@@ -19,6 +19,7 @@ public class MovementBehavior : MonoBehaviour {
         Vector3 move = new Vector3(input.Move().x, 0f, input.Move().y);
         move = cameraTransform.forward * move.z + cameraTransform.right * move.x;
         move.y = 0f;
+        move.Normalize();
         transform.Translate(move * (Time.deltaTime * speed));
     }
 }
