@@ -3,6 +3,7 @@ using UnityEngine;
 public class MovementBehavior : MonoBehaviour {
     private UserInput input;
     private Transform transform;
+    private Rigidbody rb;
     private Camera camera;
     private Transform cameraTransform;
     [SerializeField] private float speed;
@@ -13,13 +14,22 @@ public class MovementBehavior : MonoBehaviour {
         transform = GetComponent<Transform>();
         camera = Camera.main;
         cameraTransform = camera.transform;
+        rb = GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate() {
         Vector3 move = new Vector3(input.Move().x, 0f, input.Move().y);
-        move = cameraTransform.forward * move.z + cameraTransform.right * move.x;
+        Vector3 cameraForward = cameraTransform.forward;
+        Vector3 cameraRight = cameraTransform.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraRight.Normalize();
+        cameraForward.Normalize();
+
+        move = cameraForward * move.z + cameraRight * move.x;
         move.y = 0f;
         move.Normalize();
-        transform.Translate(move * (Time.deltaTime * speed));
+        rb.velocity = new Vector3(move.x * speed, rb.velocity.y, move.z * speed);
+        /*transform.Translate(move * (Time.deltaTime * speed));*/
     }
 }
