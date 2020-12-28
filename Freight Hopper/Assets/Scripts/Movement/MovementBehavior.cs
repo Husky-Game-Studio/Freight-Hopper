@@ -1,24 +1,28 @@
 using UnityEngine;
 
-public class MovementBehavior : MonoBehaviour {
+public class MovementBehavior : MonoBehaviour
+{
     private UserInput input;
     private Transform transform;
     private Rigidbody rb;
-    private Camera camera;
     private Transform cameraTransform;
-    [SerializeField] private float speed;
 
-    private void Awake() {
+    private Vector3 moveDirection;
+    [SerializeField] private float speed;
+    [SerializeField] private float playerMoveSpeedLimit;
+
+    private void Awake()
+    {
         speed = 10;
         input = GetComponent<UserInput>();
         transform = GetComponent<Transform>();
-        camera = Camera.main;
-        cameraTransform = camera.transform;
+        cameraTransform = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate() {
-        Vector3 move = new Vector3(input.Move().x, 0f, input.Move().y);
+    private void Update()
+    {
+        moveDirection = new Vector3(input.Move().x, 0f, input.Move().y);
         Vector3 cameraForward = cameraTransform.forward;
         Vector3 cameraRight = cameraTransform.right;
         cameraForward.y = 0f;
@@ -26,10 +30,44 @@ public class MovementBehavior : MonoBehaviour {
         cameraRight.Normalize();
         cameraForward.Normalize();
 
-        move = cameraForward * move.z + cameraRight * move.x;
-        move.y = 0f;
-        move.Normalize();
-        rb.velocity = new Vector3(move.x * speed, rb.velocity.y, move.z * speed);
-        /*transform.Translate(move * (Time.deltaTime * speed));*/
+        Vector3 relativeMove = cameraForward * moveDirection.z + cameraRight * moveDirection.x;
+        relativeMove.y = 0f;
+        Move(relativeMove);
+
+        if (relativeMove != Vector3.zero)
+        {
+            gameObject.transform.forward = relativeMove;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+    }
+
+    private void Move(Vector3 direction)
+    {
+        direction.Normalize();
+        Vector3 velocity = direction * speed;
+        if (Mathf.Abs(rb.velocity.x) < playerMoveSpeedLimit)
+        {
+            rb.velocity += new Vector3(velocity.x, 0f, 0f);
+
+            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -playerMoveSpeedLimit, playerMoveSpeedLimit), rb.velocity.y, rb.velocity.z);
+
+            if (direction.x == 0)
+            {
+                rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
+            }
+        }
+        if (Mathf.Abs(rb.velocity.z) < playerMoveSpeedLimit)
+        {
+            rb.velocity += new Vector3(0, 0, velocity.z);
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -playerMoveSpeedLimit, playerMoveSpeedLimit));
+
+            if (direction.z == 0)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
+            }
+        }
     }
 }
