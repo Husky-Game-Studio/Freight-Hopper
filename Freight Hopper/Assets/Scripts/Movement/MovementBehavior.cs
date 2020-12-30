@@ -40,19 +40,25 @@ public class MovementBehavior : MonoBehaviour {
 
     private void Move(Vector3 direction) {
         direction.Normalize();
+        Vector3 decomposedVector = new Vector3(direction.x, 0f, 0f);
+        float theta = Vector3.Angle(direction, decomposedVector);
+        theta *= Mathf.Deg2Rad;
+        Debug.Log(theta);
+        float moveSpeedLimitX = playerMoveSpeedLimit * Mathf.Cos(theta);
+        float moveSpeedLimitZ = playerMoveSpeedLimit * Mathf.Sin(theta);
         Vector3 velocity = direction * speed;
-        if (Mathf.Abs(rb.velocity.x) < playerMoveSpeedLimit) {
+        if (Mathf.Abs(rb.velocity.x) < moveSpeedLimitX) {
             rb.velocity += new Vector3(velocity.x, 0f, 0f);
 
-            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -playerMoveSpeedLimit, playerMoveSpeedLimit), rb.velocity.y, rb.velocity.z);
+            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -moveSpeedLimitX, moveSpeedLimitX), rb.velocity.y, rb.velocity.z);
 
             if (direction.x == 0) {
                 rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
             }
         }
-        if (Mathf.Abs(rb.velocity.z) < playerMoveSpeedLimit) {
+        if (Mathf.Abs(rb.velocity.z) < moveSpeedLimitZ) {
             rb.velocity += new Vector3(0, 0, velocity.z);
-            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -playerMoveSpeedLimit, playerMoveSpeedLimit));
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -moveSpeedLimitZ, moveSpeedLimitZ));
 
             if (direction.z == 0) {
                 rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
