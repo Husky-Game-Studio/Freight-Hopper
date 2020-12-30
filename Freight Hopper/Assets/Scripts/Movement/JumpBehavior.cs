@@ -30,7 +30,7 @@ public class JumpBehavior : MonoBehaviour {
 
     private void FixedUpdate() {
         if (jump) {
-            rb.AddForce(new Vector3(0f, 5f, 0f), ForceMode.Impulse);
+            rb.AddForce(new Vector3(0f, 10f, 0f), ForceMode.Impulse);
             isGrounded = false;
             jump = false;
         }
