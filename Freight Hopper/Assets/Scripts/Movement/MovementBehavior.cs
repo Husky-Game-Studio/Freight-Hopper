@@ -43,7 +43,6 @@ public class MovementBehavior : MonoBehaviour {
         Vector3 decomposedVector = new Vector3(direction.x, 0f, 0f);
         float theta = Vector3.Angle(direction, decomposedVector);
         theta *= Mathf.Deg2Rad;
-        Debug.Log(theta);
         float moveSpeedLimitX = playerMoveSpeedLimit * Mathf.Cos(theta);
         float moveSpeedLimitZ = playerMoveSpeedLimit * Mathf.Sin(theta);
         Vector3 velocity = direction * speed;
