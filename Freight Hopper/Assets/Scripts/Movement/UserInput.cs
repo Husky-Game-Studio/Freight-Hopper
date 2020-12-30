@@ -17,10 +17,12 @@ public class UserInput : MonoBehaviour {
         master = new InputMaster();
     }
 
+    // Returns the direction the player wants to move
     public Vector2 Move() {
         return master.Player.Movement.ReadValue<Vector2>();
     }
 
+    // Returns if the player jumped
     public bool Jumped() {
         return master.Player.Jump.triggered;
     }
