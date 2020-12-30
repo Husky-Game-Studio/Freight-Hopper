@@ -6,31 +6,40 @@ using Cinemachine;
 public class FirstPersonCamera : MonoBehaviour
 {
     private Rigidbody playerRB;
+    private MovementBehavior playerMovement;
     private CinemachineVirtualCamera cam;
+
     [SerializeField] private CameraEffect fov;
+
     private CameraEffect speedEffectsWeight;
 
     [System.Serializable]
     private struct CameraEffect
     {
         public float baseValue;
-        public float scalingConstant;
+        public float value;
         public float maxValue;
+        public float transitionSmoothness;
     }
 
     private void Awake()
     {
         playerRB = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
+        playerMovement = playerRB.gameObject.GetComponent<MovementBehavior>();
         cam = GetComponent<CinemachineVirtualCamera>();
         fov.baseValue = cam.m_Lens.FieldOfView;
+        fov.value = fov.baseValue;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
-        cam.m_Lens.FieldOfView = Mathf.Clamp((Mathf.Pow(playerRB.velocity.magnitude / 4 * fov.scalingConstant, 2)) * 60, fov.baseValue, fov.maxValue);
+        float addedFov = playerRB.velocity.magnitude - playerMovement.Speed;
+        fov.value = Mathf.Lerp(fov.value, fov.baseValue + addedFov, fov.transitionSmoothness);
+        fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
+
+        cam.m_Lens.FieldOfView = fov.value;
     }
 }

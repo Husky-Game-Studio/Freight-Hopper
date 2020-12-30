@@ -178,7 +178,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 614358229}
   m_Lens:
-    FieldOfView: 60
+    FieldOfView: 100
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -228,8 +228,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fov:
     baseValue: 0
-    scalingConstant: 0.5
-    maxValue: 150
+    value: 0
+    maxValue: 120
+    transitionSmoothness: 0.5
 --- !u!1 &476068805
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +283,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 100
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
