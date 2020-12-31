@@ -55,7 +55,7 @@ public class FirstPersonCamera : MonoBehaviour
     {
         Vector3 currentPosition = this.transform.position;
         Debug.Log("Current position: " + currentPosition);
-        for (int i = 0; i < curve.length; i++)
+        for (float i = 0; i <= 1; i += 0.01f)
         {
             this.transform.position = Vector3.Lerp(this.transform.position, position, curve.Evaluate(i));
             Debug.Log("Current position: " + currentPosition);
