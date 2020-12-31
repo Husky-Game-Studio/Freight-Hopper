@@ -43,7 +43,6 @@ public class FirstPersonCamera : MonoBehaviour
         fov.addedValue = playerRB.velocity.magnitude - playerMovement.Speed;
         fov.value = Mathf.Lerp(fov.value, fov.baseValue + fov.addedValue, fov.transitionSmoothness);
         fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
-
         cam.m_Lens.FieldOfView = fov.value;
     }
 
