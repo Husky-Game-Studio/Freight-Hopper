@@ -9,6 +9,9 @@ public class FirstPersonCamera : MonoBehaviour
     private MovementBehavior playerMovement;
     private CinemachineVirtualCamera cam;
 
+    [SerializeField] private AnimationCurve landingSlouch;
+    [SerializeField] private AnimationCurve resetPosition;
+
     [SerializeField] private CameraEffect fov;
     [SerializeField] private CameraEffect tilt;
 
@@ -34,10 +37,10 @@ public class FirstPersonCamera : MonoBehaviour
         tilt.baseValue = cam.m_Lens.Dutch;
         tilt.value = tilt.baseValue;
 
+        StartCoroutine(TransitionCamera(this.transform.position + 5 * Vector3.down, landingSlouch));
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        Tilt(-10);
-        Invoke(nameof(ResetTilt), 5);
     }
 
     private void FixedUpdate()
@@ -46,6 +49,18 @@ public class FirstPersonCamera : MonoBehaviour
         fov.value = Mathf.Lerp(fov.value, fov.baseValue + fov.addedValue, fov.transitionSmoothness);
         fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
         cam.m_Lens.FieldOfView = fov.value;
+    }
+
+    private IEnumerator TransitionCamera(Vector3 position, AnimationCurve curve)
+    {
+        Vector3 currentPosition = this.transform.position;
+        Debug.Log("Current position: " + currentPosition);
+        for (int i = 0; i < curve.length; i++)
+        {
+            this.transform.position = Vector3.Lerp(this.transform.position, position, curve.Evaluate(i));
+            Debug.Log("Current position: " + currentPosition);
+            yield return null;
+        }
     }
 
     /// <summary>

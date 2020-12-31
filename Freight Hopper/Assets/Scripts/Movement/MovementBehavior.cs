@@ -32,6 +32,10 @@ public class MovementBehavior : MonoBehaviour
     {
         // Gets the x and y axis of the player input and puts it in a vector
         moveDirection = new Vector3(input.Move().x, 0f, input.Move().y);
+    }
+
+    private void FixedUpdate()
+    {
         // Gets camera forward and right vector
         Vector3 cameraForward = cameraTransform.forward;
         Vector3 cameraRight = cameraTransform.right;
@@ -51,39 +55,61 @@ public class MovementBehavior : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-    }
-
     // Function that moves the player
     private void Move(Vector3 direction)
     {
         direction.Normalize();
-        // Decomposes the vector
-        Vector3 decomposedVector = new Vector3(direction.x, 0f, 0f);
-        // Finds the angle between the vecotrs and converts to radians
-        float theta = Vector3.Angle(direction, decomposedVector);
-        theta *= Mathf.Deg2Rad;
-        // Sets the speed limit of each component
-        float moveSpeedLimitX = playerMoveSpeedLimit * Mathf.Cos(theta);
-        float moveSpeedLimitZ = playerMoveSpeedLimit * Mathf.Sin(theta);
+        // Creates a Vector for the player move speed limit
+        Vector3 moveSpeedLimit = direction * playerMoveSpeedLimit;
+        // Clamps the vector to make sure the magnitude stays between 0 - playerMoveSpeedLimit
+        moveSpeedLimit = Vector3.ClampMagnitude(new Vector3(moveSpeedLimit.x, moveSpeedLimit.y, moveSpeedLimit.z), playerMoveSpeedLimit);
+
         Vector3 velocity = direction * speed;
+        //Debug.Log("Move Speed Limit " + moveSpeedLimit);
+        //Debug.Log("Velocity " + velocity);
+
         // if x and z velocity is less than speed limit then add more speed else don't
-        if (Mathf.Abs(rb.velocity.x) < moveSpeedLimitX)
+        if (rb.velocity.x < moveSpeedLimit.x && Mathf.Sign(direction.x) == 1)
         {
             rb.velocity += new Vector3(velocity.x, 0f, 0f);
 
-            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -moveSpeedLimitX, moveSpeedLimitX), rb.velocity.y, rb.velocity.z);
+            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -moveSpeedLimit.x, moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
+
             // If there is no input then dead stop player
             if (direction.x == 0)
             {
                 rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
             }
         }
-        if (Mathf.Abs(rb.velocity.z) < moveSpeedLimitZ)
+        else if (rb.velocity.x > moveSpeedLimit.x && Mathf.Sign(direction.x) == -1)
+        {
+            rb.velocity += new Vector3(velocity.x, 0f, 0f);
+
+            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, moveSpeedLimit.x, -moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
+
+            // If there is no input then dead stop player
+            if (direction.x == 0)
+            {
+                rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
+            }
+        }
+        if (rb.velocity.z < moveSpeedLimit.z && Mathf.Sign(direction.z) == 1)
         {
             rb.velocity += new Vector3(0, 0, velocity.z);
-            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -moveSpeedLimitZ, moveSpeedLimitZ));
+
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -moveSpeedLimit.z, moveSpeedLimit.z));
+
+            if (direction.z == 0)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
+            }
+        }
+        else if (rb.velocity.z > moveSpeedLimit.z && Mathf.Sign(direction.z) == -1) // -2 and speed limit -3
+        {
+            rb.velocity += new Vector3(0, 0, velocity.z);
+
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, moveSpeedLimit.z, -moveSpeedLimit.z));
+
             // If there is no input then dead stop player
             if (direction.z == 0)
             {
