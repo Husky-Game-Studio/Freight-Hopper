@@ -36,55 +36,53 @@ public class FirstPersonCamera : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Tilt(-10);
+        Invoke(nameof(ResetTilt), 5);
     }
 
     private void FixedUpdate()
     {
-        fov.addedValue = playerRB.velocity.magnitude - playerMovement.Speed;
+        fov.addedValue = playerRB.velocity.magnitude - 2 * playerMovement.Speed;
         fov.value = Mathf.Lerp(fov.value, fov.baseValue + fov.addedValue, fov.transitionSmoothness);
         fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
         cam.m_Lens.FieldOfView = fov.value;
     }
 
     /// <summary>
-    /// Expecting a value of -1 for left, 0 for none, 1 for right
+    /// Tilts the player the given amount of degrees
     /// </summary>
-    /// <param name="direction"></param>
-    public void Tilt(int direction)
+    /// <param name="amount"></param>
+    public void Tilt(float amount)
     {
-        StartCoroutine(Tilting(direction));
+        StartCoroutine(Tilting(amount));
     }
 
-    private IEnumerator Tilting(int direction)
+    /// <summary>
+    /// Resets the tilt of the player back to the base value
+    /// </summary>
+    public void ResetTilt()
     {
-        float tiltSign = Mathf.Sign(tilt.value);
-        while (tilt.value != tilt.maxValue * direction)
+        StartCoroutine(Tilting(tilt.baseValue - tilt.value));
+    }
+
+    private IEnumerator Tilting(float amount)
+    {
+        float startingValue = tilt.value;
+        float endingValue = tilt.value + amount;
+
+        while (tilt.value != endingValue)
         {
-            if (direction != 0)
+            tilt.addedValue += 0.02f * amount;
+
+            tilt.value = Mathf.Lerp(tilt.value, tilt.value + tilt.addedValue, tilt.transitionSmoothness);
+
+            if (startingValue < endingValue)
             {
-                tilt.addedValue += 0.03f * direction;
+                tilt.value = Mathf.Clamp(tilt.value, startingValue, endingValue);
             }
             else
             {
-                tilt.addedValue += 0.03f * -tiltSign;
-            }
-
-            tilt.value = Mathf.Lerp(tilt.value, tilt.baseValue + tilt.addedValue, tilt.transitionSmoothness);
-
-            if (direction != 0)
-            {
-                tilt.value = Mathf.Clamp(tilt.value, -tilt.maxValue, tilt.maxValue);
-            }
-            else
-            {
-                if (tiltSign == 1)
-                {
-                    tilt.value = Mathf.Clamp(tilt.value, 0, tilt.maxValue);
-                }
-                else
-                {
-                    tilt.value = Mathf.Clamp(tilt.value, -tilt.maxValue, 0);
-                }
+                tilt.value = Mathf.Clamp(tilt.value, endingValue, startingValue);
             }
 
             cam.m_Lens.Dutch = tilt.value;

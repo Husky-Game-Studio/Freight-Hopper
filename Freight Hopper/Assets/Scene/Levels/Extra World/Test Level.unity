@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 291550051}
   m_Layer: 0
   m_Name: TestFloor
-  m_TagString: Untagged
+  m_TagString: landable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24563,7 +24563,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-83780
+  m_Name: pb_Mesh22196
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -24732,7 +24732,7 @@ GameObject:
   - component: {fileID: 1831331150}
   m_Layer: 0
   m_Name: TheWorld
-  m_TagString: Untagged
+  m_TagString: landable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24958,6 +24958,10 @@ PrefabInstance:
     - target: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_Name
       value: PlayerPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
