@@ -81,7 +81,7 @@ public class MovementBehavior : MonoBehaviour
                 rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
             }
         }
-        else if (rb.velocity.x > moveSpeedLimit.x && Mathf.Sign(direction.x) == -1)
+        if (rb.velocity.x > moveSpeedLimit.x && Mathf.Sign(direction.x) == -1)
         {
             rb.velocity += new Vector3(velocity.x, 0f, 0f);
 
@@ -104,7 +104,7 @@ public class MovementBehavior : MonoBehaviour
                 rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
             }
         }
-        else if (rb.velocity.z > moveSpeedLimit.z && Mathf.Sign(direction.z) == -1) // -2 and speed limit -3
+        if (rb.velocity.z > moveSpeedLimit.z && Mathf.Sign(direction.z) == -1) // -2 and speed limit -3
         {
             rb.velocity += new Vector3(0, 0, velocity.z);
 
