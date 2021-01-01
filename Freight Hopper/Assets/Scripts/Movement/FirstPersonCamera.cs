@@ -54,11 +54,11 @@ public class FirstPersonCamera : MonoBehaviour
     private IEnumerator TransitionCamera(Vector3 position, AnimationCurve curve)
     {
         Vector3 currentPosition = this.transform.position;
-        Debug.Log("Current position: " + currentPosition);
+        //Debug.Log("Current position: " + currentPosition);
         for (float i = 0; i <= 1; i += 0.01f)
         {
             this.transform.position = Vector3.Lerp(this.transform.position, position, curve.Evaluate(i));
-            Debug.Log("Current position: " + currentPosition);
+            //Debug.Log("Current position: " + currentPosition);
             yield return null;
         }
     }
