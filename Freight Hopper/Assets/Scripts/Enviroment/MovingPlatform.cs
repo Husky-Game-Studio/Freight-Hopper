@@ -25,6 +25,11 @@ public class MovingPlatform : MonoBehaviour
             }
             UnityEditor.Handles.DrawWireCube(waypoints[i], Vector3.one / 5);
         }
+        if (loop)
+        {
+            UnityEditor.Handles.color = Color.yellow;
+            UnityEditor.Handles.DrawDottedLine(waypoints[0], waypoints[waypoints.Length - 1], 1f);
+        }
     }
 
     private void FixedUpdate()
