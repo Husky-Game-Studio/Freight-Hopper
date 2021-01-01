@@ -20,7 +20,7 @@ public class MovingPlatform : MonoBehaviour
             if (i != waypoints.Length - 1)
             {
                 UnityEditor.Handles.color = Color.yellow;
-                UnityEditor.Handles.DrawDottedLine(waypoints[i], waypoints[i + 1], speed);
+                UnityEditor.Handles.DrawDottedLine(waypoints[i], waypoints[i + 1], 1 / speed);
                 UnityEditor.Handles.color = Color.white;
             }
             UnityEditor.Handles.DrawWireCube(waypoints[i], Vector3.one * tolerance);
@@ -28,7 +28,7 @@ public class MovingPlatform : MonoBehaviour
         if (loop)
         {
             UnityEditor.Handles.color = Color.yellow;
-            UnityEditor.Handles.DrawDottedLine(waypoints[0], waypoints[waypoints.Length - 1], speed);
+            UnityEditor.Handles.DrawDottedLine(waypoints[0], waypoints[waypoints.Length - 1], 1 / speed);
         }
     }
 
