@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class JumpBehavior : MonoBehaviour {
     private UserInput input;
-    private Transform transform;
+    private Transform playerTransform;
     private Rigidbody rb;
     private bool isGrounded;
 
@@ -13,7 +13,7 @@ public class JumpBehavior : MonoBehaviour {
     // Constructs the variables when the game starts
     private void Awake() {
         input = GetComponent<UserInput>();
-        transform = GetComponent<Transform>();
+        playerTransform = GetComponent<Transform>();
         isGrounded = true;
         rb = GetComponent<Rigidbody>();
         jump = false;

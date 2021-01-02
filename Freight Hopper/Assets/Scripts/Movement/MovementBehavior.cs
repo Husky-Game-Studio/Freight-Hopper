@@ -3,7 +3,6 @@ using UnityEngine;
 public class MovementBehavior : MonoBehaviour
 {
     private UserInput input;
-    private Transform transform;
     private Rigidbody rb;
     private Transform cameraTransform;
 
@@ -22,7 +21,6 @@ public class MovementBehavior : MonoBehaviour
     private void Awake()
     {
         input = GetComponent<UserInput>();
-        transform = GetComponent<Transform>();
         cameraTransform = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
     }
