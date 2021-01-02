@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.VFX;
+using UnityEngine.Rendering;
 
 public class FirstPersonCamera : MonoBehaviour
 {
@@ -11,12 +12,14 @@ public class FirstPersonCamera : MonoBehaviour
     private CinemachineVirtualCamera cam;
 
     private VisualEffect speedLines;
+    private Volume speedVolume;
 
     [SerializeField] private AnimationCurve landingSlouch;
     [SerializeField] private AnimationCurve resetPosition;
 
     [SerializeField] private CameraEffect fov;
     [SerializeField] private CameraEffect tilt;
+    [SerializeField] private CameraEffect postProcessing;
 
     [System.Serializable]
     private struct CameraEffect
@@ -33,9 +36,14 @@ public class FirstPersonCamera : MonoBehaviour
     {
         playerRB = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
         playerMovement = playerRB.gameObject.GetComponent<MovementBehavior>();
+
         cam = GetComponent<CinemachineVirtualCamera>();
         fov.baseValue = cam.m_Lens.FieldOfView;
         fov.value = fov.baseValue;
+
+        speedVolume = Camera.main.GetComponentInChildren<Volume>();
+        postProcessing.baseValue = 0;
+        postProcessing.value = postProcessing.baseValue;
 
         tilt.baseValue = cam.m_Lens.Dutch;
         tilt.value = tilt.baseValue;
@@ -51,10 +59,16 @@ public class FirstPersonCamera : MonoBehaviour
 
     private void FixedUpdate()
     {
-        fov.addedValue = playerRB.velocity.magnitude - 2 * playerMovement.Speed;
+        fov.addedValue = playerRB.velocity.magnitude - 3 * playerMovement.Speed;
         fov.value = Mathf.Lerp(fov.value, fov.baseValue + fov.addedValue, fov.transitionSmoothness);
         fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
+
+        postProcessing.addedValue = playerRB.velocity.magnitude - 3 * playerMovement.Speed;
+        postProcessing.value = Mathf.Lerp(postProcessing.value, postProcessing.baseValue + postProcessing.addedValue, postProcessing.transitionSmoothness);
+        postProcessing.value = Mathf.Clamp(postProcessing.value, postProcessing.baseValue, postProcessing.maxValue);
+
         cam.m_Lens.FieldOfView = fov.value;
+        speedVolume.weight = postProcessing.value;
 
         if (playerRB.velocity.magnitude > 3 * playerMovement.Speed)
         {
