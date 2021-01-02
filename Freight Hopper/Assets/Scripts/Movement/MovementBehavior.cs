@@ -46,6 +46,7 @@ public class MovementBehavior : MonoBehaviour
         cameraForward.Normalize();
         // Moves relative to the camera
         Vector3 relativeMove = cameraForward * moveDirection.z + cameraRight * moveDirection.x;
+
         relativeMove.y = 0f;
         Move(relativeMove);
         // changes the forward vector
@@ -71,9 +72,10 @@ public class MovementBehavior : MonoBehaviour
         // if x and z velocity is less than speed limit then add more speed else don't
         if (rb.velocity.x < moveSpeedLimit.x && Mathf.Sign(direction.x) == 1)
         {
+            // 2 + 2 = 4
             rb.velocity += new Vector3(velocity.x, 0f, 0f);
-
-            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -moveSpeedLimit.x, moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
+            // 3
+            //rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -moveSpeedLimit.x, moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
 
             // If there is no input then dead stop player
             if (direction.x == 0)
@@ -81,11 +83,11 @@ public class MovementBehavior : MonoBehaviour
                 rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
             }
         }
-        if (rb.velocity.x > moveSpeedLimit.x && Mathf.Sign(direction.x) == -1)
+        else if (rb.velocity.x > moveSpeedLimit.x && Mathf.Sign(direction.x) == -1)
         {
             rb.velocity += new Vector3(velocity.x, 0f, 0f);
 
-            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, moveSpeedLimit.x, -moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
+            //rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, moveSpeedLimit.x, -moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
 
             // If there is no input then dead stop player
             if (direction.x == 0)
@@ -97,18 +99,18 @@ public class MovementBehavior : MonoBehaviour
         {
             rb.velocity += new Vector3(0, 0, velocity.z);
 
-            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -moveSpeedLimit.z, moveSpeedLimit.z));
+            //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -moveSpeedLimit.z, moveSpeedLimit.z));
 
             if (direction.z == 0)
             {
                 rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
             }
         }
-        if (rb.velocity.z > moveSpeedLimit.z && Mathf.Sign(direction.z) == -1) // -2 and speed limit -3
+        else if (rb.velocity.z > moveSpeedLimit.z && Mathf.Sign(direction.z) == -1) // -2 and speed limit -3
         {
             rb.velocity += new Vector3(0, 0, velocity.z);
 
-            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, moveSpeedLimit.z, -moveSpeedLimit.z));
+            //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, moveSpeedLimit.z, -moveSpeedLimit.z));
 
             // If there is no input then dead stop player
             if (direction.z == 0)

@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.VFX;
 
 public class FirstPersonCamera : MonoBehaviour
 {
     private Rigidbody playerRB;
     private MovementBehavior playerMovement;
     private CinemachineVirtualCamera cam;
+
+    private VisualEffect speedLines;
 
     [SerializeField] private AnimationCurve landingSlouch;
     [SerializeField] private AnimationCurve resetPosition;
@@ -37,7 +40,10 @@ public class FirstPersonCamera : MonoBehaviour
         tilt.baseValue = cam.m_Lens.Dutch;
         tilt.value = tilt.baseValue;
 
-        StartCoroutine(TransitionCamera(this.transform.position + 5 * Vector3.down, landingSlouch));
+        speedLines = Camera.main.GetComponent<VisualEffect>();
+        speedLines.Stop();
+
+        //StartCoroutine(TransitionCamera(this.transform.position + 5 * Vector3.down, landingSlouch));
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -49,6 +55,15 @@ public class FirstPersonCamera : MonoBehaviour
         fov.value = Mathf.Lerp(fov.value, fov.baseValue + fov.addedValue, fov.transitionSmoothness);
         fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
         cam.m_Lens.FieldOfView = fov.value;
+
+        if (playerRB.velocity.magnitude > 3 * playerMovement.Speed)
+        {
+            speedLines.Play();
+        }
+        else
+        {
+            speedLines.Stop();
+        }
     }
 
     private IEnumerator TransitionCamera(Vector3 position, AnimationCurve curve)
