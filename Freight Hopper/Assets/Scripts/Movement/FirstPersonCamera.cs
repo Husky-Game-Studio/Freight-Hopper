@@ -14,9 +14,6 @@ public class FirstPersonCamera : MonoBehaviour
     private VisualEffect speedLines;
     private Volume speedVolume;
 
-    [SerializeField] private AnimationCurve landingSlouch;
-    [SerializeField] private AnimationCurve resetPosition;
-
     [SerializeField] private CameraEffect fov;
     [SerializeField] private CameraEffect tilt;
     [SerializeField] private CameraEffect postProcessing;
@@ -51,8 +48,6 @@ public class FirstPersonCamera : MonoBehaviour
         speedLines = Camera.main.GetComponent<VisualEffect>();
         speedLines.Stop();
 
-        //StartCoroutine(TransitionCamera(this.transform.position + 5 * Vector3.down, landingSlouch));
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -77,18 +72,6 @@ public class FirstPersonCamera : MonoBehaviour
         else
         {
             speedLines.Stop();
-        }
-    }
-
-    private IEnumerator TransitionCamera(Vector3 position, AnimationCurve curve)
-    {
-        Vector3 currentPosition = this.transform.position;
-        //Debug.Log("Current position: " + currentPosition);
-        for (float i = 0; i <= 1; i += 0.01f)
-        {
-            this.transform.position = Vector3.Lerp(this.transform.position, position, curve.Evaluate(i));
-            //Debug.Log("Current position: " + currentPosition);
-            yield return null;
         }
     }
 

@@ -227,45 +227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd1befc8ed210d34e80ed0d13ff83666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  landingSlouch:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1.9718235
-      outSlope: 1.9718235
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.43934464
-      value: 0.86631006
-      inSlope: 0.201671
-      outSlope: 0.201671
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.9916687
-      value: 0
-      inSlope: -1.5684814
-      outSlope: -1.5684814
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  resetPosition:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   fov:
     baseValue: 0
     value: 0
@@ -685,8 +646,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2097557229, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
   m_PrefabInstance: {fileID: 6851446874152417278}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &914183921
-BoxCollider:
+--- !u!135 &914183921
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -696,7 +657,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Radius: 0.38
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1715149953
 GameObject:
@@ -756,8 +717,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2112811306}
   - component: {fileID: 2112811309}
-  - component: {fileID: 2112811308}
   - component: {fileID: 2112811307}
+  - component: {fileID: 2112811308}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -853,7 +814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Damping: 1
+  m_Damping: 0.4
 --- !u!114 &2112811309
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -924,6 +885,10 @@ PrefabInstance:
     - target: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_Name
       value: PlayerPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
