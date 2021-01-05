@@ -6,7 +6,7 @@ public class JumpBehavior : MonoBehaviour {
     private Transform playerTransform;
     private Rigidbody rb;
     private bool isGrounded;
-    private float jumpBufferTime = 0.2f;
+    private float jumpBufferTime = 0.1f;
     private float jumpBufferCount;
 
     // Variable to chech if we are allowed to jump
@@ -16,7 +16,7 @@ public class JumpBehavior : MonoBehaviour {
     private void Awake() {
         input = GetComponent<UserInput>();
         playerTransform = GetComponent<Transform>();
-        isGrounded = true;
+        isGrounded = false;
         rb = GetComponent<Rigidbody>();
         jump = false;
     }
@@ -30,19 +30,35 @@ public class JumpBehavior : MonoBehaviour {
 
     // Updates every frame
     private void Update() {
-        if (input.Jumped()) {
+        /*if (input.Jumped()) {
             jumpBufferCount = jumpBufferTime;
         } else {
             jumpBufferCount -= Time.deltaTime;
         }
-        if (jumpBufferCount >= 0f && isGrounded) {
+        if (jumpBufferCount > 0f && isGrounded) {
             jump = true;
             jumpBufferCount = 0;
-        }
+        }*/
     }
 
     private void FixedUpdate() {
         // Jump code
+        
+        ////////////////////////////////////////////////////////////////////
+        if (input.Jumped())
+        {
+            jumpBufferCount = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCount -= Time.fixedDeltaTime;
+        }
+        if (jumpBufferCount > 0f && isGrounded)
+        {
+            jump = true;
+            jumpBufferCount = 0;
+        }
+        //////////////////////////////////////////////////////////////////
         if (jump) {
             rb.AddForce(new Vector3(0f, 10f, 0f), ForceMode.Impulse);
             isGrounded = false;
