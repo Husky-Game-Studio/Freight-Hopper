@@ -28,6 +28,7 @@ public class JumpBehavior : MonoBehaviour {
         }
     }
 
+    // when character exits collision with landable it sets grounded to false so we wouldn't be able to jump in air
     private void OnCollisionExit(UnityEngine.Collision other) {
         if (other.gameObject.CompareTag("landable")) {
             isGrounded = false;
@@ -36,6 +37,7 @@ public class JumpBehavior : MonoBehaviour {
 
     // Updates every frame
     private void Update() {
+        // Jump buffering
         if (input.Jumped()) {
             jumpBufferCount = jumpBufferTime;
         } else {
@@ -49,7 +51,6 @@ public class JumpBehavior : MonoBehaviour {
 
     private void FixedUpdate() {
         // Jump code
-        //////////////////////////////////////////////////////////////////
         if (jump) {
             rb.AddForce(new Vector3(0f, 10f, 0f), ForceMode.Impulse);
             isGrounded = false;
