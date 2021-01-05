@@ -23,13 +23,13 @@ public class JumpBehavior : MonoBehaviour {
 
     // When character collides with another object it gets called
     private void OnCollisionEnter(UnityEngine.Collision other) {
-        if (other.gameObject.tag == "landable") {
+        if (other.gameObject.CompareTag("landable")) {
             isGrounded = true;
         }
     }
 
     private void OnCollisionExit(UnityEngine.Collision other) {
-        if (other.gameObject.tag == "landable") {
+        if (other.gameObject.CompareTag("landable")) {
             isGrounded = false;
         }
     }
