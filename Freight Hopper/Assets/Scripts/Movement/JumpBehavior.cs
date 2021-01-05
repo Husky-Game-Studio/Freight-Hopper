@@ -6,6 +6,8 @@ public class JumpBehavior : MonoBehaviour {
     private Transform playerTransform;
     private Rigidbody rb;
     private bool isGrounded;
+    private float jumpBufferTime = 0.2f;
+    private float jumpBufferCount;
 
     // Variable to chech if we are allowed to jump
     private bool jump;
@@ -28,8 +30,14 @@ public class JumpBehavior : MonoBehaviour {
 
     // Updates every frame
     private void Update() {
-        if (input.Jumped() && isGrounded) {
+        if (input.Jumped()) {
+            jumpBufferCount = jumpBufferTime;
+        } else {
+            jumpBufferCount -= Time.deltaTime;
+        }
+        if (jumpBufferCount >= 0f && isGrounded) {
             jump = true;
+            jumpBufferCount = 0;
         }
     }
 
