@@ -2,40 +2,12 @@ using System;
 using UnityEngine;
 
 public class JumpBehavior : MonoBehaviour {
-
-    [Serializable]
-    private struct Timer {
-        public float duration;
-        public float current;
-
-        public Timer(float duration) {
-            this.duration = duration;
-            current = 0f;
-        }
-
-        public void resetTimer() {
-            current = duration;
-        }
-
-        public void deactivateTimer() {
-            current = 0f;
-        }
-
-        public bool timerActive() {
-            return current > 0;
-        }
-
-        public void countDown() {
-            current -= Time.deltaTime;
-        }
-    }
-
     private UserInput input;
     private Transform playerTransform;
     private Rigidbody rb;
     private bool isGrounded;
     private Timer jumpBuffer = new Timer(0.2f);
-    private Timer hangTime = new Timer(1f);
+    private Timer hangTime = new Timer(0.2f);
 
     // Variable to chech if we are allowed to jump
     private bool jump;
