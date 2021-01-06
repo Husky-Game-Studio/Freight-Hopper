@@ -2,18 +2,45 @@ using System;
 using UnityEngine;
 
 public class JumpBehavior : MonoBehaviour {
+
+    [Serializable]
+    private struct Timer {
+        public float duration;
+        public float current;
+
+        public Timer(float duration) {
+            this.duration = duration;
+            current = 0f;
+        }
+
+        public void resetTimer() {
+            current = duration;
+        }
+
+        public void deactivateTimer() {
+            current = 0f;
+        }
+
+        public bool timerActive() {
+            return current > 0;
+        }
+
+        public void countDown() {
+            current -= Time.deltaTime;
+        }
+    }
+
     private UserInput input;
     private Transform playerTransform;
     private Rigidbody rb;
     private bool isGrounded;
-    private float jumpBufferTime = 0.2f;
-    private float jumpBufferCount;
-    private float hangTime = 0.2f;
-    private float hangTimeCount;
-    private bool justUngrounded;
+    private Timer jumpBuffer = new Timer(0.2f);
+    private Timer hangTime = new Timer(1f);
 
     // Variable to chech if we are allowed to jump
     private bool jump;
+
+    private bool canJump;
 
     // Constructs the variables when the game starts
     private void Awake() {
@@ -22,13 +49,13 @@ public class JumpBehavior : MonoBehaviour {
         isGrounded = false;
         rb = GetComponent<Rigidbody>();
         jump = false;
-        justUngrounded = false;
     }
 
     // When character collides with another object it gets called
     private void OnCollisionEnter(UnityEngine.Collision other) {
         if (other.gameObject.CompareTag("landable")) {
             isGrounded = true;
+            canJump = true;
         }
     }
 
@@ -36,7 +63,7 @@ public class JumpBehavior : MonoBehaviour {
     private void OnCollisionExit(UnityEngine.Collision other) {
         if (other.gameObject.CompareTag("landable")) {
             isGrounded = false;
-            justUngrounded = true;
+            hangTime.resetTimer();
         }
     }
 
@@ -44,24 +71,23 @@ public class JumpBehavior : MonoBehaviour {
     private void Update() {
         // Jump buffering
         if (input.Jumped()) {
-            jumpBufferCount = jumpBufferTime;
+            jumpBuffer.resetTimer();
         } else {
-            jumpBufferCount -= Time.deltaTime;
+            jumpBuffer.countDown();
         }
-        // Hang Time
-        if (justUngrounded) {
-            justUngrounded = false;
-            if (hangTimeCount <= 0f) {
-                hangTimeCount = hangTime;
-                isGrounded = true;
-            } else {
-                hangTimeCount -= Time.deltaTime;
-            }
+        //Hang Time
+        if (!hangTime.timerActive() && !isGrounded) {
+            canJump = false;
+        } else {
+            /*
+            hangTime.countDown();
+        */
         }
-        if (jumpBufferCount > 0f && hangTimeCount > 0f) {
+        hangTime.countDown();
+
+        if (jumpBuffer.timerActive() && canJump) {
             jump = true;
-            jumpBufferCount = 0f;
-            hangTimeCount = 0f;
+            jumpBuffer.deactivateTimer();
         }
     }
 
@@ -71,7 +97,7 @@ public class JumpBehavior : MonoBehaviour {
             rb.AddForce(new Vector3(0f, 10f, 0f), ForceMode.Impulse);
             isGrounded = false;
             jump = false;
-            justUngrounded = false;
+            canJump = false;
         }
     }
 }
