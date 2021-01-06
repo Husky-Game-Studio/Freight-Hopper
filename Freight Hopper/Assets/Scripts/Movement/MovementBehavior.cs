@@ -14,6 +14,8 @@ public class MovementBehavior : MonoBehaviour
 
     public float Speed => speed;
 
+    [SerializeField] private float friction;
+
     // Speed limit
     [SerializeField] private float playerMoveSpeedLimit;
 
@@ -58,63 +60,51 @@ public class MovementBehavior : MonoBehaviour
     private void Move(Vector3 direction)
     {
         direction.Normalize();
-        // Creates a Vector for the player move speed limit
-        Vector3 moveSpeedLimit = direction * playerMoveSpeedLimit;
+
         // Clamps the vector to make sure the magnitude stays between 0 - playerMoveSpeedLimit
-        moveSpeedLimit = Vector3.ClampMagnitude(new Vector3(moveSpeedLimit.x, moveSpeedLimit.y, moveSpeedLimit.z), playerMoveSpeedLimit);
+        Vector3 moveSpeedLimit = Vector3.ClampMagnitude(direction * playerMoveSpeedLimit, playerMoveSpeedLimit);
 
-        Vector3 velocity = direction * speed;
-        //Debug.Log("Move Speed Limit " + moveSpeedLimit);
-        //Debug.Log("Velocity " + velocity);
+        Vector3 velocity = Vector3.ClampMagnitude(direction * speed, speed);
+        //Debug.Log("Move Speed Limit " + moveSpeedLimit + " " + moveSpeedLimit.magnitude);
+        //Debug.Log("Velocity " + velocity.magnitude);
 
+        // if no input and slow enough just stop the player on the axis.
+        if (rb.velocity.x < playerMoveSpeedLimit && direction.x == 0)
+        {
+            rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
+        }
+        if (rb.velocity.z < playerMoveSpeedLimit && direction.z == 0)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
+        }
+
+        // I am not happy how this function works, but it works so I can't complain.
         // if x and z velocity is less than speed limit then add more speed else don't
-        if (rb.velocity.x < moveSpeedLimit.x && Mathf.Sign(direction.x) == 1)
+        if (Mathf.Abs(rb.velocity.x) < Mathf.Abs(moveSpeedLimit.x))
         {
-            // 2 + 2 = 4
-            rb.velocity += new Vector3(velocity.x, 0f, 0f);
-            // 3
-            //rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -moveSpeedLimit.x, moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
-
-            // If there is no input then dead stop player
-            if (direction.x == 0)
-            {
-                rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
-            }
+            rb.velocity += velocity.x * Vector3.right;
+            rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -Mathf.Abs(moveSpeedLimit.x), Mathf.Abs(moveSpeedLimit.x)), rb.velocity.y, rb.velocity.z);
         }
-        else if (rb.velocity.x > moveSpeedLimit.x && Mathf.Sign(direction.x) == -1)
+        else if (Mathf.Sign(rb.velocity.x) == -Mathf.Sign(moveSpeedLimit.x)) // if the player is moving in the opposite direction of the speedlimit they can move backwards
         {
-            rb.velocity += new Vector3(velocity.x, 0f, 0f);
-
-            //rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, moveSpeedLimit.x, -moveSpeedLimit.x), rb.velocity.y, rb.velocity.z);
-
-            // If there is no input then dead stop player
-            if (direction.x == 0)
-            {
-                rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
-            }
+            rb.velocity += velocity.x * Vector3.right;
         }
-        if (rb.velocity.z < moveSpeedLimit.z && Mathf.Sign(direction.z) == 1)
+        else // if the player is above the speed limit, friction will be applied for now. This functionality should be replaced in the future by collision
         {
-            rb.velocity += new Vector3(0, 0, velocity.z);
-
-            //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -moveSpeedLimit.z, moveSpeedLimit.z));
-
-            if (direction.z == 0)
-            {
-                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
-            }
+            rb.velocity = new Vector3(rb.velocity.x * friction, rb.velocity.y, rb.velocity.z);
         }
-        else if (rb.velocity.z > moveSpeedLimit.z && Mathf.Sign(direction.z) == -1) // -2 and speed limit -3
+        if (Mathf.Abs(rb.velocity.z) < Mathf.Abs(moveSpeedLimit.z))
         {
-            rb.velocity += new Vector3(0, 0, velocity.z);
-
-            //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, moveSpeedLimit.z, -moveSpeedLimit.z));
-
-            // If there is no input then dead stop player
-            if (direction.z == 0)
-            {
-                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
-            }
+            rb.velocity += velocity.z * Vector3.forward;
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z, -Mathf.Abs(moveSpeedLimit.z), Mathf.Abs(moveSpeedLimit.z)));
+        }
+        else if (Mathf.Sign(rb.velocity.z) == -Mathf.Sign(moveSpeedLimit.z))
+        {
+            rb.velocity += velocity.z * Vector3.forward;
+        }
+        else
+        {
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * friction);
         }
     }
 }
