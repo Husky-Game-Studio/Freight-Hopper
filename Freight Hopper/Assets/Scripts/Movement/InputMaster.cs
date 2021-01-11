@@ -49,6 +49,46 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ground Pound"",
+                    ""type"": ""Button"",
+                    ""id"": ""8dafbd59-a234-4194-98ab-acd6ac84e920"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""eb8a9c01-9b08-4665-9dcf-cd0993eabc85"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Upward Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""b1bc063b-999f-44b6-a2c1-91c3bb09649d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Full Stop"",
+                    ""type"": ""Button"",
+                    ""id"": ""ead930ef-e477-4b0f-8081-58521b34d665"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Grapple Pole"",
+                    ""type"": ""Button"",
+                    ""id"": ""ded072bd-f6d3-4ec4-985d-12fe0fe19b03"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -139,6 +179,61 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7081889-1f4e-4768-8f78-3ee95bbb188b"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ground Pound"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e93637b-176f-472d-ae71-78c7ec8a5a4c"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc96117b-391c-44b2-808b-da68dc8961d7"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upward Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8e4321c-b2e1-4269-a640-dd0c566a7f7d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Full Stop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""adb02bd0-09d5-409d-b2ed-1ab5dc789b4d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grapple Pole"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -151,6 +246,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Restart = m_Player.FindAction("Restart", throwIfNotFound: true);
+        m_Player_GroundPound = m_Player.FindAction("Ground Pound", throwIfNotFound: true);
+        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_UpwardDash = m_Player.FindAction("Upward Dash", throwIfNotFound: true);
+        m_Player_FullStop = m_Player.FindAction("Full Stop", throwIfNotFound: true);
+        m_Player_GrapplePole = m_Player.FindAction("Grapple Pole", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,6 +304,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Restart;
+    private readonly InputAction m_Player_GroundPound;
+    private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_UpwardDash;
+    private readonly InputAction m_Player_FullStop;
+    private readonly InputAction m_Player_GrapplePole;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -212,6 +317,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Restart => m_Wrapper.m_Player_Restart;
+        public InputAction @GroundPound => m_Wrapper.m_Player_GroundPound;
+        public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @UpwardDash => m_Wrapper.m_Player_UpwardDash;
+        public InputAction @FullStop => m_Wrapper.m_Player_FullStop;
+        public InputAction @GrapplePole => m_Wrapper.m_Player_GrapplePole;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -233,6 +343,21 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Restart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
                 @Restart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
                 @Restart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
+                @GroundPound.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
+                @GroundPound.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
+                @GroundPound.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
+                @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @UpwardDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
+                @UpwardDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
+                @UpwardDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
+                @FullStop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
+                @FullStop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
+                @FullStop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
+                @GrapplePole.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
+                @GrapplePole.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
+                @GrapplePole.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -249,6 +374,21 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Restart.started += instance.OnRestart;
                 @Restart.performed += instance.OnRestart;
                 @Restart.canceled += instance.OnRestart;
+                @GroundPound.started += instance.OnGroundPound;
+                @GroundPound.performed += instance.OnGroundPound;
+                @GroundPound.canceled += instance.OnGroundPound;
+                @Dash.started += instance.OnDash;
+                @Dash.performed += instance.OnDash;
+                @Dash.canceled += instance.OnDash;
+                @UpwardDash.started += instance.OnUpwardDash;
+                @UpwardDash.performed += instance.OnUpwardDash;
+                @UpwardDash.canceled += instance.OnUpwardDash;
+                @FullStop.started += instance.OnFullStop;
+                @FullStop.performed += instance.OnFullStop;
+                @FullStop.canceled += instance.OnFullStop;
+                @GrapplePole.started += instance.OnGrapplePole;
+                @GrapplePole.performed += instance.OnGrapplePole;
+                @GrapplePole.canceled += instance.OnGrapplePole;
             }
         }
     }
@@ -259,5 +399,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
+        void OnGroundPound(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
+        void OnUpwardDash(InputAction.CallbackContext context);
+        void OnFullStop(InputAction.CallbackContext context);
+        void OnGrapplePole(InputAction.CallbackContext context);
     }
 }

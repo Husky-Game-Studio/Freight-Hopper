@@ -40,7 +40,7 @@ public class UserInput : MonoBehaviour
     }
 
     // Returns if the player jumped
-    public bool Jumped()
+    public bool Jump()
     {
         return master.Player.Jump.triggered;
     }
@@ -49,5 +49,29 @@ public class UserInput : MonoBehaviour
     public bool Restart()
     {
         return master.Player.Restart.triggered;
+    }
+
+    // Returns true if player presses the dash key/button
+    public bool Dash()
+    {
+        return master.Player.Dash.triggered;
+    }
+
+    // Returns true if player presses the FullStop key/button
+    public bool FullStop()
+    {
+        return master.Player.FullStop.triggered;
+    }
+
+    // Returns true if player presses the UpwardDash key/button
+    public bool UpwardDash()
+    {
+        return master.Player.UpwardDash.triggered;
+    }
+
+    // Returns true if player presses the GrapplePole key/button
+    public bool GrapplePole()
+    {
+        return master.Player.GrapplePole.triggered;
     }
 }

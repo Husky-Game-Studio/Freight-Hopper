@@ -47,7 +47,7 @@ public class JumpBehavior : MonoBehaviour
     private void Update()
     {
         // Jump buffering
-        if (UserInput.Input.Jumped())
+        if (UserInput.Input.Jump())
         {
             jumpBuffer.resetTimer();
         }
