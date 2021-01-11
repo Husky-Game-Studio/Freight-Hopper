@@ -2,32 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
 public class BouncyPad : MonoBehaviour
 {
     [Range(0, 1)]
     [SerializeField] private float percentReflection = 1;
 
-    [SerializeField] private Vector3 normal;
-
-    private BoxCollider triggerCollider;
+    //[SerializeField] private Vector3 normal;
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position, normal);
+        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * percentReflection);
     }
 
     private void Awake()
     {
-        triggerCollider = GetComponent<BoxCollider>();
+        this.GetComponent<BoxCollider>().material.bounciness = percentReflection;
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnCollisionEnter(UnityEngine.Collision collision)
     {
-        if (other.CompareTag("Player"))
+        if (collision.collider.CompareTag("Player"))
         {
-            Bounce(other);
+            Bounce(collision.collider);
         }
     }
 
@@ -35,8 +32,9 @@ public class BouncyPad : MonoBehaviour
     {
         Rigidbody rb = other.attachedRigidbody;
         Vector3 otherVelocity = rb.velocity;
-        Vector3 reflectDirection = Vector3.Reflect(otherVelocity, normal) * percentReflection;
+        rb.velocity = Vector3.zero;
+        Vector3 reflectDirection = Vector3.Reflect(otherVelocity, transform.TransformDirection(normal)) * percentReflection;
         Debug.Log("reflectDirection " + reflectDirection);
         rb.velocity = reflectDirection;
-    }
+    }*/
 }

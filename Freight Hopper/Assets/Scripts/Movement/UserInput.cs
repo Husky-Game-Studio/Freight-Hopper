@@ -5,6 +5,10 @@ public class UserInput : MonoBehaviour
     // Start is called before the first frame update
     private InputMaster master;
 
+    private static UserInput input;
+
+    public static UserInput Input => input;
+
     private void OnEnable()
     {
         master.Enable();
@@ -17,6 +21,15 @@ public class UserInput : MonoBehaviour
 
     private void Awake()
     {
+        // Singleton instance pattern
+        if (input == null)
+        {
+            input = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
         master = new InputMaster();
     }
 
