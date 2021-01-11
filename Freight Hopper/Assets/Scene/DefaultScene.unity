@@ -636,29 +636,16 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
---- !u!1 &914183919 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2097557228, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-  m_PrefabInstance: {fileID: 6851446874152417278}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &914183920 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2097557229, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
   m_PrefabInstance: {fileID: 6851446874152417278}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &914183921
+--- !u!135 &914183921 stripped
 SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 914183921, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+  m_PrefabInstance: {fileID: 6851446874152417278}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 914183919}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.38
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1715149953
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,14 +821,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1871736620, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: friction
-      value: 0.95
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871736621, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 0322162537d007a4ea1109a16040f1b8, type: 2}
     - target: {fileID: 2997259507317749449, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -890,75 +869,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrefab
       objectReference: {fileID: 0}
-    - target: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
---- !u!1 &6851446874152417279 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-  m_PrefabInstance: {fileID: 6851446874152417278}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6851446874152417280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6851446874152417279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c028b521cd8cf0a4c8d2727177a98923, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6851446874152417289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6851446874152417279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 743f4f71da3cd96478a7353af0bd33f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  downwardsForce: 20
-  delay:
-    duration: 0.5
-    current: 0
---- !u!114 &6851446874152417290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6851446874152417279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ab7f45280372ed4bace75ec6ab9afbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cooldown:
-    duration: 2
-    current: 0
---- !u!114 &6851446874152417291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6851446874152417279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8520c9a527ba0674180cdc9cf9936e13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cooldown:
-    duration: 2
-    current: 0
-  delay:
-    duration: 0.2
-    current: 0
