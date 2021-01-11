@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class MovementBehavior : MonoBehaviour
 {
-    private UserInput input;
     private Rigidbody rb;
     private Transform cameraTransform;
 
@@ -22,7 +21,6 @@ public class MovementBehavior : MonoBehaviour
     // Constructs the variables when the game starts
     private void Awake()
     {
-        input = GetComponent<UserInput>();
         cameraTransform = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
     }
@@ -31,7 +29,7 @@ public class MovementBehavior : MonoBehaviour
     private void Update()
     {
         // Gets the x and y axis of the player input and puts it in a vector
-        moveDirection = new Vector3(input.Move().x, 0f, input.Move().y);
+        moveDirection = new Vector3(UserInput.Input.Move().x, 0f, UserInput.Input.Move().y);
     }
 
     private void FixedUpdate()
