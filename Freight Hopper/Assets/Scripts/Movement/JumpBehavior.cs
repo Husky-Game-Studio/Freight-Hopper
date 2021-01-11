@@ -10,13 +10,16 @@ public class JumpBehavior : MonoBehaviour
     // isGrounded should sometime be seperated from the jump behavior. Other scripts depend on it.
     public bool IsGrounded => isGrounded;
 
-    private Timer jumpBuffer = new Timer(0.2f);
-    private Timer hangTime = new Timer(0.2f);
+    [SerializeField] private Timer jumpBuffer = new Timer(0.2f);
+    [SerializeField] private Timer hangTime = new Timer(0.2f);
+    [SerializeField] private float jumpForce = 10;
+    public float JumpForce => jumpForce;
 
     // Variable to chech if we are allowed to jump
     private bool jump;
 
     private bool canJump;
+    public bool CanJump => canJump;
 
     // Constructs the variables when the game starts
     private void Awake()
@@ -84,7 +87,7 @@ public class JumpBehavior : MonoBehaviour
         // Jump code
         if (jump)
         {
-            rb.AddForce(new Vector3(0f, 10f, 0f), ForceMode.Impulse);
+            rb.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
             isGrounded = false;
             jump = false;
             canJump = false;

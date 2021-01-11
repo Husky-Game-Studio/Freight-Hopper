@@ -56,7 +56,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""id"": ""8dafbd59-a234-4194-98ab-acd6ac84e920"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press(behavior=2)""
                 },
                 {
                     ""name"": ""Dash"",

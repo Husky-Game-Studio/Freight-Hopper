@@ -21,7 +21,7 @@ public class GroundPound : MonoBehaviour
             delay.ResetTimer();
         }
 
-        if (GetComponent<JumpBehavior>().IsGrounded)
+        if (GetComponent<JumpBehavior>().IsGrounded || !UserInput.Input.GroundPound())
         {
             groundPoundPossible = true;
             groundPound = false;

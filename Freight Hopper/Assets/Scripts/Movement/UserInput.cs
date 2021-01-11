@@ -9,6 +9,8 @@ public class UserInput : MonoBehaviour
 
     public static UserInput Input => input;
 
+    private bool groundPoundHeld;
+
     private void OnEnable()
     {
         master.Enable();
@@ -31,6 +33,14 @@ public class UserInput : MonoBehaviour
             Destroy(this);
         }
         master = new InputMaster();
+    }
+
+    private void Update()
+    {
+        if (master.Player.GroundPound.triggered)
+        {
+            groundPoundHeld = !groundPoundHeld;
+        }
     }
 
     // Returns the direction the player wants to move
@@ -75,9 +85,9 @@ public class UserInput : MonoBehaviour
         return master.Player.GrapplePole.triggered;
     }
 
-    // Returns true if player presses the GroundPound key/button
+    // Returns true if player is holding the GroundPound key/button down
     public bool GroundPound()
     {
-        return master.Player.GroundPound.triggered;
+        return groundPoundHeld;
     }
 }
