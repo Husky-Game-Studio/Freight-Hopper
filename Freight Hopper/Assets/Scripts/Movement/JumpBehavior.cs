@@ -6,6 +6,10 @@ public class JumpBehavior : MonoBehaviour
     private Transform playerTransform;
     private Rigidbody rb;
     private bool isGrounded;
+
+    // isGrounded should sometime be seperated from the jump behavior. Other scripts depend on it.
+    public bool IsGrounded => isGrounded;
+
     private Timer jumpBuffer = new Timer(0.2f);
     private Timer hangTime = new Timer(0.2f);
 

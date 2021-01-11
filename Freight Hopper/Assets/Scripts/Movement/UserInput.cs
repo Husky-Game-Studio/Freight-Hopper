@@ -74,4 +74,10 @@ public class UserInput : MonoBehaviour
     {
         return master.Player.GrapplePole.triggered;
     }
+
+    // Returns true if player presses the GroundPound key/button
+    public bool GroundPound()
+    {
+        return master.Player.GroundPound.triggered;
+    }
 }
