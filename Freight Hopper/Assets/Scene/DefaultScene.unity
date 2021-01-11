@@ -925,5 +925,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743f4f71da3cd96478a7353af0bd33f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundPoundPossible: 1
   downwardsForce: 20
+  delay:
+    duration: 0.5
+    current: 0
+--- !u!114 &6851446874152417290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6851446874152417279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab7f45280372ed4bace75ec6ab9afbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown:
+    duration: 2
+    current: 0

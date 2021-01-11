@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(JumpBehavior))]
 public class GroundPound : MonoBehaviour
 {
-    [SerializeField] private bool groundPoundPossible = true;
+    private bool groundPoundPossible = true;
     [SerializeField] private float downwardsForce;
     [SerializeField] private Timer delay = new Timer(0.5f);
     private bool groundPound = false;
@@ -13,12 +13,12 @@ public class GroundPound : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        delay.countDown();
-        if (UserInput.Input.GroundPound() && !delay.timerActive() && groundPoundPossible)
+        delay.CountDown();
+        if (UserInput.Input.GroundPound() && !delay.TimerActive() && groundPoundPossible)
         {
             groundPound = true;
             groundPoundPossible = false;
-            delay.resetTimer();
+            delay.ResetTimer();
         }
 
         if (GetComponent<JumpBehavior>().IsGrounded)

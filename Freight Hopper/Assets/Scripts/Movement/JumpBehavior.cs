@@ -43,7 +43,7 @@ public class JumpBehavior : MonoBehaviour
         if (other.gameObject.CompareTag("landable"))
         {
             isGrounded = false;
-            hangTime.resetTimer();
+            hangTime.ResetTimer();
         }
     }
 
@@ -53,14 +53,14 @@ public class JumpBehavior : MonoBehaviour
         // Jump buffering
         if (UserInput.Input.Jump())
         {
-            jumpBuffer.resetTimer();
+            jumpBuffer.ResetTimer();
         }
         else
         {
-            jumpBuffer.countDown();
+            jumpBuffer.CountDown();
         }
         //Hang Time
-        if (!hangTime.timerActive() && !isGrounded)
+        if (!hangTime.TimerActive() && !isGrounded)
         {
             canJump = false;
         }
@@ -70,12 +70,12 @@ public class JumpBehavior : MonoBehaviour
             hangTime.countDown();
         */
         }
-        hangTime.countDown();
+        hangTime.CountDown();
 
-        if (jumpBuffer.timerActive() && canJump)
+        if (jumpBuffer.TimerActive() && canJump)
         {
             jump = true;
-            jumpBuffer.deactivateTimer();
+            jumpBuffer.DeactivateTimer();
         }
     }
 
