@@ -18,7 +18,7 @@ public class Dash : MonoBehaviour
     {
         float radians = angle * Mathf.Deg2Rad;
         Vector3 direction = new Vector3(0, Mathf.Sin(radians), Mathf.Cos(radians));
-        UnityEditor.Handles.color = Color.blue;
+        Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(direction));
     }
 
