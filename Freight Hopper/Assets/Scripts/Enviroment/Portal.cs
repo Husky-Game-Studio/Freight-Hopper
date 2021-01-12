@@ -7,7 +7,7 @@ public class Portal : MonoBehaviour
     [SerializeField] private Portal otherPortal;
     [SerializeField] private Vector3 exitPosition;
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.DrawRay(transform.position, transform.forward);
         UnityEditor.Handles.color = Color.yellow;

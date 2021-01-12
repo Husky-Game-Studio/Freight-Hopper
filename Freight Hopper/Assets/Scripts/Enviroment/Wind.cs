@@ -7,7 +7,7 @@ public class Wind : MonoBehaviour
     [SerializeField] private float strength = 1;
     [SerializeField] private List<Rigidbody> effectedBodies = new List<Rigidbody>();
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * strength);

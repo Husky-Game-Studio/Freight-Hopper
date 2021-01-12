@@ -13,7 +13,7 @@ public class MovingPlatform : MonoBehaviour
     private float currentWaitTime;
     private int currentDirection = 1;
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         for (int i = 0; i < waypoints.Length; i++)
         {

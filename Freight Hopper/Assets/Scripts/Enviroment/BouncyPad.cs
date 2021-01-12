@@ -9,7 +9,7 @@ public class BouncyPad : MonoBehaviour
 
     //[SerializeField] private Vector3 normal;
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * percentReflection);
