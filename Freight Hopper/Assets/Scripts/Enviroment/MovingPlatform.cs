@@ -8,7 +8,7 @@ public class MovingPlatform : MonoBehaviour
     private int index = 0;
     [SerializeField] private bool loop;
     [SerializeField] private float speed;
-    [SerializeField] private float tolerance;
+    [SerializeField] private Vector3 tolerance;
     [SerializeField] private float delayDuration;
     private float currentWaitTime;
     private int currentDirection = 1;
@@ -23,13 +23,15 @@ public class MovingPlatform : MonoBehaviour
                 UnityEditor.Handles.DrawDottedLine(waypoints[i], waypoints[i + 1], 50 / speed);
                 UnityEditor.Handles.color = Color.white;
             }
-            UnityEditor.Handles.DrawWireCube(waypoints[i], Vector3.one * tolerance);
+            UnityEditor.Handles.DrawWireCube(waypoints[i], tolerance);
         }
         if (loop)
         {
             UnityEditor.Handles.color = Color.yellow;
             UnityEditor.Handles.DrawDottedLine(waypoints[0], waypoints[waypoints.Length - 1], 50 / speed);
         }
+        UnityEditor.Handles.color = Color.red;
+        UnityEditor.Handles.DrawWireCube(waypoints[index], tolerance);
     }
 
     private void FixedUpdate()
@@ -44,11 +46,27 @@ public class MovingPlatform : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(UnityEngine.Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.transform.parent = this.transform;
+        }
+    }
+
+    private void OnCollisionExit(UnityEngine.Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.transform.parent = null;
+        }
+    }
+
     private void MoveObject()
     {
         Vector3 heading = waypoints[index] - transform.position;
         transform.position += (heading / heading.magnitude) * speed * Time.deltaTime;
-        if (heading.magnitude < tolerance)
+        if (Mathf.Abs(heading.x) < tolerance.x && Mathf.Abs(heading.y) < tolerance.y && Mathf.Abs(heading.z) < tolerance.z)
         {
             transform.position = waypoints[index];
             currentWaitTime = Time.time;
