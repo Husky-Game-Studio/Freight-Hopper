@@ -4892,7 +4892,7 @@ Transform:
   - {fileID: 1581190179}
   - {fileID: 5005736}
   - {fileID: 187376242}
-  m_Father: {fileID: 1867366566}
+  m_Father: {fileID: 997571303}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &390513684
@@ -6671,7 +6671,7 @@ Transform:
   - {fileID: 1441124793}
   - {fileID: 751448627}
   - {fileID: 1362436203}
-  m_Father: {fileID: 1867366566}
+  m_Father: {fileID: 997571303}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &775893583
@@ -7933,6 +7933,38 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &997571302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 997571303}
+  m_Layer: 0
+  m_Name: 3DMainMenu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &997571303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997571302}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -710.5, y: -314.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 772209148}
+  - {fileID: 329206790}
+  m_Father: {fileID: 1643588335}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1067027058
 GameObject:
   m_ObjectHideFlags: 0
@@ -11749,6 +11781,7 @@ RectTransform:
   - {fileID: 39694954}
   - {fileID: 1787424846}
   - {fileID: 1326694053}
+  - {fileID: 997571303}
   m_Father: {fileID: 126928370}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12693,7 +12726,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b130fc55109734090699ee3bd6eada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainCamera: {fileID: 0}
+  MainCamera: {fileID: 1557639362}
+  LevelSelector: {fileID: 2098520622}
+  MainMenu: {fileID: 1643588334}
 --- !u!4 &1867366566
 Transform:
   m_ObjectHideFlags: 0
@@ -12704,9 +12739,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 772209148}
-  - {fileID: 329206790}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
