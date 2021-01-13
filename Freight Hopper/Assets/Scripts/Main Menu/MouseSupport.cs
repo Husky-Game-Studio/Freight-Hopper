@@ -35,6 +35,10 @@ public class MouseSupport : MonoBehaviour
                     LevelSelector.gameObject.SetActive(true);
                     MainMenu.gameObject.SetActive(false);
                 }
+                else if (hit && hitInfo.collider.gameObject.name == "TempStartQuitQ")
+                {
+                    Application.Quit();
+                }
             }
         }
     }
