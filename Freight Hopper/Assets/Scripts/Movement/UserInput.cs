@@ -10,6 +10,7 @@ public class UserInput : MonoBehaviour
     public static UserInput Input => input;
 
     private bool groundPoundHeld;
+    private bool jumpHeld;
 
     private void OnEnable()
     {
@@ -41,6 +42,10 @@ public class UserInput : MonoBehaviour
         {
             groundPoundHeld = !groundPoundHeld;
         }
+
+        if (master.Player.Jump.triggered) {
+            jumpHeld = !jumpHeld;
+        }
     }
 
     // Returns the direction the player wants to move
@@ -52,9 +57,8 @@ public class UserInput : MonoBehaviour
     // Returns if the player jumped
     public bool Jump()
     {
-        return master.Player.Jump.triggered;
+        return jumpHeld;
     }
-
     // Returns true if the player press the restart key/button
     public bool Restart()
     {
