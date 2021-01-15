@@ -76,7 +76,7 @@ public class JumpBehavior : MonoBehaviour {
             Jump();
         }
     }
-
+    // When called makes character jump
     public void Jump() {
         if (midJump == false) {
             jumpTimer.ResetTimer();

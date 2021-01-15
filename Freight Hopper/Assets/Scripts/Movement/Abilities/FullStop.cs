@@ -11,24 +11,28 @@ public class FullStop : MonoBehaviour {
     private Rigidbody rigidbody1;
 
     private void Start() {
+        // Gets the rigid body component and jump behaviour script
         rigidbody1 = GetComponent<Rigidbody>();
         jumpBehavior = GetComponent<JumpBehavior>();
     }
 
     private void Update() {
+        // Starts the countdown
         cooldown.CountDown();
-        if (UserInput.Input.FullStop() && !cooldown.TimerActive() && fullStopPossible) {
+        // Checks if the placer can full stop
+        if (UserInput.Input.FullStopTriggered() && !cooldown.TimerActive() && fullStopPossible) {
             fullStop = true;
             fullStopPossible = false;
             cooldown.ResetTimer();
         }
-
+        // Checks if player is grounded if yes then its possible to full stop 
         if (jumpBehavior.IsGrounded) {
             fullStopPossible = true;
         }
     }
 
     private void FixedUpdate() {
+        // Stops the player
         if (fullStop) {
             rigidbody1.velocity = Vector3.zero;
             fullStop = false;

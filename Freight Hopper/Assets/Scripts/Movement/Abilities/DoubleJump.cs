@@ -14,6 +14,7 @@ public class DoubleJump : MonoBehaviour {
     private Rigidbody rb;
 
     private void Start() {
+        // gets required components
         rb = GetComponent<Rigidbody>();
         jumpBehavior = GetComponent<JumpBehavior>();
     }
@@ -21,17 +22,20 @@ public class DoubleJump : MonoBehaviour {
     private void Update() {
         cooldown.CountDown();
         delay.CountDown();
+        // Checks if grounded 
         if (jumpBehavior.IsGrounded) {
             wasOnGround = true;
             doubleJumpPossible = false;
         }
 
+        // if can jump and was previously on ground then reset timer
         if (jumpBehavior.CanJump && wasOnGround) {
             doubleJumpPossible = true;
             wasOnGround = false;
             delay.ResetTimer();
         }
 
+        // checks if cooldown is active
         if (UserInput.Input.Jump() && !cooldown.TimerActive() && !delay.TimerActive() && doubleJumpPossible &&
             releasedJump) {
             doubleJump = true;
@@ -43,6 +47,7 @@ public class DoubleJump : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        // adds the jump force
         if (doubleJump) {
             if (rb.velocity.y < 0) {
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);

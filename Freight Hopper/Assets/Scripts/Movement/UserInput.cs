@@ -62,12 +62,12 @@ public class UserInput : MonoBehaviour {
     }
 
     // Returns true if player presses the FullStop key/button
-    public bool FullStop() {
+    public bool FullStopTriggered() {
         return master.Player.FullStop.triggered;
     }
 
     // Returns true if player presses the UpwardDash key/button
-    public bool UpwardDash() {
+    public bool UpwardDashTriggered() {
         return master.Player.UpwardDash.triggered;
     }
 
@@ -77,7 +77,7 @@ public class UserInput : MonoBehaviour {
     }
 
     // Returns true if player is holding the GroundPound key/button down
-    public bool GroundPound() {
+    public bool GroundPoundTriggered() {
         return groundPoundHeld;
     }
 }

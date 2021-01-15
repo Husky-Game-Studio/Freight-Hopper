@@ -13,25 +13,28 @@ public class GroundPound : MonoBehaviour {
 
     // Update is called once per frame
     private void Start() {
+        // Gets the rigid body component and jump behaviour script
         rigidbody1 = GetComponent<Rigidbody>();
         jumpBehavior = GetComponent<JumpBehavior>();
     }
 
     private void Update() {
         delay.CountDown();
-        if (UserInput.Input.GroundPound() && !delay.TimerActive() && groundPoundPossible) {
+        // Checks if ground pound is possible
+        if (UserInput.Input.GroundPoundTriggered() && !delay.TimerActive() && groundPoundPossible) {
             groundPound = true;
             groundPoundPossible = false;
             delay.ResetTimer();
         }
-
-        if (jumpBehavior.IsGrounded || !UserInput.Input.GroundPound()) {
+        // Checks if player is grounded and the button is pressed
+        if (jumpBehavior.IsGrounded || !UserInput.Input.GroundPoundTriggered()) {
             groundPoundPossible = true;
             groundPound = false;
         }
     }
 
     private void FixedUpdate() {
+        // Adds the ground pound force
         if (groundPound) {
             rigidbody1.AddForce(Vector3.down * downwardsForce);
         }
