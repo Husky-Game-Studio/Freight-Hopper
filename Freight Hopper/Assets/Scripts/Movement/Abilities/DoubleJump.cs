@@ -11,18 +11,25 @@ public class DoubleJump : MonoBehaviour
     private bool doubleJump = false;
     private bool wasOnGround;
     private bool releasedJump;
+    private JumpBehavior jumpBehavior;
+    private Rigidbody rb;
+
+    private void Start() {
+        rb = GetComponent<Rigidbody>();
+        jumpBehavior = GetComponent<JumpBehavior>();
+    }
 
     private void Update()
     {
         cooldown.CountDown();
         delay.CountDown();
-        if (GetComponent<JumpBehavior>().IsGrounded)
+        if (jumpBehavior.IsGrounded)
         {
             wasOnGround = true;
             doubleJumpPossible = false;
         }
 
-        if (!GetComponent<JumpBehavior>().CanJump && wasOnGround)
+        if (jumpBehavior.CanJump && wasOnGround)
         {
             doubleJumpPossible = true;
             wasOnGround = false;
@@ -43,13 +50,13 @@ public class DoubleJump : MonoBehaviour
     {
         if (doubleJump)
         {
-            Rigidbody rb = GetComponent<Rigidbody>();
             if (rb.velocity.y < 0)
             {
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             }
 
-            rb.AddForce(GetComponent<JumpBehavior>().JumpForce * Vector3.up, ForceMode.Impulse);
+            /*rb.AddForce(jumpBehavior.JumpForce * Vector3.up, ForceMode.Impulse);*/
+            jumpBehavior.Jump();
             doubleJump = false;
         }
     }
