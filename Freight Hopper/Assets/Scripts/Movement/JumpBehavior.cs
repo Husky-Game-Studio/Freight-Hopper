@@ -12,8 +12,8 @@ public class JumpBehavior : MonoBehaviour {
 
     [SerializeField] private Timer jumpBuffer = new Timer(0.2f);
     [SerializeField] private Timer hangTime = new Timer(0.2f);
-    private Timer jumpTimer = new Timer(0.1f);
-    private float jumpForce = 5f;
+    [SerializeField] private Timer jumpTimer = new Timer(0.1f);
+    [SerializeField] private float jumpForce = 5f;
     public float JumpForce => jumpForce;
 
     // Variable to chech if we are allowed to jump
