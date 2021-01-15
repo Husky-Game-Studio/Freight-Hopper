@@ -13,7 +13,7 @@ public class JumpBehavior : MonoBehaviour {
     [SerializeField] private Timer jumpBuffer = new Timer(0.2f);
     [SerializeField] private Timer hangTime = new Timer(0.2f);
      private Timer jumpTimer = new Timer(0.1f);
-     private float jumpForce = 5f;
+     private float jumpForce = 3f;
     public float JumpForce => jumpForce;
 
     // Variable to chech if we are allowed to jump
@@ -73,23 +73,28 @@ public class JumpBehavior : MonoBehaviour {
     private void FixedUpdate() {
         // Jump code
         if (jump || midJump) {
-            if (midJump == false) {
-                jumpTimer.ResetTimer();
-            }
-
-            if (jumpTimer.TimerActive() && UserInput.Input.Jump()) {
-                jumpTimer.CountDownFixed();
-                rb.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
-                midJump = true;
-            }
-            else {
-                jumpTimer.DeactivateTimer();
-                midJump = false;
-            }
-
-            isGrounded = false;
-            jump = false;
-            canJump = false;
+           Jump();
         }
     }
+
+    private void Jump() {
+        if (midJump == false) {
+            jumpTimer.ResetTimer();
+        }
+
+        if (jumpTimer.TimerActive() && UserInput.Input.Jump()) {
+            jumpTimer.CountDownFixed();
+            rb.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
+            midJump = true;
+        }
+        else {
+            jumpTimer.DeactivateTimer();
+            midJump = false;
+        }
+
+        isGrounded = false;
+        jump = false;
+        canJump = false;
+    }
+    
 }
