@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class UserInput : MonoBehaviour
-{
+public class UserInput : MonoBehaviour {
     // Start is called before the first frame update
     private InputMaster master;
 
@@ -12,34 +11,28 @@ public class UserInput : MonoBehaviour
     private bool groundPoundHeld;
     private bool jumpHeld;
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         master.Enable();
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() {
         master.Disable();
     }
 
-    private void Awake()
-    {
+    private void Awake() {
         // Singleton instance pattern
-        if (input == null)
-        {
+        if (input == null) {
             input = this;
         }
-        else
-        {
+        else {
             Destroy(this);
         }
+
         master = new InputMaster();
     }
 
-    private void Update()
-    {
-        if (master.Player.GroundPound.triggered)
-        {
+    private void Update() {
+        if (master.Player.GroundPound.triggered) {
             groundPoundHeld = !groundPoundHeld;
         }
 
@@ -49,49 +42,42 @@ public class UserInput : MonoBehaviour
     }
 
     // Returns the direction the player wants to move
-    public Vector2 Move()
-    {
+    public Vector2 Move() {
         return master.Player.Movement.ReadValue<Vector2>();
     }
 
     // Returns if the player jumped
-    public bool Jump()
-    {
+    public bool Jump() {
         return jumpHeld;
     }
+
     // Returns true if the player press the restart key/button
-    public bool Restart()
-    {
+    public bool Restart() {
         return master.Player.Restart.triggered;
     }
 
     // Returns true if player presses the dash key/button
-    public bool Dash()
-    {
+    public bool Dash() {
         return master.Player.Dash.triggered;
     }
 
     // Returns true if player presses the FullStop key/button
-    public bool FullStop()
-    {
+    public bool FullStop() {
         return master.Player.FullStop.triggered;
     }
 
     // Returns true if player presses the UpwardDash key/button
-    public bool UpwardDash()
-    {
+    public bool UpwardDash() {
         return master.Player.UpwardDash.triggered;
     }
 
     // Returns true if player presses the GrapplePole key/button
-    public bool GrapplePole()
-    {
+    public bool GrapplePole() {
         return master.Player.GrapplePole.triggered;
     }
 
     // Returns true if player is holding the GroundPound key/button down
-    public bool GroundPound()
-    {
+    public bool GroundPound() {
         return groundPoundHeld;
     }
 }

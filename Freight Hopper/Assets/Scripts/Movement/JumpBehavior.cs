@@ -12,8 +12,8 @@ public class JumpBehavior : MonoBehaviour {
 
     [SerializeField] private Timer jumpBuffer = new Timer(0.2f);
     [SerializeField] private Timer hangTime = new Timer(0.2f);
-     private Timer jumpTimer = new Timer(0.1f);
-     private float jumpForce = 5f;
+    private Timer jumpTimer = new Timer(0.1f);
+    private float jumpForce = 5f;
     public float JumpForce => jumpForce;
 
     // Variable to chech if we are allowed to jump
@@ -73,7 +73,7 @@ public class JumpBehavior : MonoBehaviour {
     private void FixedUpdate() {
         // Jump code
         if (jump || midJump) {
-           Jump();
+            Jump();
         }
     }
 
@@ -96,5 +96,4 @@ public class JumpBehavior : MonoBehaviour {
         jump = false;
         canJump = false;
     }
-    
 }

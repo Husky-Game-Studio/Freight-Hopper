@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(JumpBehavior))]
-public class UpwardDash : MonoBehaviour
-{
+public class UpwardDash : MonoBehaviour {
     private bool upwardDashPossible = true;
     [SerializeField] private float initialUpwardsForce;
     [SerializeField] private float consistentForce;
@@ -12,39 +11,37 @@ public class UpwardDash : MonoBehaviour
     [SerializeField] private Timer dashDuration = new Timer(1);
     private bool upwardDash = false;
     private Rigidbody rb;
+    private JumpBehavior jumpBehavior;
 
-    private void Awake()
-    {
+    private void Start() {
+        jumpBehavior = GetComponent<JumpBehavior>();
+    }
+
+    private void Awake() {
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
-    {
+    private void Update() {
         delay.CountDown();
         dashDuration.CountDown();
-        if (UserInput.Input.UpwardDash() && !delay.TimerActive() && upwardDashPossible)
-        {
+        if (UserInput.Input.UpwardDash() && !delay.TimerActive() && upwardDashPossible) {
             upwardDash = true;
             upwardDashPossible = false;
             delay.ResetTimer();
         }
 
-        if (GetComponent<JumpBehavior>().IsGrounded)
-        {
+        if (jumpBehavior.IsGrounded) {
             upwardDashPossible = true;
         }
 
-        if (dashDuration.TimerActive())
-        {
+        if (dashDuration.TimerActive()) {
             rb.AddForce(Vector3.up * consistentForce);
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (upwardDash)
-        {
+    private void FixedUpdate() {
+        if (upwardDash) {
             rb.velocity = Vector3.zero;
             rb.AddForce(Vector3.up * initialUpwardsForce, ForceMode.Impulse);
             upwardDash = false;

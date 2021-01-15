@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(JumpBehavior))]
-public class DoubleJump : MonoBehaviour
-{
+public class DoubleJump : MonoBehaviour {
     private bool doubleJumpPossible = true;
     [SerializeField] private Timer cooldown = new Timer(2);
     [SerializeField] private Timer delay = new Timer(0.1f);
@@ -19,25 +18,22 @@ public class DoubleJump : MonoBehaviour
         jumpBehavior = GetComponent<JumpBehavior>();
     }
 
-    private void Update()
-    {
+    private void Update() {
         cooldown.CountDown();
         delay.CountDown();
-        if (jumpBehavior.IsGrounded)
-        {
+        if (jumpBehavior.IsGrounded) {
             wasOnGround = true;
             doubleJumpPossible = false;
         }
 
-        if (jumpBehavior.CanJump && wasOnGround)
-        {
+        if (jumpBehavior.CanJump && wasOnGround) {
             doubleJumpPossible = true;
             wasOnGround = false;
             delay.ResetTimer();
         }
 
-        if (UserInput.Input.Jump() && !cooldown.TimerActive() && !delay.TimerActive() && doubleJumpPossible && releasedJump)
-        {
+        if (UserInput.Input.Jump() && !cooldown.TimerActive() && !delay.TimerActive() && doubleJumpPossible &&
+            releasedJump) {
             doubleJump = true;
             doubleJumpPossible = false;
             cooldown.ResetTimer();
@@ -46,12 +42,9 @@ public class DoubleJump : MonoBehaviour
         releasedJump = !UserInput.Input.Jump();
     }
 
-    private void FixedUpdate()
-    {
-        if (doubleJump)
-        {
-            if (rb.velocity.y < 0)
-            {
+    private void FixedUpdate() {
+        if (doubleJump) {
+            if (rb.velocity.y < 0) {
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             }
 

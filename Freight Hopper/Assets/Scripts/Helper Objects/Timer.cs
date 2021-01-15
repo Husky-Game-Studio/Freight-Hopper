@@ -43,6 +43,7 @@ public class Timer {
     public void CountDown() {
         current -= Time.deltaTime;
     }
+
     // Count down with Fixed update
     public void CountDownFixed() {
         current -= Time.fixedDeltaTime;
