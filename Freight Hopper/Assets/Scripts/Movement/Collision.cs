@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Collision : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static void Respawn(Transform trans, Rigidbody rb)
     {
-        
+        trans.position = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelSettings>().SpawnPosition;
+        rb.velocity = Vector3.zero;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter(UnityEngine.Collision collision)
     {
-        
+        if (!collision.collider.CompareTag("landable"))
+        {
+            Respawn(this.transform, GetComponent<Rigidbody>());
+        }
     }
 }
