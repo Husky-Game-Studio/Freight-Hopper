@@ -8,7 +8,7 @@ public class GeneralInput : MonoBehaviour
     {
         if (UserInput.Input.Restart())
         { // Optimize this later please
-            Collision.Respawn(this.transform, GetComponent<Rigidbody>());
+            this.GetComponent<Collision>().Respawn();
         }
     }
 }
