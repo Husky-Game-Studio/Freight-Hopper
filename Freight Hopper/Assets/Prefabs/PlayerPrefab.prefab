@@ -64,6 +64,9 @@ GameObject:
   - component: {fileID: 6851446874152417289}
   - component: {fileID: 6851446874152417290}
   - component: {fileID: 6851446874152417291}
+  - component: {fileID: 7898006846202917542}
+  - component: {fileID: 6851446874152417282}
+  - component: {fileID: 6851446874152417293}
   m_Layer: 7
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -184,9 +187,9 @@ MonoBehaviour:
     duration: 0.2
     current: 0
   jumpTimer:
-    duration: 1
+    duration: 0.1
     current: 0
-  jumpForce: 5
+  jumpForce: 2
 --- !u!114 &1871736619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +236,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7010316156831883096}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 743f4f71da3cd96478a7353af0bd33f5, type: 3}
   m_Name: 
@@ -249,7 +252,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7010316156831883096}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ab7f45280372ed4bace75ec6ab9afbf, type: 3}
   m_Name: 
@@ -264,7 +267,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7010316156831883096}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8520c9a527ba0674180cdc9cf9936e13, type: 3}
   m_Name: 
@@ -275,3 +278,52 @@ MonoBehaviour:
   delay:
     duration: 0.2
     current: 0
+--- !u!114 &7898006846202917542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010316156831883096}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c56f9a971e69c704ca4b36c6cfe7cc98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialUpwardsForce: 20
+  consistentForce: 1
+  delay:
+    duration: 0.3
+    current: 0
+  dashDuration:
+    duration: 1
+    current: 0
+--- !u!114 &6851446874152417282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010316156831883096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d1eca7b51a20d44a5d87fcb3bb63db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6851446874152417293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010316156831883096}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ed086809159e445b43d358eacb347f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashForce: 40
+  delay:
+    duration: 0.5
+    current: 0
+  angle: 15

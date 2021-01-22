@@ -821,14 +821,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: jumpForce
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: jumpTimer.duration
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 2997259507317749449, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -873,75 +865,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6851446874152417289, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851446874152417290, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851446874152417291, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_Name
       value: PlayerPrefab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
---- !u!1 &6851446874152417279 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
-  m_PrefabInstance: {fileID: 6851446874152417278}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6851446874152417280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6851446874152417279}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c56f9a971e69c704ca4b36c6cfe7cc98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialUpwardsForce: 20
-  consistentForce: 1
-  delay:
-    duration: 0.3
-    current: 0
-  dashDuration:
-    duration: 1
-    current: 0
---- !u!114 &6851446874152417282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6851446874152417279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30d1eca7b51a20d44a5d87fcb3bb63db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6851446874152417293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6851446874152417279}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78ed086809159e445b43d358eacb347f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dashForce: 40
-  delay:
-    duration: 0.5
-    current: 0
-  angle: 15
