@@ -9,10 +9,11 @@ public class FirstPersonCamera : MonoBehaviour
 {
     private Rigidbody playerRB;
     private MovementBehavior playerMovement;
-    private CinemachineVirtualCamera cam;
+    private Camera cam;
 
     private VisualEffect speedLines;
     private Volume speedVolume;
+    private Transform player;
 
     [SerializeField] private CameraEffect fov;
     [SerializeField] private CameraEffect tilt;
@@ -31,18 +32,20 @@ public class FirstPersonCamera : MonoBehaviour
 
     private void Awake()
     {
-        playerRB = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        playerRB = player.gameObject.GetComponent<Rigidbody>();
         playerMovement = playerRB.gameObject.GetComponent<MovementBehavior>();
 
-        cam = GetComponent<CinemachineVirtualCamera>();
-        fov.baseValue = cam.m_Lens.FieldOfView;
+        cam = GetComponent<Camera>();
+        fov.baseValue = cam.fieldOfView;
         fov.value = fov.baseValue;
 
         speedVolume = Camera.main.GetComponentInChildren<Volume>();
         postProcessing.baseValue = 0;
         postProcessing.value = postProcessing.baseValue;
 
-        tilt.baseValue = cam.m_Lens.Dutch;
+        tilt.baseValue = cam.transform.eulerAngles.z;
         tilt.value = tilt.baseValue;
 
         speedLines = Camera.main.GetComponent<VisualEffect>();
@@ -62,7 +65,7 @@ public class FirstPersonCamera : MonoBehaviour
         postProcessing.value = Mathf.Lerp(postProcessing.value, postProcessing.baseValue + postProcessing.addedValue, postProcessing.transitionSmoothness);
         postProcessing.value = Mathf.Clamp(postProcessing.value, postProcessing.baseValue, postProcessing.maxValue);
 
-        cam.m_Lens.FieldOfView = fov.value;
+        cam.fieldOfView = fov.value;
         speedVolume.weight = postProcessing.value;
 
         if (playerRB.velocity.magnitude > 3 * playerMovement.Speed)
@@ -73,6 +76,11 @@ public class FirstPersonCamera : MonoBehaviour
         {
             speedLines.Stop();
         }
+    }
+
+    public void LateUpdate()
+    {
+        this.transform.position = player.position;
     }
 
     /// <summary>
@@ -112,7 +120,7 @@ public class FirstPersonCamera : MonoBehaviour
                 tilt.value = Mathf.Clamp(tilt.value, endingValue, startingValue);
             }
 
-            cam.m_Lens.Dutch = tilt.value;
+            cam.transform.rotation = Quaternion.Euler(0, 0, tilt.value);
             yield return null;
         }
     }
