@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-    [SerializeField] Transform cameraLocation;
+    private Transform cameraLocation;
     // y min, y max
     [SerializeField] Vector2 yRotationLock;
     [SerializeField] Vector2 mouseSensitivity;
+    private Vector2 rotation;
     private void Awake()
     {
+        cameraLocation = transform.parent;
+        rotation = new Vector2(transform.eulerAngles.x, transform.eulerAngles.y);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -27,13 +30,12 @@ public class FirstPersonCamera : MonoBehaviour
 
     void RotatePlayer()
     {
-        Vector2 look = UserInput.Input.Look();
-        Vector2 mouse = look * Time.deltaTime * mouseSensitivity;
+        Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
 
-        Vector2 rotation = new Vector2(mouse.x, Mathf.Clamp(mouse.y, yRotationLock.x, yRotationLock.y));
-        Debug.Log("rotation: " + rotation);
-        Quaternion quaternionRotation = new Quaternion(0, -rotation.y, rotation.x, 0).normalized;
-        Debug.Log("Quaternion rotation: " + quaternionRotation);
-        transform.eulerAngles += new Vector3(-rotation.y, rotation.x, 0);
+        rotation += mouse;
+        rotation.y = Mathf.Clamp(rotation.y, yRotationLock.x, yRotationLock.y);
+
+        transform.localRotation = Quaternion.Euler(-rotation.y, 0, transform.localEulerAngles.z);
+        transform.parent.rotation = Quaternion.Euler(0, rotation.x, 0);
     }
 }
