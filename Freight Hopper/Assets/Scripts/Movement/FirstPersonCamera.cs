@@ -5,10 +5,16 @@ using UnityEngine;
 public class FirstPersonCamera : MonoBehaviour
 {
     private Transform cameraLocation;
+
     // y min, y max
-    [SerializeField] Vector2 yRotationLock;
-    [SerializeField] Vector2 mouseSensitivity;
+    [SerializeField] private Vector2 yRotationLock;
+
+    [SerializeField] private Vector2 mouseSensitivity;
     private Vector2 rotation;
+
+    // Vector2 acceleration;
+    // Vector2 deacceleration;
+
     private void Awake()
     {
         cameraLocation = transform.parent;
@@ -23,12 +29,12 @@ public class FirstPersonCamera : MonoBehaviour
         RotatePlayer();
     }
 
-    void FollowPlayer()
+    private void FollowPlayer()
     {
         this.transform.position = cameraLocation.position;
     }
 
-    void RotatePlayer()
+    private void RotatePlayer()
     {
         Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
 
