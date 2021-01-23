@@ -14,6 +14,8 @@ public class GravityWell : MonoBehaviour
         GetComponent<SphereCollider>().radius = radius;
     }
 
+#if UNITY_EDITOR
+
     private void OnDrawGizmosSelected()
     {
         foreach (Rigidbody rb in effectedBodies)
@@ -22,6 +24,8 @@ public class GravityWell : MonoBehaviour
             Gizmos.DrawRay(rb.position, Vector3.Normalize(this.transform.position - rb.position));
         }
     }
+
+#endif
 
     private void OnTriggerEnter(Collider other)
     {

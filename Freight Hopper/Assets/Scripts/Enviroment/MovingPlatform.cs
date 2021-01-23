@@ -13,6 +13,8 @@ public class MovingPlatform : MonoBehaviour
     private float currentWaitTime;
     private int currentDirection = 1;
 
+#if UNITY_EDITOR
+
     private void OnDrawGizmosSelected()
     {
         for (int i = 0; i < waypoints.Length; i++)
@@ -33,6 +35,8 @@ public class MovingPlatform : MonoBehaviour
         UnityEditor.Handles.color = Color.red;
         UnityEditor.Handles.DrawWireCube(waypoints[index], tolerance);
     }
+
+#endif
 
     private void FixedUpdate()
     {
