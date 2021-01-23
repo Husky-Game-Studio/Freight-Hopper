@@ -16,5 +16,12 @@ public class Collision : MonoBehaviour
         {
             Respawn();
         }
+        else
+        {
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                Camera.main.GetComponent<CameraDrag>().CollidDrag(-1 * collision.GetContact(i).normal);
+            }
+        }
     }
 }

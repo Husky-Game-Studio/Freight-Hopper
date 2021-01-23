@@ -15,18 +15,18 @@ public class CameraEffects : MonoBehaviour
     private float speedEffectsStart;
     private Average playerSpeed;
 
-    [SerializeField] private CameraEffect fov;
-    [SerializeField] private CameraEffect tilt;
-    [SerializeField] private CameraEffect postProcessing;
+    [SerializeField] private CameraEffect<float> fov;
+    [SerializeField] private CameraEffect<float> tilt;
+    [SerializeField] private CameraEffect<float> postProcessing;
 
     [System.Serializable]
-    private struct CameraEffect
+    public struct CameraEffect<T>
     {
-        [HideInInspector] public float baseValue;
-        [HideInInspector] public float value;
+        [HideInInspector] public T baseValue;
+        [HideInInspector] public T value;
         [HideInInspector] public float lerpValue;
 
-        public float maxValue;
+        public T maxValue;
     }
 
     private void Awake()
@@ -100,20 +100,12 @@ public class CameraEffects : MonoBehaviour
         float startingValue = tilt.value;
         float endingValue = tilt.value + amount;
 
-        while (tilt.value != endingValue)
+        tilt.lerpValue = 0;
+        while (tilt.lerpValue <= 1)
         {
             tilt.lerpValue += 0.01f;
 
-            tilt.value = Mathf.Lerp(tilt.value, amount, tilt.lerpValue);
-
-            if (startingValue < endingValue)
-            {
-                tilt.value = Mathf.Clamp(tilt.value, startingValue, endingValue);
-            }
-            else
-            {
-                tilt.value = Mathf.Clamp(tilt.value, endingValue, startingValue);
-            }
+            tilt.value = Mathf.Lerp(tilt.value, startingValue, endingValue);
 
             cam.transform.rotation = Quaternion.Euler(0, 0, tilt.value);
             yield return null;
