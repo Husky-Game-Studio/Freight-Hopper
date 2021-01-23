@@ -54,14 +54,9 @@ public class CameraEffects : MonoBehaviour
     private void Update()
     {
         playerSpeed.Update(playerRB.velocity.magnitude);
-        if (playerRB.velocity.magnitude <= 1 && playerSpeed.CanReset())
+        if (playerRB.velocity.magnitude <= 1)
         {
             playerSpeed.Reset();
-            playerSpeed.ToggleReset();
-        }
-        else if (playerRB.velocity.magnitude >= 1 && !playerSpeed.CanReset())
-        {
-            playerSpeed.ToggleReset();
         }
 
         fov.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - playerMovement.Speed) / speedEffectsStart, 0, 1);

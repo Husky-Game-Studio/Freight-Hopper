@@ -8,7 +8,7 @@ public class Average
     private Queue<float> values;
     private float total;
     private float defaultValue;
-    private bool disableReset;
+    private int resettedBlockCount;
     private int n;
 
     /// <summary>
@@ -21,31 +21,14 @@ public class Average
         this.n = n;
         defaultValue = intializeValue;
         values = new Queue<float>(n);
-        disableReset = false;
         Fill();
     }
 
-    /// <summary>
-    /// Sets disable reset boolean to opposite
-    /// </summary>
-    public void ToggleReset()
-    {
-        disableReset = !disableReset;
-    }
-
-    public bool CanReset()
-    {
-        return !disableReset;
-    }
-
-    // Assumes a cleared queue
+    // Resets block count to N and causes total to not use the queue for N updates
     private void Fill()
     {
-        for (int i = 0; i < n; i++)
-        {
-            values.Enqueue(defaultValue);
-            total += defaultValue;
-        }
+        total = defaultValue * n;
+        resettedBlockCount = n;
     }
 
     /// <summary>
@@ -54,7 +37,20 @@ public class Average
     /// <param name="value">Adds value to the total</param>
     public void Update(float value)
     {
-        total -= values.Dequeue();
+        if (resettedBlockCount > 0)
+        {
+            total -= defaultValue;
+            resettedBlockCount--;
+            if (values.Count == n)
+            {
+                values.Dequeue();
+            }
+        }
+        else
+        {
+            total -= values.Dequeue();
+        }
+
         values.Enqueue(value);
         total += value;
     }
@@ -64,12 +60,7 @@ public class Average
     /// </summary>
     public void Reset()
     {
-        if (!disableReset)
-        {
-            values.Clear();
-            total = defaultValue * n;
-            Fill();
-        }
+        Fill();
     }
 
     /// <summary>
