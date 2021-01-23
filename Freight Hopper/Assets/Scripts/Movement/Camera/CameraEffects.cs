@@ -12,6 +12,8 @@ public class CameraEffects : MonoBehaviour
 
     private VisualEffect speedLines;
     private Volume speedVolume;
+    private float speedEffectsStart;
+    private Average playerSpeed;
 
     [SerializeField] private CameraEffect fov;
     [SerializeField] private CameraEffect tilt;
@@ -22,16 +24,17 @@ public class CameraEffects : MonoBehaviour
     {
         [HideInInspector] public float baseValue;
         [HideInInspector] public float value;
-        [HideInInspector] public float addedValue;
+        [HideInInspector] public float lerpValue;
 
         public float maxValue;
-        public float transitionSmoothness;
     }
 
     private void Awake()
     {
         playerRB = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Rigidbody>();
         playerMovement = playerRB.gameObject.GetComponent<MovementBehavior>();
+        speedEffectsStart = playerMovement.Speed * 3;
+        playerSpeed = new Average(300);
 
         cam = GetComponent<Camera>();
         fov.baseValue = cam.fieldOfView;
@@ -48,20 +51,29 @@ public class CameraEffects : MonoBehaviour
         speedLines.Stop();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        fov.addedValue = playerRB.velocity.magnitude - 3 * playerMovement.Speed;
-        fov.value = Mathf.Lerp(fov.value, fov.baseValue + fov.addedValue, fov.transitionSmoothness);
-        fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
+        playerSpeed.Update(playerRB.velocity.magnitude);
+        if (playerRB.velocity.magnitude <= 1 && playerSpeed.CanReset())
+        {
+            playerSpeed.Reset();
+            playerSpeed.ToggleReset();
+        }
+        else if (playerRB.velocity.magnitude >= 1 && !playerSpeed.CanReset())
+        {
+            playerSpeed.ToggleReset();
+        }
 
-        postProcessing.addedValue = playerRB.velocity.magnitude - 3 * playerMovement.Speed;
-        postProcessing.value = Mathf.Lerp(postProcessing.value, postProcessing.baseValue + postProcessing.addedValue, postProcessing.transitionSmoothness);
-        postProcessing.value = Mathf.Clamp(postProcessing.value, postProcessing.baseValue, postProcessing.maxValue);
+        fov.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - playerMovement.Speed) / speedEffectsStart, 0, 1);
+        fov.value = Mathf.Lerp(fov.baseValue, fov.maxValue, fov.lerpValue);
+
+        postProcessing.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - playerMovement.Speed) / speedEffectsStart, 0, 1);
+        postProcessing.value = Mathf.Lerp(postProcessing.baseValue, postProcessing.maxValue, postProcessing.lerpValue);
 
         cam.fieldOfView = fov.value;
         speedVolume.weight = postProcessing.value;
 
-        if (playerRB.velocity.magnitude > 3 * playerMovement.Speed)
+        if (playerSpeed.GetAverage() > speedEffectsStart)
         {
             speedLines.Play();
         }
@@ -95,9 +107,9 @@ public class CameraEffects : MonoBehaviour
 
         while (tilt.value != endingValue)
         {
-            tilt.addedValue += 0.02f * amount;
+            tilt.lerpValue += 0.01f;
 
-            tilt.value = Mathf.Lerp(tilt.value, tilt.value + tilt.addedValue, tilt.transitionSmoothness);
+            tilt.value = Mathf.Lerp(tilt.value, amount, tilt.lerpValue);
 
             if (startingValue < endingValue)
             {
