@@ -1,119 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
-using UnityEngine.VFX;
-using UnityEngine.Rendering;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-    private Rigidbody playerRB;
-    private MovementBehavior playerMovement;
-    private CinemachineVirtualCamera cam;
+    private Transform cameraLocation;
 
-    private VisualEffect speedLines;
-    private Volume speedVolume;
+    // y min, y max
+    [SerializeField] private Vector2 yRotationLock;
 
-    [SerializeField] private CameraEffect fov;
-    [SerializeField] private CameraEffect tilt;
-    [SerializeField] private CameraEffect postProcessing;
+    [SerializeField] private Vector2 mouseSensitivity;
+    private Vector2 rotation;
 
-    [System.Serializable]
-    private struct CameraEffect
-    {
-        [HideInInspector] public float baseValue;
-        [HideInInspector] public float value;
-        [HideInInspector] public float addedValue;
-
-        public float maxValue;
-        public float transitionSmoothness;
-    }
+    // Vector2 acceleration;
+    // Vector2 deacceleration;
 
     private void Awake()
     {
-        playerRB = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
-        playerMovement = playerRB.gameObject.GetComponent<MovementBehavior>();
-
-        cam = GetComponent<CinemachineVirtualCamera>();
-        fov.baseValue = cam.m_Lens.FieldOfView;
-        fov.value = fov.baseValue;
-
-        speedVolume = Camera.main.GetComponentInChildren<Volume>();
-        postProcessing.baseValue = 0;
-        postProcessing.value = postProcessing.baseValue;
-
-        tilt.baseValue = cam.m_Lens.Dutch;
-        tilt.value = tilt.baseValue;
-
-        speedLines = Camera.main.GetComponent<VisualEffect>();
-        speedLines.Stop();
-
+        cameraLocation = transform.parent;
+        rotation = new Vector2(transform.eulerAngles.x, transform.eulerAngles.y);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void FixedUpdate()
+    public void LateUpdate()
     {
-        fov.addedValue = playerRB.velocity.magnitude - 3 * playerMovement.Speed;
-        fov.value = Mathf.Lerp(fov.value, fov.baseValue + fov.addedValue, fov.transitionSmoothness);
-        fov.value = Mathf.Clamp(fov.value, fov.baseValue, fov.maxValue);
-
-        postProcessing.addedValue = playerRB.velocity.magnitude - 3 * playerMovement.Speed;
-        postProcessing.value = Mathf.Lerp(postProcessing.value, postProcessing.baseValue + postProcessing.addedValue, postProcessing.transitionSmoothness);
-        postProcessing.value = Mathf.Clamp(postProcessing.value, postProcessing.baseValue, postProcessing.maxValue);
-
-        cam.m_Lens.FieldOfView = fov.value;
-        speedVolume.weight = postProcessing.value;
-
-        if (playerRB.velocity.magnitude > 3 * playerMovement.Speed)
-        {
-            speedLines.Play();
-        }
-        else
-        {
-            speedLines.Stop();
-        }
+        FollowPlayer();
+        RotatePlayer();
     }
 
-    /// <summary>
-    /// Tilts the player the given amount of degrees
-    /// </summary>
-    /// <param name="amount"></param>
-    public void Tilt(float amount)
+    private void FollowPlayer()
     {
-        StartCoroutine(Tilting(amount));
+        this.transform.position = cameraLocation.position;
     }
 
-    /// <summary>
-    /// Resets the tilt of the player back to the base value
-    /// </summary>
-    public void ResetTilt()
+    private void RotatePlayer()
     {
-        StartCoroutine(Tilting(tilt.baseValue - tilt.value));
-    }
+        Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
 
-    private IEnumerator Tilting(float amount)
-    {
-        float startingValue = tilt.value;
-        float endingValue = tilt.value + amount;
+        rotation += mouse;
+        rotation.y = Mathf.Clamp(rotation.y, yRotationLock.x, yRotationLock.y);
 
-        while (tilt.value != endingValue)
-        {
-            tilt.addedValue += 0.02f * amount;
-
-            tilt.value = Mathf.Lerp(tilt.value, tilt.value + tilt.addedValue, tilt.transitionSmoothness);
-
-            if (startingValue < endingValue)
-            {
-                tilt.value = Mathf.Clamp(tilt.value, startingValue, endingValue);
-            }
-            else
-            {
-                tilt.value = Mathf.Clamp(tilt.value, endingValue, startingValue);
-            }
-
-            cam.m_Lens.Dutch = tilt.value;
-            yield return null;
-        }
+        transform.localRotation = Quaternion.Euler(-rotation.y, 0, transform.localEulerAngles.z);
+        transform.parent.rotation = Quaternion.Euler(0, rotation.x, 0);
     }
 }
