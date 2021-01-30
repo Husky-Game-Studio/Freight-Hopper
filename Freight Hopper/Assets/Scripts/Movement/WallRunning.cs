@@ -5,7 +5,7 @@ using UnityEngine;
 public class WallRunTutorial : MonoBehaviour
 {
     /// <summary>
-    /// Wall run Tutorial stuff, scroll down for full movement
+    /// Taken from a wallrunning tutorial so there might be bugs, havem't tested this much but basic functionality is fine
     /// </summary>
 
     //Wallrunning
@@ -13,7 +13,6 @@ public class WallRunTutorial : MonoBehaviour
     public float wallrunForce,maxWallrunTime, maxWallSpeed;
     bool isWallRight, isWallLeft;
     bool isWallRunning;
-    public float maxWallRunCameraTilt, wallRunCameraTilt;
 
     private void WallRunInput() //make sure to call in void Update
     {
