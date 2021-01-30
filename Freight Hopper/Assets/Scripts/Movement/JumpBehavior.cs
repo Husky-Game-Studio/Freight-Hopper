@@ -15,6 +15,7 @@ public class JumpBehavior : MonoBehaviour
     [SerializeField] private Timer hangTime = new Timer(0.2f);
     [SerializeField] private Timer jumpTimer = new Timer(0.1f);
     [SerializeField] private float jumpForce = 5f;
+    private AudioSource jumpSound;
     public float JumpForce => jumpForce;
 
     // Variable to chech if we are allowed to jump
@@ -29,6 +30,7 @@ public class JumpBehavior : MonoBehaviour
         playerTransform = GetComponent<Transform>();
         isGrounded = false;
         rb = GetComponent<Rigidbody>();
+        jumpSound = GetComponent<AudioSource>();
         jump = false;
         midJump = false;
     }
@@ -103,6 +105,11 @@ public class JumpBehavior : MonoBehaviour
 
         if (jumpTimer.TimerActive() && UserInput.Input.Jump())
         {
+            if (!jumpSound.isPlaying)
+            {
+                jumpSound.Play();
+            }
+
             Camera.main.GetComponent<CameraDrag>().CollidDrag(Vector3.up);
             jumpTimer.CountDownFixed();
             rb.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
