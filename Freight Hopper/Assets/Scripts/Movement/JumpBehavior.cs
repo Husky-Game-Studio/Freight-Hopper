@@ -38,8 +38,11 @@ public class JumpBehavior : MonoBehaviour
     {
         if (other.gameObject.CompareTag("landable"))
         {
-            isGrounded = true;
-            canJump = true;
+            if (Vector3.Angle(other.GetContact(0).normal, Vector3.up) < 30)
+            {
+                isGrounded = true;
+                canJump = true;
+            }
         }
     }
 
