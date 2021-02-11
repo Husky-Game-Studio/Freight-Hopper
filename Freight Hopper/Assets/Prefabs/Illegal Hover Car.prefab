@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 300000
-    Ki: 600
-    Kd: 5000
+    Kp: 119999.99
+    Ki: 799.99994
+    Kd: 5999.9995
 --- !u!1 &2827870909766923765
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,12 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05852190c9073be4395f46a6aa214239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  maxDistance: 5
-  targetDistance: 2
-  direction: {x: 0, y: -1, z: 0}
   rb: {fileID: 2827870909710682138}
   centerOfMass: {fileID: 5303466593774662880}
   centerOfMassGameObjectName: COM
@@ -108,9 +102,15 @@ MonoBehaviour:
   - {fileID: 485411777}
   - {fileID: 1953289229}
   - {fileID: 391521228}
-  p: 300000
-  i: 600
-  d: 5000
+  p: 30
+  i: 0.2
+  d: 1.5
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  maxDistance: 3
+  targetDistance: 2
+  direction: {x: 0, y: -1, z: 0}
 --- !u!1 &3170521276626943476
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,13 +154,13 @@ Rigidbody:
   m_GameObject: {fileID: 3170521276626943476}
   serializedVersion: 2
   m_Mass: 4000
-  m_Drag: 2
+  m_Drag: 0.2
   m_AngularDrag: 2
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!1 &3953107057220026246
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,9 +205,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 300000
-    Ki: 600
-    Kd: 5000
+    Kp: 119999.99
+    Ki: 799.99994
+    Kd: 5999.9995
 --- !u!1 &4533259482411672177
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,9 +282,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 300000
-    Ki: 600
-    Kd: 5000
+    Kp: 119999.99
+    Ki: 799.99994
+    Kd: 5999.9995
 --- !u!1 &5590574445324446434
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,9 +329,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 300000
-    Ki: 600
-    Kd: 5000
+    Kp: 119999.99
+    Ki: 799.99994
+    Kd: 5999.9995
 --- !u!1 &6229111250220598573
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ public class PID
     /// </summary>
     private float previousError;
 
-    public void Initalize(float p, float i, float d)
+    public void Initialize(float p, float i, float d)
     {
         Kp = p;
         Ki = i;

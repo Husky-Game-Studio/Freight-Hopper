@@ -3,19 +3,20 @@ using UnityEngine;
 
 public class HoverEngines : MonoBehaviour
 {
-    [SerializeField] private LayerMask layerMask;
-    [SerializeField] private float maxDistance;
-    [SerializeField] private float targetDistance;
-
-    [Tooltip("Normal of engine direction")]
-    [SerializeField] private Vector3 direction;
-
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform centerOfMass;
     [SerializeField] private string centerOfMassGameObjectName;
-
     [SerializeField] private List<HoverEngine> hoverEnginePivots;
-    [SerializeField] private float p, i, d;
+
+    [Header("Adjustable")]
+    [SerializeField, Tooltip("General speed of hovering movement")] private float p;
+
+    [SerializeField, Tooltip("Kind of like increasing rigidity of hovering")] private float i;
+    [SerializeField, Tooltip("Kind of like dampening hovering")] private float d;
+    [SerializeField, Tooltip("Mask for deciding what the hover engines react to")] private LayerMask layerMask;
+    [SerializeField, Tooltip("Max distance to check for the ground")] private float maxDistance;
+    [SerializeField, Tooltip("Target distance above the ground for each engine")] private float targetDistance;
+    [SerializeField, Tooltip("Normal of engine direction")] private Vector3 direction;
 
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class HoverEngines : MonoBehaviour
     {
         foreach (HoverEngine hoverEngine in hoverEnginePivots)
         {
-            hoverEngine.Initailize(p, i, d);
+            hoverEngine.controller.Initialize(rb.mass * p, rb.mass * i, rb.mass * d);
         }
     }
 
@@ -47,8 +48,7 @@ public class HoverEngines : MonoBehaviour
         {
             hoverEnginePivots.Add(child.gameObject.GetComponent<HoverEngine>());
         }
-        direction = Vector3.down;
-        maxDistance = 5;
+
         layerMask = LayerMask.GetMask("Default");
         if (transform.parent.GetComponent<Rigidbody>() != null)
         {
@@ -63,10 +63,13 @@ public class HoverEngines : MonoBehaviour
                 centerOfMass = child;
             }
         }
+
+        direction = Vector3.down;
         targetDistance = 2;
-        p = 300000;
-        i = 600;
-        d = 5000;
+        maxDistance = 3;
+        p = 30;
+        i = 0.2f;
+        d = 1.5f;
     }
 
     private void OnDrawGizmosSelected()
@@ -80,21 +83,23 @@ public class HoverEngines : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Hover();
+    }
+
+    private void Hover()
+    {
         foreach (HoverEngine pivot in hoverEnginePivots)
         {
             RaycastHit hit;
             if (Physics.Raycast(pivot.transform.position, direction, out hit, maxDistance, layerMask))
             {
-                //Vector3 force = -direction * (forceMultiplier / hit.distance);
                 float error = targetDistance - hit.distance;
+                // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
                 if (error > 0)
                 {
-                    Vector3 force = -direction * pivot.controller.GetOutput(error, Time.deltaTime);
+                    Vector3 force = -direction * pivot.controller.GetOutput(error, Time.fixedDeltaTime);
                     rb.AddForceAtPosition(force, pivot.transform.position, ForceMode.Force);
                 }
-
-                //Debug.Log(hit.distance);
-                //Debug.Log(pivot.gameObject.name + " - force: " + force);
             }
         }
     }
