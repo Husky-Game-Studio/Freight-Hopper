@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &569891668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 569891669}
+  m_Layer: 2
+  m_Name: Front
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &569891669
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569891668}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 7.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2356549054153549646}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &729756504126931259
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,9 +74,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 119999.99
+    Kp: 13999.999
     Ki: 799.99994
     Kd: 5999.9995
+  force: 0
 --- !u!1 &2827870909766923765
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,14 +133,13 @@ MonoBehaviour:
   - {fileID: 485411777}
   - {fileID: 1953289229}
   - {fileID: 391521228}
-  p: 30
+  p: 3.5
   i: 0.2
   d: 1.5
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  maxDistance: 3
-  targetDistance: 2
+  targetDistance: 3
   direction: {x: 0, y: -1, z: 0}
 --- !u!1 &3170521276626943476
 GameObject:
@@ -121,6 +151,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2356549054153549646}
   - component: {fileID: 2827870909710682138}
+  - component: {fileID: 2143706798}
   m_Layer: 2
   m_Name: Illegal Hover Car
   m_TagString: landable
@@ -142,6 +173,7 @@ Transform:
   - {fileID: 2937491358096021014}
   - {fileID: 2827870909766923764}
   - {fileID: 5303466593774662880}
+  - {fileID: 569891669}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -161,6 +193,31 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &2143706798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170521276626943476}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3909c6ff10f7f3c40824f802e59bda02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotation:
+    Kp: 120000
+    Ki: 80
+    Kd: 4800
+  speed:
+    Kp: 120000
+    Ki: 80
+    Kd: 4800
+  rb: {fileID: 2827870909710682138}
+  facePoint: {x: -50, y: 1, z: -10}
+  front: {fileID: 569891669}
+  tolerance: 5
+  desiredSpeed: 5
 --- !u!1 &3953107057220026246
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,9 +262,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 119999.99
+    Kp: 13999.999
     Ki: 799.99994
     Kd: 5999.9995
+  force: 0
 --- !u!1 &4533259482411672177
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,9 +340,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 119999.99
+    Kp: 13999.999
     Ki: 799.99994
     Kd: 5999.9995
+  force: 0
 --- !u!1 &5590574445324446434
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,9 +388,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller:
-    Kp: 119999.99
+    Kp: 13999.999
     Ki: 799.99994
     Kd: 5999.9995
+  force: 0
 --- !u!1 &6229111250220598573
 GameObject:
   m_ObjectHideFlags: 0

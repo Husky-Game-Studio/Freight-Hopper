@@ -14,7 +14,6 @@ public class HoverEngines : MonoBehaviour
     [SerializeField, Tooltip("Kind of like increasing rigidity of hovering")] private float i;
     [SerializeField, Tooltip("Kind of like dampening hovering")] private float d;
     [SerializeField, Tooltip("Mask for deciding what the hover engines react to")] private LayerMask layerMask;
-    [SerializeField, Tooltip("Max distance to check for the ground")] private float maxDistance;
     [SerializeField, Tooltip("Target distance above the ground for each engine")] private float targetDistance;
     [SerializeField, Tooltip("Normal of engine direction")] private Vector3 direction;
 
@@ -66,7 +65,6 @@ public class HoverEngines : MonoBehaviour
 
         direction = Vector3.down;
         targetDistance = 2;
-        maxDistance = 3;
         p = 30;
         i = 0.2f;
         d = 1.5f;
@@ -77,7 +75,7 @@ public class HoverEngines : MonoBehaviour
         foreach (HoverEngine pivot in hoverEnginePivots)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(pivot.transform.position, pivot.transform.position + direction * maxDistance);
+            Gizmos.DrawLine(pivot.transform.position, pivot.transform.position + direction * targetDistance);
         }
     }
 
@@ -91,13 +89,15 @@ public class HoverEngines : MonoBehaviour
         foreach (HoverEngine pivot in hoverEnginePivots)
         {
             RaycastHit hit;
-            if (Physics.Raycast(pivot.transform.position, direction, out hit, maxDistance, layerMask))
+            if (Physics.Raycast(pivot.transform.position, direction, out hit, targetDistance + 0.1f, layerMask))
             {
                 float error = targetDistance - hit.distance;
+                Debug.DrawLine(pivot.transform.position, pivot.transform.position + Vector3.up * error, Color.white);
                 // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
-                if (error > 0)
+                if (error > -0.1f)
                 {
                     Vector3 force = -direction * pivot.controller.GetOutput(error, Time.fixedDeltaTime);
+                    pivot.force = force.magnitude;
                     rb.AddForceAtPosition(force, pivot.transform.position, ForceMode.Force);
                 }
             }
