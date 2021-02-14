@@ -25,9 +25,12 @@ public class HoverEngines : MonoBehaviour
 
     private void InitializeEngines()
     {
-        foreach (HoverEngine hoverEngine in hoverEnginePivots)
+        if (this != null)
         {
-            hoverEngine.controller.Initialize(rb.mass * p, rb.mass * i, rb.mass * d);
+            foreach (HoverEngine hoverEngine in hoverEnginePivots)
+            {
+                hoverEngine.controller.Initialize(rb.mass * p, rb.mass * i, rb.mass * d);
+            }
         }
     }
 
@@ -64,8 +67,8 @@ public class HoverEngines : MonoBehaviour
         }
 
         direction = Vector3.down;
-        targetDistance = 2;
-        p = 30;
+        targetDistance = 3;
+        p = 3.5f;
         i = 0.2f;
         d = 1.5f;
     }
