@@ -25,18 +25,18 @@ public class HoverEngines : MonoBehaviour
 
     private void InitializeEngines()
     {
-        if (this != null)
+        foreach (HoverEngine hoverEngine in hoverEnginePivots)
         {
-            foreach (HoverEngine hoverEngine in hoverEnginePivots)
-            {
-                hoverEngine.controller.Initialize(rb.mass * p, rb.mass * i, rb.mass * d);
-            }
+            hoverEngine.controller.Initialize(rb.mass * p, rb.mass * i, rb.mass * d);
         }
     }
 
     private void OnValidate()
     {
-        InitializeEngines();
+        if (this.gameObject != null)
+        {
+            InitializeEngines();
+        }
     }
 
     // The default settings for hover engines are initialized.
