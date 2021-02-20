@@ -12,7 +12,7 @@ public class DoubleJump : MonoBehaviour
     [SerializeField] private float percentStrengthComparedToNormalJump;
 
     private bool releasedJump;
-    private bool doubleJumpReady;
+    [SerializeField, ReadOnly] private bool doubleJumpReady;
 
     private void Awake()
     {
@@ -47,7 +47,7 @@ public class DoubleJump : MonoBehaviour
 
     private void TryDoubleJump()
     {
-        if (!playerCollision.IsGrounded && releasedJump && doubleJumpReady)
+        if (!playerCollision.IsGrounded && releasedJump && doubleJumpReady && !jumpBehavior.CanJump)
         {
             releasedJump = false;
             doubleJumpReady = false;

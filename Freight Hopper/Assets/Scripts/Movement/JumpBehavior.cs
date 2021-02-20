@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CollisionCheck), typeof(Gravity))]
@@ -12,11 +11,11 @@ public class JumpBehavior : MonoBehaviour
     [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
     [SerializeField] private Timer jumpHoldingPeriod = new Timer(0.5f);
     [SerializeField] private Timer coyoteTime = new Timer(0.5f);
-    [SerializeField] private float jumpHeight = 5f;
+    [SerializeField] private float maxJumpHeight = 5f;
+    [SerializeField] private float minJumpHeight = 2f;
 
-    [SerializeField, Range(0, 1000)] private float percentGravityDifferenceWhenHoldingSpace;
-
-    public float JumpHeight => jumpHeight;
+    public float JumpHeight => minJumpHeight;
+    public bool CanJump => coyoteTime.TimerActive();
 
     private void OnEnable()
     {
@@ -53,13 +52,13 @@ public class JumpBehavior : MonoBehaviour
         if (jumpBuffer.TimerActive() && playerCollision.IsGrounded)
         {
             //Debug.Log("Jump buffer timer active and grounded");
-            Jump(jumpHeight);
+            Jump(minJumpHeight);
         }
         if (jumpHoldingPeriod.TimerActive() && !playerCollision.IsGrounded)
         {
             if (UserInput.Input.Jump())
             {
-                gravity.scale.SetCurrent(gravity.scale.old / (percentGravityDifferenceWhenHoldingSpace / 100));
+                gravity.scale.SetCurrent((gravity.scale.old * minJumpHeight) / maxJumpHeight);
             }
             else
             {
@@ -97,7 +96,7 @@ public class JumpBehavior : MonoBehaviour
         // Lower gravity when holding space making you go higher
         if (UserInput.Input.Jump())
         {
-            gravity.scale.SetCurrent(gravity.scale.old / (percentGravityDifferenceWhenHoldingSpace / 100));
+            gravity.scale.SetCurrent((gravity.scale.old * minJumpHeight) / maxJumpHeight);
         }
     }
 
@@ -109,7 +108,7 @@ public class JumpBehavior : MonoBehaviour
         {
             //Debug.Log("On ground: " + playerCollision.IsGrounded);
             //Debug.Log("Coyote timer active: " + coyoteTime.TimerActive());
-            Jump(jumpHeight);
+            Jump(minJumpHeight);
         }
     }
 }

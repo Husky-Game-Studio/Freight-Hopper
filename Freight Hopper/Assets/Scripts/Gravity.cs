@@ -32,7 +32,8 @@ public class Gravity : MonoBehaviour
             return;
         }
 
-        // This is temp until more advanced gravity and moving platforms. It basically waits a second tos ee if the player is not moving and if so stop adding force
+        // THIS WILL LIKELY CAUSE A FLOATING BUG UNTIL ITS UPDATE
+        // This is temp until more advanced gravity and moving platforms. It basically waits a second to see if the player is not moving and if so stop adding force
         // Arbitrary small threshold. This is so that if the object is moving very slowly then no gravity is applied
         if (rb.velocity.sqrMagnitude < 0.0001f)
         {
