@@ -9,16 +9,16 @@ using UnityEngine;
 public class Gravity : MonoBehaviour
 {
     private Rigidbody rb;
-    [SerializeField] private float scale = 1;
+    [SerializeField] public Var<float> scale = new Var<float>(1, 1);
     [SerializeField] private Vector3 direction = Vector3.up;
     public static readonly float constant = -9.81f;
-    public float Scale => scale;
 
     public Vector3 Direction => direction;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        scale.UpdateOld();
     }
 
     private float floatDelay;
@@ -43,6 +43,6 @@ public class Gravity : MonoBehaviour
             }
         }
 
-        rb.AddForce(constant * direction * scale, ForceMode.Acceleration);
+        rb.AddForce(constant * direction * scale.current, ForceMode.Acceleration);
     }
 }

@@ -10,8 +10,11 @@ public class JumpBehavior : MonoBehaviour
     private AudioSource jumpSound;
 
     [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
+    [SerializeField] private Timer jumpHoldingPeriod = new Timer(0.5f);
     [SerializeField] private Timer coyoteTime = new Timer(0.5f);
     [SerializeField] private float jumpHeight = 5f;
+
+    [SerializeField, Range(0, 1000)] private float percentGravityDifferenceWhenHoldingSpace;
 
     public float JumpHeight => jumpHeight;
 
@@ -36,6 +39,7 @@ public class JumpBehavior : MonoBehaviour
         {
             coyoteTime.CountDown();
             jumpBuffer.CountDown();
+            jumpHoldingPeriod.CountDown();
         }
     }
 
@@ -46,12 +50,33 @@ public class JumpBehavior : MonoBehaviour
             //Debug.Log("Jump buffer timer active and grounded");
             Jump(jumpHeight);
         }
+        if (jumpHoldingPeriod.TimerActive() && !playerCollision.IsGrounded)
+        {
+            if (UserInput.Input.Jump())
+            {
+                Debug.Log("Setting scale");
+                gravity.scale.SetCurrent(gravity.scale.old / (percentGravityDifferenceWhenHoldingSpace / 100));
+            }
+            else
+            {
+                Debug.Log("Reverting current ");
+                gravity.scale.RevertCurrent();
+                jumpHoldingPeriod.DeactivateTimer();
+            }
+        }
+        else
+        {
+            Debug.Log("Reverting current ");
+            gravity.scale.RevertCurrent();
+        }
     }
 
     public void Jump(float height)
     {
         jumpBuffer.DeactivateTimer();
         coyoteTime.DeactivateTimer();
+        jumpHoldingPeriod.ResetTimer();
+
         if (!jumpSound.isPlaying)
         {
             jumpSound.Play();
@@ -59,9 +84,10 @@ public class JumpBehavior : MonoBehaviour
 
         // Basic physics, except the force required to reach this height may not work if we consider holding space
         // That and considering that physics works in timesteps.
-        float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.Scale * height);
+        float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.scale.current * height);
         Camera.main.GetComponent<CameraDrag>().CollidDrag(gravity.Direction);
         rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
+        gravity.scale.SetCurrent(gravity.scale.old / (percentGravityDifferenceWhenHoldingSpace / 100));
     }
 
     // When called makes character jump

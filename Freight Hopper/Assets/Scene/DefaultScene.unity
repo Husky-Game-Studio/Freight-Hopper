@@ -196,12 +196,32 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1523211730, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: scale.old
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523211730, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: gravityScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523211730, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: scale.current
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: jumpHeight
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: jumpBuffer.duration
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: jumpHoldingPeriod.duration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: percentGravityDifferenceWhenHoldingSpace
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 2997259507317749449, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_RootOrder

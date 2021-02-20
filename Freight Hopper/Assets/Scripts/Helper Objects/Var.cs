@@ -22,4 +22,21 @@ public struct Var<T>
     {
         old = current;
     }
+
+    /// <summary>
+    /// Assigns current value to parameter
+    /// </summary>
+    /// <param name="value"></param>
+    public void SetCurrent(T value)
+    {
+        current = value;
+    }
+
+    /// <summary>
+    /// Assigns current to old
+    /// </summary>
+    public void RevertCurrent()
+    {
+        current = old;
+    }
 }
