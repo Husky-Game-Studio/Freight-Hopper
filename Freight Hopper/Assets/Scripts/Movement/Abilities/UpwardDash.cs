@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(JumpBehavior))]
-public class UpwardDash : MonoBehaviour {
+[RequireComponent(typeof(CollisionCheck))]
+public class UpwardDash : MonoBehaviour
+{
     private bool upwardDashPossible = true;
     [SerializeField] private float initialUpwardsForce;
     [SerializeField] private float consistentForce;
@@ -11,37 +12,44 @@ public class UpwardDash : MonoBehaviour {
     [SerializeField] private Timer dashDuration = new Timer(1);
     private bool upwardDash = false;
     private Rigidbody rb;
-    private JumpBehavior jumpBehavior;
+    private CollisionCheck playerCollision;
 
-    private void Start() {
+    private void Start()
+    {
         // Gets the jump behaviour component and rigid body
-        jumpBehavior = GetComponent<JumpBehavior>();
+        playerCollision = GetComponent<CollisionCheck>();
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Update() {
+    private void Update()
+    {
         delay.CountDown();
         dashDuration.CountDown();
         // Checks if button is pressed and timer is active and can dash within constrains
-        if (UserInput.Input.UpwardDashTriggered() && !delay.TimerActive() && upwardDashPossible) {
+        if (UserInput.Input.UpwardDashTriggered() && !delay.TimerActive() && upwardDashPossible)
+        {
             upwardDash = true;
             upwardDashPossible = false;
             delay.ResetTimer();
         }
         // Checks if player is gorunded
-        if (jumpBehavior.IsGrounded) {
+        if (playerCollision.IsGrounded)
+        {
             upwardDashPossible = true;
         }
         // adds force as long as timer is till active
-        if (dashDuration.TimerActive()) {
+        if (dashDuration.TimerActive())
+        {
             rb.AddForce(Vector3.up * consistentForce);
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
     }
-    
-    private void FixedUpdate() {
+
+    private void FixedUpdate()
+    {
         // applies upward dash
-        if (upwardDash) {
+        if (upwardDash)
+        {
             rb.velocity = Vector3.zero;
             rb.AddForce(Vector3.up * initialUpwardsForce, ForceMode.Impulse);
             upwardDash = false;

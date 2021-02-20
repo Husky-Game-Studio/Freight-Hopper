@@ -57,8 +57,8 @@ public class MovementBehavior : MonoBehaviour
     // Function that moves the player
     private void Move(Vector3 direction)
     {
-        direction.Normalize();
-
+        direction = Vector3.ClampMagnitude(direction, 1);
+        Debug.DrawRay(this.transform.position, this.transform.position + direction);
         // Clamps the vector to make sure the magnitude stays between 0 - playerMoveSpeedLimit
         Vector3 moveSpeedLimit = Vector3.ClampMagnitude(direction * playerMoveSpeedLimit, playerMoveSpeedLimit);
 

@@ -2,34 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(JumpBehavior))]
-public class DoubleJump : MonoBehaviour {
+[RequireComponent(typeof(CollisionCheck), typeof(JumpBehavior))]
+public class DoubleJump : MonoBehaviour
+{
     private bool doubleJumpPossible = true;
     [SerializeField] private Timer cooldown = new Timer(2);
     [SerializeField] private Timer delay = new Timer(0.1f);
     private bool doubleJump = false;
     private bool wasOnGround;
     private bool releasedJump;
+    private CollisionCheck playerCollision;
     private JumpBehavior jumpBehavior;
     private Rigidbody rb;
 
-    private void Start() {
+    private void Awake()
+    {
         // gets required components
         rb = GetComponent<Rigidbody>();
+        playerCollision = GetComponent<CollisionCheck>();
         jumpBehavior = GetComponent<JumpBehavior>();
     }
 
-    private void Update() {
+    private void Update()
+    {
         cooldown.CountDown();
         delay.CountDown();
-        // Checks if grounded 
-        if (jumpBehavior.IsGrounded) {
+        // Checks if grounded
+        if (playerCollision.IsGrounded)
+        {
             wasOnGround = true;
             doubleJumpPossible = false;
         }
 
         // if can jump and was previously on ground then reset timer
-        if (jumpBehavior.CanJump && wasOnGround) {
+        if (wasOnGround)
+        {
             doubleJumpPossible = true;
             wasOnGround = false;
             delay.ResetTimer();
@@ -37,7 +44,8 @@ public class DoubleJump : MonoBehaviour {
 
         // checks if cooldown is active
         if (UserInput.Input.Jump() && !cooldown.TimerActive() && !delay.TimerActive() && doubleJumpPossible &&
-            releasedJump) {
+            releasedJump)
+        {
             doubleJump = true;
             doubleJumpPossible = false;
             cooldown.ResetTimer();
@@ -46,15 +54,18 @@ public class DoubleJump : MonoBehaviour {
         releasedJump = !UserInput.Input.Jump();
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         // adds the jump force
-        if (doubleJump) {
-            if (rb.velocity.y < 0) {
+        if (doubleJump)
+        {
+            if (rb.velocity.y < 0)
+            {
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             }
 
             /*rb.AddForce(jumpBehavior.JumpForce * Vector3.up, ForceMode.Impulse);*/
-            jumpBehavior.Jump();
+            jumpBehavior.Jump(5);
             doubleJump = false;
         }
     }

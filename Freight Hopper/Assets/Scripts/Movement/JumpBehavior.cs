@@ -1,128 +1,78 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(CollisionCheck), typeof(Gravity))]
 public class JumpBehavior : MonoBehaviour
 {
-    private Transform playerTransform;
     private Rigidbody rb;
-    private bool isGrounded;
-    private bool midJump;
-
-    // isGrounded should sometime be seperated from the jump behavior. Other scripts depend on it.
-    public bool IsGrounded => isGrounded;
-
-    [SerializeField] private Timer jumpBuffer = new Timer(0.2f);
-    [SerializeField] private Timer hangTime = new Timer(0.2f);
-    [SerializeField] private Timer jumpTimer = new Timer(0.1f);
-    [SerializeField] private float jumpForce = 5f;
+    private CollisionCheck playerCollision;
+    private Gravity gravity;
     private AudioSource jumpSound;
-    public float JumpForce => jumpForce;
 
-    // Variable to chech if we are allowed to jump
-    private bool jump;
+    [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
+    [SerializeField] private Timer coyoteTime = new Timer(0.5f);
+    [SerializeField] private float jumpHeight = 5f;
 
-    private bool canJump;
-    public bool CanJump => canJump;
+    public float JumpHeight => jumpHeight;
 
-    // Constructs the variables when the game starts
+    private void OnEnable()
+    {
+        UserInput.JumpInput += TryJump;
+    }
+
     private void Awake()
     {
-        playerTransform = GetComponent<Transform>();
-        isGrounded = false;
         rb = GetComponent<Rigidbody>();
+        playerCollision = GetComponent<CollisionCheck>();
+        gravity = GetComponent<Gravity>();
         jumpSound = GetComponent<AudioSource>();
-        jump = false;
-        midJump = false;
-    }
-
-    // When character collides with another object it gets called
-    private void OnCollisionEnter(UnityEngine.Collision other)
-    {
-        if (other.gameObject.CompareTag("landable"))
-        {
-            if (Vector3.Angle(other.GetContact(0).normal, Vector3.up) < 30)
-            {
-                isGrounded = true;
-                canJump = true;
-            }
-        }
-    }
-
-    // when character exits collision with landable it sets grounded to false so we wouldn't be able to jump in air
-    private void OnCollisionExit(UnityEngine.Collision other)
-    {
-        if (other.gameObject.CompareTag("landable"))
-        {
-            isGrounded = false;
-            hangTime.ResetTimer();
-        }
+        playerCollision.Landed += coyoteTime.ResetTimer;
     }
 
     // Updates every frame
     private void Update()
     {
-        // Jump buffering
-        if (UserInput.Input.Jump())
+        if (!playerCollision.IsGrounded)
         {
-            jumpBuffer.ResetTimer();
-        }
-        else
-        {
+            coyoteTime.CountDown();
             jumpBuffer.CountDown();
-        }
-
-        //Hang Time
-        if (!hangTime.TimerActive() && !isGrounded)
-        {
-            canJump = false;
-        }
-
-        hangTime.CountDown();
-
-        if (jumpBuffer.TimerActive() && canJump)
-        {
-            jump = true;
-            jumpBuffer.DeactivateTimer();
         }
     }
 
     private void FixedUpdate()
     {
-        // Jump code
-        if (jump || midJump)
+        if (jumpBuffer.TimerActive() && playerCollision.IsGrounded)
         {
-            Jump();
+            //Debug.Log("Jump buffer timer active and grounded");
+            Jump(jumpHeight);
         }
     }
 
-    // When called makes character jump
-    public void Jump()
+    public void Jump(float height)
     {
-        if (midJump == false)
+        jumpBuffer.DeactivateTimer();
+        coyoteTime.DeactivateTimer();
+        if (!jumpSound.isPlaying)
         {
-            jumpTimer.ResetTimer();
+            jumpSound.Play();
         }
 
-        if (jumpTimer.TimerActive() && UserInput.Input.Jump())
-        {
-            if (!jumpSound.isPlaying)
-            {
-                jumpSound.Play();
-            }
+        // Basic physics, except the force required to reach this height may not work if we consider holding space
+        // That and considering that physics works in timesteps.
+        float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.Scale * height);
+        Camera.main.GetComponent<CameraDrag>().CollidDrag(gravity.Direction);
+        rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
+    }
 
-            Camera.main.GetComponent<CameraDrag>().CollidDrag(Vector3.up);
-            jumpTimer.CountDownFixed();
-            rb.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
-            midJump = true;
-        }
-        else
+    // When called makes character jump
+    private void TryJump()
+    {
+        jumpBuffer.ResetTimer();
+        if (playerCollision.IsGrounded || coyoteTime.TimerActive())
         {
-            jumpTimer.DeactivateTimer();
-            midJump = false;
+            //Debug.Log("On ground: " + playerCollision.IsGrounded);
+            //Debug.Log("Coyote timer active: " + coyoteTime.TimerActive());
+            Jump(jumpHeight);
         }
-
-        isGrounded = false;
-        jump = false;
-        canJump = false;
     }
 }

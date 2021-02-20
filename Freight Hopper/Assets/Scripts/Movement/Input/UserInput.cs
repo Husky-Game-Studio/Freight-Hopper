@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class UserInput : MonoBehaviour
 {
@@ -9,12 +10,18 @@ public class UserInput : MonoBehaviour
 
     public static UserInput Input => input;
 
-    private bool groundPoundHeld;
-    private bool jumpHeld;
+    public delegate void JumpEventHandler();
+
+    public static event JumpEventHandler JumpInput;
+
+    [ReadOnly, SerializeField] private bool groundPoundHeld;
+    [ReadOnly, SerializeField] private bool jumpHeld;
 
     private void OnEnable()
     {
         master.Enable();
+        master.Player.GroundPound.performed += GroundPoundHeld;
+        master.Player.Jump.performed += JumpHeld;
     }
 
     private void OnDisable()
@@ -37,16 +44,17 @@ public class UserInput : MonoBehaviour
         master = new InputMaster();
     }
 
-    private void Update()
+    private void GroundPoundHeld(InputAction.CallbackContext context)
     {
-        if (master.Player.GroundPound.triggered)
-        {
-            groundPoundHeld = !groundPoundHeld;
-        }
+        groundPoundHeld = !groundPoundHeld;
+    }
 
-        if (master.Player.Jump.triggered)
+    private void JumpHeld(InputAction.CallbackContext context)
+    {
+        jumpHeld = !jumpHeld;
+        if (jumpHeld)
         {
-            jumpHeld = !jumpHeld;
+            JumpInput?.Invoke();
         }
     }
 
