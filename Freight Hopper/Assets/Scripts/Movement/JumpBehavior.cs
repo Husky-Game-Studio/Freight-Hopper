@@ -23,6 +23,11 @@ public class JumpBehavior : MonoBehaviour
         UserInput.JumpInput += TryJump;
     }
 
+    private void OnDisable()
+    {
+        UserInput.JumpInput -= TryJump;
+    }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -54,25 +59,26 @@ public class JumpBehavior : MonoBehaviour
         {
             if (UserInput.Input.Jump())
             {
-                Debug.Log("Setting scale");
                 gravity.scale.SetCurrent(gravity.scale.old / (percentGravityDifferenceWhenHoldingSpace / 100));
             }
             else
             {
-                Debug.Log("Reverting current ");
                 gravity.scale.RevertCurrent();
                 jumpHoldingPeriod.DeactivateTimer();
             }
         }
         else
         {
-            Debug.Log("Reverting current ");
             gravity.scale.RevertCurrent();
         }
     }
 
     public void Jump(float height)
     {
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        }
         jumpBuffer.DeactivateTimer();
         coyoteTime.DeactivateTimer();
         jumpHoldingPeriod.ResetTimer();
@@ -87,7 +93,12 @@ public class JumpBehavior : MonoBehaviour
         float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.scale.current * height);
         Camera.main.GetComponent<CameraDrag>().CollidDrag(gravity.Direction);
         rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
-        gravity.scale.SetCurrent(gravity.scale.old / (percentGravityDifferenceWhenHoldingSpace / 100));
+
+        // Lower gravity when holding space making you go higher
+        if (UserInput.Input.Jump())
+        {
+            gravity.scale.SetCurrent(gravity.scale.old / (percentGravityDifferenceWhenHoldingSpace / 100));
+        }
     }
 
     // When called makes character jump

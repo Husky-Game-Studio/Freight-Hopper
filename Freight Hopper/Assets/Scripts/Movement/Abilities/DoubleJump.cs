@@ -5,68 +5,53 @@ using UnityEngine;
 [RequireComponent(typeof(CollisionCheck), typeof(JumpBehavior))]
 public class DoubleJump : MonoBehaviour
 {
-    private bool doubleJumpPossible = true;
-    [SerializeField] private Timer cooldown = new Timer(2);
-    [SerializeField] private Timer delay = new Timer(0.1f);
-    private bool doubleJump = false;
-    private bool wasOnGround;
-    private bool releasedJump;
     private CollisionCheck playerCollision;
     private JumpBehavior jumpBehavior;
-    private Rigidbody rb;
+
+    [Range(25, 300)]
+    [SerializeField] private float percentStrengthComparedToNormalJump;
+
+    private bool releasedJump;
+    private bool doubleJumpReady;
 
     private void Awake()
     {
-        // gets required components
-        rb = GetComponent<Rigidbody>();
         playerCollision = GetComponent<CollisionCheck>();
         jumpBehavior = GetComponent<JumpBehavior>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        cooldown.CountDown();
-        delay.CountDown();
-        // Checks if grounded
-        if (playerCollision.IsGrounded)
-        {
-            wasOnGround = true;
-            doubleJumpPossible = false;
-        }
-
-        // if can jump and was previously on ground then reset timer
-        if (wasOnGround)
-        {
-            doubleJumpPossible = true;
-            wasOnGround = false;
-            delay.ResetTimer();
-        }
-
-        // checks if cooldown is active
-        if (UserInput.Input.Jump() && !cooldown.TimerActive() && !delay.TimerActive() && doubleJumpPossible &&
-            releasedJump)
-        {
-            doubleJump = true;
-            doubleJumpPossible = false;
-            cooldown.ResetTimer();
-        }
-
-        releasedJump = !UserInput.Input.Jump();
+        UserInput.JumpInput += TryDoubleJump;
+        playerCollision.Landed += DoubleJumpUsed;
     }
 
-    private void FixedUpdate()
+    private void OnDisable()
     {
-        // adds the jump force
-        if (doubleJump)
-        {
-            if (rb.velocity.y < 0)
-            {
-                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            }
+        UserInput.JumpInput -= TryDoubleJump;
+        playerCollision.Landed -= DoubleJumpUsed;
+    }
 
-            /*rb.AddForce(jumpBehavior.JumpForce * Vector3.up, ForceMode.Impulse);*/
-            jumpBehavior.Jump(5);
-            doubleJump = false;
+    private void Update()
+    {
+        if (!playerCollision.IsGrounded && !UserInput.Input.Jump())
+        {
+            releasedJump = true;
+        }
+    }
+
+    private void DoubleJumpUsed()
+    {
+        doubleJumpReady = true;
+    }
+
+    private void TryDoubleJump()
+    {
+        if (!playerCollision.IsGrounded && releasedJump && doubleJumpReady)
+        {
+            releasedJump = false;
+            doubleJumpReady = false;
+            jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
         }
     }
 }

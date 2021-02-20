@@ -197,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1523211730, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: scale.old
-      value: 3
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 1523211730, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: gravityScale
@@ -205,7 +205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1523211730, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: scale.current
-      value: 3
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: jumpHeight
@@ -221,7 +221,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1871736618, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: percentGravityDifferenceWhenHoldingSpace
-      value: 350
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871736623, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2997259507317749449, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_RootOrder
@@ -266,6 +270,22 @@ PrefabInstance:
     - target: {fileID: 2997259507317749449, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851446874152417282, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: maxSlope
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851446874152417291, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851446874152417291, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: cooldown.duration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851446874152417291, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
+      propertyPath: percentStrengthComparedToNormalJump
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7010316156831883096, guid: 3fed46bc49f681b4f90abb798a98e57b, type: 3}
       propertyPath: m_Name
