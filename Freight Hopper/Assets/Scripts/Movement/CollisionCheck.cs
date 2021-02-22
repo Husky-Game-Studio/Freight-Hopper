@@ -7,9 +7,9 @@ public class CollisionCheck : MonoBehaviour
 {
     private Gravity gravity;
 
-    [ReadOnly, SerializeField] private bool isGrounded;
+    [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [SerializeField] private float maxSlope = 30;
-    public bool IsGrounded => isGrounded;
+    public Var<bool> IsGrounded => isGrounded;
 
     public delegate void LandedEventHandler();
 
@@ -41,7 +41,7 @@ public class CollisionCheck : MonoBehaviour
                 // Is Vector3.angle efficient?
                 float collisionAngle = Vector3.Angle(collision.GetContact(i).normal, gravity.Direction);
                 //Debug.Log("Angle of collision " + i + ": " + collisionAngle);
-                isGrounded |= collisionAngle <= maxSlope;
+                isGrounded.current |= collisionAngle <= maxSlope;
             }
         }
     }
@@ -53,7 +53,7 @@ public class CollisionCheck : MonoBehaviour
             Respawn();
         }
         EvaulateCollisions(collision, true);
-        if (IsGrounded)
+        if (isGrounded.current)
         {
             Landed.Invoke();
         }
@@ -62,13 +62,19 @@ public class CollisionCheck : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         EvaulateCollisions(collision);
+        if (isGrounded.current && !isGrounded.old)
+        {
+            Landed.Invoke();
+        }
     }
 
-    private void OnCollisionExit(Collision collision)
+    /// <summary>
+    /// This sets isGrounded to false at the start of fixed update, change script execution priority if you have issues with isGrounded of other scripts
+    /// </summary>
+    private void FixedUpdate()
     {
-        if (collision.collider.CompareTag("landable"))
-        {
-            isGrounded = false;
-        }
+        isGrounded.UpdateOld();
+
+        isGrounded.current = false;
     }
 }

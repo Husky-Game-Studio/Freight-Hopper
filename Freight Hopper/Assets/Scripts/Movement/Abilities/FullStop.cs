@@ -30,7 +30,7 @@ public class FullStop : MonoBehaviour
             cooldown.ResetTimer();
         }
         // Checks if player is grounded if yes then its possible to full stop
-        if (playerCollision.IsGrounded)
+        if (playerCollision.IsGrounded.current)
         {
             fullStopPossible = true;
         }

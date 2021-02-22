@@ -43,7 +43,7 @@ public class Dash : MonoBehaviour
             delay.ResetTimer();
         }
 
-        if (playerCollision.IsGrounded)
+        if (playerCollision.IsGrounded.current)
         {
             dashPossible = true;
         }

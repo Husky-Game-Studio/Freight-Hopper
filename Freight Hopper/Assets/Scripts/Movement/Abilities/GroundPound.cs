@@ -31,7 +31,7 @@ public class GroundPound : MonoBehaviour
             delay.ResetTimer();
         }
         // Checks if player is grounded and the button is pressed
-        if (playerCollision.IsGrounded || !UserInput.Input.GroundPoundTriggered())
+        if (playerCollision.IsGrounded.current || !UserInput.Input.GroundPoundTriggered())
         {
             groundPoundPossible = true;
             groundPound = false;

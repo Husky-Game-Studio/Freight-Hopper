@@ -11,7 +11,6 @@ public class DoubleJump : MonoBehaviour
     [Range(25, 300)]
     [SerializeField] private float percentStrengthComparedToNormalJump;
 
-    private bool releasedJump;
     [SerializeField, ReadOnly] private bool doubleJumpReady;
 
     private void Awake()
@@ -23,33 +22,24 @@ public class DoubleJump : MonoBehaviour
     private void OnEnable()
     {
         UserInput.JumpInput += TryDoubleJump;
-        playerCollision.Landed += DoubleJumpUsed;
+        playerCollision.Landed += Landed;
     }
 
     private void OnDisable()
     {
         UserInput.JumpInput -= TryDoubleJump;
-        playerCollision.Landed -= DoubleJumpUsed;
+        playerCollision.Landed -= Landed;
     }
 
-    private void Update()
-    {
-        if (!playerCollision.IsGrounded && !UserInput.Input.Jump())
-        {
-            releasedJump = true;
-        }
-    }
-
-    private void DoubleJumpUsed()
+    private void Landed()
     {
         doubleJumpReady = true;
     }
 
     private void TryDoubleJump()
     {
-        if (!playerCollision.IsGrounded && releasedJump && doubleJumpReady && !jumpBehavior.CanJump)
+        if (!playerCollision.IsGrounded.current && doubleJumpReady && !jumpBehavior.CanJump)
         {
-            releasedJump = false;
             doubleJumpReady = false;
             jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
         }

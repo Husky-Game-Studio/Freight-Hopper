@@ -33,7 +33,7 @@ public class UpwardDash : MonoBehaviour
             delay.ResetTimer();
         }
         // Checks if player is gorunded
-        if (playerCollision.IsGrounded)
+        if (playerCollision.IsGrounded.current)
         {
             upwardDashPossible = true;
         }

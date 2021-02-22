@@ -15,7 +15,7 @@ public class JumpBehavior : MonoBehaviour
     [SerializeField] private float minJumpHeight = 2f;
 
     public float JumpHeight => minJumpHeight;
-    public bool CanJump => coyoteTime.TimerActive();
+    [SerializeField] public bool CanJump => coyoteTime.TimerActive();
 
     private void OnEnable()
     {
@@ -39,7 +39,7 @@ public class JumpBehavior : MonoBehaviour
     // Updates every frame
     private void Update()
     {
-        if (!playerCollision.IsGrounded)
+        if (!playerCollision.IsGrounded.current)
         {
             coyoteTime.CountDown();
             jumpBuffer.CountDown();
@@ -49,12 +49,11 @@ public class JumpBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (jumpBuffer.TimerActive() && playerCollision.IsGrounded)
+        if (jumpBuffer.TimerActive() && playerCollision.IsGrounded.old)
         {
-            //Debug.Log("Jump buffer timer active and grounded");
             Jump(minJumpHeight);
         }
-        if (jumpHoldingPeriod.TimerActive() && !playerCollision.IsGrounded)
+        if (jumpHoldingPeriod.TimerActive() && !playerCollision.IsGrounded.current)
         {
             if (UserInput.Input.Jump())
             {
@@ -104,10 +103,8 @@ public class JumpBehavior : MonoBehaviour
     private void TryJump()
     {
         jumpBuffer.ResetTimer();
-        if (playerCollision.IsGrounded || coyoteTime.TimerActive())
+        if (playerCollision.IsGrounded.current || coyoteTime.TimerActive())
         {
-            //Debug.Log("On ground: " + playerCollision.IsGrounded);
-            //Debug.Log("Coyote timer active: " + coyoteTime.TimerActive());
             Jump(minJumpHeight);
         }
     }
