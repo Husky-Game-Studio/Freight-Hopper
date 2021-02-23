@@ -1,28 +1,28 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Gravity))]
 public class MovementBehavior : MonoBehaviour
 {
     private Rigidbody rb;
     private Transform cameraTransform;
 
-    // Direction to move player
     private Vector3 moveDirection;
 
-    // Speed
+    private Gravity gravity;
+
     [SerializeField] private float speed = 20f;
 
     public float Speed => speed;
 
     [SerializeField] private float friction;
 
-    // Speed limit
     [SerializeField] private float playerMoveSpeedLimit;
 
-    // Constructs the variables when the game starts
     private void Awake()
     {
         cameraTransform = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
+        gravity = GetComponent<Gravity>();
     }
 
     // Called every frame
@@ -32,10 +32,12 @@ public class MovementBehavior : MonoBehaviour
         moveDirection = new Vector3(UserInput.Input.Move().x, 0f, UserInput.Input.Move().y);
     }
 
+    private Vector3 cameraForward;
+
     private void FixedUpdate()
     {
         // Gets camera forward and right vector
-        Vector3 cameraForward = cameraTransform.forward;
+        cameraForward = cameraTransform.forward;
         Vector3 cameraRight = cameraTransform.right;
         // Sets the y axis to 0 so there is no conflict
         cameraForward.y = 0f;
@@ -43,6 +45,7 @@ public class MovementBehavior : MonoBehaviour
         cameraRight.Normalize();
         cameraForward.Normalize();
         // Moves relative to the camera
+
         Vector3 relativeMove = cameraForward * moveDirection.z + cameraRight * moveDirection.x;
 
         relativeMove.y = 0f;
