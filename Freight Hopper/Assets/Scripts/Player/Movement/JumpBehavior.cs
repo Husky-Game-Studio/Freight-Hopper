@@ -90,7 +90,11 @@ public class JumpBehavior : MonoBehaviour
         // That and considering that physics works in timesteps.
         float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.scale.current * height);
         Camera.main.GetComponent<CameraDrag>().CollidDrag(gravity.Direction);
-        float alignedSpeed = Vector3.Dot(rb.velocity, playerCollision.ContactNormal);
+
+        // Upward bias for sloped jumping
+        Vector3 jumpDirection = (playerCollision.ContactNormal + gravity.Direction).normalized;
+        // Considers velocity when jumping on slopes
+        float alignedSpeed = Vector3.Dot(rb.velocity, jumpDirection);
         if (alignedSpeed > 0)
         {
             jumpForce = Mathf.Max(jumpForce - alignedSpeed, 0);
