@@ -49,15 +49,18 @@ public class JumpBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Jump buffer jumping
         if (jumpBuffer.TimerActive() && playerCollision.IsGrounded.old)
         {
             Jump(minJumpHeight);
         }
+
+        // This lowers your gravity while you are holding space for the timer period while you are holding jump
         if (jumpHoldingPeriod.TimerActive() && !playerCollision.IsGrounded.current)
         {
             if (UserInput.Input.Jump())
             {
-                gravity.scale.SetCurrent((gravity.scale.old * minJumpHeight) / maxJumpHeight);
+                gravity.scale.SetCurrent(gravity.scale.old * minJumpHeight / maxJumpHeight);
             }
             else
             {
@@ -73,10 +76,6 @@ public class JumpBehavior : MonoBehaviour
 
     public void Jump(float height)
     {
-        if (rb.velocity.y < 0)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        }
         jumpBuffer.DeactivateTimer();
         coyoteTime.DeactivateTimer();
         jumpHoldingPeriod.ResetTimer();
@@ -86,6 +85,11 @@ public class JumpBehavior : MonoBehaviour
             jumpSound.Play();
         }
 
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        }
+
         // Basic physics, except the force required to reach this height may not work if we consider holding space
         // That and considering that physics works in timesteps.
         float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.scale.current * height);
@@ -93,19 +97,21 @@ public class JumpBehavior : MonoBehaviour
 
         // Upward bias for sloped jumping
         Vector3 jumpDirection = (playerCollision.ContactNormal + gravity.Direction).normalized;
-        // Considers velocity when jumping on slopes
+
+        // Considers velocity when jumping on slopes and the slope angle
         float alignedSpeed = Vector3.Dot(rb.velocity, jumpDirection);
         if (alignedSpeed > 0)
         {
             jumpForce = Mathf.Max(jumpForce - alignedSpeed, 0);
         }
 
+        // Actual jump itself
         rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
 
         // Lower gravity when holding space making you go higher
         if (UserInput.Input.Jump())
         {
-            gravity.scale.SetCurrent((gravity.scale.old * minJumpHeight) / maxJumpHeight);
+            gravity.scale.SetCurrent(gravity.scale.old * minJumpHeight / maxJumpHeight);
         }
     }
 
