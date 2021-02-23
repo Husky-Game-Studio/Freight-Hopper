@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Movement/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Player/Input/InputMaster.inputactions'
 
 using System;
 using System.Collections;
@@ -39,7 +39,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""a16746e7-e947-468e-ad81-b5a88ea06e5c"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""NormalizeVector2"",
                     ""interactions"": """"
                 },
                 {
