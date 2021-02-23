@@ -9,10 +9,11 @@ public class CollisionCheck : MonoBehaviour
 
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [ReadOnly, SerializeField] private Vector3 contactNormal;
+    [ReadOnly, SerializeField] private int contactCount;
     public Vector3 ContactNormal => contactNormal;
+    public Var<bool> IsGrounded => isGrounded;
 
     [SerializeField] private float maxSlope = 30;
-    public Var<bool> IsGrounded => isGrounded;
 
     public delegate void LandedEventHandler();
 
@@ -49,8 +50,13 @@ public class CollisionCheck : MonoBehaviour
                 if (collisionAngle <= maxSlope)
                 {
                     isGrounded.current = true;
-                    contactNormal = normal;
+                    contactNormal += normal;
+                    contactCount++;
                 }
+            }
+            if (contactCount > 1)
+            {
+                contactNormal.Normalize();
             }
         }
     }
@@ -85,6 +91,7 @@ public class CollisionCheck : MonoBehaviour
         isGrounded.UpdateOld();
 
         isGrounded.current = false;
+        contactCount = 0;
         contactNormal = gravity.Direction;
     }
 
