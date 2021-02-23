@@ -989,7 +989,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
@@ -1009,7 +1009,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517b906aae6a2b64a89f7ca3cfe1f8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAcceleration: 23
+  maxAcceleration: 45
+  maxAirAcceleration: 15
   playerMoveSpeedLimit: 10
 --- !u!114 &6851446874579196116
 MonoBehaviour:

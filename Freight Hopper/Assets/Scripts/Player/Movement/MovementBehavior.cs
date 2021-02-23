@@ -1,17 +1,18 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Gravity))]
+[RequireComponent(typeof(Gravity), typeof(CollisionCheck))]
 public class MovementBehavior : MonoBehaviour
 {
     private Rigidbody rb;
     private Transform cameraTransform;
+    private CollisionCheck playerCollision;
 
     private Vector3 desiredVelocity;
 
     [SerializeField] private float maxAcceleration = 20;
+    [SerializeField] private float maxAirAcceleration = 10;
 
     private Gravity gravity;
-
     public float Speed => playerMoveSpeedLimit;
 
     [SerializeField] private float playerMoveSpeedLimit;
@@ -20,6 +21,7 @@ public class MovementBehavior : MonoBehaviour
     {
         cameraTransform = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
+        playerCollision = GetComponent<CollisionCheck>();
         gravity = GetComponent<Gravity>();
     }
 
@@ -48,6 +50,7 @@ public class MovementBehavior : MonoBehaviour
         Vector3 relativeMove = cameraForward * desiredVelocity.z + cameraRight * desiredVelocity.x;
 
         Move(relativeMove);
+
         // changes the forward vector
         if (relativeMove != Vector3.zero)
         {
@@ -55,14 +58,24 @@ public class MovementBehavior : MonoBehaviour
         }
     }
 
-    // Function that moves the player
     private void Move(Vector3 desiredVelocity)
     {
+        Vector3 xAxis = playerCollision.ProjectOnContactPlane(Vector3.right).normalized;
+        Vector3 zAxis = playerCollision.ProjectOnContactPlane(Vector3.forward).normalized;
+
         Vector3 velocity = rb.velocity;
-        Debug.DrawRay(this.transform.position, this.transform.position + velocity);
-        float maxSpeedChange = maxAcceleration * Time.deltaTime;
-        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
-        velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange);
+
+        float currentX = Vector3.Dot(velocity, xAxis);
+        float currentZ = Vector3.Dot(velocity, zAxis);
+
+        float acceleration = playerCollision.IsGrounded.old ? maxAcceleration : maxAirAcceleration;
+
+        float maxSpeedChange = acceleration * Time.deltaTime;
+        float newX = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+        float newZ = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange);
+
+        velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
+
         rb.velocity = velocity;
     }
 }

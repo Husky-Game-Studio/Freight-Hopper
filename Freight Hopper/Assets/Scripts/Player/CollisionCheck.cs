@@ -85,5 +85,11 @@ public class CollisionCheck : MonoBehaviour
         isGrounded.UpdateOld();
 
         isGrounded.current = false;
+        contactNormal = gravity.Direction;
+    }
+
+    public Vector3 ProjectOnContactPlane(Vector3 vector)
+    {
+        return vector - contactNormal * Vector3.Dot(vector, contactNormal);
     }
 }

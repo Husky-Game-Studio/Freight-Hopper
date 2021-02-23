@@ -90,6 +90,12 @@ public class JumpBehavior : MonoBehaviour
         // That and considering that physics works in timesteps.
         float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.scale.current * height);
         Camera.main.GetComponent<CameraDrag>().CollidDrag(gravity.Direction);
+        float alignedSpeed = Vector3.Dot(rb.velocity, playerCollision.ContactNormal);
+        if (alignedSpeed > 0)
+        {
+            jumpForce = Mathf.Max(jumpForce - alignedSpeed, 0);
+        }
+
         rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
 
         // Lower gravity when holding space making you go higher
