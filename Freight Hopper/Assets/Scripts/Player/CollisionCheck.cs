@@ -8,6 +8,9 @@ public class CollisionCheck : MonoBehaviour
     private Gravity gravity;
 
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
+    [ReadOnly, SerializeField] private Vector3 contactNormal;
+    public Vector3 ContactNormal => contactNormal;
+
     [SerializeField] private float maxSlope = 30;
     public Var<bool> IsGrounded => isGrounded;
 
@@ -38,10 +41,16 @@ public class CollisionCheck : MonoBehaviour
                     Camera.main.GetComponent<CameraDrag>().CollidDrag(-collision.GetContact(i).normal);
                 }
 
+                Vector3 normal = collision.GetContact(i).normal;
+
                 // Is Vector3.angle efficient?
-                float collisionAngle = Vector3.Angle(collision.GetContact(i).normal, gravity.Direction);
+                float collisionAngle = Vector3.Angle(normal, gravity.Direction);
                 //Debug.Log("Angle of collision " + i + ": " + collisionAngle);
-                isGrounded.current |= collisionAngle <= maxSlope;
+                if (collisionAngle <= maxSlope)
+                {
+                    isGrounded.current = true;
+                    contactNormal = normal;
+                }
             }
         }
     }
