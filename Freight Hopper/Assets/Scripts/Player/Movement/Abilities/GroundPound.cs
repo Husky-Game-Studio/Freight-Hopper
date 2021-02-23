@@ -2,48 +2,78 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck))]
+[RequireComponent(typeof(CollisionCheck), typeof(Gravity))]
 public class GroundPound : MonoBehaviour
 {
     [ReadOnly, SerializeField] private bool groundPoundPossible = true;
+    [ReadOnly, SerializeField] private bool groundPounding = false;
+    [SerializeField] private float initialBurstForce;
     [SerializeField] private float downwardsForce;
-    [SerializeField] private Timer delay = new Timer(0.5f);
-    private bool groundPound = false;
-    private CollisionCheck playerCollision;
-    private Rigidbody rigidbody1;
+    [SerializeField] private float slopeDownForce;
 
-    // Update is called once per frame
-    private void Start()
+    private CollisionCheck playerCollision;
+    private Gravity gravity;
+    private Rigidbody rb;
+
+    private void OnEnable()
     {
-        // Gets the rigid body component and jump behaviour script
-        rigidbody1 = GetComponent<Rigidbody>();
+        UserInput.GroundPoundInput += TryGroundPound;
+    }
+
+    private void OnDisable()
+    {
+        UserInput.GroundPoundInput -= TryGroundPound;
+    }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        gravity = GetComponent<Gravity>();
         playerCollision = GetComponent<CollisionCheck>();
     }
 
     private void Update()
     {
-        delay.CountDown();
         // Checks if ground pound is possible
-        if (UserInput.Input.GroundPoundTriggered() && !delay.TimerActive() && groundPoundPossible)
-        {
-            groundPound = true;
-            groundPoundPossible = false;
-            delay.ResetTimer();
-        }
-        // Checks if player is grounded and the button is pressed
-        if (playerCollision.IsGrounded.current || !UserInput.Input.GroundPoundTriggered())
+        if (!UserInput.Input.GroundPoundTriggered())
         {
             groundPoundPossible = true;
-            groundPound = false;
+            groundPounding = false;
+        }
+    }
+
+    private void TryGroundPound()
+    {
+        if (groundPoundPossible)
+        {
+            if (rb.velocity.y > 0)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            }
+            rb.AddForce(-gravity.Direction * downwardsForce, ForceMode.VelocityChange);
+            groundPounding = true;
+            groundPoundPossible = false;
         }
     }
 
     private void FixedUpdate()
     {
-        // Adds the ground pound force
-        if (groundPound)
+        if (groundPounding)
         {
-            rigidbody1.AddForce(Vector3.down * downwardsForce);
+            Vector3 direction = -gravity.Direction;
+            if (playerCollision.IsGrounded.old)
+            {
+                Vector3 acrossSlope = Vector3.Cross(gravity.Direction, playerCollision.ContactNormal);
+                Vector3 downSlope = Vector3.Cross(acrossSlope, playerCollision.ContactNormal);
+                direction = downSlope;
+                direction *= slopeDownForce;
+            }
+            else
+            {
+                direction *= downwardsForce;
+            }
+
+            rb.AddForce(direction, ForceMode.Acceleration);
         }
     }
 }

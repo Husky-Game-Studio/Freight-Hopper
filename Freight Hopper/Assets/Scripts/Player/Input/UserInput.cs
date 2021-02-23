@@ -10,9 +10,11 @@ public class UserInput : MonoBehaviour
 
     public static UserInput Input => input;
 
-    public delegate void JumpEventHandler();
+    public delegate void PressEventHandler();
 
-    public static event JumpEventHandler JumpInput;
+    public static event PressEventHandler JumpInput;
+
+    public static event PressEventHandler GroundPoundInput;
 
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
@@ -47,6 +49,10 @@ public class UserInput : MonoBehaviour
     private void GroundPoundHeld(InputAction.CallbackContext context)
     {
         groundPoundHeld = !groundPoundHeld;
+        if (groundPoundHeld)
+        {
+            GroundPoundInput?.Invoke();
+        }
     }
 
     private void JumpHeld(InputAction.CallbackContext context)

@@ -176,16 +176,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 743f4f71da3cd96478a7353af0bd33f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   groundPoundPossible: 1
-  downwardsForce: 20
-  delay:
-    duration: 0.5
-    current: 0
+  groundPounding: 0
+  initialBurstForce: 20
+  downwardsForce: 10
+  slopeDownForce: 500
 --- !u!114 &4092
 MonoBehaviour:
   m_ObjectHideFlags: 0
