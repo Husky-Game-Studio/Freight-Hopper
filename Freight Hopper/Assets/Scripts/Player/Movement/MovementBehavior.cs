@@ -27,35 +27,37 @@ public class MovementBehavior : MonoBehaviour
 
     private void Update()
     {
-        // Gets the x and y axis of the player input and puts it in a vector
-
-        Vector2 input = new Vector2(UserInput.Input.Move().x, UserInput.Input.Move().y);
-        input = Vector2.ClampMagnitude(input, 1);
-
-        desiredVelocity = new Vector3(input.x, 0f, input.y) * playerMoveSpeedLimit;
+        desiredVelocity = Input() * playerMoveSpeedLimit;
     }
 
     private void FixedUpdate()
     {
-        // Gets camera forward and right vector
-        Vector3 cameraForward = cameraTransform.forward;
-        Vector3 cameraRight = cameraTransform.right;
-        // Sets the y axis to 0 so there is no conflict
-        cameraForward.y = 0f;
-        cameraRight.y = 0f;
-        cameraRight.Normalize();
-        cameraForward.Normalize();
-        // Moves relative to the camera
-
-        Vector3 relativeMove = cameraForward * desiredVelocity.z + cameraRight * desiredVelocity.x;
+        Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
         Move(relativeMove);
 
-        // changes the forward vector
+        // Changes the forward vector of the player to match the direction moved
         if (relativeMove != Vector3.zero)
         {
             gameObject.transform.forward = relativeMove;
         }
+    }
+
+    private Vector3 Input()
+    {
+        return new Vector3(UserInput.Input.Move().x, 0f, UserInput.Input.Move().y);
+    }
+
+    private Vector3 RelativeMove(Vector3 forward, Vector3 right)
+    {
+        forward.y = 0f;
+        right.y = 0f;
+        right.Normalize();
+        forward.Normalize();
+
+        // Moves relative to the camera
+        Vector3 move = forward * desiredVelocity.z + right * desiredVelocity.x;
+        return move;
     }
 
     private void Move(Vector3 desiredVelocity)
@@ -71,8 +73,8 @@ public class MovementBehavior : MonoBehaviour
         float acceleration = playerCollision.IsGrounded.old ? maxAcceleration : maxAirAcceleration;
 
         float maxSpeedChange = acceleration * Time.deltaTime;
-        float newX = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
-        float newZ = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange);
+        float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
+        float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
         velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
 
