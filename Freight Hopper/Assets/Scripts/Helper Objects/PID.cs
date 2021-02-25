@@ -7,40 +7,47 @@ using UnityEngine;
 /// </summary>
 public class PID
 {
-    /// <summary>
-    /// The gain of the proportional error. This defines how much weight the proportional
-    /// error has in the final output.
-    /// </summary>
-    [SerializeField] private float Kp;
+    [System.Serializable]
+    public struct Data
+    {
+        // The gain of the proportional error. This defines how much weight the proportional
+        // error has in the final output.
+        [SerializeField] public float Kp;
 
-    /// <summary>
-    /// The gain of the integral error. This defines how much weight the integral
-    /// error has in the final output.
-    /// </summary>
-    [SerializeField] private float Ki;
+        // The gain of the integral error. This defines how much weight the integral
+        // error has in the final output.
+        [SerializeField] public float Ki;
 
-    /// <summary>
-    /// The gain of the derivative error. This defines how much weight the derivative
-    /// error has in the final output.
-    /// </summary>
-    [SerializeField] private float Kd;
+        // The gain of the derivative error. This defines how much weight the derivative
+        // error has in the final output.
+        [SerializeField] public float Kd;
 
-    /// <summary>
-    /// Tracks the current values of the proportional, integral, and derative errors.
-    /// </summary>
+        public Data(float p, float i, float d)
+        {
+            Kp = p;
+            Ki = i;
+            Kd = d;
+        }
+
+        public static Data operator *(Data a, float b)
+        {
+            return new Data(a.Kp * b, a.Ki * b, a.Kd * b);
+        }
+    }
+
+    // Constants modified by the user
+    [SerializeField] private Data data;
+
+    // Tracks the current values of the proportional, integral, and derative errors.
     private float P, I, D;
 
-    /// <summary>
-    /// Used to keep track of what the error value was the last time the output was requested.
-    /// This is used by the derivative to calculate the rate of change.
-    /// </summary>
+    // Used to keep track of what the error value was the last time the output was requested.
+    // This is used by the derivative to calculate the rate of change.
     private float previousError;
 
-    public void Initialize(float p, float i, float d)
+    public void Initialize(Data newData)
     {
-        Kp = p;
-        Ki = i;
-        Kd = d;
+        data = newData;
     }
 
     /// <summary>
@@ -60,6 +67,6 @@ public class PID
 
         previousError = currentError;
 
-        return P * Kp + I * Ki + D * Kd;
+        return P * data.Kp + I * data.Ki + D * data.Kd;
     }
 }
