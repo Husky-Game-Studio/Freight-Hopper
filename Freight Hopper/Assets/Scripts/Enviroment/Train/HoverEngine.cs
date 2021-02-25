@@ -4,25 +4,19 @@ using UnityEngine;
 public class HoverEngine : MonoBehaviour
 {
     [SerializeField, ReadOnly] private Rigidbody rb;
-    public PID controller;
-    public float targetDistance;
-    public Vector3 direction;
-    public LayerMask layerMask;
-    public bool automatic;
+    [SerializeField, ReadOnly] private Vector3 direction = Vector3.down;
+    [SerializeField, ReadOnly] private LayerMask layerMask;
+    [SerializeField, ReadOnly] private PID controller = new PID();
+    [SerializeField, ReadOnly] private float targetDistance;
+    [SerializeField, ReadOnly] private bool automatic;
 
-    private void Awake()
+    public void Initialize(Rigidbody rb, LayerMask layerMask, PID.Data data, float targetDistance, bool automatic)
     {
-        if (transform.parent.parent.GetComponent<Rigidbody>() != null)
-        {
-            rb = transform.parent.parent.GetComponent<Rigidbody>();
-        }
-    }
-
-    private void Reset()
-    {
-        targetDistance = 3;
-
-        layerMask = LayerMask.GetMask("Default");
+        this.rb = rb;
+        controller.Initialize(data * rb.mass);
+        this.layerMask = layerMask;
+        this.targetDistance = targetDistance;
+        this.automatic = automatic;
     }
 
     private void OnDrawGizmosSelected()
@@ -48,11 +42,17 @@ public class HoverEngine : MonoBehaviour
         }
     }
 
+    public void SetDirection(Vector3 direction)
+    {
+        direction.Normalize();
+        this.direction = direction;
+    }
+
     private void FixedUpdate()
     {
         if (automatic)
         {
-            direction = Physics.gravity.normalized;
+            SetDirection(Physics.gravity);
             Hover(targetDistance);
         }
     }

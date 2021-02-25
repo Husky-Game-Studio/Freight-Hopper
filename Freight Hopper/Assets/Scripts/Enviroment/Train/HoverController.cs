@@ -3,24 +3,50 @@ using UnityEngine;
 
 public class HoverController : MonoBehaviour
 {
-    [SerializeField, ReadOnly] public Rigidbody rb;
-    [SerializeField, ReadOnly] private Transform centerOfMass;
-    [SerializeField, ReadOnly] private string centerOfMassGameObjectName = "COM";
-    [SerializeField] private List<HoverEngine> hoverEnginePivots;
+    [SerializeField, ReadOnly] private Rigidbody rb;
 
-    [SerializeField] private PID.Data PIDData;
-    [SerializeField, Tooltip("Mask for deciding what the hover engines react to")] public LayerMask layerMask;
-    [SerializeField, Tooltip("Target distance above the ground for each engine")] public float targetDistance;
-
-    [SerializeField] private bool customCenterOfMass = false;
+    [SerializeField, ReadOnly, Tooltip("Automatically grabs hover engine that are children to this object")] private List<HoverEngine> hoverEnginePivots;
+    [SerializeField] private HoverPresets hoverSetting;
+    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private float targetDistance;
     [SerializeField] private bool automatic = true;
 
-    private void Awake()
+    public void AddHoverEngine(Vector3 position, string name = "")
     {
-        if (customCenterOfMass)
+        if (name.Equals(""))
         {
-            rb.centerOfMass = centerOfMass.localPosition;
+            name = hoverEnginePivots.Count.ToString();
         }
+        GameObject go = new GameObject(name);
+        go.transform.parent = this.transform;
+        go.transform.localPosition = position;
+        go.AddComponent<HoverEngine>();
+        InitializeEngines();
+    }
+
+    private void OnValidate()
+    {
+        if (this.gameObject != null)
+        {
+            InitializeEngines();
+        }
+    }
+
+    private void Reset()
+    {
+        layerMask = LayerMask.GetMask("Default");
+        if (transform.parent.GetComponent<Rigidbody>() != null)
+        {
+            rb = transform.parent.GetComponent<Rigidbody>();
+        }
+        else
+        {
+            Debug.LogWarning("HoverController: Rigidbody not found in parent");
+        }
+
+        targetDistance = 3;
+
+        InitializeEngines();
     }
 
     private void InitializeEngines()
@@ -38,65 +64,7 @@ public class HoverController : MonoBehaviour
                 continue;
             }
 
-            hoverEngine.controller.Initialize(PIDData * rb.mass);
-            hoverEngine.layerMask = layerMask;
-            hoverEngine.targetDistance = targetDistance;
-            hoverEngine.automatic = automatic;
+            hoverEngine.Initialize(rb, layerMask, hoverSetting.CurrentPreset(), targetDistance, automatic);
         }
-
-        foreach (Transform child in rb.transform)
-        {
-            if (child.name.Equals(centerOfMassGameObjectName))
-            {
-                centerOfMass = child;
-            }
-        }
-    }
-
-    private void OnValidate()
-    {
-        if (this.gameObject != null)
-        {
-            InitializeEngines();
-        }
-        if (customCenterOfMass)
-        {
-            Vector3 location = Vector3.zero;
-            foreach (HoverEngine engine in hoverEnginePivots)
-            {
-                location += engine.transform.position;
-            }
-            location /= hoverEnginePivots.Count;
-
-            if (centerOfMass == null)
-            {
-                centerOfMass = Instantiate(new GameObject(centerOfMassGameObjectName), location, Quaternion.identity, this.transform.parent).transform;
-                print("HoverController: Added Center of Mass Object in the middle of hover engines");
-            }
-            else
-            {
-                centerOfMass.position = location;
-            }
-            rb.centerOfMass = centerOfMass.localPosition;
-        }
-    }
-
-    private void Reset()
-    {
-        layerMask = LayerMask.GetMask("Default");
-        if (transform.parent.GetComponent<Rigidbody>() != null)
-        {
-            rb = transform.parent.GetComponent<Rigidbody>();
-        }
-
-        customCenterOfMass = false;
-
-        PIDData.Kp = 3.5f;
-        PIDData.Ki = 0.2f;
-        PIDData.Kd = 1.5f;
-
-        targetDistance = 5;
-
-        InitializeEngines();
     }
 }
