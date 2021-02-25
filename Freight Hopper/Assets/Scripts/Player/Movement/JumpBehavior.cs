@@ -96,7 +96,7 @@ public class JumpBehavior : MonoBehaviour
         Camera.main.GetComponent<CameraDrag>().CollidDrag(gravity.Direction);
 
         // Upward bias for sloped jumping
-        Vector3 jumpDirection = (playerCollision.ContactNormal + gravity.Direction).normalized;
+        Vector3 jumpDirection = (playerCollision.ContactNormal.old + gravity.Direction).normalized;
 
         // Considers velocity when jumping on slopes and the slope angle
         float alignedSpeed = Vector3.Dot(rb.velocity, jumpDirection);

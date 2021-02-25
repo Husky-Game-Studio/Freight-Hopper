@@ -8,9 +8,9 @@ public class CollisionCheck : MonoBehaviour
     private Gravity gravity;
 
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
-    [ReadOnly, SerializeField] private Vector3 contactNormal;
+    [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
     [ReadOnly, SerializeField] private int contactCount;
-    public Vector3 ContactNormal => contactNormal;
+    public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
 
     [SerializeField] private float maxSlope = 30;
@@ -22,6 +22,8 @@ public class CollisionCheck : MonoBehaviour
     private void Awake()
     {
         gravity = GetComponent<Gravity>();
+        contactNormal.current = gravity.Direction;
+        contactNormal.UpdateOld();
     }
 
     // This needs to be replaced by a level manager, doesn't belong here
@@ -35,6 +37,7 @@ public class CollisionCheck : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("landable"))
         {
+            contactNormal.current = Vector3.zero;
             for (int i = 0; i < collision.contactCount; i++)
             {
                 if (collisionEffects)
@@ -50,13 +53,17 @@ public class CollisionCheck : MonoBehaviour
                 if (collisionAngle <= maxSlope)
                 {
                     isGrounded.current = true;
-                    contactNormal += normal;
+                    contactNormal.current += normal;
                     contactCount++;
                 }
             }
             if (contactCount > 1)
             {
-                contactNormal.Normalize();
+                contactNormal.current.Normalize();
+            }
+            if (contactCount == 0)
+            {
+                contactNormal.current = gravity.Direction;
             }
         }
     }
@@ -92,11 +99,12 @@ public class CollisionCheck : MonoBehaviour
 
         isGrounded.current = false;
         contactCount = 0;
-        contactNormal = gravity.Direction;
+        contactNormal.UpdateOld();
+        contactNormal.current = gravity.Direction;
     }
 
     public Vector3 ProjectOnContactPlane(Vector3 vector)
     {
-        return vector - contactNormal * Vector3.Dot(vector, contactNormal);
+        return vector - contactNormal.old * Vector3.Dot(vector, contactNormal.old);
     }
 }

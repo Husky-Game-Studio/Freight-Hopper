@@ -63,8 +63,8 @@ public class GroundPound : MonoBehaviour
             Vector3 direction = -gravity.Direction;
             if (playerCollision.IsGrounded.old)
             {
-                Vector3 acrossSlope = Vector3.Cross(gravity.Direction, playerCollision.ContactNormal);
-                Vector3 downSlope = Vector3.Cross(acrossSlope, playerCollision.ContactNormal);
+                Vector3 acrossSlope = Vector3.Cross(gravity.Direction, playerCollision.ContactNormal.old);
+                Vector3 downSlope = Vector3.Cross(acrossSlope, playerCollision.ContactNormal.old);
                 direction = downSlope;
                 direction *= slopeDownForce;
             }

@@ -5,17 +5,19 @@ public class MovementBehavior : MonoBehaviour
 {
     private Rigidbody rb;
     private Transform cameraTransform;
+    [SerializeField] private Transform movementTransform;
     private CollisionCheck playerCollision;
 
-    private Vector3 desiredVelocity;
+    private Vector3 input;
 
-    [SerializeField] private float maxAcceleration = 20;
-    [SerializeField] private float maxAirAcceleration = 10;
+    [SerializeField] private float groundAcceleration = 20;
+    [SerializeField] private float airAcceleration = 10;
+
+    [SerializeField] private float airFriction = 0.97f;
+    [SerializeField] private float kineticGroundFriction = 0.95f;
 
     private Gravity gravity;
-    public float Speed => playerMoveSpeedLimit;
-
-    [SerializeField] private float playerMoveSpeedLimit;
+    public float Speed => groundAcceleration;
 
     private void Awake()
     {
@@ -27,7 +29,7 @@ public class MovementBehavior : MonoBehaviour
 
     private void Update()
     {
-        desiredVelocity = Input() * playerMoveSpeedLimit;
+        input = Input();
     }
 
     private void FixedUpdate()
@@ -35,6 +37,7 @@ public class MovementBehavior : MonoBehaviour
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
         Move(relativeMove);
+        Friction();
 
         // Changes the forward vector of the player to match the direction moved
         if (relativeMove != Vector3.zero)
@@ -56,28 +59,29 @@ public class MovementBehavior : MonoBehaviour
         forward.Normalize();
 
         // Moves relative to the camera
-        Vector3 move = forward * desiredVelocity.z + right * desiredVelocity.x;
+        Vector3 move = forward * input.z + right * input.x;
         return move;
     }
 
-    private void Move(Vector3 desiredVelocity)
+    private void Friction()
+    {
+        float amount = playerCollision.IsGrounded.old ? kineticGroundFriction : airFriction;
+
+        Vector3 velocity = rb.velocity * amount;
+        rb.velocity = velocity;
+    }
+
+    private void Move(Vector3 direction)
     {
         Vector3 xAxis = playerCollision.ProjectOnContactPlane(Vector3.right).normalized;
         Vector3 zAxis = playerCollision.ProjectOnContactPlane(Vector3.forward).normalized;
 
-        Vector3 velocity = rb.velocity;
+        Vector3 relativeDirection = direction.x * xAxis + zAxis * direction.z;
 
-        float currentX = Vector3.Dot(velocity, xAxis);
-        float currentZ = Vector3.Dot(velocity, zAxis);
+        movementTransform.forward = playerCollision.ProjectOnContactPlane(cameraTransform.forward);
 
-        float acceleration = playerCollision.IsGrounded.old ? maxAcceleration : maxAirAcceleration;
+        float acceleration = playerCollision.IsGrounded.old ? groundAcceleration : airAcceleration;
 
-        float maxSpeedChange = acceleration * Time.deltaTime;
-        float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
-        float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
-
-        velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
-
-        rb.velocity = velocity;
+        rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }
 }
