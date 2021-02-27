@@ -13,9 +13,6 @@ public class MovementBehavior : MonoBehaviour
     [SerializeField] private float groundAcceleration = 20;
     [SerializeField] private float airAcceleration = 10;
 
-    [SerializeField] private float airFriction = 0.97f;
-    [SerializeField] private float kineticGroundFriction = 0.95f;
-
     private Gravity gravity;
     public float Speed => groundAcceleration;
 
@@ -37,7 +34,6 @@ public class MovementBehavior : MonoBehaviour
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
         Move(relativeMove);
-        Friction();
 
         // Changes the forward vector of the player to match the direction moved
         if (relativeMove != Vector3.zero)
@@ -61,14 +57,6 @@ public class MovementBehavior : MonoBehaviour
         // Moves relative to the camera
         Vector3 move = forward * input.z + right * input.x;
         return move;
-    }
-
-    private void Friction()
-    {
-        float amount = playerCollision.IsGrounded.old ? kineticGroundFriction : airFriction;
-
-        Vector3 force = (rb.velocity - playerCollision.ConnectionVelocity.old) * amount;
-        rb.AddForce(-force, ForceMode.VelocityChange);
     }
 
     private void Move(Vector3 direction)

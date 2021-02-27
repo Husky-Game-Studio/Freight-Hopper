@@ -218,6 +218,8 @@ MonoBehaviour:
   connectionAcceleration:
     old: {x: 0, y: 0, z: 0}
     current: {x: 0, y: 0, z: 0}
+  airFriction: 0.01
+  kineticGroundFriction: 0.08
   maxSlope: 60
 --- !u!114 &4094
 MonoBehaviour:
@@ -1058,8 +1060,6 @@ MonoBehaviour:
   movementTransform: {fileID: 1017428897}
   groundAcceleration: 40
   airAcceleration: 10
-  airFriction: 0.01
-  kineticGroundFriction: 0.08
 --- !u!114 &6851446874579196116
 MonoBehaviour:
   m_ObjectHideFlags: 0

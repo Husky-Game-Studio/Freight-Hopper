@@ -106,6 +106,7 @@ public class JumpBehavior : MonoBehaviour
 
         // Actual jump itself
         rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
+        rb.AddForce(playerCollision.ConnectionVelocity.old, ForceMode.VelocityChange);
 
         // Lower gravity when holding space making you go higher
         if (UserInput.Input.Jump())

@@ -25,6 +25,8 @@ public class CollisionCheck : MonoBehaviour
     public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
 
+    [SerializeField] private float airFriction = 0.01f;
+    [SerializeField] private float kineticGroundFriction = 0.08f;
     [SerializeField] private float maxSlope = 30;
 
     public delegate void LandedEventHandler();
@@ -112,7 +114,7 @@ public class CollisionCheck : MonoBehaviour
         }
     }
 
-    public void UpdateConnectionState()
+    private void UpdateConnectionState()
     {
         if (connectedRb.current == connectedRb.old)
         {
@@ -123,6 +125,19 @@ public class CollisionCheck : MonoBehaviour
 
         connectionWorldPosition = rb.position;
         connectionLocalPosition = connectedRb.current.transform.InverseTransformPoint(connectionWorldPosition);
+    }
+
+    private void Friction()
+    {
+        float amount = isGrounded.current ? kineticGroundFriction : airFriction;
+
+        Vector3 force = (rb.velocity - connectionVelocity.current) * amount;
+        if (isGrounded.current)
+        {
+            force = ProjectOnContactPlane(force);
+        }
+
+        rb.AddForce(-force, ForceMode.VelocityChange);
     }
 
     /// <summary>
@@ -137,6 +152,9 @@ public class CollisionCheck : MonoBehaviour
                 UpdateConnectionState();
             }
         }
+
+        Friction();
+
         isGrounded.UpdateOld();
         isGrounded.current = false;
         contactCount = 0;
@@ -148,6 +166,10 @@ public class CollisionCheck : MonoBehaviour
         connectionVelocity.UpdateOld();
         connectionVelocity.current = Vector3.zero;
         contactNormal.current = gravity.Direction;
+
+        if (connectedRb.current == null && connectedRb.old != null)
+        {
+        }
         connectedRb.UpdateOld();
         connectedRb.current = null;
     }
