@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d1eca7b51a20d44a5d87fcb3bb63db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
   isGrounded:
     old: 0
     current: 0
@@ -205,6 +206,18 @@ MonoBehaviour:
     old: {x: 0, y: 0, z: 0}
     current: {x: 0, y: 0, z: 0}
   contactCount: 0
+  steepCount: 0
+  connectedRb:
+    old: {fileID: 0}
+    current: {fileID: 0}
+  connectionWorldPosition: {x: 0, y: 0, z: 0}
+  connectionLocalPosition: {x: 0, y: 0, z: 0}
+  connectionVelocity:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+  connectionAcceleration:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
   maxSlope: 55
 --- !u!114 &4094
 MonoBehaviour:
@@ -982,8 +995,8 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 0
-  m_BlendUpdateMethod: 0
+  m_UpdateMethod: 1
+  m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
     m_Time: 2
@@ -1007,7 +1020,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 6c843397d0e4de24586128a475788fc6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
@@ -1045,8 +1058,8 @@ MonoBehaviour:
   movementTransform: {fileID: 1017428897}
   groundAcceleration: 40
   airAcceleration: 10
-  airFriction: 0.99
-  kineticGroundFriction: 0.92
+  airFriction: 0.01
+  kineticGroundFriction: 0.08
 --- !u!114 &6851446874579196116
 MonoBehaviour:
   m_ObjectHideFlags: 0

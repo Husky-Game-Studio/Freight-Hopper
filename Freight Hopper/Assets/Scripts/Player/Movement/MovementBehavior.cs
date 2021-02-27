@@ -39,6 +39,9 @@ public class MovementBehavior : MonoBehaviour
         Move(relativeMove);
         Friction();
 
+        //rb.AddForce(playerCollision.ConnectionVelocity.old, ForceMode.VelocityChange);
+        rb.AddForce(playerCollision.ConnectionAcceleration.old, ForceMode.VelocityChange);
+
         // Changes the forward vector of the player to match the direction moved
         if (relativeMove != Vector3.zero)
         {
@@ -67,8 +70,8 @@ public class MovementBehavior : MonoBehaviour
     {
         float amount = playerCollision.IsGrounded.old ? kineticGroundFriction : airFriction;
 
-        Vector3 velocity = rb.velocity * amount;
-        rb.velocity = velocity;
+        Vector3 force = (rb.velocity - playerCollision.ConnectionVelocity.old) * amount;
+        rb.AddForce(-force, ForceMode.VelocityChange);
     }
 
     private void Move(Vector3 direction)

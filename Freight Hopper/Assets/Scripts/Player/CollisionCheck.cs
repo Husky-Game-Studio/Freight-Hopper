@@ -7,9 +7,21 @@ public class CollisionCheck : MonoBehaviour
 {
     private Gravity gravity;
 
+    [ReadOnly, SerializeField] private Rigidbody rb;
+
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
     [ReadOnly, SerializeField] private int contactCount;
+    [ReadOnly, SerializeField] private int steepCount;
+    [ReadOnly, SerializeField] private Var<Rigidbody> connectedRb = new Var<Rigidbody>(null, null);
+    [ReadOnly, SerializeField] private Vector3 connectionWorldPosition;
+    [ReadOnly, SerializeField] private Vector3 connectionLocalPosition;
+    [ReadOnly, SerializeField] private Var<Vector3> connectionVelocity;
+    [ReadOnly, SerializeField] private Var<Vector3> connectionAcceleration;
+
+    public Var<Rigidbody> ConnectedRb => connectedRb;
+    public Var<Vector3> ConnectionAcceleration => connectionAcceleration;
+    public Var<Vector3> ConnectionVelocity => connectionVelocity;
     public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
 
@@ -22,6 +34,7 @@ public class CollisionCheck : MonoBehaviour
     private void Awake()
     {
         gravity = GetComponent<Gravity>();
+        rb = GetComponent<Rigidbody>();
         contactNormal.current = gravity.Direction;
         contactNormal.UpdateOld();
     }
@@ -49,12 +62,21 @@ public class CollisionCheck : MonoBehaviour
 
                 // Is Vector3.angle efficient?
                 float collisionAngle = Vector3.Angle(normal, gravity.Direction);
-                //Debug.Log("Angle of collision " + i + ": " + collisionAngle);
+                // Debug.Log("Angle of collision " + i + ": " + collisionAngle);
                 if (collisionAngle <= maxSlope)
                 {
                     isGrounded.current = true;
                     contactNormal.current += normal;
                     contactCount++;
+                    connectedRb.current = collision.rigidbody;
+                }
+                else
+                {
+                    steepCount++;
+                    if (contactCount == 0)
+                    {
+                        connectedRb.current = collision.rigidbody;
+                    }
                 }
             }
             if (contactCount > 1)
@@ -90,17 +112,43 @@ public class CollisionCheck : MonoBehaviour
         }
     }
 
+    public void UpdateConnectionState()
+    {
+        if (connectedRb.current == connectedRb.old)
+        {
+            connectionVelocity.current = (connectedRb.current.transform.TransformPoint(connectionLocalPosition) - connectionWorldPosition) / Time.fixedDeltaTime;
+            connectionAcceleration.current = (connectionVelocity.current - connectionVelocity.old);
+        }
+
+        connectionWorldPosition = rb.position;
+        connectionLocalPosition = connectedRb.current.transform.InverseTransformPoint(connectionWorldPosition);
+    }
+
     /// <summary>
     /// This sets isGrounded to false at the start of fixed update, change script execution priority if you have issues with isGrounded of other scripts
     /// </summary>
     private void FixedUpdate()
     {
+        if (connectedRb.current)
+        {
+            if (connectedRb.current.isKinematic || connectedRb.current.mass >= rb.mass)
+            {
+                UpdateConnectionState();
+            }
+        }
         isGrounded.UpdateOld();
-
         isGrounded.current = false;
         contactCount = 0;
+        steepCount = 0;
         contactNormal.UpdateOld();
+
+        connectionAcceleration.UpdateOld();
+        connectionAcceleration.current = Vector3.zero;
+        connectionVelocity.UpdateOld();
+        connectionVelocity.current = Vector3.zero;
         contactNormal.current = gravity.Direction;
+        connectedRb.UpdateOld();
+        connectedRb.current = null;
     }
 
     public Vector3 ProjectOnContactPlane(Vector3 vector)
