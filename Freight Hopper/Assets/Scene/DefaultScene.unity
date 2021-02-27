@@ -218,7 +218,7 @@ MonoBehaviour:
   connectionAcceleration:
     old: {x: 0, y: 0, z: 0}
     current: {x: 0, y: 0, z: 0}
-  maxSlope: 55
+  maxSlope: 60
 --- !u!114 &4094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,7 +1042,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &6851446874579196114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1081,7 +1081,7 @@ MonoBehaviour:
   coyoteTime:
     duration: 0.5
     current: 0
-  maxJumpHeight: 4
+  maxJumpHeight: 5
   minJumpHeight: 1.5
 --- !u!114 &6851446874579196117
 MonoBehaviour:

@@ -118,6 +118,7 @@ public class CollisionCheck : MonoBehaviour
         {
             connectionVelocity.current = (connectedRb.current.transform.TransformPoint(connectionLocalPosition) - connectionWorldPosition) / Time.fixedDeltaTime;
             connectionAcceleration.current = (connectionVelocity.current - connectionVelocity.old);
+            rb.AddForce(connectionAcceleration.current, ForceMode.VelocityChange);
         }
 
         connectionWorldPosition = rb.position;

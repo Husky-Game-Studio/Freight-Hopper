@@ -39,9 +39,6 @@ public class MovementBehavior : MonoBehaviour
         Move(relativeMove);
         Friction();
 
-        //rb.AddForce(playerCollision.ConnectionVelocity.old, ForceMode.VelocityChange);
-        rb.AddForce(playerCollision.ConnectionAcceleration.old, ForceMode.VelocityChange);
-
         // Changes the forward vector of the player to match the direction moved
         if (relativeMove != Vector3.zero)
         {

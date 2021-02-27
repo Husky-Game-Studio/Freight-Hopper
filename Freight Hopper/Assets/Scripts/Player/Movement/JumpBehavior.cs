@@ -36,7 +36,6 @@ public class JumpBehavior : MonoBehaviour
         playerCollision.Landed += coyoteTime.ResetTimer;
     }
 
-    // Updates every frame
     private void Update()
     {
         if (!playerCollision.IsGrounded.current)
@@ -115,7 +114,6 @@ public class JumpBehavior : MonoBehaviour
         }
     }
 
-    // When called makes character jump
     private void TryJump()
     {
         jumpBuffer.ResetTimer();
