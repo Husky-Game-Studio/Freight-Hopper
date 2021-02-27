@@ -165,11 +165,7 @@ public class CollisionCheck : MonoBehaviour
         connectionAcceleration.current = Vector3.zero;
         connectionVelocity.UpdateOld();
         connectionVelocity.current = Vector3.zero;
-        contactNormal.current = gravity.Direction;
-
-        if (connectedRb.current == null && connectedRb.old != null)
-        {
-        }
+        contactNormal.current = Vector3.zero;
         connectedRb.UpdateOld();
         connectedRb.current = null;
     }

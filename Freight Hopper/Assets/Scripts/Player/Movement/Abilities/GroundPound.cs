@@ -10,6 +10,8 @@ public class GroundPound : MonoBehaviour
     [SerializeField] private float initialBurstForce;
     [SerializeField] private float downwardsForce;
     [SerializeField] private float slopeDownForce;
+    [SerializeField] private Var<float> increasingForce;
+    [SerializeField] private float deltaIncreaseForce;
 
     private CollisionCheck playerCollision;
     private Gravity gravity;
@@ -58,7 +60,7 @@ public class GroundPound : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (groundPounding)
+        if (groundPounding && playerCollision.ContactNormal.old != gravity.Direction)
         {
             Vector3 direction = -gravity.Direction;
             if (playerCollision.IsGrounded.old)
@@ -73,7 +75,13 @@ public class GroundPound : MonoBehaviour
                 direction *= downwardsForce;
             }
 
-            rb.AddForce(direction, ForceMode.Acceleration);
+            rb.AddForce(direction * increasingForce.current, ForceMode.Acceleration);
+            increasingForce.current += deltaIncreaseForce;
+        }
+        else
+        {
+            groundPounding = false;
+            increasingForce.RevertCurrent();
         }
     }
 }
