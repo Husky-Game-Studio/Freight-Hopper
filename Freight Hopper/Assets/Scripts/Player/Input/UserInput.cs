@@ -16,6 +16,12 @@ public class UserInput : MonoBehaviour
 
     public static event PressEventHandler GroundPoundInput;
 
+    public static event PressEventHandler FullStopInput;
+
+    public static event PressEventHandler DashInput;
+
+    public static event PressEventHandler UpwardDashInput;
+
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
 
@@ -24,6 +30,7 @@ public class UserInput : MonoBehaviour
         master.Enable();
         master.Player.GroundPound.performed += GroundPoundHeld;
         master.Player.Jump.performed += JumpHeld;
+        master.Player.FullStop.performed += FullStopPressed;
     }
 
     private void OnDisable()
@@ -62,6 +69,21 @@ public class UserInput : MonoBehaviour
         {
             JumpInput?.Invoke();
         }
+    }
+
+    private void FullStopPressed(InputAction.CallbackContext context)
+    {
+        FullStopInput.Invoke();
+    }
+
+    private void UpwardDashPressed(InputAction.CallbackContext context)
+    {
+        UpwardDashInput.Invoke();
+    }
+
+    private void DashPressed(InputAction.CallbackContext context)
+    {
+        DashInput.Invoke();
     }
 
     // Returns the direction the player wants to move

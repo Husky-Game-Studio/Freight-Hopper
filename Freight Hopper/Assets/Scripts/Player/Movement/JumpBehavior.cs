@@ -1,46 +1,32 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck), typeof(Gravity))]
-public class JumpBehavior : MonoBehaviour
+[System.Serializable]
+public class JumpBehavior
 {
+    [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
+    [SerializeField] private Timer jumpHoldingPeriod = new Timer(0.5f);
+    [SerializeField] public Timer coyoteTime = new Timer(0.5f);
+    [SerializeField] private float maxJumpHeight = 5f;
+    [SerializeField] private float minJumpHeight = 2f;
+
     private Rigidbody rb;
     private CollisionCheck playerCollision;
     private Gravity gravity;
     private AudioSource jumpSound;
 
-    [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
-    [SerializeField] private Timer jumpHoldingPeriod = new Timer(0.5f);
-    [SerializeField] private Timer coyoteTime = new Timer(0.5f);
-    [SerializeField] private float maxJumpHeight = 5f;
-    [SerializeField] private float minJumpHeight = 2f;
-
     public float JumpHeight => minJumpHeight;
-    [SerializeField] public bool CanJump => coyoteTime.TimerActive();
+    public bool CanJump => coyoteTime.TimerActive();
 
-    private void OnEnable()
+    public void Initialize(Rigidbody rb, CollisionCheck playerCollision, Gravity gravity, AudioSource jumpSound)
     {
-        UserInput.JumpInput += TryJump;
-        playerCollision.CollisionDataCollected += Jumping;
-        playerCollision.Landed += coyoteTime.ResetTimer;
-    }
-
-    private void OnDisable()
-    {
-        UserInput.JumpInput -= TryJump;
-        playerCollision.CollisionDataCollected -= Jumping;
-        playerCollision.Landed -= coyoteTime.ResetTimer;
-    }
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-        playerCollision = GetComponent<CollisionCheck>();
-        gravity = GetComponent<Gravity>();
-        jumpSound = GetComponent<AudioSource>();
+        this.rb = rb;
+        this.playerCollision = playerCollision;
+        this.gravity = gravity;
+        this.jumpSound = jumpSound;
     }
 
     // Every LateFixedUpdate checks for jump buffering and if player is holding space
-    private void Jumping()
+    public void Jumping()
     {
         if (!playerCollision.IsGrounded.current)
         {
@@ -118,7 +104,7 @@ public class JumpBehavior : MonoBehaviour
     }
 
     // Jumps if conditions are correct
-    private void TryJump()
+    public void TryJump()
     {
         jumpBuffer.ResetTimer();
         if (playerCollision.IsGrounded.current || coyoteTime.TimerActive())

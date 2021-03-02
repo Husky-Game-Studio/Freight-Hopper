@@ -123,73 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &4083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78ed086809159e445b43d358eacb347f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dashForce: 40
-  delay:
-    duration: 0.5
-    current: 0
-  angle: 15
---- !u!114 &4084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ab7f45280372ed4bace75ec6ab9afbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cooldown:
-    duration: 2
-    current: 0
---- !u!114 &4085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8520c9a527ba0674180cdc9cf9936e13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  percentStrengthComparedToNormalJump: 75
-  doubleJumpReady: 0
---- !u!114 &4087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 743f4f71da3cd96478a7353af0bd33f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groundPoundPossible: 1
-  groundPounding: 0
-  initialBurstForce: 20
-  downwardsForce: 10
-  slopeDownForce: 500
-  increasingForce:
-    old: 1
-    current: 1
-  deltaIncreaseForce: 0.01
 --- !u!114 &4092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,26 +379,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3642956626905236824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c56f9a971e69c704ca4b36c6cfe7cc98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialUpwardsForce: 20
-  consistentForce: 1
-  delay:
-    duration: 0.3
-    current: 0
-  dashDuration:
-    duration: 1
-    current: 0
 --- !u!4 &4240512253113615695
 Transform:
   m_ObjectHideFlags: 0
@@ -498,13 +411,7 @@ GameObject:
   - component: {fileID: 6851446875331684908}
   - component: {fileID: 4493642203787552935}
   - component: {fileID: 4092}
-  - component: {fileID: 6851446874579196114}
-  - component: {fileID: 6851446874579196116}
-  - component: {fileID: 4087}
-  - component: {fileID: 4085}
-  - component: {fileID: 4084}
-  - component: {fileID: 3642956626905236824}
-  - component: {fileID: 4083}
+  - component: {fileID: 4493642203787552936}
   - component: {fileID: 6851446875331684921}
   m_Layer: 7
   m_Name: PlayerPrefab
@@ -527,6 +434,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   airFriction: 0.01
   kineticGroundFriction: 0.08
+--- !u!114 &4493642203787552936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493642203787552934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47277d9d7453b0e4d963a53c4a87d9ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement:
+    groundAcceleration: 40
+    airAcceleration: 10
+  jumpBehavior:
+    jumpBuffer:
+      duration: 0.3
+      current: 0
+    jumpHoldingPeriod:
+      duration: 0.6
+      current: 0
+    coyoteTime:
+      duration: 0.5
+      current: 0
+    maxJumpHeight: 5
+    minJumpHeight: 1.5
+  groundPound:
+    groundPoundPossible: 1
+    groundPounding: 0
+    increasingForce:
+      old: 1
+      current: 1
+    deltaIncreaseForce: 0.01
+    initialBurstForce: 20
+    downwardsForce: 10
+    slopeDownForce: 500
+  doubleJump:
+    percentStrengthComparedToNormalJump: 75
+    doubleJumpReady: 0
+  fullstop:
+    fullStopPossible: 1
+    cooldown:
+      duration: 2
+      current: 0
 --- !u!1 &5082612187920354132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,44 +1014,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!114 &6851446874579196114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 517b906aae6a2b64a89f7ca3cfe1f8e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementTransform: {fileID: 1017428897}
-  groundAcceleration: 40
-  airAcceleration: 10
---- !u!114 &6851446874579196116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7acc6ed8b238cc48a6f8d2ae3c342ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpBuffer:
-    duration: 0.3
-    current: 0
-  jumpHoldingPeriod:
-    duration: 0.6
-    current: 0
-  coyoteTime:
-    duration: 0.5
-    current: 0
-  maxJumpHeight: 5
-  minJumpHeight: 1.5
 --- !u!114 &6851446874579196117
 MonoBehaviour:
   m_ObjectHideFlags: 0

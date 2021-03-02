@@ -8,12 +8,11 @@ using UnityEngine.Rendering;
 public class CameraEffects : MonoBehaviour
 {
     private Rigidbody playerRB;
-    private MovementBehavior playerMovement;
     private CinemachineVirtualCamera cam;
 
     private VisualEffect speedLines;
     private Volume speedVolume;
-    private float speedEffectsStart;
+    private readonly float speedEffectsStart = 15;
     private Average playerSpeed;
 
     [SerializeField] private CameraEffect<float> fov;
@@ -33,8 +32,6 @@ public class CameraEffects : MonoBehaviour
     private void Awake()
     {
         playerRB = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Rigidbody>();
-        playerMovement = playerRB.gameObject.GetComponent<MovementBehavior>();
-        speedEffectsStart = playerMovement.Speed * 3;
         playerSpeed = new Average(300);
 
         cam = GetComponent<CinemachineVirtualCamera>();
@@ -60,12 +57,12 @@ public class CameraEffects : MonoBehaviour
             playerSpeed.Reset();
         }
 
-        fov.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - playerMovement.Speed) / speedEffectsStart, 0, 1);
+        fov.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - speedEffectsStart) / speedEffectsStart, 0, 1);
         fov.value = Mathf.Lerp(fov.baseValue, fov.maxValue, fov.lerpValue);
 
         cam.m_Lens.Dutch = tilt.value;
 
-        postProcessing.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - playerMovement.Speed) / speedEffectsStart, 0, 1);
+        postProcessing.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - speedEffectsStart) / speedEffectsStart, 0, 1);
         postProcessing.value = Mathf.Lerp(postProcessing.baseValue, postProcessing.maxValue, postProcessing.lerpValue);
 
         cam.m_Lens.FieldOfView = fov.value;

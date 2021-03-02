@@ -1,45 +1,31 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Gravity), typeof(CollisionCheck))]
-public class MovementBehavior : MonoBehaviour
+[System.Serializable]
+public class MovementBehavior
 {
-    private Rigidbody rb;
-    private Transform cameraTransform;
-    [SerializeField] private Transform movementTransform;
-    private CollisionCheck playerCollision;
-
-    private Vector3 input;
-
     [SerializeField] private float groundAcceleration = 20;
     [SerializeField] private float airAcceleration = 10;
 
+    private Rigidbody rb;
+    private CollisionCheck playerCollision;
     private Gravity gravity;
+    private Transform cameraTransform;
+    private Transform playerTransform;
+
+    private Vector3 Input => new Vector3(UserInput.Input.Move().x, 0f, UserInput.Input.Move().y);
+
     public float Speed => groundAcceleration;
 
-    private void Awake()
+    public void Initialize(Rigidbody rb, CollisionCheck playerCollision, Gravity gravity, Transform cameraTransform, Transform playerTransform)
     {
-        cameraTransform = Camera.main.transform;
-        rb = GetComponent<Rigidbody>();
-        playerCollision = GetComponent<CollisionCheck>();
-        gravity = GetComponent<Gravity>();
+        this.rb = rb;
+        this.playerCollision = playerCollision;
+        this.gravity = gravity;
+        this.cameraTransform = cameraTransform;
+        this.playerTransform = playerTransform;
     }
 
-    private void OnEnable()
-    {
-        playerCollision.CollisionDataCollected += Movement;
-    }
-
-    private void OnDisable()
-    {
-        playerCollision.CollisionDataCollected -= Movement;
-    }
-
-    private void Update()
-    {
-        input = Input();
-    }
-
-    private void Movement()
+    public void Movement()
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
@@ -48,13 +34,8 @@ public class MovementBehavior : MonoBehaviour
         // Changes the forward vector of the player to match the direction moved
         if (relativeMove != Vector3.zero)
         {
-            gameObject.transform.forward = relativeMove;
+            playerTransform.gameObject.transform.forward = relativeMove;
         }
-    }
-
-    private Vector3 Input()
-    {
-        return new Vector3(UserInput.Input.Move().x, 0f, UserInput.Input.Move().y);
     }
 
     private Vector3 RelativeMove(Vector3 forward, Vector3 right)
@@ -65,7 +46,7 @@ public class MovementBehavior : MonoBehaviour
         forward.Normalize();
 
         // Moves relative to the camera
-        Vector3 move = forward * input.z + right * input.x;
+        Vector3 move = forward * Input.z + right * Input.x;
         return move;
     }
 
@@ -75,8 +56,6 @@ public class MovementBehavior : MonoBehaviour
         Vector3 zAxis = playerCollision.ProjectOnContactPlane(Vector3.forward).normalized;
 
         Vector3 relativeDirection = direction.x * xAxis + zAxis * direction.z;
-
-        movementTransform.forward = playerCollision.ProjectOnContactPlane(cameraTransform.forward);
 
         float acceleration = playerCollision.IsGrounded.current ? groundAcceleration : airAcceleration;
 

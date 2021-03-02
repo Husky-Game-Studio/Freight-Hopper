@@ -1,44 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck), typeof(JumpBehavior))]
-public class DoubleJump : MonoBehaviour
+[System.Serializable]
+public class DoubleJump
 {
-    private CollisionCheck playerCollision;
-    private JumpBehavior jumpBehavior;
-
     [Range(25, 300)]
-    [SerializeField] private float percentStrengthComparedToNormalJump;
+    [SerializeField] private float percentStrengthComparedToNormalJump = 75;
 
     [SerializeField, ReadOnly] private bool doubleJumpReady;
 
-    private void Awake()
+    private JumpBehavior jumpBehavior;
+    private CollisionCheck playerCollision;
+
+    public void Initialize(CollisionCheck playerCollision, JumpBehavior jumpBehavior)
     {
-        playerCollision = GetComponent<CollisionCheck>();
-        jumpBehavior = GetComponent<JumpBehavior>();
+        this.jumpBehavior = jumpBehavior;
+        this.playerCollision = playerCollision;
     }
 
-    private void OnEnable()
-    {
-        UserInput.JumpInput += TryDoubleJump;
-        playerCollision.Landed += Landed;
-    }
-
-    private void OnDisable()
-    {
-        UserInput.JumpInput -= TryDoubleJump;
-        playerCollision.Landed -= Landed;
-    }
-
-    private void Landed()
+    public void Landed()
     {
         doubleJumpReady = true;
     }
 
-    private void TryDoubleJump()
+    public void TryDoubleJump()
     {
-        if (!playerCollision.IsGrounded.current && doubleJumpReady && !jumpBehavior.CanJump)
+        if (!playerCollision.IsGrounded.current && !playerCollision.IsGrounded.old && doubleJumpReady && !jumpBehavior.CanJump)
         {
             doubleJumpReady = false;
             jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));

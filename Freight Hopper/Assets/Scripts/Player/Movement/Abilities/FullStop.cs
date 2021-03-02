@@ -1,48 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck))]
-public class FullStop : MonoBehaviour
+[System.Serializable]
+public class FullStop
 {
-    private bool fullStopPossible = true;
-    [SerializeField] private Timer cooldown = new Timer(2);
-    private bool fullStop = false;
-    private CollisionCheck playerCollision;
-    private Rigidbody rigidbody1;
+    [SerializeField, ReadOnly] private bool fullStopPossible = true;
+    [SerializeField] public Timer cooldown = new Timer(2);
 
-    private void Start()
+    private Rigidbody rb;
+
+    public void Initialize(Rigidbody rb)
     {
-        // Gets the rigid body component and jump behaviour script
-        rigidbody1 = GetComponent<Rigidbody>();
-        playerCollision = GetComponent<CollisionCheck>();
+        this.rb = rb;
     }
 
-    private void Update()
+    public void Landed()
     {
-        // Starts the countdown
-        cooldown.CountDown();
-        // Checks if the placer can full stop
-        if (UserInput.Input.FullStopTriggered() && !cooldown.TimerActive() && fullStopPossible)
-        {
-            fullStop = true;
-            fullStopPossible = false;
-            cooldown.ResetTimer();
-        }
-        // Checks if player is grounded if yes then its possible to full stop
-        if (playerCollision.IsGrounded.current)
-        {
-            fullStopPossible = true;
-        }
+        fullStopPossible = true;
     }
 
-    private void FixedUpdate()
+    public void TryFullStop()
     {
         // Stops the player
-        if (fullStop)
+        if (!cooldown.TimerActive() && fullStopPossible)
         {
-            rigidbody1.velocity = Vector3.zero;
-            fullStop = false;
+            cooldown.ResetTimer();
+            rb.velocity = Vector3.zero;
+            fullStopPossible = false;
         }
     }
 }
