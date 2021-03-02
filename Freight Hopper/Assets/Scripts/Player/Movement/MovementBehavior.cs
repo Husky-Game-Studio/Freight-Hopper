@@ -24,12 +24,22 @@ public class MovementBehavior : MonoBehaviour
         gravity = GetComponent<Gravity>();
     }
 
+    private void OnEnable()
+    {
+        playerCollision.CollisionDataCollected += Movement;
+    }
+
+    private void OnDisable()
+    {
+        playerCollision.CollisionDataCollected -= Movement;
+    }
+
     private void Update()
     {
         input = Input();
     }
 
-    private void FixedUpdate()
+    private void Movement()
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
@@ -68,7 +78,7 @@ public class MovementBehavior : MonoBehaviour
 
         movementTransform.forward = playerCollision.ProjectOnContactPlane(cameraTransform.forward);
 
-        float acceleration = playerCollision.IsGrounded.old ? groundAcceleration : airAcceleration;
+        float acceleration = playerCollision.IsGrounded.current ? groundAcceleration : airAcceleration;
 
         rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }

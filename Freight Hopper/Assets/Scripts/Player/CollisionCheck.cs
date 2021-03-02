@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Gravity))]
 public class CollisionCheck : MonoBehaviour
@@ -25,13 +26,13 @@ public class CollisionCheck : MonoBehaviour
     public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
 
-    [SerializeField] private float airFriction = 0.01f;
-    [SerializeField] private float kineticGroundFriction = 0.08f;
     [SerializeField] private float maxSlope = 30;
 
-    public delegate void LandedEventHandler();
+    public delegate void CollisionEventHandler();
 
-    public event LandedEventHandler Landed;
+    public event CollisionEventHandler Landed;
+
+    public event CollisionEventHandler CollisionDataCollected;
 
     private void Awake()
     {
@@ -39,6 +40,8 @@ public class CollisionCheck : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         contactNormal.current = gravity.Direction;
         contactNormal.UpdateOld();
+
+        StartCoroutine(LateFixedUpdate());
     }
 
     // This needs to be replaced by a level manager, doesn't belong here
@@ -48,23 +51,17 @@ public class CollisionCheck : MonoBehaviour
         GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
-    private void EvaulateCollisions(Collision collision, bool collisionEffects = false)
+    private void EvaulateCollisions(Collision collision)
     {
         if (collision.gameObject.CompareTag("landable"))
         {
             contactNormal.current = Vector3.zero;
             for (int i = 0; i < collision.contactCount; i++)
             {
-                if (collisionEffects)
-                {
-                    Camera.main.GetComponent<CameraDrag>().CollidDrag(-collision.GetContact(i).normal);
-                }
-
                 Vector3 normal = collision.GetContact(i).normal;
 
                 // Is Vector3.angle efficient?
                 float collisionAngle = Vector3.Angle(normal, gravity.Direction);
-                // Debug.Log("Angle of collision " + i + ": " + collisionAngle);
                 if (collisionAngle <= maxSlope)
                 {
                     isGrounded.current = true;
@@ -98,7 +95,7 @@ public class CollisionCheck : MonoBehaviour
         {
             Respawn();
         }
-        EvaulateCollisions(collision, true);
+        EvaulateCollisions(collision);
         if (isGrounded.current)
         {
             Landed.Invoke();
@@ -111,6 +108,35 @@ public class CollisionCheck : MonoBehaviour
         if (isGrounded.current && !isGrounded.old)
         {
             Landed.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// Basically rotates a vector onto the contact plane. Make sure to use the CollisionDataCollected event when using this
+    /// </summary>
+    /// <param name="vector">vector to rotate</param>
+    /// <returns>Rotated vector</returns>
+    public Vector3 ProjectOnContactPlane(Vector3 vector)
+    {
+        return vector - contactNormal.current * Vector3.Dot(vector, contactNormal.current);
+    }
+
+    private IEnumerator LateFixedUpdate()
+    {
+        while (true)
+        {
+            yield return new WaitForFixedUpdate();
+            if (connectedRb.current)
+            {
+                if (connectedRb.current.isKinematic || connectedRb.current.mass >= rb.mass)
+                {
+                    UpdateConnectionState();
+                }
+            }
+            CollisionDataCollected.Invoke();
+
+            UpdateOldValues();
+            ClearValues();
         }
     }
 
@@ -127,51 +153,25 @@ public class CollisionCheck : MonoBehaviour
         connectionLocalPosition = connectedRb.current.transform.InverseTransformPoint(connectionWorldPosition);
     }
 
-    private void Friction()
+    private void UpdateOldValues()
     {
-        float amount = isGrounded.current ? kineticGroundFriction : airFriction;
-
-        Vector3 force = (rb.velocity - connectionVelocity.current) * amount;
-        if (isGrounded.current)
-        {
-            force = ProjectOnContactPlane(force);
-        }
-
-        rb.AddForce(-force, ForceMode.VelocityChange);
+        isGrounded.UpdateOld();
+        contactNormal.UpdateOld();
+        connectionAcceleration.UpdateOld();
+        connectionVelocity.UpdateOld();
+        connectedRb.UpdateOld();
     }
 
-    /// <summary>
-    /// This sets isGrounded to false at the start of fixed update, change script execution priority if you have issues with isGrounded of other scripts
-    /// </summary>
-    private void FixedUpdate()
+    private void ClearValues()
     {
-        if (connectedRb.current)
-        {
-            if (connectedRb.current.isKinematic || connectedRb.current.mass >= rb.mass)
-            {
-                UpdateConnectionState();
-            }
-        }
-
-        Friction();
-
-        isGrounded.UpdateOld();
         isGrounded.current = false;
         contactCount = 0;
         steepCount = 0;
-        contactNormal.UpdateOld();
 
-        connectionAcceleration.UpdateOld();
         connectionAcceleration.current = Vector3.zero;
-        connectionVelocity.UpdateOld();
         connectionVelocity.current = Vector3.zero;
         contactNormal.current = Vector3.zero;
-        connectedRb.UpdateOld();
-        connectedRb.current = null;
-    }
 
-    public Vector3 ProjectOnContactPlane(Vector3 vector)
-    {
-        return vector - contactNormal.old * Vector3.Dot(vector, contactNormal.old);
+        connectedRb.current = null;
     }
 }

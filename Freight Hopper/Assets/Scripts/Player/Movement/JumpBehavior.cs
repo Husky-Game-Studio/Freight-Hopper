@@ -20,11 +20,15 @@ public class JumpBehavior : MonoBehaviour
     private void OnEnable()
     {
         UserInput.JumpInput += TryJump;
+        playerCollision.CollisionDataCollected += Jumping;
+        playerCollision.Landed += coyoteTime.ResetTimer;
     }
 
     private void OnDisable()
     {
         UserInput.JumpInput -= TryJump;
+        playerCollision.CollisionDataCollected -= Jumping;
+        playerCollision.Landed -= coyoteTime.ResetTimer;
     }
 
     private void Awake()
@@ -33,23 +37,20 @@ public class JumpBehavior : MonoBehaviour
         playerCollision = GetComponent<CollisionCheck>();
         gravity = GetComponent<Gravity>();
         jumpSound = GetComponent<AudioSource>();
-        playerCollision.Landed += coyoteTime.ResetTimer;
     }
 
-    private void Update()
+    // Every LateFixedUpdate checks for jump buffering and if player is holding space
+    private void Jumping()
     {
         if (!playerCollision.IsGrounded.current)
         {
-            coyoteTime.CountDown();
-            jumpBuffer.CountDown();
-            jumpHoldingPeriod.CountDown();
+            coyoteTime.CountDownFixed();
+            jumpBuffer.CountDownFixed();
+            jumpHoldingPeriod.CountDownFixed();
         }
-    }
 
-    private void FixedUpdate()
-    {
         // Jump buffer jumping
-        if (jumpBuffer.TimerActive() && playerCollision.IsGrounded.old)
+        if (jumpBuffer.TimerActive() && playerCollision.IsGrounded.current)
         {
             Jump(minJumpHeight);
         }
@@ -73,6 +74,7 @@ public class JumpBehavior : MonoBehaviour
         }
     }
 
+    // Jumps to minimum height
     public void Jump(float height)
     {
         jumpBuffer.DeactivateTimer();
@@ -115,6 +117,7 @@ public class JumpBehavior : MonoBehaviour
         }
     }
 
+    // Jumps if conditions are correct
     private void TryJump()
     {
         jumpBuffer.ResetTimer();

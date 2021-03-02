@@ -20,11 +20,13 @@ public class GroundPound : MonoBehaviour
     private void OnEnable()
     {
         UserInput.GroundPoundInput += TryGroundPound;
+        playerCollision.CollisionDataCollected += GroundPounding;
     }
 
     private void OnDisable()
     {
         UserInput.GroundPoundInput -= TryGroundPound;
+        playerCollision.CollisionDataCollected -= GroundPounding;
     }
 
     private void Awake()
@@ -58,15 +60,15 @@ public class GroundPound : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void GroundPounding()
     {
-        if (groundPounding && playerCollision.ContactNormal.old != gravity.Direction)
+        if (groundPounding && playerCollision.ContactNormal.current != gravity.Direction)
         {
             Vector3 direction = -gravity.Direction;
-            if (playerCollision.IsGrounded.old)
+            if (playerCollision.IsGrounded.current)
             {
-                Vector3 acrossSlope = Vector3.Cross(gravity.Direction, playerCollision.ContactNormal.old);
-                Vector3 downSlope = Vector3.Cross(acrossSlope, playerCollision.ContactNormal.old);
+                Vector3 acrossSlope = Vector3.Cross(gravity.Direction, playerCollision.ContactNormal.current);
+                Vector3 downSlope = Vector3.Cross(acrossSlope, playerCollision.ContactNormal.current);
                 direction = downSlope;
                 direction *= slopeDownForce;
             }
