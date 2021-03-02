@@ -222,8 +222,6 @@ MonoBehaviour:
   connectionAcceleration:
     old: {x: 0, y: 0, z: 0}
     current: {x: 0, y: 0, z: 0}
-  airFriction: 0.01
-  kineticGroundFriction: 0.08
   maxSlope: 60
 --- !u!114 &4094
 MonoBehaviour:
@@ -498,6 +496,7 @@ GameObject:
   - component: {fileID: 6851446874579196117}
   - component: {fileID: 4094}
   - component: {fileID: 6851446875331684908}
+  - component: {fileID: 4493642203787552935}
   - component: {fileID: 4092}
   - component: {fileID: 6851446874579196114}
   - component: {fileID: 6851446874579196116}
@@ -514,6 +513,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4493642203787552935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493642203787552934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f837b1f1de82a48aba93d23de70d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  airFriction: 0.01
+  kineticGroundFriction: 0.08
 --- !u!1 &5082612187920354132
 GameObject:
   m_ObjectHideFlags: 0
