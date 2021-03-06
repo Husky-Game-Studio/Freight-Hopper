@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
         playerCollision.CollisionDataCollected += movement.Movement;
         playerCollision.CollisionDataCollected += jumpBehavior.Jumping;
+        playerCollision.CollisionDataCollected += doubleJump.JumpLetGo;
         playerCollision.CollisionDataCollected += groundPound.GroundPounding;
         playerCollision.CollisionDataCollected += fullstop.cooldown.CountDownFixed;
     }
@@ -57,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
         playerCollision.CollisionDataCollected -= movement.Movement;
         playerCollision.CollisionDataCollected -= jumpBehavior.Jumping;
+        playerCollision.CollisionDataCollected -= doubleJump.JumpLetGo;
         playerCollision.CollisionDataCollected -= groundPound.GroundPounding;
         playerCollision.CollisionDataCollected -= fullstop.cooldown.CountDownFixed;
     }

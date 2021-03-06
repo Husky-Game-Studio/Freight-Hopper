@@ -21,6 +21,15 @@ public class DoubleJump
     public void Landed()
     {
         doubleJumpReady = true;
+        jumpInputLetGo = false;
+    }
+
+    public void JumpLetGo()
+    {
+        if (!playerCollision.IsGrounded.current && doubleJumpReady && !jumpBehavior.CanJump)
+        {
+            jumpInputLetGo = true;
+        }
     }
 
     public void TryDoubleJump()
@@ -30,10 +39,6 @@ public class DoubleJump
             jumpInputLetGo = false;
             doubleJumpReady = false;
             jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
-        }
-        else if (doubleJumpReady)
-        {
-            jumpInputLetGo = true;
         }
     }
 }
