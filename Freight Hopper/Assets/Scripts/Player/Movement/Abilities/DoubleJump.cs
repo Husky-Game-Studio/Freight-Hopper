@@ -7,6 +7,7 @@ public class DoubleJump
     [SerializeField] private float percentStrengthComparedToNormalJump = 75;
 
     [SerializeField, ReadOnly] private bool doubleJumpReady;
+    [SerializeField, ReadOnly] private bool jumpInputLetGo = false;
 
     private JumpBehavior jumpBehavior;
     private CollisionCheck playerCollision;
@@ -24,10 +25,15 @@ public class DoubleJump
 
     public void TryDoubleJump()
     {
-        if (!playerCollision.IsGrounded.current && !playerCollision.IsGrounded.old && doubleJumpReady && !jumpBehavior.CanJump)
+        if (!playerCollision.IsGrounded.current && doubleJumpReady && !jumpBehavior.CanJump && jumpInputLetGo)
         {
+            jumpInputLetGo = false;
             doubleJumpReady = false;
             jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
+        }
+        else if (doubleJumpReady)
+        {
+            jumpInputLetGo = true;
         }
     }
 }
