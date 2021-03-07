@@ -96,7 +96,7 @@ public class JumpBehavior
         rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
         if (playerCollision.rigidbodyLinker.ConnectedRb.old != null)
         {
-            rb.AddForce(playerCollision.rigidbodyLinker.ConnectionVelocity.old, ForceMode.VelocityChange);
+            rb.AddForce(Vector3.Project(playerCollision.rigidbodyLinker.ConnectionVelocity.old, gravity.Direction), ForceMode.VelocityChange);
         }
 
         // Lower gravity when holding space making you go higher

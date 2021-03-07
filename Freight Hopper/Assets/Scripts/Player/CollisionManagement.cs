@@ -46,53 +46,46 @@ public class CollisionManagement : MonoBehaviour
 
     private void EvaulateCollisions(Collision collision)
     {
-        if (collision.gameObject.CompareTag("landable"))
+        contactNormal.current = Vector3.zero;
+        for (int i = 0; i < collision.contactCount; i++)
         {
-            contactNormal.current = Vector3.zero;
-            for (int i = 0; i < collision.contactCount; i++)
+            Vector3 normal = collision.GetContact(i).normal;
+
+            // Is Vector3.angle efficient?
+            float collisionAngle = Vector3.Angle(normal, gravity.Direction);
+            if (collisionAngle <= maxSlope)
             {
-                Vector3 normal = collision.GetContact(i).normal;
+                isGrounded.current = true;
+                contactNormal.current += normal;
+                contactCount++;
 
-                // Is Vector3.angle efficient?
-                float collisionAngle = Vector3.Angle(normal, gravity.Direction);
-                if (collisionAngle <= maxSlope)
+                rigidbodyLinker.UpdateLink(collision.rigidbody);
+            }
+            else
+            {
+                steepCount++;
+                if (contactCount == 0)
                 {
-                    isGrounded.current = true;
-                    contactNormal.current += normal;
-                    contactCount++;
-
                     rigidbodyLinker.UpdateLink(collision.rigidbody);
                 }
-                else
-                {
-                    steepCount++;
-                    if (contactCount == 0)
-                    {
-                        rigidbodyLinker.UpdateLink(collision.rigidbody);
-                    }
-                }
             }
-            if (contactCount == 0)
-            {
-                contactNormal.current = gravity.Direction;
-            }
-            if (contactCount > 1)
-            {
-                contactNormal.current.Normalize();
-            }
+        }
+        if (contactCount == 0)
+        {
+            contactNormal.current = gravity.Direction;
+        }
+        if (contactCount > 1)
+        {
+            contactNormal.current.Normalize();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.collider.CompareTag("landable"))
-        {
-            Respawn();
-        }
         EvaulateCollisions(collision);
         if (isGrounded.current)
         {
-            Landed.Invoke();
+            Landed?.Invoke();
         }
     }
 
@@ -101,7 +94,7 @@ public class CollisionManagement : MonoBehaviour
         EvaulateCollisions(collision);
         if (isGrounded.current && !isGrounded.old)
         {
-            Landed.Invoke();
+            Landed?.Invoke();
         }
     }
 
