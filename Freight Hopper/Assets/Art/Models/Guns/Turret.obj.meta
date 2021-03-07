@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ff5667a2270fae44190282dd3b23d19b
+guid: 3a5fb1b22f731654fa500b4772dffb32
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -7,7 +7,12 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: defaultMat
+      name: Turret_BarrelMat
+    second: {fileID: 2100000, guid: a8fbfaf73a0d7c64ba4cd4f53cbdc164, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Turret_BaseMat
     second: {fileID: 2100000, guid: a8fbfaf73a0d7c64ba4cd4f53cbdc164, type: 2}
   materials:
     materialImportMode: 2
