@@ -7,7 +7,7 @@ public class MovementBehavior
     [SerializeField] private float airAcceleration = 10;
 
     private Rigidbody rb;
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
     private Gravity gravity;
     private Transform cameraTransform;
     private Transform playerTransform;
@@ -16,7 +16,7 @@ public class MovementBehavior
 
     public float Speed => groundAcceleration;
 
-    public void Initialize(Rigidbody rb, CollisionCheck playerCollision, Gravity gravity, Transform cameraTransform, Transform playerTransform)
+    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Gravity gravity, Transform cameraTransform, Transform playerTransform)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;

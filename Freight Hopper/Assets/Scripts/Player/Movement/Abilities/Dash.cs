@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck))]
+[RequireComponent(typeof(CollisionManagement))]
 public class Dash : MonoBehaviour
 {
     private bool dashPossible = true;
@@ -13,11 +13,11 @@ public class Dash : MonoBehaviour
 
     private bool dash = false;
     private Rigidbody rb;
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
 
     private void Start()
     {
-        playerCollision = GetComponent<CollisionCheck>();
+        playerCollision = GetComponent<CollisionManagement>();
     }
 
     private void OnDrawGizmosSelected()

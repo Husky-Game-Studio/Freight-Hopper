@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [RequireComponent(typeof(Gravity))]
-public class CollisionCheck : MonoBehaviour
+public class CollisionManagement : MonoBehaviour
 {
     private Gravity gravity;
 
@@ -14,15 +14,8 @@ public class CollisionCheck : MonoBehaviour
     [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
-    [ReadOnly, SerializeField] private Var<Rigidbody> connectedRb = new Var<Rigidbody>(null, null);
-    [ReadOnly, SerializeField] private Vector3 connectionWorldPosition;
-    [ReadOnly, SerializeField] private Vector3 connectionLocalPosition;
-    [ReadOnly, SerializeField] private Var<Vector3> connectionVelocity;
-    [ReadOnly, SerializeField] private Var<Vector3> connectionAcceleration;
+    [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
 
-    public Var<Rigidbody> ConnectedRb => connectedRb;
-    public Var<Vector3> ConnectionAcceleration => connectionAcceleration;
-    public Var<Vector3> ConnectionVelocity => connectionVelocity;
     public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
 
@@ -67,24 +60,25 @@ public class CollisionCheck : MonoBehaviour
                     isGrounded.current = true;
                     contactNormal.current += normal;
                     contactCount++;
-                    connectedRb.current = collision.rigidbody;
+
+                    rigidbodyLinker.UpdateLink(collision.rigidbody);
                 }
                 else
                 {
                     steepCount++;
                     if (contactCount == 0)
                     {
-                        connectedRb.current = collision.rigidbody;
+                        rigidbodyLinker.UpdateLink(collision.rigidbody);
                     }
                 }
-            }
-            if (contactCount > 1)
-            {
-                contactNormal.current.Normalize();
             }
             if (contactCount == 0)
             {
                 contactNormal.current = gravity.Direction;
+            }
+            if (contactCount > 1)
+            {
+                contactNormal.current.Normalize();
             }
         }
     }
@@ -126,40 +120,19 @@ public class CollisionCheck : MonoBehaviour
         while (true)
         {
             yield return new WaitForFixedUpdate();
-            if (connectedRb.current)
-            {
-                if (connectedRb.current.isKinematic || connectedRb.current.mass >= rb.mass)
-                {
-                    UpdateConnectionState();
-                }
-            }
-            CollisionDataCollected.Invoke();
+            rigidbodyLinker.UpdateConnectionState(rb);
 
+            CollisionDataCollected.Invoke();
             UpdateOldValues();
             ClearValues();
         }
-    }
-
-    private void UpdateConnectionState()
-    {
-        if (connectedRb.current == connectedRb.old)
-        {
-            connectionVelocity.current = (connectedRb.current.transform.TransformPoint(connectionLocalPosition) - connectionWorldPosition) / Time.fixedDeltaTime;
-            connectionAcceleration.current = (connectionVelocity.current - connectionVelocity.old);
-            rb.AddForce(connectionAcceleration.current, ForceMode.VelocityChange);
-        }
-
-        connectionWorldPosition = rb.position;
-        connectionLocalPosition = connectedRb.current.transform.InverseTransformPoint(connectionWorldPosition);
     }
 
     private void UpdateOldValues()
     {
         isGrounded.UpdateOld();
         contactNormal.UpdateOld();
-        connectionAcceleration.UpdateOld();
-        connectionVelocity.UpdateOld();
-        connectedRb.UpdateOld();
+        rigidbodyLinker.UpdateOldValues();
     }
 
     private void ClearValues()
@@ -168,10 +141,7 @@ public class CollisionCheck : MonoBehaviour
         contactCount = 0;
         steepCount = 0;
 
-        connectionAcceleration.current = Vector3.zero;
-        connectionVelocity.current = Vector3.zero;
         contactNormal.current = Vector3.zero;
-
-        connectedRb.current = null;
+        rigidbodyLinker.ClearValues();
     }
 }

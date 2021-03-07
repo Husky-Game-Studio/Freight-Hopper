@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck))]
+[RequireComponent(typeof(CollisionManagement))]
 public class UpwardDash : MonoBehaviour
 {
     private bool upwardDashPossible = true;
@@ -12,12 +12,12 @@ public class UpwardDash : MonoBehaviour
     [SerializeField] private Timer dashDuration = new Timer(1);
     private bool upwardDash = false;
     private Rigidbody rb;
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
 
     private void Start()
     {
         // Gets the jump behaviour component and rigid body
-        playerCollision = GetComponent<CollisionCheck>();
+        playerCollision = GetComponent<CollisionManagement>();
         rb = GetComponent<Rigidbody>();
     }
 

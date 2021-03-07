@@ -10,9 +10,9 @@ public class DoubleJump
     [SerializeField, ReadOnly] private bool jumpInputLetGo = false;
 
     private JumpBehavior jumpBehavior;
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
 
-    public void Initialize(CollisionCheck playerCollision, JumpBehavior jumpBehavior)
+    public void Initialize(CollisionManagement playerCollision, JumpBehavior jumpBehavior)
     {
         this.jumpBehavior = jumpBehavior;
         this.playerCollision = playerCollision;

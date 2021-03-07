@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck), typeof(Gravity), typeof(Rigidbody))]
+[RequireComponent(typeof(CollisionManagement), typeof(Gravity), typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private MovementBehavior movement;
@@ -11,13 +11,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
     private Gravity gravity;
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         gravity = GetComponent<Gravity>();
-        playerCollision = GetComponent<CollisionCheck>();
+        playerCollision = GetComponent<CollisionManagement>();
 
         movement.Initialize(rb, playerCollision, gravity, Camera.main.transform, this.transform);
         doubleJump.Initialize(playerCollision, jumpBehavior);

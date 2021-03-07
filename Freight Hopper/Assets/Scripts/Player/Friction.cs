@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionCheck))]
+[RequireComponent(typeof(CollisionManagement))]
 public class Friction : MonoBehaviour
 {
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
     private Rigidbody rb;
 
     [SerializeField] private float airFriction = 0.01f;
@@ -13,7 +13,7 @@ public class Friction : MonoBehaviour
 
     private void Awake()
     {
-        playerCollision = GetComponent<CollisionCheck>();
+        playerCollision = GetComponent<CollisionManagement>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -31,7 +31,7 @@ public class Friction : MonoBehaviour
     {
         float amount = playerCollision.IsGrounded.current ? kineticGroundFriction : airFriction;
 
-        Vector3 force = (rb.velocity - playerCollision.ConnectionVelocity.current) * amount;
+        Vector3 force = (rb.velocity - playerCollision.rigidbodyLinker.ConnectionVelocity.current) * amount;
 
         if (playerCollision.IsGrounded.current)
         {

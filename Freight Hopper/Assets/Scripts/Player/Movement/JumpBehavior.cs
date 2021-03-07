@@ -10,14 +10,14 @@ public class JumpBehavior
     [SerializeField] private float minJumpHeight = 2f;
 
     private Rigidbody rb;
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
     private Gravity gravity;
     private AudioSource jumpSound;
 
     public float JumpHeight => minJumpHeight;
     public bool CanJump => coyoteTime.TimerActive();
 
-    public void Initialize(Rigidbody rb, CollisionCheck playerCollision, Gravity gravity, AudioSource jumpSound)
+    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Gravity gravity, AudioSource jumpSound)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
@@ -94,7 +94,10 @@ public class JumpBehavior
 
         // Actual jump itself
         rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
-        rb.AddForce(playerCollision.ConnectionVelocity.old, ForceMode.VelocityChange);
+        if (playerCollision.rigidbodyLinker.ConnectedRb.old != null)
+        {
+            rb.AddForce(playerCollision.rigidbodyLinker.ConnectionVelocity.old, ForceMode.VelocityChange);
+        }
 
         // Lower gravity when holding space making you go higher
         if (UserInput.Input.Jump())

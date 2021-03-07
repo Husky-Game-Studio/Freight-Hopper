@@ -11,11 +11,11 @@ public class GroundPound
     [SerializeField] private float downwardsForce = 10;
     [SerializeField] private float slopeDownForce = 500;
 
-    private CollisionCheck playerCollision;
+    private CollisionManagement playerCollision;
     private Gravity gravity;
     private Rigidbody rb;
 
-    public void Initalize(Rigidbody rb, CollisionCheck playerCollision, Gravity gravity)
+    public void Initalize(Rigidbody rb, CollisionManagement playerCollision, Gravity gravity)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
