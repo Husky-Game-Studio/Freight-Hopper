@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : BasicState
+public class JumpState : BasicState
 {
     // Start is called before the first frame update
     void Start()
