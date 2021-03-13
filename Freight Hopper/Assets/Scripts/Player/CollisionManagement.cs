@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[RequireComponent(typeof(Gravity))]
 public class CollisionManagement : MonoBehaviour
 {
-    private Gravity gravity;
-
     [ReadOnly, SerializeField] private Rigidbody rb;
 
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
@@ -29,9 +26,8 @@ public class CollisionManagement : MonoBehaviour
 
     private void Awake()
     {
-        gravity = GetComponent<Gravity>();
         rb = GetComponent<Rigidbody>();
-        contactNormal.current = gravity.Direction;
+        contactNormal.current = CustomGravity.GetUpAxis(rb.position);
         contactNormal.UpdateOld();
 
         StartCoroutine(LateFixedUpdate());
@@ -47,12 +43,13 @@ public class CollisionManagement : MonoBehaviour
     private void EvaulateCollisions(Collision collision)
     {
         contactNormal.current = Vector3.zero;
+        Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
         for (int i = 0; i < collision.contactCount; i++)
         {
             Vector3 normal = collision.GetContact(i).normal;
 
             // Is Vector3.angle efficient?
-            float collisionAngle = Vector3.Angle(normal, gravity.Direction);
+            float collisionAngle = Vector3.Angle(normal, upAxis);
             if (collisionAngle <= maxSlope)
             {
                 isGrounded.current = true;
@@ -72,7 +69,7 @@ public class CollisionManagement : MonoBehaviour
         }
         if (contactCount == 0)
         {
-            contactNormal.current = gravity.Direction;
+            contactNormal.current = upAxis;
         }
         if (contactCount > 1)
         {
@@ -103,9 +100,9 @@ public class CollisionManagement : MonoBehaviour
     /// </summary>
     /// <param name="vector">vector to rotate</param>
     /// <returns>Rotated vector</returns>
-    public Vector3 ProjectOnContactPlane(Vector3 vector)
+    public static Vector3 ProjectOnContactPlane(Vector3 vector, Vector3 normal)
     {
-        return vector - contactNormal.current * Vector3.Dot(vector, contactNormal.current);
+        return vector - normal * Vector3.Dot(vector, normal);
     }
 
     private IEnumerator LateFixedUpdate()

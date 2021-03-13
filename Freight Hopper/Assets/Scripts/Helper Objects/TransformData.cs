@@ -23,7 +23,7 @@ public struct TransformData
         Scale
     }
 
-    public static TransformData empty
+    public static TransformData Empty
     {
         get
         {

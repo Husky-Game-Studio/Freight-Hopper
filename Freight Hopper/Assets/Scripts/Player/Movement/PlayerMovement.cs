@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionManagement), typeof(Gravity), typeof(Rigidbody))]
+[RequireComponent(typeof(CollisionManagement), typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private MovementBehavior movement;
@@ -10,19 +10,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private FullStop fullstop;
 
     private Rigidbody rb;
-    private Gravity gravity;
     private CollisionManagement playerCollision;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        gravity = GetComponent<Gravity>();
         playerCollision = GetComponent<CollisionManagement>();
 
-        movement.Initialize(rb, playerCollision, gravity, Camera.main.transform, this.transform);
+        movement.Initialize(rb, playerCollision, Camera.main.transform, this.transform);
         doubleJump.Initialize(playerCollision, jumpBehavior);
-        jumpBehavior.Initialize(rb, playerCollision, gravity, GetComponent<AudioSource>());
-        groundPound.Initalize(rb, playerCollision, gravity);
+        jumpBehavior.Initialize(rb, playerCollision, GetComponent<AudioSource>());
+        groundPound.Initalize(rb, playerCollision);
 
         fullstop.Initialize(rb);
     }

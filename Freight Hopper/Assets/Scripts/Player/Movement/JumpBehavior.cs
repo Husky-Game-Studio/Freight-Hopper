@@ -6,22 +6,20 @@ public class JumpBehavior
     [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
     [SerializeField] private Timer jumpHoldingPeriod = new Timer(0.5f);
     [SerializeField] public Timer coyoteTime = new Timer(0.5f);
-    [SerializeField] private float maxJumpHeight = 5f;
     [SerializeField] private float minJumpHeight = 2f;
+    [SerializeField] private float holdingJumpForceMultiplier = 5f;
 
     private Rigidbody rb;
     private CollisionManagement playerCollision;
-    private Gravity gravity;
     private AudioSource jumpSound;
 
     public float JumpHeight => minJumpHeight;
     public bool CanJump => coyoteTime.TimerActive();
 
-    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Gravity gravity, AudioSource jumpSound)
+    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, AudioSource jumpSound)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
-        this.gravity = gravity;
         this.jumpSound = jumpSound;
     }
 
@@ -44,19 +42,14 @@ public class JumpBehavior
         // This lowers your gravity while you are holding space for the timer period while you are holding jump
         if (jumpHoldingPeriod.TimerActive() && !playerCollision.IsGrounded.current)
         {
-            if (UserInput.Input.Jump())
+            if (!UserInput.Input.Jump())
             {
-                gravity.scale.SetCurrent(gravity.scale.old * minJumpHeight / maxJumpHeight);
+                jumpHoldingPeriod.DeactivateTimer();
             }
             else
             {
-                gravity.scale.RevertCurrent();
-                jumpHoldingPeriod.DeactivateTimer();
+                rb.AddForce(CustomGravity.GetUpAxis(rb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
             }
-        }
-        else
-        {
-            gravity.scale.RevertCurrent();
         }
     }
 
@@ -71,19 +64,21 @@ public class JumpBehavior
         {
             jumpSound.Play();
         }
+        Vector3 gravity = CustomGravity.GetGravity(rb.position);
+        Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
 
-        if (rb.velocity.y < 0)
+        if (Vector3.Dot(rb.velocity, upAxis) < 0)
         {
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            rb.velocity = CollisionManagement.ProjectOnContactPlane(rb.velocity, upAxis);
         }
 
         // Basic physics, except the force required to reach this height may not work if we consider holding space
         // That and considering that physics works in timesteps.
-        float jumpForce = Mathf.Sqrt(-2f * Gravity.constant * gravity.scale.current * height);
-        Camera.main.GetComponent<CameraDrag>().CollidDrag(gravity.Direction);
+        float jumpForce = Mathf.Sqrt(2f * gravity.magnitude * height);
+        Camera.main.GetComponent<CameraDrag>().CollidDrag(upAxis);
 
         // Upward bias for sloped jumping
-        Vector3 jumpDirection = (playerCollision.ContactNormal.old + gravity.Direction).normalized;
+        Vector3 jumpDirection = (playerCollision.ContactNormal.old + upAxis).normalized;
 
         // Considers velocity when jumping on slopes and the slope angle
         float alignedSpeed = Vector3.Dot(rb.velocity, jumpDirection);
@@ -93,16 +88,10 @@ public class JumpBehavior
         }
 
         // Actual jump itself
-        rb.AddForce(jumpForce * gravity.Direction, ForceMode.VelocityChange);
+        rb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
         if (playerCollision.rigidbodyLinker.ConnectedRb.old != null)
         {
-            rb.AddForce(Vector3.Project(playerCollision.rigidbodyLinker.ConnectionVelocity.old, gravity.Direction), ForceMode.VelocityChange);
-        }
-
-        // Lower gravity when holding space making you go higher
-        if (UserInput.Input.Jump())
-        {
-            gravity.scale.SetCurrent(gravity.scale.old * minJumpHeight / maxJumpHeight);
+            rb.AddForce(Vector3.Project(playerCollision.rigidbodyLinker.ConnectionVelocity.old, upAxis), ForceMode.VelocityChange);
         }
     }
 

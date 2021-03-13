@@ -12,14 +12,12 @@ public class GroundPound
     [SerializeField] private float slopeDownForce = 500;
 
     private CollisionManagement playerCollision;
-    private Gravity gravity;
     private Rigidbody rb;
 
-    public void Initalize(Rigidbody rb, CollisionManagement playerCollision, Gravity gravity)
+    public void Initalize(Rigidbody rb, CollisionManagement playerCollision)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
-        this.gravity = gravity;
     }
 
     public void TryGroundPound()
@@ -30,7 +28,7 @@ public class GroundPound
             {
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             }
-            rb.AddForce(-gravity.Direction * initialBurstForce, ForceMode.VelocityChange);
+            rb.AddForce(-CustomGravity.GetUpAxis(rb.position) * initialBurstForce, ForceMode.VelocityChange);
             groundPounding = true;
             groundPoundPossible = false;
         }
@@ -44,13 +42,13 @@ public class GroundPound
             groundPoundPossible = true;
             groundPounding = false;
         }
-
-        if (groundPounding && playerCollision.ContactNormal.current != gravity.Direction)
+        Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
+        if (groundPounding && playerCollision.ContactNormal.current != upAxis)
         {
-            Vector3 direction = -gravity.Direction;
+            Vector3 direction = -upAxis;
             if (playerCollision.IsGrounded.current)
             {
-                Vector3 acrossSlope = Vector3.Cross(gravity.Direction, playerCollision.ContactNormal.current);
+                Vector3 acrossSlope = Vector3.Cross(upAxis, playerCollision.ContactNormal.current);
                 Vector3 downSlope = Vector3.Cross(acrossSlope, playerCollision.ContactNormal.current);
                 direction = downSlope;
                 direction *= slopeDownForce;

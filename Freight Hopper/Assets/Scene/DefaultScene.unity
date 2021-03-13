@@ -376,10 +376,10 @@ GameObject:
   - component: {fileID: 6851446874579196117}
   - component: {fileID: 4094}
   - component: {fileID: 6851446875331684908}
+  - component: {fileID: 4493642203787552937}
   - component: {fileID: 4493642203787552935}
   - component: {fileID: 4493642203787552936}
   - component: {fileID: 6851446875331684921}
-  - component: {fileID: 4493642203787552937}
   m_Layer: 7
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -426,8 +426,8 @@ MonoBehaviour:
     coyoteTime:
       duration: 0.5
       current: 0
-    maxJumpHeight: 5
     minJumpHeight: 1.5
+    holdingJumpForceMultiplier: 15
   groundPound:
     groundPoundPossible: 1
     groundPounding: 0
@@ -1330,10 +1330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scale:
-    old: 2.5
-    current: 2.5
-  direction: {x: 0, y: 1, z: 0}
 --- !u!82 &6851446875331684921
 AudioSource:
   m_ObjectHideFlags: 0

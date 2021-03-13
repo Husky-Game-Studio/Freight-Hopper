@@ -8,7 +8,6 @@ public class MovementBehavior
 
     private Rigidbody rb;
     private CollisionManagement playerCollision;
-    private Gravity gravity;
     private Transform cameraTransform;
     private Transform playerTransform;
 
@@ -16,11 +15,10 @@ public class MovementBehavior
 
     public float Speed => groundAcceleration;
 
-    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Gravity gravity, Transform cameraTransform, Transform playerTransform)
+    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Transform cameraTransform, Transform playerTransform)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
-        this.gravity = gravity;
         this.cameraTransform = cameraTransform;
         this.playerTransform = playerTransform;
     }
@@ -52,11 +50,10 @@ public class MovementBehavior
 
     private void Move(Vector3 direction)
     {
-        Vector3 xAxis = playerCollision.ProjectOnContactPlane(Vector3.right).normalized;
-        Vector3 zAxis = playerCollision.ProjectOnContactPlane(Vector3.forward).normalized;
+        Vector3 xAxis = CollisionManagement.ProjectOnContactPlane(Vector3.right, playerCollision.ContactNormal.current).normalized;
+        Vector3 zAxis = CollisionManagement.ProjectOnContactPlane(Vector3.forward, playerCollision.ContactNormal.current).normalized;
 
         Vector3 relativeDirection = direction.x * xAxis + zAxis * direction.z;
-
         float acceleration = playerCollision.IsGrounded.current ? groundAcceleration : airAcceleration;
 
         rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);

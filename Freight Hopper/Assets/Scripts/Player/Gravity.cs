@@ -5,25 +5,32 @@ using UnityEngine;
 /// <summary>
 /// Realistically, this is not the final approach. This assuming too much about the gravity
 /// </summary>
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody), typeof(CollisionManagement))]
 public class Gravity : MonoBehaviour
 {
     private Rigidbody rb;
-    [SerializeField] public Var<float> scale = new Var<float>(1, 1);
-    [SerializeField] private Vector3 direction = Vector3.up;
-    public static readonly float constant = -9.81f;
-
-    public Vector3 Direction => direction;
+    private CollisionManagement collid;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        scale.UpdateOld();
+        rb.useGravity = false;
+        collid = GetComponent<CollisionManagement>();
     }
 
     private float floatDelay;
 
-    private void FixedUpdate()
+    public void OnEnable()
+    {
+        collid.CollisionDataCollected += ApplyGravity;
+    }
+
+    public void OnDisable()
+    {
+        collid.CollisionDataCollected -= ApplyGravity;
+    }
+
+    private void ApplyGravity()
     {
         // Is Sleeping is a physics engine thing. It basically stops physics interactions for an object if its not doing anything to save calculation cost
         if (rb.IsSleeping())
@@ -43,7 +50,11 @@ public class Gravity : MonoBehaviour
                 return;
             }
         }
+        if (collid.IsGrounded.current)
+        {
+            return;
+        }
 
-        rb.AddForce(constant * direction * scale.current, ForceMode.Acceleration);
+        rb.AddForce(Physics.gravity, ForceMode.Acceleration);
     }
 }

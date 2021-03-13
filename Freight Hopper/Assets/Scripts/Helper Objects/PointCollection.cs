@@ -8,9 +8,8 @@ public abstract class PointCollection : MonoBehaviour
 
     public virtual void Add()
     {
-        points.Add(new EditorPoint(TransformData.empty));
+        points.Add(new EditorPoint(TransformData.Empty));
     }
-
 
     public abstract void Add(TransformData data);
 
