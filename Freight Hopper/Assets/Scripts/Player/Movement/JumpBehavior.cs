@@ -64,8 +64,7 @@ public class JumpBehavior
         {
             jumpSound.Play();
         }
-        Vector3 gravity = CustomGravity.GetGravity(rb.position);
-        Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
+        Vector3 gravity = CustomGravity.GetGravity(rb.position, out Vector3 upAxis);
 
         if (Vector3.Dot(rb.velocity, upAxis) < 0)
         {
