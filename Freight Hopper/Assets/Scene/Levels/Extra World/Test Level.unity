@@ -62652,6 +62652,7 @@ GameObject:
   - component: {fileID: 678257386}
   - component: {fileID: 678257385}
   - component: {fileID: 678257384}
+  - component: {fileID: 678257389}
   m_Layer: 0
   m_Name: Plane
   m_TagString: landable
@@ -63138,6 +63139,20 @@ Transform:
   m_Father: {fileID: 1831331150}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &678257389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678257383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee9aff2615ad25499caaa4e7a1fea42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: 25
+  falloffRange: 200
 --- !u!43 &693222196
 Mesh:
   m_ObjectHideFlags: 0
@@ -70826,7 +70841,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22432
+  m_Name: pb_Mesh66186
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
