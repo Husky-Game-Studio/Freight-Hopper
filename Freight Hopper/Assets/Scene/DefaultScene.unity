@@ -123,39 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &4092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30d1eca7b51a20d44a5d87fcb3bb63db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  isGrounded:
-    old: 0
-    current: 0
-  contactNormal:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  contactCount: 0
-  steepCount: 0
-  connectedRb:
-    old: {fileID: 0}
-    current: {fileID: 0}
-  connectionWorldPosition: {x: 0, y: 0, z: 0}
-  connectionLocalPosition: {x: 0, y: 0, z: 0}
-  connectionVelocity:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  connectionAcceleration:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  maxSlope: 60
 --- !u!114 &4094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,9 +377,9 @@ GameObject:
   - component: {fileID: 4094}
   - component: {fileID: 6851446875331684908}
   - component: {fileID: 4493642203787552935}
-  - component: {fileID: 4092}
   - component: {fileID: 4493642203787552936}
   - component: {fileID: 6851446875331684921}
+  - component: {fileID: 4493642203787552937}
   m_Layer: 7
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -474,11 +441,46 @@ MonoBehaviour:
   doubleJump:
     percentStrengthComparedToNormalJump: 75
     doubleJumpReady: 0
+    jumpInputLetGo: 0
   fullstop:
     fullStopPossible: 1
     cooldown:
       duration: 2
       current: 0
+--- !u!114 &4493642203787552937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493642203787552934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa6fe17683d2efe4abea007baae20b30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  isGrounded:
+    old: 0
+    current: 0
+  contactNormal:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+  contactCount: 0
+  steepCount: 0
+  rigidbodyLinker:
+    connectedRb:
+      old: {fileID: 0}
+      current: {fileID: 0}
+    connectionWorldPosition: {x: 0, y: 0, z: 0}
+    connectionLocalPosition: {x: 0, y: 0, z: 0}
+    connectionVelocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    connectionAcceleration:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+  maxSlope: 30
 --- !u!1 &5082612187920354132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,7 +1256,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2668742715668758253, guid: b3553ff0af945b14e85fa5086aa7a516, type: 3}
+  - {fileID: -3033667219593020291, guid: 5a45fd228adb8a94490f49ecd8a1ccf1, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
