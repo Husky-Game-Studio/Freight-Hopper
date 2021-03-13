@@ -15,4 +15,6 @@ public class BasicState : MonoBehaviour
     {
         
     }
+
+    public void onRecieveInput() {}
 }

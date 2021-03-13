@@ -15,4 +15,6 @@ public class PlayerMachineCenter : MonoBehaviour
     {
         
     }
+
+    private void OnGround() {}
 }
