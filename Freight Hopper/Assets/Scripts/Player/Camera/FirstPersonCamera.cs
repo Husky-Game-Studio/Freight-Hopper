@@ -4,7 +4,6 @@ public class FirstPersonCamera : MonoBehaviour
 {
     private Transform camTransform;
     private Transform player;
-    private Vector2 rotation;
 
     [SerializeField] private Transform playerHead;
 
@@ -19,7 +18,6 @@ public class FirstPersonCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         camTransform = Camera.main.transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        rotation = new Vector2(camTransform.eulerAngles.x, camTransform.eulerAngles.y);
     }
 
     private void LateUpdate()
@@ -35,12 +33,33 @@ public class FirstPersonCamera : MonoBehaviour
 
     private void RotatePlayer()
     {
-        Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
-        rotation += mouse;
-        rotation.y = Mathf.Clamp(rotation.y, yRotationLock.x, yRotationLock.y);
+        // Up axis
+        Vector3 upAxis = CustomGravity.GetUpAxis(player.position);
 
-        player.rotation = Quaternion.Euler(0, rotation.x, 0);
-        camTransform.rotation = player.rotation;
-        camTransform.rotation = Quaternion.Euler(-rotation.y, camTransform.localEulerAngles.y, camTransform.localEulerAngles.z);
+        // Get rotation
+
+        Quaternion currentRotationPlayer = player.rotation;
+        Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
+        Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
+        Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
+
+        //currentRotationPlayer *= mouseRotationHorizontal;
+
+        //currentRotation += mouse;
+
+        // Clamp it
+        // rotation.y = Mathf.Clamp(rotation.y, yRotationLock.x, yRotationLock.y);
+
+        // Rotate player horizontally
+        // player.rotation *= mouseRotationHorizontal;
+        //Quaternion.LookRotation(play);
+        // Rotate camera vertically
+        camTransform.rotation *= mouseRotationHorizontal;
+        //camTransform.rotation *= mouseRotationVertical;
+
+        //Quaternion currentRotationCamera = camTransform.rotation;
+        // camTransform.rotation = player.rotation;
+        // camTransform.rotation = currentRotationCamera * mouseRotationVertical;
+        // camTransform.rotation = Quaternion.Euler(-rotation.y, camTransform.localEulerAngles.y, camTransform.localEulerAngles.z);
     }
 }

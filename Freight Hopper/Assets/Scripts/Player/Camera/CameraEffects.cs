@@ -60,7 +60,7 @@ public class CameraEffects : MonoBehaviour
         fov.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - speedEffectsStart) / speedEffectsStart, 0, 1);
         fov.value = Mathf.Lerp(fov.baseValue, fov.maxValue, fov.lerpValue);
 
-        cam.transform.rotation = Quaternion.Euler(0, 0, tilt.value);
+        //cam.transform.rotation = Quaternion.Euler(0, 0, tilt.value);
 
         postProcessing.lerpValue = Mathf.Clamp((playerSpeed.GetAverage() - speedEffectsStart) / speedEffectsStart, 0, 1);
         postProcessing.value = Mathf.Lerp(postProcessing.baseValue, postProcessing.maxValue, postProcessing.lerpValue);
@@ -107,7 +107,7 @@ public class CameraEffects : MonoBehaviour
 
             tilt.value = Mathf.Lerp(tilt.value, startingValue, endingValue);
 
-            cam.transform.rotation = Quaternion.Euler(0, 0, tilt.value);
+            //cam.transform.rotation = Quaternion.Euler(0, 0, tilt.value);
             yield return null;
         }
     }
