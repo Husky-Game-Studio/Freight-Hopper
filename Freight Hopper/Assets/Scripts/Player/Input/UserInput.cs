@@ -100,6 +100,11 @@ public class UserInput : MonoBehaviour
         return master.Player.Movement.ReadValue<Vector2>();
     }
 
+    public Vector2 Look()
+    {
+        return master.Player.Look.ReadValue<Vector2>();
+    }
+
     // Returns if the player jumped
     public bool Jump()
     {
