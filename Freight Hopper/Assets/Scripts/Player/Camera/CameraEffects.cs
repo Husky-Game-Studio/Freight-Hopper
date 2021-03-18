@@ -35,6 +35,7 @@ public class CameraEffects : MonoBehaviour
         playerSpeed = new Average(300);
 
         cam = GetComponent<CinemachineVirtualCamera>();
+
         fov.baseValue = cam.m_Lens.FieldOfView;
         fov.value = fov.baseValue;
 
