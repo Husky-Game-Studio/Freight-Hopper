@@ -3,6 +3,7 @@ using UnityEngine;
 public class FirstPersonCamera : MonoBehaviour
 {
     private Transform camTransform;
+    [SerializeField] private Quaternion localRotation;
     private Transform player;
 
     [SerializeField] private Transform playerHead;
@@ -18,6 +19,7 @@ public class FirstPersonCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         camTransform = Camera.main.transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        localRotation = player.rotation;
     }
 
     private void LateUpdate()
@@ -29,6 +31,7 @@ public class FirstPersonCamera : MonoBehaviour
     private void FollowPlayer()
     {
         camTransform.position = playerHead.position;
+        localRotation *= (Quaternion.Inverse(camTransform.rotation) * player.rotation);
     }
 
     private void RotatePlayer()
@@ -47,8 +50,6 @@ public class FirstPersonCamera : MonoBehaviour
         //delta *= mouseRotationHorizontal;
         //camTransform.rotation *= delta;
 
-
-
         //currentRotationPlayer *= mouseRotationHorizontal;
 
         //currentRotation += mouse;
@@ -60,12 +61,13 @@ public class FirstPersonCamera : MonoBehaviour
         // player.rotation *= mouseRotationHorizontal;
         //Quaternion.LookRotation(play);
         // Rotate camera vertically
-        //camTransform.rotation *= mouseRotationHorizontal;
-        //camTransform.rotation *= mouseRotationVertical;
+        localRotation *= mouseRotationHorizontal;
+        //localRotation *= mouseRotationVertical;
 
         //Quaternion currentRotationCamera = camTransform.rotation;
         // camTransform.rotation = player.rotation;
         // camTransform.rotation = currentRotationCamera * mouseRotationVertical;
         // camTransform.rotation = Quaternion.Euler(-rotation.y, camTransform.localEulerAngles.y, camTransform.localEulerAngles.z);
+        camTransform.rotation = localRotation;
     }
 }
