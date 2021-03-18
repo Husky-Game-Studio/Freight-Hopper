@@ -43,6 +43,12 @@ public class FirstPersonCamera : MonoBehaviour
         Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
         Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
 
+        //Var<Quaternion> delta = new Var(Quaternion.Inverse(camTransform.rotation) * Quaternion.FromToRotation(Vector3.up, upAxis));
+        //delta *= mouseRotationHorizontal;
+        //camTransform.rotation *= delta;
+
+
+
         //currentRotationPlayer *= mouseRotationHorizontal;
 
         //currentRotation += mouse;
@@ -54,7 +60,7 @@ public class FirstPersonCamera : MonoBehaviour
         // player.rotation *= mouseRotationHorizontal;
         //Quaternion.LookRotation(play);
         // Rotate camera vertically
-        camTransform.rotation *= mouseRotationHorizontal;
+        //camTransform.rotation *= mouseRotationHorizontal;
         //camTransform.rotation *= mouseRotationVertical;
 
         //Quaternion currentRotationCamera = camTransform.rotation;
