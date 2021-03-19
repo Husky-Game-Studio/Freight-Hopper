@@ -27,10 +27,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        UserInput.JumpInput += jumpBehavior.TryJump;
-        UserInput.JumpInput += doubleJump.TryDoubleJump;
-        UserInput.GroundPoundInput += groundPound.TryGroundPound;
-        UserInput.FullStopInput += fullstop.TryFullStop;
+        UserInput.Input.JumpInput += jumpBehavior.TryJump;
+        UserInput.Input.JumpInput += doubleJump.TryDoubleJump;
+        UserInput.Input.GroundPoundInput += groundPound.TryGroundPound;
+        UserInput.Input.FullStopInput += fullstop.TryFullStop;
 
         playerCollision.Landed += jumpBehavior.coyoteTime.ResetTimer;
         playerCollision.Landed += doubleJump.Landed;
@@ -45,10 +45,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        UserInput.JumpInput -= jumpBehavior.TryJump;
-        UserInput.JumpInput -= doubleJump.TryDoubleJump;
-        UserInput.GroundPoundInput -= groundPound.TryGroundPound;
-        UserInput.FullStopInput -= fullstop.TryFullStop;
+        UserInput.Input.JumpInput -= jumpBehavior.TryJump;
+        UserInput.Input.JumpInput -= doubleJump.TryDoubleJump;
+        UserInput.Input.GroundPoundInput -= groundPound.TryGroundPound;
+        UserInput.Input.FullStopInput -= fullstop.TryFullStop;
 
         playerCollision.Landed -= jumpBehavior.coyoteTime.ResetTimer;
         playerCollision.Landed -= doubleJump.Landed;

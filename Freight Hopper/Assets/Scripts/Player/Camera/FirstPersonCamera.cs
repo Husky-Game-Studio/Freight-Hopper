@@ -31,7 +31,6 @@ public class FirstPersonCamera : MonoBehaviour
     private void FollowPlayer()
     {
         camTransform.position = playerHead.position;
-        localRotation *= (Quaternion.Inverse(camTransform.rotation) * player.rotation);
     }
 
     private void RotatePlayer()
@@ -43,8 +42,8 @@ public class FirstPersonCamera : MonoBehaviour
 
         Quaternion currentRotationPlayer = player.rotation;
         Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
-        Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
-        Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
+        Quaternion mouseRotationHorizontal = Quaternion.Euler(-mouse.y, mouse.x, 0);
+        Quaternion mouseRotationVertical = Quaternion.Euler(0, 0, 0);
 
         //Var<Quaternion> delta = new Var(Quaternion.Inverse(camTransform.rotation) * Quaternion.FromToRotation(Vector3.up, upAxis));
         //delta *= mouseRotationHorizontal;
@@ -61,13 +60,14 @@ public class FirstPersonCamera : MonoBehaviour
         // player.rotation *= mouseRotationHorizontal;
         //Quaternion.LookRotation(play);
         // Rotate camera vertically
-        localRotation *= mouseRotationHorizontal;
+        localRotation = mouseRotationHorizontal;
         //localRotation *= mouseRotationVertical;
-
+        // ;
         //Quaternion currentRotationCamera = camTransform.rotation;
         // camTransform.rotation = player.rotation;
         // camTransform.rotation = currentRotationCamera * mouseRotationVertical;
         // camTransform.rotation = Quaternion.Euler(-rotation.y, camTransform.localEulerAngles.y, camTransform.localEulerAngles.z);
-        camTransform.rotation = localRotation;
+
+        camTransform.rotation *= localRotation * (Quaternion.Inverse(camTransform.rotation) * player.rotation);
     }
 }

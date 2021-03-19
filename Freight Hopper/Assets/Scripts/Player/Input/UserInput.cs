@@ -12,17 +12,17 @@ public class UserInput : MonoBehaviour
 
     public delegate void PressEventHandler();
 
-    public static event PressEventHandler JumpInput;
+    public event PressEventHandler JumpInput;
 
-    public static event PressEventHandler JumpInputCanceled;
+    public event PressEventHandler JumpInputCanceled;
 
-    public static event PressEventHandler GroundPoundInput;
+    public event PressEventHandler GroundPoundInput;
 
-    public static event PressEventHandler FullStopInput;
+    public event PressEventHandler FullStopInput;
 
-    public static event PressEventHandler DashInput;
+    public event PressEventHandler DashInput;
 
-    public static event PressEventHandler UpwardDashInput;
+    public event PressEventHandler UpwardDashInput;
 
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
@@ -47,13 +47,12 @@ public class UserInput : MonoBehaviour
         if (input == null)
         {
             input = this;
+            master = new InputMaster();
         }
         else
         {
             Destroy(this);
         }
-
-        master = new InputMaster();
     }
 
     private void GroundPoundHeld(InputAction.CallbackContext context)
