@@ -12,7 +12,6 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private Vector2 yRotationLock = new Vector2(-89.999f, 89.999f);
 
     [SerializeField] private Vector2 mouseSensitivity;
-    [SerializeField] private Quaternion gravityRot;
 
     private void Awake()
     {

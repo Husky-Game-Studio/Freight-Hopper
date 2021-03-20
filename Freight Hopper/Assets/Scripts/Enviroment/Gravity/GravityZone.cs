@@ -5,10 +5,9 @@ using UnityEngine;
 public class GravityZone : GravitySource
 {
     [SerializeField] private float gravity = 25f;
-
     [SerializeField] private Quaternion gravityDirection;
+    [SerializeField] private Vector3 centerOffset = Vector3.zero;
     [SerializeField] private Vector3 zone = Vector3.one;
-    [SerializeField] private Vector3 falloffZone = Vector3.one * 2;
 
     public static void DrawGizmosArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
     {
@@ -34,15 +33,10 @@ public class GravityZone : GravitySource
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        DrawGizmosArrow(transform.position, gravityDirection * -transform.up);
-        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        DrawGizmosArrow(transform.position + centerOffset, gravityDirection * -transform.up);
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale);
 
-        Gizmos.DrawWireCube(Vector3.zero, 2 * zone);
-        if (falloffZone != zone)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube(Vector3.zero, 2 * falloffZone);
-        }
+        Gizmos.DrawWireCube(centerOffset, 2 * zone);
     }
 
     private void Awake()
@@ -53,29 +47,37 @@ public class GravityZone : GravitySource
     private void OnValidate()
     {
         zone = Vector3.Max(zone, Vector3.zero);
-        falloffZone = Vector3.Max(falloffZone, zone);
     }
 
-    // This is very close to being done, but when you touch the edges of the box you get shot straight up for some reason
     public override Vector3 GetGravity(Vector3 position)
     {
-        position -= transform.position;
-        Vector3 falloffDistances = falloffZone - position.Abs();
-        //Debug.Log("Falloff Distances: " + falloffDistances);
-        if (falloffDistances.x < 0 || falloffDistances.y < 0 || falloffDistances.z < 0)
+        if (!IsPointInBoxRegion(this.transform, centerOffset, zone, position))
         {
-            //Debug.Log("no gravity");
             return Vector3.zero;
         }
-        Vector3 g = gravity * (gravityDirection * -transform.up).normalized;
-        //Vector3 distances = (transform.position + zone) - position.Abs();
-        //Debug.Log("Distances: " + distances);
-        // This is definitly not right
-        /*if (distances.x < 0 || distances.y < 0 || distances.z < 0)
-        {
-            g *= 1 / (distances - falloffDistances).magnitude;
-        }*/
-        //Debug.Log("Gravity applied: " + g);
-        return g;
+
+        return gravity * (gravityDirection * -transform.up).normalized;
+    }
+
+    /// <summary>
+    /// Source: https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
+    /// Function for checking if a point is in a box region, true if point is inside the region. Transform is for converting world position to local
+    /// </summary>
+    public static bool IsPointInBoxRegion(Transform transform, Vector3 center, Vector3 bounds, Vector3 point)
+    {
+        Vector3 p1 = transform.TransformPoint(center - bounds);
+        Vector3 p2 = transform.TransformPoint(new Vector3(center.x - bounds.x, center.y - bounds.y, center.z + bounds.z));
+        Vector3 p3 = transform.TransformPoint(new Vector3(center.x + bounds.x, center.y - bounds.y, center.z - bounds.z));
+        Vector3 p4 = transform.TransformPoint(new Vector3(center.x - bounds.x, center.y + bounds.y, center.z - bounds.z));
+
+        Vector3 U = p1 - p2;
+        Vector3 V = p1 - p3;
+        Vector3 W = p1 - p4;
+
+        bool caseOne = Vector3.Dot(U, p2) < Vector3.Dot(U, point) && Vector3.Dot(U, point) < Vector3.Dot(U, p1);
+        bool caseTwo = Vector3.Dot(V, p3) < Vector3.Dot(V, point) && Vector3.Dot(V, point) < Vector3.Dot(V, p1);
+        bool caseThree = Vector3.Dot(W, p4) < Vector3.Dot(W, point) && Vector3.Dot(W, point) < Vector3.Dot(W, p1);
+
+        return caseOne && caseTwo && caseThree;
     }
 }
