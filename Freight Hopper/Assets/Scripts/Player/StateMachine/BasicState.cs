@@ -8,11 +8,11 @@ using UnityEngine;
 
 public abstract class BasicState : MonoBehaviour
 {
-    protected PlayerSystem playerSystem;
+    //protected PlayerSystem playerSystem;
 
-    public BasicState(PlayerSystem playerSystem) {
-        this.playerSystem = playerSystem;
-    }
+    //public BasicState(PlayerSystem playerSystem) {
+    //    this.playerSystem = playerSystem;
+    //}
 
     public virtual IEnumerator Start()
     {
