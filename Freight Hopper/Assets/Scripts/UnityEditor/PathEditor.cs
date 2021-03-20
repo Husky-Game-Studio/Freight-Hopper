@@ -6,7 +6,7 @@ using UnityEditor;
 [CustomEditor(typeof(PathCreator))]
 public class PathEditor : Editor
 {
-    Rect windowRect = new Rect(20,40,10,10);
+    Rect windowRect = new Rect(20,40,10,10); //Window for editor controls
     PathCreator creator;
     BezierPath path;
     RaycastHit lastMouseRaycastHit = new RaycastHit();
@@ -75,22 +75,13 @@ public class PathEditor : Editor
     void Window(int windowID)
     {
         Color defaultColor = GUI.color;
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button(new GUIContent(" ", "[Numpad 7]"), GUILayout.Width(120.0f)))
-        {
-            
-        }
         GUI.color = Color.red;
-        if (GUILayout.Button(new GUIContent("Match Pos/Rot", "[Numpad 8]"), GUILayout.Width(120.0f)))
-        {
-
-        }
-        GUI.color = defaultColor;
-        if (GUILayout.Button(new GUIContent(" ", "[Numpad 9]"), GUILayout.Width(120.0f)))
-        {
-
-        }
+        GUILayout.BeginHorizontal();
+        GUILayout.Button(new GUIContent(" ", "[Numpad 7]"), GUILayout.Width(120.0f)); //Just displaying numpad layout
+        GUILayout.Button(new GUIContent("Match Pos/Rot", "[Numpad 8] (Keybind Only)"), GUILayout.Width(120.0f)); //Keybind only
+        GUILayout.Button(new GUIContent(" ", "[Numpad 9]"), GUILayout.Width(120.0f)); //Just displaying numpad layout
         GUILayout.EndHorizontal();
+        GUI.color = defaultColor;
 
         GUILayout.BeginHorizontal();
         if (GUILayout.Button(new GUIContent("Next Anchor (-)", "[Numpad 4]"), GUILayout.Width(120.0f)))
@@ -110,7 +101,7 @@ public class PathEditor : Editor
             ActionCreateSegmentAhead();
         GUILayout.EndHorizontal();
 
-        GUI.DragWindow();
+        GUI.DragWindow(); //Must be at end of this script (read it's description)
     }
 
     private void ActionDecreaseFocusIndex()
@@ -182,92 +173,114 @@ public class PathEditor : Editor
 
     private void InteractableHandles()
     {
-        //Clickable Points
+        //creator.transform.TransformPoint();
+        //creator.transform.InverseTransformPoint();
+        ClickableAnchorHandles();
+        if (operation == Operation.Translate)
+        {
+            TranslateAnchorHandles();
+        }
+        else if (operation == Operation.Rotate)
+        {
+            RotateAnchorHandles();
+        }
+    }
+
+    private void ClickableAnchorHandles()
+    {
+        Handles.color = Color.cyan;
         for (int i = 0; i < path.NumAnchors; i++)
         {
-            if (i != creator.focusIndex)
+            if (i != creator.focusIndex) //For all anchors except the one in focus
             {
-                Handles.color = Color.cyan;
-                if (Handles.Button(path.GetAnchor(i), Quaternion.identity, 0.2f, 0.2f, Handles.SphereHandleCap))
+                if (Handles.Button(creator.transform.TransformPoint(path.GetAnchor(i)), Quaternion.identity, 0.2f, 0.2f, Handles.SphereHandleCap)) //Click SphereHandleCap to focus on clicked anchor
                 {
                     creator.focusIndex = i;
                 }
             }
         }
+    }
 
-        //Translate Anchor
-        if (operation == Operation.Translate)
+    private void TranslateAnchorHandles()
+    {
+        
+        int indexCurrent = creator.focusIndex * 3;
+        Vector3 anchorStoredPos = path[indexCurrent];
+        Vector3 anchorHandle = Handles.PositionHandle(creator.transform.TransformPoint(anchorStoredPos), Quaternion.identity);
+        Vector3 anchorHandlePos = creator.transform.InverseTransformPoint(anchorHandle);
+        if (newRaycastHit)
+            anchorHandlePos = lastMouseRaycastHit.point;
+        if (anchorStoredPos != anchorHandlePos)
         {
-            int indexCurrent = creator.focusIndex * 3;
-            Vector3 anchorStoredPos = path[indexCurrent];
-            Vector3 anchorHandlePos = Handles.PositionHandle(anchorStoredPos, Quaternion.identity);
-            if (newRaycastHit)
-                anchorHandlePos = lastMouseRaycastHit.point;
-            if (anchorStoredPos != anchorHandlePos)
+            Undo.RecordObject(creator, "Translate Anchor Point");
+            if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
+                path.MovePoint(indexCurrent + 1, anchorHandlePos + path[indexCurrent + 1] - path[indexCurrent]);
+            if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
+                path.MovePoint(indexCurrent - 1, anchorHandlePos + (path[indexCurrent - 1] - path[indexCurrent]));
+            path.MovePoint(indexCurrent, anchorHandlePos);
+        }
+    }
+
+    private void RotateAnchorHandles()
+    {
+        Handles.color = Color.green;
+        int indexCurrent = creator.focusIndex * 3;
+        Vector3 anchorStoredPos = path[indexCurrent];
+        Quaternion anchorStoredRot = Quaternion.LookRotation(CalculatePathDirection(creator.focusIndex));
+        Quaternion anchorHandle = Handles.RotationHandle(Quaternion.LookRotation(creator.transform.TransformDirection(anchorStoredRot * Vector3.forward)), creator.transform.TransformPoint(anchorStoredPos));
+        Quaternion anchorHandleRot = Quaternion.LookRotation(creator.transform.InverseTransformDirection(anchorHandle * Vector3.forward));
+        if (newRaycastHit)
+            anchorHandleRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(CalculatePathDirection(creator.focusIndex), lastMouseRaycastHit.normal));
+        //Rotate Anchor Handle
+        if (anchorStoredRot != anchorHandleRot)
+        {
+            Undo.RecordObject(creator, "Rotate Anchor Point");
+            if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
+                path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, path[indexCurrent + 1]) * (anchorHandleRot * Vector3.forward));
+            if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
+                path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, path[indexCurrent - 1]) * (anchorHandleRot * Vector3.forward));
+        }
+        //Moving strength handle ahead constrained by rotation
+        if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
+        {
+            Vector3 strengthHandle = Handles.FreeMoveHandle(creator.transform.TransformPoint(path[indexCurrent + 1]), Quaternion.identity, 0.2f, Vector3.zero, Handles.SphereHandleCap);
+            Vector3 strengthHandlePos = creator.transform.InverseTransformPoint(strengthHandle);
+            if (path[indexCurrent + 1] != strengthHandlePos)
             {
-                Undo.RecordObject(creator, "Translate Anchor Point");
-                if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
-                    path.MovePoint(indexCurrent + 1, anchorHandlePos + path[indexCurrent + 1] - path[indexCurrent]);
-                if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
-                    path.MovePoint(indexCurrent - 1, anchorHandlePos + (path[indexCurrent - 1] - path[indexCurrent]));
-                path.MovePoint(indexCurrent, anchorHandlePos);
+                Undo.RecordObject(creator, "Adjust Path Strength");
+                path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward));
             }
         }
-
-        //Rotate Anchor
-        if (operation == Operation.Rotate)
+        //Moving strength handle behind constrained by rotation
+        if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
         {
-            Handles.color = Color.green;
-            int indexCurrent = creator.focusIndex * 3;
-            Vector3 anchorStoredPos = path[indexCurrent];
-            Quaternion anchorStoredRot = Quaternion.LookRotation(CalculatePathDirection(creator.focusIndex));
-            Quaternion anchorHandleRot = Handles.RotationHandle(anchorStoredRot, anchorStoredPos);
-            if (newRaycastHit)
-                anchorHandleRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(CalculatePathDirection(creator.focusIndex), lastMouseRaycastHit.normal));
-            if (anchorStoredRot != anchorHandleRot)
+            Vector3 strengthHandle = Handles.FreeMoveHandle(creator.transform.TransformPoint(path[indexCurrent - 1]), Quaternion.identity, 0.2f, Vector3.zero, Handles.SphereHandleCap);
+            Vector3 strengthHandlePos = creator.transform.InverseTransformPoint(strengthHandle);
+            if (path[indexCurrent - 1] != strengthHandlePos)
             {
-                Undo.RecordObject(creator, "Rotate Anchor Point");
-                if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
-                    path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, path[indexCurrent + 1]) * (anchorHandleRot * Vector3.forward));
-                if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
-                    path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, path[indexCurrent - 1]) * (anchorHandleRot * Vector3.forward));
-            }
-            if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
-            {
-                Vector3 strengthHandlePos1 = Handles.FreeMoveHandle(path[indexCurrent + 1], Quaternion.identity, 0.2f, Vector3.zero, Handles.SphereHandleCap);
-                if (path[indexCurrent + 1] != strengthHandlePos1)
-                {
-                    Undo.RecordObject(creator, "Adjust Path Strength");
-                    path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, strengthHandlePos1) * (anchorHandleRot * Vector3.forward));
-                }
-            }
-            if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
-            {
-                Vector3 strengthHandlePos2 = Handles.FreeMoveHandle(path[indexCurrent - 1], Quaternion.identity, 0.2f, Vector3.zero, Handles.SphereHandleCap);
-                if (path[indexCurrent - 1] != strengthHandlePos2)
-                {
-                    Undo.RecordObject(creator, "Adjust Path Strength");
-                    path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, strengthHandlePos2) * (anchorHandleRot * Vector3.forward));
-                }
+                Undo.RecordObject(creator, "Adjust Path Strength");
+                path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward));
             }
         }
     }
 
     private void Visuals()
     {
+        Handles.color = Color.green;
         //Bezier Lines
         for (int i = 0; i < path.NumSegments; i++)
         {
             Vector3[] points = path.GetSegment(i);
-            Handles.color = Color.green;
+            for (int j = 0; j < points.Length; j++)
+            {
+                points[j] = creator.transform.TransformPoint(points[j]);
+            }
             Handles.DrawLine(points[0], points[1]);
             Handles.DrawLine(points[2], points[3]);
             Handles.DrawBezier(points[0], points[3], points[1], points[2], Color.white, null, 2);
         }
-
         //Handle for anchor focused on
-        Handles.color = Color.green;
-        Handles.SphereHandleCap(0, path.GetAnchor(creator.focusIndex), Quaternion.identity, 0.3f, EventType.Repaint);
+        Handles.SphereHandleCap(0, creator.transform.TransformPoint(path.GetAnchor(creator.focusIndex)), Quaternion.identity, 0.3f, EventType.Repaint);
     }
 
     private bool KeyDown(Event guiEvent, KeyCode key)

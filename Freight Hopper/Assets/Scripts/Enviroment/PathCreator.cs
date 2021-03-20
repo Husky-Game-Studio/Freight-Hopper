@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class PathCreator : MonoBehaviour
 {
-    //Data
-    public BezierPath path;
-
-    //Saved Editor Values
-    public int focusIndex;
+    [HideInInspector] //The BezierPath should not be modified directly as some constraints must be met
+    public BezierPath path; //The data
+    public int focusIndex; //Saved editor value
 
     public void CreatePath()
     {
@@ -17,7 +15,10 @@ public class PathCreator : MonoBehaviour
 
     private void OnValidate()
     {
-        focusIndex = Mathf.Clamp(focusIndex, 0, path.NumAnchors - 1);
+        if (path != null)
+        {
+            focusIndex = Mathf.Clamp(focusIndex, 0, path.NumAnchors - 1);
+        }
     }
 
 }
