@@ -12,7 +12,9 @@ public class CollisionManagement : MonoBehaviour
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
     [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
+    [ReadOnly, SerializeField] private Vector3 validUpAxis;
 
+    public Vector3 ValidUpAxis => validUpAxis;
     public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
 
@@ -131,7 +133,12 @@ public class CollisionManagement : MonoBehaviour
         contactCount = 0;
         steepCount = 0;
 
-        contactNormal.current = Vector3.zero;
+        Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
+        if (upAxis != Vector3.zero)
+        {
+            validUpAxis = upAxis;
+        }
+        contactNormal.current = validUpAxis;
         rigidbodyLinker.ClearValues();
     }
 }

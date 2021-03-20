@@ -12,6 +12,7 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private Vector2 yRotationLock = new Vector2(-89.999f, 89.999f);
 
     [SerializeField] private Vector2 mouseSensitivity;
+    [SerializeField] private Quaternion gravityRot;
 
     private void Awake()
     {
@@ -36,38 +37,19 @@ public class FirstPersonCamera : MonoBehaviour
     private void RotatePlayer()
     {
         // Up axis
-        Vector3 upAxis = CustomGravity.GetUpAxis(player.position);
+        Vector3 upAxis = player.GetComponent<CollisionManagement>().ValidUpAxis;
 
-        // Get rotation
-
-        Quaternion currentRotationPlayer = player.rotation;
+        // convert input to rotation
         Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
-        Quaternion mouseRotationHorizontal = Quaternion.Euler(-mouse.y, mouse.x, 0);
-        Quaternion mouseRotationVertical = Quaternion.Euler(0, 0, 0);
+        Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
+        Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
 
-        //Var<Quaternion> delta = new Var(Quaternion.Inverse(camTransform.rotation) * Quaternion.FromToRotation(Vector3.up, upAxis));
-        //delta *= mouseRotationHorizontal;
-        //camTransform.rotation *= delta;
+        localRotation *= mouseRotationVertical;
 
-        //currentRotationPlayer *= mouseRotationHorizontal;
-
-        //currentRotation += mouse;
-
-        // Clamp it
-        // rotation.y = Mathf.Clamp(rotation.y, yRotationLock.x, yRotationLock.y);
-
-        // Rotate player horizontally
-        // player.rotation *= mouseRotationHorizontal;
-        //Quaternion.LookRotation(play);
-        // Rotate camera vertically
-        localRotation = mouseRotationHorizontal;
-        //localRotation *= mouseRotationVertical;
-        // ;
-        //Quaternion currentRotationCamera = camTransform.rotation;
-        // camTransform.rotation = player.rotation;
-        // camTransform.rotation = currentRotationCamera * mouseRotationVertical;
-        // camTransform.rotation = Quaternion.Euler(-rotation.y, camTransform.localEulerAngles.y, camTransform.localEulerAngles.z);
-
-        camTransform.rotation *= localRotation * (Quaternion.Inverse(camTransform.rotation) * player.rotation);
+        // Apply camera and player rotation
+        camTransform.rotation = Quaternion.LookRotation(player.forward, upAxis) * localRotation;
+        Vector3 forward = CollisionManagement.ProjectOnContactPlane(camTransform.forward, upAxis).normalized;
+        player.LookAt(player.position + forward, upAxis);
+        player.rotation *= mouseRotationHorizontal;
     }
 }

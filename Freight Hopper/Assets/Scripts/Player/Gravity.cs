@@ -32,24 +32,6 @@ public class Gravity : MonoBehaviour
 
     private void ApplyGravity()
     {
-        // Is Sleeping is a physics engine thing. It basically stops physics interactions for an object if its not doing anything to save calculation cost
-        if (rb.IsSleeping())
-        {
-            floatDelay = 0;
-            return;
-        }
-
-        // THIS WILL LIKELY CAUSE A FLOATING BUG UNTIL ITS UPDATE
-        // This is temp until more advanced gravity and moving platforms. It basically waits a second to see if the player is not moving and if so stop adding force
-        // Arbitrary small threshold. This is so that if the object is moving very slowly then no gravity is applied
-        if (rb.velocity.sqrMagnitude < 0.00001f)
-        {
-            floatDelay += Time.deltaTime;
-            if (floatDelay >= 5)
-            {
-                return;
-            }
-        }
         if (collid.IsGrounded.current)
         {
             return;

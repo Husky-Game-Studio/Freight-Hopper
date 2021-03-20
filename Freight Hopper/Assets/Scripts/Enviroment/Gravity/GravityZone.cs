@@ -67,14 +67,14 @@ public class GravityZone : GravitySource
             //Debug.Log("no gravity");
             return Vector3.zero;
         }
-        Vector3 g = gravity * (gravityDirection * -transform.up);
-        Vector3 distances = (transform.position + zone) - position.Abs();
+        Vector3 g = gravity * (gravityDirection * -transform.up).normalized;
+        //Vector3 distances = (transform.position + zone) - position.Abs();
         //Debug.Log("Distances: " + distances);
         // This is definitly not right
-        if (distances.x < 0 || distances.y < 0 || distances.z < 0)
+        /*if (distances.x < 0 || distances.y < 0 || distances.z < 0)
         {
             g *= 1 / (distances - falloffDistances).magnitude;
-        }
+        }*/
         //Debug.Log("Gravity applied: " + g);
         return g;
     }

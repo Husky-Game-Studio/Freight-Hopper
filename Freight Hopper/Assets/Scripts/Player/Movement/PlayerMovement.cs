@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerCollision = GetComponent<CollisionManagement>();
 
-        movement.Initialize(rb, playerCollision, Camera.main.transform, this.transform, transform.Find("Gravity"));
+        movement.Initialize(rb, playerCollision, Camera.main.transform, this.transform);
         doubleJump.Initialize(playerCollision, jumpBehavior);
         jumpBehavior.Initialize(rb, playerCollision, GetComponent<AudioSource>());
         groundPound.Initalize(rb, playerCollision);
