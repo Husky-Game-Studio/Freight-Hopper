@@ -2,19 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicState : MonoBehaviour
+// State Machine help from these urls:
+// https://www.youtube.com/watch?v=5PTd0WdKB-4&list=PL3Z46QHED2JVPi0YHXVcNCqbOKRAO7sxB&index=2
+// https://www.youtube.com/watch?v=G1bd75R10m4&list=PL3Z46QHED2JVPi0YHXVcNCqbOKRAO7sxB&index=2
+
+public abstract class BasicState : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    protected PlayerSystem playerSystem;
+
+    public BasicState(PlayerSystem playerSystem) {
+        this.playerSystem = playerSystem;
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual IEnumerator Start()
     {
-        
+        yield break;
     }
 
-    public void onRecieveInput() {}
+    public virtual IEnumerator Attack() { 
+        yield break;
+    }
+    public virtual IEnumerator Heal()
+    {
+        yield break;
+    }
+    public virtual IEnumerator Pause()
+    {
+        yield break;
+    }
+    public virtual IEnumerator Resume()
+    {
+        yield break;
+    }
 }
