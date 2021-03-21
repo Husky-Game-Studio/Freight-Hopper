@@ -12,13 +12,4 @@ public class PathCreator : MonoBehaviour
     {
         path = new BezierPath(transform.position);
     }
-
-    private void OnValidate()
-    {
-        if (path != null)
-        {
-            focusIndex = Mathf.Clamp(focusIndex, 0, path.NumAnchors - 1);
-        }
-    }
-
 }

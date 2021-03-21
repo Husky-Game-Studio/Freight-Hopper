@@ -39,6 +39,14 @@ public class PathEditor : Editor
         base.OnInspectorGUI();
     }
 
+    private void OnValidate()
+    {
+        if (path != null)
+        {
+            creator.focusIndex = Mathf.Clamp(creator.focusIndex, 0, path.NumAnchors - 1);
+        }
+    }
+
     private void OnSceneGUI()
     {
         if (creator == null)
