@@ -9,31 +9,10 @@ public class GravityZone : GravitySource
     [SerializeField] private Vector3 centerOffset = Vector3.zero;
     [SerializeField] private Vector3 zone = Vector3.one;
 
-    public static void DrawGizmosArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
-    {
-        Gizmos.DrawRay(pos, direction);
-
-        Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-        Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-        Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
-        Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
-    }
-
-    public static void DrawGizmosArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
-    {
-        Gizmos.color = color;
-        Gizmos.DrawRay(pos, direction);
-
-        Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-        Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-        Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
-        Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
-    }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        DrawGizmosArrow(transform.position + centerOffset, gravityDirection * -transform.up);
+        GizmosExtensions.DrawGizmosArrow(transform.position + centerOffset, gravityDirection * -transform.up);
         Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale);
 
         Gizmos.DrawWireCube(centerOffset, 2 * zone);
@@ -49,6 +28,9 @@ public class GravityZone : GravitySource
         zone = Vector3.Max(zone, Vector3.zero);
     }
 
+    /// <summary>
+    /// Anything in box has gravity applied on it with given direction
+    /// </summary>
     public override Vector3 GetGravity(Vector3 position)
     {
         if (!IsPointInBoxRegion(this.transform, centerOffset, zone, position))
@@ -62,6 +44,7 @@ public class GravityZone : GravitySource
     /// <summary>
     /// Source: https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
     /// Function for checking if a point is in a box region, true if point is inside the region. Transform is for converting world position to local
+    /// probably shouldn't be in gravityzone, but idk where else to put it
     /// </summary>
     public static bool IsPointInBoxRegion(Transform transform, Vector3 center, Vector3 bounds, Vector3 point)
     {

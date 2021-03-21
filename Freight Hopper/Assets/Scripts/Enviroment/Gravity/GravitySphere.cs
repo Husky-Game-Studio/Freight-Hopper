@@ -5,31 +5,21 @@ using UnityEngine;
 public class GravitySphere : GravitySource
 {
     [SerializeField] private float gravity = 25f;
-    [SerializeField, Min(0)] private float outerRadius = 10;
-    [SerializeField, Min(0)] private float outerFalloffRadius = 15;
-    [SerializeField, Min(0)] private float innerRadius = 5;
-    [SerializeField, Min(0)] private float innerFalloffRadius = 1;
-    private float outerFalloffFactor;
-    private float innerFalloffFactor;
+    [SerializeField, Min(0)] private float radius = 10;
+    [SerializeField, Min(0)] private float falloffRadius = 15;
+
+    private float falloffFactor;
 
     private void OnDrawGizmosSelected()
     {
         Vector3 position = transform.position;
-        if (innerFalloffRadius > 0 && innerFalloffRadius < innerRadius)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(position, innerFalloffRadius);
-        }
+
         Gizmos.color = Color.yellow;
-        if (innerRadius > 0 && innerRadius < outerRadius)
-        {
-            Gizmos.DrawWireSphere(position, innerRadius);
-        }
-        Gizmos.DrawWireSphere(position, outerRadius);
-        if (outerFalloffRadius > outerRadius)
+        Gizmos.DrawWireSphere(position, radius);
+        if (falloffRadius > radius)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(position, outerFalloffRadius);
+            Gizmos.DrawWireSphere(position, falloffRadius);
         }
     }
 
@@ -40,32 +30,30 @@ public class GravitySphere : GravitySource
 
     private void OnValidate()
     {
-        innerFalloffRadius = Mathf.Max(innerFalloffRadius, 0);
-        innerRadius = Mathf.Max(innerRadius, innerFalloffRadius);
-        outerRadius = Mathf.Max(outerRadius, innerRadius);
-        outerFalloffRadius = Mathf.Max(outerFalloffRadius, outerRadius);
+        falloffRadius = Mathf.Max(falloffRadius, radius);
 
-        innerFalloffFactor = 1 / (innerRadius - innerFalloffRadius);
-        outerFalloffFactor = 1 / (outerFalloffRadius - outerRadius);
+        falloffFactor = 1 / (falloffRadius - radius);
     }
 
+    /// <summary>
+    /// Anything in sphere will have gravity applied on it
+    /// </summary>
     public override Vector3 GetGravity(Vector3 position)
     {
         Vector3 posDifference = transform.position - position;
+
         float distance = posDifference.magnitude;
-        if (distance > outerFalloffRadius || distance < innerFalloffRadius)
+        if (distance > falloffRadius)
         {
             return Vector3.zero;
         }
+
         float g = gravity / distance;
-        if (distance > outerRadius)
+        if (distance > radius)
         {
-            g *= 1 - (distance - outerRadius) * outerFalloffFactor;
+            g *= 1 - (distance - radius) * falloffFactor;
         }
-        else if (distance < innerRadius)
-        {
-            g *= 1 - (innerRadius - distance) * innerFalloffFactor;
-        }
+
         return g * posDifference;
     }
 }

@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Realistically, this is not the final approach. This assuming too much about the gravity
-/// </summary>
 [RequireComponent(typeof(Rigidbody), typeof(CollisionManagement))]
 public class Gravity : MonoBehaviour
 {
@@ -17,8 +12,6 @@ public class Gravity : MonoBehaviour
         rb.useGravity = false;
         collid = GetComponent<CollisionManagement>();
     }
-
-    private float floatDelay;
 
     public void OnEnable()
     {
