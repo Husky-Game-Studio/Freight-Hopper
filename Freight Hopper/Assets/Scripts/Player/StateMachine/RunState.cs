@@ -4,5 +4,9 @@ using UnityEngine;
 
 public class RunState : BasicState
 {
-    
+    public BasicState DoState(PlayerMachineCenter myPlayer)
+    {
+        return this;
+    }
+
 }

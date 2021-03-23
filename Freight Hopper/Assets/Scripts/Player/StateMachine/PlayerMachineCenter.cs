@@ -1,54 +1,40 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// State Machine help from these urls:
-// https://www.youtube.com/watch?v=5PTd0WdKB-4&list=PL3Z46QHED2JVPi0YHXVcNCqbOKRAO7sxB&index=2
-// https://www.youtube.com/watch?v=G1bd75R10m4&list=PL3Z46QHED2JVPi0YHXVcNCqbOKRAO7sxB&index=2
+// State Machine help from these url:
 // https://www.youtube.com/watch?v=nnrOhb5UdRc
 
-public abstract class PlayerMachineCenter : MonoBehaviour
+public class PlayerMachineCenter : MonoBehaviour
 {
-    private PlayerMode playerMode = PlayerMode.idle;
+    [SerializeField]
+    private string currentStateName;
+    private BasicState currentState;
 
-    public enum PlayerMode
-    { 
-        idle,
-        run,
-        jump,
-        fall
+    // Player States
+    public IdleState idleState = new IdleState();
+    public RunState runState = new RunState();
+    public JumpState jumpState = new JumpState();
+    public FallState fallState = new FallState();
+
+    // Input Components
+    public UserInput userInput;
+    public PlayerMovement playerMovement;
+
+    private void OnEnable()
+    {
+        currentState = idleState;
     }
 
     private void Update()
     {
-        switch (PlayerMode)
+        if (currentState != null)
         {
-            case PlayerMode.idle:
-                DoIdle();
-                break;
-
-            case PlayerMode.run:
-                DoRun();
-                break;
-
-            case PlayerMode.jump:
-                DoJump();
-                break;
-
-            case PlayerMode.fall:
-                DoFall();
-                break;
-
-            default:
-                break;
+            currentState = currentState.DoState(this);
+            currentStateName = currentState.ToString();
+        }
+        else {
+            Debug.Log("currentState is null");
         }
     }
-
-    private void DoIdle() { }
-    private void DoRun() { }
-    private void DoJump() { }
-    private void DoFall() { }
-
-
 }
-*/

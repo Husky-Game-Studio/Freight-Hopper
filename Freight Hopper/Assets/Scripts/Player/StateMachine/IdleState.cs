@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class IdleState : BasicState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public BasicState DoState(PlayerMachineCenter myPlayer) {
+        // if the run buttons was pressed, then go to run state (return myPlayer.runState)
 
-    // Update is called once per frame
-    void Update()
-    {
+        // if the jump button was pressed, then go to jump state (return myPlayer.jumpState)
+
+        // if the <INSERT ABILITY> button was pressed, then go to <INSERT ABILITY> state (return myPlayer.<INSERT ABILITY>State)
         
+        return this;
     }
 }

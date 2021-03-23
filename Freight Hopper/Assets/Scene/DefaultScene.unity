@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 6851446874579196112}
   - component: {fileID: 6851446874579196117}
   - component: {fileID: 4094}
+  - component: {fileID: 4493642203787552938}
   - component: {fileID: 6851446875331684908}
   - component: {fileID: 4493642203787552937}
   - component: {fileID: 4493642203787552935}
@@ -316,6 +317,21 @@ MonoBehaviour:
       current: {x: 0, y: 0, z: 0}
   validUpAxis: {x: 0, y: 0, z: 0}
   maxSlope: 60
+--- !u!114 &4493642203787552938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493642203787552934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8156a7bd37866a741a0859a84fef0022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStateName: 
+  userInput: {fileID: 6851446874579196117}
+  playerMovement: {fileID: 4493642203787552936}
 --- !u!114 &6851446874351635506
 MonoBehaviour:
   m_ObjectHideFlags: 0

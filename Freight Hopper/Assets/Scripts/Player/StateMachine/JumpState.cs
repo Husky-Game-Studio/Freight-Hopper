@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class JumpState : BasicState
 {
-    // Start is called before the first frame update
-    void Start()
+    public BasicState DoState(PlayerMachineCenter myPlayer)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return this;
     }
 }
