@@ -103,4 +103,10 @@ public class JumpBehavior
             Jump(minJumpHeight);
         }
     }
+
+    // Gabe: need to see if player collides with ground
+    /*public bool getIsGroundedEvent()
+    {
+        return playerCollision.getIsGroundedEvent();
+    }*/
 }

@@ -141,4 +141,10 @@ public class CollisionManagement : MonoBehaviour
         contactNormal.current = validUpAxis;
         rigidbodyLinker.ClearValues();
     }
+
+    // Gabe: player FSM needs to see if the player has collided with the ground
+    /*public bool getIsGroundedEvent()
+    {
+        if (Landed.get()) { return true; };
+    }*/
 }

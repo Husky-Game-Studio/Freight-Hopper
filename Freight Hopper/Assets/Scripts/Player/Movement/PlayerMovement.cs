@@ -60,4 +60,10 @@ public class PlayerMovement : MonoBehaviour
         playerCollision.CollisionDataCollected -= groundPound.GroundPounding;
         playerCollision.CollisionDataCollected -= fullstop.cooldown.CountDownFixed;
     }
+
+    // Gabe: need to see if player collides with ground
+    /*public bool getIsGroundedEvent()
+    {
+        return jumpBehavior.getIsGroundedEvent();
+    }*/
 }

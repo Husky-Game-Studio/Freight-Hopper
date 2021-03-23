@@ -6,6 +6,15 @@ public class JumpState : BasicState
 {
     public BasicState DoState(PlayerMachineCenter myPlayer)
     {
-        return this;
+        if (myPlayer.userInput.Jump())
+        {
+            Debug.Log("In Jump state!");
+            return this;
+        }
+        else
+        {
+            Debug.Log("Should be in Fall state");
+            return myPlayer.fallState;
+        }
     }
 }
