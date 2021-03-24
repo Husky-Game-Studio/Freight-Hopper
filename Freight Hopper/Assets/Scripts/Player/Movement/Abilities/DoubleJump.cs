@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class DoubleJump
+public class DoubleJump : MonoBehaviour
 {
     [Range(25, 300)]
     [SerializeField] private float percentStrengthComparedToNormalJump = 75;
@@ -16,6 +16,20 @@ public class DoubleJump
     {
         this.jumpBehavior = jumpBehavior;
         this.playerCollision = playerCollision;
+    }
+
+    private void OnEnable()
+    {
+        UserInput.Input.JumpInput += TryDoubleJump;
+        playerCollision.Landed += Landed;
+        playerCollision.CollisionDataCollected += JumpLetGo;
+    }
+
+    private void OnDisable()
+    {
+        UserInput.Input.JumpInput -= TryDoubleJump;
+        playerCollision.Landed -= Landed;
+        playerCollision.CollisionDataCollected -= JumpLetGo;
     }
 
     public void Landed()

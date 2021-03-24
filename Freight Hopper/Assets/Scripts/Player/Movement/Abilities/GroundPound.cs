@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class GroundPound
+public class GroundPound : MonoBehaviour
 {
     [ReadOnly, SerializeField] private bool groundPoundPossible = true;
     [ReadOnly, SerializeField] private bool groundPounding = false;
@@ -18,6 +18,18 @@ public class GroundPound
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
+    }
+
+    private void OnEnable()
+    {
+        UserInput.Input.GroundPoundInput += TryGroundPound;
+        playerCollision.CollisionDataCollected += GroundPounding;
+    }
+
+    private void OnDisable()
+    {
+        UserInput.Input.GroundPoundInput -= TryGroundPound;
+        playerCollision.CollisionDataCollected -= GroundPounding;
     }
 
     public void TryGroundPound()

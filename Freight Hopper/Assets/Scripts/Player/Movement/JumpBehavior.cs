@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class JumpBehavior
+public class JumpBehavior : MonoBehaviour
 {
     [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
     [SerializeField] private Timer jumpHoldingPeriod = new Timer(0.5f);
@@ -21,6 +21,20 @@ public class JumpBehavior
         this.rb = rb;
         this.playerCollision = playerCollision;
         this.jumpSound = jumpSound;
+    }
+
+    private void OnEnable()
+    {
+        UserInput.Input.JumpInput += TryJump;
+        playerCollision.Landed += coyoteTime.ResetTimer;
+        playerCollision.CollisionDataCollected += Jumping;
+    }
+
+    private void OnDisable()
+    {
+        UserInput.Input.JumpInput -= TryJump;
+        playerCollision.Landed -= coyoteTime.ResetTimer;
+        playerCollision.CollisionDataCollected -= Jumping;
     }
 
     // Every LateFixedUpdate checks for jump buffering and if player is holding space

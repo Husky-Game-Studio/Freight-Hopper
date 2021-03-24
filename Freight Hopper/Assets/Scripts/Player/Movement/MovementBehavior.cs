@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class MovementBehavior
+public class MovementBehavior : MonoBehaviour
 {
     [SerializeField] private float groundAcceleration = 20;
     [SerializeField] private float airAcceleration = 10;
@@ -9,25 +9,33 @@ public class MovementBehavior
     private Rigidbody rb;
     private CollisionManagement playerCollision;
     private Transform cameraTransform;
-    private Transform playerTransform;
 
     private Vector3 Input => new Vector3(UserInput.Input.Move().x, 0f, UserInput.Input.Move().y);
 
     public float Speed => groundAcceleration;
 
-    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Transform cameraTransform, Transform playerTransform)
+    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Transform cameraTransform)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
         this.cameraTransform = cameraTransform;
-        this.playerTransform = playerTransform;
+    }
+
+    private void OnEnable()
+    {
+        playerCollision.CollisionDataCollected += Movement;
+    }
+
+    private void OnDisable()
+    {
+        playerCollision.CollisionDataCollected -= Movement;
     }
 
     public void Movement()
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
-        Move(relativeMove);
+        Move(rb, playerCollision, relativeMove, playerCollision.IsGrounded.current ? groundAcceleration : airAcceleration);
     }
 
     private Vector3 RelativeMove(Vector3 forward, Vector3 right)
@@ -40,11 +48,10 @@ public class MovementBehavior
         return move;
     }
 
-    private void Move(Vector3 direction)
+    public void Move(Rigidbody rigidbody, CollisionManagement collision, Vector3 direction, float acceleration)
     {
-        Vector3 relativeDirection = CollisionManagement.ProjectOnContactPlane(direction, playerCollision.ContactNormal.current).normalized;
-        float acceleration = playerCollision.IsGrounded.current ? groundAcceleration : airAcceleration;
+        Vector3 relativeDirection = CollisionManagement.ProjectOnContactPlane(direction, collision.ContactNormal.current).normalized;
 
-        rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
+        rigidbody.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }
 }
