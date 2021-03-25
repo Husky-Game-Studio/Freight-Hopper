@@ -37,7 +37,7 @@ public class FallState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
-
+        playerMachine.playerMovement.movement.Movement();
     }
 
 

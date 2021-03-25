@@ -23,12 +23,12 @@ public class MovementBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        playerCollision.CollisionDataCollected += Movement;
+        //playerCollision.CollisionDataCollected += Movement;
     }
 
     private void OnDisable()
     {
-        playerCollision.CollisionDataCollected -= Movement;
+        //playerCollision.CollisionDataCollected -= Movement;
     }
 
     public void Movement()

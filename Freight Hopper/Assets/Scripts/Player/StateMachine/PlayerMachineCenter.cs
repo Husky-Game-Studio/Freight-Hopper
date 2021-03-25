@@ -56,9 +56,22 @@ public class PlayerMachineCenter : MonoBehaviour
 
         if (currentState != null)
         {
+            // entry behavior
+
+
             currentState.PerformBehavior(this);
 
+
+
             currentState = currentState.TransitionState(this);
+
+            if (previousState != currentState) { // if the current state changed
+            // run old state exit behavior
+            // run current state entry behavior
+            }
+
+            // exit behavior
+
             currentStateName = currentState.ToString();
 
             //previousState = currentState;

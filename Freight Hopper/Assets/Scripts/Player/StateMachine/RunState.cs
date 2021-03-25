@@ -43,7 +43,7 @@ public class RunState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
-
+        playerMachine.playerMovement.movement.Movement();
     }
 
     private void JumpButtonPressed()

@@ -11,4 +11,10 @@ public interface BasicState
     void UnsubToListeners(PlayerMachineCenter playerMachine);
     BasicState TransitionState(PlayerMachineCenter playerMachine);
     void PerformBehavior(PlayerMachineCenter playerMachine);
+
+
+    // Need an entry behavior
+
+    // Need an exit behavior
+
 }

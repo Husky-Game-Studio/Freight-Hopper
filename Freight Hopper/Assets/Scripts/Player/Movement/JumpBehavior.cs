@@ -34,7 +34,7 @@ public class JumpBehavior : MonoBehaviour
 
     private void OnDisable()
     {
-        UserInput.Input.JumpInput -= TryJump;
+        //UserInput.Input.JumpInput -= TryJump;
         playerCollision.Landed -= coyoteTime.ResetTimer;
         playerCollision.CollisionDataCollected -= Jumping;
     }

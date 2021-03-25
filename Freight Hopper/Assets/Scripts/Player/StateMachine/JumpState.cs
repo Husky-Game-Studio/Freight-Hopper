@@ -39,7 +39,8 @@ public class JumpState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
-
+        playerMachine.playerMovement.movement.Movement();
+        playerMachine.playerMovement.jumpBehavior.Jumping();
     }
 
     private void ReleasedJumpButtonPressed()
