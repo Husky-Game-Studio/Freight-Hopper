@@ -16,6 +16,8 @@ public class JumpBehavior : MonoBehaviour
     public float JumpHeight => minJumpHeight;
     public bool CanJump => coyoteTime.TimerActive();
 
+    public bool IsJumping => jumpHoldingPeriod.TimerActive();
+
     public void Initialize(Rigidbody rb, CollisionManagement playerCollision, AudioSource jumpSound)
     {
         this.rb = rb;

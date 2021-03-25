@@ -4,17 +4,38 @@ using UnityEngine;
 
 public class FallState : BasicState
 {
-    public BasicState DoState(PlayerMachineCenter myPlayer)
+    private bool playerLanded = false;
+
+    public void subToListeners(PlayerMachineCenter playerMachine)
     {
-        /*if (myPlayer.playerMovement.)
+        // sub to Landed to trigger a function that returns a bool. and use that to pass or fail the if checks
+        playerMachine.collision.Landed += this.hasLanded;
+    }
+
+    public void unsubToListeners(PlayerMachineCenter playerMachine) {
+        playerMachine.collision.Landed -= this.hasLanded;
+    }
+
+    public BasicState DoState(PlayerMachineCenter playerMachine)
+    {
+        
+
+        // Fall
+        if (!playerLanded)
         {
-            Debug.Log("In Fall state!: " + myPlayer.playerMovement.getIsGrounded().current);
+            //Debug.Log("In Fall state!: " + myPlayer.playerMovement.getIsGrounded().old);
             return this;
-        }*/
-        //else
-        //{
-            Debug.Log("Should be in Idle state");
-            return myPlayer.idleState;
-        //}
+        }
+        // Idle
+        else
+        {
+            playerLanded = false;
+            //Debug.Log("Should be in Idle state");
+            return playerMachine.idleState;
+        }
+    }
+    
+    private void hasLanded() {
+        playerLanded = true;
     }
 }

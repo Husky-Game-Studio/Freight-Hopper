@@ -7,5 +7,7 @@ using UnityEngine;
 
 public interface BasicState
 {
-    BasicState DoState(PlayerMachineCenter myPlayer);
+    void subToListeners(PlayerMachineCenter playerMachine);
+    void unsubToListeners(PlayerMachineCenter playerMachine);
+    BasicState DoState(PlayerMachineCenter playerMachine);
 }

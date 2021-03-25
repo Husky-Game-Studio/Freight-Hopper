@@ -4,18 +4,44 @@ using UnityEngine;
 
 public class RunState : BasicState
 {
-    public BasicState DoState(PlayerMachineCenter myPlayer)
+    private bool jumpPressed = false;
+
+    public void subToListeners(PlayerMachineCenter playerMachine)
     {
-        if (myPlayer.userInput.Move() != Vector2.zero)
+        UserInput.Input.JumpInput += this.jumpButtonPressed;
+    }
+
+    public void unsubToListeners(PlayerMachineCenter playerMachine)
+    {
+        UserInput.Input.JumpInput -= this.jumpButtonPressed;
+    }
+
+    public BasicState DoState(PlayerMachineCenter playerMachine)
+    {
+        
+        // Jump
+        if (jumpPressed)
+        {
+            jumpPressed = false;
+            //Debug.Log("Should be in Jump state!");
+            return playerMachine.jumpState;
+        }
+
+        // Run
+        if (UserInput.Input.Move() != Vector2.zero)
         {
             //Debug.Log("in Run state!");
             return this;
         }
+        // Idle
         else
         {
             //Debug.Log("Should be in Idle state");
-            return myPlayer.idleState;
+            return playerMachine.idleState;
         }
     }
-
+    private void jumpButtonPressed()
+    {
+        jumpPressed = true;
+    }
 }

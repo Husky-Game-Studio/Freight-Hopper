@@ -4,17 +4,41 @@ using UnityEngine;
 
 public class JumpState : BasicState
 {
-    public BasicState DoState(PlayerMachineCenter myPlayer)
+    private bool releasedJumpPressed = false;
+
+    public void subToListeners(PlayerMachineCenter playerMachine)
     {
-        if (myPlayer.userInput.Jump())
+        UserInput.Input.JumpInputCanceled += this.releasedJumpButtonPressed;
+    }
+
+    public void unsubToListeners(PlayerMachineCenter playerMachine)
+    {
+        UserInput.Input.JumpInputCanceled -= this.releasedJumpButtonPressed;
+    }
+
+    public BasicState DoState(PlayerMachineCenter playerMachine)
+    {
+        
+        // Fall
+        if (releasedJumpPressed || !playerMachine.playerMovement.jumpBehavior.IsJumping)
         {
-            Debug.Log("In Jump state!");
-            return this;
+            
+            //Debug.Log("Should be in Fall state");
+            releasedJumpPressed = false;
+            
+            return playerMachine.fallState;
         }
+        // Jump
         else
         {
-            Debug.Log("Should be in Fall state");
-            return myPlayer.fallState;
+            //Debug.Log("In Jump state!");
+            
+            return this;
         }
+    }
+
+    private void releasedJumpButtonPressed()
+    {
+        releasedJumpPressed = true;
     }
 }
