@@ -6,17 +6,17 @@ public class FallState : BasicState
 {
     private bool playerLanded = false;
 
-    public void subToListeners(PlayerMachineCenter playerMachine)
+    public void SubToListeners(PlayerMachineCenter playerMachine)
     {
         // sub to Landed to trigger a function that returns a bool. and use that to pass or fail the if checks
-        playerMachine.collision.Landed += this.hasLanded;
+        playerMachine.collision.Landed += this.HasLanded;
     }
 
-    public void unsubToListeners(PlayerMachineCenter playerMachine) {
-        playerMachine.collision.Landed -= this.hasLanded;
+    public void UnsubToListeners(PlayerMachineCenter playerMachine) {
+        playerMachine.collision.Landed -= this.HasLanded;
     }
 
-    public BasicState DoState(PlayerMachineCenter playerMachine)
+    public BasicState TransitionState(PlayerMachineCenter playerMachine)
     {
         
 
@@ -34,8 +34,14 @@ public class FallState : BasicState
             return playerMachine.idleState;
         }
     }
-    
-    private void hasLanded() {
+
+    public void PerformBehavior(PlayerMachineCenter playerMachine)
+    {
+
+    }
+
+
+    private void HasLanded() {
         playerLanded = true;
     }
 }

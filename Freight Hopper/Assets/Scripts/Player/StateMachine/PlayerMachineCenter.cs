@@ -34,44 +34,36 @@ public class PlayerMachineCenter : MonoBehaviour
     {
         currentState = idleState;
         previousState = idleState;
-        currentState.subToListeners(this);
+        currentState.SubToListeners(this);
+        collision.CollisionDataCollected += LateFixedUpdate;
     }
 
-    private void Update()
+    void OnDisable()
     {
-        if (previousState != currentState) {
-            currentState.subToListeners(this);
-            previousState.unsubToListeners(this);
+        currentState.UnsubToListeners(this);
+        collision.CollisionDataCollected -= LateFixedUpdate;
+    }
+
+
+    private void LateFixedUpdate()
+    {
+        if (previousState != currentState)
+        {
+            currentState.SubToListeners(this);
+            previousState.UnsubToListeners(this);
             previousState = currentState;
         }
 
-        if (currentState != null && currentState != fallState)
+        if (currentState != null)
         {
-            currentState = currentState.DoState(this);
+            currentState = currentState.TransitionState(this);
             currentStateName = currentState.ToString();
 
             //previousState = currentState;
         }
-        else {
+        else
+        {
             Debug.Log("currentState is null");
-        }
-
-        
-    }
-
-    private void FixedUpdate()
-    {
-        /*if (previousState != currentState)
-        {
-            currentState.subToListeners();
-            previousState.unsubToListeners();
-            previousState = currentState;
-        }*/
-
-        if (currentState == fallState) {
-            currentState = currentState.DoState(this);
-            currentStateName = currentState.ToString();
-            //previousState = currentState;
         }
     }
 }

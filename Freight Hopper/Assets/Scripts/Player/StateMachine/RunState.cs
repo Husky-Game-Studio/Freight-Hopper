@@ -6,17 +6,17 @@ public class RunState : BasicState
 {
     private bool jumpPressed = false;
 
-    public void subToListeners(PlayerMachineCenter playerMachine)
+    public void SubToListeners(PlayerMachineCenter playerMachine)
     {
-        UserInput.Input.JumpInput += this.jumpButtonPressed;
+        UserInput.Input.JumpInput += this.JumpButtonPressed;
     }
 
-    public void unsubToListeners(PlayerMachineCenter playerMachine)
+    public void UnsubToListeners(PlayerMachineCenter playerMachine)
     {
-        UserInput.Input.JumpInput -= this.jumpButtonPressed;
+        UserInput.Input.JumpInput -= this.JumpButtonPressed;
     }
 
-    public BasicState DoState(PlayerMachineCenter playerMachine)
+    public BasicState TransitionState(PlayerMachineCenter playerMachine)
     {
         
         // Jump
@@ -40,7 +40,13 @@ public class RunState : BasicState
             return playerMachine.idleState;
         }
     }
-    private void jumpButtonPressed()
+
+    public void PerformBehavior(PlayerMachineCenter playerMachine)
+    {
+
+    }
+
+    private void JumpButtonPressed()
     {
         jumpPressed = true;
     }

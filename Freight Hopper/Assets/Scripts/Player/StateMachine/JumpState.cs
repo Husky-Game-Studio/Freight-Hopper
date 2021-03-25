@@ -6,17 +6,17 @@ public class JumpState : BasicState
 {
     private bool releasedJumpPressed = false;
 
-    public void subToListeners(PlayerMachineCenter playerMachine)
+    public void SubToListeners(PlayerMachineCenter playerMachine)
     {
-        UserInput.Input.JumpInputCanceled += this.releasedJumpButtonPressed;
+        UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
     }
 
-    public void unsubToListeners(PlayerMachineCenter playerMachine)
+    public void UnsubToListeners(PlayerMachineCenter playerMachine)
     {
-        UserInput.Input.JumpInputCanceled -= this.releasedJumpButtonPressed;
+        UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
     }
 
-    public BasicState DoState(PlayerMachineCenter playerMachine)
+    public BasicState TransitionState(PlayerMachineCenter playerMachine)
     {
         
         // Fall
@@ -37,7 +37,12 @@ public class JumpState : BasicState
         }
     }
 
-    private void releasedJumpButtonPressed()
+    public void PerformBehavior(PlayerMachineCenter playerMachine)
+    {
+
+    }
+
+    private void ReleasedJumpButtonPressed()
     {
         releasedJumpPressed = true;
     }
