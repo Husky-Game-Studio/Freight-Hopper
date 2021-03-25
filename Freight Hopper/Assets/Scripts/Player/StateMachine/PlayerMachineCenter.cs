@@ -56,6 +56,8 @@ public class PlayerMachineCenter : MonoBehaviour
 
         if (currentState != null)
         {
+            currentState.PerformBehavior(this);
+
             currentState = currentState.TransitionState(this);
             currentStateName = currentState.ToString();
 
