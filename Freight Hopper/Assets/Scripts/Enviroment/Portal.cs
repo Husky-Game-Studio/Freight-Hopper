@@ -5,7 +5,8 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     [SerializeField] private Portal otherPortal;
-    [SerializeField] private Vector3 exitPosition;
+
+    private HashSet<Rigidbody> teleportingObjects = new HashSet<Rigidbody>();
 
 #if UNITY_EDITOR
 
@@ -14,21 +15,58 @@ public class Portal : MonoBehaviour
         Gizmos.DrawRay(transform.position, transform.forward);
         UnityEditor.Handles.color = Color.yellow;
         UnityEditor.Handles.DrawDottedLine(this.transform.position, otherPortal.transform.position, 2);
-        UnityEditor.Handles.DrawWireCube(otherPortal.transform.position + otherPortal.transform.TransformDirection(exitPosition), Vector3.one * 0.25f);
+        UnityEditor.Handles.DrawWireCube(otherPortal.transform.position, Vector3.one * 0.25f);
     }
 
 #endif
 
-    private void OnTriggerEnter(UnityEngine.Collider collision)
+    public void AddTeleportingRigidbody(Rigidbody rb)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        teleportingObjects.Add(rb);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (teleportingObjects.Contains(other.attachedRigidbody))
         {
-            collision.transform.position = otherPortal.transform.position + otherPortal.transform.TransformDirection(exitPosition);
-            Vector3 reflectionNormal = (this.transform.forward + otherPortal.transform.forward);
-            reflectionNormal.Normalize();
-            Debug.DrawRay((this.transform.position - otherPortal.transform.position), reflectionNormal, Color.red);
-            Vector3 newVelocity = Vector3.Reflect(collision.attachedRigidbody.velocity, reflectionNormal);
-            collision.attachedRigidbody.velocity = newVelocity;
+            teleportingObjects.Remove(other.attachedRigidbody);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.attachedRigidbody != null)
+        {
+            if (other.GetComponent<CollisionManagement>() == null)
+            {
+                return;
+            }
+            if (teleportingObjects.Contains(other.attachedRigidbody))
+            {
+                return;
+            }
+
+            otherPortal.AddTeleportingRigidbody(other.attachedRigidbody);
+            Teleport(other);
+            RotateVelocity(other);
+        }
+    }
+
+    private void Teleport(Collider other)
+    {
+        other.transform.position = otherPortal.transform.position;
+    }
+
+    private void RotateVelocity(Collider other)
+    {
+        Vector3 velocity = Vector3.zero;
+        if (velocity == Vector3.zero)
+        {
+            velocity = other.GetComponent<CollisionManagement>().Velocity.old;
+        }
+
+        Vector3 reflectionNormal = (this.transform.forward + otherPortal.transform.forward).normalized;
+        Vector3 newVelocity = Vector3.Reflect(velocity, reflectionNormal);
+        other.attachedRigidbody.velocity = newVelocity;
     }
 }

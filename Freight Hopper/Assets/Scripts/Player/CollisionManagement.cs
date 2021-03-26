@@ -9,6 +9,7 @@ public class CollisionManagement : MonoBehaviour
 
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
+    [ReadOnly, SerializeField] private Var<Vector3> velocity;
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
     [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
@@ -17,6 +18,8 @@ public class CollisionManagement : MonoBehaviour
     public Vector3 ValidUpAxis => validUpAxis;
     public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
+
+    public Var<Vector3> Velocity => velocity;
 
     [SerializeField] private float maxSlope = 30;
 
@@ -125,6 +128,7 @@ public class CollisionManagement : MonoBehaviour
         isGrounded.UpdateOld();
         contactNormal.UpdateOld();
         rigidbodyLinker.UpdateOldValues();
+        velocity.UpdateOld();
     }
 
     private void ClearValues()
@@ -132,6 +136,7 @@ public class CollisionManagement : MonoBehaviour
         isGrounded.current = false;
         contactCount = 0;
         steepCount = 0;
+        velocity.current = rb.velocity;
 
         Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
         if (upAxis != Vector3.zero)
@@ -141,10 +146,4 @@ public class CollisionManagement : MonoBehaviour
         contactNormal.current = validUpAxis;
         rigidbodyLinker.ClearValues();
     }
-
-    // Gabe: player FSM needs to see if the player has collided with the ground
-    /*public bool getIsGroundedEvent()
-    {
-        if (Landed.get()) { return true; };
-    }*/
 }

@@ -51,4 +51,11 @@ public class FirstPersonCamera : MonoBehaviour
         player.LookAt(player.position + forward, upAxis);
         player.rotation *= mouseRotationHorizontal;
     }
+
+    public void RotateTo(Quaternion rotation)
+    {
+        Vector3 upAxis = player.GetComponent<CollisionManagement>().ValidUpAxis;
+        Vector3 forward = CollisionManagement.ProjectOnContactPlane(rotation * player.forward, upAxis).normalized;
+        player.LookAt(player.position + forward, upAxis);
+    }
 }
