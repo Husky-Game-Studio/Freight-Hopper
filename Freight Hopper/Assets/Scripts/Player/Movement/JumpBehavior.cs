@@ -5,7 +5,7 @@ public class JumpBehavior : MonoBehaviour
 {
     [SerializeField] private Timer jumpBuffer = new Timer(0.3f);
     [SerializeField] private Timer jumpHoldingPeriod = new Timer(0.5f);
-    [SerializeField] public Timer coyoteTime = new Timer(0.5f);
+    [SerializeField] private Timer coyoteTime = new Timer(0.5f);
     [SerializeField] private float minJumpHeight = 2f;
     [SerializeField] private float holdingJumpForceMultiplier = 5f;
 
@@ -15,8 +15,9 @@ public class JumpBehavior : MonoBehaviour
 
     public float JumpHeight => minJumpHeight;
     public bool CanJump => coyoteTime.TimerActive();
-
+    public bool JumpBufferActive => jumpBuffer.TimerActive();
     public bool IsJumping => jumpHoldingPeriod.TimerActive();
+
 
     public void Initialize(Rigidbody rb, CollisionManagement playerCollision, AudioSource jumpSound)
     {
@@ -27,35 +28,36 @@ public class JumpBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        UserInput.Input.JumpInput += TryJump;
+        UserInput.Input.JumpInput += jumpBuffer.ResetTimer;
         playerCollision.Landed += coyoteTime.ResetTimer;
-        playerCollision.CollisionDataCollected += Jumping;
     }
 
     private void OnDisable()
     {
-        //UserInput.Input.JumpInput -= TryJump;
+        UserInput.Input.JumpInput -= jumpBuffer.ResetTimer;
         playerCollision.Landed -= coyoteTime.ResetTimer;
-        playerCollision.CollisionDataCollected -= Jumping;
+    }
+
+    // If in fall state //
+    public void DecrementTimers()
+    {
+        coyoteTime.CountDownFixed();
+        jumpBuffer.CountDownFixed();
     }
 
     // Every LateFixedUpdate checks for jump buffering and if player is holding space
     public void Jumping()
     {
-        if (!playerCollision.IsGrounded.current)
-        {
-            coyoteTime.CountDownFixed();
-            jumpBuffer.CountDownFixed();
-            jumpHoldingPeriod.CountDownFixed();
-        }
-
+        // If landed state and jump buffer active //
         // Jump buffer jumping
         if (jumpBuffer.TimerActive() && playerCollision.IsGrounded.current)
         {
             Jump(minJumpHeight);
         }
 
-        // This lowers your gravity while you are holding space for the timer period while you are holding jump
+
+        // If in jumping state //
+        jumpHoldingPeriod.CountDownFixed();
         if (jumpHoldingPeriod.TimerActive() && !playerCollision.IsGrounded.current)
         {
             if (!UserInput.Input.Jump())
@@ -111,18 +113,11 @@ public class JumpBehavior : MonoBehaviour
     }
 
     // Jumps if conditions are correct
-    public void TryJump()
+    /*public void TryJump()
     {
-        jumpBuffer.ResetTimer();
         if (playerCollision.IsGrounded.current || coyoteTime.TimerActive())
         {
             Jump(minJumpHeight);
         }
-    }
-
-    // Gabe: need to see if player collides with ground
-    /*public bool getIsGroundedEvent()
-    {
-        return playerCollision.getIsGroundedEvent();
     }*/
 }

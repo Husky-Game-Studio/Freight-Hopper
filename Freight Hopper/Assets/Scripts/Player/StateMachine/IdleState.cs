@@ -17,6 +17,10 @@ public class IdleState : BasicState
     }
 
     public BasicState TransitionState(PlayerMachineCenter playerMachine) {
+
+        // if jumpbuffer timer is not expired, then jump
+
+
         // Jump
         if (jumpPressed)
         {
@@ -41,11 +45,19 @@ public class IdleState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
-
+        // reset coyotee timer, only decrements when in falling state
     }
 
     private void JumpButtonPressed()
     {
         jumpPressed = true;
     }
+
+    public bool HasSubStateMachine()
+    {
+        return false;
+    }
+
+    public BasicState GetCurrentSubState() { return null; }
+    public BasicState[] GetSubStateArray() { return null; }
 }

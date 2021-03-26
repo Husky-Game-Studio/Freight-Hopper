@@ -18,8 +18,13 @@ public class FallState : BasicState
 
     public BasicState TransitionState(PlayerMachineCenter playerMachine)
     {
-        
 
+        // if coyetee timer is not expired and the jump button was pressed-> then jump
+
+        // Jump
+        if (playerMachine.playerMovement.jumpBehavior.CanJump) {
+            return playerMachine.jumpState;
+        }
         // Fall
         if (!playerLanded)
         {
@@ -37,11 +42,25 @@ public class FallState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
+        playerMachine.playerMovement.jumpBehavior.DecrementTimers();
         playerMachine.playerMovement.movement.Movement();
     }
 
+    /*void PerformEntryBehavior(PlayerMachineCenter playerMachine) {
+    
+    }
+    void PerformExitBehavior(PlayerMachineCenter playerMachine) {
+    
+    }*/
 
     private void HasLanded() {
         playerLanded = true;
     }
+
+    public bool HasSubStateMachine() {
+        return false;
+    }
+
+    public BasicState GetCurrentSubState() { return null; }
+    public BasicState[] GetSubStateArray() { return null; }
 }

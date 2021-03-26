@@ -7,14 +7,13 @@ using UnityEngine;
 
 public interface BasicState
 {
-    void SubToListeners(PlayerMachineCenter playerMachine);
-    void UnsubToListeners(PlayerMachineCenter playerMachine);
-    BasicState TransitionState(PlayerMachineCenter playerMachine);
-    void PerformBehavior(PlayerMachineCenter playerMachine);
-
-
-    // Need an entry behavior
-
-    // Need an exit behavior
-
+    public void SubToListeners(PlayerMachineCenter playerMachine);
+    public void UnsubToListeners(PlayerMachineCenter playerMachine);
+    public BasicState TransitionState(PlayerMachineCenter playerMachine);
+    public void PerformBehavior(PlayerMachineCenter playerMachine);
+    //void PerformEntryBehavior(PlayerMachineCenter playerMachine);
+    //void PerformExitBehavior(PlayerMachineCenter playerMachine);
+    public bool HasSubStateMachine();
+    public BasicState GetCurrentSubState();
+    public BasicState[] GetSubStateArray();
 }

@@ -18,6 +18,8 @@ public class RunState : BasicState
 
     public BasicState TransitionState(PlayerMachineCenter playerMachine)
     {
+        // if jumpbuffer timer is not expired, then jump
+
         
         // Jump
         if (jumpPressed)
@@ -50,4 +52,11 @@ public class RunState : BasicState
     {
         jumpPressed = true;
     }
+
+    public bool HasSubStateMachine()
+    {
+        return false;
+    }
+    public BasicState GetCurrentSubState() { return null; }
+    public BasicState[] GetSubStateArray() { return null; }
 }

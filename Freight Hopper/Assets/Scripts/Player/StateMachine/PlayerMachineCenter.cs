@@ -7,21 +7,28 @@ using UnityEngine;
 
 public class PlayerMachineCenter : MonoBehaviour
 {
-    [SerializeField]
-    private string currentStateName;
+    [SerializeField] private string currentStateName;
     private BasicState previousState;
     private BasicState currentState;
+    [SerializeField] private string currentSubStateName;
+    private BasicState currentSubState;
+    private bool jumpPressed = false;
 
     // Player States
     public IdleState idleState = new IdleState();
     public RunState runState = new RunState();
-    public JumpState jumpState = new JumpState();
+    public JumpState jumpState;
     public FallState fallState = new FallState();
 
     // Input Components
     //public UserInput userInput;
     [HideInInspector] public PlayerMovement playerMovement;
     [HideInInspector] public CollisionManagement collision;
+
+    public PlayerMachineCenter()
+    {
+        jumpState = new JumpState(this);
+    }
 
     private void OnValidate()
     {
@@ -36,17 +43,24 @@ public class PlayerMachineCenter : MonoBehaviour
         previousState = idleState;
         currentState.SubToListeners(this);
         collision.CollisionDataCollected += LateFixedUpdate;
+
+        //UserInput.Input.JumpInput += this.JumpButtonPressed;
     }
 
     void OnDisable()
     {
         currentState.UnsubToListeners(this);
         collision.CollisionDataCollected -= LateFixedUpdate;
+
+        //UserInput.Input.JumpInput -= this.JumpButtonPressed;
     }
 
 
     private void LateFixedUpdate()
     {
+        //if the jump button is pressed, then reset jump buffer timer
+
+        // If current state is a new transisiton, unsub from old listeners, and sub to new ones
         if (previousState != currentState)
         {
             currentState.SubToListeners(this);
@@ -54,31 +68,30 @@ public class PlayerMachineCenter : MonoBehaviour
             previousState = currentState;
         }
 
-        if (currentState != null)
-        {
-            // entry behavior
+        // Perform state behavior
+        currentState.PerformBehavior(this);
 
+        // check if the state needs to transition, and return the state it should belong in
+        currentState = currentState.TransitionState(this);
 
-            currentState.PerformBehavior(this);
-
-
-
-            currentState = currentState.TransitionState(this);
-
-            if (previousState != currentState) { // if the current state changed
-            // run old state exit behavior
-            // run current state entry behavior
-            }
-
-            // exit behavior
-
-            currentStateName = currentState.ToString();
-
-            //previousState = currentState;
+        // Debugging
+        currentStateName = currentState.ToString();
+        if (!currentState.HasSubStateMachine()) {
+            currentSubStateName = "No Sub States";
         }
         else
         {
-            Debug.Log("currentState is null");
+            currentSubState = currentState.GetCurrentSubState();
+            currentSubStateName = currentSubState.ToString();
         }
     }
+
+    public BasicState GetCurrentState() {
+        return this.currentState;
+    }
+
+    /*private void JumpButtonPressed()
+    {
+        jumpPressed = true;
+    }*/
 }
