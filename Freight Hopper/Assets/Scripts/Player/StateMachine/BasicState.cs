@@ -11,8 +11,6 @@ public interface BasicState
     public void UnsubToListeners(PlayerMachineCenter playerMachine);
     public BasicState TransitionState(PlayerMachineCenter playerMachine);
     public void PerformBehavior(PlayerMachineCenter playerMachine);
-    //void PerformEntryBehavior(PlayerMachineCenter playerMachine);
-    //void PerformExitBehavior(PlayerMachineCenter playerMachine);
     public bool HasSubStateMachine();
     public BasicState GetCurrentSubState();
     public BasicState[] GetSubStateArray();
