@@ -54,12 +54,12 @@ public class Road
         if (AllSettingsExist())
         {
             int pointsPerSegment = segmentPoints.Length;
-            Vector3[] vers = new Vector3[pointsPerSegment * detail * path.NumAnchors];
-            Vector2[] uvs = new Vector2[pointsPerSegment * detail * path.NumAnchors];
-            int[] tris = new int[3 * segmentConnections.Length * detail * path.NumSegments];
+            Vector3[] vers = new Vector3[pointsPerSegment * (detail * path.NumSegments + 1)];
+            Vector2[] uvs = new Vector2[pointsPerSegment * (detail * path.NumSegments + 1)];
+            int[] tris = new int[(3 * segmentConnections.Length) * (detail * path.NumSegments)];
 
             float cummulativeDistance = 0;
-            for (int i = 0; i <= detail * path.NumSegments; i++)
+            for (int i = 0; i < detail * path.NumSegments + 1; i++)
             {
                 if (i > 0)
                 {
@@ -72,8 +72,19 @@ public class Road
             }
             for (int i = 0; i < detail * path.NumSegments; i++)
             {
-                SegmentTris(i).CopyTo(tris, pointsPerSegment * i);
+                SegmentTris(i).CopyTo(tris, (3 * segmentConnections.Length) * i);
+                /*
+                int[] theTris = SegmentTris(i);
+                Debug.Log("Segment " + i);
+                for (int j = 0; j < theTris.Length / 3; j++)
+                {
+                    Debug.Log("1st: " + theTris[3 * j]);
+                    Debug.Log("2nd: " + theTris[3 * j + 1]);
+                    Debug.Log("3rd: " + theTris[3 * j + 2]);
+                }
+                */
             }
+
 
             Mesh mesh = new Mesh();
             mesh.vertices = vers;
@@ -89,14 +100,33 @@ public class Road
         }
     }
 
+    private Vector3 GetPathDirection(int i)
+    {
+        if (0 < i && i < detail * path.NumSegments)
+            return (roadPoints[i + 1] - roadPoints[i - 1]).normalized;
+        else if (0 == i)
+            return (roadPoints[i + 1] - roadPoints[i]).normalized;
+        else
+            return (roadPoints[i] - roadPoints[i - 1]).normalized;
+    }
+
     private Vector3[] SegmentVertices(Vector3 position, Vector3 direction)
     {
         Vector3[] vertices = new Vector3[segmentPoints.Length];
         for(int i = 0; i < segmentPoints.Length; i++)
         {
-            vertices[i] = (Quaternion.LookRotation(segmentPoints[i] - position) * Quaternion.LookRotation(direction)) * Vector3.forward;
+            vertices[i] = position + RotateVector(segmentPoints[i], direction);
         }
         return vertices;
+    }
+
+    //TODO Create a version that rotates with respect to an "up axis"
+    private Vector3 RotateVector(Vector3 displacement, Vector3 direction)
+    {
+        Vector3 projection = Vector3.ProjectOnPlane(displacement, Quaternion.LookRotation(direction) * Vector3.up);
+        Vector3 projectionDisplacement = displacement - projection;
+        Vector3 newProjection = Quaternion.LookRotation(projection) * Quaternion.LookRotation(direction) * Vector3.forward * projection.magnitude;
+        return newProjection + projectionDisplacement;
     }
 
     private Vector2[] SegmentUVs(float cummulativeDistance)
@@ -128,15 +158,7 @@ public class Road
         return tris;
     }
 
-    private Vector3 GetPathDirection(int i)
-    {
-        if (0 < i && i < detail * path.NumSegments)
-            return (roadPoints[i + 1] - roadPoints[i - 1]).normalized;
-        else if (0 == i)
-            return (roadPoints[i + 1] - roadPoints[i - 0]).normalized;
-        else
-            return (roadPoints[i] - roadPoints[i - 1]).normalized;
-    }
+    
 
     
 }
