@@ -10,6 +10,6 @@ public class PathCreator : MonoBehaviour
 
     public void CreatePath()
     {
-        path = new BezierPath(transform.position);
+        path = new BezierPath();
     }
 }
