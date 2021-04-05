@@ -9,6 +9,8 @@ public class IdleState : BasicState
     public void SubToListeners(PlayerMachineCenter playerMachine)
     {
         UserInput.Input.JumpInput += this.JumpButtonPressed;
+
+        playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
     public void UnsubToListeners(PlayerMachineCenter playerMachine)
@@ -22,7 +24,7 @@ public class IdleState : BasicState
 
 
         // Jump
-        if (jumpPressed)
+        if (jumpPressed || playerMachine.jumpBufferTimer.TimerActive())
         {
             jumpPressed = false;
             //Debug.Log("Should be in Jump state!");

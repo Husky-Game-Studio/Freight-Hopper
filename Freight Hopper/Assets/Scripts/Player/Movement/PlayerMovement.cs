@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
         movement.Initialize(rb, playerCollision, Camera.main.transform);
         doubleJump.Initialize(playerCollision, jumpBehavior);
-        jumpBehavior.Initialize(rb, playerCollision, GetComponent<AudioSource>());
+        jumpBehavior.Initialize(rb, playerCollision);
         groundPound.Initalize(rb, playerCollision);
 
         fullstop.Initialize(rb, playerCollision);

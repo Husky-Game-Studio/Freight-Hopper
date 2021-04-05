@@ -66,4 +66,10 @@ public class SubStateMachineCenter
     {
         return this.currentState;
     }
+
+    public void setPrevCurrState(BasicState subState)
+    {
+        currentState = subState;
+        previousState = subState;
+    }
 }

@@ -396,6 +396,9 @@ MonoBehaviour:
   contactNormal:
     old: {x: 0, y: 0, z: 0}
     current: {x: 0, y: 0, z: 0}
+  velocity:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
   contactCount: 0
   steepCount: 0
   rigidbodyLinker:
@@ -425,8 +428,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStateName: 
-  userInput: {fileID: 6851446874579196117}
+  currentSubStateName: 
   playerMovement: {fileID: 4493642203787552936}
+  collision: {fileID: 4493642203787552937}
 --- !u!114 &6851446874351635506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1274,7 +1278,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 5, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1798020240}

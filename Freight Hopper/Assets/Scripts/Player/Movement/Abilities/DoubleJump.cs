@@ -20,39 +20,39 @@ public class DoubleJump : MonoBehaviour
 
     private void OnEnable()
     {
-        UserInput.Input.JumpInput += TryDoubleJump;
-        playerCollision.Landed += Landed;
-        playerCollision.CollisionDataCollected += JumpLetGo;
+        //UserInput.Input.JumpInput += TryDoubleJump;
+        //playerCollision.Landed += Landed;
+        //playerCollision.CollisionDataCollected += JumpLetGo;
     }
 
     private void OnDisable()
     {
-        UserInput.Input.JumpInput -= TryDoubleJump;
-        playerCollision.Landed -= Landed;
-        playerCollision.CollisionDataCollected -= JumpLetGo;
+        //UserInput.Input.JumpInput -= TryDoubleJump;
+        //playerCollision.Landed -= Landed;
+        //playerCollision.CollisionDataCollected -= JumpLetGo;
     }
 
     public void Landed()
     {
-        doubleJumpReady = true;
-        jumpInputLetGo = false;
+        //doubleJumpReady = true;
+        //jumpInputLetGo = false;
     }
 
     public void JumpLetGo()
     {
-        if (!playerCollision.IsGrounded.current && doubleJumpReady && !jumpBehavior.CanJump)
-        {
-            jumpInputLetGo = true;
-        }
+        //if (!playerCollision.IsGrounded.current && doubleJumpReady /*&& !jumpBehavior.CanJump*/)
+        //{
+        //    jumpInputLetGo = true;
+        //}
     }
 
     public void TryDoubleJump()
     {
-        if (!playerCollision.IsGrounded.current && doubleJumpReady && !jumpBehavior.CanJump && jumpInputLetGo)
-        {
-            jumpInputLetGo = false;
-            doubleJumpReady = false;
-            jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
-        }
+        //if (!playerCollision.IsGrounded.current && doubleJumpReady /*&& !jumpBehavior.CanJump*/ && jumpInputLetGo)
+        //{
+        //    jumpInputLetGo = false;
+        //    doubleJumpReady = false;
+        //    jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
+        //}
     }
 }

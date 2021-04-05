@@ -23,8 +23,10 @@ public class JumpHoldState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
+        playerMachine.jumpHoldingTimer.CountDownFixed();
         playerMachine.playerMovement.movement.Movement();
-        playerMachine.playerMovement.jumpBehavior.Jumping();
+        playerMachine.playerMovement.jumpBehavior.holdingJumpBehavior();
+        Debug.Log("In JumpHoldState at: " + Time.time);
     }
 
     /*private void ReleasedJumpButtonPressed()
