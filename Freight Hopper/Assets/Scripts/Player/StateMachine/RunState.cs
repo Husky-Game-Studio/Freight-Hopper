@@ -28,7 +28,10 @@ public class RunState : BasicState
             //Debug.Log("Should be in Jump state!");
             return playerMachine.jumpState;
         }
-
+        // Fall
+        if (!playerMachine.collision.IsGrounded.current) {
+            return playerMachine.fallState;
+        }
         // Run
         if (UserInput.Input.Move() != Vector2.zero)
         {

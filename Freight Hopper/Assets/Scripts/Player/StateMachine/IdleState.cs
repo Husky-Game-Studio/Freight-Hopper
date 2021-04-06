@@ -30,6 +30,12 @@ public class IdleState : BasicState
             //Debug.Log("Should be in Jump state!");
             return playerMachine.jumpState;
         }
+        // Fall
+        if (!playerMachine.collision.IsGrounded.current)
+        {
+            return playerMachine.fallState;
+        }
+
 
         // if the <INSERT ABILITY> button was pressed, then go to <INSERT ABILITY> state (return myPlayer.<INSERT ABILITY>State)
 
