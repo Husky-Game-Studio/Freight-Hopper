@@ -106,8 +106,11 @@ public class PlayerMachineCenter : MonoBehaviour
         } else
         {
             jumpPressed = false;
+            jumpBufferTimer.DeactivateTimer();
         }
-        jumpBufferTimer.CountDownFixed();
+        if (jumpBufferTimer.TimerActive()) {
+            jumpBufferTimer.CountDownFixed();
+        }
     }
 
     public BasicState GetCurrentState() {

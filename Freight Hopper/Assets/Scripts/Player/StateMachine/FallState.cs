@@ -13,12 +13,20 @@ public class FallState : BasicState
         playerMachine.collision.Landed += this.HasLanded;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
 
-        playerMachine.coyoteeTimer.ResetTimer();
+        if (playerMachine.getPrevState() != playerMachine.jumpState)
+        {
+            playerMachine.coyoteeTimer.ResetTimer();
+        }
+        else {
+            playerMachine.coyoteeTimer.DeactivateTimer();
+        }
     }
 
     public void UnsubToListeners(PlayerMachineCenter playerMachine) {
         playerMachine.collision.Landed -= this.HasLanded;
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
+
+        playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
     public BasicState TransitionState(PlayerMachineCenter playerMachine)
@@ -29,8 +37,10 @@ public class FallState : BasicState
         // Jump
         //  THERE IS A BUG HERE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (jumpPressed && playerMachine.coyoteeTimer.TimerActive() && playerMachine.getPrevState() != playerMachine.jumpState) {
-            //return playerMachine.jumpState;
+            jumpPressed = false;
+            return playerMachine.jumpState;
         }
+        jumpPressed = false;
         // Fall
         if (!playerLanded)
         {
@@ -48,7 +58,9 @@ public class FallState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
-        playerMachine.coyoteeTimer.CountDown();
+        if (playerMachine.getPrevState() != playerMachine.jumpState) {
+            playerMachine.coyoteeTimer.CountDown();
+        }
 
         playerMachine.playerMovement.movement.Movement();
     }
