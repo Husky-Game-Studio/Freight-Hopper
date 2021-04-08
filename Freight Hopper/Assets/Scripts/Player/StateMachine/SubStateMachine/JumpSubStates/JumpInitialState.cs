@@ -27,7 +27,7 @@ public class JumpInitialState : BasicState
     {
         playerMachine.playerMovement.movement.Movement();
         playerMachine.playerMovement.jumpBehavior.Jump(playerMachine.playerMovement.jumpBehavior.JumpHeight);
-        Debug.Log("In JumpInitialState at: " + Time.time);
+        //Debug.Log("In JumpInitialState at: " + Time.time);
     }
 
     /*private void ReleasedJumpButtonPressed()

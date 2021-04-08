@@ -19,28 +19,24 @@ public class IdleState : BasicState
     }
 
     public BasicState TransitionState(PlayerMachineCenter playerMachine) {
-
-        // if jumpbuffer timer is not expired, then jump
-
-
         // Jump
         if (jumpPressed || playerMachine.jumpBufferTimer.TimerActive())
         {
             jumpPressed = false;
-            //Debug.Log("Should be in Jump state!");
             return playerMachine.jumpState;
         }
-
-        // if the <INSERT ABILITY> button was pressed, then go to <INSERT ABILITY> state (return myPlayer.<INSERT ABILITY>State)
-
-        // if the run buttons was pressed, then go to run state (return myPlayer.runState)
+        // Fall
+        if (!playerMachine.collision.IsGrounded.current) {
+            return playerMachine.fallState;
+        }
+        // Run
         if (UserInput.Input.Move() != Vector2.zero)
         {
-            //Debug.Log("Should be in Run state!");
             return playerMachine.runState;
         }
-        else {
-            //Debug.Log("In Idle state");
+        // Idle
+        else 
+        {
             return this;
         }
     }
