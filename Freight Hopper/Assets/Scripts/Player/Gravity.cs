@@ -4,28 +4,28 @@ using UnityEngine;
 public class Gravity : MonoBehaviour
 {
     private Rigidbody rb;
-    private CollisionManagement collid;
+    private CollisionManagement collision;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
-        collid = GetComponent<CollisionManagement>();
+        collision = GetComponent<CollisionManagement>();
     }
 
     public void OnEnable()
     {
-        collid.CollisionDataCollected += ApplyGravity;
+        collision.CollisionDataCollected += ApplyGravity;
     }
 
     public void OnDisable()
     {
-        collid.CollisionDataCollected -= ApplyGravity;
+        collision.CollisionDataCollected -= ApplyGravity;
     }
 
     private void ApplyGravity()
     {
-        if (collid.IsGrounded.current)
+        if (collision.IsGrounded.current)
         {
             return;
         }

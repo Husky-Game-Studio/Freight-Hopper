@@ -102,6 +102,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1434231962263806617, guid: 18a9419ab1b64164fa2d098ca2c01da6, type: 3}
   m_PrefabInstance: {fileID: 5488309830902598482}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6903190195236317647 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1434231962263806621, guid: 18a9419ab1b64164fa2d098ca2c01da6, type: 3}
+  m_PrefabInstance: {fileID: 5488309830902598482}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af39d1020b6aa6498cf7108bb47732d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7717652026332755786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -157,14 +168,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1434231962263806620, guid: 18a9419ab1b64164fa2d098ca2c01da6, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: -6347765598793275104, guid: 23ab0f246ddf73a46b0a50c511296e79, type: 3}
     - target: {fileID: 1434231962263806621, guid: 18a9419ab1b64164fa2d098ca2c01da6, type: 3}
       propertyPath: otherPortal
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6903190195236317647}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18a9419ab1b64164fa2d098ca2c01da6, type: 3}
 --- !u!4 &8718390527514236371 stripped

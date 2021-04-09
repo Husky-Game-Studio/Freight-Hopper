@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3166660194925301172}
   - component: {fileID: 3166660194925301174}
-  - component: {fileID: 3166660194925301175}
+  - component: {fileID: -5733940754091195993}
   m_Layer: 0
   m_Name: Gravity Sphere
   m_TagString: landable
@@ -127,7 +127,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3166660194925301175
+--- !u!114 &-5733940754091195993
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,7 +140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 25
-  outerRadius: 10
-  outerFalloffRadius: 15
-  innerRadius: 0
-  innerFalloffRadius: 0
+  priority: 0
+  radius: 55
+  falloffRadius:
+    enabled: 0
+    value: 55

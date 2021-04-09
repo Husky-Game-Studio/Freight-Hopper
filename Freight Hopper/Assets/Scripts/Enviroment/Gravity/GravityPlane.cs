@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class GravityPlane : GravitySource
 {
-    [SerializeField] private float gravity = 25f;
     [SerializeField] private Quaternion gravityDirection;
     [SerializeField] private Vector3 centerOffset = Vector3.zero;
-    [SerializeField, Min(0)] private float falloffRange = 1;
+    [SerializeField] private Optional<float> falloffRange = new Optional<float>(1);
 
+    // Draws squares representing an infinite plane. Anything below this is applied for the gravity
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -18,10 +18,10 @@ public class GravityPlane : GravitySource
         Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, scale);
         Vector3 size = new Vector3(2, 0, 2);
         Gizmos.DrawWireCube(centerOffset, size);
-        if (falloffRange > 0)
+        if (falloffRange.Enabled && falloffRange.value > 0)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube((Vector3.up * falloffRange) + centerOffset, size);
+            Gizmos.DrawWireCube((Vector3.up * falloffRange.value) + centerOffset, size);
         }
     }
 
@@ -33,15 +33,15 @@ public class GravityPlane : GravitySource
     {
         Vector3 up = (gravityDirection * transform.up).normalized;
         float distance = Vector3.Dot(up, position - (transform.position + centerOffset));
-        if (distance > falloffRange)
+        if (distance > falloffRange.value)
         {
             return Vector3.zero;
         }
 
         float falloffGravity = -gravity;
-        if (distance > 0)
+        if (falloffRange.Enabled && distance > 0 && falloffRange.value > 0)
         {
-            falloffGravity *= 1 - distance / falloffRange;
+            falloffGravity *= 1 - distance / falloffRange.value;
         }
 
         return falloffGravity * up;

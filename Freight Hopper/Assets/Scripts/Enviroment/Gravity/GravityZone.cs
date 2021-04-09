@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GravityZone : GravitySource
 {
-    [SerializeField] private float gravity = 25f;
     [SerializeField] private Quaternion gravityDirection;
     [SerializeField] private Vector3 centerOffset = Vector3.zero;
     [SerializeField] private Vector3 zone = Vector3.one;

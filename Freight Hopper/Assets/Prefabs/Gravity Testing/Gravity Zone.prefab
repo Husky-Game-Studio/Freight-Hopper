@@ -45,10 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 25
+  priority: 0
   gravityDirection: {x: 0, y: 0, z: 0, w: 0}
   centerOffset: {x: 0, y: 4, z: 0}
   zone: {x: 1, y: 4, z: 1}
-  falloffZone: {x: 1, y: 4, z: 1}
 --- !u!1 &8590676992001403462
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6309585165426643711, guid: 7298ef6209731394f8f2bc08f7b19ff4, type: 3}
+  - {fileID: 1770134382824984136, guid: aa0127b3c40f30a4dbb27f637101a14d, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

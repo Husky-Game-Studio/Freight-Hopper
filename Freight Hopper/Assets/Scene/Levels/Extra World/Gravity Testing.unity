@@ -135,6 +135,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 213751511}
     m_Modifications:
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.value
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3166660194925301172, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -195,26 +203,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Sphere (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: radius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: gravity
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerRadius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: falloffRadius
-      value: 110
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerFalloffRadius
-      value: 150
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
 --- !u!4 &167094530 stripped
@@ -246,7 +234,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 213751510}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -42.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 297958213}
@@ -325,6 +313,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Zone (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8776809484347349698, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1770134382824984136, guid: aa0127b3c40f30a4dbb27f637101a14d, type: 3}
     - target: {fileID: 9183062386706698669, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
       propertyPath: zone.y
       value: 10
@@ -464,6 +456,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Plane
       objectReference: {fileID: 0}
+    - target: {fileID: 8776809484347349698, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1770134382824984136, guid: aa0127b3c40f30a4dbb27f637101a14d, type: 3}
     - target: {fileID: 9183062386706698669, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
       propertyPath: zone.y
       value: 10
@@ -490,6 +486,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 213751511}
     m_Modifications:
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.value
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3166660194925301172, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -550,26 +554,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Sphere (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: radius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: gravity
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerRadius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: falloffRadius
-      value: 110
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerFalloffRadius
-      value: 150
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
 --- !u!4 &740561598 stripped
@@ -584,6 +568,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 213751511}
     m_Modifications:
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: priority
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.value
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3166660194925301172, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -644,26 +640,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Sphere (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: radius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: gravity
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerRadius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: falloffRadius
-      value: 110
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerFalloffRadius
-      value: 150
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
 --- !u!1 &964241305 stripped
@@ -689,9 +665,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 25
+  priority: 0
   gravityDirection: {x: 0, y: 0, z: 0, w: 1}
   centerOffset: {x: 0, y: 10, z: 0}
-  falloffRange: 10
+  falloffRange:
+    enabled: 0
+    value: 1
 --- !u!1001 &990718465
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -755,6 +734,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Zone (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8776809484347349698, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1770134382824984136, guid: aa0127b3c40f30a4dbb27f637101a14d, type: 3}
     - target: {fileID: 9183062386706698669, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
       propertyPath: zone.y
       value: 10
@@ -1049,6 +1032,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 1
+  priority: 0
 --- !u!4 &1402900919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3166660194925301172, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
@@ -1117,6 +1101,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Zone (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8776809484347349698, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1770134382824984136, guid: aa0127b3c40f30a4dbb27f637101a14d, type: 3}
     - target: {fileID: 9183062386706698669, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
       propertyPath: zone.y
       value: 10
@@ -1677,6 +1665,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravity Zone (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8776809484347349698, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1770134382824984136, guid: aa0127b3c40f30a4dbb27f637101a14d, type: 3}
     - target: {fileID: 9183062386706698669, guid: 9d26301d65e6c9f40b383543519f7aca, type: 3}
       propertyPath: zone.y
       value: 10
@@ -1702,6 +1694,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 213751511}
     m_Modifications:
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: radius
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.value
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -5733940754091195993, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
+      propertyPath: falloffRadius.enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3166660194925301172, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1761,26 +1769,6 @@ PrefabInstance:
     - target: {fileID: 3166660194925301173, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
       propertyPath: m_Name
       value: Gravity Sphere
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: radius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: gravity
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerRadius
-      value: 55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: falloffRadius
-      value: 150
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166660194925301175, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}
-      propertyPath: outerFalloffRadius
-      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24d4e292cc4168e45ab9a73ce5d0dda6, type: 3}

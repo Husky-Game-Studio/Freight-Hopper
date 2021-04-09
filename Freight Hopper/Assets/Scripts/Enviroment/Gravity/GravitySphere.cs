@@ -1,25 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GravitySphere : GravitySource
 {
-    [SerializeField] private float gravity = 25f;
     [SerializeField, Min(0)] private float radius = 10;
-    [SerializeField, Min(0)] private float falloffRadius = 15;
+    [SerializeField] private Optional<float> falloffRadius = new Optional<float>(15);
 
     private float falloffFactor;
 
+    // Generates sphere gizmos. One for radius and one for falloff
     private void OnDrawGizmosSelected()
     {
         Vector3 position = transform.position;
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(position, radius);
-        if (falloffRadius > radius)
+        if (falloffRadius.Enabled && falloffRadius.value > radius)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(position, falloffRadius);
+            Gizmos.DrawWireSphere(position, falloffRadius.value);
         }
     }
 
@@ -30,9 +28,16 @@ public class GravitySphere : GravitySource
 
     private void OnValidate()
     {
-        falloffRadius = Mathf.Max(falloffRadius, radius);
+        if (falloffRadius.Enabled)
+        {
+            falloffRadius.value = Mathf.Max(falloffRadius.value, radius);
 
-        falloffFactor = 1 / (falloffRadius - radius);
+            falloffFactor = 1 / (falloffRadius.value - radius);
+        }
+        else
+        {
+            falloffRadius.value = radius;
+        }
     }
 
     /// <summary>
@@ -43,17 +48,25 @@ public class GravitySphere : GravitySource
         Vector3 posDifference = transform.position - position;
 
         float distance = posDifference.magnitude;
-        if (distance > falloffRadius)
+        if (distance > falloffRadius.value)
         {
             return Vector3.zero;
         }
 
-        float g = gravity / distance;
-        if (distance > radius)
+        // This shouldn't happen, but if it does at least the game is still running
+        if (distance == 0)
         {
-            g *= 1 - (distance - radius) * falloffFactor;
+            Debug.LogError("Distance from gravity sphere is 0 causing divide by 0 excpetion");
+            return gravity * posDifference;
         }
 
-        return g * posDifference;
+        float falloffGravity = gravity / distance;
+
+        if (falloffRadius.Enabled && distance > radius)
+        {
+            falloffGravity *= 1 - (distance - radius) * falloffFactor;
+        }
+
+        return falloffGravity * posDifference;
     }
 }

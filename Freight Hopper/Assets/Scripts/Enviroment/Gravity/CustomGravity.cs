@@ -11,9 +11,23 @@ public static class CustomGravity
     public static Vector3 GetGravity(Vector3 position)
     {
         Vector3 gravity = Vector3.zero;
+        int highestPriority = int.MinValue;
         foreach (GravitySource source in sources)
         {
-            gravity += source.GetGravity(position);
+            Vector3 sourceGravity = source.GetGravity(position);
+            if (sourceGravity == Vector3.zero)
+            {
+                continue;
+            }
+            if (source.GetPriority > highestPriority)
+            {
+                gravity = Vector3.zero;
+                highestPriority = source.GetPriority;
+            }
+            if (source.GetPriority == highestPriority)
+            {
+                gravity += source.GetGravity(position);
+            }
         }
         return gravity;
     }
@@ -24,11 +38,7 @@ public static class CustomGravity
     /// </summary>
     public static Vector3 GetGravity(Vector3 position, out Vector3 upAxis)
     {
-        Vector3 gravity = Vector3.zero;
-        foreach (GravitySource source in sources)
-        {
-            gravity += source.GetGravity(position);
-        }
+        Vector3 gravity = GetGravity(position);
         upAxis = -gravity.normalized;
         return gravity;
     }
@@ -38,12 +48,7 @@ public static class CustomGravity
     /// </summary>
     public static Vector3 GetUpAxis(Vector3 position)
     {
-        Vector3 gravity = Vector3.zero;
-        foreach (GravitySource source in sources)
-        {
-            gravity += source.GetGravity(position);
-        }
-        return -gravity.normalized;
+        return -GetGravity(position).normalized;
     }
 
     /// <summary>

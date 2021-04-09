@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class GravityUniversal : GravitySource
 {
-    [SerializeField] private float gravity = 25f;
-
     /// <summary>
     /// Ignores position, just applies gravity with given -transform.up. Great for most levels
     /// </summary>
