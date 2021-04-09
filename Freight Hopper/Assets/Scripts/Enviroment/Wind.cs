@@ -9,7 +9,7 @@ public class Wind : MonoBehaviour
     [SerializeField] private Vector3 size;
 
     [SerializeField, Range(0.4f, 0.9f)] private float width = 1;
-    [SerializeField] private Dictionary<Rigidbody, List<Vector3>> affectedBodies = new Dictionary<Rigidbody, List<Vector3>>();
+    [SerializeField] private Dictionary<Rigidbody, List<Ray>> affectedBodies = new Dictionary<Rigidbody, List<Ray>>();
     [SerializeField] private LayerMask layers;
 
     private void OnDrawGizmosSelected()
@@ -37,11 +37,11 @@ public class Wind : MonoBehaviour
         while (true)
         {
             yield return new WaitForSecondsRealtime(1 / (float)frequency);
-            FindRigidbodies();
+            FindRigidbodies(size, this.transform);
         }
     }
 
-    private void FindRigidbodies()
+    private void FindRigidbodies(Vector3 windSize, Transform source)
     {
         foreach (Rigidbody rb in affectedBodies.Keys)
         {
@@ -49,22 +49,44 @@ public class Wind : MonoBehaviour
         }
 
         RaycastHit hit;
-        for (float x = -size.x / 2; x <= size.x / 2; x += width)
+        Vector3 direction = source.transform.forward;
+        for (float x = -windSize.x / 2; x <= windSize.x / 2; x += width)
         {
-            for (float y = -size.y / 2; y <= size.y / 2; y += width)
+            for (float y = -windSize.y / 2; y <= windSize.y / 2; y += width)
             {
-                Vector3 position = transform.TransformPoint(new Vector3(x, y, 0));
+                Vector3 position = source.transform.TransformPoint(new Vector3(x, y, 0));
+                Ray ray = new Ray(position, direction);
+                SendRay(ref ray, out hit, windSize.z);
+            }
+        }
+    }
 
-                if (Physics.Raycast(position, transform.forward, out hit, size.z, layers))
+    private void SendRay(ref Ray ray, out RaycastHit hit, float distance)
+    {
+        if (Physics.Raycast(ray, out hit, distance, layers))
+        {
+            if (hit.collider.isTrigger)
+            {
+                Portal portal = hit.collider.gameObject.GetComponent<Portal>();
+                if (portal != null)
                 {
-                    if (hit.collider.attachedRigidbody != null)
+                    float distanceLeft = distance - Vector3.Distance(hit.point, ray.origin);
+                    portal.TeleportRay(ref ray, hit.point);
+                    SendRay(ref ray, out hit, distanceLeft);
+
+                    //Debug.DrawRay(ray.origin, ray.direction * distanceLeft, Color.blue);
+                }
+            }
+            else
+            {
+                if (hit.collider.attachedRigidbody != null)
+                {
+                    if (!affectedBodies.ContainsKey(hit.collider.attachedRigidbody))
                     {
-                        if (!affectedBodies.ContainsKey(hit.collider.attachedRigidbody))
-                        {
-                            affectedBodies.Add(hit.collider.attachedRigidbody, new List<Vector3>());
-                        }
-                        affectedBodies[hit.collider.attachedRigidbody].Add(hit.point);
+                        affectedBodies.Add(hit.collider.attachedRigidbody, new List<Ray>());
                     }
+                    affectedBodies[hit.collider.attachedRigidbody].Add(new Ray(hit.point, ray.direction));
+                    //Debug.Log("Hitting " + hit.transform.name);
                 }
             }
         }
@@ -74,9 +96,9 @@ public class Wind : MonoBehaviour
     {
         foreach (Rigidbody rb in affectedBodies.Keys)
         {
-            foreach (Vector3 position in affectedBodies[rb])
+            foreach (Ray ray in affectedBodies[rb])
             {
-                rb.AddForceAtPosition(transform.forward * forcePerPosition, position, ForceMode.Force);
+                rb.AddForceAtPosition(ray.direction * forcePerPosition, ray.origin, ForceMode.Force);
             }
         }
     }

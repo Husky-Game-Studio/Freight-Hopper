@@ -20,6 +20,27 @@ public class Portal : MonoBehaviour
 
 #endif
 
+    /// <summary>
+    /// Grabs transform of connected portal
+    /// </summary>
+    /// <returns></returns>
+    public Transform GetOtherPortal()
+    {
+        return otherPortal.transform;
+    }
+
+    /// <summary>
+    /// Takes in a ray and teleports it to the other portal.
+    /// Needs point the portal gets hit on by the raw to teleport
+    /// </summary>
+    /// <param name="ray"></param>
+    /// <param name="hitPoint"></param>
+    public void TeleportRay(ref Ray ray, Vector3 hitPoint)
+    {
+        ray.origin = otherPortal.transform.TransformPoint(transform.InverseTransformPoint(hitPoint));
+        ray.direction = otherPortal.transform.TransformDirection(transform.InverseTransformDirection(-ray.direction));
+    }
+
     public void AddTeleportingRigidbody(Rigidbody rb)
     {
         teleportingObjects.Add(rb);

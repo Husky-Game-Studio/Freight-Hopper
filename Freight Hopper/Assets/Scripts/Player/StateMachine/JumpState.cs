@@ -22,6 +22,17 @@ public class JumpState : BasicState
         UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
         //UserInput.Input.JumpInput += playerMachine.playerMovement.jumpBehavior.TryJump;
         mySSMC.GetCurrentSubState().SubToListeners(playerMachine);
+
+
+        ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
+        mySSMC.setPrevCurrState(miniStateArray[0]);
+
+
+        // reset jump hold timer
+        playerMachine.jumpHoldingTimer.ResetTimer();
+        // deactivate jump buffer and coyotee timer
+        //playerMachine.jumpBufferTimer.DeactivateTimer();
+        //playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
     public void UnsubToListeners(PlayerMachineCenter playerMachine)
@@ -30,13 +41,19 @@ public class JumpState : BasicState
         //UserInput.Input.JumpInput -= playerMachine.playerMovement.jumpBehavior.TryJump;
         mySSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
 
+        // deactivate jump hold timer
+        playerMachine.jumpHoldingTimer.DeactivateTimer();
+
+        ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
+        mySSMC.setPrevCurrState(miniStateArray[0]);
     }
 
     public BasicState TransitionState(PlayerMachineCenter playerMachine)
     {
         // Fall
-        if (releasedJumpPressed || !playerMachine.playerMovement.jumpBehavior.IsJumping)
+        if (releasedJumpPressed || !playerMachine.jumpHoldingTimer.TimerActive())
         {
+            playerMachine.jumpHoldingTimer.DeactivateTimer();
             releasedJumpPressed = false;
             return playerMachine.fallState;
         }
@@ -49,7 +66,9 @@ public class JumpState : BasicState
 
     public void PerformBehavior(PlayerMachineCenter playerMachine)
     {
-        // deactivate jump buffer and coyotee timer
+        
+        // each fixedupdate the jump button is pressed down, this timer should decrease by that time
+        playerMachine.jumpHoldingTimer.CountDownFixed();
 
 
         // Perform the SubStateMachine Behavior

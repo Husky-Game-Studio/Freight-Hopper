@@ -21,8 +21,8 @@ public class RoadCreator : MonoBehaviour
 
     public void UpdateMesh()
     {
-        //RoadDefaultShape();
-        RailroadShape();
+        RoadDefaultShape();
+        //RailroadShape();
         road.UpdateRoadPoints(pathCreator.path, 10);
         gameObject.GetComponent<MeshFilter>().mesh = road.CreateMesh();
     }
@@ -31,10 +31,10 @@ public class RoadCreator : MonoBehaviour
     {
         Vector3[] points = new Vector3[]
         {
-            new Vector3(1,1,0),
-            new Vector3(1,-1,0),
-            new Vector3(-1,-1,0),
-            new Vector3(-1,1,0)
+            new Vector3(4,1,0),
+            new Vector3(4,-1,0),
+            new Vector3(-4,-1,0),
+            new Vector3(-4,1,0)
         };
         int[] connections = new int[]
         {

@@ -7,12 +7,21 @@ using UnityEngine;
 
 public class PlayerMachineCenter : MonoBehaviour
 {
+    // State machine fields
     [SerializeField] private string currentStateName;
     private BasicState previousState;
     private BasicState currentState;
     [SerializeField] private string currentSubStateName;
     private BasicState currentSubState;
+    
+    // state independent fields
     private bool jumpPressed = false;
+    [SerializeField] public Timer jumpHoldingTimer = new Timer(0.5f);
+    [SerializeField] public Timer coyoteeTimer = new Timer(0.5f);
+    [SerializeField] public Timer jumpBufferTimer = new Timer(0.3f);
+    /*public bool CanCoyotee => coyoteeTimer.TimerActive();
+    public bool CanBuffer => jumpBufferTimer.TimerActive();
+    public bool IsJumpHolding => jumpHoldingTimer.TimerActive();*/
 
     // Player States
     public IdleState idleState = new IdleState();
@@ -44,7 +53,7 @@ public class PlayerMachineCenter : MonoBehaviour
         currentState.SubToListeners(this);
         collision.CollisionDataCollected += LateFixedUpdate;
 
-        //UserInput.Input.JumpInput += this.JumpButtonPressed;
+        UserInput.Input.JumpInput += this.JumpButtonPressed;
     }
 
     void OnDisable()
@@ -52,12 +61,14 @@ public class PlayerMachineCenter : MonoBehaviour
         currentState.UnsubToListeners(this);
         collision.CollisionDataCollected -= LateFixedUpdate;
 
-        //UserInput.Input.JumpInput -= this.JumpButtonPressed;
+        UserInput.Input.JumpInput -= this.JumpButtonPressed;
     }
 
 
     private void LateFixedUpdate()
     {
+        this.performStateIndependentBehaviors();
+
         //if the jump button is pressed, then reset jump buffer timer
 
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
@@ -86,12 +97,32 @@ public class PlayerMachineCenter : MonoBehaviour
         }
     }
 
+    private void performStateIndependentBehaviors()
+    {
+        if (jumpPressed) {
+            // start jumpBuffer timer
+            jumpBufferTimer.ResetTimer();
+            jumpPressed = false;
+        } else
+        {
+            jumpPressed = false;
+            jumpBufferTimer.DeactivateTimer();
+        }
+        if (jumpBufferTimer.TimerActive()) {
+            jumpBufferTimer.CountDownFixed();
+        }
+    }
+
     public BasicState GetCurrentState() {
         return this.currentState;
     }
 
-    /*private void JumpButtonPressed()
+    private void JumpButtonPressed()
     {
         jumpPressed = true;
-    }*/
+    }
+
+    public BasicState getPrevState() {
+        return previousState;
+    }
 }

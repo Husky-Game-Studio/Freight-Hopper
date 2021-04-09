@@ -9,6 +9,8 @@ public class RunState : BasicState
     public void SubToListeners(PlayerMachineCenter playerMachine)
     {
         UserInput.Input.JumpInput += this.JumpButtonPressed;
+
+        playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
     public void UnsubToListeners(PlayerMachineCenter playerMachine)
@@ -18,27 +20,25 @@ public class RunState : BasicState
 
     public BasicState TransitionState(PlayerMachineCenter playerMachine)
     {
-        // if jumpbuffer timer is not expired, then jump
-
-        
         // Jump
-        if (jumpPressed)
+        if (jumpPressed || playerMachine.jumpBufferTimer.TimerActive())
         {
             jumpPressed = false;
-            //Debug.Log("Should be in Jump state!");
             return playerMachine.jumpState;
         }
-
+        // Fall
+        if (!playerMachine.collision.IsGrounded.current)
+        {
+            return playerMachine.fallState;
+        }
         // Run
         if (UserInput.Input.Move() != Vector2.zero)
         {
-            //Debug.Log("in Run state!");
             return this;
         }
         // Idle
         else
         {
-            //Debug.Log("Should be in Idle state");
             return playerMachine.idleState;
         }
     }

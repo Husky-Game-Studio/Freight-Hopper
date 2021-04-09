@@ -11,14 +11,14 @@ public class BezierPath
     [SerializeField]
     List<Vector3> points;
 
-    public BezierPath(Vector3 origin)
+    public BezierPath()
     {
         points = new List<Vector3>
         {
-            origin + Vector3.left,
-            origin + Vector3.forward * 0.5f,
-            origin + Vector3.back * 0.5f,
-            origin + Vector3.right
+            Vector3.left,
+            Vector3.forward * 0.5f,
+            Vector3.back * 0.5f,
+            Vector3.right
         };
     }
     public Vector3 this[int i]
