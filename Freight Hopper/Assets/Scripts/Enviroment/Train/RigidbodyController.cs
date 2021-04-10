@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Marked for deletion
+/// </summary>
 public class RigidbodyController : MonoBehaviour
 {
     [SerializeField] private PID rotation;

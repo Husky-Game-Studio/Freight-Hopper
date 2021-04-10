@@ -10,84 +10,26 @@ public class RoadCreator : MonoBehaviour
     
     public Road road;
     private MeshFilter meshFilter;
+    public RoadSlice slice;
+    [Range(1,100)]
+    public int roadDetail;
 
     public void CreateRoad()
     {
         pathCreator = gameObject.GetComponent<PathCreator>();
         meshFilter = gameObject.GetComponent<MeshFilter>();
         road = new Road(pathCreator.path);
-        RoadDefaultShape();
     }
 
     public void UpdateMesh()
     {
-        RoadDefaultShape();
-        //RailroadShape();
-        road.UpdateRoadPoints(pathCreator.path, 10);
+        RoadShape(slice);
+        road.UpdateRoadPoints(pathCreator.path, roadDetail);
         gameObject.GetComponent<MeshFilter>().mesh = road.CreateMesh();
     }
 
-    private void RoadDefaultShape()
+    private void RoadShape(RoadSlice slice)
     {
-        Vector3[] points = new Vector3[]
-        {
-            new Vector3(4,1,0),
-            new Vector3(4,-1,0),
-            new Vector3(-4,-1,0),
-            new Vector3(-4,1,0)
-        };
-        int[] connections = new int[]
-        {
-            0, 1,
-            1, 2,
-            2, 3,
-            3, 0
-        };
-        Vector2[] uvs = new Vector2[]
-        {
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(1,0),
-            new Vector2(0,0)
-        };
-        road.ChangeSegmentShape(points, connections, uvs);
-    }
-
-    private void RailroadShape()
-    {
-        Vector3[] points = new Vector3[]
-        {
-            new Vector3(1,0.5f,0),
-            new Vector3(2,0.5f,0),
-            new Vector3(2,-0.5f,0),
-            new Vector3(1,-0.5f,0),
-            new Vector3(-2,0.5f,0),
-            new Vector3(-1,0.5f,0),
-            new Vector3(-1,-0.5f,0),
-            new Vector3(-2,-0.5f,0)
-        };
-        int[] connections = new int[]
-        {
-            0, 1,
-            1, 2,
-            2, 3,
-            3, 0,
-            4, 5,
-            5, 6,
-            6, 7,
-            7, 4
-        };
-        Vector2[] uvs = new Vector2[]
-        {
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(0,0),
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(1,0)
-        };
-        road.ChangeSegmentShape(points, connections, uvs);
+        road.ChangeSegmentShape(slice.Points, slice.Connections, slice.Uvs);
     }
 }
