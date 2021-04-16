@@ -5,14 +5,14 @@ using UnityEngine;
 // State Machine help from these url:
 // https://www.youtube.com/watch?v=nnrOhb5UdRc
 
-public class PlayerMachineCenter : MonoBehaviour
+public class PlayerMachineCenter : FiniteStateMachineCenter
 {
     // State machine fields
-    [SerializeField] private string currentStateName;
-    private BasicState previousState;
-    private BasicState currentState;
-    [SerializeField] private string currentSubStateName;
-    private BasicState currentSubState;
+    //[SerializeField] private string currentStateName;
+    //[SerializeField] private string currentSubStateName;
+    //private BasicState previousState;
+    //private BasicState currentState;
+    //private BasicState currentSubState;
     
     // state independent fields
     private bool jumpPressed = false;
@@ -39,14 +39,14 @@ public class PlayerMachineCenter : MonoBehaviour
         jumpState = new JumpState(this);
     }
 
-    private void OnValidate()
+    public override void OnValidate()
     {
         //public UserInput userInput;
         playerMovement = GetComponent<PlayerMovement>();
         collision = GetComponent<CollisionManagement>();
     }
 
-    private void OnEnable()
+    public override void OnEnable()
     {
         currentState = idleState;
         previousState = idleState;
@@ -56,7 +56,7 @@ public class PlayerMachineCenter : MonoBehaviour
         UserInput.Input.JumpInput += this.JumpButtonPressed;
     }
 
-    void OnDisable()
+    public override void OnDisable()
     {
         currentState.UnsubToListeners(this);
         collision.CollisionDataCollected -= LateFixedUpdate;
@@ -65,19 +65,13 @@ public class PlayerMachineCenter : MonoBehaviour
     }
 
 
-    private void LateFixedUpdate()
+    /*public void LateFixedUpdate()
     {
+        // perform anything that is independent of being in any one single state
         this.performStateIndependentBehaviors();
 
-        //if the jump button is pressed, then reset jump buffer timer
-
-        // If current state is a new transisiton, unsub from old listeners, and sub to new ones
-        if (previousState != currentState)
-        {
-            currentState.SubToListeners(this);
-            previousState.UnsubToListeners(this);
-            previousState = currentState;
-        }
+        // checks if the prevousState is not the currentState
+        this.checkAndChangeCurrentState();
 
         // Perform state behavior
         currentState.PerformBehavior(this);
@@ -95,9 +89,21 @@ public class PlayerMachineCenter : MonoBehaviour
             currentSubState = currentState.GetCurrentSubState();
             currentSubStateName = currentSubState.ToString();
         }
-    }
+    }*/
 
-    private void performStateIndependentBehaviors()
+    // checks if the prevousState is not the currentState
+    /*private void checkAndChangeCurrentState() {
+        // If current state is a new transisiton, unsub from old listeners, and sub to new ones
+        if (previousState != currentState)
+        {
+            currentState.SubToListeners(this);
+            previousState.UnsubToListeners(this);
+            previousState = currentState;
+        }
+    }*/
+
+    // perform anything that is independent of being in any one single state
+    public override void performStateIndependentBehaviors()
     {
         if (jumpPressed) {
             // start jumpBuffer timer
@@ -113,16 +119,16 @@ public class PlayerMachineCenter : MonoBehaviour
         }
     }
 
-    public BasicState GetCurrentState() {
+    /*public BasicState GetCurrentState() {
         return this.currentState;
-    }
+    }*/
 
     private void JumpButtonPressed()
     {
         jumpPressed = true;
     }
 
-    public BasicState getPrevState() {
+    /*public BasicState getPreviousState() {
         return previousState;
-    }
+    }*/
 }

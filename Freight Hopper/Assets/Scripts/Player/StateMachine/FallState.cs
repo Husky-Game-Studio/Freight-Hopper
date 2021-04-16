@@ -7,13 +7,15 @@ public class FallState : BasicState
     private bool playerLanded = false;
     private bool jumpPressed = false;
 
-    public void SubToListeners(PlayerMachineCenter playerMachine)
+    public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         // sub to Landed to trigger a function that returns a bool. and use that to pass or fail the if checks
         playerMachine.collision.Landed += this.HasLanded;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
 
-        if (playerMachine.getPrevState() != playerMachine.jumpState)
+        if (playerMachine.GetPreviousState() != playerMachine.jumpState)
         {
             playerMachine.coyoteeTimer.ResetTimer();
         }
@@ -22,21 +24,24 @@ public class FallState : BasicState
         }
     }
 
-    public void UnsubToListeners(PlayerMachineCenter playerMachine) {
+    public void UnsubToListeners(FiniteStateMachineCenter machineCenter) {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         playerMachine.collision.Landed -= this.HasLanded;
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
-    public BasicState TransitionState(PlayerMachineCenter playerMachine)
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         // if coyetee timer is not expired and the jump button was pressed-> then jump
 
         // Jump
         //  THERE IS A BUG HERE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (jumpPressed && playerMachine.coyoteeTimer.TimerActive() && playerMachine.getPrevState() != playerMachine.jumpState) {
+        if (jumpPressed && playerMachine.coyoteeTimer.TimerActive() && playerMachine.GetPreviousState() != playerMachine.jumpState) {
             jumpPressed = false;
             return playerMachine.jumpState;
         }
@@ -56,9 +61,11 @@ public class FallState : BasicState
         }
     }
 
-    public void PerformBehavior(PlayerMachineCenter playerMachine)
+    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        if (playerMachine.getPrevState() != playerMachine.jumpState) {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
+        if (playerMachine.GetPreviousState() != playerMachine.jumpState) {
             playerMachine.coyoteeTimer.CountDown();
         }
 

@@ -6,23 +6,25 @@ public class JumpHoldState : BasicState
 {
     //private bool releasedJumpPressed = false;
 
-    public void SubToListeners(PlayerMachineCenter playerMachine)
+    public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         //UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
     }
 
-    public void UnsubToListeners(PlayerMachineCenter playerMachine)
+    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         //UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
     }
 
-    public BasicState TransitionState(PlayerMachineCenter playerMachine)
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         return this;
     }
 
-    public void PerformBehavior(PlayerMachineCenter playerMachine)
+    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         playerMachine.jumpHoldingTimer.CountDownFixed();
         playerMachine.playerMovement.movement.Movement();
         playerMachine.playerMovement.jumpBehavior.holdingJumpBehavior();

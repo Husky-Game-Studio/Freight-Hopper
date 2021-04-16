@@ -6,20 +6,22 @@ public class RunState : BasicState
 {
     private bool jumpPressed = false;
 
-    public void SubToListeners(PlayerMachineCenter playerMachine)
+    public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
-    public void UnsubToListeners(PlayerMachineCenter playerMachine)
+    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
     }
 
-    public BasicState TransitionState(PlayerMachineCenter playerMachine)
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         // Jump
         if (jumpPressed || playerMachine.jumpBufferTimer.TimerActive())
         {
@@ -43,8 +45,9 @@ public class RunState : BasicState
         }
     }
 
-    public void PerformBehavior(PlayerMachineCenter playerMachine)
+    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         playerMachine.playerMovement.movement.Movement();
     }
 

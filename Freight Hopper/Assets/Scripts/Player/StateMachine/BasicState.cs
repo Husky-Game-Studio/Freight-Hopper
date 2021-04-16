@@ -7,10 +7,10 @@ using UnityEngine;
 
 public interface BasicState
 {
-    public void SubToListeners(PlayerMachineCenter playerMachine);
-    public void UnsubToListeners(PlayerMachineCenter playerMachine);
-    public BasicState TransitionState(PlayerMachineCenter playerMachine);
-    public void PerformBehavior(PlayerMachineCenter playerMachine);
+    public void SubToListeners(FiniteStateMachineCenter machineCenter);
+    public void UnsubToListeners(FiniteStateMachineCenter machineCenter);
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter);
+    public void PerformBehavior(FiniteStateMachineCenter machineCenter);
     public bool HasSubStateMachine();
     public BasicState GetCurrentSubState();
     public BasicState[] GetSubStateArray();

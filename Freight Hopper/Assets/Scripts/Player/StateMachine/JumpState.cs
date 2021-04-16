@@ -17,8 +17,10 @@ public class JumpState : BasicState
         mySSMC = new SubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
     }
 
-    public void SubToListeners(PlayerMachineCenter playerMachine)
+    public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
         //UserInput.Input.JumpInput += playerMachine.playerMovement.jumpBehavior.TryJump;
         mySSMC.GetCurrentSubState().SubToListeners(playerMachine);
@@ -35,8 +37,10 @@ public class JumpState : BasicState
         //playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
-    public void UnsubToListeners(PlayerMachineCenter playerMachine)
+    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
         //UserInput.Input.JumpInput -= playerMachine.playerMovement.jumpBehavior.TryJump;
         mySSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
@@ -48,8 +52,10 @@ public class JumpState : BasicState
         mySSMC.setPrevCurrState(miniStateArray[0]);
     }
 
-    public BasicState TransitionState(PlayerMachineCenter playerMachine)
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         // Fall
         if (releasedJumpPressed || !playerMachine.jumpHoldingTimer.TimerActive())
         {
@@ -64,9 +70,10 @@ public class JumpState : BasicState
         }
     }
 
-    public void PerformBehavior(PlayerMachineCenter playerMachine)
+    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         playerMachine.jumpHoldingTimer.CountDownFixed();
 
