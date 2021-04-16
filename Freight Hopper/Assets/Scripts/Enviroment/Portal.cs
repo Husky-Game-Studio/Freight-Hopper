@@ -24,7 +24,7 @@ public class Portal : MonoBehaviour
     /// Grabs transform of connected portal
     /// </summary>
     /// <returns></returns>
-    public Transform GetOtherPortal()
+    public Transform OtherPortal()
     {
         return otherPortal.transform;
     }
