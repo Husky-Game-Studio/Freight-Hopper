@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(WindParticleController))]
 public class Wind : MonoBehaviour
 {
     [SerializeField] private bool active = true;
@@ -12,6 +13,7 @@ public class Wind : MonoBehaviour
     private readonly int updatesPerSecond = 20;
 
     [SerializeField] private Vector3 size;
+    [SerializeField] private Vector3 offset;
 
     // Density of wind, higher densities means more wind particles per square unit. Can cause performance issues
     [SerializeField, Range(4f, 9f)] private float density = 6f;
@@ -24,13 +26,13 @@ public class Wind : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        GizmosExtensions.DrawGizmosArrow(this.transform.position, this.transform.forward);
+        GizmosExtensions.DrawGizmosArrow(this.transform.position + offset, this.transform.forward);
 
         for (float x = -size.x / 2; x <= size.x / 2; x += density / 10)
         {
             for (float y = -size.y / 2; y <= size.y / 2; y += density / 10)
             {
-                Vector3 position = transform.TransformPoint(new Vector3(x, y, 0));
+                Vector3 position = transform.TransformPoint(new Vector3(x, y, 0) + offset);
                 Gizmos.DrawRay(position, transform.TransformDirection(Vector3.forward) * size.z);
             }
         }
@@ -47,7 +49,7 @@ public class Wind : MonoBehaviour
         {
             activated = true;
             StartCoroutine(WindLoop(updatesPerSecond));
-            windParticleController.SpawnParticleSystem(size, this.transform.forward, this.transform);
+            windParticleController.SpawnParticleSystem(offset, size, this.transform.forward, this.transform);
         }
     }
 
@@ -84,7 +86,7 @@ public class Wind : MonoBehaviour
         {
             for (float y = -windSize.y / 2; y <= windSize.y / 2; y += density / 10)
             {
-                Vector3 position = source.transform.TransformPoint(new Vector3(x, y, 0));
+                Vector3 position = source.transform.TransformPoint(new Vector3(x, y, 0) + offset);
                 Ray ray = new Ray(position, direction);
                 SendRay(ref ray, out hit, windSize.z);
             }
@@ -112,7 +114,7 @@ public class Wind : MonoBehaviour
                     }
 
                     SendRay(ref ray, out hit, distanceLeft);
-                    windParticleController.SpawnParticleSystem(new Vector3(portalSize.x, portalSize.y, distanceLeft), ray.direction, portal.OtherPortal());
+                    windParticleController.SpawnParticleSystem(Vector3.zero, new Vector3(portalSize.x, portalSize.y, distanceLeft), ray.direction, portal.OtherPortal());
                 }
             }
             else
@@ -134,6 +136,11 @@ public class Wind : MonoBehaviour
         if (active && !activated)
         {
             Activate();
+        }
+        if (active && activated)
+        {
+            windParticleController.UpdateSettings(size, this.transform.forward);
+            windParticleController.EnableParticles();
         }
         if (!active && activated)
         {

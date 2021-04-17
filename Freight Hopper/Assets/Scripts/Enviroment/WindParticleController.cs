@@ -22,10 +22,6 @@ public class WindParticleController : MonoBehaviour
     public void DisableParticles()
     {
         windEnabled = false;
-        if (particleSys != null)
-        {
-            particleSys.Stop();
-        }
     }
 
     // These are all cached so that we are not finding them a dozens of times a second
@@ -34,13 +30,14 @@ public class WindParticleController : MonoBehaviour
     private ParticleSystem.ShapeModule shapeModule;
     private ParticleSystem.EmissionModule emissionModule;
     private ParticleSystem.VelocityOverLifetimeModule velocityOverLifetimeModule;
+    private ParticleSystem.TrailModule trailModule;
 
-    public void SpawnParticleSystem(Vector3 size, Vector3 direction, Transform parent)
+    public void SpawnParticleSystem(Vector3 offset, Vector3 size, Vector3 direction, Transform parent)
     {
         if (particles == null)
         {
             sourceTransform = parent;
-            particles = Instantiate(Resources.Load("Particles/Wind Particles"), sourceTransform.position, sourceTransform.rotation, sourceTransform) as GameObject;
+            particles = Instantiate(Resources.Load("Particles/Wind Particles"), sourceTransform.position + offset, sourceTransform.rotation, sourceTransform) as GameObject;
             particleSys = particles.GetComponent<ParticleSystem>();
             if (particles == null)
             {
@@ -51,25 +48,38 @@ public class WindParticleController : MonoBehaviour
             shapeModule = particleSys.shape;
             emissionModule = particleSys.emission;
             velocityOverLifetimeModule = particleSys.velocityOverLifetime;
+            trailModule = particleSys.trails;
 
-            mainModule.startLifetime = size.z * 0.05f;
-            shapeModule.scale = size;
-            emissionModule.rateOverTime = size.x * size.y * 3;
             EnableParticles();
         }
 
-        particleSys.Play();
+        UpdateSettings(size, direction);
 
+        particleSys.Play();
+    }
+
+    public void UpdateSettings(Vector3 size, Vector3 direction)
+    {
         velocityOverLifetimeModule.x = direction.x;
         velocityOverLifetimeModule.y = direction.y;
         velocityOverLifetimeModule.z = direction.z;
+
+        mainModule.startLifetime = size.z * 0.05f;
+        shapeModule.scale = size;
+        emissionModule.rateOverTime = size.x * size.y * 5;
+        trailModule.lifetime = 1 / size.z;
     }
 
     private void FixedUpdate()
     {
-        if (windEnabled && !particles)
+        if (windEnabled && particleSys != null)
         {
             particleSys.Play();
         }
+        if (!windEnabled && particleSys != null)
+        {
+            particleSys.Stop();
+        }
+        DisableParticles();
     }
 }
