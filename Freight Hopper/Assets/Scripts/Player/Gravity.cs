@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(CollisionManagement))]
 public class Gravity : MonoBehaviour
 {
+    [SerializeField] private bool useGravity = true;
     private Rigidbody rb;
     private CollisionManagement collision;
 
@@ -25,7 +26,7 @@ public class Gravity : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (collision.IsGrounded.current)
+        if (!useGravity || collision.IsGrounded.current)
         {
             return;
         }
