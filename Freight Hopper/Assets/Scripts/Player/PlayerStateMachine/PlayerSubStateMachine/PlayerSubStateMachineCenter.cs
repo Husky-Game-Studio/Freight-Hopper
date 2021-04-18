@@ -31,7 +31,7 @@ public class PlayerSubStateMachineCenter : SubStateMachineCenter
         collision = myPlayerMachine.collision;
     }
 
-    public override void OnValidate()
+    /*public override void OnValidate()
     {
         //public UserInput userInput;
         
@@ -45,7 +45,7 @@ public class PlayerSubStateMachineCenter : SubStateMachineCenter
     public override void OnDisable()
     {
         //currentState.UnsubToListeners(playerMachine);
-    }
+    }*/
 
     /*public void PerformSubMachineBehavior()
     {

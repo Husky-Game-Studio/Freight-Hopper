@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SubStateMachineCenter : MonoBehaviour
+public abstract class SubStateMachineCenter
 {
     // inherented and parent fields
     public BasicState parentState;
@@ -15,9 +15,9 @@ public abstract class SubStateMachineCenter : MonoBehaviour
     public BasicState previousState;
 
     // Monobehavior functions
-    public abstract void OnValidate();
-    public abstract void OnEnable();
-    public abstract void OnDisable();
+    //public abstract void OnValidate();
+    //public abstract void OnEnable();
+    //public abstract void OnDisable();
 
     // SubState Machine Functions
     public void PerformSubMachineBehavior()
