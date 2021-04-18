@@ -18,7 +18,7 @@ public abstract class SubStateMachineCenter
     public void PerformSubMachineBehavior()
     {
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
-        this.checkAndChangeCurrentState(machineCenter);
+        this.CheckAndChangeCurrentStateListeners(machineCenter);
 
         // Perform state behavior
         currentState.PerformBehavior(machineCenter);
@@ -27,7 +27,7 @@ public abstract class SubStateMachineCenter
         currentState = currentState.TransitionState(machineCenter);
     }
 
-    private void checkAndChangeCurrentState(FiniteStateMachineCenter machineCenter)
+    private void CheckAndChangeCurrentStateListeners(FiniteStateMachineCenter machineCenter)
     {
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
         if (previousState != currentState)

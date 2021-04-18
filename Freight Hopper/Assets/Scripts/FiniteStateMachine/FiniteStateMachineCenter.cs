@@ -19,10 +19,10 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     // Pefromed each LateFixedUpdate
     public void LateFixedUpdate() {
         // perform anything that is independent of being in any one single state
-        this.performStateIndependentBehaviors();
+        this.PerformStateIndependentBehaviors();
 
         // checks if the prevousState is not the currentState
-        this.checkAndChangeCurrentState();
+        this.CheckAndChangeCurrentStateListeners();
 
         // Perform state behavior
         currentState.PerformBehavior(this);
@@ -44,10 +44,10 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     }
 
     // perform anything that is independent of being in any one single state
-    public abstract void performStateIndependentBehaviors();
+    public abstract void PerformStateIndependentBehaviors();
 
     // checks if the prevousState is not the currentState
-    private void checkAndChangeCurrentState()
+    private void CheckAndChangeCurrentStateListeners()
     {
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
         if (previousState != currentState)

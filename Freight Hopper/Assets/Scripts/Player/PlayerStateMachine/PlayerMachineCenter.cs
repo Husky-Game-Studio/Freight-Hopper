@@ -53,7 +53,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     }
 
     // perform anything that is independent of being in any one single state
-    public override void performStateIndependentBehaviors()
+    public override void PerformStateIndependentBehaviors()
     {
         if (jumpPressed) {
             jumpBufferTimer.ResetTimer();
