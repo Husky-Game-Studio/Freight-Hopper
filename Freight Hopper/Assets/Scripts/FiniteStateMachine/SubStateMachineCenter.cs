@@ -14,11 +14,6 @@ public abstract class SubStateMachineCenter
     public BasicState currentState;
     public BasicState previousState;
 
-    // Monobehavior functions
-    //public abstract void OnValidate();
-    //public abstract void OnEnable();
-    //public abstract void OnDisable();
-
     // SubState Machine Functions
     public void PerformSubMachineBehavior()
     {
