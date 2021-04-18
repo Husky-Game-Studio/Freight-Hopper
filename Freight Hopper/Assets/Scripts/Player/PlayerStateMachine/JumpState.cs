@@ -9,7 +9,8 @@ public class JumpState : BasicState
     private PlayerMachineCenter myPlayerMachineCenter;
     private BasicState[] miniStateArray;
 
-    public JumpState(PlayerMachineCenter myPMC) {
+    public JumpState(PlayerMachineCenter myPMC)
+    {
         myPlayerMachineCenter = myPMC;
         miniStateArray = new BasicState[2];
         miniStateArray[0] = new JumpInitialState();
@@ -25,10 +26,8 @@ public class JumpState : BasicState
         //UserInput.Input.JumpInput += playerMachine.playerMovement.jumpBehavior.TryJump;
         pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
 
-
         ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
-        pSSMC.setPrevCurrState(miniStateArray[0]);
-
+        pSSMC.SetPrevCurrState(miniStateArray[0]);
 
         // reset jump hold timer
         playerMachine.jumpHoldingTimer.ResetTimer();
@@ -49,7 +48,7 @@ public class JumpState : BasicState
         playerMachine.jumpHoldingTimer.DeactivateTimer();
 
         ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
-        pSSMC.setPrevCurrState(miniStateArray[0]);
+        pSSMC.SetPrevCurrState(miniStateArray[0]);
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -77,7 +76,6 @@ public class JumpState : BasicState
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         playerMachine.jumpHoldingTimer.CountDownFixed();
 
-
         // Perform the SubStateMachine Behavior
         pSSMC.PerformSubMachineBehavior();
 
@@ -96,7 +94,13 @@ public class JumpState : BasicState
         return true;
     }
 
-    public BasicState GetCurrentSubState() { return pSSMC.GetCurrentSubState(); }
+    public BasicState GetCurrentSubState()
+    {
+        return pSSMC.GetCurrentSubState();
+    }
 
-    public BasicState[] GetSubStateArray() { return miniStateArray; }
+    public BasicState[] GetSubStateArray()
+    {
+        return miniStateArray;
+    }
 }

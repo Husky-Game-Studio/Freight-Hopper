@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WindParticleController : MonoBehaviour
@@ -14,11 +12,17 @@ public class WindParticleController : MonoBehaviour
         sourceTransform = this.transform;
     }
 
+    /// <summary>
+    /// Sets wind enabled to true, enabling the particles
+    /// </summary>
     public void EnableParticles()
     {
         windEnabled = true;
     }
 
+    /// <summary>
+    /// Sets wind enabled to false, disabling the particles
+    /// </summary>
     public void DisableParticles()
     {
         windEnabled = false;
@@ -32,6 +36,10 @@ public class WindParticleController : MonoBehaviour
     private ParticleSystem.VelocityOverLifetimeModule velocityOverLifetimeModule;
     private ParticleSystem.TrailModule trailModule;
 
+    /// <summary>
+    /// Can be called multiple times, first call instantiates particle system with the given settings.
+    /// Should be called multiple times if the particle system needs to be updated.
+    /// </summary>
     public void SpawnParticleSystem(Vector3 offset, Vector3 size, Vector3 direction, Transform parent)
     {
         if (particles == null)
@@ -58,6 +66,9 @@ public class WindParticleController : MonoBehaviour
         particleSys.Play();
     }
 
+    /// <summary>
+    /// size and direction can be modified at runtime and therefore particle system needs to be updated
+    /// </summary>
     public void UpdateSettings(Vector3 size, Vector3 direction)
     {
         velocityOverLifetimeModule.x = direction.x;
