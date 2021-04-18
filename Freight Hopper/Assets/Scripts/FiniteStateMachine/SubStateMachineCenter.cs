@@ -6,10 +6,12 @@ public abstract class SubStateMachineCenter
 {
     // inherented and parent fields
     public BasicState parentState;
+
     public FiniteStateMachineCenter machineCenter;
 
     // substate fields
     public BasicState[] miniStatesArray;
+
     public bool completedSubStateBehavior;
     public BasicState currentState;
     public BasicState previousState;
@@ -43,7 +45,7 @@ public abstract class SubStateMachineCenter
         return this.currentState;
     }
 
-    public void setPrevCurrState(BasicState subState)
+    public void SetPrevCurrState(BasicState subState)
     {
         currentState = subState;
         previousState = subState;

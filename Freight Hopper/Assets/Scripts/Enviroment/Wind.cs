@@ -8,6 +8,7 @@ public class Wind : MonoBehaviour
     [SerializeField] private bool active = true;
     private bool activated = false;
     [SerializeField] private float forcePerParticle = 1;
+    private float rayWidth;
 
     // How many times per second wind status of rigidbodies are updated. Default 20, can cause performance issues at high numbers
     private readonly int updatesPerSecond = 20;
@@ -16,7 +17,7 @@ public class Wind : MonoBehaviour
     [SerializeField] private Vector3 offset;
 
     // Density of wind, higher densities means more wind particles per square unit. Can cause performance issues
-    [SerializeField, Range(4f, 9f)] private float density = 6f;
+    [SerializeField, Range(1.1f, 2.5f)] private float density = 1.65f;
 
     private Dictionary<Rigidbody, List<Ray>> affectedBodies = new Dictionary<Rigidbody, List<Ray>>();
     [SerializeField] private LayerMask affectedLayers;
@@ -28,9 +29,13 @@ public class Wind : MonoBehaviour
         Gizmos.color = Color.yellow;
         GizmosExtensions.DrawGizmosArrow(this.transform.position + offset, this.transform.forward);
 
-        for (float x = -size.x / 2; x <= size.x / 2; x += density / 10)
+        if (!active)
         {
-            for (float y = -size.y / 2; y <= size.y / 2; y += density / 10)
+            return;
+        }
+        for (float x = -size.x / 2; x <= size.x / 2; x += rayWidth)
+        {
+            for (float y = -size.y / 2; y <= size.y / 2; y += rayWidth)
             {
                 Vector3 position = transform.TransformPoint(new Vector3(x, y, 0) + offset);
                 Gizmos.DrawRay(position, transform.TransformDirection(Vector3.forward) * size.z);
@@ -41,8 +46,17 @@ public class Wind : MonoBehaviour
     private void Awake()
     {
         windParticleController = this.GetComponent<WindParticleController>();
+        OnValidate();
     }
 
+    private void OnValidate()
+    {
+        rayWidth = 1 / density;
+    }
+
+    /// <summary>
+    /// Activates wind source
+    /// </summary>
     public void Activate()
     {
         if (active && !activated)
@@ -53,6 +67,9 @@ public class Wind : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Deactives wind sources. Do this for performance reasons
+    /// </summary>
     public void Deactivate()
     {
         if (activated)
@@ -82,9 +99,9 @@ public class Wind : MonoBehaviour
 
         RaycastHit hit;
         Vector3 direction = source.transform.forward;
-        for (float x = -windSize.x / 2; x <= windSize.x / 2; x += density / 10)
+        for (float x = -windSize.x / 2; x <= windSize.x / 2; x += rayWidth)
         {
-            for (float y = -windSize.y / 2; y <= windSize.y / 2; y += density / 10)
+            for (float y = -windSize.y / 2; y <= windSize.y / 2; y += rayWidth)
             {
                 Vector3 position = source.transform.TransformPoint(new Vector3(x, y, 0) + offset);
                 Ray ray = new Ray(position, direction);
@@ -119,6 +136,7 @@ public class Wind : MonoBehaviour
             }
             else
             {
+                // Wind on a rigidbody
                 if (hit.collider.attachedRigidbody != null)
                 {
                     if (!affectedBodies.ContainsKey(hit.collider.attachedRigidbody))
@@ -127,6 +145,17 @@ public class Wind : MonoBehaviour
                     }
                     affectedBodies[hit.collider.attachedRigidbody].Add(new Ray(hit.point, ray.direction));
                 }
+            }
+        }
+    }
+
+    private void ApplyWind()
+    {
+        foreach (Rigidbody rb in affectedBodies.Keys)
+        {
+            foreach (Ray ray in affectedBodies[rb])
+            {
+                rb.AddForceAtPosition(ray.direction * forcePerParticle, ray.origin, ForceMode.Force);
             }
         }
     }
@@ -148,13 +177,7 @@ public class Wind : MonoBehaviour
         }
         if (activated)
         {
-            foreach (Rigidbody rb in affectedBodies.Keys)
-            {
-                foreach (Ray ray in affectedBodies[rb])
-                {
-                    rb.AddForceAtPosition(ray.direction * forcePerParticle, ray.origin, ForceMode.Force);
-                }
-            }
+            ApplyWind();
         }
     }
 }
