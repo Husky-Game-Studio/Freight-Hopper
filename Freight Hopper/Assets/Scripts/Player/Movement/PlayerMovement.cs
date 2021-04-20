@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public MovementBehavior movement;
     public JumpBehavior jumpBehavior;
-    public GroundPound groundPound;
+    public GroundPoundBehavior groundPoundBehavior;
     public DoubleJump doubleJump;
     public FullStop fullstop;
 
@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     {
         movement = GetComponentInChildren<MovementBehavior>();
         jumpBehavior = GetComponentInChildren<JumpBehavior>();
-        groundPound = GetComponentInChildren<GroundPound>();
+        groundPoundBehavior = GetComponentInChildren<GroundPoundBehavior>();
         doubleJump = GetComponentInChildren<DoubleJump>();
         fullstop = GetComponentInChildren<FullStop>();
     }
@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
         movement.Initialize(rb, playerCollision, Camera.main.transform);
         doubleJump.Initialize(playerCollision, jumpBehavior);
         jumpBehavior.Initialize(rb, playerCollision);
-        groundPound.Initalize(rb, playerCollision);
+        groundPoundBehavior.Initalize(rb, playerCollision);
 
         fullstop.Initialize(rb, playerCollision);
     }

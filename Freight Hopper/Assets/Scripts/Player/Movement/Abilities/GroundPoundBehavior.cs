@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class GroundPound : MonoBehaviour
+public class GroundPoundBehavior : MonoBehaviour
 {
     [ReadOnly, SerializeField] private bool groundPoundPossible = true;
     [ReadOnly, SerializeField] private bool groundPounding = false;
