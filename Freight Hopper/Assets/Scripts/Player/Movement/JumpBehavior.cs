@@ -18,9 +18,17 @@ public class JumpBehavior : MonoBehaviour
     }
 
     // Physics behavior for holding the jump button
-    public void holdingJumpBehavior()
+    public void HoldingJump()
     {
         rb.AddForce(CustomGravity.GetUpAxis(rb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
+    }
+
+    /// <summary>
+    /// Same as jump but inputs the users current jump height
+    /// </summary>
+    public void Jump()
+    {
+        Jump(minJumpHeight);
     }
 
     // Physics behavior for the initial press of jump button
@@ -36,7 +44,7 @@ public class JumpBehavior : MonoBehaviour
         // Basic physics, except the force required to reach this height may not work if we consider holding space
         // That and considering that physics works in timesteps.
         float jumpForce = Mathf.Sqrt(2f * gravity.magnitude * height);
-       
+
         // Upward bias for sloped jumping
         Vector3 jumpDirection = (playerCollision.ContactNormal.old + upAxis).normalized;
 

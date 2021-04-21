@@ -48,7 +48,7 @@ public class RunState : BasicState
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        playerMachine.playerMovement.movement.Movement();
+        playerMachine.playerMovement.movementBehavior.Movement();
     }
 
     private void JumpButtonPressed()
@@ -60,6 +60,14 @@ public class RunState : BasicState
     {
         return false;
     }
-    public BasicState GetCurrentSubState() { return null; }
-    public BasicState[] GetSubStateArray() { return null; }
+
+    public BasicState GetCurrentSubState()
+    {
+        return null;
+    }
+
+    public BasicState[] GetSubStateArray()
+    {
+        return null;
+    }
 }

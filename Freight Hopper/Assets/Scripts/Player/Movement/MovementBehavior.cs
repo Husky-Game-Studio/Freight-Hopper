@@ -14,11 +14,11 @@ public class MovementBehavior : MonoBehaviour
 
     public float Speed => groundAcceleration;
 
-    public void Initialize(Rigidbody rb, CollisionManagement playerCollision, Transform cameraTransform)
+    public void Initialize(Rigidbody rb, CollisionManagement playerCollision)
     {
         this.rb = rb;
         this.playerCollision = playerCollision;
-        this.cameraTransform = cameraTransform;
+        this.cameraTransform = Camera.main.transform;
     }
 
     private void OnEnable()
@@ -31,6 +31,7 @@ public class MovementBehavior : MonoBehaviour
         //playerCollision.CollisionDataCollected -= Movement;
     }
 
+    // Input, Rigidbody, PlayerCollision
     public void Movement()
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);

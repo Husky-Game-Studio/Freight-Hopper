@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class DoubleJump : MonoBehaviour
+public class DoubleJumpBehavior : MonoBehaviour
 {
     [Range(25, 300)]
     [SerializeField] private float percentStrengthComparedToNormalJump = 75;

@@ -5,12 +5,14 @@ using UnityEngine;
 public class IdleState : BasicState
 {
     private bool jumpPressed = false;
+    private bool grapplePressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         UserInput.Input.JumpInput += this.JumpButtonPressed;
+        UserInput.Input.GrappleInput += this.GrappleButtonPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
@@ -18,9 +20,11 @@ public class IdleState : BasicState
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
+        UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter) {
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         // Jump
@@ -29,8 +33,17 @@ public class IdleState : BasicState
             jumpPressed = false;
             return playerMachine.jumpState;
         }
+
+        // Grapple pole
+        if (grapplePressed)
+        {
+            grapplePressed = false;
+            return playerMachine.grapplePoleState;
+        }
+
         // Fall
-        if (!playerMachine.collision.IsGrounded.current) {
+        if (!playerMachine.collision.IsGrounded.current)
+        {
             return playerMachine.fallState;
         }
         // Run
@@ -39,7 +52,7 @@ public class IdleState : BasicState
             return playerMachine.runState;
         }
         // Idle
-        else 
+        else
         {
             return this;
         }
@@ -55,11 +68,23 @@ public class IdleState : BasicState
         jumpPressed = true;
     }
 
+    private void GrappleButtonPressed()
+    {
+        grapplePressed = true;
+    }
+
     public bool HasSubStateMachine()
     {
         return false;
     }
 
-    public BasicState GetCurrentSubState() { return null; }
-    public BasicState[] GetSubStateArray() { return null; }
+    public BasicState GetCurrentSubState()
+    {
+        return null;
+    }
+
+    public BasicState[] GetSubStateArray()
+    {
+        return null;
+    }
 }

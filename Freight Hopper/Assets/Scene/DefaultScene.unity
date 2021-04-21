@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 3564.8984, g: 1984.8174, b: 1220.752, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: 1798020242}
   - component: {fileID: 1798020241}
   - component: {fileID: 1798020239}
+  - component: {fileID: 1798020245}
   m_Layer: 7
   m_Name: Movement
   m_TagString: Untagged
@@ -295,15 +296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7acc6ed8b238cc48a6f8d2ae3c342ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpBuffer:
-    duration: 0.3
-    current: 0
-  jumpHoldingPeriod:
-    duration: 0.6
-    current: 0
-  coyoteTime:
-    duration: 0.5
-    current: 0
   minJumpHeight: 1.5
   holdingJumpForceMultiplier: 15
 --- !u!114 &1798020244
@@ -320,6 +312,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundAcceleration: 40
   airAcceleration: 10
+--- !u!114 &1798020245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798020238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d483ce78f84fa04db5ca55132169c5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  length: 0
+  maxLength: 10
+  grappleExtensionSpeed: 2
+  affectedLayers:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!1 &4493642203787552934
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,11 +382,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47277d9d7453b0e4d963a53c4a87d9ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 1798020244}
+  movementBehavior: {fileID: 1798020244}
   jumpBehavior: {fileID: 1798020243}
-  groundPound: {fileID: 1798020242}
-  doubleJump: {fileID: 1798020241}
-  fullstop: {fileID: 1798020239}
+  groundPoundBehavior: {fileID: 1798020242}
+  grapplePoleBehavior: {fileID: 1798020245}
+  doubleJumpBehavior: {fileID: 1798020241}
+  fullstopBehavior: {fileID: 1798020239}
 --- !u!114 &4493642203787552937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,6 +440,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStateName: 
   currentSubStateName: 
+  jumpHoldingTimer:
+    duration: 0.5
+    current: 0
+  coyoteeTimer:
+    duration: 0.5
+    current: 0
+  jumpBufferTimer:
+    duration: 0.3
+    current: 0
   playerMovement: {fileID: 4493642203787552936}
   collision: {fileID: 4493642203787552937}
 --- !u!114 &6851446874351635506
@@ -1174,6 +1194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useGravity: 1
 --- !u!82 &6851446875331684921
 AudioSource:
   m_ObjectHideFlags: 0

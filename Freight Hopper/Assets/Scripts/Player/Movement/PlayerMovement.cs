@@ -3,22 +3,24 @@ using UnityEngine;
 [RequireComponent(typeof(CollisionManagement), typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
-    public MovementBehavior movement;
+    public MovementBehavior movementBehavior;
     public JumpBehavior jumpBehavior;
     public GroundPoundBehavior groundPoundBehavior;
-    public DoubleJump doubleJump;
-    public FullStop fullstop;
+    public GrapplePoleBehavior grapplePoleBehavior;
+    public DoubleJumpBehavior doubleJumpBehavior;
+    public FullStopBehavior fullstopBehavior;
 
     private Rigidbody rb;
     private CollisionManagement playerCollision;
 
     private void OnValidate()
     {
-        movement = GetComponentInChildren<MovementBehavior>();
+        movementBehavior = GetComponentInChildren<MovementBehavior>();
         jumpBehavior = GetComponentInChildren<JumpBehavior>();
         groundPoundBehavior = GetComponentInChildren<GroundPoundBehavior>();
-        doubleJump = GetComponentInChildren<DoubleJump>();
-        fullstop = GetComponentInChildren<FullStop>();
+        grapplePoleBehavior = GetComponentInChildren<GrapplePoleBehavior>();
+        doubleJumpBehavior = GetComponentInChildren<DoubleJumpBehavior>();
+        fullstopBehavior = GetComponentInChildren<FullStopBehavior>();
     }
 
     private void Awake()
@@ -26,11 +28,11 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerCollision = GetComponent<CollisionManagement>();
 
-        movement.Initialize(rb, playerCollision, Camera.main.transform);
-        doubleJump.Initialize(playerCollision, jumpBehavior);
+        movementBehavior.Initialize(rb, playerCollision);
+        doubleJumpBehavior.Initialize(playerCollision, jumpBehavior);
         jumpBehavior.Initialize(rb, playerCollision);
         groundPoundBehavior.Initalize(rb, playerCollision);
-
-        fullstop.Initialize(rb, playerCollision);
+        grapplePoleBehavior.Initialize(rb, playerCollision);
+        fullstopBehavior.Initialize(rb, playerCollision);
     }
 }

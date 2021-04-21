@@ -2,41 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpInitialState : BasicState
+public class GrappleFireState : BasicState
 {
-    //private bool releasedJumpPressed = false;
+    private bool startOfGrapple = true;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        //UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
+        startOfGrapple = true;
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        //UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        return playerMachine.GetCurrentState().GetSubStateArray()[1];
+        if (playerMachine.playerMovement.grapplePoleBehavior.Anchored())
+        {
+            return playerMachine.GetCurrentState().GetSubStateArray()[1];
+        }
+
+        return this;
     }
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
+        // Call animation and mesh generation
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        playerMachine.playerMovement.jumpBehavior.Jump();
         playerMachine.playerMovement.movementBehavior.Movement();
-
-        //Debug.Log("In JumpInitialState at: " + Time.time);
+        if (startOfGrapple)
+        {
+            playerMachine.playerMovement.grapplePoleBehavior.StartGrapple();
+            startOfGrapple = false;
+        }
+        playerMachine.playerMovement.grapplePoleBehavior.GrappleTransition();
     }
-
-    /*private void ReleasedJumpButtonPressed()
-    {
-        releasedJumpPressed = true;
-    }*/
 
     public bool HasSubStateMachine()
     {

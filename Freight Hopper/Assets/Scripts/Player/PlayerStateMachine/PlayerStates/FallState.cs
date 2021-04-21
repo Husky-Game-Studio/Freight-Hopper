@@ -6,6 +6,7 @@ public class FallState : BasicState
 {
     private bool playerLanded = false;
     private bool jumpPressed = false;
+    private bool grapplePressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -14,21 +15,25 @@ public class FallState : BasicState
         // sub to Landed to trigger a function that returns a bool. and use that to pass or fail the if checks
         playerMachine.collision.Landed += this.HasLanded;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
+        UserInput.Input.GrappleInput += this.GrappleButtonPressed;
 
         if (playerMachine.GetPreviousState() != playerMachine.jumpState)
         {
             playerMachine.coyoteeTimer.ResetTimer();
         }
-        else {
+        else
+        {
             playerMachine.coyoteeTimer.DeactivateTimer();
         }
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter) {
+    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         playerMachine.collision.Landed -= this.HasLanded;
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
+        UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
@@ -41,13 +46,22 @@ public class FallState : BasicState
 
         // Jump
         //  THERE IS A BUG HERE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (jumpPressed && playerMachine.coyoteeTimer.TimerActive() && playerMachine.GetPreviousState() != playerMachine.jumpState) {
+        if (jumpPressed && playerMachine.coyoteeTimer.TimerActive() && playerMachine.GetPreviousState() != playerMachine.jumpState)
+        {
             jumpPressed = false;
             return playerMachine.jumpState;
         }
         jumpPressed = false;
+
+        // Grapple pole
+        if (grapplePressed)
+        {
+            grapplePressed = false;
+            return playerMachine.grapplePoleState;
+        }
+
         // Fall
-        if (!playerLanded)
+        if (!playerMachine.collision.IsGrounded.current)
         {
             //Debug.Log("In Fall state!: " + myPlayer.playerMovement.getIsGrounded().old);
             return this;
@@ -65,25 +79,26 @@ public class FallState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        if (playerMachine.GetPreviousState() != playerMachine.jumpState) {
+        if (playerMachine.GetPreviousState() != playerMachine.jumpState)
+        {
             playerMachine.coyoteeTimer.CountDown();
         }
 
-        playerMachine.playerMovement.movement.Movement();
+        playerMachine.playerMovement.movementBehavior.Movement();
     }
 
     /*void PerformEntryBehavior(PlayerMachineCenter playerMachine) {
-    
     }
     void PerformExitBehavior(PlayerMachineCenter playerMachine) {
-    
     }*/
 
-    private void HasLanded() {
+    private void HasLanded()
+    {
         playerLanded = true;
     }
 
-    public bool HasSubStateMachine() {
+    public bool HasSubStateMachine()
+    {
         return false;
     }
 
@@ -92,6 +107,18 @@ public class FallState : BasicState
         jumpPressed = true;
     }
 
-    public BasicState GetCurrentSubState() { return null; }
-    public BasicState[] GetSubStateArray() { return null; }
+    private void GrappleButtonPressed()
+    {
+        grapplePressed = true;
+    }
+
+    public BasicState GetCurrentSubState()
+    {
+        return null;
+    }
+
+    public BasicState[] GetSubStateArray()
+    {
+        return null;
+    }
 }

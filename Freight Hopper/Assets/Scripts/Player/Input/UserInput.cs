@@ -22,6 +22,8 @@ public class UserInput : MonoBehaviour
 
     public event PressEventHandler DashInput;
 
+    public event PressEventHandler GrappleInput;
+
     public event PressEventHandler UpwardDashInput;
 
     [ReadOnly, SerializeField] private bool groundPoundHeld;
@@ -34,6 +36,7 @@ public class UserInput : MonoBehaviour
         master.Player.Jump.performed += JumpHeld;
         master.Player.Jump.canceled += JumpReleased;
         master.Player.FullStop.performed += FullStopPressed;
+        master.Player.GrapplePole.performed += GrapplePressed;
     }
 
     private void OnDisable()
@@ -76,6 +79,11 @@ public class UserInput : MonoBehaviour
     private void JumpReleased(InputAction.CallbackContext context)
     {
         JumpInputCanceled?.Invoke();
+    }
+
+    private void GrapplePressed(InputAction.CallbackContext context)
+    {
+        GrappleInput?.Invoke();
     }
 
     private void FullStopPressed(InputAction.CallbackContext context)

@@ -7,25 +7,33 @@ using UnityEngine;
 
 public class PlayerMachineCenter : FiniteStateMachineCenter
 {
-    // state independent fields
+    // State independent fields
     private bool jumpPressed = false;
+
     [SerializeField] public Timer jumpHoldingTimer = new Timer(0.5f);
     [SerializeField] public Timer coyoteeTimer = new Timer(0.5f);
     [SerializeField] public Timer jumpBufferTimer = new Timer(0.3f);
-    
+
     // Player States
     public IdleState idleState = new IdleState();
+
     public RunState runState = new RunState();
+
+    // If it has a substate use the constructor
     public JumpState jumpState;
+
     public FallState fallState = new FallState();
+    public GrapplePoleState grapplePoleState;
 
     // Input Components
     [HideInInspector] public PlayerMovement playerMovement;
+
     [HideInInspector] public CollisionManagement collision;
 
     public PlayerMachineCenter()
     {
         jumpState = new JumpState(this);
+        grapplePoleState = new GrapplePoleState(this);
     }
 
     public override void OnValidate()
@@ -55,15 +63,18 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // perform anything that is independent of being in any one single state
     public override void PerformStateIndependentBehaviors()
     {
-        if (jumpPressed) {
+        if (jumpPressed)
+        {
             jumpBufferTimer.ResetTimer();
             jumpPressed = false;
-        } else
+        }
+        else
         {
             jumpPressed = false;
             jumpBufferTimer.DeactivateTimer();
         }
-        if (jumpBufferTimer.TimerActive()) {
+        if (jumpBufferTimer.TimerActive())
+        {
             jumpBufferTimer.CountDownFixed();
         }
     }

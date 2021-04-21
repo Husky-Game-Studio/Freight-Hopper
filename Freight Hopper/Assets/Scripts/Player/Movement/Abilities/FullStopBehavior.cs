@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class FullStop : MonoBehaviour
+public class FullStopBehavior : MonoBehaviour
 {
     [SerializeField, ReadOnly] private bool fullStopPossible = true;
     [SerializeField] public Timer cooldown = new Timer(2);

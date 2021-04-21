@@ -2,41 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpInitialState : BasicState
+public class GrappleAnchoredState : BasicState
 {
-    //private bool releasedJumpPressed = false;
-
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        //UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        //UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        return playerMachine.GetCurrentState().GetSubStateArray()[1];
+        return this;
     }
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        playerMachine.playerMovement.jumpBehavior.Jump();
+        // Perform grapple pole behavior
+        playerMachine.playerMovement.grapplePoleBehavior.Grapple();
+        // REMOVE THE MOVEMENT LATER, SHOULDN'T BE ABLE TO MOVE
         playerMachine.playerMovement.movementBehavior.Movement();
-
-        //Debug.Log("In JumpInitialState at: " + Time.time);
     }
-
-    /*private void ReleasedJumpButtonPressed()
-    {
-        releasedJumpPressed = true;
-    }*/
 
     public bool HasSubStateMachine()
     {
