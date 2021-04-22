@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FallState : BasicState
 {
-    private bool playerLanded = false;
     private bool jumpPressed = false;
     private bool grapplePressed = false;
 
@@ -13,7 +12,6 @@ public class FallState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         // sub to Landed to trigger a function that returns a bool. and use that to pass or fail the if checks
-        playerMachine.collision.Landed += this.HasLanded;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
         UserInput.Input.GrappleInput += this.GrappleButtonPressed;
 
@@ -31,7 +29,6 @@ public class FallState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        playerMachine.collision.Landed -= this.HasLanded;
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
 
@@ -69,7 +66,6 @@ public class FallState : BasicState
         // Idle
         else
         {
-            playerLanded = false;
             //Debug.Log("Should be in Idle state");
             return playerMachine.idleState;
         }
@@ -91,11 +87,6 @@ public class FallState : BasicState
     }
     void PerformExitBehavior(PlayerMachineCenter playerMachine) {
     }*/
-
-    private void HasLanded()
-    {
-        playerLanded = true;
-    }
 
     public bool HasSubStateMachine()
     {

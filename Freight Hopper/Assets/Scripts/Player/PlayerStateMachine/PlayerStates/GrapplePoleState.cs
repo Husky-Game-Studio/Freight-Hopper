@@ -13,7 +13,7 @@ public class GrapplePoleState : BasicState
     /// </summary>
 
     private bool grapplePolePressed = false;
-
+    private bool pressedJump = false;
     private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
     private BasicState[] miniStateArray;
@@ -32,6 +32,7 @@ public class GrapplePoleState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         UserInput.Input.GrappleInput += this.GrapplePolePressed;
+        UserInput.Input.JumpInput += this.JumpButtonPressed;
         pSSMC.SetPrevCurrState(miniStateArray[0]);
         pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
     }
@@ -41,6 +42,7 @@ public class GrapplePoleState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         UserInput.Input.GrappleInput -= this.GrapplePolePressed;
+        UserInput.Input.JumpInput -= this.JumpButtonPressed;
         pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
     }
 
@@ -54,7 +56,18 @@ public class GrapplePoleState : BasicState
             return playerMachine.fallState;
         }
 
+        if (pressedJump)
+        {
+            pressedJump = false;
+            return playerMachine.jumpState;
+        }
+
         return this;
+    }
+
+    private void JumpButtonPressed()
+    {
+        pressedJump = true;
     }
 
     private void GrapplePolePressed()
