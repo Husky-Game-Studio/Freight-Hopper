@@ -117,7 +117,7 @@ public class CollisionManagement : MonoBehaviour
             yield return new WaitForFixedUpdate();
             rigidbodyLinker.UpdateConnectionState(rb);
 
-            CollisionDataCollected.Invoke();
+            CollisionDataCollected?.Invoke();
             UpdateOldValues();
             ClearValues();
         }
