@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 3558.9346, g: 1990.7432, b: 1235.7812, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -387,6 +387,59 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: a5856ec116ca0834497403aedc1601c6, type: 2}
+--- !u!1 &193273199
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 193273201}
+  - component: {fileID: 193273200}
+  m_Layer: 0
+  m_Name: Cube Path
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &193273200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193273199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2055c4ca491ee11499dcb1ed5e32ec70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path:
+    points:
+    - {x: -0.08220959, y: 1, z: -0.1287384}
+    - {x: -0.16754085, y: 1, z: 6.822496}
+    - {x: 4.2476263, y: 1, z: 6.233048}
+    - {x: 7.9042997, y: 1, z: 6.5530953}
+    - {x: 12.240628, y: 1, z: 6.9326286}
+    - {x: 17.278227, y: 1, z: 5.926895}
+    - {x: 18.7471, y: 1, z: -0.9198642}
+  focusIndex: 2
+--- !u!4 &193273201
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193273199}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1335493215}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &322440280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1414,6 +1467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useGravity: 1
 --- !u!114 &900187113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1780,6 +1834,7 @@ Transform:
   - {fileID: 1908452299}
   - {fileID: 579109189}
   - {fileID: 1874902748}
+  - {fileID: 193273201}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1833,6 +1888,7 @@ GameObject:
   - component: {fileID: 1656372300}
   - component: {fileID: 1656372299}
   - component: {fileID: 1656372303}
+  - component: {fileID: 1656372304}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1942,6 +1998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useGravity: 1
 --- !u!114 &1656372301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2003,7 +2060,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656372294}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06c8023b029fef448acac5dfaca08c3c, type: 3}
   m_Name: 
@@ -2012,6 +2069,29 @@ MonoBehaviour:
   velTarget: {x: 0, y: 0, z: 5}
   rotCurrent: 1.5707964
   newPos: {x: 0, y: 0, z: 0}
+--- !u!114 &1656372304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656372294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0001d4aca8e78954da17141e454effc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathCreator: {fileID: 193273200}
+  targetVelocity: 4
+  followDistance: 4
+  forwardPIDData:
+    Kp: 1
+    Ki: 0
+    Kd: 0
+  rotatePIDData:
+    Kp: 2
+    Ki: 0
+    Kd: 0
 --- !u!4 &1835975021 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7110399510810264678, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
