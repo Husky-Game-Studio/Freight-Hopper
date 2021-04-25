@@ -50,6 +50,14 @@ public class PID
         data = newData;
     }
 
+    public void Reset()
+    {
+        P = 0;
+        I = 0;
+        D = 0;
+        previousError = 0;
+    }
+
     /// <summary>
     /// Returns the amount of force that should be applied this frame
     /// to reach the target.

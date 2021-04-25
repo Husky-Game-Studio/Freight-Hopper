@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class JumpState : BasicState
 {
+    private bool grapplePressed = false;
     private bool releasedJumpPressed = false;
     private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
@@ -23,6 +24,7 @@ public class JumpState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
+        UserInput.Input.GrappleInput += this.GrappleButtonPressed;
         pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
 
         ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
@@ -37,6 +39,7 @@ public class JumpState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
+        UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
         pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
 
         // deactivate jump hold timer
@@ -57,6 +60,13 @@ public class JumpState : BasicState
             releasedJumpPressed = false;
             return playerMachine.fallState;
         }
+        // Grapple pole
+        if (grapplePressed)
+        {
+            grapplePressed = false;
+            return playerMachine.grapplePoleState;
+        }
+
         // Jump
         else
         {
@@ -78,6 +88,11 @@ public class JumpState : BasicState
     private void ReleasedJumpButtonPressed()
     {
         releasedJumpPressed = true;
+    }
+
+    private void GrappleButtonPressed()
+    {
+        grapplePressed = true;
     }
 
     public bool HasSubStateMachine()
