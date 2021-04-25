@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3564.8984, g: 1984.8174, b: 1220.752, a: 1}
+  m_IndirectSpecularColor: {r: 3571.3877, g: 1987.3281, b: 1219.5137, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -325,11 +325,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   length: 0
-  maxLength: 10
-  grappleExtensionSpeed: 2
+  lengthOnGrapple: 0
+  maxLength: 60
+  grappleExtensionSpeed: 1000
+  grappleMoveSpeed: 50
   affectedLayers:
     serializedVersion: 2
     m_Bits: 1
+  distanceController:
+    data:
+      Kp: 2
+      Ki: 0.3
+      Kd: 0.25
 --- !u!1 &4493642203787552934
 GameObject:
   m_ObjectHideFlags: 0
