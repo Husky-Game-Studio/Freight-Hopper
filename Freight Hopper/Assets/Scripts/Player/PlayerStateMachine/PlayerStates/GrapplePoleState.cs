@@ -50,15 +50,18 @@ public class GrapplePoleState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        if (grapplePolePressed)
+        if (grapplePolePressed ||
+            (playerMachine.playerMovement.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.playerMovement.grapplePoleBehavior.Anchored()))
         {
             grapplePolePressed = false;
+            playerMachine.playerMovement.grapplePoleBehavior.EndGrapple();
             return playerMachine.fallState;
         }
 
         if (pressedJump)
         {
             pressedJump = false;
+            playerMachine.playerMovement.grapplePoleBehavior.EndGrapple();
             return playerMachine.jumpState;
         }
 
@@ -67,7 +70,10 @@ public class GrapplePoleState : BasicState
 
     private void JumpButtonPressed()
     {
-        pressedJump = true;
+        if (GetCurrentSubState() == miniStateArray[1])
+        {
+            pressedJump = true;
+        }
     }
 
     private void GrapplePolePressed()

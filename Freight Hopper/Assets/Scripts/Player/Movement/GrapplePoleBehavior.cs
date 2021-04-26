@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GrapplePoleBehavior : MonoBehaviour
 {
     [SerializeField, ReadOnly] private float length;
-    [SerializeField, ReadOnly] private float lengthOnGrapple;
+    [SerializeField] private LineRenderer pole;
+    [SerializeField, Range(0.9f, 3)] private float breakMaxLengthPercent = 1.2f;
     [SerializeField] private float maxLength = 10;
     [SerializeField] private float grappleExtensionSpeed = 10;
     [SerializeField] private float grappleMoveSpeed = 10;
 
-    //[SerializeField] private float anchoredGrappleSpeed = 10;
     [SerializeField] private LayerMask affectedLayers;
 
     private Ray playerAnchor;
@@ -33,20 +31,23 @@ public class GrapplePoleBehavior : MonoBehaviour
         this.cameraTransform = Camera.main.transform;
     }
 
+    private void Awake()
+    {
+        EndGrapple();
+    }
+
     public void Grapple(Vector3 direction)
     {
-        //Debug.Log("Grappling");
-
         if (anchoredRb != null)
         {
             anchor = new Ray(anchoredRb.transform.TransformPoint(anchoredRbLocalPosition), -playerAnchor.direction);
         }
-        playerAnchor = new Ray(cameraTransform.position, playerAnchor.direction);
-        Debug.DrawLine(playerAnchor.origin, anchor.origin, Color.red, Time.fixedDeltaTime);
+        playerAnchor = new Ray(rb.position + pole.GetPosition(0), playerAnchor.direction);
+        pole.SetPosition(1, rb.transform.InverseTransformPoint(anchor.origin));
 
         Vector3 normal = (playerAnchor.origin - anchor.origin).normalized;
 
-        Transform playerTransform = rb.transform;
+        //Transform playerTransform = rb.transform;
         Vector3 tangent = Vector3.Cross(cameraTransform.right, normal);
         Vector3 bitangent = Vector3.Cross(normal, tangent);
         Debug.DrawLine(playerAnchor.origin, playerAnchor.origin + normal, Color.green, Time.fixedDeltaTime);
@@ -55,11 +56,10 @@ public class GrapplePoleBehavior : MonoBehaviour
 
         Vector3 move = tangent * direction.z + bitangent * direction.x;
         move.Normalize();
-        //Debug.Log("Moving:" + move);
 
         rb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);
 
-        Vector3 applicableVelocity = Vector3.Project(rb.velocity, normal);
+        //Vector3 applicableVelocity = Vector3.Project(rb.velocity, normal);
 
         float expectedLength = length;
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
@@ -70,11 +70,11 @@ public class GrapplePoleBehavior : MonoBehaviour
 
     public void GrappleTransition()
     {
-        //Debug.Log("Grapple Firing");
-        playerAnchor = new Ray(cameraTransform.position, cameraTransform.transform.forward);
+        playerAnchor = new Ray(rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
 
         length += Time.fixedDeltaTime * grappleExtensionSpeed;
         length = Mathf.Min(length, maxLength);
+        pole.SetPosition(1, rb.transform.InverseTransformPoint(playerAnchor.GetPoint(length)));
         RaycastHit hit;
         Debug.DrawLine(playerAnchor.origin, playerAnchor.GetPoint(length), Color.yellow, Time.fixedDeltaTime);
         if (Physics.Raycast(playerAnchor, out hit, length, affectedLayers))
@@ -101,13 +101,26 @@ public class GrapplePoleBehavior : MonoBehaviour
         length = 0;
         anchoredRb = null;
         anchoredRbLocalPosition = Vector3.zero;
-        playerAnchor = new Ray(cameraTransform.position, cameraTransform.transform.forward);
-        //Debug.Log("starting grapple at: " + playerAnchor.origin + " heading to " + playerAnchor.direction);
+        playerAnchor = new Ray(rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
         anchored = false;
+
+        pole.enabled = true;
+        pole.SetPosition(1, pole.GetPosition(0));
+    }
+
+    public void EndGrapple()
+    {
+        pole.enabled = false;
     }
 
     public bool ReachedMaxDistance()
     {
         return length >= maxLength;
+    }
+
+    public bool GrapplePoleBroken()
+    {
+        float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
+        return actualLength > maxLength * breakMaxLengthPercent;
     }
 }
