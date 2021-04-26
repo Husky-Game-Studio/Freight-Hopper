@@ -7,6 +7,7 @@ public class RunState : BasicState
     private bool groundPoundPressed = false;
     private bool upwardDashPressed = false;
     private bool fullStopPressed = false;
+    private bool burstPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -16,6 +17,7 @@ public class RunState : BasicState
         UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
         UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
         UserInput.Input.FullStopInput += this.FullStopPressed;
+        UserInput.Input.BurstInput += this.BurstPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
@@ -27,12 +29,14 @@ public class RunState : BasicState
         UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
         UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
         UserInput.Input.FullStopInput -= this.FullStopPressed;
+        UserInput.Input.BurstInput -= this.BurstPressed;
 
         jumpPressed = false;
-        grapplePressed = false;
         groundPoundPressed = false;
+        grapplePressed = false;
         upwardDashPressed = false;
         fullStopPressed = false;
+        burstPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -77,6 +81,12 @@ public class RunState : BasicState
             return playerMachine.fullStopState;
         }
 
+        // Burst
+        if (burstPressed && !playerMachine.abilities.burstBehavior.IsConsumed)
+        {
+            return playerMachine.burstState;
+        }
+
         // Fall
         if (!playerMachine.playerCM.IsGrounded.current)
         {
@@ -89,10 +99,11 @@ public class RunState : BasicState
         }
 
         jumpPressed = false;
-        grapplePressed = false;
         groundPoundPressed = false;
+        grapplePressed = false;
         upwardDashPressed = false;
         fullStopPressed = false;
+        burstPressed = false;
         return this;
     }
 
@@ -125,6 +136,11 @@ public class RunState : BasicState
     private void FullStopPressed()
     {
         fullStopPressed = true;
+    }
+
+    private void BurstPressed()
+    {
+        burstPressed = true;
     }
 
     public bool HasSubStateMachine()

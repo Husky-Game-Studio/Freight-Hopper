@@ -44,6 +44,7 @@ public class UserInput : MonoBehaviour
         master.Player.Jump.performed += JumpHeld;
         master.Player.Jump.canceled += JumpReleased;
         master.Player.FullStop.performed += FullStopPressed;
+        master.Player.Burst.performed += BurstPressed;
         master.Player.GrapplePole.performed += GrapplePressed;
     }
 

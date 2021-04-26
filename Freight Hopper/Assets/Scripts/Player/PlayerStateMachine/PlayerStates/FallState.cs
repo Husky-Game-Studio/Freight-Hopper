@@ -9,6 +9,7 @@ public class FallState : BasicState
     private bool groundPoundPressed = false;
     private bool upwardDashPressed = false;
     private bool fullStopPressed = false;
+    private bool burstPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -19,6 +20,7 @@ public class FallState : BasicState
         UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
         UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
         UserInput.Input.FullStopInput += this.FullStopPressed;
+        UserInput.Input.BurstInput += this.BurstPressed;
 
         if (playerMachine.GetPreviousState() != playerMachine.jumpState)
         {
@@ -39,6 +41,7 @@ public class FallState : BasicState
         UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
         UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
         UserInput.Input.FullStopInput -= this.FullStopPressed;
+        UserInput.Input.BurstInput -= this.BurstPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
         jumpPressed = false;
@@ -46,6 +49,7 @@ public class FallState : BasicState
         grapplePressed = false;
         upwardDashPressed = false;
         fullStopPressed = false;
+        burstPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -92,7 +96,13 @@ public class FallState : BasicState
             return playerMachine.fullStopState;
         }
 
-        // idle
+        // Burst
+        if (burstPressed && !playerMachine.abilities.burstBehavior.IsConsumed)
+        {
+            return playerMachine.burstState;
+        }
+
+        // Idle
         if (playerMachine.playerCM.IsGrounded.current)
         {
             foreach (AbilityBehavior ability in playerMachine.abilities.Abilities)
@@ -103,9 +113,11 @@ public class FallState : BasicState
         }
 
         jumpPressed = false;
-        grapplePressed = false;
         groundPoundPressed = false;
+        grapplePressed = false;
         upwardDashPressed = false;
+        fullStopPressed = false;
+        burstPressed = false;
         return this;
     }
 
@@ -149,6 +161,11 @@ public class FallState : BasicState
     private void FullStopPressed()
     {
         fullStopPressed = true;
+    }
+
+    private void BurstPressed()
+    {
+        burstPressed = true;
     }
 
     public BasicState GetCurrentSubState()
