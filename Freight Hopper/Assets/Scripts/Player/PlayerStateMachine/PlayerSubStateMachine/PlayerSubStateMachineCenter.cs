@@ -17,7 +17,7 @@ public class PlayerSubStateMachineCenter : SubStateMachineCenter
         currentState = miniStatesArray[0];
         previousState = currentState;
 
-        playerMovement = myPlayerMachine.playerAbilities;
+        playerMovement = myPlayerMachine.abilities;
         collision = myPlayerMachine.playerCM;
     }
 }

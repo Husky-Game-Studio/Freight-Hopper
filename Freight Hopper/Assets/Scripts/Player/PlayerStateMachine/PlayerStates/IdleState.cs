@@ -17,6 +17,9 @@ public class IdleState : BasicState
         UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
+        jumpPressed = false;
+        grapplePressed = false;
+        groundPoundPressed = false;
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
@@ -24,6 +27,9 @@ public class IdleState : BasicState
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
         UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
+        jumpPressed = false;
+        grapplePressed = false;
+        groundPoundPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -31,35 +37,32 @@ public class IdleState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         // Jump
-        if (jumpPressed || playerMachine.jumpBufferTimer.TimerActive())
+        if ((jumpPressed || playerMachine.jumpBufferTimer.TimerActive()) && !playerMachine.abilities.jumpBehavior.IsConsumed)
         {
-            jumpPressed = false;
             return playerMachine.jumpState;
         }
 
         // Double Jump
-        if (jumpPressed && playerMachine.playerAbilities.jumpBehavior.IsConsumed && !playerMachine.playerAbilities.doubleJumpBehavior.IsConsumed)
+        if (jumpPressed && playerMachine.abilities.jumpBehavior.IsConsumed && !playerMachine.abilities.doubleJumpBehavior.IsConsumed)
         {
-            jumpPressed = false;
             return playerMachine.doubleJumpState;
         }
 
         // Grapple pole
-        if (grapplePressed)
+        if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.IsConsumed)
         {
-            grapplePressed = false;
+            playerMachine.abilities.grapplePoleBehavior.PreventConsumption();
             return playerMachine.grapplePoleState;
         }
 
         // Ground Pound
         if (groundPoundPressed &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.playerAbilities.groundPoundBehavior.IsConsumed)
+            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.IsConsumed)
         {
-            groundPoundPressed = false;
             return playerMachine.groundPoundState;
         }
-        groundPoundPressed = false;
+
         // Fall
         if (!playerMachine.playerCM.IsGrounded.current)
         {
@@ -71,10 +74,11 @@ public class IdleState : BasicState
             return playerMachine.runState;
         }
         // Idle
-        else
-        {
-            return this;
-        }
+
+        jumpPressed = false;
+        grapplePressed = false;
+        groundPoundPressed = false;
+        return this;
     }
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)

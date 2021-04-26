@@ -22,9 +22,9 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     // If it has a substate use the constructor
 
-    public JumpState jumpState;
-    public DoubleJumpState doubleJumpState;
-    public GroundPoundState groundPoundState;
+    public JumpState jumpState = new JumpState();
+    public DoubleJumpState doubleJumpState = new DoubleJumpState();
+    public GroundPoundState groundPoundState = new GroundPoundState();
     public BurstState burstState;
     public FullStopState fullStopState;
     public UpwardDashState upwardDashState;
@@ -32,21 +32,18 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public GrapplePoleState grapplePoleState;
 
     // Input Components
-    [HideInInspector] public PlayerAbilities playerAbilities;
+    [HideInInspector] public PlayerAbilities abilities;
 
     [HideInInspector] public CollisionManagement playerCM;
 
     public PlayerMachineCenter()
     {
-        jumpState = new JumpState(this);
-        doubleJumpState = new DoubleJumpState(this);
-        groundPoundState = new GroundPoundState(this);
         grapplePoleState = new GrapplePoleState(this);
     }
 
     public override void OnValidate()
     {
-        playerAbilities = GetComponent<PlayerAbilities>();
+        abilities = GetComponent<PlayerAbilities>();
         playerCM = GetComponent<CollisionManagement>();
     }
 

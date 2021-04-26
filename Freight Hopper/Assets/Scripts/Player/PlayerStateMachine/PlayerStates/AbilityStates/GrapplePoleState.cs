@@ -39,17 +39,17 @@ public class GrapplePoleState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         if (grapplePolePressed ||
-            (playerMachine.playerAbilities.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.playerAbilities.grapplePoleBehavior.Anchored()))
+            (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.abilities.grapplePoleBehavior.Anchored()))
         {
             grapplePolePressed = false;
-            playerMachine.playerAbilities.grapplePoleBehavior.ExitAction();
+            playerMachine.abilities.grapplePoleBehavior.ExitAction();
             return playerMachine.fallState;
         }
 
         if (jumpPressed)
         {
             jumpPressed = false;
-            playerMachine.playerAbilities.grapplePoleBehavior.ExitAction();
+            playerMachine.abilities.grapplePoleBehavior.ExitAction();
             return playerMachine.jumpState;
         }
 

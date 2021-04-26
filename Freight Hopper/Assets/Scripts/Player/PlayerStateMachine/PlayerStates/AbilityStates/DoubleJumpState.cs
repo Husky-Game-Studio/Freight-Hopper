@@ -6,47 +6,30 @@ public class DoubleJumpState : BasicState
 {
     private bool grapplePressed = false;
     private bool releasedJumpPressed = false;
-    private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
-    private BasicState[] miniStateArray;
-
-    public DoubleJumpState(PlayerMachineCenter myPMC)
-    {
-        myPlayerMachineCenter = myPMC;
-        miniStateArray = new BasicState[2];
-        miniStateArray[0] = new DoubleJumpInitialState();
-        miniStateArray[1] = new JumpHoldState();
-        pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
-    }
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
+        myPlayerMachineCenter = playerMachine;
         UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
         UserInput.Input.GrappleInput += this.GrappleButtonPressed;
-        pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
-
-        ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
-        pSSMC.SetPrevCurrState(miniStateArray[0]);
 
         // reset jump hold timer
         playerMachine.jumpHoldingTimer.ResetTimer();
+        myPlayerMachineCenter.abilities.doubleJumpBehavior.EntryAction();
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
-        pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
 
         // deactivate jump hold timer
-        playerMachine.jumpHoldingTimer.DeactivateTimer();
-
-        ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
-        pSSMC.SetPrevCurrState(miniStateArray[0]);
+        myPlayerMachineCenter.jumpHoldingTimer.DeactivateTimer();
+        myPlayerMachineCenter.abilities.doubleJumpBehavior.ExitAction();
+        releasedJumpPressed = false;
+        grapplePressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -57,34 +40,25 @@ public class DoubleJumpState : BasicState
         if (releasedJumpPressed || !playerMachine.jumpHoldingTimer.TimerActive())
         {
             playerMachine.jumpHoldingTimer.DeactivateTimer();
-            releasedJumpPressed = false;
-            playerMachine.playerAbilities.doubleJumpBehavior.ExitAction();
             return playerMachine.fallState;
         }
         // Grapple pole
         if (grapplePressed)
         {
-            grapplePressed = false;
-            playerMachine.playerAbilities.doubleJumpBehavior.ExitAction();
             return playerMachine.grapplePoleState;
         }
 
         // Double Jump
-        else
-        {
-            return this;
-        }
+        releasedJumpPressed = false;
+        grapplePressed = false;
+        return this;
     }
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
-        playerMachine.jumpHoldingTimer.CountDownFixed();
-
-        // Perform the SubStateMachine Behavior
-        pSSMC.PerformSubMachineBehavior();
+        myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
+        myPlayerMachineCenter.abilities.doubleJumpBehavior.Action();
     }
 
     private void ReleasedJumpButtonPressed()
@@ -99,16 +73,16 @@ public class DoubleJumpState : BasicState
 
     public bool HasSubStateMachine()
     {
-        return true;
+        return false;
     }
 
     public BasicState GetCurrentSubState()
     {
-        return pSSMC.GetCurrentSubState();
+        return null;
     }
 
     public BasicState[] GetSubStateArray()
     {
-        return miniStateArray;
+        return null;
     }
 }

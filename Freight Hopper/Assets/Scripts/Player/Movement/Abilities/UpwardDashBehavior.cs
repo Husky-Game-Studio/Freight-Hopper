@@ -51,7 +51,7 @@ public class UpwardDashBehavior : AbilityBehavior
 
     public override void ExitAction()
     {
-        consumed = true;
+        base.ExitAction();
         playerRb.velocity = storedVelocity;
         storedVelocity = Vector3.zero;
     }

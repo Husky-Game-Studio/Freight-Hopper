@@ -2,67 +2,45 @@ public class JumpState : BasicState
 {
     private bool grapplePressed = false;
     private bool releasedJumpPressed = false;
-    private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
-    private BasicState[] miniStateArray;
-
-    public JumpState(PlayerMachineCenter myPMC)
-    {
-        myPlayerMachineCenter = myPMC;
-        miniStateArray = new BasicState[2];
-        miniStateArray[0] = new JumpInitialState();
-        miniStateArray[1] = new JumpHoldState();
-        pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
-    }
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
+        myPlayerMachineCenter = playerMachine;
         UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
         UserInput.Input.GrappleInput += this.GrappleButtonPressed;
-        pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
-
-        ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
-        pSSMC.SetPrevCurrState(miniStateArray[0]);
 
         // reset jump hold timer
         playerMachine.jumpHoldingTimer.ResetTimer();
+        playerMachine.abilities.jumpBehavior.EntryAction();
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
-        pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
 
         // deactivate jump hold timer
-        playerMachine.jumpHoldingTimer.DeactivateTimer();
+        myPlayerMachineCenter.jumpHoldingTimer.DeactivateTimer();
 
-        ///////////////MAYBE HERE RESET THE INITIAL SUBSTATE??
-        pSSMC.SetPrevCurrState(miniStateArray[0]);
+        myPlayerMachineCenter.abilities.jumpBehavior.ExitAction();
+        releasedJumpPressed = false;
+        grapplePressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         // Fall
-        if (releasedJumpPressed || !playerMachine.jumpHoldingTimer.TimerActive())
+        if (releasedJumpPressed || !myPlayerMachineCenter.jumpHoldingTimer.TimerActive())
         {
-            playerMachine.jumpHoldingTimer.DeactivateTimer();
-            releasedJumpPressed = false;
-            playerMachine.playerAbilities.jumpBehavior.ExitAction();
-            return playerMachine.fallState;
+            myPlayerMachineCenter.jumpHoldingTimer.DeactivateTimer();
+            return myPlayerMachineCenter.fallState;
         }
         // Grapple pole
-        if (grapplePressed)
+        if (grapplePressed && !myPlayerMachineCenter.abilities.grapplePoleBehavior.IsConsumed)
         {
-            grapplePressed = false;
-            playerMachine.playerAbilities.jumpBehavior.ExitAction();
-            return playerMachine.grapplePoleState;
+            return myPlayerMachineCenter.grapplePoleState;
         }
 
         // Jump
@@ -74,13 +52,10 @@ public class JumpState : BasicState
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
-        playerMachine.jumpHoldingTimer.CountDownFixed();
+        myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
 
-        // Perform the SubStateMachine Behavior
-        pSSMC.PerformSubMachineBehavior();
+        myPlayerMachineCenter.abilities.jumpBehavior.Action();
     }
 
     private void ReleasedJumpButtonPressed()
@@ -95,16 +70,16 @@ public class JumpState : BasicState
 
     public bool HasSubStateMachine()
     {
-        return true;
+        return false;
     }
 
     public BasicState GetCurrentSubState()
     {
-        return pSSMC.GetCurrentSubState();
+        return null;
     }
 
     public BasicState[] GetSubStateArray()
     {
-        return miniStateArray;
+        return null;
     }
 }

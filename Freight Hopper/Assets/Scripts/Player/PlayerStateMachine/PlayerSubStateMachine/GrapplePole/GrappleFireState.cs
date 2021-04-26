@@ -15,7 +15,7 @@ public class GrappleFireState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        if (playerMachine.playerAbilities.grapplePoleBehavior.Anchored())
+        if (playerMachine.abilities.grapplePoleBehavior.Anchored())
         {
             return playerMachine.GetCurrentState().GetSubStateArray()[1];
         }
@@ -28,13 +28,13 @@ public class GrappleFireState : BasicState
         // Call animation and mesh generation
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        playerMachine.playerAbilities.movementBehavior.Action();
+        playerMachine.abilities.movementBehavior.Action();
         if (startOfGrapple)
         {
-            playerMachine.playerAbilities.grapplePoleBehavior.EntryAction();
+            playerMachine.abilities.grapplePoleBehavior.EntryAction();
             startOfGrapple = false;
         }
-        playerMachine.playerAbilities.grapplePoleBehavior.GrappleTransition();
+        playerMachine.abilities.grapplePoleBehavior.GrappleTransition();
     }
 
     public bool HasSubStateMachine()

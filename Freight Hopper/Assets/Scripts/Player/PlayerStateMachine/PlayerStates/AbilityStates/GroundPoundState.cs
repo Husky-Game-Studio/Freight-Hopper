@@ -2,28 +2,16 @@ public class GroundPoundState : BasicState
 {
     private bool groundPoundReleased = false;
     private bool jumpPressed = false;
-    private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
-    private BasicState[] miniStateArray;
-
-    public GroundPoundState(PlayerMachineCenter myPMC)
-    {
-        myPlayerMachineCenter = myPMC;
-        miniStateArray = new BasicState[2];
-        miniStateArray[0] = new GroundPoundInitialState();
-        miniStateArray[1] = new GroundPoundFall();
-
-        pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
-    }
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
+        myPlayerMachineCenter = playerMachine;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
         UserInput.Input.GroundPoundCanceled += this.GroundPoundButtonReleased;
-        pSSMC.SetPrevCurrState(miniStateArray[0]);
-        pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
+
+        playerMachine.abilities.groundPoundBehavior.EntryAction();
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
@@ -32,7 +20,10 @@ public class GroundPoundState : BasicState
 
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         UserInput.Input.GroundPoundCanceled -= this.GroundPoundButtonReleased;
-        pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
+
+        playerMachine.abilities.groundPoundBehavior.ExitAction();
+        groundPoundReleased = false;
+        jumpPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -42,29 +33,24 @@ public class GroundPoundState : BasicState
         // Fall
         if (groundPoundReleased)
         {
-            groundPoundReleased = false;
-            playerMachine.playerAbilities.groundPoundBehavior.ExitAction();
             return playerMachine.fallState;
         }
-        groundPoundReleased = false;
+
         // Jump
-        if (jumpPressed && !playerMachine.playerAbilities.jumpBehavior.IsConsumed)
+        if (jumpPressed && !playerMachine.abilities.jumpBehavior.IsConsumed)
         {
-            jumpPressed = false;
-            playerMachine.playerAbilities.groundPoundBehavior.ExitAction();
             return playerMachine.jumpState;
         }
         // Double Jump
-        if (jumpPressed && playerMachine.playerAbilities.jumpBehavior.IsConsumed && !playerMachine.playerAbilities.doubleJumpBehavior.IsConsumed)
+        if (jumpPressed && playerMachine.abilities.jumpBehavior.IsConsumed && !playerMachine.abilities.doubleJumpBehavior.IsConsumed)
         {
-            jumpPressed = false;
-            playerMachine.playerAbilities.groundPoundBehavior.ExitAction();
             return playerMachine.doubleJumpState;
         }
         // Grapple (SHOULDN'T CANCEL GROUND POUND)
         // Burst
         // Upward Dash
-
+        groundPoundReleased = false;
+        jumpPressed = false;
         return this;
     }
 
@@ -80,21 +66,21 @@ public class GroundPoundState : BasicState
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        pSSMC.PerformSubMachineBehavior();
+        myPlayerMachineCenter.abilities.groundPoundBehavior.Action();
     }
 
     public bool HasSubStateMachine()
     {
-        return true;
+        return false;
     }
 
     public BasicState GetCurrentSubState()
     {
-        return pSSMC.GetCurrentSubState();
+        return null;
     }
 
     public BasicState[] GetSubStateArray()
     {
-        return miniStateArray;
+        return null;
     }
 }

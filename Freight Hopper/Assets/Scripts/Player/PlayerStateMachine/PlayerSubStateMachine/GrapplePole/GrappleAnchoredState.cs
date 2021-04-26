@@ -19,7 +19,7 @@ public class GrappleAnchoredState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         // Perform grapple pole behavior
-        playerMachine.playerAbilities.grapplePoleBehavior.Grapple(UserInput.Input.Move());
+        playerMachine.abilities.grapplePoleBehavior.Grapple(UserInput.Input.Move());
     }
 
     public bool HasSubStateMachine()
