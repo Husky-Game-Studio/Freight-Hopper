@@ -25,9 +25,9 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public JumpState jumpState = new JumpState();
     public DoubleJumpState doubleJumpState = new DoubleJumpState();
     public GroundPoundState groundPoundState = new GroundPoundState();
-    public BurstState burstState;
-    public FullStopState fullStopState;
-    public UpwardDashState upwardDashState;
+    public BurstState burstState = new BurstState();
+    public FullStopState fullStopState = new FullStopState();
+    public UpwardDashState upwardDashState = new UpwardDashState();
     public WallRunState wallRunState;
     public GrapplePoleState grapplePoleState;
 

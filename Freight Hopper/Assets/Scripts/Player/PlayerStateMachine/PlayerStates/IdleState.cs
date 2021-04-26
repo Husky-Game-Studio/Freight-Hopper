@@ -7,29 +7,30 @@ public class IdleState : BasicState
     private bool jumpPressed = false;
     private bool grapplePressed = false;
     private bool groundPoundPressed = false;
+    private bool upwardDashPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        UserInput.Input.JumpInput += this.JumpButtonPressed;
-        UserInput.Input.GrappleInput += this.GrappleButtonPressed;
-        UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
+        UserInput.Input.JumpInput += this.JumpPressed;
+        UserInput.Input.GrappleInput += this.GrapplePressed;
+        UserInput.Input.GroundPoundInput += this.GroundPoundPressed;
+        UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
-        jumpPressed = false;
-        grapplePressed = false;
-        groundPoundPressed = false;
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        UserInput.Input.JumpInput -= this.JumpButtonPressed;
-        UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
-        UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
+        UserInput.Input.JumpInput -= this.JumpPressed;
+        UserInput.Input.GrappleInput -= this.GrapplePressed;
+        UserInput.Input.GroundPoundInput -= this.GroundPoundPressed;
+        UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
         jumpPressed = false;
         grapplePressed = false;
         groundPoundPressed = false;
+        upwardDashPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -63,6 +64,12 @@ public class IdleState : BasicState
             return playerMachine.groundPoundState;
         }
 
+        // Upward Dash
+        if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.IsConsumed)
+        {
+            return playerMachine.upwardDashState;
+        }
+
         // Fall
         if (!playerMachine.playerCM.IsGrounded.current)
         {
@@ -73,11 +80,11 @@ public class IdleState : BasicState
         {
             return playerMachine.runState;
         }
-        // Idle
 
         jumpPressed = false;
         grapplePressed = false;
         groundPoundPressed = false;
+        upwardDashPressed = false;
         return this;
     }
 
@@ -86,19 +93,24 @@ public class IdleState : BasicState
         // reset coyotee timer, only decrements when in falling state // i dont think this comment is necessary anymore, i think it is solved somewhere else?
     }
 
-    private void JumpButtonPressed()
+    private void JumpPressed()
     {
         jumpPressed = true;
     }
 
-    private void GrappleButtonPressed()
+    private void GrapplePressed()
     {
         grapplePressed = true;
     }
 
-    private void GroundPoundButtonPressed()
+    private void GroundPoundPressed()
     {
         groundPoundPressed = true;
+    }
+
+    private void UpwardDashPressed()
+    {
+        upwardDashPressed = true;
     }
 
     public bool HasSubStateMachine()

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3568.498, g: 1985.7354, b: 1218.8125, a: 1}
+  m_IndirectSpecularColor: {r: 3567.1113, g: 1984.9336, b: 1218.4512, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -373,6 +373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
 --- !u!4 &1798020240
 Transform:
   m_ObjectHideFlags: 0
@@ -401,6 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
   percentStrengthComparedToNormalJump: 75
 --- !u!114 &1798020242
 MonoBehaviour:
@@ -416,6 +418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
   increasingForce:
     old: 1
     current: 1
@@ -437,6 +440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
   minJumpHeight: 1.5
   holdingJumpForceMultiplier: 15
 --- !u!114 &1798020244
@@ -453,6 +457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
   groundAcceleration: 40
   airAcceleration: 10
 --- !u!114 &1798020245
@@ -469,6 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
   length: 0
   pole: {fileID: 840649353}
   breakMaxLengthPercent: 1.25
@@ -497,6 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
 --- !u!114 &1798020247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,9 +518,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
   storedVelocity: {x: 0, y: 0, z: 0}
-  initialUpwardsForce: 0
-  consistentForce: 0
+  initialUpwardsForce: 20
+  consistentForce: 0.6
 --- !u!114 &1798020248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,6 +536,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unlocked: 1
   consumed: 0
+  preventConsumption: 0
   burstForce: 0
   angle: 0
 --- !u!1 &4493642203787552934
@@ -587,9 +596,9 @@ MonoBehaviour:
   groundPoundBehavior: {fileID: 1798020242}
   grapplePoleBehavior: {fileID: 1798020245}
   doubleJumpBehavior: {fileID: 1798020241}
-  wallRunBehavior: {fileID: 0}
-  upwardDashBehavior: {fileID: 0}
-  burstBehavior: {fileID: 0}
+  wallRunBehavior: {fileID: 1798020246}
+  upwardDashBehavior: {fileID: 1798020247}
+  burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
 --- !u!114 &4493642203787552937
 MonoBehaviour:
@@ -652,8 +661,9 @@ MonoBehaviour:
   jumpBufferTimer:
     duration: 0.3
     current: 0
-  playerMovement: {fileID: 4493642203787552936}
-  collision: {fileID: 4493642203787552937}
+  wallRunState: {fileID: 0}
+  abilities: {fileID: 4493642203787552936}
+  playerCM: {fileID: 4493642203787552937}
 --- !u!114 &6851446874351635506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1097,6 +1107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundPoundHeld: 0
   jumpHeld: 0
+  upwardDashHeld: 0
 --- !u!4 &6851446874724608892
 Transform:
   m_ObjectHideFlags: 0

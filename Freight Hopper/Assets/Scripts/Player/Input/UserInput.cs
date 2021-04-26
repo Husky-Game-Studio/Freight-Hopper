@@ -28,14 +28,19 @@ public class UserInput : MonoBehaviour
 
     public event PressEventHandler UpwardDashInput;
 
+    public event PressEventHandler UpwardDashInputCanceled;
+
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
+    [ReadOnly, SerializeField] private bool upwardDashHeld;
 
     private void OnEnable()
     {
         master.Enable();
         master.Player.GroundPound.performed += GroundPoundHeld;
         master.Player.GroundPound.canceled += GroundPoundReleased;
+        master.Player.UpwardDash.performed += UpwardDashHeld;
+        master.Player.UpwardDash.canceled += UpwardDashReleased;
         master.Player.Jump.performed += JumpHeld;
         master.Player.Jump.canceled += JumpReleased;
         master.Player.FullStop.performed += FullStopPressed;
@@ -82,6 +87,20 @@ public class UserInput : MonoBehaviour
     private void JumpReleased(InputAction.CallbackContext context)
     {
         JumpInputCanceled?.Invoke();
+    }
+
+    private void UpwardDashHeld(InputAction.CallbackContext context)
+    {
+        upwardDashHeld = !upwardDashHeld;
+        if (upwardDashHeld)
+        {
+            UpwardDashInput?.Invoke();
+        }
+    }
+
+    private void UpwardDashReleased(InputAction.CallbackContext context)
+    {
+        UpwardDashInputCanceled?.Invoke();
     }
 
     private void GroundPoundReleased(InputAction.CallbackContext context)

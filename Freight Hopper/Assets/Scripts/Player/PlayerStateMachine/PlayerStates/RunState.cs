@@ -7,6 +7,7 @@ public class RunState : BasicState
     private bool jumpPressed = false;
     private bool grapplePressed = false;
     private bool groundPoundPressed = false;
+    private bool upwardDashPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -14,6 +15,7 @@ public class RunState : BasicState
         UserInput.Input.JumpInput += this.JumpButtonPressed;
         UserInput.Input.GrappleInput += this.GrappleButtonPressed;
         UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
+        UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
@@ -23,9 +25,11 @@ public class RunState : BasicState
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
         UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
+        UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
         jumpPressed = false;
         grapplePressed = false;
         groundPoundPressed = false;
+        upwardDashPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -58,6 +62,12 @@ public class RunState : BasicState
             return playerMachine.groundPoundState;
         }
 
+        // Upward Dash
+        if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.IsConsumed)
+        {
+            return playerMachine.upwardDashState;
+        }
+
         // Fall
         if (!playerMachine.playerCM.IsGrounded.current)
         {
@@ -72,6 +82,7 @@ public class RunState : BasicState
         jumpPressed = false;
         grapplePressed = false;
         groundPoundPressed = false;
+        upwardDashPressed = false;
         return this;
     }
 
@@ -94,6 +105,11 @@ public class RunState : BasicState
     private void GrappleButtonPressed()
     {
         grapplePressed = true;
+    }
+
+    private void UpwardDashPressed()
+    {
+        upwardDashPressed = true;
     }
 
     public bool HasSubStateMachine()

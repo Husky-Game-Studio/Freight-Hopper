@@ -7,6 +7,7 @@ public class FallState : BasicState
     private bool jumpPressed = false;
     private bool grapplePressed = false;
     private bool groundPoundPressed = false;
+    private bool upwardDashPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -16,6 +17,7 @@ public class FallState : BasicState
         UserInput.Input.JumpInput += this.JumpButtonPressed;
         UserInput.Input.GrappleInput += this.GrappleButtonPressed;
         UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
+        UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
 
         if (playerMachine.GetPreviousState() != playerMachine.jumpState)
         {
@@ -25,9 +27,6 @@ public class FallState : BasicState
         {
             playerMachine.coyoteeTimer.DeactivateTimer();
         }
-        jumpPressed = false;
-        grapplePressed = false;
-        groundPoundPressed = false;
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
@@ -37,11 +36,13 @@ public class FallState : BasicState
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
         UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
+        UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
         jumpPressed = false;
         groundPoundPressed = false;
         grapplePressed = false;
+        upwardDashPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -76,6 +77,12 @@ public class FallState : BasicState
             return playerMachine.grapplePoleState;
         }
 
+        // Upward Dash
+        if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.IsConsumed)
+        {
+            return playerMachine.upwardDashState;
+        }
+
         // idle
         if (playerMachine.playerCM.IsGrounded.current)
         {
@@ -89,6 +96,7 @@ public class FallState : BasicState
         jumpPressed = false;
         grapplePressed = false;
         groundPoundPressed = false;
+        upwardDashPressed = false;
         return this;
     }
 
@@ -122,6 +130,11 @@ public class FallState : BasicState
     private void GroundPoundButtonPressed()
     {
         groundPoundPressed = true;
+    }
+
+    private void UpwardDashPressed()
+    {
+        upwardDashPressed = true;
     }
 
     private void GrappleButtonPressed()

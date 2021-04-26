@@ -72,7 +72,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""id"": ""b1bc063b-999f-44b6-a2c1-91c3bb09649d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press(behavior=2)""
                 },
                 {
                     ""name"": ""Full Stop"",
