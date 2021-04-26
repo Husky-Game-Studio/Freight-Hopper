@@ -8,6 +8,7 @@ public class IdleState : BasicState
     private bool grapplePressed = false;
     private bool groundPoundPressed = false;
     private bool upwardDashPressed = false;
+    private bool fullStopPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -17,6 +18,7 @@ public class IdleState : BasicState
         UserInput.Input.GrappleInput += this.GrapplePressed;
         UserInput.Input.GroundPoundInput += this.GroundPoundPressed;
         UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
+        UserInput.Input.FullStopInput += this.FullStopPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
@@ -27,10 +29,12 @@ public class IdleState : BasicState
         UserInput.Input.GrappleInput -= this.GrapplePressed;
         UserInput.Input.GroundPoundInput -= this.GroundPoundPressed;
         UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
+        UserInput.Input.FullStopInput -= this.FullStopPressed;
         jumpPressed = false;
         grapplePressed = false;
         groundPoundPressed = false;
         upwardDashPressed = false;
+        fullStopPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -70,6 +74,12 @@ public class IdleState : BasicState
             return playerMachine.upwardDashState;
         }
 
+        // Full Stop
+        if (fullStopPressed && !playerMachine.abilities.fullstopBehavior.IsConsumed)
+        {
+            return playerMachine.fullStopState;
+        }
+
         // Fall
         if (!playerMachine.playerCM.IsGrounded.current)
         {
@@ -85,6 +95,7 @@ public class IdleState : BasicState
         grapplePressed = false;
         groundPoundPressed = false;
         upwardDashPressed = false;
+        fullStopPressed = false;
         return this;
     }
 
@@ -111,6 +122,11 @@ public class IdleState : BasicState
     private void UpwardDashPressed()
     {
         upwardDashPressed = true;
+    }
+
+    private void FullStopPressed()
+    {
+        fullStopPressed = true;
     }
 
     public bool HasSubStateMachine()

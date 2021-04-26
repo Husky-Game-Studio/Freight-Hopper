@@ -1,51 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class FullStopState : BasicState
 {
-    public BasicState GetCurrentSubState()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool HasSubStateMachine()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
-    {
-        throw new System.NotImplementedException();
-    }
+    private PlayerMachineCenter myPlayerMachineCenter;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        throw new System.NotImplementedException();
-    }
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+        myPlayerMachineCenter = playerMachine;
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
-    {
-        throw new System.NotImplementedException();
+        playerMachine.abilities.fullstopBehavior.EntryAction();
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        throw new System.NotImplementedException();
+        myPlayerMachineCenter.abilities.fullstopBehavior.ExitAction();
     }
 
-    // Start is called before the first frame update
-    private void Start()
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
+        return myPlayerMachineCenter.fallState;
     }
 
-    // Update is called once per frame
-    private void Update()
+    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
+        myPlayerMachineCenter.abilities.fullstopBehavior.Action();
+    }
+
+    public bool HasSubStateMachine()
+    {
+        return false;
+    }
+
+    public BasicState GetCurrentSubState()
+    {
+        return null;
+    }
+
+    public BasicState[] GetSubStateArray()
+    {
+        return null;
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RunState : BasicState
@@ -8,6 +6,7 @@ public class RunState : BasicState
     private bool grapplePressed = false;
     private bool groundPoundPressed = false;
     private bool upwardDashPressed = false;
+    private bool fullStopPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -16,6 +15,7 @@ public class RunState : BasicState
         UserInput.Input.GrappleInput += this.GrappleButtonPressed;
         UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
         UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
+        UserInput.Input.FullStopInput += this.FullStopPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
@@ -26,10 +26,13 @@ public class RunState : BasicState
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
         UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
         UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
+        UserInput.Input.FullStopInput -= this.FullStopPressed;
+
         jumpPressed = false;
         grapplePressed = false;
         groundPoundPressed = false;
         upwardDashPressed = false;
+        fullStopPressed = false;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -68,6 +71,12 @@ public class RunState : BasicState
             return playerMachine.upwardDashState;
         }
 
+        // Full Stop
+        if (fullStopPressed && !playerMachine.abilities.fullstopBehavior.IsConsumed)
+        {
+            return playerMachine.fullStopState;
+        }
+
         // Fall
         if (!playerMachine.playerCM.IsGrounded.current)
         {
@@ -83,6 +92,7 @@ public class RunState : BasicState
         grapplePressed = false;
         groundPoundPressed = false;
         upwardDashPressed = false;
+        fullStopPressed = false;
         return this;
     }
 
@@ -110,6 +120,11 @@ public class RunState : BasicState
     private void UpwardDashPressed()
     {
         upwardDashPressed = true;
+    }
+
+    private void FullStopPressed()
+    {
+        fullStopPressed = true;
     }
 
     public bool HasSubStateMachine()

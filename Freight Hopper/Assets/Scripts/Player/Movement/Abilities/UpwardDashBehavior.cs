@@ -19,7 +19,7 @@ public class UpwardDashBehavior : AbilityBehavior
     public override void Action()
     {
         playerRb.AddForce(playerCM.ValidUpAxis * consistentForce, ForceMode.VelocityChange);
-        playerRb.velocity = new Vector3(0, playerRb.velocity.y, 0);
+        playerRb.velocity = Vector3.Project(playerRb.velocity, playerCM.ValidUpAxis);
     }
 
     public override void ExitAction()
