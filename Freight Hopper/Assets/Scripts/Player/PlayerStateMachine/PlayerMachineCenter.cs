@@ -15,31 +15,39 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     [SerializeField] public Timer jumpBufferTimer = new Timer(0.3f);
 
     // Player States
-    public IdleState idleState = new IdleState();
 
+    public IdleState idleState = new IdleState();
+    public FallState fallState = new FallState();
     public RunState runState = new RunState();
 
     // If it has a substate use the constructor
-    public JumpState jumpState;
 
-    public FallState fallState = new FallState();
+    public JumpState jumpState;
+    public DoubleJumpState doubleJumpState;
+    public GroundPoundState groundPoundState;
+    public BurstState burstState;
+    public FullStopState fullStopState;
+    public UpwardDashState upwardDashState;
+    public WallRunState wallRunState;
     public GrapplePoleState grapplePoleState;
 
     // Input Components
-    [HideInInspector] public PlayerMovement playerMovement;
+    [HideInInspector] public PlayerAbilities playerAbilities;
 
-    [HideInInspector] public CollisionManagement collision;
+    [HideInInspector] public CollisionManagement playerCM;
 
     public PlayerMachineCenter()
     {
         jumpState = new JumpState(this);
+        doubleJumpState = new DoubleJumpState(this);
+        groundPoundState = new GroundPoundState(this);
         grapplePoleState = new GrapplePoleState(this);
     }
 
     public override void OnValidate()
     {
-        playerMovement = GetComponent<PlayerMovement>();
-        collision = GetComponent<CollisionManagement>();
+        playerAbilities = GetComponent<PlayerAbilities>();
+        playerCM = GetComponent<CollisionManagement>();
     }
 
     public override void OnEnable()
@@ -47,7 +55,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         currentState = idleState;
         previousState = idleState;
         currentState.SubToListeners(this);
-        collision.CollisionDataCollected += LateFixedUpdate;
+        playerCM.CollisionDataCollected += LateFixedUpdate;
 
         UserInput.Input.JumpInput += this.JumpButtonPressed;
     }
@@ -55,7 +63,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public override void OnDisable()
     {
         currentState.UnsubToListeners(this);
-        collision.CollisionDataCollected -= LateFixedUpdate;
+        playerCM.CollisionDataCollected -= LateFixedUpdate;
 
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
     }

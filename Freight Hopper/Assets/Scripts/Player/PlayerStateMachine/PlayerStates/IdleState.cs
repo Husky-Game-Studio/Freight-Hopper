@@ -6,6 +6,7 @@ public class IdleState : BasicState
 {
     private bool jumpPressed = false;
     private bool grapplePressed = false;
+    private bool groundPoundPressed = false;
 
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -13,6 +14,7 @@ public class IdleState : BasicState
 
         UserInput.Input.JumpInput += this.JumpButtonPressed;
         UserInput.Input.GrappleInput += this.GrappleButtonPressed;
+        UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
@@ -21,6 +23,7 @@ public class IdleState : BasicState
     {
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
+        UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -34,6 +37,13 @@ public class IdleState : BasicState
             return playerMachine.jumpState;
         }
 
+        // Double Jump
+        if (jumpPressed && playerMachine.playerAbilities.jumpBehavior.IsConsumed && !playerMachine.playerAbilities.doubleJumpBehavior.IsConsumed)
+        {
+            jumpPressed = false;
+            return playerMachine.doubleJumpState;
+        }
+
         // Grapple pole
         if (grapplePressed)
         {
@@ -41,13 +51,22 @@ public class IdleState : BasicState
             return playerMachine.grapplePoleState;
         }
 
+        // Ground Pound
+        if (groundPoundPressed &&
+            (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
+            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.playerAbilities.groundPoundBehavior.IsConsumed)
+        {
+            groundPoundPressed = false;
+            return playerMachine.groundPoundState;
+        }
+        groundPoundPressed = false;
         // Fall
-        if (!playerMachine.collision.IsGrounded.current)
+        if (!playerMachine.playerCM.IsGrounded.current)
         {
             return playerMachine.fallState;
         }
         // Run
-        if (UserInput.Input.Move() != Vector2.zero)
+        if (UserInput.Input.Move() != Vector3.zero)
         {
             return playerMachine.runState;
         }
@@ -71,6 +90,11 @@ public class IdleState : BasicState
     private void GrappleButtonPressed()
     {
         grapplePressed = true;
+    }
+
+    private void GroundPoundButtonPressed()
+    {
+        groundPoundPressed = true;
     }
 
     public bool HasSubStateMachine()

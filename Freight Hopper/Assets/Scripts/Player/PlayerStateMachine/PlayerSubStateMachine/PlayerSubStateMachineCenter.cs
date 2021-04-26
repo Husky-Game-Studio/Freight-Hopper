@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerSubStateMachineCenter : SubStateMachineCenter
 {
-    private PlayerMovement playerMovement;
+    private PlayerAbilities playerMovement;
     private CollisionManagement collision;
 
     public PlayerSubStateMachineCenter(BasicState myParentState, BasicState[] myMiniStatesArray, PlayerMachineCenter myPlayerMachine)
@@ -17,7 +17,7 @@ public class PlayerSubStateMachineCenter : SubStateMachineCenter
         currentState = miniStatesArray[0];
         previousState = currentState;
 
-        playerMovement = myPlayerMachine.playerMovement;
-        collision = myPlayerMachine.collision;
+        playerMovement = myPlayerMachine.playerAbilities;
+        collision = myPlayerMachine.playerCM;
     }
 }

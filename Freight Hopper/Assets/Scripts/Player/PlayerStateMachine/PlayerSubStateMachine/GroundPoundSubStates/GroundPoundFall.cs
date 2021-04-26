@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class JumpHoldState : BasicState
+public class GroundPoundFall : BasicState
 {
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -14,16 +10,16 @@ public class JumpHoldState : BasicState
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         return this;
     }
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        playerMachine.jumpHoldingTimer.CountDownFixed();
-        playerMachine.playerAbilities.movementBehavior.Action();
-        playerMachine.playerAbilities.jumpBehavior.Action();
+        // Perform grapple pole behavior
+        playerMachine.playerAbilities.groundPoundBehavior.Action();
     }
 
     public bool HasSubStateMachine()

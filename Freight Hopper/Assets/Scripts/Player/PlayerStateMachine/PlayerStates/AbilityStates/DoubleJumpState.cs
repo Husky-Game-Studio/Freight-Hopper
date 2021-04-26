@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpState : BasicState
+public class DoubleJumpState : BasicState
 {
     private bool grapplePressed = false;
     private bool releasedJumpPressed = false;
@@ -10,11 +10,11 @@ public class JumpState : BasicState
     private PlayerMachineCenter myPlayerMachineCenter;
     private BasicState[] miniStateArray;
 
-    public JumpState(PlayerMachineCenter myPMC)
+    public DoubleJumpState(PlayerMachineCenter myPMC)
     {
         myPlayerMachineCenter = myPMC;
         miniStateArray = new BasicState[2];
-        miniStateArray[0] = new JumpInitialState();
+        miniStateArray[0] = new DoubleJumpInitialState();
         miniStateArray[1] = new JumpHoldState();
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
     }
@@ -58,16 +58,18 @@ public class JumpState : BasicState
         {
             playerMachine.jumpHoldingTimer.DeactivateTimer();
             releasedJumpPressed = false;
+            playerMachine.playerAbilities.doubleJumpBehavior.ExitAction();
             return playerMachine.fallState;
         }
         // Grapple pole
         if (grapplePressed)
         {
             grapplePressed = false;
+            playerMachine.playerAbilities.doubleJumpBehavior.ExitAction();
             return playerMachine.grapplePoleState;
         }
 
-        // Jump
+        // Double Jump
         else
         {
             return this;

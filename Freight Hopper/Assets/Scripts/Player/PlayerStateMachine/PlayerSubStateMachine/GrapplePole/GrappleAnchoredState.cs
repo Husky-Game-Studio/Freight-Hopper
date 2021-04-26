@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class GrappleAnchoredState : BasicState
 {
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
@@ -23,9 +19,7 @@ public class GrappleAnchoredState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         // Perform grapple pole behavior
-        playerMachine.playerMovement.grapplePoleBehavior.Grapple(new Vector3(UserInput.Input.Move().x, 0, UserInput.Input.Move().y));
-        // REMOVE THE MOVEMENT LATER, SHOULDN'T BE ABLE TO MOVE
-        //playerMachine.playerMovement.movementBehavior.Movement();
+        playerMachine.playerAbilities.grapplePoleBehavior.Grapple(UserInput.Input.Move());
     }
 
     public bool HasSubStateMachine()

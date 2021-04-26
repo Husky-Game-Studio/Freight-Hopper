@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class GrappleFireState : BasicState
 {
     private bool startOfGrapple = true;
@@ -19,7 +15,7 @@ public class GrappleFireState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        if (playerMachine.playerMovement.grapplePoleBehavior.Anchored())
+        if (playerMachine.playerAbilities.grapplePoleBehavior.Anchored())
         {
             return playerMachine.GetCurrentState().GetSubStateArray()[1];
         }
@@ -32,13 +28,13 @@ public class GrappleFireState : BasicState
         // Call animation and mesh generation
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        playerMachine.playerMovement.movementBehavior.Movement();
+        playerMachine.playerAbilities.movementBehavior.Action();
         if (startOfGrapple)
         {
-            playerMachine.playerMovement.grapplePoleBehavior.StartGrapple();
+            playerMachine.playerAbilities.grapplePoleBehavior.EntryAction();
             startOfGrapple = false;
         }
-        playerMachine.playerMovement.grapplePoleBehavior.GrappleTransition();
+        playerMachine.playerAbilities.grapplePoleBehavior.GrappleTransition();
     }
 
     public bool HasSubStateMachine()

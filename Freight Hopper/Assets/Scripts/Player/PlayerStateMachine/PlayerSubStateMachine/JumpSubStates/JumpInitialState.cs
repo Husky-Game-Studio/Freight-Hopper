@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class JumpInitialState : BasicState
 {
-    //private bool releasedJumpPressed = false;
-
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        //UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        //UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -23,20 +19,13 @@ public class JumpInitialState : BasicState
         return playerMachine.GetCurrentState().GetSubStateArray()[1];
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public virtual void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        playerMachine.playerMovement.jumpBehavior.Jump();
-        playerMachine.playerMovement.movementBehavior.Movement();
-
-        //Debug.Log("In JumpInitialState at: " + Time.time);
+        playerMachine.playerAbilities.jumpBehavior.EntryAction();
+        playerMachine.playerAbilities.movementBehavior.Action();
     }
-
-    /*private void ReleasedJumpButtonPressed()
-    {
-        releasedJumpPressed = true;
-    }*/
 
     public bool HasSubStateMachine()
     {

@@ -1,58 +1,27 @@
 using UnityEngine;
 
-[System.Serializable]
-public class DoubleJumpBehavior : MonoBehaviour
+public class DoubleJumpBehavior : AbilityBehavior
 {
     [Range(25, 300)]
     [SerializeField] private float percentStrengthComparedToNormalJump = 75;
 
-    [SerializeField, ReadOnly] private bool doubleJumpReady;
-    [SerializeField, ReadOnly] private bool jumpInputLetGo = false;
+    //[SerializeField, ReadOnly] private bool doubleJumpReady;
+    //[SerializeField, ReadOnly] private bool jumpInputLetGo = false;
 
     private JumpBehavior jumpBehavior;
-    private CollisionManagement playerCollision;
 
-    public void Initialize(CollisionManagement playerCollision, JumpBehavior jumpBehavior)
+    public void GetJumpBehavior(JumpBehavior jumpBehavior)
     {
         this.jumpBehavior = jumpBehavior;
-        this.playerCollision = playerCollision;
     }
 
-    private void OnEnable()
+    public override void EntryAction()
     {
-        UserInput.Input.JumpInput += TryDoubleJump;
-        playerCollision.Landed += Landed;
-        playerCollision.CollisionDataCollected += JumpLetGo;
+        jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
     }
 
-    private void OnDisable()
+    public override void Action()
     {
-        UserInput.Input.JumpInput -= TryDoubleJump;
-        playerCollision.Landed -= Landed;
-        playerCollision.CollisionDataCollected -= JumpLetGo;
-    }
-
-    public void Landed()
-    {
-        doubleJumpReady = true;
-        jumpInputLetGo = false;
-    }
-
-    public void JumpLetGo()
-    {
-        if (!playerCollision.IsGrounded.current && doubleJumpReady /*&& !jumpBehavior.CanJump*/)
-        {
-            jumpInputLetGo = true;
-        }
-    }
-
-    public void TryDoubleJump()
-    {
-        if (!playerCollision.IsGrounded.current && doubleJumpReady /*&& !jumpBehavior.CanJump*/ && jumpInputLetGo)
-        {
-            jumpInputLetGo = false;
-            doubleJumpReady = false;
-            jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
-        }
+        jumpBehavior.Action();
     }
 }

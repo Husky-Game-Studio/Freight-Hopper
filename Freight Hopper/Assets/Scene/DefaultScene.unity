@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3573.504, g: 1988.5029, b: 1220.0254, a: 1}
+  m_IndirectSpecularColor: {r: 3568.498, g: 1985.7354, b: 1218.8125, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -271,7 +271,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &1130440466
 LightingSettings:
@@ -349,6 +349,9 @@ GameObject:
   - component: {fileID: 1798020241}
   - component: {fileID: 1798020239}
   - component: {fileID: 1798020245}
+  - component: {fileID: 1798020248}
+  - component: {fileID: 1798020247}
+  - component: {fileID: 1798020246}
   m_Layer: 7
   m_Name: Movement
   m_TagString: Untagged
@@ -368,10 +371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ab7f45280372ed4bace75ec6ab9afbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fullStopPossible: 1
-  cooldown:
-    duration: 2
-    current: 0
+  unlocked: 1
+  consumed: 0
 --- !u!4 &1798020240
 Transform:
   m_ObjectHideFlags: 0
@@ -384,7 +385,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1798020241
 MonoBehaviour:
@@ -398,9 +399,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8520c9a527ba0674180cdc9cf9936e13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlocked: 1
+  consumed: 0
   percentStrengthComparedToNormalJump: 75
-  doubleJumpReady: 0
-  jumpInputLetGo: 0
 --- !u!114 &1798020242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,8 +414,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743f4f71da3cd96478a7353af0bd33f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundPoundPossible: 1
-  groundPounding: 0
+  unlocked: 1
+  consumed: 0
   increasingForce:
     old: 1
     current: 1
@@ -434,6 +435,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7acc6ed8b238cc48a6f8d2ae3c342ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlocked: 1
+  consumed: 0
   minJumpHeight: 1.5
   holdingJumpForceMultiplier: 15
 --- !u!114 &1798020244
@@ -448,6 +451,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517b906aae6a2b64a89f7ca3cfe1f8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlocked: 1
+  consumed: 0
   groundAcceleration: 40
   airAcceleration: 10
 --- !u!114 &1798020245
@@ -462,8 +467,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d483ce78f84fa04db5ca55132169c5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlocked: 1
+  consumed: 0
   length: 0
-  lengthOnGrapple: 0
   pole: {fileID: 840649353}
   breakMaxLengthPercent: 1.25
   maxLength: 40
@@ -477,6 +483,53 @@ MonoBehaviour:
       Kp: 2
       Ki: 0.3
       Kd: 0.25
+--- !u!114 &1798020246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798020238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ca35e36a2fb574ca21cc709f9e0cec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  consumed: 0
+--- !u!114 &1798020247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798020238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c56f9a971e69c704ca4b36c6cfe7cc98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  consumed: 0
+  storedVelocity: {x: 0, y: 0, z: 0}
+  initialUpwardsForce: 0
+  consistentForce: 0
+--- !u!114 &1798020248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798020238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ed086809159e445b43d358eacb347f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  consumed: 0
+  burstForce: 0
+  angle: 0
 --- !u!1 &4493642203787552934
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,6 +587,9 @@ MonoBehaviour:
   groundPoundBehavior: {fileID: 1798020242}
   grapplePoleBehavior: {fileID: 1798020245}
   doubleJumpBehavior: {fileID: 1798020241}
+  wallRunBehavior: {fileID: 0}
+  upwardDashBehavior: {fileID: 0}
+  burstBehavior: {fileID: 0}
   fullstopBehavior: {fileID: 1798020239}
 --- !u!114 &4493642203787552937
 MonoBehaviour:
@@ -1246,7 +1302,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &6851446875239732598
 MeshRenderer:
@@ -1327,7 +1383,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6851446875331684908
 MonoBehaviour:
@@ -1449,10 +1505,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 840649354}
   - {fileID: 1798020240}
   - {fileID: 6851446875239732601}
   - {fileID: 6851446874874222867}
+  - {fileID: 840649354}
   - {fileID: 6851446874732734526}
   m_Father: {fileID: 0}
   m_RootOrder: 1

@@ -1,21 +1,11 @@
 using UnityEngine;
 
-[System.Serializable]
-public class FullStopBehavior : MonoBehaviour
+public class FullStopBehavior : AbilityBehavior
 {
-    [SerializeField, ReadOnly] private bool fullStopPossible = true;
-    [SerializeField] public Timer cooldown = new Timer(2);
+    //[SerializeField, ReadOnly] private bool fullStopPossible = true;
+    //[SerializeField] public Timer cooldown = new Timer(2);
 
-    private Rigidbody rb;
-    private CollisionManagement playerCollision;
-
-    public void Initialize(Rigidbody rb, CollisionManagement playerCollision)
-    {
-        this.rb = rb;
-        this.playerCollision = playerCollision;
-    }
-
-    private void OnEnable()
+    /*private void OnEnable()
     {
         UserInput.Input.FullStopInput += TryFullStop;
         playerCollision.Landed += Landed;
@@ -27,21 +17,29 @@ public class FullStopBehavior : MonoBehaviour
         UserInput.Input.FullStopInput -= TryFullStop;
         playerCollision.Landed -= Landed;
         playerCollision.CollisionDataCollected -= cooldown.CountDownFixed;
-    }
+    }*/
 
-    public void Landed()
-    {
-        fullStopPossible = true;
-    }
-
-    public void TryFullStop()
-    {
-        // Stops the player
-        if (!cooldown.TimerActive() && fullStopPossible)
+    /*    public void Landed()
         {
-            cooldown.ResetTimer();
-            rb.velocity = Vector3.zero;
-            fullStopPossible = false;
-        }
+            fullStopPossible = true;
+        }*/
+
+    /*  public void TryFullStop()
+      {
+          // Stops the player
+          if (!cooldown.TimerActive() && fullStopPossible)
+          {
+          }
+      }*/
+
+    public override void EntryAction()
+    {
+    }
+
+    public override void Action()
+    {
+        //cooldown.ResetTimer();
+        playerRb.velocity = Vector3.zero;
+        //fullStopPossible = false;
     }
 }

@@ -1,18 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GroundPoundInitialState : MonoBehaviour
+public class GroundPoundInitialState : BasicState
 {
-    // Start is called before the first frame update
-    void Start()
+    public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        
+    }
+
+    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
+        return playerMachine.GetCurrentState().GetSubStateArray()[1];
+    }
+
+    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+        // Perform grapple pole behavior
+        playerMachine.playerAbilities.groundPoundBehavior.EntryAction();
+    }
+
+    public bool HasSubStateMachine()
+    {
+        return false;
+    }
+
+    public BasicState GetCurrentSubState()
+    {
+        return null;
+    }
+
+    public BasicState[] GetSubStateArray()
+    {
+        return null;
     }
 }

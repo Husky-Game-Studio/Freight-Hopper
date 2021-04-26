@@ -1,19 +1,7 @@
-using UnityEngine;
-
 public class GrapplePoleState : BasicState
 {
-    /// <summary>
-    /// W Forward
-    /// S Backwards
-    /// A Left
-    /// D Right
-    /// Left Mouse - Fire/Release
-    /// - Retract
-    /// - Extend
-    /// </summary>
-
     private bool grapplePolePressed = false;
-    private bool pressedJump = false;
+    private bool jumpPressed = false;
     private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
     private BasicState[] miniStateArray;
@@ -51,17 +39,17 @@ public class GrapplePoleState : BasicState
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
         if (grapplePolePressed ||
-            (playerMachine.playerMovement.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.playerMovement.grapplePoleBehavior.Anchored()))
+            (playerMachine.playerAbilities.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.playerAbilities.grapplePoleBehavior.Anchored()))
         {
             grapplePolePressed = false;
-            playerMachine.playerMovement.grapplePoleBehavior.EndGrapple();
+            playerMachine.playerAbilities.grapplePoleBehavior.ExitAction();
             return playerMachine.fallState;
         }
 
-        if (pressedJump)
+        if (jumpPressed)
         {
-            pressedJump = false;
-            playerMachine.playerMovement.grapplePoleBehavior.EndGrapple();
+            jumpPressed = false;
+            playerMachine.playerAbilities.grapplePoleBehavior.ExitAction();
             return playerMachine.jumpState;
         }
 
@@ -72,7 +60,7 @@ public class GrapplePoleState : BasicState
     {
         if (GetCurrentSubState() == miniStateArray[1])
         {
-            pressedJump = true;
+            jumpPressed = true;
         }
     }
 
@@ -83,9 +71,6 @@ public class GrapplePoleState : BasicState
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        // Perform the SubStateMachine Behavior
         pSSMC.PerformSubMachineBehavior();
     }
 
@@ -96,7 +81,7 @@ public class GrapplePoleState : BasicState
 
     public BasicState GetCurrentSubState()
     {
-        return pSSMC.GetCurrentSubState(); ;
+        return pSSMC.GetCurrentSubState();
     }
 
     public BasicState[] GetSubStateArray()
