@@ -24,7 +24,7 @@ public class JumpBehavior : AbilityBehavior
 
         if (Vector3.Dot(playerRb.velocity, upAxis) < 0)
         {
-            playerRb.velocity = CollisionManagement.ProjectOnContactPlane(playerRb.velocity, upAxis);
+            playerRb.velocity = playerRb.velocity.ProjectOnContactPlane(upAxis);
         }
 
         // Basic physics, except the force required to reach this height may not work if we consider holding space
@@ -43,9 +43,9 @@ public class JumpBehavior : AbilityBehavior
 
         // Actual jump itself
         playerRb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
-        if (playerCM.rigidbodyLinker.ConnectedRb.old != null)
+        if (playerCM.rigidbodyLinker.ConnectedRb.current != null)
         {
-            playerRb.AddForce(Vector3.Project(playerCM.rigidbodyLinker.ConnectionVelocity.old, upAxis), ForceMode.VelocityChange);
+            playerRb.AddForce(Vector3.Project(playerCM.rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
         }
     }
 

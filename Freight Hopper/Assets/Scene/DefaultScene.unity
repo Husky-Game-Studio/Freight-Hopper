@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3283.249, g: 1713.5479, b: 880.8721, a: 1}
+  m_IndirectSpecularColor: {r: 3291.171, g: 1715.7471, b: 878.3799, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -501,9 +501,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ca35e36a2fb574ca21cc709f9e0cec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlocked: 1
+  unlocked: 0
   consumed: 0
   preventConsumption: 0
+  wallNormals:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  wallCheckDistance: 1
+  validWalls:
+    serializedVersion: 2
+    m_Bits: 1
+  upwardsForce: 10
+  rightForce: 5
+  climbForce: 10
+  jumpForce: 10
+  pushAwayFromWallForce: 10
 --- !u!114 &1798020247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,7 +626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa6fe17683d2efe4abea007baae20b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   isGrounded:
     old: 0
     current: 0
@@ -661,7 +674,6 @@ MonoBehaviour:
   jumpBufferTimer:
     duration: 0.3
     current: 0
-  wallRunState: {fileID: 0}
   abilities: {fileID: 4493642203787552936}
   playerCM: {fileID: 4493642203787552937}
 --- !u!114 &6851446874351635506

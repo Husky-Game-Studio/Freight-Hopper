@@ -38,6 +38,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     public PlayerMachineCenter()
     {
+        wallRunState = new WallRunState(this);
         grapplePoleState = new GrapplePoleState(this);
     }
 

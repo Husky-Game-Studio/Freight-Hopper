@@ -1,30 +1,27 @@
 using UnityEngine;
 
-public class BurstState : BasicState
+public class WallJumpState : BasicState
 {
-    private PlayerMachineCenter myPlayerMachineCenter;
-
     public void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        myPlayerMachineCenter = playerMachine;
-
-        playerMachine.abilities.burstBehavior.EntryAction();
+        Debug.Log("Entered Wall Jump State");
     }
 
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        myPlayerMachineCenter.abilities.burstBehavior.ExitAction();
+        Debug.Log("exited Wall Jump State");
     }
 
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
-        return myPlayerMachineCenter.fallState;
+        return this;
     }
 
     public void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        myPlayerMachineCenter.abilities.burstBehavior.Action();
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+        // Perform grapple pole behavior
+        playerMachine.abilities.wallRunBehavior.WallJump();
     }
 
     public bool HasSubStateMachine()

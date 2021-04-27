@@ -5,7 +5,7 @@ using System;
 
 public class CollisionManagement : MonoBehaviour
 {
-    [ReadOnly, SerializeField] private Rigidbody rb;
+    private Rigidbody rb;
 
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
@@ -28,6 +28,38 @@ public class CollisionManagement : MonoBehaviour
     public event CollisionEventHandler Landed;
 
     public event CollisionEventHandler CollisionDataCollected;
+
+    /// <summary>
+    /// Checks cardinal direction (relative) walls for their normals in range
+    /// </summary>
+    /// <returns>returns normals of all 4 walls</returns>
+    public Vector3[] CheckWalls(float distance, LayerMask layers)
+    {
+        Vector3[] walls = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
+        Vector3[] directions = { Vector3.forward, Vector3.right, -Vector3.forward, -Vector3.right };
+        RaycastHit hit;
+        for (int i = 0; i < 4; ++i)
+        {
+            if (Physics.Raycast(rb.position, rb.transform.TransformDirection(directions[i]), out hit, distance, layers))
+            {
+                float collisionAngle = Vector3.Angle(hit.normal, ValidUpAxis);
+                if (collisionAngle > maxSlope)
+                {
+                    walls[i] = hit.normal;
+                }
+            }
+            if (walls[i] != Vector3.zero)
+            {
+                Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.red, Time.fixedDeltaTime);
+            }
+            else
+            {
+                Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.yellow, Time.fixedDeltaTime);
+            }
+        }
+
+        return walls;
+    }
 
     private void Awake()
     {
@@ -98,16 +130,6 @@ public class CollisionManagement : MonoBehaviour
         {
             Landed?.Invoke();
         }
-    }
-
-    /// <summary>
-    /// Basically rotates a vector onto the contact plane. Make sure to use the CollisionDataCollected event when using this
-    /// </summary>
-    /// <param name="vector">vector to rotate</param>
-    /// <returns>Rotated vector</returns>
-    public static Vector3 ProjectOnContactPlane(Vector3 vector, Vector3 normal)
-    {
-        return vector - normal * Vector3.Dot(vector, normal);
     }
 
     private IEnumerator LateFixedUpdate()

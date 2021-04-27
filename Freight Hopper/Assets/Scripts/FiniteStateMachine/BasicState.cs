@@ -8,10 +8,16 @@ using UnityEngine;
 public interface BasicState
 {
     public void SubToListeners(FiniteStateMachineCenter machineCenter);
+
     public void UnsubToListeners(FiniteStateMachineCenter machineCenter);
+
     public BasicState TransitionState(FiniteStateMachineCenter machineCenter);
+
     public void PerformBehavior(FiniteStateMachineCenter machineCenter);
+
     public bool HasSubStateMachine();
+
     public BasicState GetCurrentSubState();
+
     public BasicState[] GetSubStateArray();
 }

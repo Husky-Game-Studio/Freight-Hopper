@@ -16,8 +16,8 @@ public class MovementBehavior : AbilityBehavior
 
     private Vector3 RelativeMove(Vector3 forward, Vector3 right)
     {
-        forward = CollisionManagement.ProjectOnContactPlane(forward, playerCM.ValidUpAxis);
-        right = CollisionManagement.ProjectOnContactPlane(right, playerCM.ValidUpAxis);
+        forward = forward.ProjectOnContactPlane(playerCM.ValidUpAxis);
+        right = right.ProjectOnContactPlane(playerCM.ValidUpAxis);
 
         // Moves relative to the camera
         Vector3 input = UserInput.Input.Move();
@@ -27,7 +27,7 @@ public class MovementBehavior : AbilityBehavior
 
     public void Move(Rigidbody rigidbody, CollisionManagement collision, Vector3 direction, float acceleration)
     {
-        Vector3 relativeDirection = CollisionManagement.ProjectOnContactPlane(direction, collision.ContactNormal.current).normalized;
+        Vector3 relativeDirection = direction.ProjectOnContactPlane(collision.ContactNormal.current).normalized;
 
         rigidbody.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }

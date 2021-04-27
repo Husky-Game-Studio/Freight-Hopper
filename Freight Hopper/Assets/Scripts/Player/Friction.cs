@@ -35,7 +35,7 @@ public class Friction : MonoBehaviour
 
         if (playerCollision.IsGrounded.current)
         {
-            force = CollisionManagement.ProjectOnContactPlane(force, playerCollision.ContactNormal.current);
+            force = force.ProjectOnContactPlane(playerCollision.ContactNormal.current);
         }
 
         rb.AddForce(-force, ForceMode.VelocityChange);

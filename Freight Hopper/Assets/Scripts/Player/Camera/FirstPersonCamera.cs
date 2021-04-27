@@ -47,7 +47,7 @@ public class FirstPersonCamera : MonoBehaviour
 
         // Apply camera and player rotation
         camTransform.rotation = Quaternion.LookRotation(player.forward, upAxis) * localRotation;
-        Vector3 forward = CollisionManagement.ProjectOnContactPlane(camTransform.forward, upAxis).normalized;
+        Vector3 forward = camTransform.forward.ProjectOnContactPlane(upAxis).normalized;
         player.LookAt(player.position + forward, upAxis);
         player.rotation *= mouseRotationHorizontal;
     }
@@ -55,7 +55,7 @@ public class FirstPersonCamera : MonoBehaviour
     public void RotateTo(Quaternion rotation)
     {
         Vector3 upAxis = player.GetComponent<CollisionManagement>().ValidUpAxis;
-        Vector3 forward = CollisionManagement.ProjectOnContactPlane(rotation * player.forward, upAxis).normalized;
+        Vector3 forward = (rotation * player.forward).ProjectOnContactPlane(upAxis).normalized;
         player.LookAt(player.position + forward, upAxis);
     }
 }

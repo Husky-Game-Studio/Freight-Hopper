@@ -66,7 +66,7 @@ public class FallState : BasicState
             return playerMachine.jumpState;
         }
         // Double Jump
-        if (jumpPressed && playerMachine.abilities.jumpBehavior.IsConsumed && !playerMachine.abilities.doubleJumpBehavior.IsConsumed)
+        if (jumpPressed && !playerMachine.abilities.doubleJumpBehavior.IsConsumed)
         {
             return playerMachine.doubleJumpState;
         }
@@ -110,6 +110,16 @@ public class FallState : BasicState
                 ability.Recharge();
             }
             return playerMachine.idleState;
+        }
+
+        // Wall run
+        if (playerMachine.abilities.wallRunBehavior.IsUnlocked)
+        {
+            bool[] walls = playerMachine.abilities.wallRunBehavior.CheckWalls();
+            if (walls[0] || walls[1] || walls[3])
+            {
+                return playerMachine.wallRunState;
+            }
         }
 
         jumpPressed = false;

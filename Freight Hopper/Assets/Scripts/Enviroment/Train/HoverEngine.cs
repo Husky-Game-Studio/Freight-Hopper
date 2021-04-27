@@ -27,8 +27,7 @@ public class HoverEngine : MonoBehaviour
 
     public void Hover(float height)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(this.transform.position, direction, out hit, height + 0.1f, layerMask))
+        if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, height + 0.1f, layerMask))
         {
             float error = height - hit.distance;
             Debug.DrawLine(this.transform.position, this.transform.position + Vector3.up * error, Color.white);

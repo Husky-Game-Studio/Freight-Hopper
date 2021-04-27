@@ -13,7 +13,7 @@ public class HoverController : MonoBehaviour
 
     public void AddHoverEngine(Vector3 position, string name = "")
     {
-        if (name.Equals(""))
+        if (string.IsNullOrEmpty(name))
         {
             name = hoverEnginePivots.Count.ToString();
         }

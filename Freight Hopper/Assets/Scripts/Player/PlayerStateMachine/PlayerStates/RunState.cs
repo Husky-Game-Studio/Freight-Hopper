@@ -48,12 +48,6 @@ public class RunState : BasicState
             return playerMachine.jumpState;
         }
 
-        // Double Jump
-        if (jumpPressed && playerMachine.abilities.jumpBehavior.IsConsumed && !playerMachine.abilities.doubleJumpBehavior.IsConsumed)
-        {
-            return playerMachine.doubleJumpState;
-        }
-
         // Grapple pole
         if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.IsConsumed)
         {
@@ -66,12 +60,14 @@ public class RunState : BasicState
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
             playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.IsConsumed)
         {
+            playerMachine.abilities.groundPoundBehavior.PreventConsumption();
             return playerMachine.groundPoundState;
         }
 
         // Upward Dash
         if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.IsConsumed)
         {
+            playerMachine.abilities.upwardDashBehavior.PreventConsumption();
             return playerMachine.upwardDashState;
         }
 
@@ -84,6 +80,7 @@ public class RunState : BasicState
         // Burst
         if (burstPressed && !playerMachine.abilities.burstBehavior.IsConsumed)
         {
+            playerMachine.abilities.burstBehavior.PreventConsumption();
             return playerMachine.burstState;
         }
 
