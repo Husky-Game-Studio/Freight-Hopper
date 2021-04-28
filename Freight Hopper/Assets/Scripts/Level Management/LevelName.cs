@@ -3,7 +3,12 @@ using UnityEngine;
 
 public struct LevelName
 {
-    // galaxys hold multiple worlds, and universes hold multiple galaxys. Universes have unique names
+    // Format
+    // Name 0 0
+    // Name representing the world series name
+    // First number is the worldID
+    // Second number is the levelID
+    // world series hold multiple worlds, and universes hold multiple galaxys. Universes have unique names
     public string worldSeriesName;
 
     public int worldID;

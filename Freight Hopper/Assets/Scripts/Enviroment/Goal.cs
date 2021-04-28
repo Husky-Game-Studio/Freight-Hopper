@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
-    private string nextLevelName = "0 0 0";
+    private string nextLevelName = "0 0";
 
     private void Awake()
     {
