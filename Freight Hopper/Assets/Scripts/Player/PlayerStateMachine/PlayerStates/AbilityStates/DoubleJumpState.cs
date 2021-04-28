@@ -39,7 +39,7 @@ public class DoubleJumpState : BasicState
             return playerMachine.fallState;
         }
         // Grapple pole
-        if (grapplePressed)
+        if (grapplePressed && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.grapplePoleBehavior.Unlocked)
         {
             return playerMachine.grapplePoleState;
         }

@@ -36,7 +36,7 @@ public class UpwardDashState : BasicState
             return myPlayerMachineCenter.fallState;
         }
         // Grapple pole
-        if (grapplePressed && !myPlayerMachineCenter.abilities.grapplePoleBehavior.IsConsumed)
+        if (grapplePressed && !myPlayerMachineCenter.abilities.grapplePoleBehavior.Consumed)
         {
             return myPlayerMachineCenter.grapplePoleState;
         }

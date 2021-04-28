@@ -37,12 +37,12 @@ public class GroundPoundState : BasicState
         }
 
         // Jump
-        if (jumpPressed && !playerMachine.abilities.jumpBehavior.IsConsumed)
+        if (jumpPressed && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)
         {
             return playerMachine.jumpState;
         }
         // Double Jump
-        if (jumpPressed && playerMachine.abilities.jumpBehavior.IsConsumed && !playerMachine.abilities.doubleJumpBehavior.IsConsumed)
+        if (jumpPressed && playerMachine.abilities.jumpBehavior.Consumed && !playerMachine.abilities.doubleJumpBehavior.Consumed && playerMachine.abilities.doubleJumpBehavior.Unlocked)
         {
             return playerMachine.doubleJumpState;
         }

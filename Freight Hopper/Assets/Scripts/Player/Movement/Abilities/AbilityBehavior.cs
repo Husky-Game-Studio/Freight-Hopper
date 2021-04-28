@@ -3,11 +3,11 @@ using UnityEngine;
 [System.Serializable]
 public abstract class AbilityBehavior : MonoBehaviour
 {
-    [SerializeField] protected bool unlocked = true;
+    [SerializeField, ReadOnly] protected bool unlocked = false;
     [SerializeField, ReadOnly] protected bool consumed = false;
     [SerializeField, ReadOnly] protected bool preventConsumption = false;
-    public bool IsUnlocked => unlocked;
-    public bool IsConsumed => consumed;
+    public bool Unlocked => unlocked;
+    public bool Consumed => consumed;
     protected Rigidbody playerRb;
     protected CollisionManagement playerCM;
 

@@ -1,7 +1,8 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/Level Data", order = 1)]
-public class LevelData : ScriptableObject
+[System.Serializable]
+public class LevelData
 {
     public enum NextLevelStatus
     {
@@ -11,6 +12,14 @@ public class LevelData : ScriptableObject
         Credits,
     }
 
-    [SerializeField] public NextLevelStatus nextLevelStatus;
+    [SerializeField] public NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
     [SerializeField] public Vector3 spawnPosition = Vector3.zero;
+
+    [SerializeField]
+    public PlayerAbilities.Name[] activeAbilities = {
+            PlayerAbilities.Name.MovementBehavior,
+            PlayerAbilities.Name.JumpBehavior,
+            PlayerAbilities.Name.WallRunBehavior,
+            PlayerAbilities.Name.GroundPoundBehavior
+        };
 }

@@ -1,6 +1,7 @@
 using System.Text;
 using UnityEngine;
 
+[System.Serializable]
 public struct LevelName
 {
     // Format
@@ -59,18 +60,8 @@ public struct LevelName
         return ConvertToString(worldID, levelID + 1);
     }
 
-    public string PreviousLevel()
-    {
-        return ConvertToString(worldID, levelID - 1);
-    }
-
     public string NextWorld()
     {
-        return ConvertToString(worldID + 1, levelID);
-    }
-
-    public string PreviousWorld()
-    {
-        return ConvertToString(worldID - 1, levelID);
+        return ConvertToString(worldID + 1, 1);
     }
 }

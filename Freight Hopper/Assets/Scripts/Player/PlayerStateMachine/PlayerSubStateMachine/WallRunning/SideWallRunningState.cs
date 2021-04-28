@@ -23,7 +23,7 @@ public class SideWallRunningState : BasicState
         bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
 
         // Wall Climb
-        if (status[0] && !status[1] && !status[3] && !playerMachine.abilities.wallRunBehavior.IsConsumed)
+        if (status[0] && !status[1] && !status[3] && !playerMachine.abilities.wallRunBehavior.Consumed)
         {
             Debug.Log("Wall climbed");
             return playerMachine.GetCurrentState().GetSubStateArray()[1];

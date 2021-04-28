@@ -1,18 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(CollisionManagement), typeof(Rigidbody))]
 public class PlayerAbilities : MonoBehaviour
 {
     public MovementBehavior movementBehavior;
     public JumpBehavior jumpBehavior;
+    public WallRunBehavior wallRunBehavior;
     public GroundPoundBehavior groundPoundBehavior;
     public GrapplePoleBehavior grapplePoleBehavior;
     public DoubleJumpBehavior doubleJumpBehavior;
-    public WallRunBehavior wallRunBehavior;
     public UpwardDashBehavior upwardDashBehavior;
     public BurstBehavior burstBehavior;
     public FullStopBehavior fullstopBehavior;
+
+    public enum Name
+    {
+        MovementBehavior,
+        JumpBehavior,
+        WallRunBehavior,
+        GroundPoundBehavior,
+        GrapplePoleBehavior,
+        DoubleJumpBehavior,
+        UpwardDashBehavior,
+        BurstBehavior,
+        FullStopBehavior
+    }
+
+    private Dictionary<Name, AbilityBehavior> behavior = new Dictionary<Name, AbilityBehavior>();
 
     private List<AbilityBehavior> abilities = new List<AbilityBehavior>();
     public List<AbilityBehavior> Abilities => abilities;
@@ -41,6 +57,17 @@ public class PlayerAbilities : MonoBehaviour
         abilities.Add(upwardDashBehavior);
         abilities.Add(burstBehavior);
         abilities.Add(fullstopBehavior);
+
+        behavior.Clear();
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(MovementBehavior)), movementBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(JumpBehavior)), jumpBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(GroundPoundBehavior)), groundPoundBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(GrapplePoleBehavior)), grapplePoleBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(DoubleJumpBehavior)), doubleJumpBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(WallRunBehavior)), wallRunBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(UpwardDashBehavior)), upwardDashBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(BurstBehavior)), burstBehavior);
+        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(FullStopBehavior)), fullstopBehavior);
     }
 
     private void Awake()
@@ -57,5 +84,17 @@ public class PlayerAbilities : MonoBehaviour
             ability.LinkPhysicsInformation(playerRb, playerCM);
         }
         doubleJumpBehavior.GetJumpBehavior(jumpBehavior);
+    }
+
+    public void SetActiveAbilities(Name[] abilitiesNames)
+    {
+        foreach (AbilityBehavior ability in abilities)
+        {
+            ability.Lock();
+        }
+        foreach (Name name in abilitiesNames)
+        {
+            behavior[name].Unlock();
+        }
     }
 }

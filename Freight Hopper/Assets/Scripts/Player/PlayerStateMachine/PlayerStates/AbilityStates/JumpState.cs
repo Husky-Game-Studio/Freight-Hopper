@@ -38,7 +38,7 @@ public class JumpState : BasicState
             return myPlayerMachineCenter.fallState;
         }
         // Grapple pole
-        if (grapplePressed && !myPlayerMachineCenter.abilities.grapplePoleBehavior.IsConsumed)
+        if (grapplePressed && !myPlayerMachineCenter.abilities.grapplePoleBehavior.Consumed && myPlayerMachineCenter.abilities.grapplePoleBehavior.Unlocked)
         {
             return myPlayerMachineCenter.grapplePoleState;
         }

@@ -4,11 +4,10 @@ using UnityEngine.InputSystem;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField] private LevelData levelData;
-    public Vector3 SpawnPosition => levelData.spawnPosition;
-
     public LevelName CurrentLevelName => levelName;
     [SerializeField, ReadOnly] private LevelName levelName;
+    [SerializeField] private LevelData levelData;
+    public Vector3 SpawnPosition => levelData.spawnPosition;
 
     public static LevelController Instance => instance;
     private static LevelController instance;
@@ -45,20 +44,26 @@ public class LevelController : MonoBehaviour
             instance = this;
         }
         Player.PlayerLoadedIn += Respawn;
+        Player.PlayerLoadedIn += UnlockAbilities;
     }
 
     private void OnDestroy()
     {
         Player.PlayerLoadedIn -= Respawn;
+        Player.PlayerLoadedIn -= UnlockAbilities;
+    }
+
+    public void UnlockAbilities()
+    {
+        Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.activeAbilities);
     }
 
     public void Respawn()
     {
-        // This shouldn't be done, but I am not sure what else to do for now
         GameObject player = Player.Instance.gameObject;
         if (player == null)
         {
-            Debug.Log("Can't find player");
+            Debug.LogWarning("Can't find player");
         }
         player.transform.position = SpawnPosition;
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;

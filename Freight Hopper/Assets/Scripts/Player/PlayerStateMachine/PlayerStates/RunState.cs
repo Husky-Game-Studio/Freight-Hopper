@@ -43,13 +43,13 @@ public class RunState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         // Jump
-        if ((jumpPressed || playerMachine.jumpBufferTimer.TimerActive()) && !playerMachine.abilities.jumpBehavior.IsConsumed)
+        if ((jumpPressed || playerMachine.jumpBufferTimer.TimerActive()) && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)
         {
             return playerMachine.jumpState;
         }
 
         // Grapple pole
-        if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.IsConsumed)
+        if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.Consumed && playerMachine.abilities.grapplePoleBehavior.Unlocked)
         {
             playerMachine.abilities.grapplePoleBehavior.PreventConsumption();
             return playerMachine.grapplePoleState;
@@ -58,27 +58,27 @@ public class RunState : BasicState
         // Ground Pound
         if (groundPoundPressed &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.IsConsumed)
+            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.Consumed && playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
             playerMachine.abilities.groundPoundBehavior.PreventConsumption();
             return playerMachine.groundPoundState;
         }
 
         // Upward Dash
-        if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.IsConsumed)
+        if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.Consumed && playerMachine.abilities.upwardDashBehavior.Unlocked)
         {
             playerMachine.abilities.upwardDashBehavior.PreventConsumption();
             return playerMachine.upwardDashState;
         }
 
         // Full Stop
-        if (fullStopPressed && !playerMachine.abilities.fullstopBehavior.IsConsumed)
+        if (fullStopPressed && !playerMachine.abilities.fullstopBehavior.Consumed && playerMachine.abilities.fullstopBehavior.Unlocked)
         {
             return playerMachine.fullStopState;
         }
 
         // Burst
-        if (burstPressed && !playerMachine.abilities.burstBehavior.IsConsumed)
+        if (burstPressed && !playerMachine.abilities.burstBehavior.Consumed && playerMachine.abilities.burstBehavior.Unlocked)
         {
             playerMachine.abilities.burstBehavior.PreventConsumption();
             return playerMachine.burstState;

@@ -61,12 +61,12 @@ public class FallState : BasicState
         // Jump
         //  THERE IS A BUG HERE ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (jumpPressed && playerMachine.coyoteeTimer.TimerActive() && playerMachine.GetPreviousState() != playerMachine.jumpState &&
-            !playerMachine.abilities.jumpBehavior.IsConsumed)
+            !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)
         {
             return playerMachine.jumpState;
         }
         // Double Jump
-        if (jumpPressed && !playerMachine.abilities.doubleJumpBehavior.IsConsumed)
+        if (jumpPressed && !playerMachine.abilities.doubleJumpBehavior.Consumed && playerMachine.abilities.doubleJumpBehavior.Unlocked)
         {
             return playerMachine.doubleJumpState;
         }
@@ -74,30 +74,31 @@ public class FallState : BasicState
         // Ground Pound
         if (groundPoundPressed &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.IsConsumed)
+            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.Consumed
+            && playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
             return playerMachine.groundPoundState;
         }
         // Grapple pole
-        if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.IsConsumed)
+        if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.Consumed && playerMachine.abilities.grapplePoleBehavior.Unlocked)
         {
             return playerMachine.grapplePoleState;
         }
 
         // Upward Dash
-        if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.IsConsumed)
+        if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.Consumed && playerMachine.abilities.upwardDashBehavior.Unlocked)
         {
             return playerMachine.upwardDashState;
         }
 
         // Full Stop
-        if (fullStopPressed && !playerMachine.abilities.fullstopBehavior.IsConsumed)
+        if (fullStopPressed && !playerMachine.abilities.fullstopBehavior.Consumed && playerMachine.abilities.fullstopBehavior.Unlocked)
         {
             return playerMachine.fullStopState;
         }
 
         // Burst
-        if (burstPressed && !playerMachine.abilities.burstBehavior.IsConsumed)
+        if (burstPressed && !playerMachine.abilities.burstBehavior.Consumed && playerMachine.abilities.burstBehavior.Unlocked)
         {
             return playerMachine.burstState;
         }
@@ -113,7 +114,7 @@ public class FallState : BasicState
         }
 
         // Wall run
-        if (playerMachine.abilities.wallRunBehavior.IsUnlocked)
+        if (playerMachine.abilities.wallRunBehavior.Unlocked && playerMachine.abilities.wallRunBehavior.Unlocked)
         {
             bool[] walls = playerMachine.abilities.wallRunBehavior.CheckWalls();
             if (walls[0] || walls[1] || walls[3])
