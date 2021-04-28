@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class UserInput : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public InputMaster UserInputMaster => master;
     private InputMaster master;
 
     private static UserInput input;

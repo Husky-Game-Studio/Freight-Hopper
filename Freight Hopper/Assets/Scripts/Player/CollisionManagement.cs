@@ -70,13 +70,6 @@ public class CollisionManagement : MonoBehaviour
         StartCoroutine(LateFixedUpdate());
     }
 
-    // This needs to be replaced by a level manager, doesn't belong here
-    public void Respawn()
-    {
-        this.transform.position = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelSettings>().SpawnPosition;
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-    }
-
     private void EvaulateCollisions(Collision collision)
     {
         contactNormal.current = Vector3.zero;

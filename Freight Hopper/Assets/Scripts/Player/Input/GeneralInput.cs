@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class GeneralInput : MonoBehaviour
 {
-    private void Update()
+    private void Awake()
     {
-        if (UserInput.Input.Restart())
-        { // Optimize this later please
-            this.GetComponent<CollisionManagement>().Respawn();
-        }
+        UserInput.Input.UserInputMaster.Player.Restart.performed += LevelController.Instance.Respawn;
     }
 }
