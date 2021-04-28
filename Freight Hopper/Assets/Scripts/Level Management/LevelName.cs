@@ -43,7 +43,10 @@ public struct LevelName
     private string ConvertToString(int world, int level)
     {
         StringBuilder str = new StringBuilder(worldSeriesName);
-        str.Append(" ");
+        if (!string.IsNullOrEmpty(worldSeriesName))
+        {
+            str.Append(" ");
+        }
         str.Append(world);
         str.Append(" ");
         str.Append(level);

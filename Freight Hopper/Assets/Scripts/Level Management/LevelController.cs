@@ -7,10 +7,13 @@ public class LevelController : MonoBehaviour
     public LevelName CurrentLevelName => levelName;
     [SerializeField, ReadOnly] private LevelName levelName;
     [SerializeField] private LevelData levelData;
-    public Vector3 SpawnPosition => levelData.spawnPosition;
-
     public static LevelController Instance => instance;
     private static LevelController instance;
+
+    private void OnDrawGizmosSelected()
+    {
+        GizmosExtensions.DrawGizmosArrow(levelData.spawnPosition, Vector3.forward);
+    }
 
     private void OnValidate()
     {
@@ -65,8 +68,9 @@ public class LevelController : MonoBehaviour
         {
             Debug.LogWarning("Can't find player");
         }
-        player.transform.position = SpawnPosition;
+        player.transform.position = levelData.spawnPosition;
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }
 
     public void Respawn(InputAction.CallbackContext context)

@@ -194,7 +194,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0.12, y: 0.7, z: -0.14}
-  - {x: 5.68, y: -35.25, z: 46.09}
+  - {x: 0.12, y: 0.7, z: -0.14}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.1
@@ -423,9 +423,9 @@ MonoBehaviour:
     old: 1
     current: 1
   deltaIncreaseForce: 0.01
-  initialBurstForce: 20
-  downwardsForce: 10
-  slopeDownForce: 500
+  initialBurstForce: 15
+  downwardsForce: 8
+  slopeDownForce: 200
 --- !u!114 &1798020243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,7 +441,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
-  minJumpHeight: 1.5
+  minJumpHeight: 2
   holdingJumpForceMultiplier: 15
 --- !u!114 &1798020244
 MonoBehaviour:
@@ -458,8 +458,8 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
-  groundAcceleration: 40
-  airAcceleration: 10
+  groundAcceleration: 50
+  airAcceleration: 20
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -608,10 +608,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementBehavior: {fileID: 1798020244}
   jumpBehavior: {fileID: 1798020243}
+  wallRunBehavior: {fileID: 1798020246}
   groundPoundBehavior: {fileID: 1798020242}
   grapplePoleBehavior: {fileID: 1798020245}
   doubleJumpBehavior: {fileID: 1798020241}
-  wallRunBehavior: {fileID: 1798020246}
   upwardDashBehavior: {fileID: 1798020247}
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
@@ -1538,7 +1538,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.1, y: 66.5, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1798020240}

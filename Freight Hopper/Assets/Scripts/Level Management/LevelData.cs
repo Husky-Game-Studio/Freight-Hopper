@@ -12,8 +12,9 @@ public class LevelData
         Credits,
     }
 
-    [SerializeField] public NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
-    [SerializeField] public Vector3 spawnPosition = Vector3.zero;
+    public NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
+    public Vector3 spawnPosition = Vector3.zero;
+    //public float rotationAngle = 0;
 
     [SerializeField]
     public PlayerAbilities.Name[] activeAbilities = {

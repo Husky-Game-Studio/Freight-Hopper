@@ -78,6 +78,11 @@ public class CollisionManagement : MonoBehaviour
         {
             Vector3 normal = collision.GetContact(i).normal;
 
+            if (!collision.gameObject.CompareTag("landable"))
+            {
+                LevelController.Instance.Respawn();
+            }
+
             // Is Vector3.angle efficient?
             float collisionAngle = Vector3.Angle(normal, upAxis);
             if (collisionAngle <= maxSlope)
