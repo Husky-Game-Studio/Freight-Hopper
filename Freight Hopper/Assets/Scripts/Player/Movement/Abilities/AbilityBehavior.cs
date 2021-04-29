@@ -10,14 +10,16 @@ public abstract class AbilityBehavior : MonoBehaviour
     public bool Consumed => consumed;
     protected Rigidbody playerRb;
     protected CollisionManagement playerCM;
+    protected SoundManager playerSM;
 
     /// <summary>
-    /// Assigns the rigidbody and collision management for the ability
+    /// Links abilities to components they will need to function
     /// </summary>
-    public virtual void LinkPhysicsInformation(Rigidbody rb, CollisionManagement cm)
+    public virtual void Initialize(Rigidbody rb, CollisionManagement cm, SoundManager sm)
     {
         this.playerRb = rb;
         this.playerCM = cm;
+        this.playerSM = sm;
     }
 
     /// <summary>

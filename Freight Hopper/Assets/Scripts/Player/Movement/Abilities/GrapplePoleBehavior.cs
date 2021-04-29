@@ -22,9 +22,9 @@ public class GrapplePoleBehavior : AbilityBehavior
 
     private Transform cameraTransform;
 
-    public override void LinkPhysicsInformation(Rigidbody rb, CollisionManagement playerCollision)
+    public override void Initialize(Rigidbody rb, CollisionManagement cm, SoundManager sm)
     {
-        base.LinkPhysicsInformation(rb, playerCollision);
+        base.Initialize(rb, cm, sm);
         cameraTransform = Camera.main.transform;
     }
 
@@ -72,9 +72,9 @@ public class GrapplePoleBehavior : AbilityBehavior
         length += Time.fixedDeltaTime * grappleExtensionSpeed;
         length = Mathf.Min(length, maxLength);
         pole.SetPosition(1, playerRb.transform.InverseTransformPoint(playerAnchor.GetPoint(length)));
-        RaycastHit hit;
+
         Debug.DrawLine(playerAnchor.origin, playerAnchor.GetPoint(length), Color.yellow, Time.fixedDeltaTime);
-        if (Physics.Raycast(playerAnchor, out hit, length, affectedLayers))
+        if (Physics.Raycast(playerAnchor, out RaycastHit hit, length, affectedLayers))
         {
             anchored = true;
             anchor = new Ray(hit.point, -playerAnchor.direction);

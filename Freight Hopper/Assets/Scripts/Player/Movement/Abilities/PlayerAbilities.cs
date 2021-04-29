@@ -34,6 +34,7 @@ public class PlayerAbilities : MonoBehaviour
     public List<AbilityBehavior> Abilities => abilities;
     private Rigidbody playerRb;
     private CollisionManagement playerCM;
+    private SoundManager playerSM;
 
     private void OnValidate()
     {
@@ -74,6 +75,7 @@ public class PlayerAbilities : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody>();
         playerCM = GetComponent<CollisionManagement>();
+        playerSM = GetComponentInChildren<SoundManager>();
 
         foreach (AbilityBehavior ability in abilities)
         {
@@ -81,7 +83,7 @@ public class PlayerAbilities : MonoBehaviour
             {
                 Debug.LogError("Ability script links not found");
             }
-            ability.LinkPhysicsInformation(playerRb, playerCM);
+            ability.Initialize(playerRb, playerCM, playerSM);
         }
         doubleJumpBehavior.GetJumpBehavior(jumpBehavior);
     }

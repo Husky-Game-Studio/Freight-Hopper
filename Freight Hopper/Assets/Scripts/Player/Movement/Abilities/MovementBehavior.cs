@@ -8,9 +8,9 @@ public class MovementBehavior : AbilityBehavior
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
 
-    public override void LinkPhysicsInformation(Rigidbody rb, CollisionManagement cm)
+    public override void Initialize(Rigidbody rb, CollisionManagement cm, SoundManager sm)
     {
-        base.LinkPhysicsInformation(rb, cm);
+        base.Initialize(rb, cm, sm);
         cameraTransform = Camera.main.transform;
     }
 

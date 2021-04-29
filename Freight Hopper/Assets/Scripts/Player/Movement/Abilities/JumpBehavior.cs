@@ -47,6 +47,8 @@ public class JumpBehavior : AbilityBehavior
         {
             playerRb.AddForce(Vector3.Project(playerCM.rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
         }
+
+        playerSM.Play("Jump");
     }
 
     public override void EntryAction()

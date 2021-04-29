@@ -13,7 +13,7 @@ public class BurstBehavior : AbilityBehavior
         float radians = angle * Mathf.Deg2Rad;
         Vector3 direction = new Vector3(0, Mathf.Sin(radians), Mathf.Cos(radians));
         Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position, transform.TransformDirection(direction));
+        Gizmos.DrawRay(this.transform.position, this.transform.TransformDirection(direction));
     }
 
     public override void EntryAction()
@@ -24,6 +24,6 @@ public class BurstBehavior : AbilityBehavior
     {
         float radians = angle * Mathf.Deg2Rad;
         Vector3 direction = new Vector3(0, Mathf.Sin(radians), Mathf.Cos(radians));
-        playerRb.AddForce(transform.TransformDirection(direction) * burstForce, ForceMode.VelocityChange);
+        playerRb.AddForce(this.transform.TransformDirection(direction) * burstForce, ForceMode.VelocityChange);
     }
 }
