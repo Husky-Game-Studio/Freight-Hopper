@@ -18,6 +18,6 @@ public static class StringExtensions
     public static string SetNumber(this string incrementableString, int number)
     {
         string[] splitText = incrementableString.Split(' ');
-        return splitText[0] + number;
+        return splitText[0] + " " + number;
     }
 }

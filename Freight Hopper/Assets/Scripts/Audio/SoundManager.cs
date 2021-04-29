@@ -68,6 +68,11 @@ public class SoundManager : MonoBehaviour
         sound.source.volume = sound.volume;
     }
 
+    public void PlayRandom(string name, int size)
+    {
+        Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)));
+    }
+
     public void Stop(string name)
     {
         Sound sound = FindSound(name);

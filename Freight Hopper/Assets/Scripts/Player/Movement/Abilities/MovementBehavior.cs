@@ -39,7 +39,7 @@ public class MovementBehavior : AbilityBehavior
     public override void Action()
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
-
+        playerSM.PlayRandom("Move 1", 7);
         Move(playerRb, playerCM, relativeMove, playerCM.IsGrounded.current ? groundAcceleration : airAcceleration);
     }
 
