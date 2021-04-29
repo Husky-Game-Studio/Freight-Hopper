@@ -2,16 +2,12 @@ public class GrappleFireState : BasicState
 {
     private bool startOfGrapple = true;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         startOfGrapple = true;
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
-    {
-    }
-
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -23,7 +19,7 @@ public class GrappleFireState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         // Call animation and mesh generation
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
@@ -35,20 +31,5 @@ public class GrappleFireState : BasicState
             startOfGrapple = false;
         }
         playerMachine.abilities.grapplePoleBehavior.GrappleTransition();
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

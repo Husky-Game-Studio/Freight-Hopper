@@ -4,20 +4,20 @@ public class SideWallRunningState : BasicState
 {
     private bool jumpPressed = false;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.JumpInput += this.JumpButtonPressed;
         Debug.Log("entered side wall Jump State");
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         jumpPressed = false;
         Debug.Log("exited side wall Jump State");
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
@@ -38,7 +38,7 @@ public class SideWallRunningState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
@@ -56,20 +56,5 @@ public class SideWallRunningState : BasicState
     {
         Debug.Log("jump button pressed");
         jumpPressed = true;
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

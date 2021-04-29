@@ -18,7 +18,7 @@ public class WallRunState : BasicState
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
     }
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -27,7 +27,7 @@ public class WallRunState : BasicState
         playerMachine.abilities.wallRunBehavior.EntryAction();
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         if (pSSMC.currentState == miniStateArray[1])
         {
@@ -37,7 +37,7 @@ public class WallRunState : BasicState
         myPlayerMachineCenter.abilities.wallRunBehavior.ExitAction();
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         bool[] status = myPlayerMachineCenter.abilities.wallRunBehavior.CheckWalls();
         // Fall from wall climb
@@ -53,24 +53,24 @@ public class WallRunState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         pSSMC.PerformSubMachineBehavior();
         myPlayerMachineCenter.abilities.wallRunBehavior.Action();
         myPlayerMachineCenter.abilities.movementBehavior.Action();
     }
 
-    public bool HasSubStateMachine()
+    public override bool HasSubStateMachine()
     {
         return true;
     }
 
-    public BasicState GetCurrentSubState()
+    public override BasicState GetCurrentSubState()
     {
         return pSSMC.GetCurrentSubState();
     }
 
-    public BasicState[] GetSubStateArray()
+    public override BasicState[] GetSubStateArray()
     {
         return miniStateArray;
     }

@@ -4,7 +4,7 @@ public class DoubleJumpState : BasicState
     private bool releasedJumpPressed = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -16,7 +16,7 @@ public class DoubleJumpState : BasicState
         myPlayerMachineCenter.abilities.doubleJumpBehavior.EntryAction();
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
@@ -28,7 +28,7 @@ public class DoubleJumpState : BasicState
         grapplePressed = false;
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -50,7 +50,7 @@ public class DoubleJumpState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
@@ -65,20 +65,5 @@ public class DoubleJumpState : BasicState
     private void GrappleButtonPressed()
     {
         grapplePressed = true;
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

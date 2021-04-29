@@ -15,7 +15,7 @@ public class GrapplePoleState : BasicState
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
     }
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -25,7 +25,7 @@ public class GrapplePoleState : BasicState
         pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -34,7 +34,7 @@ public class GrapplePoleState : BasicState
         pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -69,22 +69,22 @@ public class GrapplePoleState : BasicState
         grapplePolePressed = true;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         pSSMC.PerformSubMachineBehavior();
     }
 
-    public bool HasSubStateMachine()
+    public override bool HasSubStateMachine()
     {
         return true;
     }
 
-    public BasicState GetCurrentSubState()
+    public override BasicState GetCurrentSubState()
     {
         return pSSMC.GetCurrentSubState();
     }
 
-    public BasicState[] GetSubStateArray()
+    public override BasicState[] GetSubStateArray()
     {
         return miniStateArray;
     }

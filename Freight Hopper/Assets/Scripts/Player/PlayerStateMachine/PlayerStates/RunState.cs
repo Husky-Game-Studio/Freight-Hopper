@@ -9,7 +9,7 @@ public class RunState : BasicState
     private bool fullStopPressed = false;
     private bool burstPressed = false;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
@@ -22,7 +22,7 @@ public class RunState : BasicState
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
@@ -39,7 +39,7 @@ public class RunState : BasicState
         burstPressed = false;
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         // Jump
@@ -104,7 +104,7 @@ public class RunState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         playerMachine.abilities.movementBehavior.Action();
@@ -138,20 +138,5 @@ public class RunState : BasicState
     private void BurstPressed()
     {
         burstPressed = true;
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

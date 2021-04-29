@@ -11,7 +11,7 @@ public class IdleState : BasicState
     private bool fullStopPressed = false;
     private bool burstPressed = false;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -25,7 +25,7 @@ public class IdleState : BasicState
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.JumpInput -= this.JumpPressed;
         UserInput.Input.GrappleInput -= this.GrapplePressed;
@@ -42,7 +42,7 @@ public class IdleState : BasicState
         burstPressed = false;
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -109,9 +109,9 @@ public class IdleState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        // reset coyotee timer, only decrements when in falling state // i dont think this comment is necessary anymore, i think it is solved somewhere else?
+        
     }
 
     private void JumpPressed()
@@ -142,20 +142,5 @@ public class IdleState : BasicState
     private void FullStopPressed()
     {
         fullStopPressed = true;
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

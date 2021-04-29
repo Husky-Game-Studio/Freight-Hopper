@@ -2,7 +2,7 @@ public class FullStopState : BasicState
 {
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -10,33 +10,18 @@ public class FullStopState : BasicState
         playerMachine.abilities.fullstopBehavior.EntryAction();
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter.abilities.fullstopBehavior.ExitAction();
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         return myPlayerMachineCenter.fallState;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter.abilities.fullstopBehavior.Action();
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

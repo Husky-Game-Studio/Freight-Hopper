@@ -5,19 +5,19 @@ using UnityEngine;
 // State Machine help from these url:
 // https://www.youtube.com/watch?v=nnrOhb5UdRc
 
-public interface BasicState
+public abstract class BasicState
 {
-    public void SubToListeners(FiniteStateMachineCenter machineCenter);
+    public virtual void SubToListeners(FiniteStateMachineCenter machineCenter) {}
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter);
+    public virtual void UnsubToListeners(FiniteStateMachineCenter machineCenter) {}
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter);
+    public abstract BasicState TransitionState(FiniteStateMachineCenter machineCenter);
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter);
+    public abstract void PerformBehavior(FiniteStateMachineCenter machineCenter);
 
-    public bool HasSubStateMachine();
+    public virtual bool HasSubStateMachine() { return false; }
 
-    public BasicState GetCurrentSubState();
+    public virtual BasicState GetCurrentSubState() { return null; }
 
-    public BasicState[] GetSubStateArray();
+    public virtual BasicState[] GetSubStateArray() { return null; }
 }

@@ -4,7 +4,7 @@ public class GroundPoundState : BasicState
     private bool jumpPressed = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -14,7 +14,7 @@ public class GroundPoundState : BasicState
         playerMachine.abilities.groundPoundBehavior.EntryAction();
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -26,7 +26,7 @@ public class GroundPoundState : BasicState
         jumpPressed = false;
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -64,23 +64,8 @@ public class GroundPoundState : BasicState
         jumpPressed = true;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter.abilities.groundPoundBehavior.Action();
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

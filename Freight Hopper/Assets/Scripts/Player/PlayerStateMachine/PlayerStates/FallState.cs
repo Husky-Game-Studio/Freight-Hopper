@@ -11,7 +11,7 @@ public class FallState : BasicState
     private bool fullStopPressed = false;
     private bool burstPressed = false;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -32,7 +32,7 @@ public class FallState : BasicState
         }
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -52,7 +52,7 @@ public class FallState : BasicState
         burstPressed = false;
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -132,7 +132,7 @@ public class FallState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -142,11 +142,6 @@ public class FallState : BasicState
         }
 
         playerMachine.abilities.movementBehavior.Action();
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
     }
 
     private void JumpButtonPressed()
@@ -177,15 +172,5 @@ public class FallState : BasicState
     private void BurstPressed()
     {
         burstPressed = true;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }

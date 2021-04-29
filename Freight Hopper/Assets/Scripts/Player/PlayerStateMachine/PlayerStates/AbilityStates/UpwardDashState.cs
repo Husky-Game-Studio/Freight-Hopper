@@ -8,7 +8,7 @@ public class UpwardDashState : BasicState
     private bool releasedUpwardDash = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -18,7 +18,7 @@ public class UpwardDashState : BasicState
         playerMachine.abilities.upwardDashBehavior.EntryAction();
     }
 
-    public void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
         UserInput.Input.UpwardDashInputCanceled -= this.ReleasedUpwardDash;
         UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
@@ -28,7 +28,7 @@ public class UpwardDashState : BasicState
         grapplePressed = false;
     }
 
-    public BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         // Fall
         if (releasedUpwardDash)
@@ -44,7 +44,7 @@ public class UpwardDashState : BasicState
         return this;
     }
 
-    public void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter.abilities.upwardDashBehavior.Action();
     }
@@ -57,20 +57,5 @@ public class UpwardDashState : BasicState
     private void GrappleButtonPressed()
     {
         grapplePressed = true;
-    }
-
-    public bool HasSubStateMachine()
-    {
-        return false;
-    }
-
-    public BasicState GetCurrentSubState()
-    {
-        return null;
-    }
-
-    public BasicState[] GetSubStateArray()
-    {
-        return null;
     }
 }
