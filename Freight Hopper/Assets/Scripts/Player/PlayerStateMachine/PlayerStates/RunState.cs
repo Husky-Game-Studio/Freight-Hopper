@@ -58,7 +58,8 @@ public class RunState : BasicState
         // Ground Pound
         if (groundPoundPressed &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.Consumed && playerMachine.abilities.groundPoundBehavior.Unlocked)
+            playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.Consumed
+            && playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
             playerMachine.abilities.groundPoundBehavior.PreventConsumption();
             return playerMachine.groundPoundState;

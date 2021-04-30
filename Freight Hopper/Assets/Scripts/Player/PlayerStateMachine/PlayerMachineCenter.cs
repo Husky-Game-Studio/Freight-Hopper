@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class PlayerMachineCenter : FiniteStateMachineCenter
 {
+    // Dictionary of Player State Transitions
+    public Dictionary<BasicState, List<StateTransition>> playerStateTransitions;
+
     // State independent fields
     private bool jumpPressed = false;
 

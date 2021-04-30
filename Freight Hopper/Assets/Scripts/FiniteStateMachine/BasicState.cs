@@ -7,6 +7,8 @@ using UnityEngine;
 
 public abstract class BasicState
 {
+    private List<StateTransition> stateTransitions;
+
     public virtual void SubToListeners(FiniteStateMachineCenter machineCenter) {}
 
     public virtual void UnsubToListeners(FiniteStateMachineCenter machineCenter) {}
@@ -20,4 +22,6 @@ public abstract class BasicState
     public virtual BasicState GetCurrentSubState() { return null; }
 
     public virtual BasicState[] GetSubStateArray() { return null; }
+
+    public List<StateTransition> getStateTransitions() { return stateTransitions; }
 }
