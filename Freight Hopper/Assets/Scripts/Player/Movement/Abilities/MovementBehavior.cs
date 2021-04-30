@@ -32,15 +32,21 @@ public class MovementBehavior : AbilityBehavior
         rigidbody.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }
 
+    public void PlayerMove()
+    {
+        Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
+        Move(playerRb, playerCM, relativeMove, playerCM.IsGrounded.current ? groundAcceleration : airAcceleration);
+    }
+
     public override void EntryAction()
     {
     }
 
     public override void Action()
     {
-        Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
-        playerSM.PlayRandom("Move 1", 7);
-        Move(playerRb, playerCM, relativeMove, playerCM.IsGrounded.current ? groundAcceleration : airAcceleration);
+        PlayerMove();
+        playerSM.PlayRandom("Move", 7);
+        playerSM.PlayRandom("Stone", 5);
     }
 
     public override void ExitAction()

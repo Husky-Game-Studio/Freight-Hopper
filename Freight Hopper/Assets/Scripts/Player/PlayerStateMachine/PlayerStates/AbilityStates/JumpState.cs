@@ -34,7 +34,6 @@ public class JumpState : BasicState
         // Fall
         if (releasedJumpPressed || !myPlayerMachineCenter.jumpHoldingTimer.TimerActive())
         {
-            myPlayerMachineCenter.jumpHoldingTimer.DeactivateTimer();
             return myPlayerMachineCenter.fallState;
         }
         // Grapple pole

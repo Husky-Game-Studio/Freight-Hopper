@@ -51,6 +51,14 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         playerCM = GetComponent<CollisionManagement>();
     }
 
+    private void PlayerSpawned()
+    {
+        currentState.UnsubToListeners(this);
+        currentState = idleState;
+        previousState = idleState;
+        currentState.SubToListeners(this);
+    }
+
     public override void OnEnable()
     {
         currentState = idleState;
@@ -58,6 +66,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         currentState.SubToListeners(this);
         playerCM.CollisionDataCollected += LateFixedUpdate;
 
+        LevelController.PlayerRespawned += PlayerSpawned;
         UserInput.Input.JumpInput += this.JumpButtonPressed;
     }
 
@@ -66,6 +75,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         currentState.UnsubToListeners(this);
         playerCM.CollisionDataCollected -= LateFixedUpdate;
 
+        LevelController.PlayerRespawned -= PlayerSpawned;
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
     }
 

@@ -17,7 +17,6 @@ public static class StringExtensions
     /// </summary>
     public static string SetNumber(this string incrementableString, int number)
     {
-        string[] splitText = incrementableString.Split(' ');
-        return splitText[0] + " " + number;
+        return incrementableString + " " + number;
     }
 }

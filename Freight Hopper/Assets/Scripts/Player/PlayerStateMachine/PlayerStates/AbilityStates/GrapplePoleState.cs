@@ -31,7 +31,11 @@ public class GrapplePoleState : BasicState
 
         UserInput.Input.GrappleInput -= this.GrapplePolePressed;
         UserInput.Input.JumpInput -= this.JumpButtonPressed;
+
+        grapplePolePressed = false;
+        jumpPressed = false;
         pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
+        playerMachine.abilities.grapplePoleBehavior.ExitAction();
     }
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -41,18 +45,15 @@ public class GrapplePoleState : BasicState
         if (grapplePolePressed ||
             (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.abilities.grapplePoleBehavior.Anchored()))
         {
-            grapplePolePressed = false;
-            playerMachine.abilities.grapplePoleBehavior.ExitAction();
             return playerMachine.fallState;
         }
 
         if (jumpPressed)
         {
-            jumpPressed = false;
-            playerMachine.abilities.grapplePoleBehavior.ExitAction();
             return playerMachine.jumpState;
         }
-
+        grapplePolePressed = false;
+        jumpPressed = false;
         return this;
     }
 

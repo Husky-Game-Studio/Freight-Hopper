@@ -57,7 +57,7 @@ public class WallRunState : BasicState
     {
         pSSMC.PerformSubMachineBehavior();
         myPlayerMachineCenter.abilities.wallRunBehavior.Action();
-        myPlayerMachineCenter.abilities.movementBehavior.Action();
+        myPlayerMachineCenter.abilities.movementBehavior.PlayerMove();
     }
 
     public override bool HasSubStateMachine()

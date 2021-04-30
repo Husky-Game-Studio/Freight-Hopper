@@ -140,7 +140,7 @@ public class FallState : BasicState
             playerMachine.coyoteeTimer.CountDown();
         }
 
-        playerMachine.abilities.movementBehavior.Action();
+        playerMachine.abilities.movementBehavior.PlayerMove();
     }
 
     private void JumpButtonPressed()

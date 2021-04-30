@@ -24,7 +24,7 @@ public class GrappleFireState : BasicState
         // Call animation and mesh generation
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        playerMachine.abilities.movementBehavior.Action();
+        playerMachine.abilities.movementBehavior.PlayerMove();
         if (startOfGrapple)
         {
             playerMachine.abilities.grapplePoleBehavior.EntryAction();

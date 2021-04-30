@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Sound", menuName = "Scriptable Objects/Sound")]
 public class Sound : ScriptableObject
 {
+    [Tooltip("This is for stuff like Metal 1 and Metal 2, leave the name as Metal in that case. Otherwise blank")]
+    public string groupingName = "";
+
     public string filename;
 
     public AudioClip clip;
@@ -21,6 +24,9 @@ public class Sound : ScriptableObject
 
     public bool isLoop;
     public bool hasCooldown;
+
+    [Min(0)]
+    public float delay = 0f;
 
     [HideInInspector] public AudioSource source;
 }

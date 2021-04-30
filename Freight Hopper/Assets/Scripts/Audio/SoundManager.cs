@@ -22,7 +22,7 @@ public class SoundManager : MonoBehaviour
 
         if (sound.hasCooldown)
         {
-            soundTimerDictionary[sound.filename] = 0f;
+            soundTimerDictionary[GetSoundName(sound)] = Time.time;
         }
     }
 
@@ -80,15 +80,26 @@ public class SoundManager : MonoBehaviour
         sound.source.Stop();
     }
 
+    protected string GetSoundName(Sound sound)
+    {
+        string soundName = sound.filename;
+        if (!string.IsNullOrEmpty(sound.groupingName))
+        {
+            soundName = sound.groupingName;
+        }
+        return soundName;
+    }
+
     protected bool CanPlaySound(Sound sound)
     {
-        if (soundTimerDictionary.ContainsKey(sound.filename))
+        string soundName = GetSoundName(sound);
+        if (soundTimerDictionary.ContainsKey(soundName))
         {
-            float lastTimePlayed = soundTimerDictionary[sound.filename];
+            float lastTimePlayed = soundTimerDictionary[soundName];
 
-            if (lastTimePlayed + sound.clip.length < Time.time)
+            if (lastTimePlayed + sound.clip.length + sound.delay < Time.time)
             {
-                soundTimerDictionary[sound.filename] = Time.time;
+                soundTimerDictionary[soundName] = Time.time;
                 return true;
             }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,9 @@ public class LevelController : MonoBehaviour
     public LevelName CurrentLevelName => levelName;
     [SerializeField, ReadOnly] private LevelName levelName;
     [SerializeField] private LevelData levelData;
+
+    public static event Action PlayerRespawned;
+
     public static LevelController Instance => instance;
     private static LevelController instance;
 
@@ -70,6 +74,7 @@ public class LevelController : MonoBehaviour
         }
         player.transform.position = levelData.spawnPosition;
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        PlayerRespawned?.Invoke();
         //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }
 
