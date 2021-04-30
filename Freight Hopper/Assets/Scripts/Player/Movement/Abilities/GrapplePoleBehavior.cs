@@ -45,8 +45,8 @@ public class GrapplePoleBehavior : AbilityBehavior
         Vector3 normal = (playerAnchor.origin - anchor.origin).normalized;
 
         //Transform playerTransform = rb.transform;
-        Vector3 tangent = Vector3.Cross(cameraTransform.right, normal);
-        Vector3 bitangent = Vector3.Cross(normal, tangent);
+        Vector3 tangent = Vector3.Cross(normal, cameraTransform.right);
+        Vector3 bitangent = Vector3.Cross(tangent, normal);
         Debug.DrawLine(playerAnchor.origin, playerAnchor.origin + normal, Color.green, Time.fixedDeltaTime);
         Debug.DrawLine(playerAnchor.origin, playerAnchor.origin + tangent, Color.blue, Time.fixedDeltaTime);
         Debug.DrawLine(playerAnchor.origin, playerAnchor.origin + bitangent, Color.red, Time.fixedDeltaTime);
