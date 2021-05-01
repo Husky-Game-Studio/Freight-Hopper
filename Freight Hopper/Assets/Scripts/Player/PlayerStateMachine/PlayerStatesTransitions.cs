@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStatsTransitions : MonoBehaviour
+public class PlayerStatesTransitions : MonoBehaviour
 {
     public class toRunTransition : StateTransition {
         public bool shouldTransition(FiniteStateMachineCenter machineCenter) {
