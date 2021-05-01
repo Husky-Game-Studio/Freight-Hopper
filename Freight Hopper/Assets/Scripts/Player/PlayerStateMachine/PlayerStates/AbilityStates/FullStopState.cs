@@ -17,7 +17,12 @@ public class FullStopState : BasicState
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
-        return myPlayerMachineCenter.fallState;
+        if (myPlayerMachineCenter.abilities.fullstopBehavior.FullStopFinished())
+        {
+            return myPlayerMachineCenter.fallState;
+        }
+
+        return this;
     }
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)

@@ -24,6 +24,16 @@ public class Gravity : MonoBehaviour
         collision.CollisionDataCollected -= ApplyGravity;
     }
 
+    public void DisableGravity()
+    {
+        useGravity = false;
+    }
+
+    public void EnableGravity()
+    {
+        useGravity = true;
+    }
+
     private void ApplyGravity()
     {
         if (!useGravity || collision.IsGrounded.current)
