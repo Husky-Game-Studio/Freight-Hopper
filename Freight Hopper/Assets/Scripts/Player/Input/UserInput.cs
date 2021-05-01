@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class UserInput : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class UserInput : MonoBehaviour
 
     private static UserInput input;
 
-    public static UserInput Input => input;
+    public static UserInput Instance => input;
 
     public delegate void PressEventHandler();
 
@@ -46,11 +47,27 @@ public class UserInput : MonoBehaviour
         master.Player.FullStop.performed += FullStopPressed;
         master.Player.Burst.performed += BurstPressed;
         master.Player.GrapplePole.performed += GrapplePressed;
+        if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
+        {
+            LevelController.LevelLoadedIn += RespawnLinked;
+        }
+        else
+        {
+            Player.PlayerLoadedIn += RespawnLinked;
+        }
+    }
+
+    private void RespawnLinked()
+    {
+        master.Player.Restart.performed += LevelController.Instance.Respawn;
     }
 
     private void OnDisable()
     {
         master.Disable();
+        LevelController.LevelLoadedIn -= RespawnLinked;
+        master.Player.Restart.performed -= LevelController.Instance.Respawn;
+        Player.PlayerLoadedIn -= RespawnLinked;
     }
 
     private void Awake()

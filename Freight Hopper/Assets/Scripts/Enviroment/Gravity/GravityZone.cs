@@ -11,8 +11,8 @@ public class GravityZone : GravitySource
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        GizmosExtensions.DrawGizmosArrow(transform.position + centerOffset, gravityDirection * -transform.up);
-        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale);
+        GizmosExtensions.DrawGizmosArrow(this.transform.position + centerOffset, gravityDirection * -this.transform.up);
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position, this.transform.rotation, this.transform.localScale);
 
         Gizmos.DrawWireCube(centerOffset, 2 * zone);
     }
@@ -37,7 +37,7 @@ public class GravityZone : GravitySource
             return Vector3.zero;
         }
 
-        return gravity * (gravityDirection * -transform.up).normalized;
+        return gravity * (gravityDirection * -this.transform.up).normalized;
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (index < waypoints.Length && index >= 0 && transform.position != waypoints[index])
+        if (index < waypoints.Length && index >= 0 && this.transform.position != waypoints[index])
         {
             MoveObject();
         }
@@ -68,11 +68,11 @@ public class MovingPlatform : MonoBehaviour
 
     private void MoveObject()
     {
-        Vector3 heading = waypoints[index] - transform.position;
-        transform.position += (heading / heading.magnitude) * speed * Time.deltaTime;
+        Vector3 heading = waypoints[index] - this.transform.position;
+        this.transform.position += (heading / heading.magnitude) * speed * Time.deltaTime;
         if (Mathf.Abs(heading.x) < tolerance.x && Mathf.Abs(heading.y) < tolerance.y && Mathf.Abs(heading.z) < tolerance.z)
         {
-            transform.position = waypoints[index];
+            this.transform.position = waypoints[index];
             currentWaitTime = Time.time;
         }
     }

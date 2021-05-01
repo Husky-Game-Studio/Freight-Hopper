@@ -16,8 +16,8 @@ public class RoadCreator : MonoBehaviour
 
     public void CreateRoad()
     {
-        pathCreator = gameObject.GetComponent<PathCreator>();
-        meshFilter = gameObject.GetComponent<MeshFilter>();
+        pathCreator = this.gameObject.GetComponent<PathCreator>();
+        meshFilter = this.gameObject.GetComponent<MeshFilter>();
         road = new Road(pathCreator.path);
     }
 
@@ -25,7 +25,7 @@ public class RoadCreator : MonoBehaviour
     {
         RoadShape(slice);
         road.UpdateRoadPoints(pathCreator.path, roadDetail);
-        gameObject.GetComponent<MeshFilter>().mesh = road.CreateMesh();
+        this.gameObject.GetComponent<MeshFilter>().mesh = road.CreateMesh();
     }
 
     private void RoadShape(RoadSlice slice)

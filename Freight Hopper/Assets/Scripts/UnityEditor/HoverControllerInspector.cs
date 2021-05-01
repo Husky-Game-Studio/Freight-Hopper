@@ -8,8 +8,8 @@ public class HoverControllerInspector : Editor
     {
         if (GUILayout.Button("Add Hover Engine"))
         {
-            HoverController controller = (HoverController)target;
-            controller.AddHoverEngine(Vector3.zero, name);
+            HoverController controller = (HoverController)this.target;
+            controller.AddHoverEngine(Vector3.zero, this.name);
         }
         base.OnInspectorGUI();
     }

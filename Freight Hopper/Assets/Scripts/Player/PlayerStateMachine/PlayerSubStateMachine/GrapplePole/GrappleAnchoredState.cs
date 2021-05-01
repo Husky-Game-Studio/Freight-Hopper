@@ -11,6 +11,6 @@ public class GrappleAnchoredState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         // Perform grapple pole behavior
-        playerMachine.abilities.grapplePoleBehavior.Grapple(UserInput.Input.Move());
+        playerMachine.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
     }
 }

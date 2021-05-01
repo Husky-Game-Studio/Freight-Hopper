@@ -67,7 +67,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         playerCM.CollisionDataCollected += LateFixedUpdate;
 
         LevelController.PlayerRespawned += PlayerSpawned;
-        UserInput.Input.JumpInput += this.JumpButtonPressed;
+        UserInput.Instance.JumpInput += this.JumpButtonPressed;
     }
 
     public override void OnDisable()
@@ -76,7 +76,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         playerCM.CollisionDataCollected -= LateFixedUpdate;
 
         LevelController.PlayerRespawned -= PlayerSpawned;
-        UserInput.Input.JumpInput -= this.JumpButtonPressed;
+        UserInput.Instance.JumpInput -= this.JumpButtonPressed;
     }
 
     // perform anything that is independent of being in any one single state

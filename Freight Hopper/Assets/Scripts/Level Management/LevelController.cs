@@ -11,6 +11,8 @@ public class LevelController : MonoBehaviour
 
     public static event Action PlayerRespawned;
 
+    public static event Action LevelLoadedIn;
+
     public static LevelController Instance => instance;
     private static LevelController instance;
 
@@ -23,7 +25,19 @@ public class LevelController : MonoBehaviour
     {
         if (levelData != null)
         {
-            levelName = new LevelName(SceneManager.GetActiveScene().name);
+            Scene levelScene = SceneManager.GetActiveScene();
+
+#if UNITY_EDITOR
+            string playerSceneName = "DefaultScene";
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                if (!playerSceneName.Equals(SceneManager.GetSceneAt(i).name))
+                {
+                    levelScene = SceneManager.GetSceneAt(i);
+                }
+            }
+#endif
+            levelName = new LevelName(levelScene.name);
         }
     }
 
@@ -52,6 +66,7 @@ public class LevelController : MonoBehaviour
         }
         Player.PlayerLoadedIn += Respawn;
         Player.PlayerLoadedIn += UnlockAbilities;
+        LevelLoadedIn?.Invoke();
     }
 
     private void OnDestroy()

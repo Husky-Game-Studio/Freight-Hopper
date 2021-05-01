@@ -20,8 +20,8 @@ public class MovementBehavior : AbilityBehavior
         right = right.ProjectOnContactPlane(playerCM.ValidUpAxis);
 
         // Moves relative to the camera
-        Vector3 input = UserInput.Input.Move();
-        Vector3 move = forward * input.z + right * input.x;
+        Vector3 input = UserInput.Instance.Move();
+        Vector3 move = (forward * input.z) + (right * input.x);
         return move;
     }
 

@@ -6,13 +6,13 @@ public class SideWallRunningState : BasicState
 
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        UserInput.Input.JumpInput += this.JumpButtonPressed;
+        UserInput.Instance.JumpInput += this.JumpButtonPressed;
         Debug.Log("entered side wall Jump State");
     }
 
     public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        UserInput.Input.JumpInput -= this.JumpButtonPressed;
+        UserInput.Instance.JumpInput -= this.JumpButtonPressed;
         jumpPressed = false;
         Debug.Log("exited side wall Jump State");
     }

@@ -80,14 +80,14 @@ public class BezierPath
     /// <returns></returns>
     public Vector3 GetPathPoint(float t)
     {
-        if (t < 0 || NumSegments < t)
+        if (t < 0 || this.NumSegments < t)
         {
-            t = Mathf.Clamp(t, 0, NumSegments);
+            t = Mathf.Clamp(t, 0, this.NumSegments);
             Debug.LogWarning("For GetPathPoint(t), argument passed into t is outside of the proper index and has been clamped");
         }
-        if (t == NumSegments)
+        if (t == this.NumSegments)
         {
-            return QuadraticBezier(GetSegment(NumSegments - 1), 1.0f);
+            return QuadraticBezier(GetSegment(this.NumSegments - 1), 1.0f);
         }
         else
         {
@@ -103,9 +103,9 @@ public class BezierPath
     /// <returns> A list of 4 3D positions, the 4 points which make up the quadratic bezier curve.</returns>
     public Vector3[] GetSegment(int seg)
     {
-        if (0 <= seg && seg < NumSegments)
+        if (0 <= seg && seg < this.NumSegments)
         {
-            return new Vector3[] { points[seg * 3], points[seg * 3 + 1], points[seg * 3 + 2], points[seg * 3 + 3] };
+            return new Vector3[] { points[seg * 3], points[(seg * 3) + 1], points[(seg * 3) + 2], points[(seg * 3) + 3] };
         }
         else
         {
@@ -127,14 +127,14 @@ public class BezierPath
         {
             index = 0;
         }
-        else if (0 < seg && seg < NumSegments + 1)
+        else if (0 < seg && seg < this.NumSegments + 1)
         {
-            index = 3 * seg - 1;
+            index = (3 * seg) - 1;
         }
-        else if (seg == NumSegments + 1)
+        else if (seg == this.NumSegments + 1)
         {
 
-            index = 3 * seg - 2;
+            index = (3 * seg) - 2;
         }
         else
         {
@@ -152,7 +152,7 @@ public class BezierPath
     /// <returns></returns>
     public Vector3 GetAnchor(int anc)
     {
-        if (0 <= anc && anc <= NumAnchors - 1)
+        if (0 <= anc && anc <= this.NumAnchors - 1)
         {
             return points[3 * anc];
         }
@@ -168,7 +168,7 @@ public class BezierPath
     /// <param name="anc"></param>
     public void RemoveAnchor(int anc)
     {
-        if (NumSegments <= 1)
+        if (this.NumSegments <= 1)
         {
             throw new System.Exception("BezierPath must have at least 1 segment");
         }
@@ -177,14 +177,14 @@ public class BezierPath
         {
             index = 0;
         }
-        else if (0 < anc && anc < NumAnchors - 1)
+        else if (0 < anc && anc < this.NumAnchors - 1)
         {
-            index = 3 * anc - 1;
+            index = (3 * anc) - 1;
         }
-        else if (anc == NumAnchors - 1)
+        else if (anc == this.NumAnchors - 1)
         {
 
-            index = 3 * anc - 2;
+            index = (3 * anc) - 2;
         }
         else
         {

@@ -22,7 +22,7 @@ public class HoverEngine : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + direction * targetDistance);
+        Gizmos.DrawLine(this.transform.position, this.transform.position + (direction * targetDistance));
     }
 
     public void Hover(float height)
@@ -30,7 +30,7 @@ public class HoverEngine : MonoBehaviour
         if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, height + 0.1f, layerMask))
         {
             float error = height - hit.distance;
-            Debug.DrawLine(this.transform.position, this.transform.position + Vector3.up * error, Color.white);
+            Debug.DrawLine(this.transform.position, this.transform.position + (Vector3.up * error), Color.white);
             // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
             if (error > -0.1f)
             {

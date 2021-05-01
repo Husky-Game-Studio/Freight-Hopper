@@ -7,14 +7,14 @@ public class PlayerStatesTransitions : MonoBehaviour
     public class toRunTransition : StateTransition {
         public bool shouldTransition(FiniteStateMachineCenter machineCenter) {
             PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-            return UserInput.Input.Move() != Vector3.zero && playerMachine.abilities.movementBehavior.Unlocked;
+            return UserInput.Instance.Move() != Vector3.zero && playerMachine.abilities.movementBehavior.Unlocked;
         }
     }
 
     public class toIdleTransition : StateTransition {
         public bool shouldTransition(FiniteStateMachineCenter machineCenter) {
             PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-            return UserInput.Input.Move() == Vector3.zero;
+            return UserInput.Instance.Move() == Vector3.zero;
         }
     }
 
@@ -29,7 +29,7 @@ public class PlayerStatesTransitions : MonoBehaviour
     public class toFallTransition : StateTransition {
         public bool shouldTransition(FiniteStateMachineCenter machineCenter) {
             PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-            return UserInput.Input.Move() != Vector3.zero && playerMachine.abilities.movementBehavior.Unlocked;
+            return UserInput.Instance.Move() != Vector3.zero && playerMachine.abilities.movementBehavior.Unlocked;
         }
     }
 }

@@ -49,7 +49,7 @@ public class WindParticleController : MonoBehaviour
             particleSys = particles.GetComponent<ParticleSystem>();
             if (particles == null)
             {
-                Debug.LogWarning("Particle system not found for " + name);
+                Debug.LogWarning("Particle system not found for " + this.name);
             }
 
             mainModule = particleSys.main;

@@ -53,7 +53,7 @@ public class GrapplePoleBehavior : AbilityBehavior
         Debug.DrawLine(playerAnchor.origin, playerAnchor.origin + tangent, Color.blue, Time.fixedDeltaTime);
         Debug.DrawLine(playerAnchor.origin, playerAnchor.origin + bitangent, Color.red, Time.fixedDeltaTime);
 
-        Vector3 move = tangent * direction.z + bitangent * direction.x;
+        Vector3 move = (tangent * direction.z) + (bitangent * direction.x);
         move.Normalize();
 
         playerRb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);

@@ -8,8 +8,8 @@ public class GroundPoundState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
-        UserInput.Input.JumpInput += this.JumpButtonPressed;
-        UserInput.Input.GroundPoundCanceled += this.GroundPoundButtonReleased;
+        UserInput.Instance.JumpInput += this.JumpButtonPressed;
+        UserInput.Instance.GroundPoundCanceled += this.GroundPoundButtonReleased;
 
         playerMachine.abilities.groundPoundBehavior.EntryAction();
     }
@@ -18,8 +18,8 @@ public class GroundPoundState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        UserInput.Input.JumpInput -= this.JumpButtonPressed;
-        UserInput.Input.GroundPoundCanceled -= this.GroundPoundButtonReleased;
+        UserInput.Instance.JumpInput -= this.JumpButtonPressed;
+        UserInput.Instance.GroundPoundCanceled -= this.GroundPoundButtonReleased;
 
         playerMachine.abilities.groundPoundBehavior.ExitAction();
         groundPoundReleased = false;

@@ -12,16 +12,16 @@ public class UpwardDashState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
-        UserInput.Input.UpwardDashInputCanceled += this.ReleasedUpwardDash;
-        UserInput.Input.GrappleInput += this.GrappleButtonPressed;
+        UserInput.Instance.UpwardDashInputCanceled += this.ReleasedUpwardDash;
+        UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
 
         playerMachine.abilities.upwardDashBehavior.EntryAction();
     }
 
     public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        UserInput.Input.UpwardDashInputCanceled -= this.ReleasedUpwardDash;
-        UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
+        UserInput.Instance.UpwardDashInputCanceled -= this.ReleasedUpwardDash;
+        UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
 
         myPlayerMachineCenter.abilities.upwardDashBehavior.ExitAction();
         releasedUpwardDash = false;

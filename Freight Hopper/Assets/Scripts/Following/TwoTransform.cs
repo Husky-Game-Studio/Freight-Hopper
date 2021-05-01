@@ -25,7 +25,7 @@ public class TwoTransform : MonoBehaviour
     void PowerMovement(float forward, float rotational, Vector3 moveTemp)
     {
         //rb.AddRelativeForce(Vector3.forward * forward);
-        gameObject.transform.position += moveTemp;
+        this.gameObject.transform.position += moveTemp;
         rb.AddRelativeTorque(Vector3.up * rotational);
 
     }
@@ -34,7 +34,7 @@ public class TwoTransform : MonoBehaviour
     {
         Vector3 posCurrent = rb.position;
         Vector3 posDelta = posTarget - posCurrent;
-        rotCurrent = transform.eulerAngles.y * Mathf.Deg2Rad;
+        rotCurrent = this.transform.eulerAngles.y * Mathf.Deg2Rad;
         Matrix4x4 mat = new Matrix4x4(
             new Vector4(Mathf.Cos(rotCurrent), 0, Mathf.Sin(rotCurrent), 0),
             new Vector4(0, 1, 0, 0),
@@ -53,7 +53,7 @@ public class TwoTransform : MonoBehaviour
         PowerMovement(newPos.z * 0.05f, newPos.x * 4.0f, newPos.z * 0.05f * (mat.inverse * Vector3.forward));
         //Vector3.Dot(new Vector3(Mathf.Sin(rotCurrent), 0, Mathf.Cos(rotCurrent)), newPos.normalized) * (velMagTarget - velMagCurrent)
         Debug.DrawLine(posCurrent, posTarget);
-        Debug.DrawLine(posCurrent, posCurrent + 10.0f* (Vector3)(mat.inverse * Vector3.forward));
+        Debug.DrawLine(posCurrent, posCurrent + (10.0f* (Vector3)(mat.inverse * Vector3.forward)));
 
     }
 }

@@ -15,12 +15,12 @@ public class FallState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        UserInput.Input.JumpInput += this.JumpButtonPressed;
-        UserInput.Input.GrappleInput += this.GrappleButtonPressed;
-        UserInput.Input.GroundPoundInput += this.GroundPoundButtonPressed;
-        UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
-        UserInput.Input.FullStopInput += this.FullStopPressed;
-        UserInput.Input.BurstInput += this.BurstPressed;
+        UserInput.Instance.JumpInput += this.JumpButtonPressed;
+        UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
+        UserInput.Instance.GroundPoundInput += this.GroundPoundButtonPressed;
+        UserInput.Instance.UpwardDashInput += this.UpwardDashPressed;
+        UserInput.Instance.FullStopInput += this.FullStopPressed;
+        UserInput.Instance.BurstInput += this.BurstPressed;
 
         if (playerMachine.GetPreviousState() != playerMachine.jumpState)
         {
@@ -36,12 +36,12 @@ public class FallState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        UserInput.Input.JumpInput -= this.JumpButtonPressed;
-        UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
-        UserInput.Input.GroundPoundInput -= this.GroundPoundButtonPressed;
-        UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
-        UserInput.Input.FullStopInput -= this.FullStopPressed;
-        UserInput.Input.BurstInput -= this.BurstPressed;
+        UserInput.Instance.JumpInput -= this.JumpButtonPressed;
+        UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
+        UserInput.Instance.GroundPoundInput -= this.GroundPoundButtonPressed;
+        UserInput.Instance.UpwardDashInput -= this.UpwardDashPressed;
+        UserInput.Instance.FullStopInput -= this.FullStopPressed;
+        UserInput.Instance.BurstInput -= this.BurstPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
         jumpPressed = false;

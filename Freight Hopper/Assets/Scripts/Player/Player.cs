@@ -4,6 +4,7 @@ using System;
 public class Player : MonoBehaviour
 {
     public static event Action PlayerLoadedIn;
+
     private static Player instance;
     public static Player Instance { get => instance; set => _ = instance; }
 
@@ -17,6 +18,6 @@ public class Player : MonoBehaviour
         {
             instance = this;
         }
-        PlayerLoadedIn.Invoke();
+        PlayerLoadedIn?.Invoke();
     }
 }

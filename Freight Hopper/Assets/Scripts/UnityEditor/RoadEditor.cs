@@ -9,7 +9,7 @@ public class RoadEditor : Editor
     RoadCreator creator;
     private void OnEnable()
     {
-        creator = (RoadCreator)target;
+        creator = (RoadCreator)this.target;
         if (creator.pathCreator == null)
         {
             creator.CreateRoad();

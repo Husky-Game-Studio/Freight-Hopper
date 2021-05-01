@@ -10,7 +10,7 @@ public class GravitySphere : GravitySource
     // Generates sphere gizmos. One for radius and one for falloff
     private void OnDrawGizmosSelected()
     {
-        Vector3 position = transform.position;
+        Vector3 position = this.transform.position;
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(position, radius);
@@ -45,7 +45,7 @@ public class GravitySphere : GravitySource
     /// </summary>
     public override Vector3 GetGravity(Vector3 position)
     {
-        Vector3 posDifference = transform.position - position;
+        Vector3 posDifference = this.transform.position - position;
 
         float distance = posDifference.magnitude;
         if (distance > falloffRadius.value)
@@ -64,7 +64,7 @@ public class GravitySphere : GravitySource
 
         if (falloffRadius.Enabled && distance > radius)
         {
-            falloffGravity *= 1 - (distance - radius) * falloffFactor;
+            falloffGravity *= 1 - ((distance - radius) * falloffFactor);
         }
 
         return falloffGravity * posDifference;

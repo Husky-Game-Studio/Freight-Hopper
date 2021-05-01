@@ -37,8 +37,8 @@ public class Wind : MonoBehaviour
         {
             for (float y = -size.y / 2; y <= size.y / 2; y += rayWidth)
             {
-                Vector3 position = transform.TransformPoint(new Vector3(x, y, 0) + offset);
-                Gizmos.DrawRay(position, transform.TransformDirection(Vector3.forward) * size.z);
+                Vector3 position = this.transform.TransformPoint(new Vector3(x, y, 0) + offset);
+                Gizmos.DrawRay(position, this.transform.TransformDirection(Vector3.forward) * size.z);
             }
         }
     }

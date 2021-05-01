@@ -7,6 +7,6 @@ public class GravityUniversal : GravitySource
     /// </summary>
     public override Vector3 GetGravity(Vector3 position)
     {
-        return -transform.up * gravity;
+        return -this.transform.up * gravity;
     }
 }

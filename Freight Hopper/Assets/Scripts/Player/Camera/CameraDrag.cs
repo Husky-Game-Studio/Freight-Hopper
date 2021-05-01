@@ -10,7 +10,7 @@ public class CameraDrag : MonoBehaviour
 
     private void Awake()
     {
-        cameraHead = transform.GetChild(0);
+        cameraHead = this.transform.GetChild(0);
     }
 
     public void CollidDrag(Vector3 forceDirection)

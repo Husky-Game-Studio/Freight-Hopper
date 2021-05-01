@@ -24,7 +24,7 @@ public class PathEditor : Editor
 
     private void OnEnable()
     {
-        creator = (PathCreator)target;
+        creator = (PathCreator)this.target;
         if (creator.path == null)
         {
             creator.CreatePath();
@@ -140,7 +140,7 @@ public class PathEditor : Editor
         Undo.RecordObject(creator, "Add Segment");
         Vector3 direction = -CalculatePathDirection(creator.focusIndex);
         Vector3 origin = path[3 * creator.focusIndex];
-        path.AddSegment(creator.focusIndex, origin + 3 * direction, origin + 2 * direction, origin + 1 * direction);
+        path.AddSegment(creator.focusIndex, origin + (3 * direction), origin + (2 * direction), origin + (1 * direction));
     }
 
     private void ActionCreateSegmentAhead()
@@ -148,7 +148,7 @@ public class PathEditor : Editor
         Undo.RecordObject(creator, "Add Segment");
         Vector3 direction = CalculatePathDirection(creator.focusIndex);
         Vector3 origin = path[3 * creator.focusIndex];
-        path.AddSegment(creator.focusIndex + 1, origin + 1 * direction, origin + 2 * direction, origin + 3 * direction);
+        path.AddSegment(creator.focusIndex + 1, origin + (1 * direction), origin + (2 * direction), origin + (3 * direction));
         creator.focusIndex += 1;
     }
 
@@ -168,10 +168,10 @@ public class PathEditor : Editor
     {
         if (0 <= anc && anc <= path.NumAnchors - 1)
         {
-            if (3 * anc + 1 <= path.NumPoints - 1)
-                return (path[3 * creator.focusIndex + 1] - path[3 * creator.focusIndex]).normalized;
+            if ((3 * anc) + 1 <= path.NumPoints - 1)
+                return (path[(3 * creator.focusIndex) + 1] - path[3 * creator.focusIndex]).normalized;
             else
-                return (path[3 * creator.focusIndex] - path[3 * creator.focusIndex - 1]).normalized;
+                return (path[3 * creator.focusIndex] - path[(3 * creator.focusIndex) - 1]).normalized;
         }
         else
         {
@@ -244,9 +244,9 @@ public class PathEditor : Editor
         {
             Undo.RecordObject(creator, "Rotate Anchor Point");
             if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
-                path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, path[indexCurrent + 1]) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent + 1, anchorStoredPos + (Vector3.Distance(anchorStoredPos, path[indexCurrent + 1]) * (anchorHandleRot * Vector3.forward)));
             if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
-                path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, path[indexCurrent - 1]) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent - 1, anchorStoredPos - (Vector3.Distance(anchorStoredPos, path[indexCurrent - 1]) * (anchorHandleRot * Vector3.forward)));
         }
         //Moving strength handle ahead constrained by rotation
         if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
@@ -256,7 +256,7 @@ public class PathEditor : Editor
             if (path[indexCurrent + 1] != strengthHandlePos)
             {
                 Undo.RecordObject(creator, "Adjust Path Strength");
-                path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent + 1, anchorStoredPos + (Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward)));
             }
         }
         //Moving strength handle behind constrained by rotation
@@ -267,7 +267,7 @@ public class PathEditor : Editor
             if (path[indexCurrent - 1] != strengthHandlePos)
             {
                 Undo.RecordObject(creator, "Adjust Path Strength");
-                path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent - 1, anchorStoredPos - (Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward)));
             }
         }
     }

@@ -15,12 +15,12 @@ public class IdleState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        UserInput.Input.JumpInput += this.JumpPressed;
-        UserInput.Input.GrappleInput += this.GrapplePressed;
-        UserInput.Input.GroundPoundInput += this.GroundPoundPressed;
-        UserInput.Input.UpwardDashInput += this.UpwardDashPressed;
-        UserInput.Input.FullStopInput += this.FullStopPressed;
-        UserInput.Input.BurstInput += this.BurstPressed;
+        UserInput.Instance.JumpInput += this.JumpPressed;
+        UserInput.Instance.GrappleInput += this.GrapplePressed;
+        UserInput.Instance.GroundPoundInput += this.GroundPoundPressed;
+        UserInput.Instance.UpwardDashInput += this.UpwardDashPressed;
+        UserInput.Instance.FullStopInput += this.FullStopPressed;
+        UserInput.Instance.BurstInput += this.BurstPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
         foreach (AbilityBehavior ability in playerMachine.abilities.Abilities)
@@ -31,12 +31,12 @@ public class IdleState : BasicState
 
     public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        UserInput.Input.JumpInput -= this.JumpPressed;
-        UserInput.Input.GrappleInput -= this.GrapplePressed;
-        UserInput.Input.GroundPoundInput -= this.GroundPoundPressed;
-        UserInput.Input.UpwardDashInput -= this.UpwardDashPressed;
-        UserInput.Input.FullStopInput -= this.FullStopPressed;
-        UserInput.Input.BurstInput -= this.BurstPressed;
+        UserInput.Instance.JumpInput -= this.JumpPressed;
+        UserInput.Instance.GrappleInput -= this.GrapplePressed;
+        UserInput.Instance.GroundPoundInput -= this.GroundPoundPressed;
+        UserInput.Instance.UpwardDashInput -= this.UpwardDashPressed;
+        UserInput.Instance.FullStopInput -= this.FullStopPressed;
+        UserInput.Instance.BurstInput -= this.BurstPressed;
 
         jumpPressed = false;
         groundPoundPressed = false;
@@ -99,7 +99,7 @@ public class IdleState : BasicState
             return playerMachine.fallState;
         }
         // Run
-        if (UserInput.Input.Move() != Vector3.zero && playerMachine.abilities.movementBehavior.Unlocked)
+        if (UserInput.Instance.Move() != Vector3.zero && playerMachine.abilities.movementBehavior.Unlocked)
         {
             return playerMachine.runState;
         }

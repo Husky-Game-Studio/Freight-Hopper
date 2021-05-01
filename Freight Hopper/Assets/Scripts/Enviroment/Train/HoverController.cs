@@ -35,9 +35,9 @@ public class HoverController : MonoBehaviour
     private void Reset()
     {
         layerMask = LayerMask.GetMask("Default");
-        if (transform.parent.GetComponent<Rigidbody>() != null)
+        if (this.transform.parent.GetComponent<Rigidbody>() != null)
         {
-            rb = transform.parent.GetComponent<Rigidbody>();
+            rb = this.transform.parent.GetComponent<Rigidbody>();
         }
         else
         {

@@ -16,7 +16,7 @@ public static class Vector3Extensions
     /// <returns>Rotated vector</returns>
     public static Vector3 ProjectOnContactPlane(this Vector3 vector, Vector3 normal)
     {
-        return vector - normal * Vector3.Dot(vector, normal);
+        return vector - (normal * Vector3.Dot(vector, normal));
     }
 
     public static bool IsZero(this Vector3 vector)

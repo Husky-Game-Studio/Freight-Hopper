@@ -8,8 +8,8 @@ public class DoubleJumpState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
-        UserInput.Input.JumpInputCanceled += this.ReleasedJumpButtonPressed;
-        UserInput.Input.GrappleInput += this.GrappleButtonPressed;
+        UserInput.Instance.JumpInputCanceled += this.ReleasedJumpButtonPressed;
+        UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
 
         // reset jump hold timer
         playerMachine.jumpHoldingTimer.ResetTimer();
@@ -18,8 +18,8 @@ public class DoubleJumpState : BasicState
 
     public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        UserInput.Input.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
-        UserInput.Input.GrappleInput -= this.GrappleButtonPressed;
+        UserInput.Instance.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
+        UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
 
         // deactivate jump hold timer
         myPlayerMachineCenter.jumpHoldingTimer.DeactivateTimer();

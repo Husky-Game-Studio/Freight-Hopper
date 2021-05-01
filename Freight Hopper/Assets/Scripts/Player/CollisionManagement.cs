@@ -42,7 +42,7 @@ public class CollisionManagement : MonoBehaviour
         {
             if (Physics.Raycast(rb.position, rb.transform.TransformDirection(directions[i]), out hit, distance, layers))
             {
-                float collisionAngle = Vector3.Angle(hit.normal, ValidUpAxis);
+                float collisionAngle = Vector3.Angle(hit.normal, this.ValidUpAxis);
                 if (collisionAngle > maxSlope)
                 {
                     walls[i] = hit.normal;

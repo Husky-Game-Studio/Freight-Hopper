@@ -39,7 +39,7 @@ public class FirstPersonCamera : MonoBehaviour
         Vector3 upAxis = player.GetComponent<CollisionManagement>().ValidUpAxis;
 
         // convert input to rotation
-        Vector2 mouse = UserInput.Input.Look() * mouseSensitivity * Time.deltaTime;
+        Vector2 mouse = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
         Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
         Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
 

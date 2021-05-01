@@ -75,6 +75,6 @@ public class PID
 
         previousError = currentError;
 
-        return P * data.Kp + I * data.Ki + D * data.Kd;
+        return (P * data.Kp) + (I * data.Ki) + (D * data.Kd);
     }
 }

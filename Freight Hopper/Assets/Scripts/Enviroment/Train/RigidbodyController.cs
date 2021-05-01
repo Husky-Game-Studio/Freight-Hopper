@@ -38,7 +38,7 @@ public class RigidbodyController : MonoBehaviour
     {
         //Debug.Log("Player forward transform: " + transform.forward);
         //Debug.Log("Weird inverse transform point: " + transform.InverseTransformPoint(position));
-        float errorTorque = transform.InverseTransformPoint(position).x - transform.forward.x;
+        float errorTorque = this.transform.InverseTransformPoint(position).x - this.transform.forward.x;
         Vector3 torque = Vector3.up * rotation.GetOutput(errorTorque, Time.fixedDeltaTime);
         rb.AddRelativeTorque(torque, ForceMode.Force);
 

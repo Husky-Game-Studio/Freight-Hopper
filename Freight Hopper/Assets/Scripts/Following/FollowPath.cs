@@ -4,32 +4,36 @@ using UnityEngine;
 
 public class FollowPath : MonoBehaviour
 {
-    BezierPath path;
-    Vector3 targetPos;
-    Rigidbody rb;
-    float t = 0.0f;
+    private BezierPath path;
+    private Vector3 targetPos;
+    private Rigidbody rb;
+    private float t = 0.0f;
 
     [SerializeField]
-    PathCreator pathCreator;
-    [SerializeField]
-    float targetVelocity;
-    [SerializeField]
-    float followDistance;
-    [SerializeField]
-    PID.Data forwardPIDData;
-    [SerializeField]
-    PID.Data rotatePIDDataY;
-    [SerializeField]
-    PID.Data rotatePIDDataX;
+    private PathCreator pathCreator;
 
-    PID forwardPID = new PID();
-    PID rotatePID_Y = new PID();
-    PID rotatePID_X = new PID();
+    [SerializeField]
+    private float targetVelocity;
 
+    [SerializeField]
+    private float followDistance;
+
+    [SerializeField]
+    private PID.Data forwardPIDData;
+
+    [SerializeField]
+    private PID.Data rotatePIDDataY;
+
+    [SerializeField]
+    private PID.Data rotatePIDDataX;
+
+    private PID forwardPID = new PID();
+    private PID rotatePID_Y = new PID();
+    private PID rotatePID_X = new PID();
 
     private void Start()
     {
-        rb = transform.GetComponent<Rigidbody>();
+        rb = this.transform.GetComponent<Rigidbody>();
         path = pathCreator.path;
         ApplyVelocityChange(2.0f, 0.5f);
         forwardPID.Initialize(forwardPIDData);
@@ -41,8 +45,8 @@ public class FollowPath : MonoBehaviour
     {
         AdjustTarget();
         //Transform matrices
-        Matrix4x4 mat = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
-        Matrix4x4 matDir = Matrix4x4.Rotate(transform.rotation);
+        Matrix4x4 mat = Matrix4x4.TRS(this.transform.position, this.transform.rotation, Vector3.one);
+        Matrix4x4 matDir = Matrix4x4.Rotate(this.transform.rotation);
         //Transformed variables
         Vector3 deltaPosRelative = mat.inverse.MultiplyPoint3x4(targetPos);
         float currentForwardVelocity = (matDir.inverse * rb.velocity).z;
@@ -70,14 +74,13 @@ public class FollowPath : MonoBehaviour
 
     private void AdjustTarget() //TODO: If entire path is within follow distance, this will be a forever loop. Prevent this
     {
-        while ((path.GetPathPoint(t) - transform.position).magnitude < followDistance)
+        while ((path.GetPathPoint(t) - this.transform.position).magnitude < followDistance)
         {
             t += 0.01f;
             if (t >= path.NumSegments)
             {
                 break;
             }
-                
         }
         targetPos = path.GetPathPoint(t);
     }
