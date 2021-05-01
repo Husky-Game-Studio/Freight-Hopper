@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3558.9346, g: 1990.7432, b: 1235.7812, a: 1}
+  m_IndirectSpecularColor: {r: 3564.4395, g: 1986.8096, b: 1224.5293, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -425,7 +425,19 @@ MonoBehaviour:
     - {x: 12.240628, y: 1, z: 6.9326286}
     - {x: 17.278227, y: 1, z: 5.926895}
     - {x: 18.7471, y: 1, z: -0.9198642}
-  focusIndex: 2
+    - {x: 20.002108, y: 1, z: -6.7698493}
+    - {x: 20.327068, y: 5.101391, z: -8.324359}
+    - {x: 20.83509, y: 9.210656, z: -10.692441}
+    - {x: 21.261358, y: 12.658579, z: -12.679436}
+    - {x: 21.21473, y: 13.998634, z: -14.106862}
+    - {x: 21.648672, y: 17.508654, z: -16.129625}
+    - {x: 22.692205, y: 25.949347, z: -20.993877}
+    - {x: 12.3495, y: 21.20946, z: -18.450035}
+    - {x: 12.876682, y: 29.410202, z: -23.28041}
+    - {x: 12.931988, y: 30.270523, z: -23.787155}
+    - {x: 12.987293, y: 41.695026, z: -30.66265}
+    - {x: 13.042599, y: 42.555347, z: -31.169394}
+  focusIndex: 6
 --- !u!4 &193273201
 Transform:
   m_ObjectHideFlags: 0
@@ -1850,7 +1862,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbccf86e791a42e4f8062f572022a0e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelData: {fileID: 11400000, guid: 87a2d05e6e1f80b419a7ef0032f6a158, type: 2}
+  levelName:
+    worldSeriesName: Rail-Road
+    worldID: 1
+    levelID: 1
+  levelData:
+    nextLevelStatus: 0
+    spawnPosition: {x: 0, y: 0, z: 0}
+    activeAbilities: 00000000010000000200000003000000
 --- !u!1 &1617635130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2094,14 +2113,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathCreator: {fileID: 193273200}
-  targetVelocity: 4
+  targetVelocity: 8
   followDistance: 4
   forwardPIDData:
     Kp: 1
     Ki: 0
     Kd: 0
-  rotatePIDData:
-    Kp: 2
+  rotatePIDDataY:
+    Kp: 20
+    Ki: 100
+    Kd: 0
+  rotatePIDDataX:
+    Kp: 5
     Ki: 0
     Kd: 0
 --- !u!4 &1835975021 stripped

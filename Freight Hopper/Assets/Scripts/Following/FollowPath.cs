@@ -18,11 +18,14 @@ public class FollowPath : MonoBehaviour
     [SerializeField]
     PID.Data forwardPIDData;
     [SerializeField]
-    PID.Data rotatePIDData;
+    PID.Data rotatePIDDataY;
+    [SerializeField]
+    PID.Data rotatePIDDataX;
 
     PID forwardPID = new PID();
-    PID rotatePID = new PID();
-    
+    PID rotatePID_Y = new PID();
+    PID rotatePID_X = new PID();
+
 
     private void Start()
     {
@@ -30,7 +33,8 @@ public class FollowPath : MonoBehaviour
         path = pathCreator.path;
         ApplyVelocityChange(2.0f, 0.5f);
         forwardPID.Initialize(forwardPIDData);
-        rotatePID.Initialize(rotatePIDData);
+        rotatePID_Y.Initialize(rotatePIDDataY);
+        rotatePID_X.Initialize(rotatePIDDataX);
     }
 
     private void FixedUpdate()
@@ -43,16 +47,25 @@ public class FollowPath : MonoBehaviour
         Vector3 deltaPosRelative = mat.inverse.MultiplyPoint3x4(targetPos);
         float currentForwardVelocity = (matDir.inverse * rb.velocity).z;
         //Turning calculations
-        float turnRadius = deltaPosRelative.sqrMagnitude / (2.0f * deltaPosRelative.x);
+        float turnRadius = deltaPosRelative.sqrMagnitude / (2.0f * new Vector2(deltaPosRelative.x, deltaPosRelative.y).magnitude);
         float targetAngularVelocity = targetVelocity / turnRadius;
-        //Apply forces
-        ApplyVelocityChange(targetVelocity - currentForwardVelocity, targetAngularVelocity - rb.angularVelocity.y);
-        
-        //float forwardForce = forwardPID.GetOutput(targetVelocity - currentForwardVelocity, Time.fixedDeltaTime);
-        //float torque = rotatePID.GetOutput(targetAngularVelocity - rb.angularVelocity.y, Time.fixedDeltaTime);
-        //ApplyForce(forwardForce, torque);
-
-        TurningConstraintForce(currentForwardVelocity, rb.angularVelocity.y);
+        float turnXYAngle = Mathf.Atan2(deltaPosRelative.y, deltaPosRelative.x);
+        float targetAngularVelocityY = targetAngularVelocity * Mathf.Cos(turnXYAngle);
+        float targetAngularVelocityX = targetAngularVelocity * Mathf.Sin(turnXYAngle);
+        //Calculate Acceleration to apply
+        float forwardForce = forwardPID.GetOutput(targetVelocity - currentForwardVelocity, Time.fixedDeltaTime);
+        float torqueY = rotatePID_Y.GetOutput(targetAngularVelocityY - rb.angularVelocity.y, Time.fixedDeltaTime);
+        float torqueX = -rotatePID_X.GetOutput(targetAngularVelocityX - rb.angularVelocity.x, Time.fixedDeltaTime);
+        //Apply Forces
+        rb.AddRelativeForce(Vector3.forward * forwardForce, ForceMode.Acceleration);
+        rb.AddRelativeTorque(Vector3.up * torqueY, ForceMode.Acceleration);
+        rb.AddRelativeTorque(Vector3.right * torqueX, ForceMode.Acceleration);
+        //Turning Constraint Force
+        Vector3 radialVector = new Vector3(Mathf.Cos(turnXYAngle), Mathf.Sin(turnXYAngle), 0);
+        rb.AddRelativeForce(radialVector * currentForwardVelocity * new Vector2(rb.angularVelocity.x, rb.angularVelocity.y).magnitude, ForceMode.Acceleration);
+        //Debug Drawing
+        Debug.DrawLine(rb.position, rb.position + 4.0f * (Vector3)(mat * radialVector));
+        Debug.DrawLine(rb.position, targetPos);
     }
 
     private void AdjustTarget() //TODO: If entire path is within follow distance, this will be a forever loop. Prevent this
