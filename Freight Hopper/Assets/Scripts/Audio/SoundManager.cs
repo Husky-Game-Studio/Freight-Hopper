@@ -14,16 +14,23 @@ public class SoundManager : MonoBehaviour
     protected void CreateAudioSource(Sound sound)
     {
         sound.source = this.gameObject.AddComponent<AudioSource>();
+#if !UNITY_EDITOR
+        UpdateAudioSource(sound);
+#endif
+        if (sound.hasCooldown)
+        {
+            soundTimerDictionary[GetSoundName(sound)] = Time.time;
+        }
+    }
+
+    protected void UpdateAudioSource(Sound sound)
+    {
         sound.source.clip = sound.clip;
         sound.source.outputAudioMixerGroup = mixerGroup;
         sound.source.volume = sound.volume;
         sound.source.pitch = sound.pitch;
         sound.source.loop = sound.isLoop;
-
-        if (sound.hasCooldown)
-        {
-            soundTimerDictionary[GetSoundName(sound)] = Time.time;
-        }
+        sound.source.priority = sound.priority;
     }
 
     protected Sound FindSound(string name)
@@ -38,6 +45,9 @@ public class SoundManager : MonoBehaviour
                     {
                         CreateAudioSource(sound);
                     }
+#if UNITY_EDITOR
+                    UpdateAudioSource(sound);
+#endif
                     return sound;
                 }
             }

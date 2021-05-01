@@ -28,5 +28,8 @@ public class Sound : ScriptableObject
     [Min(0)]
     public float delay = 0f;
 
+    [Range(0, 256), Tooltip("Lower is higher priority")]
+    public int priority = 128;
+
     [HideInInspector] public AudioSource source;
 }

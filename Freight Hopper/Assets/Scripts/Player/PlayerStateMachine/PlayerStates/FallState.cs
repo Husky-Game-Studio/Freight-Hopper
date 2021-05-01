@@ -105,10 +105,6 @@ public class FallState : BasicState
         // Idle
         if (playerMachine.playerCM.IsGrounded.current)
         {
-            foreach (AbilityBehavior ability in playerMachine.abilities.Abilities)
-            {
-                ability.Recharge();
-            }
             return playerMachine.idleState;
         }
 

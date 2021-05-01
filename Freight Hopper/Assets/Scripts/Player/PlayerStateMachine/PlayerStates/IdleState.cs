@@ -23,6 +23,10 @@ public class IdleState : BasicState
         UserInput.Input.BurstInput += this.BurstPressed;
 
         playerMachine.coyoteeTimer.DeactivateTimer();
+        foreach (AbilityBehavior ability in playerMachine.abilities.Abilities)
+        {
+            ability.Recharge();
+        }
     }
 
     public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
@@ -111,7 +115,6 @@ public class IdleState : BasicState
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        
     }
 
     private void JumpPressed()
