@@ -10,7 +10,7 @@ public class CameraEffects : MonoBehaviour
     private Camera cam;
 
     private VisualEffect speedLines;
-    private Volume speedVolume;
+    [SerializeField] private Volume speedVolume;
     private readonly float speedEffectsStart = 15;
     private Average playerSpeed;
 
@@ -38,7 +38,6 @@ public class CameraEffects : MonoBehaviour
         fov.baseValue = cam.fieldOfView;
         fov.value = fov.baseValue;
 
-        speedVolume = Camera.main.GetComponentInChildren<Volume>();
         postProcessing.baseValue = 0;
         postProcessing.value = postProcessing.baseValue;
 
