@@ -43,7 +43,6 @@ public class WallRunState : BasicState
         // Fall from wall climb
         if (!status[0] && !status[1] && !status[3])
         {
-            Debug.Log("Not touching any walls leaving");
             return myPlayerMachineCenter.fallState;
         }
         if (pSSMC.currentState == miniStateArray[1] || pSSMC.currentState == miniStateArray[2])

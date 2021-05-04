@@ -47,6 +47,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public void WallClimb()
     {
+        //Debug.Log("Wall Climb");
         Vector3 upAlongWall = Vector3.Cross(playerRb.transform.right, wallNormals[0]);
         Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         playerRb.AddForce(rightForce * -wallNormals[0], ForceMode.Acceleration);
@@ -67,6 +68,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public void RightWallRun()
     {
+        //Debug.Log("Right wall Climb");
         Vector3 upAlongWall = -Vector3.Cross(playerRb.transform.forward, wallNormals[1]);
         Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         WallRun(-wallNormals[1], upAlongWall);
@@ -74,6 +76,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public void LeftWallRun()
     {
+        //Debug.Log("Left wall Climb");
         Vector3 upAlongWall = Vector3.Cross(playerRb.transform.forward, wallNormals[3]);
         Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         WallRun(-wallNormals[3], upAlongWall);
