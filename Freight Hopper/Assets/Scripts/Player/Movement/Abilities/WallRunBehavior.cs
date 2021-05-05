@@ -79,8 +79,8 @@ public class WallRunBehavior : AbilityBehavior
     public void WallJumpContinous()
     {
         jumpHoldingTimer.CountDownFixed();
-        playerRb.AddForce(jumpIniitalPush * jumpNormalCache, ForceMode.Acceleration);
-        playerRb.AddForce(jumpInitialForce * playerCM.ValidUpAxis, ForceMode.Acceleration);
+        playerRb.AddForce(jumpContinousPush * jumpNormalCache, ForceMode.Acceleration);
+        playerRb.AddForce(jumpContinousForce * playerCM.ValidUpAxis, ForceMode.Acceleration);
     }
 
     public void RightWallRun()
