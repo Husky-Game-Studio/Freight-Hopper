@@ -47,7 +47,12 @@ public class WallRunState : BasicState
         // Fall from wall climb
         if (!status[0] && !status[1] && !status[3] && pSSMC.currentState != miniStateArray[2] && pSSMC.currentState != miniStateArray[1])
         {
-            return myPlayerMachineCenter.fallState;
+            myPlayerMachineCenter.abilities.wallRunBehavior.coyoteTimer.CountDownFixed();
+            if (!myPlayerMachineCenter.abilities.wallRunBehavior.coyoteTimer.TimerActive())
+            {
+                myPlayerMachineCenter.abilities.wallRunBehavior.coyoteTimer.ResetTimer();
+                return myPlayerMachineCenter.fallState;
+            }
         }
         if (myPlayerMachineCenter.playerCM.IsGrounded.current)
         {

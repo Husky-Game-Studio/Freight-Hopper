@@ -620,14 +620,15 @@ MonoBehaviour:
     m_Bits: 1
   upwardsForce: 20
   rightForce: 5
+  initialClimbForce: 5
   climbForce: 50
   climbTimer:
     duration: 0.5
     current: 0
   jumpInitialForce: 5
   jumpIniitalPush: 5
-  jumpContinousForce: 40
-  jumpContinousPush: 20
+  jumpContinousForce: 15
+  jumpContinousPush: 5
   jumpHoldingTimer:
     duration: 0.5
     current: 0

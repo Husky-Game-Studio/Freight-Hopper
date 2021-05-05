@@ -10,6 +10,7 @@ public class WallRunBehavior : AbilityBehavior
     [SerializeField] private LayerMask validWalls;
     [SerializeField] private float upwardsForce = 10;
     [SerializeField] private float rightForce = 5; // force applied towards the wall
+    [SerializeField] private float initialClimbForce = 5;
     [SerializeField] private float climbForce = 10;
     public Timer climbTimer = new Timer(0.5f);
 
@@ -20,6 +21,7 @@ public class WallRunBehavior : AbilityBehavior
     [SerializeField] private float jumpContinousForce = 10;
 
     [SerializeField] private float jumpContinousPush = 10;
+    public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
     private Vector3 jumpNormalCache;
 
@@ -54,8 +56,23 @@ public class WallRunBehavior : AbilityBehavior
     {
     }
 
+    public void InitialWallClimb()
+    {
+        playerSM.Play("Jump");
+        climbTimer.ResetTimer();
+        if (Vector3.Dot(playerRb.velocity, playerCM.ValidUpAxis) < 0)
+        {
+            playerRb.velocity = playerRb.velocity.ProjectOnContactPlane(playerCM.ValidUpAxis);
+        }
+        Vector3 upAlongWall = Vector3.Cross(playerRb.transform.right, wallNormals[0]);
+        Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
+        playerRb.AddForce(rightForce * -wallNormals[0], ForceMode.VelocityChange);
+        playerRb.AddForce(initialClimbForce * upAlongWall, ForceMode.VelocityChange);
+    }
+
     public void WallClimb()
     {
+        playerSM.Play("WallSkid");
         climbTimer.CountDownFixed();
         Vector3 upAlongWall = Vector3.Cross(playerRb.transform.right, wallNormals[0]);
         Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
@@ -65,15 +82,21 @@ public class WallRunBehavior : AbilityBehavior
 
     public void WallJumpInitial()
     {
+        playerSM.Play("Jump");
         Vector3 sumNormals = Vector3.zero;
         foreach (Vector3 normal in wallNormals)
         {
             sumNormals += normal;
         }
         sumNormals.Normalize();
+        if (Vector3.Dot(playerRb.velocity, playerCM.ValidUpAxis) < 0)
+        {
+            playerRb.velocity = playerRb.velocity.ProjectOnContactPlane(playerCM.ValidUpAxis);
+        }
+
         jumpNormalCache = sumNormals;
+        playerRb.GetComponentInChildren<JumpBehavior>().Jump();
         playerRb.AddForce(jumpIniitalPush * sumNormals, ForceMode.VelocityChange);
-        playerRb.AddForce(jumpInitialForce * playerCM.ValidUpAxis, ForceMode.VelocityChange);
     }
 
     public void WallJumpContinous()
@@ -85,7 +108,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public void RightWallRun()
     {
-        //Debug.Log("Right wall Climb");
+        playerSM.Play("WallSkid");
         Vector3 upAlongWall = -Vector3.Cross(playerRb.transform.forward, wallNormals[1]);
         Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         WallRun(-wallNormals[1], upAlongWall);
@@ -93,7 +116,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public void LeftWallRun()
     {
-        //Debug.Log("Left wall Climb");
+        playerSM.Play("WallSkid");
         Vector3 upAlongWall = Vector3.Cross(playerRb.transform.forward, wallNormals[3]);
         Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         WallRun(-wallNormals[3], upAlongWall);
@@ -107,10 +130,12 @@ public class WallRunBehavior : AbilityBehavior
 
     public void WallClimbExit()
     {
+        ExitAction();
         base.ExitAction();
     }
 
     public override void ExitAction()
     {
+        playerSM.Stop("WallSkid");
     }
 }

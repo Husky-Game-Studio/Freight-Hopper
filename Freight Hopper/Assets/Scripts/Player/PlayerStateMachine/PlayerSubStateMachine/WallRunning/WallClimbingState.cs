@@ -5,7 +5,7 @@ public class WallClimbingState : BasicState
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        playerMachine.abilities.wallRunBehavior.climbTimer.ResetTimer();
+        playerMachine.abilities.wallRunBehavior.InitialWallClimb();
     }
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)

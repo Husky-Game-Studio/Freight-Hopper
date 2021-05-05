@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour
 #endif
         if (sound.hasCooldown)
         {
-            soundTimerDictionary[GetSoundName(sound)] = Time.time;
+            soundTimerDictionary[GetSoundName(sound)] = -100;
         }
     }
 
@@ -86,7 +86,7 @@ public class SoundManager : MonoBehaviour
     public void Stop(string name)
     {
         Sound sound = FindSound(name);
-
+        soundTimerDictionary[GetSoundName(sound)] = 0;
         sound.source.Stop();
     }
 
