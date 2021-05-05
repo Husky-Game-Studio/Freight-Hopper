@@ -11,6 +11,10 @@ public class IdleState : BasicState
     private bool fullStopPressed = false;
     private bool burstPressed = false;
 
+    public IdleState(List<BasicState> myTransitions) {
+        this.stateTransitions = myTransitions;
+    }
+
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;

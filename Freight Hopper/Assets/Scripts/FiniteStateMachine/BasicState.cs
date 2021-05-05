@@ -7,7 +7,7 @@ using UnityEngine;
 
 public abstract class BasicState
 {
-    private List<StateTransition> stateTransitions;
+    protected List<BasicState> stateTransitions;
 
     public virtual void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -36,7 +36,7 @@ public abstract class BasicState
         return null;
     }
 
-    public List<StateTransition> GetStateTransitions()
+    public List<BasicState> GetStateTransitions()
     {
         return stateTransitions;
     }

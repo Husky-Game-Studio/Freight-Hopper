@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RunState : BasicState
@@ -8,6 +10,11 @@ public class RunState : BasicState
     private bool upwardDashPressed = false;
     private bool fullStopPressed = false;
     private bool burstPressed = false;
+
+
+    public RunState(List<BasicState> myTransitions) {
+        this.stateTransitions = myTransitions;
+    }
 
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {

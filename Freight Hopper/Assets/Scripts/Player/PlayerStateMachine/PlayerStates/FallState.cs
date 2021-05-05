@@ -69,7 +69,6 @@ public class FallState : BasicState
         {
             return playerMachine.doubleJumpState;
         }
-
         // Ground Pound
         if (groundPoundPressed &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||

@@ -9,6 +9,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 {
     // Dictionary of Player State Transitions
     public Dictionary<BasicState, List<StateTransition>> playerStateTransitions;
+    public PlayerStatesTransitions pFSMTH;
 
     // State independent fields
     private bool jumpPressed = false;
@@ -19,9 +20,9 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     // Player States
 
-    public IdleState idleState = new IdleState();
+    public IdleState idleState;// = new IdleState();
     public FallState fallState = new FallState();
-    public RunState runState = new RunState();
+    public RunState runState;// = new RunState();
 
     // If it has a substate use the constructor
 
@@ -41,8 +42,23 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     public PlayerMachineCenter()
     {
+        pFSMTH = new PlayerStatesTransitions(this);
+
         wallRunState = new WallRunState(this);
         grapplePoleState = new GrapplePoleState(this);
+
+        // Idle Transitions
+        List<BasicState> idleTransitionsList = new List<BasicState>();
+        //idleTransitionsList.Add(pFSMTH.toRunState);
+        //idleTransitionsList.Add(pFSMTH.toJumpState);
+        idleState = new IdleState(idleTransitionsList);
+
+        // Run Transitions
+        List<BasicState> runTransitionsList = new List<BasicState>();
+        //runTransitionsList.Add(pFSMTH.toIdleState);
+        //runTransitionsList.Add(pFSMTH.toJumpState);
+        runState = new RunState(runTransitionsList);
+
     }
 
     public override void OnValidate()
