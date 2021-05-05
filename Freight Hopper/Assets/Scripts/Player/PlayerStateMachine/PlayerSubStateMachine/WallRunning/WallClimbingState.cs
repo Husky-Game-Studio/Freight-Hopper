@@ -4,7 +4,8 @@ public class WallClimbingState : BasicState
 {
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        Debug.Log("Entered Climbing State");
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+        playerMachine.abilities.wallRunBehavior.climbTimer.ResetTimer();
     }
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)

@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class WallJumpState : BasicState
 {
+    private PlayerMachineCenter myPlayerMachineCenter;
+
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        Debug.Log("Entered Wall Jump State");
+        myPlayerMachineCenter = (PlayerMachineCenter)machineCenter;
+        myPlayerMachineCenter.abilities.wallRunBehavior.jumpHoldingTimer.ResetTimer();
+        myPlayerMachineCenter.abilities.wallRunBehavior.WallJumpInitial();
     }
 
     public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        Debug.Log("exited Wall Jump State");
     }
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
@@ -19,8 +22,6 @@ public class WallJumpState : BasicState
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        // Perform grapple pole behavior
-        playerMachine.abilities.wallRunBehavior.WallJump();
+        myPlayerMachineCenter.abilities.wallRunBehavior.WallJumpContinous();
     }
 }

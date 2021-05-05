@@ -11,8 +11,17 @@ public class WallRunBehavior : AbilityBehavior
     [SerializeField] private float upwardsForce = 10;
     [SerializeField] private float rightForce = 5; // force applied towards the wall
     [SerializeField] private float climbForce = 10;
-    [SerializeField] private float jumpForce = 10;
-    [SerializeField] private float pushAwayFromWallForce = 10;
+    public Timer climbTimer = new Timer(0.5f);
+
+    [Space]
+    [SerializeField] private float jumpInitialForce = 10;
+
+    [SerializeField] private float jumpIniitalPush = 10;
+    [SerializeField] private float jumpContinousForce = 10;
+
+    [SerializeField] private float jumpContinousPush = 10;
+    public Timer jumpHoldingTimer = new Timer(0.5f);
+    private Vector3 jumpNormalCache;
 
     private bool[] UpdateWallStatus(Vector3[] walls)
     {
@@ -47,14 +56,14 @@ public class WallRunBehavior : AbilityBehavior
 
     public void WallClimb()
     {
-        //Debug.Log("Wall Climb");
+        climbTimer.CountDownFixed();
         Vector3 upAlongWall = Vector3.Cross(playerRb.transform.right, wallNormals[0]);
         Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         playerRb.AddForce(rightForce * -wallNormals[0], ForceMode.Acceleration);
         playerRb.AddForce(climbForce * upAlongWall, ForceMode.Acceleration);
     }
 
-    public void WallJump()
+    public void WallJumpInitial()
     {
         Vector3 sumNormals = Vector3.zero;
         foreach (Vector3 normal in wallNormals)
@@ -62,8 +71,16 @@ public class WallRunBehavior : AbilityBehavior
             sumNormals += normal;
         }
         sumNormals.Normalize();
-        playerRb.AddForce(pushAwayFromWallForce * sumNormals, ForceMode.VelocityChange);
-        playerRb.AddForce(jumpForce * playerCM.ValidUpAxis, ForceMode.VelocityChange);
+        jumpNormalCache = sumNormals;
+        playerRb.AddForce(jumpIniitalPush * sumNormals, ForceMode.VelocityChange);
+        playerRb.AddForce(jumpInitialForce * playerCM.ValidUpAxis, ForceMode.VelocityChange);
+    }
+
+    public void WallJumpContinous()
+    {
+        jumpHoldingTimer.CountDownFixed();
+        playerRb.AddForce(jumpIniitalPush * jumpNormalCache, ForceMode.Acceleration);
+        playerRb.AddForce(jumpInitialForce * playerCM.ValidUpAxis, ForceMode.Acceleration);
     }
 
     public void RightWallRun()

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3573.5156, g: 1988.5107, b: 1220.0254, a: 1}
+  m_IndirectSpecularColor: {r: 3573.504, g: 1988.5029, b: 1220.0254, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -618,11 +618,19 @@ MonoBehaviour:
   validWalls:
     serializedVersion: 2
     m_Bits: 1
-  upwardsForce: 10
+  upwardsForce: 20
   rightForce: 5
-  climbForce: 10
-  jumpForce: 10
-  pushAwayFromWallForce: 10
+  climbForce: 50
+  climbTimer:
+    duration: 0.5
+    current: 0
+  jumpInitialForce: 5
+  jumpIniitalPush: 5
+  jumpContinousForce: 40
+  jumpContinousPush: 20
+  jumpHoldingTimer:
+    duration: 0.5
+    current: 0
 --- !u!114 &1798020247
 MonoBehaviour:
   m_ObjectHideFlags: 0
