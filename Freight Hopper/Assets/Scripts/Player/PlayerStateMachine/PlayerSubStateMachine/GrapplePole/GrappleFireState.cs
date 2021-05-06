@@ -11,7 +11,7 @@ public class GrappleFireState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        if (playerMachine.abilities.grapplePoleBehavior.Anchored())
+        if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
         {
             return playerMachine.GetCurrentState().GetSubStateArray()[1];
         }

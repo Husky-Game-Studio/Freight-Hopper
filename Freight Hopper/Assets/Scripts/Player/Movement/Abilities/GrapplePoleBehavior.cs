@@ -33,6 +33,9 @@ public class GrapplePoleBehavior : AbilityBehavior
         pole.enabled = false;
     }
 
+    /// <summary>
+    /// Grapple anchored code, direction is the direction the player wants to move
+    /// </summary>
     public void Grapple(Vector3 direction)
     {
         if (anchoredRb != null)
@@ -67,6 +70,9 @@ public class GrapplePoleBehavior : AbilityBehavior
         playerRb.AddForce(tensionVelocity, ForceMode.VelocityChange);
     }
 
+    /// <summary>
+    /// Grapple transition is the firing code. Tries to attach to a surface
+    /// </summary>
     public void GrappleTransition()
     {
         playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
@@ -90,16 +96,17 @@ public class GrapplePoleBehavior : AbilityBehavior
         }
     }
 
-    public bool Anchored()
+    /// <summary>
+    /// Returns true if the grapple pole is anchored
+    /// </summary>
+    public bool IsAnchored()
     {
         return anchored;
     }
 
-    public bool ReachedMaxDistance()
-    {
-        return length >= maxLength;
-    }
-
+    /// <summary>
+    /// Returns true if the pole should be snapped due to extending too far past max distance
+    /// </summary>
     public bool GrapplePoleBroken()
     {
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
