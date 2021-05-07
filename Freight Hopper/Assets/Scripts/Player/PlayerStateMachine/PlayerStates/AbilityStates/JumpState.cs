@@ -5,8 +5,6 @@ using System;
 
 public class JumpState : BasicState
 {
-    private bool grapplePressed = false;
-    private bool releasedJumpPressed = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
     public JumpState(List<Func<BasicState>> myTransitions) {
@@ -76,16 +74,5 @@ public class JumpState : BasicState
         myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
 
         myPlayerMachineCenter.abilities.jumpBehavior.Action();
-    }
-
-    private void ReleasedJumpButtonPressed()
-    {
-        //myPlayerMachineCenter.pFSMTH.ReleasedJumpButtonPressed();
-        releasedJumpPressed = true;
-    }
-
-    private void GrappleButtonPressed()
-    {
-        grapplePressed = true;
     }
 }

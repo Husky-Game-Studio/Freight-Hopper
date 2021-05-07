@@ -5,8 +5,6 @@ using System;
 
 public class DoubleJumpState : BasicState
 {
-    private bool grapplePressed = false;
-    private bool releasedJumpPressed = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
     public DoubleJumpState(List<Func<BasicState>> myTransitions) {
@@ -73,15 +71,5 @@ public class DoubleJumpState : BasicState
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
         myPlayerMachineCenter.abilities.doubleJumpBehavior.Action();
-    }
-
-    private void ReleasedJumpButtonPressed()
-    {
-        releasedJumpPressed = true;
-    }
-
-    private void GrappleButtonPressed()
-    {
-        grapplePressed = true;
     }
 }

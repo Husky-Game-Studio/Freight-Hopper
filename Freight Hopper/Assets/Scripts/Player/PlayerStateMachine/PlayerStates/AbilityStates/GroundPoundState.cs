@@ -5,8 +5,6 @@ using System;
 
 public class GroundPoundState : BasicState
 {
-    private bool groundPoundReleased = false;
-    private bool jumpPressed = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
     public GroundPoundState(List<Func<BasicState>> myTransitions) {
@@ -68,16 +66,6 @@ public class GroundPoundState : BasicState
         playerMachine.pFSMTH.groundPoundReleased = false;
         playerMachine.pFSMTH.jumpPressed = false;
         return this;
-    }
-
-    private void GroundPoundButtonReleased()
-    {
-        groundPoundReleased = true;
-    }
-
-    private void JumpButtonPressed()
-    {
-        jumpPressed = true;
     }
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)

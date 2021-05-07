@@ -5,8 +5,6 @@ using System;
 
 public class UpwardDashState : BasicState
 {
-    private bool grapplePressed = false;
-    private bool releasedUpwardDash = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
     public UpwardDashState(List<Func<BasicState>> myTransitions) {
@@ -62,15 +60,5 @@ public class UpwardDashState : BasicState
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter.abilities.upwardDashBehavior.Action();
-    }
-
-    private void ReleasedUpwardDash()
-    {
-        releasedUpwardDash = true;
-    }
-
-    private void GrappleButtonPressed()
-    {
-        grapplePressed = true;
     }
 }

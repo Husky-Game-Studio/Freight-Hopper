@@ -5,13 +5,6 @@ using System;
 
 public class FallState : BasicState
 {
-    private bool jumpPressed = false;
-    private bool grapplePressed = false;
-    private bool groundPoundPressed = false;
-    private bool upwardDashPressed = false;
-    private bool fullStopPressed = false;
-    private bool burstPressed = false;
-
     public FallState(List<Func<BasicState>> myTransitions) {
         this.stateTransitions = myTransitions;
     }
@@ -151,33 +144,4 @@ public class FallState : BasicState
         playerMachine.abilities.movementBehavior.PlayerMove();
     }
 
-    private void JumpButtonPressed()
-    {
-        jumpPressed = true;
-    }
-
-    private void GroundPoundButtonPressed()
-    {
-        groundPoundPressed = true;
-    }
-
-    private void UpwardDashPressed()
-    {
-        upwardDashPressed = true;
-    }
-
-    private void GrappleButtonPressed()
-    {
-        grapplePressed = true;
-    }
-
-    private void FullStopPressed()
-    {
-        fullStopPressed = true;
-    }
-
-    private void BurstPressed()
-    {
-        burstPressed = true;
-    }
 }

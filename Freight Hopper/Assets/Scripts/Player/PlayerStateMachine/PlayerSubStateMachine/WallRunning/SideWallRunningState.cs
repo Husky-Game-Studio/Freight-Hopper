@@ -5,7 +5,6 @@ using System;
 
 public class SideWallRunningState : BasicState
 {
-    private bool jumpPressed = false;
 
     public SideWallRunningState(List<Func<BasicState>> myTransitions) {
         this.stateTransitions = myTransitions;
@@ -62,10 +61,5 @@ public class SideWallRunningState : BasicState
         {
             playerMachine.abilities.wallRunBehavior.LeftWallRun();
         }
-    }
-
-    private void JumpButtonPressed()
-    {
-        jumpPressed = true;
     }
 }

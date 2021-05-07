@@ -5,7 +5,6 @@ using System;
 
 public class WallRunState : BasicState
 {
-    private bool releasedJump = false;
     private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
     private BasicState[] miniStateArray;
@@ -18,9 +17,6 @@ public class WallRunState : BasicState
         miniStateArray[0] = null;//new SideWallRunningState();
         miniStateArray[1] = new WallClimbingState();
         miniStateArray[2] = new WallJumpState();
-
-
-
 
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
     }
@@ -92,11 +88,6 @@ public class WallRunState : BasicState
         pSSMC.PerformSubMachineBehavior();
         myPlayerMachineCenter.abilities.wallRunBehavior.Action();
         myPlayerMachineCenter.abilities.movementBehavior.PlayerMove();
-    }
-
-    private void ReleaseJump()
-    {
-        releasedJump = true;
     }
 
     public override bool HasSubStateMachine()

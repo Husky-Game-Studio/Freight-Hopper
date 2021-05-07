@@ -5,8 +5,6 @@ using System;
 
 public class GrapplePoleState : BasicState
 {
-    private bool grapplePolePressed = false;
-    private bool jumpPressed = false;
     private PlayerSubStateMachineCenter pSSMC;
     private PlayerMachineCenter myPlayerMachineCenter;
     private BasicState[] miniStateArray;
@@ -69,19 +67,6 @@ public class GrapplePoleState : BasicState
         playerMachine.pFSMTH.grapplePressed = false;
         playerMachine.pFSMTH.jumpPressed = false;
         return this;
-    }
-
-    private void JumpButtonPressed()
-    {
-        if (GetCurrentSubState() == miniStateArray[1])
-        {
-            jumpPressed = true;
-        }
-    }
-
-    private void GrapplePolePressed()
-    {
-        grapplePolePressed = true;
     }
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)

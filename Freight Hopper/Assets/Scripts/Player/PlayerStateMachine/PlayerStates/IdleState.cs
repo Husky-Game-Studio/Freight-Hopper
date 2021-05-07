@@ -5,13 +5,6 @@ using System;
 
 public class IdleState : BasicState
 {
-    private bool jumpPressed = false;
-    private bool grapplePressed = false;
-    private bool groundPoundPressed = false;
-    private bool upwardDashPressed = false;
-    private bool fullStopPressed = false;
-    private bool burstPressed = false;
-
     public IdleState(List<Func<BasicState>> myTransitions) {
         this.stateTransitions = myTransitions;
     }
@@ -120,12 +113,12 @@ public class IdleState : BasicState
         // }
         
 
-        jumpPressed = false;
-        groundPoundPressed = false;
-        grapplePressed = false;
-        upwardDashPressed = false;
-        fullStopPressed = false;
-        burstPressed = false;
+        playerMachine.pFSMTH.jumpPressed = false;
+        playerMachine.pFSMTH.groundPoundPressed = false;
+        playerMachine.pFSMTH.grapplePressed = false;
+        playerMachine.pFSMTH.upwardDashPressed = false;
+        playerMachine.pFSMTH.fullStopPressed = false;
+        playerMachine.pFSMTH.burstPressed = false;
         return this;
     }
 
@@ -133,33 +126,4 @@ public class IdleState : BasicState
     {
     }
 
-    private void JumpPressed()
-    {
-        jumpPressed = true;
-    }
-
-    private void GrapplePressed()
-    {
-        grapplePressed = true;
-    }
-
-    private void GroundPoundPressed()
-    {
-        groundPoundPressed = true;
-    }
-
-    private void UpwardDashPressed()
-    {
-        upwardDashPressed = true;
-    }
-
-    private void BurstPressed()
-    {
-        burstPressed = true;
-    }
-
-    private void FullStopPressed()
-    {
-        fullStopPressed = true;
-    }
 }
