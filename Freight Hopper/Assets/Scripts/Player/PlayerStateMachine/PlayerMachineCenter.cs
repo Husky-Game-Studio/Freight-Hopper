@@ -45,9 +45,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     void Awake() { 
         pFSMTH = new PlayerStatesTransitions(this);
 
-        //wallRunState = new WallRunState(this);
-        //grapplePoleState = new GrapplePoleState(this);
-
         // Idle Transitions
         List<Func<BasicState>> idleTransitionsList = new List<Func<BasicState>>();
         idleTransitionsList.Add(pFSMTH.checkToRunState);
