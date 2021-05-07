@@ -1,6 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
 public class GrappleFireState : BasicState
 {
     private bool startOfGrapple = true;
+
+    public GrappleFireState(List<Func<BasicState>> myTransitions) {
+        this.stateTransitions = myTransitions;
+    }
 
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -10,11 +19,18 @@ public class GrappleFireState : BasicState
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
-        {
-            return playerMachine.GetCurrentState().GetSubStateArray()[1];
+        
+        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+            BasicState tempState = stateCheck();
+            if (tempState != null) {
+                return tempState;
+            }
         }
+
+        // if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
+        // {
+        //     return playerMachine.GetCurrentState().GetSubStateArray()[1];
+        // }
 
         return this;
     }

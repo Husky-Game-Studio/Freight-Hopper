@@ -6,7 +6,6 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 {
     // Machine Fields
     [SerializeField] private string currentStateName;
-
     [SerializeField] private string currentSubStateName;
     public BasicState currentState;
     public BasicState previousState;

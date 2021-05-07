@@ -1,3 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
 public class GrapplePoleState : BasicState
 {
     private bool grapplePolePressed = false;
@@ -6,11 +11,13 @@ public class GrapplePoleState : BasicState
     private PlayerMachineCenter myPlayerMachineCenter;
     private BasicState[] miniStateArray;
 
-    public GrapplePoleState(PlayerMachineCenter myPMC)
+    public GrapplePoleState(PlayerMachineCenter myPMC, List<Func<BasicState>> myTransitions)
     {
+        this.stateTransitions = myTransitions;
+
         myPlayerMachineCenter = myPMC;
         miniStateArray = new BasicState[2];
-        miniStateArray[0] = new GrappleFireState();
+        miniStateArray[0] = null;//new GrappleFireState();
         miniStateArray[1] = new GrappleAnchoredState();
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
     }
@@ -19,8 +26,8 @@ public class GrapplePoleState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        UserInput.Instance.GrappleInput += this.GrapplePolePressed;
-        UserInput.Instance.JumpInput += this.JumpButtonPressed;
+        //UserInput.Instance.GrappleInput += this.GrapplePolePressed;
+        //UserInput.Instance.JumpInput += this.JumpButtonPressed;
         pSSMC.SetPrevCurrState(miniStateArray[0]);
         pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
     }
@@ -29,11 +36,11 @@ public class GrapplePoleState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        UserInput.Instance.GrappleInput -= this.GrapplePolePressed;
-        UserInput.Instance.JumpInput -= this.JumpButtonPressed;
+        //UserInput.Instance.GrappleInput -= this.GrapplePolePressed;
+        //UserInput.Instance.JumpInput -= this.JumpButtonPressed;
 
-        grapplePolePressed = false;
-        jumpPressed = false;
+        playerMachine.pFSMTH.grapplePressed = false;
+        playerMachine.pFSMTH.jumpPressed = false;
         pSSMC.GetCurrentSubState().UnsubToListeners(playerMachine);
         playerMachine.abilities.grapplePoleBehavior.ExitAction();
     }
@@ -42,18 +49,25 @@ public class GrapplePoleState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        if (grapplePolePressed ||
-            (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.abilities.grapplePoleBehavior.IsAnchored()))
-        {
-            return playerMachine.fallState;
+        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+            BasicState tempState = stateCheck();
+            if (tempState != null) {
+                return tempState;
+            }
         }
 
-        if (jumpPressed)
-        {
-            return playerMachine.jumpState;
-        }
-        grapplePolePressed = false;
-        jumpPressed = false;
+        // if (grapplePolePressed ||
+        //     (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() && playerMachine.abilities.grapplePoleBehavior.IsAnchored()))
+        // {
+        //     return playerMachine.fallState;
+        // }
+
+        // if (jumpPressed)
+        // {
+        //     return playerMachine.jumpState;
+        // }
+        playerMachine.pFSMTH.grapplePressed = false;
+        playerMachine.pFSMTH.jumpPressed = false;
         return this;
     }
 

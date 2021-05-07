@@ -1,6 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
 public class FullStopState : BasicState
 {
     private PlayerMachineCenter myPlayerMachineCenter;
+
+    public FullStopState(List<Func<BasicState>> myTransitions) {
+        this.stateTransitions = myTransitions;
+    }
 
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -17,10 +26,18 @@ public class FullStopState : BasicState
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
-        if (myPlayerMachineCenter.abilities.fullstopBehavior.FullStopFinished())
-        {
-            return myPlayerMachineCenter.fallState;
+        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+            BasicState tempState = stateCheck();
+            if (tempState != null) {
+                return tempState;
+            }
         }
+
+
+        // if (myPlayerMachineCenter.abilities.fullstopBehavior.FullStopFinished())
+        // {
+        //     return myPlayerMachineCenter.fallState;
+        // }
 
         return this;
     }

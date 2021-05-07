@@ -1,15 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
 public class DoubleJumpState : BasicState
 {
     private bool grapplePressed = false;
     private bool releasedJumpPressed = false;
     private PlayerMachineCenter myPlayerMachineCenter;
 
+    public DoubleJumpState(List<Func<BasicState>> myTransitions) {
+        this.stateTransitions = myTransitions;
+    }
+
     public override void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
-        UserInput.Instance.JumpInputCanceled += this.ReleasedJumpButtonPressed;
-        UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
+        //UserInput.Instance.JumpInputCanceled += this.ReleasedJumpButtonPressed;
+        //UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
 
         // reset jump hold timer
         playerMachine.jumpHoldingTimer.ResetTimer();
@@ -18,35 +27,44 @@ public class DoubleJumpState : BasicState
 
     public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
     {
-        UserInput.Instance.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
-        UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
+        //UserInput.Instance.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
+        //UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
 
         // deactivate jump hold timer
         myPlayerMachineCenter.jumpHoldingTimer.DeactivateTimer();
         myPlayerMachineCenter.abilities.doubleJumpBehavior.ExitAction();
-        releasedJumpPressed = false;
-        grapplePressed = false;
+        playerMachine.pFSMTH.releasedJumpPressed = false;
+        playerMachine.pFSMTH.grapplePressed = false;
     }
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        // Fall
-        if (releasedJumpPressed || !playerMachine.jumpHoldingTimer.TimerActive())
-        {
-            playerMachine.jumpHoldingTimer.DeactivateTimer();
-            return playerMachine.fallState;
-        }
-        // Grapple pole
-        if (grapplePressed && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.grapplePoleBehavior.Unlocked)
-        {
-            return playerMachine.grapplePoleState;
+        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+            BasicState tempState = stateCheck();
+            if (tempState != null) {
+                return tempState;
+            }
         }
 
+        // Fall
+        // if (releasedJumpPressed || !playerMachine.jumpHoldingTimer.TimerActive())
+        // {
+        //     playerMachine.jumpHoldingTimer.DeactivateTimer();
+        //     return playerMachine.fallState;
+        // }
+        // Grapple pole
+        // if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.Consumed && playerMachine.abilities.grapplePoleBehavior.Unlocked)
+        // {
+        //     return playerMachine.grapplePoleState;
+        // }
+
         // Double Jump
-        releasedJumpPressed = false;
-        grapplePressed = false;
+        playerMachine.pFSMTH.releasedJumpPressed = false;
+        playerMachine.pFSMTH.grapplePressed = false;
         return this;
     }
 

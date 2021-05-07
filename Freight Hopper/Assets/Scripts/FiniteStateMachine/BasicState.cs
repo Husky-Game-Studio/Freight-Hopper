@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 // State Machine help from these url:
 // https://www.youtube.com/watch?v=nnrOhb5UdRc
 
 public abstract class BasicState
 {
-    protected List<BasicState> stateTransitions;
+    protected List<Func<BasicState>> stateTransitions;
 
     public virtual void SubToListeners(FiniteStateMachineCenter machineCenter)
     {
@@ -36,7 +37,7 @@ public abstract class BasicState
         return null;
     }
 
-    public List<BasicState> GetStateTransitions()
+    public List<Func<BasicState>> GetStateTransitions()
     {
         return stateTransitions;
     }
