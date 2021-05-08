@@ -60,6 +60,9 @@ public class JumpState : BasicState
         //     return myPlayerMachineCenter.grapplePoleState;
         // }
         
+        myPlayerMachineCenter.pFSMTH.jumpPressed = false;
+
+
         // Jump
         //else
         //{

@@ -81,7 +81,6 @@ public class PlayerStatesTransitions
     public Func<BasicState> checkToWallRunWallClimbingState;
     public Func<BasicState> checkToWallRunWallJumpState;
 
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -220,7 +219,7 @@ public class PlayerStatesTransitions
             return playerMachine.jumpState;
         }
         
-        jumpPressed = false;
+        // jumpPressed = false;
         return null;
     }
 
