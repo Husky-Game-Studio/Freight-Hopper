@@ -12,7 +12,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public PlayerStatesTransitions pFSMTH;
 
     // State independent fields
-    private bool jumpPressed = false;
+    //private bool jumpPressed = false;
 
     [SerializeField] public Timer jumpHoldingTimer = new Timer(0.5f);
     [SerializeField] public Timer coyoteeTimer = new Timer(0.5f);
@@ -173,15 +173,15 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // perform anything that is independent of being in any one single state
     public override void PerformStateIndependentBehaviors()
     {
-        if (jumpPressed)
+        if (pFSMTH.jumpPressed)
         {
             jumpBufferTimer.ResetTimer();
-            jumpPressed = false;
+            //pFSMTH.jumpPressed = false;
         }
         else
         {
-            jumpPressed = false;
-            jumpBufferTimer.DeactivateTimer();
+            //pFSMTH.jumpPressed = false;
+            //jumpBufferTimer.DeactivateTimer();
         }
         if (jumpBufferTimer.TimerActive())
         {
@@ -191,6 +191,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void JumpButtonPressed()
     {
-        jumpPressed = true;
+        //pFSMTH.jumpPressed = true;
     }
 }
