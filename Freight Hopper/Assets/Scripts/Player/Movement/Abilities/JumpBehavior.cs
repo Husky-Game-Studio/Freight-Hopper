@@ -53,6 +53,7 @@ public class JumpBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
+        //playerMachine.jumpHoldingTimer.ResetTimer();
         Jump();
     }
 

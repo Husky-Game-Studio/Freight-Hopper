@@ -43,6 +43,9 @@ public class FallState : BasicState
 
         playerMachine.coyoteeTimer.DeactivateTimer();
         playerMachine.pFSMTH.jumpPressed = false;
+
+        // playerMachine.pFSMTH.releasedJumpPressed = false;
+        
         playerMachine.pFSMTH.groundPoundPressed = false;
         playerMachine.pFSMTH.grapplePressed = false;
         playerMachine.pFSMTH.upwardDashPressed = false;
@@ -124,6 +127,9 @@ public class FallState : BasicState
         
 
         playerMachine.pFSMTH.jumpPressed = false;
+
+        playerMachine.pFSMTH.releasedJumpPressed = false;
+        
         playerMachine.pFSMTH.groundPoundPressed = false;
         playerMachine.pFSMTH.grapplePressed = false;
         playerMachine.pFSMTH.upwardDashPressed = false;

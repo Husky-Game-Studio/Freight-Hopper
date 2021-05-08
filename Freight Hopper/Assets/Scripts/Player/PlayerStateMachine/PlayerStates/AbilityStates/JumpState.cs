@@ -27,6 +27,7 @@ public class JumpState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         
+
         // UserInput.Instance.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
         // UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
 
@@ -62,7 +63,6 @@ public class JumpState : BasicState
         
         myPlayerMachineCenter.pFSMTH.jumpPressed = false;
 
-
         // Jump
         //else
         //{
@@ -73,9 +73,13 @@ public class JumpState : BasicState
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
+        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
 
         myPlayerMachineCenter.abilities.jumpBehavior.Action();
+
+        //playerMachine.jumpHoldingTimer.ResetTimer();
     }
 }

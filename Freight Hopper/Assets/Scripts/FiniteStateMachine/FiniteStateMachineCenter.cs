@@ -7,6 +7,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     // Machine Fields
     [SerializeField] private string currentStateName;
     [SerializeField] private string currentSubStateName;
+    [SerializeField] private string previousStateName;
     public BasicState currentState;
     public BasicState previousState;
     public BasicState currentSubState;
@@ -35,6 +36,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
         // Debugging
         currentStateName = currentState.ToString();
+        previousStateName = previousState.ToString();
         if (!currentState.HasSubStateMachine())
         {
             currentSubStateName = "No Sub States";

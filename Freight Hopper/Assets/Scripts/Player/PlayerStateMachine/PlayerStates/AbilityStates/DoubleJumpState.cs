@@ -68,6 +68,7 @@ public class DoubleJumpState : BasicState
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
+        //Debug.Log("Double Jump Performed on " + Time.time);
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
         myPlayerMachineCenter.abilities.doubleJumpBehavior.Action();
