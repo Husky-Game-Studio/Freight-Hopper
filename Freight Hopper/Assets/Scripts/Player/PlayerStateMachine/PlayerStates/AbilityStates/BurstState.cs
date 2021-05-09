@@ -4,7 +4,7 @@ public class BurstState : BasicState
 {
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -12,7 +12,7 @@ public class BurstState : BasicState
         playerMachine.abilities.burstBehavior.EntryAction();
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter.abilities.burstBehavior.ExitAction();
     }

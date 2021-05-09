@@ -5,11 +5,12 @@ using System;
 
 public class RunState : BasicState
 {
-    public RunState(List<Func<BasicState>> myTransitions) {
+    public RunState(List<Func<BasicState>> myTransitions)
+    {
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         // UserInput.Instance.JumpInput += this.JumpButtonPressed;
@@ -22,7 +23,7 @@ public class RunState : BasicState
         playerMachine.coyoteeTimer.DeactivateTimer();
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -44,15 +45,16 @@ public class RunState : BasicState
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
-        
-        
+
         // // Jump
         // if ((jumpPressed || playerMachine.jumpBufferTimer.TimerActive()) && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)
         // {
@@ -106,7 +108,6 @@ public class RunState : BasicState
         // {
         //     return playerMachine.idleState;
         // }
-        
 
         playerMachine.pFSMTH.jumpPressed = false;
         playerMachine.pFSMTH.groundPoundPressed = false;

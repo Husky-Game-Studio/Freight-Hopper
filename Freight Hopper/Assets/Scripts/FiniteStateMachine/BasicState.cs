@@ -10,11 +10,11 @@ public abstract class BasicState
 {
     protected List<Func<BasicState>> stateTransitions;
 
-    public virtual void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public virtual void EnterState(FiniteStateMachineCenter machineCenter)
     {
     }
 
-    public virtual void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public virtual void ExitState(FiniteStateMachineCenter machineCenter)
     {
     }
 

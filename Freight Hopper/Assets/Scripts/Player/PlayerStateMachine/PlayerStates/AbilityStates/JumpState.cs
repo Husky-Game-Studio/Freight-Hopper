@@ -7,11 +7,12 @@ public class JumpState : BasicState
 {
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public JumpState(List<Func<BasicState>> myTransitions) {
+    public JumpState(List<Func<BasicState>> myTransitions)
+    {
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -23,10 +24,9 @@ public class JumpState : BasicState
         playerMachine.abilities.jumpBehavior.EntryAction();
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        
 
         // UserInput.Instance.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
         // UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
@@ -41,15 +41,15 @@ public class JumpState : BasicState
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
-        
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
-        
-        
+
         // // Fall
         // if (releasedJumpPressed || !myPlayerMachineCenter.jumpHoldingTimer.TimerActive())
         // {
@@ -60,15 +60,14 @@ public class JumpState : BasicState
         // {
         //     return myPlayerMachineCenter.grapplePoleState;
         // }
-        
+
         myPlayerMachineCenter.pFSMTH.jumpPressed = false;
 
         // Jump
         //else
         //{
-            return this;
+        return this;
         //}
-        
     }
 
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)

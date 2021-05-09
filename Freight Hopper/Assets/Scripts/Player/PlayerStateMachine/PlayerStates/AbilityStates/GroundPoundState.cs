@@ -11,7 +11,7 @@ public class GroundPoundState : BasicState
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -21,7 +21,7 @@ public class GroundPoundState : BasicState
         playerMachine.abilities.groundPoundBehavior.EntryAction();
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 

@@ -11,7 +11,7 @@ public class GrappleFireState : BasicState
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         startOfGrapple = true;
     }

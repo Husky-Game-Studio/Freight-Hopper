@@ -5,17 +5,17 @@ using System;
 
 public class SideWallRunningState : BasicState
 {
-
-    public SideWallRunningState(List<Func<BasicState>> myTransitions) {
+    public SideWallRunningState(List<Func<BasicState>> myTransitions)
+    {
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         //UserInput.Instance.JumpInput += this.JumpButtonPressed;
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -26,14 +26,16 @@ public class SideWallRunningState : BasicState
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
-        
+
         // bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
         // // Wall Climb
         // if (status[0] && !status[1] && !status[3] && !playerMachine.abilities.wallRunBehavior.Consumed)

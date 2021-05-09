@@ -40,9 +40,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     [HideInInspector] public CollisionManagement playerCM;
 
-
-
-    void Awake() { 
+    private void Awake()
+    {
         pFSMTH = new PlayerStatesTransitions(this);
 
         // Idle Transitions
@@ -144,17 +143,17 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void PlayerSpawned()
     {
-        currentState.UnsubToListeners(this);
+        currentState.ExitState(this);
         currentState = idleState;
         previousState = idleState;
-        currentState.SubToListeners(this);
+        currentState.EnterState(this);
     }
 
     public override void OnEnable()
     {
         currentState = idleState;
         previousState = idleState;
-        currentState.SubToListeners(this);
+        currentState.EnterState(this);
         playerCM.CollisionDataCollected += LateFixedUpdate;
 
         LevelController.PlayerRespawned += PlayerSpawned;
@@ -163,7 +162,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     public override void OnDisable()
     {
-        currentState.UnsubToListeners(this);
+        currentState.ExitState(this);
         playerCM.CollisionDataCollected -= LateFixedUpdate;
 
         LevelController.PlayerRespawned -= PlayerSpawned;

@@ -7,11 +7,12 @@ public class DoubleJumpState : BasicState
 {
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public DoubleJumpState(List<Func<BasicState>> myTransitions) {
+    public DoubleJumpState(List<Func<BasicState>> myTransitions)
+    {
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -23,7 +24,7 @@ public class DoubleJumpState : BasicState
         myPlayerMachineCenter.abilities.doubleJumpBehavior.EntryAction();
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -41,9 +42,11 @@ public class DoubleJumpState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }

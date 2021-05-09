@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WallClimbingState : BasicState
 {
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         playerMachine.abilities.wallRunBehavior.InitialWallClimb();

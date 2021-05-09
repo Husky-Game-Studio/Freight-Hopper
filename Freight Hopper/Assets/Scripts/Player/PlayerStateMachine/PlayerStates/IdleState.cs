@@ -5,11 +5,12 @@ using System;
 
 public class IdleState : BasicState
 {
-    public IdleState(List<Func<BasicState>> myTransitions) {
+    public IdleState(List<Func<BasicState>> myTransitions)
+    {
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -27,10 +28,10 @@ public class IdleState : BasicState
         }
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        
+
         // UserInput.Instance.JumpInput -= this.JumpPressed;
         // UserInput.Instance.GrappleInput -= this.GrapplePressed;
         // UserInput.Instance.GroundPoundInput -= this.GroundPoundPressed;
@@ -49,15 +50,16 @@ public class IdleState : BasicState
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
 
-        
         // Jump
         // if ((jumpPressed || playerMachine.jumpBufferTimer.TimerActive()) && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)
         // {
@@ -111,7 +113,6 @@ public class IdleState : BasicState
         // {
         //     return playerMachine.runState;
         // }
-        
 
         playerMachine.pFSMTH.jumpPressed = false;
         playerMachine.pFSMTH.groundPoundPressed = false;
@@ -125,5 +126,4 @@ public class IdleState : BasicState
     public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
     {
     }
-
 }

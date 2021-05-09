@@ -21,17 +21,17 @@ public class WallRunState : BasicState
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, myPlayerMachineCenter);
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
         pSSMC.SetPrevCurrState(miniStateArray[0]);
-        pSSMC.GetCurrentSubState().SubToListeners(playerMachine);
+        pSSMC.GetCurrentSubState().EnterState(playerMachine);
         playerMachine.abilities.wallRunBehavior.EntryAction();
         //UserInput.Instance.JumpInputCanceled += ReleaseJump;
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -39,7 +39,7 @@ public class WallRunState : BasicState
         {
             myPlayerMachineCenter.abilities.wallRunBehavior.WallClimbExit();
         }
-        pSSMC.GetCurrentSubState().UnsubToListeners(myPlayerMachineCenter);
+        pSSMC.GetCurrentSubState().ExitState(myPlayerMachineCenter);
         myPlayerMachineCenter.abilities.wallRunBehavior.ExitAction();
         playerMachine.pFSMTH.releasedJumpPressed = false;
         //UserInput.Instance.JumpInputCanceled -= ReleaseJump;
@@ -49,9 +49,11 @@ public class WallRunState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
@@ -105,7 +107,8 @@ public class WallRunState : BasicState
         return miniStateArray;
     }
 
-    public PlayerSubStateMachineCenter GetPlayerSubStateMachineCenter() {
+    public PlayerSubStateMachineCenter GetPlayerSubStateMachineCenter()
+    {
         return pSSMC;
     }
 }

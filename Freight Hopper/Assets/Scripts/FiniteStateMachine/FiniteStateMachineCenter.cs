@@ -57,8 +57,8 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
         if (previousState != currentState)
         {
-            currentState.SubToListeners(this);
-            previousState.UnsubToListeners(this);
+            currentState.EnterState(this);
+            previousState.ExitState(this);
             previousState = currentState;
         }
     }

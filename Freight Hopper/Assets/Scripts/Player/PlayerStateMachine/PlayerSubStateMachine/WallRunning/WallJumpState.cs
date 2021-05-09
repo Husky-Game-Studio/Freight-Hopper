@@ -7,14 +7,14 @@ public class WallJumpState : BasicState
 {
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter.abilities.wallRunBehavior.jumpHoldingTimer.ResetTimer();
         myPlayerMachineCenter.abilities.wallRunBehavior.WallJumpInitial();
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
     }
 

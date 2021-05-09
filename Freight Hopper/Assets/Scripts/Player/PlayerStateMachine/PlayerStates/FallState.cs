@@ -5,11 +5,12 @@ using System;
 
 public class FallState : BasicState
 {
-    public FallState(List<Func<BasicState>> myTransitions) {
+    public FallState(List<Func<BasicState>> myTransitions)
+    {
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
@@ -30,25 +31,16 @@ public class FallState : BasicState
         }
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        // UserInput.Instance.JumpInput -= this.JumpButtonPressed;
-        // UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
-        // UserInput.Instance.GroundPoundInput -= this.GroundPoundButtonPressed;
-        // UserInput.Instance.UpwardDashInput -= this.UpwardDashPressed;
-        // UserInput.Instance.FullStopInput -= this.FullStopPressed;
-        // UserInput.Instance.BurstInput -= this.BurstPressed;
-
         playerMachine.coyoteeTimer.DeactivateTimer();
         playerMachine.pFSMTH.jumpPressed = false;
-
-        // playerMachine.pFSMTH.releasedJumpPressed = false;
-        
         playerMachine.pFSMTH.groundPoundPressed = false;
         playerMachine.pFSMTH.grapplePressed = false;
         playerMachine.pFSMTH.upwardDashPressed = false;
+        playerMachine.pFSMTH.releasedUpwardDash = false;
         playerMachine.pFSMTH.fullStopPressed = false;
         playerMachine.pFSMTH.burstPressed = false;
     }
@@ -57,14 +49,15 @@ public class FallState : BasicState
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
 
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
 
-        
         // if coyetee timer is not expired and the jump button was pressed-> then jump
         // Jump
         // if (jumpPressed && playerMachine.coyoteeTimer.TimerActive() && playerMachine.GetPreviousState() != playerMachine.jumpState &&
@@ -124,12 +117,11 @@ public class FallState : BasicState
         //         return playerMachine.wallRunState;
         //     }
         // }
-        
 
         playerMachine.pFSMTH.jumpPressed = false;
 
         playerMachine.pFSMTH.releasedJumpPressed = false;
-        
+
         playerMachine.pFSMTH.groundPoundPressed = false;
         playerMachine.pFSMTH.grapplePressed = false;
         playerMachine.pFSMTH.upwardDashPressed = false;
@@ -149,5 +141,4 @@ public class FallState : BasicState
 
         playerMachine.abilities.movementBehavior.PlayerMove();
     }
-
 }

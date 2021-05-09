@@ -7,11 +7,12 @@ public class FullStopState : BasicState
 {
     private PlayerMachineCenter myPlayerMachineCenter;
 
-    public FullStopState(List<Func<BasicState>> myTransitions) {
+    public FullStopState(List<Func<BasicState>> myTransitions)
+    {
         this.stateTransitions = myTransitions;
     }
 
-    public override void SubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void EnterState(FiniteStateMachineCenter machineCenter)
     {
         PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
         myPlayerMachineCenter = playerMachine;
@@ -19,20 +20,21 @@ public class FullStopState : BasicState
         playerMachine.abilities.fullstopBehavior.EntryAction();
     }
 
-    public override void UnsubToListeners(FiniteStateMachineCenter machineCenter)
+    public override void ExitState(FiniteStateMachineCenter machineCenter)
     {
         myPlayerMachineCenter.abilities.fullstopBehavior.ExitAction();
     }
 
     public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
     {
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
-
 
         // if (myPlayerMachineCenter.abilities.fullstopBehavior.FullStopFinished())
         // {
