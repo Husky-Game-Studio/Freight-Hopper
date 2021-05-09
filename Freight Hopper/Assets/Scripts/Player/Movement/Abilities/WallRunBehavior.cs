@@ -5,6 +5,7 @@ public class WallRunBehavior : AbilityBehavior
     /// Front, Right, Back, Left
     [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[4];
 
+    [SerializeField] private float wallrunCameraTilt = 10;
     [SerializeField] private float wallCheckDistance = 1;
 
     [SerializeField] private LayerMask validWalls;
@@ -24,6 +25,12 @@ public class WallRunBehavior : AbilityBehavior
     public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
     private Vector3 jumpNormalCache;
+    private FirstPersonCamera cameraController;
+
+    private void Awake()
+    {
+        cameraController = Camera.main.GetComponent<FirstPersonCamera>();
+    }
 
     private bool[] UpdateWallStatus(Vector3[] walls)
     {
@@ -58,6 +65,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public void InitialWallClimb()
     {
+        cameraController.ResetUpAxis();
         playerSM.Play("Jump");
         climbTimer.ResetTimer();
         if (Vector3.Dot(playerRb.velocity, playerCM.ValidUpAxis) < 0)
@@ -65,7 +73,7 @@ public class WallRunBehavior : AbilityBehavior
             playerRb.velocity = playerRb.velocity.ProjectOnContactPlane(playerCM.ValidUpAxis);
         }
         Vector3 upAlongWall = Vector3.Cross(playerRb.transform.right, wallNormals[0]);
-        Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
+        //Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         playerRb.AddForce(rightForce * -wallNormals[0], ForceMode.VelocityChange);
         playerRb.AddForce(initialClimbForce * upAlongWall, ForceMode.VelocityChange);
     }
@@ -75,13 +83,14 @@ public class WallRunBehavior : AbilityBehavior
         playerSM.Play("WallSkid");
         climbTimer.CountDownFixed();
         Vector3 upAlongWall = Vector3.Cross(playerRb.transform.right, wallNormals[0]);
-        Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
+        //Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         playerRb.AddForce(rightForce * -wallNormals[0], ForceMode.Acceleration);
         playerRb.AddForce(climbForce * upAlongWall, ForceMode.Acceleration);
     }
 
     public void WallJumpInitial()
     {
+        cameraController.ResetUpAxis();
         playerSM.Play("Jump");
         Vector3 sumNormals = Vector3.zero;
         foreach (Vector3 normal in wallNormals)
@@ -109,21 +118,23 @@ public class WallRunBehavior : AbilityBehavior
     public void RightWallRun()
     {
         playerSM.Play("WallSkid");
-        Vector3 upAlongWall = -Vector3.Cross(playerRb.transform.forward, wallNormals[1]);
-        Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
+        Vector3 upAlongWall = Vector3.Cross(wallNormals[1], Vector3.Cross(playerCM.ValidUpAxis, wallNormals[1]));
+        //Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         WallRun(-wallNormals[1], upAlongWall);
     }
 
     public void LeftWallRun()
     {
         playerSM.Play("WallSkid");
-        Vector3 upAlongWall = Vector3.Cross(playerRb.transform.forward, wallNormals[3]);
-        Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
+        Vector3 upAlongWall = Vector3.Cross(wallNormals[3], Vector3.Cross(playerCM.ValidUpAxis, wallNormals[3]));
+        //Debug.DrawLine(playerRb.position, playerRb.position + upAlongWall, Color.green, Time.fixedDeltaTime);
         WallRun(-wallNormals[3], upAlongWall);
     }
 
     private void WallRun(Vector3 right, Vector3 up)
     {
+        //Debug.DrawLine(playerRb.position, playerRb.position + up);
+        cameraController.TiltUpAxis(Vector3.Cross(right, up) * wallrunCameraTilt);
         playerRb.AddForce(right * rightForce, ForceMode.Acceleration);
         playerRb.AddForce(up * upwardsForce, ForceMode.Acceleration);
     }
@@ -137,5 +148,6 @@ public class WallRunBehavior : AbilityBehavior
     public override void ExitAction()
     {
         playerSM.Stop("WallSkid");
+        cameraController.ResetUpAxis();
     }
 }

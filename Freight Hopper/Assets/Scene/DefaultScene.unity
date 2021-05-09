@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3573.504, g: 1988.5029, b: 1220.0254, a: 1}
+  m_IndirectSpecularColor: {r: 3573.4883, g: 1988.4873, b: 1211.7754, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -614,21 +614,25 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
+  wallrunCameraTilt: 10
   wallCheckDistance: 1
   validWalls:
     serializedVersion: 2
     m_Bits: 1
   upwardsForce: 20
-  rightForce: 5
+  rightForce: 4
   initialClimbForce: 5
   climbForce: 50
   climbTimer:
     duration: 0.5
     current: 0
   jumpInitialForce: 5
-  jumpIniitalPush: 5
+  jumpIniitalPush: 4
   jumpContinousForce: 15
   jumpContinousPush: 5
+  coyoteTimer:
+    duration: 0.5
+    current: 0
   jumpHoldingTimer:
     duration: 0.5
     current: 0
@@ -828,6 +832,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStateName: 
   currentSubStateName: 
+  previousStateName: 
   jumpHoldingTimer:
     duration: 0.5
     current: 0
@@ -1109,7 +1114,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6851446874351635515}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1232,9 +1237,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   localRotation: {x: 0, y: 0, z: 0, w: 0}
+  upAxisAngleRotation: {x: 0, y: 0, z: 0}
+  upAxis:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+  smoothedUpAxis: {x: 0, y: 0, z: 0}
+  oldUpAxis: {x: 0, y: 0, z: 0}
+  timeStep: 0
   playerHead: {fileID: 6851446874874222867}
-  yRotationLock: {x: -89.999, y: 89.999}
+  yRotationLock: {x: 89.8, y: 270.2}
   mouseSensitivity: {x: 7, y: 5}
+  smoothingDelta: 0.1
 --- !u!136 &6851446874579196112
 CapsuleCollider:
   m_ObjectHideFlags: 0

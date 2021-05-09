@@ -50,11 +50,11 @@ public class CollisionManagement : MonoBehaviour
             }
             if (walls[i] != Vector3.zero)
             {
-                Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.red, Time.fixedDeltaTime);
+                //Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.red, Time.fixedDeltaTime);
             }
             else
             {
-                Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.yellow, Time.fixedDeltaTime);
+                //Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.yellow, Time.fixedDeltaTime);
             }
         }
 

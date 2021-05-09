@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 
 public class LevelController : MonoBehaviour
 {
@@ -93,7 +92,7 @@ public class LevelController : MonoBehaviour
         //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }
 
-    public void Respawn(InputAction.CallbackContext context)
+    public void Respawn(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         Respawn();
     }
