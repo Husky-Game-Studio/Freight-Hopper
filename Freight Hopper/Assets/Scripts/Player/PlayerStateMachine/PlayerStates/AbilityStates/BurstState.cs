@@ -24,6 +24,20 @@ public class BurstState : PlayerState
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.abilities.burstBehavior.Action();
+        if (playerMachineCenter.playerCM.IsGrounded.current)
+        {
+            playerMachineCenter.abilities.burstBehavior.GroundBurst();
+        }
+        else
+        {
+            if (playerMachineCenter.abilities.wallRunBehavior.CheckWalls()[2])
+            {
+                playerMachineCenter.abilities.burstBehavior.WallBurst();
+            }
+            else
+            {
+                playerMachineCenter.abilities.burstBehavior.AirBurst();
+            }
+        }
     }
 }

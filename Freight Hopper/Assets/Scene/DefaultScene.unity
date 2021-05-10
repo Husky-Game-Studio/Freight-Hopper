@@ -677,8 +677,12 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
-  burstForce: 30
-  angle: 15
+  airBurstForce: 30
+  burstAngle: 10
+  groundBurstForce: 40
+  groundBurstAngle: 75
+  wallBurstForce: 50
+  wallBurstAngle: 0
 --- !u!1 &2129630600
 GameObject:
   m_ObjectHideFlags: 0
