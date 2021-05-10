@@ -1,31 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-public class FullStopState : BasicState
+public class FullStopState : PlayerState
 {
-    private PlayerMachineCenter myPlayerMachineCenter;
-
-    public FullStopState(List<Func<BasicState>> myTransitions)
+    public FullStopState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
-        this.stateTransitions = myTransitions;
     }
 
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        myPlayerMachineCenter = playerMachine;
-
-        playerMachine.abilities.fullstopBehavior.EntryAction();
+        playerMachineCenter.abilities.fullstopBehavior.EntryAction();
     }
 
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public override void ExitState()
     {
-        myPlayerMachineCenter.abilities.fullstopBehavior.ExitAction();
+        playerMachineCenter.abilities.fullstopBehavior.ExitAction();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
         foreach (Func<BasicState> stateCheck in this.stateTransitions)
         {
@@ -36,16 +28,11 @@ public class FullStopState : BasicState
             }
         }
 
-        // if (myPlayerMachineCenter.abilities.fullstopBehavior.FullStopFinished())
-        // {
-        //     return myPlayerMachineCenter.fallState;
-        // }
-
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        myPlayerMachineCenter.abilities.fullstopBehavior.Action();
+        playerMachineCenter.abilities.fullstopBehavior.Action();
     }
 }

@@ -8,6 +8,10 @@ public abstract class AbilityBehavior : MonoBehaviour
     [SerializeField, ReadOnly] protected bool preventConsumption = false;
     public bool Unlocked => unlocked;
     public bool Consumed => consumed;
+
+    // Ready meaning not consumed
+    public bool UnlockedAndReady => Unlocked && !Consumed;
+
     protected Rigidbody playerRb;
     protected CollisionManagement playerCM;
     protected SoundManager playerSM;

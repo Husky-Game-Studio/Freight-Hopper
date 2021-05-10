@@ -1,22 +1,24 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
 
-public class WallClimbingState : BasicState
+public class WallClimbingState : PlayerState
 {
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public WallClimbingState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        playerMachine.abilities.wallRunBehavior.InitialWallClimb();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
+    {
+        playerMachineCenter.abilities.wallRunBehavior.InitialWallClimb();
+    }
+
+    public override BasicState TransitionState()
     {
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        playerMachine.abilities.wallRunBehavior.WallClimb();
+        playerMachineCenter.abilities.wallRunBehavior.WallClimb();
     }
 }

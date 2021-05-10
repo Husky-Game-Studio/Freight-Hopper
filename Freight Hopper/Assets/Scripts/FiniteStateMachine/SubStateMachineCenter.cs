@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public abstract class SubStateMachineCenter
 {
     // inherented and parent fields
@@ -20,21 +16,21 @@ public abstract class SubStateMachineCenter
     public void PerformSubMachineBehavior()
     {
         // Perform state behavior
-        currentState.PerformBehavior(machineCenter);
+        currentState.PerformBehavior();
         // check if the state needs to transition, and return the state it should belong in
-        currentState = currentState.TransitionState(machineCenter);
+        currentState = currentState.TransitionState();
 
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
-        this.CheckAndChangeCurrentStateListeners(machineCenter);
+        this.CheckAndChangeCurrentStateListeners();
     }
 
-    private void CheckAndChangeCurrentStateListeners(FiniteStateMachineCenter machineCenter)
+    private void CheckAndChangeCurrentStateListeners()
     {
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
         if (previousState != currentState)
         {
-            currentState.EnterState(machineCenter);
-            previousState.ExitState(machineCenter);
+            currentState.EnterState();
+            previousState.ExitState();
             previousState = currentState;
         }
     }

@@ -1,32 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-public class SideWallRunningState : BasicState
+public class SideWallRunningState : PlayerState
 {
-    public SideWallRunningState(List<Func<BasicState>> myTransitions)
+    public SideWallRunningState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
-        this.stateTransitions = myTransitions;
     }
 
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public override void ExitState()
     {
-        //UserInput.Instance.JumpInput += this.JumpButtonPressed;
+        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        //UserInput.Instance.JumpInput -= this.JumpButtonPressed;
-        playerMachine.pFSMTH.jumpPressed = false;
-    }
-
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
-    {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         foreach (Func<BasicState> stateCheck in this.stateTransitions)
         {
             BasicState tempState = stateCheck();
@@ -36,32 +23,20 @@ public class SideWallRunningState : BasicState
             }
         }
 
-        // bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
-        // // Wall Climb
-        // if (status[0] && !status[1] && !status[3] && !playerMachine.abilities.wallRunBehavior.Consumed)
-        // {
-        //     return playerMachine.GetCurrentState().GetSubStateArray()[1];
-        // }
-        // Wall Jump
-        // if (jumpPressed)
-        // {
-        //     return playerMachine.GetCurrentState().GetSubStateArray()[2];
-        // }
-        playerMachine.pFSMTH.jumpPressed = false;
+        playerMachineCenter.pFSMTH.ResetInputs();
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
+        bool[] status = playerMachineCenter.abilities.wallRunBehavior.CheckWalls();
         if (status[1])
         {
-            playerMachine.abilities.wallRunBehavior.RightWallRun();
+            playerMachineCenter.abilities.wallRunBehavior.RightWallRun();
         }
         if (status[3])
         {
-            playerMachine.abilities.wallRunBehavior.LeftWallRun();
+            playerMachineCenter.abilities.wallRunBehavior.LeftWallRun();
         }
     }
 }

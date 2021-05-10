@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class FiniteStateMachineCenter : MonoBehaviour
 {
     // Machine Fields
     [SerializeField] private string currentStateName;
+
     [SerializeField] private string currentSubStateName;
     [SerializeField] private string previousStateName;
     public BasicState currentState;
@@ -26,10 +25,10 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         this.PerformStateIndependentBehaviors();
 
         // Perform state behavior
-        currentState.PerformBehavior(this);
+        currentState.PerformBehavior();
 
         // check if the state needs to transition, and return the state it should belong in
-        currentState = currentState.TransitionState(this);
+        currentState = currentState.TransitionState();
 
         // checks if the prevousState is not the currentState
         this.CheckAndChangeCurrentStateListeners();
@@ -57,8 +56,8 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
         if (previousState != currentState)
         {
-            currentState.EnterState(this);
-            previousState.ExitState(this);
+            currentState.EnterState();
+            previousState.ExitState();
             previousState = currentState;
         }
     }

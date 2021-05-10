@@ -1,75 +1,40 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-public class GroundPoundState : BasicState
+public class GroundPoundState : PlayerState
 {
-    private PlayerMachineCenter myPlayerMachineCenter;
-
-    public GroundPoundState(List<Func<BasicState>> myTransitions) {
-        this.stateTransitions = myTransitions;
+    public GroundPoundState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
+    {
     }
 
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        myPlayerMachineCenter = playerMachine;
-        //UserInput.Instance.JumpInput += this.JumpButtonPressed;
-        //UserInput.Instance.GroundPoundCanceled += this.GroundPoundButtonReleased;
-
-        playerMachine.abilities.groundPoundBehavior.EntryAction();
+        playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
     }
 
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public override void ExitState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        //UserInput.Instance.JumpInput -= this.JumpButtonPressed;
-        //UserInput.Instance.GroundPoundCanceled -= this.GroundPoundButtonReleased;
-
-        playerMachine.abilities.groundPoundBehavior.ExitAction();
-        playerMachine.pFSMTH.groundPoundReleased = false;
-        playerMachine.pFSMTH.jumpPressed = false;
+        playerMachineCenter.abilities.groundPoundBehavior.ExitAction();
+        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
 
-        // Fall
-        // if (groundPoundReleased)
-        // {
-        //     return playerMachine.fallState;
-        // }
-
-        // Jump
-        // if (jumpPressed && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)
-        // {
-        //     return playerMachine.jumpState;
-        // }
-        // Double Jump
-        // if (jumpPressed && playerMachine.abilities.jumpBehavior.Consumed && !playerMachine.abilities.doubleJumpBehavior.Consumed && playerMachine.abilities.doubleJumpBehavior.Unlocked)
-        // {
-        //     return playerMachine.doubleJumpState;
-        // }
-        // Grapple (SHOULDN'T CANCEL GROUND POUND)
-        // Burst
-        // Upward Dash
-        playerMachine.pFSMTH.groundPoundReleased = false;
-        playerMachine.pFSMTH.jumpPressed = false;
+        playerMachineCenter.pFSMTH.ResetInputs();
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        myPlayerMachineCenter.abilities.groundPoundBehavior.Action();
+        playerMachineCenter.abilities.groundPoundBehavior.Action();
     }
 }

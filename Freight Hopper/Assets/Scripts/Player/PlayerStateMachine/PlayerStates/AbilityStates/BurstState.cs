@@ -1,29 +1,29 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
 
-public class BurstState : BasicState
+public class BurstState : PlayerState
 {
-    private PlayerMachineCenter myPlayerMachineCenter;
-
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public BurstState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        myPlayerMachineCenter = playerMachine;
-
-        playerMachine.abilities.burstBehavior.EntryAction();
     }
 
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
     {
-        myPlayerMachineCenter.abilities.burstBehavior.ExitAction();
+        playerMachineCenter.abilities.burstBehavior.EntryAction();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override void ExitState()
     {
-        return myPlayerMachineCenter.fallState;
+        playerMachineCenter.abilities.burstBehavior.ExitAction();
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
-        myPlayerMachineCenter.abilities.burstBehavior.Action();
+        return playerMachineCenter.fallState;
+    }
+
+    public override void PerformBehavior()
+    {
+        playerMachineCenter.abilities.burstBehavior.Action();
     }
 }

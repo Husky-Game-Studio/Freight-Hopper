@@ -1,47 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-public class DoubleJumpState : BasicState
+public class DoubleJumpState : PlayerState
 {
-    private PlayerMachineCenter myPlayerMachineCenter;
-
-    public DoubleJumpState(List<Func<BasicState>> myTransitions)
+    public DoubleJumpState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
-        this.stateTransitions = myTransitions;
     }
 
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        myPlayerMachineCenter = playerMachine;
-        //UserInput.Instance.JumpInputCanceled += this.ReleasedJumpButtonPressed;
-        //UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
-
         // reset jump hold timer
-        playerMachine.jumpHoldingTimer.ResetTimer();
-        myPlayerMachineCenter.abilities.doubleJumpBehavior.EntryAction();
+        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.ResetTimer();
+        playerMachineCenter.abilities.doubleJumpBehavior.EntryAction();
     }
 
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public override void ExitState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        //UserInput.Instance.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
-        //UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
-
         // deactivate jump hold timer
-        myPlayerMachineCenter.jumpHoldingTimer.DeactivateTimer();
-        myPlayerMachineCenter.abilities.doubleJumpBehavior.ExitAction();
-        playerMachine.pFSMTH.releasedJumpPressed = false;
-        playerMachine.pFSMTH.grapplePressed = false;
+        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.DeactivateTimer();
+        playerMachineCenter.abilities.doubleJumpBehavior.ExitAction();
+        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         foreach (Func<BasicState> stateCheck in this.stateTransitions)
         {
             BasicState tempState = stateCheck();
@@ -51,29 +33,14 @@ public class DoubleJumpState : BasicState
             }
         }
 
-        // Fall
-        // if (releasedJumpPressed || !playerMachine.jumpHoldingTimer.TimerActive())
-        // {
-        //     playerMachine.jumpHoldingTimer.DeactivateTimer();
-        //     return playerMachine.fallState;
-        // }
-        // Grapple pole
-        // if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.Consumed && playerMachine.abilities.grapplePoleBehavior.Unlocked)
-        // {
-        //     return playerMachine.grapplePoleState;
-        // }
-
-        // Double Jump
-        playerMachine.pFSMTH.releasedJumpPressed = false;
-        playerMachine.pFSMTH.grapplePressed = false;
+        playerMachineCenter.pFSMTH.ResetInputs();
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        //Debug.Log("Double Jump Performed on " + Time.time);
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
-        myPlayerMachineCenter.jumpHoldingTimer.CountDownFixed();
-        myPlayerMachineCenter.abilities.doubleJumpBehavior.Action();
+        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.CountDownFixed();
+        playerMachineCenter.abilities.doubleJumpBehavior.Action();
     }
 }

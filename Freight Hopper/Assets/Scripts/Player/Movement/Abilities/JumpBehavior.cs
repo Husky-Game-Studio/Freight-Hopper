@@ -4,7 +4,9 @@ public class JumpBehavior : AbilityBehavior
 {
     [SerializeField] private float minJumpHeight = 2f;
     [SerializeField] private float holdingJumpForceMultiplier = 5f;
-
+    [SerializeField] public Timer jumpHoldingTimer = new Timer(0.5f);
+    [SerializeField] public Timer coyoteeTimer = new Timer(0.5f);
+    [SerializeField] public Timer jumpBufferTimer = new Timer(0.3f);
     public float JumpHeight => minJumpHeight;
 
     /// <summary>
@@ -53,7 +55,6 @@ public class JumpBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
-        //playerMachine.jumpHoldingTimer.ResetTimer();
         Jump();
     }
 

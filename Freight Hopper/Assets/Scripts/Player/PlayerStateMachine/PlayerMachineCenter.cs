@@ -12,26 +12,19 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public PlayerStatesTransitions pFSMTH;
 
     // State independent fields
-    //private bool jumpPressed = false;
-
-    [SerializeField] public Timer jumpHoldingTimer = new Timer(0.5f);
-    [SerializeField] public Timer coyoteeTimer = new Timer(0.5f);
-    [SerializeField] public Timer jumpBufferTimer = new Timer(0.3f);
 
     // Player States
 
-    public IdleState idleState;// = new IdleState();
-    public FallState fallState;// = new FallState();
-    public RunState runState;// = new RunState();
+    public IdleState idleState;
+    public FallState fallState;
+    public RunState runState;
 
-    // If it has a substate use the constructor
-
-    public JumpState jumpState;// = new JumpState();
-    public DoubleJumpState doubleJumpState;// = new DoubleJumpState();
-    public GroundPoundState groundPoundState;// = new GroundPoundState();
-    public BurstState burstState = new BurstState();
-    public FullStopState fullStopState;// = new FullStopState();
-    public UpwardDashState upwardDashState;// = new UpwardDashState();
+    public JumpState jumpState;
+    public DoubleJumpState doubleJumpState;
+    public GroundPoundState groundPoundState;
+    public BurstState burstState;
+    public FullStopState fullStopState;
+    public UpwardDashState upwardDashState;
     public WallRunState wallRunState;
     public GrapplePoleState grapplePoleState;
 
@@ -54,7 +47,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         idleTransitionsList.Add(pFSMTH.checkToBurstState);
         idleTransitionsList.Add(pFSMTH.checkToUpwardDashState);
         idleTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        idleState = new IdleState(idleTransitionsList);
+        idleState = new IdleState(this, idleTransitionsList);
 
         // Run Transitions
         List<Func<BasicState>> runTransitionsList = new List<Func<BasicState>>();
@@ -66,13 +59,13 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         runTransitionsList.Add(pFSMTH.checkToBurstState);
         runTransitionsList.Add(pFSMTH.checkToUpwardDashState);
         runTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        runState = new RunState(runTransitionsList);
+        runState = new RunState(this, runTransitionsList);
 
         // Jump Transitions
         List<Func<BasicState>> jumpTransitionsList = new List<Func<BasicState>>();
         jumpTransitionsList.Add(pFSMTH.checkToFallState);
         jumpTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        jumpState = new JumpState(jumpTransitionsList);
+        jumpState = new JumpState(this, jumpTransitionsList);
 
         // Fall Transitions
         List<Func<BasicState>> fallTransitionsList = new List<Func<BasicState>>();
@@ -85,18 +78,18 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         fallTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
         fallTransitionsList.Add(pFSMTH.checkToUpwardDashState);
         fallTransitionsList.Add(pFSMTH.checkToWallRunState);
-        fallState = new FallState(fallTransitionsList);
+        fallState = new FallState(this, fallTransitionsList);
 
         // Double Jump Transitions
         List<Func<BasicState>> doubleJumpTransitionsList = new List<Func<BasicState>>();
         doubleJumpTransitionsList.Add(pFSMTH.checkToFallState);
         doubleJumpTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        doubleJumpState = new DoubleJumpState(doubleJumpTransitionsList);
+        doubleJumpState = new DoubleJumpState(this, doubleJumpTransitionsList);
 
         // Full Stop Transitions
         List<Func<BasicState>> fullStopTransitionsList = new List<Func<BasicState>>();
         fullStopTransitionsList.Add(pFSMTH.checkToFallState);
-        fullStopState = new FullStopState(fullStopTransitionsList);
+        fullStopState = new FullStopState(this, fullStopTransitionsList);
 
         // Grapple Pole Transitions
         List<Func<BasicState>> grapplePoleTransistionsList = new List<Func<BasicState>>();
@@ -107,20 +100,20 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         // Gapple Pole Grapple Fire Transitions
         List<Func<BasicState>> grapplePoleGrappleFireTransitionsList = new List<Func<BasicState>>();
         grapplePoleGrappleFireTransitionsList.Add(pFSMTH.checkToGrapplePoleAnchoredState);
-        grapplePoleState.GetSubStateArray()[0] = new GrappleFireState(grapplePoleGrappleFireTransitionsList);
+        grapplePoleState.GetSubStateArray()[0] = new GrappleFireState(this, grapplePoleGrappleFireTransitionsList);
 
         // Ground Pound Transitions
         List<Func<BasicState>> groundPoundTransitionsList = new List<Func<BasicState>>();
         groundPoundTransitionsList.Add(pFSMTH.checkToFallState);
         groundPoundTransitionsList.Add(pFSMTH.checkToJumpState);
         groundPoundTransitionsList.Add(pFSMTH.checkToDoubleJumpState);
-        groundPoundState = new GroundPoundState(groundPoundTransitionsList);
+        groundPoundState = new GroundPoundState(this, groundPoundTransitionsList);
 
         // Upward Dash Transitions
         List<Func<BasicState>> upwardDashTransitionsList = new List<Func<BasicState>>();
         upwardDashTransitionsList.Add(pFSMTH.checkToFallState);
         upwardDashTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        upwardDashState = new UpwardDashState(upwardDashTransitionsList);
+        upwardDashState = new UpwardDashState(this, upwardDashTransitionsList);
 
         // Wall Run Transisitons
         List<Func<BasicState>> wallRunTransitionsList = new List<Func<BasicState>>();
@@ -132,7 +125,10 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         List<Func<BasicState>> wallRunSideWallRunningTransitions = new List<Func<BasicState>>();
         wallRunSideWallRunningTransitions.Add(pFSMTH.checkToWallRunWallClimbingState);
         wallRunSideWallRunningTransitions.Add(pFSMTH.checkToWallRunWallJumpState);
-        wallRunState.GetSubStateArray()[0] = new SideWallRunningState(wallRunSideWallRunningTransitions);
+        wallRunState.GetSubStateArray()[0] = new SideWallRunningState(this, wallRunSideWallRunningTransitions);
+
+        // Burst Transitions
+        burstState = new BurstState(this, null);
     }
 
     public override void OnValidate()
@@ -143,30 +139,28 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void PlayerSpawned()
     {
-        currentState.ExitState(this);
+        currentState.ExitState();
         currentState = idleState;
         previousState = idleState;
-        currentState.EnterState(this);
+        currentState.EnterState();
     }
 
     public override void OnEnable()
     {
         currentState = idleState;
         previousState = idleState;
-        currentState.EnterState(this);
+        currentState.EnterState();
         playerCM.CollisionDataCollected += LateFixedUpdate;
 
         LevelController.PlayerRespawned += PlayerSpawned;
-        UserInput.Instance.JumpInput += this.JumpButtonPressed;
     }
 
     public override void OnDisable()
     {
-        currentState.ExitState(this);
+        currentState.ExitState();
         playerCM.CollisionDataCollected -= LateFixedUpdate;
 
         LevelController.PlayerRespawned -= PlayerSpawned;
-        UserInput.Instance.JumpInput -= this.JumpButtonPressed;
     }
 
     // perform anything that is independent of being in any one single state
@@ -174,22 +168,11 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     {
         if (pFSMTH.jumpPressed)
         {
-            jumpBufferTimer.ResetTimer();
-            //pFSMTH.jumpPressed = false;
+            abilities.jumpBehavior.jumpBufferTimer.ResetTimer();
         }
-        else
+        if (abilities.jumpBehavior.jumpBufferTimer.TimerActive())
         {
-            //pFSMTH.jumpPressed = false;
-            //jumpBufferTimer.DeactivateTimer();
+            abilities.jumpBehavior.jumpBufferTimer.CountDownFixed();
         }
-        if (jumpBufferTimer.TimerActive())
-        {
-            jumpBufferTimer.CountDownFixed();
-        }
-    }
-
-    private void JumpButtonPressed()
-    {
-        //pFSMTH.jumpPressed = true;
     }
 }

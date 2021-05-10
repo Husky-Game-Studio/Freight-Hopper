@@ -1,51 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-public class RunState : BasicState
+public class RunState : PlayerState
 {
-    public RunState(List<Func<BasicState>> myTransitions)
+    public RunState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
-        this.stateTransitions = myTransitions;
     }
 
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        // UserInput.Instance.JumpInput += this.JumpButtonPressed;
-        // UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
-        // UserInput.Instance.GroundPoundInput += this.GroundPoundButtonPressed;
-        // UserInput.Instance.UpwardDashInput += this.UpwardDashPressed;
-        // UserInput.Instance.FullStopInput += this.FullStopPressed;
-        // UserInput.Instance.BurstInput += this.BurstPressed;
-
-        playerMachine.coyoteeTimer.DeactivateTimer();
+        playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
     }
 
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public override void ExitState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        // UserInput.Instance.JumpInput -= this.JumpButtonPressed;
-        // UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
-        // UserInput.Instance.GroundPoundInput -= this.GroundPoundButtonPressed;
-        // UserInput.Instance.UpwardDashInput -= this.UpwardDashPressed;
-        // UserInput.Instance.FullStopInput -= this.FullStopPressed;
-        // UserInput.Instance.BurstInput -= this.BurstPressed;
-
-        playerMachine.pFSMTH.jumpPressed = false;
-        playerMachine.pFSMTH.groundPoundPressed = false;
-        playerMachine.pFSMTH.grapplePressed = false;
-        playerMachine.pFSMTH.upwardDashPressed = false;
-        playerMachine.pFSMTH.fullStopPressed = false;
-        playerMachine.pFSMTH.burstPressed = false;
+        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
         foreach (Func<BasicState> stateCheck in this.stateTransitions)
         {
             BasicState tempState = stateCheck();
@@ -55,72 +28,12 @@ public class RunState : BasicState
             }
         }
 
-        // // Jump
-        // if ((jumpPressed || playerMachine.jumpBufferTimer.TimerActive()) && !playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)
-        // {
-        //     return playerMachine.jumpState;
-        // }
-
-        // Grapple pole
-        // if (grapplePressed && !playerMachine.abilities.grapplePoleBehavior.Consumed && playerMachine.abilities.grapplePoleBehavior.Unlocked)
-        // {
-        //     playerMachine.abilities.grapplePoleBehavior.PreventConsumption();
-        //     return playerMachine.grapplePoleState;
-        // }
-
-        // Ground Pound
-        // if (groundPoundPressed &&
-        //     (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-        //     playerMachine.playerCM.IsGrounded.current == false) && !playerMachine.abilities.groundPoundBehavior.Consumed
-        //     && playerMachine.abilities.groundPoundBehavior.Unlocked)
-        // {
-        //     playerMachine.abilities.groundPoundBehavior.PreventConsumption();
-        //     return playerMachine.groundPoundState;
-        // }
-
-        // Upward Dash
-        // if (upwardDashPressed && !playerMachine.abilities.upwardDashBehavior.Consumed && playerMachine.abilities.upwardDashBehavior.Unlocked)
-        // {
-        //     playerMachine.abilities.upwardDashBehavior.PreventConsumption();
-        //     return playerMachine.upwardDashState;
-        // }
-
-        // Full Stop
-        // if (fullStopPressed && !playerMachine.abilities.fullstopBehavior.Consumed && playerMachine.abilities.fullstopBehavior.Unlocked)
-        // {
-        //     return playerMachine.fullStopState;
-        // }
-
-        // Burst
-        // if (burstPressed && !playerMachine.abilities.burstBehavior.Consumed && playerMachine.abilities.burstBehavior.Unlocked)
-        // {
-        //     playerMachine.abilities.burstBehavior.PreventConsumption();
-        //     return playerMachine.burstState;
-        // }
-
-        // // Fall
-        // if (!playerMachine.playerCM.IsGrounded.current)
-        // {
-        //     return playerMachine.fallState;
-        // }
-        // // Idle
-        // if (UserInput.Instance.Move() == Vector3.zero)
-        // {
-        //     return playerMachine.idleState;
-        // }
-
-        playerMachine.pFSMTH.jumpPressed = false;
-        playerMachine.pFSMTH.groundPoundPressed = false;
-        playerMachine.pFSMTH.grapplePressed = false;
-        playerMachine.pFSMTH.upwardDashPressed = false;
-        playerMachine.pFSMTH.fullStopPressed = false;
-        playerMachine.pFSMTH.burstPressed = false;
+        playerMachineCenter.pFSMTH.ResetInputs();
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        playerMachine.abilities.movementBehavior.Action();
+        playerMachineCenter.abilities.movementBehavior.Action();
     }
 }

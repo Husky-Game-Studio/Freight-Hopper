@@ -548,6 +548,15 @@ MonoBehaviour:
   preventConsumption: 0
   minJumpHeight: 2
   holdingJumpForceMultiplier: 15
+  jumpHoldingTimer:
+    duration: 0.5
+    current: 0
+  coyoteeTimer:
+    duration: 0.5
+    current: 0
+  jumpBufferTimer:
+    duration: 0.3
+    current: 0
 --- !u!114 &1798020244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,7 +635,6 @@ MonoBehaviour:
   climbTimer:
     duration: 0.5
     current: 0
-  jumpInitialForce: 5
   jumpIniitalPush: 4
   jumpContinousForce: 15
   jumpContinousPush: 5
@@ -833,15 +841,6 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  jumpHoldingTimer:
-    duration: 0.5
-    current: 0
-  coyoteeTimer:
-    duration: 0.5
-    current: 0
-  jumpBufferTimer:
-    duration: 0.3
-    current: 0
   abilities: {fileID: 4493642203787552936}
   playerCM: {fileID: 4493642203787552937}
 --- !u!114 &4493642203787552939
@@ -1602,7 +1601,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.26, y: 2.32, z: -4.28}
+  m_LocalPosition: {x: 4, y: 2, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1798020240}

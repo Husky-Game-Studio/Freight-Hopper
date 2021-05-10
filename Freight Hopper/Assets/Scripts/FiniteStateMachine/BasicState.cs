@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
 // State Machine help from these url:
@@ -9,18 +7,25 @@ using System;
 public abstract class BasicState
 {
     protected List<Func<BasicState>> stateTransitions;
+    protected FiniteStateMachineCenter machineCenter;
 
-    public virtual void EnterState(FiniteStateMachineCenter machineCenter)
+    public BasicState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions)
+    {
+        this.machineCenter = machineCenter;
+        this.stateTransitions = stateTransitions;
+    }
+
+    public virtual void EnterState()
     {
     }
 
-    public virtual void ExitState(FiniteStateMachineCenter machineCenter)
+    public virtual void ExitState()
     {
     }
 
-    public abstract BasicState TransitionState(FiniteStateMachineCenter machineCenter);
+    public abstract BasicState TransitionState();
 
-    public abstract void PerformBehavior(FiniteStateMachineCenter machineCenter);
+    public abstract void PerformBehavior();
 
     public virtual bool HasSubStateMachine()
     {

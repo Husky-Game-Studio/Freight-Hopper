@@ -1,51 +1,34 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-public class GrappleFireState : BasicState
+public class GrappleFireState : PlayerState
 {
-    private bool startOfGrapple = true;
-
-    public GrappleFireState(List<Func<BasicState>> myTransitions) {
-        this.stateTransitions = myTransitions;
+    public GrappleFireState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
+    {
     }
 
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
     {
-        startOfGrapple = true;
+        playerMachineCenter.abilities.grapplePoleBehavior.EntryAction();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        
-        foreach (Func<BasicState> stateCheck in this.stateTransitions) {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
             BasicState tempState = stateCheck();
-            if (tempState != null) {
+            if (tempState != null)
+            {
                 return tempState;
             }
         }
 
-        // if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
-        // {
-        //     return playerMachine.GetCurrentState().GetSubStateArray()[1];
-        // }
-
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        // Call animation and mesh generation
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        playerMachine.abilities.movementBehavior.PlayerMove();
-        if (startOfGrapple)
-        {
-            playerMachine.abilities.grapplePoleBehavior.EntryAction();
-            startOfGrapple = false;
-        }
-        playerMachine.abilities.grapplePoleBehavior.GrappleTransition();
+        playerMachineCenter.abilities.movementBehavior.PlayerMove();
+        playerMachineCenter.abilities.grapplePoleBehavior.GrappleTransition();
     }
 }

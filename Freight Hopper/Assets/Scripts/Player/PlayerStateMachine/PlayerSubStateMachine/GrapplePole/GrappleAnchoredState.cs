@@ -1,16 +1,19 @@
-public class GrappleAnchoredState : BasicState
-{
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
-    {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
+using System.Collections.Generic;
+using System;
 
+public class GrappleAnchoredState : PlayerState
+{
+    public GrappleAnchoredState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
+    {
+    }
+
+    public override BasicState TransitionState()
+    {
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        // Perform grapple pole behavior
-        playerMachine.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
+        playerMachineCenter.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
     }
 }

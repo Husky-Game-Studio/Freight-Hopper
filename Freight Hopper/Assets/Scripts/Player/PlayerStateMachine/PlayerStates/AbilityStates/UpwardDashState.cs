@@ -1,40 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-public class UpwardDashState : BasicState
+public class UpwardDashState : PlayerState
 {
-    private PlayerMachineCenter myPlayerMachineCenter;
-
-    public UpwardDashState(List<Func<BasicState>> myTransitions)
+    public UpwardDashState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
-        this.stateTransitions = myTransitions;
     }
 
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-        myPlayerMachineCenter = playerMachine;
-        // UserInput.Instance.UpwardDashInputCanceled += this.ReleasedUpwardDash;
-        // UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
-
-        playerMachine.abilities.upwardDashBehavior.EntryAction();
+        playerMachineCenter.abilities.upwardDashBehavior.EntryAction();
     }
 
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public override void ExitState()
     {
-        PlayerMachineCenter playerMachine = (PlayerMachineCenter)machineCenter;
-
-        // UserInput.Instance.UpwardDashInputCanceled -= this.ReleasedUpwardDash;
-        // UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
-
-        myPlayerMachineCenter.abilities.upwardDashBehavior.ExitAction();
-        playerMachine.pFSMTH.releasedUpwardDash = false;
-        playerMachine.pFSMTH.grapplePressed = false;
+        playerMachineCenter.abilities.upwardDashBehavior.ExitAction();
+        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override BasicState TransitionState()
     {
         foreach (Func<BasicState> stateCheck in this.stateTransitions)
         {
@@ -44,23 +28,13 @@ public class UpwardDashState : BasicState
                 return tempState;
             }
         }
-
-        // Fall
-        // if (releasedUpwardDash)
-        // {
-        //     return myPlayerMachineCenter.fallState;
-        // }
-        // Grapple pole
-        // if (grapplePressed && !myPlayerMachineCenter.abilities.grapplePoleBehavior.Consumed)
-        // {
-        //     return myPlayerMachineCenter.grapplePoleState;
-        // }
+        playerMachineCenter.pFSMTH.ResetInputs();
 
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        myPlayerMachineCenter.abilities.upwardDashBehavior.Action();
+        playerMachineCenter.abilities.upwardDashBehavior.Action();
     }
 }

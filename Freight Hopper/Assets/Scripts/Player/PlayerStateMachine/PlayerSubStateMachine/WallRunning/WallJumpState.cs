@@ -1,30 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
 
-public class WallJumpState : BasicState
+public class WallJumpState : PlayerState
 {
-    private PlayerMachineCenter myPlayerMachineCenter;
-
-    public override void EnterState(FiniteStateMachineCenter machineCenter)
-    {
-        myPlayerMachineCenter = (PlayerMachineCenter)machineCenter;
-        myPlayerMachineCenter.abilities.wallRunBehavior.jumpHoldingTimer.ResetTimer();
-        myPlayerMachineCenter.abilities.wallRunBehavior.WallJumpInitial();
-    }
-
-    public override void ExitState(FiniteStateMachineCenter machineCenter)
+    public WallJumpState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
     }
 
-    public override BasicState TransitionState(FiniteStateMachineCenter machineCenter)
+    public override void EnterState()
+    {
+        playerMachineCenter.abilities.wallRunBehavior.jumpHoldingTimer.ResetTimer();
+        playerMachineCenter.abilities.wallRunBehavior.WallJumpInitial();
+    }
+
+    public override BasicState TransitionState()
     {
         return this;
     }
 
-    public override void PerformBehavior(FiniteStateMachineCenter machineCenter)
+    public override void PerformBehavior()
     {
-        myPlayerMachineCenter.abilities.wallRunBehavior.WallJumpContinous();
+        playerMachineCenter.abilities.wallRunBehavior.WallJumpContinous();
     }
 }
