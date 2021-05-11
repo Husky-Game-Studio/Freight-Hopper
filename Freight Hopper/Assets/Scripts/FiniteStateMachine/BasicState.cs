@@ -23,6 +23,19 @@ public abstract class BasicState
     {
     }
 
+    protected BasicState CheckTransitions()
+    {
+        foreach (Func<BasicState> stateCheck in this.stateTransitions)
+        {
+            BasicState tempState = stateCheck();
+            if (tempState != null)
+            {
+                return tempState;
+            }
+        }
+        return this;
+    }
+
     public abstract BasicState TransitionState();
 
     public abstract void PerformBehavior();

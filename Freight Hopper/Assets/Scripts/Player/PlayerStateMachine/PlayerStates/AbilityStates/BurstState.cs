@@ -24,6 +24,7 @@ public class BurstState : PlayerState
 
     public override void PerformBehavior()
     {
+        playerMachineCenter.abilities.movementBehavior.PlayerMove();
         if (playerMachineCenter.playerCM.IsGrounded.current)
         {
             playerMachineCenter.abilities.burstBehavior.GroundBurst();

@@ -7,24 +7,9 @@ public class SideWallRunningState : PlayerState
     {
     }
 
-    public override void ExitState()
-    {
-        playerMachineCenter.pFSMTH.ResetInputs();
-    }
-
     public override BasicState TransitionState()
     {
-        foreach (Func<BasicState> stateCheck in this.stateTransitions)
-        {
-            BasicState tempState = stateCheck();
-            if (tempState != null)
-            {
-                return tempState;
-            }
-        }
-
-        //playerMachineCenter.pFSMTH.ResetInputs();
-        return this;
+        return CheckTransitions();
     }
 
     public override void PerformBehavior()

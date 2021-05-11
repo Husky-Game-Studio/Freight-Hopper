@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System;
 
-public class GroundPoundState : PlayerState
+public class GrappleGroundPoundState : PlayerState
 {
-    public GroundPoundState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
+    public GrappleGroundPoundState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
     }
 
@@ -19,14 +19,11 @@ public class GroundPoundState : PlayerState
 
     public override BasicState TransitionState()
     {
-        BasicState state = CheckTransitions();
-
-        return state;
+        return CheckTransitions();
     }
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.abilities.movementBehavior.PlayerMove();
         playerMachineCenter.abilities.groundPoundBehavior.Action();
     }
 }

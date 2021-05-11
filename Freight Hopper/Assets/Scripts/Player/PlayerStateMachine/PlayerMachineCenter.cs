@@ -9,7 +9,7 @@ using System;
 public class PlayerMachineCenter : FiniteStateMachineCenter
 {
     // Player State Machine Transition Handler
-    public PlayerStatesTransitions pFSMTH;
+    public PlayerStatesTransitions transitionHandler;
 
     // State independent fields
     private bool grappleFiring;
@@ -36,112 +36,118 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
-        pFSMTH = new PlayerStatesTransitions(this);
+        transitionHandler = new PlayerStatesTransitions(this);
 
         // Idle Transitions
         List<Func<BasicState>> idleTransitionsList = new List<Func<BasicState>>();
-        idleTransitionsList.Add(pFSMTH.checkToRunState);
-        idleTransitionsList.Add(pFSMTH.checkToJumpState);
-        idleTransitionsList.Add(pFSMTH.checkToFallState);
-        idleTransitionsList.Add(pFSMTH.checkToGroundPoundState);
-        idleTransitionsList.Add(pFSMTH.checkToFullStopState);
-        idleTransitionsList.Add(pFSMTH.checkToBurstState);
-        idleTransitionsList.Add(pFSMTH.checkToUpwardDashState);
-        idleTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
+        idleTransitionsList.Add(transitionHandler.checkToRunState);
+        idleTransitionsList.Add(transitionHandler.checkToJumpState);
+        idleTransitionsList.Add(transitionHandler.checkToFallState);
+        idleTransitionsList.Add(transitionHandler.checkToGroundPoundState);
+        idleTransitionsList.Add(transitionHandler.checkToFullStopState);
+        idleTransitionsList.Add(transitionHandler.checkToBurstState);
+        idleTransitionsList.Add(transitionHandler.checkToUpwardDashState);
+        idleTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
         idleState = new IdleState(this, idleTransitionsList);
 
         // Run Transitions
         List<Func<BasicState>> runTransitionsList = new List<Func<BasicState>>();
-        runTransitionsList.Add(pFSMTH.checkToIdleState);
-        runTransitionsList.Add(pFSMTH.checkToJumpState);
-        runTransitionsList.Add(pFSMTH.checkToFallState);
-        runTransitionsList.Add(pFSMTH.checkToGroundPoundState);
-        runTransitionsList.Add(pFSMTH.checkToFullStopState);
-        runTransitionsList.Add(pFSMTH.checkToBurstState);
-        runTransitionsList.Add(pFSMTH.checkToUpwardDashState);
-        runTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
+        runTransitionsList.Add(transitionHandler.checkToIdleState);
+        runTransitionsList.Add(transitionHandler.checkToJumpState);
+        runTransitionsList.Add(transitionHandler.checkToFallState);
+        runTransitionsList.Add(transitionHandler.checkToGroundPoundState);
+        runTransitionsList.Add(transitionHandler.checkToFullStopState);
+        runTransitionsList.Add(transitionHandler.checkToBurstState);
+        runTransitionsList.Add(transitionHandler.checkToUpwardDashState);
+        runTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
         runState = new RunState(this, runTransitionsList);
 
         // Jump Transitions
         List<Func<BasicState>> jumpTransitionsList = new List<Func<BasicState>>();
-        jumpTransitionsList.Add(pFSMTH.checkToFallState);
-        jumpTransitionsList.Add(pFSMTH.checkToGroundPoundState);
-        jumpTransitionsList.Add(pFSMTH.checkToFullStopState);
-        jumpTransitionsList.Add(pFSMTH.checkToBurstState);
-        jumpTransitionsList.Add(pFSMTH.checkToUpwardDashState);
-        jumpTransitionsList.Add(pFSMTH.checkToWallRunState);
-        jumpTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
+        jumpTransitionsList.Add(transitionHandler.checkToFallState);
+        jumpTransitionsList.Add(transitionHandler.checkToGroundPoundState);
+        jumpTransitionsList.Add(transitionHandler.checkToFullStopState);
+        jumpTransitionsList.Add(transitionHandler.checkToBurstState);
+        jumpTransitionsList.Add(transitionHandler.checkToUpwardDashState);
+        jumpTransitionsList.Add(transitionHandler.checkToWallRunState);
+        jumpTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
         jumpState = new JumpState(this, jumpTransitionsList);
 
         // Fall Transitions
         List<Func<BasicState>> fallTransitionsList = new List<Func<BasicState>>();
-        fallTransitionsList.Add(pFSMTH.checkToIdleState);
-        fallTransitionsList.Add(pFSMTH.checkToJumpState);
-        fallTransitionsList.Add(pFSMTH.checkToDoubleJumpState);
-        fallTransitionsList.Add(pFSMTH.checkToGroundPoundState);
-        fallTransitionsList.Add(pFSMTH.checkToFullStopState);
-        fallTransitionsList.Add(pFSMTH.checkToBurstState);
-        fallTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        fallTransitionsList.Add(pFSMTH.checkToUpwardDashState);
-        fallTransitionsList.Add(pFSMTH.checkToWallRunState);
+        fallTransitionsList.Add(transitionHandler.checkToIdleState);
+        fallTransitionsList.Add(transitionHandler.checkToJumpState);
+        fallTransitionsList.Add(transitionHandler.checkToDoubleJumpState);
+        fallTransitionsList.Add(transitionHandler.checkToGroundPoundState);
+        fallTransitionsList.Add(transitionHandler.checkToFullStopState);
+        fallTransitionsList.Add(transitionHandler.checkToBurstState);
+        fallTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
+        fallTransitionsList.Add(transitionHandler.checkToUpwardDashState);
+        fallTransitionsList.Add(transitionHandler.checkToWallRunState);
         fallState = new FallState(this, fallTransitionsList);
 
         // Double Jump Transitions
         List<Func<BasicState>> doubleJumpTransitionsList = new List<Func<BasicState>>();
-        doubleJumpTransitionsList.Add(pFSMTH.checkToFallState);
-        doubleJumpTransitionsList.Add(pFSMTH.checkToGroundPoundState);
-        doubleJumpTransitionsList.Add(pFSMTH.checkToFullStopState);
-        doubleJumpTransitionsList.Add(pFSMTH.checkToBurstState);
-        doubleJumpTransitionsList.Add(pFSMTH.checkToUpwardDashState);
-        doubleJumpTransitionsList.Add(pFSMTH.checkToWallRunState);
-        doubleJumpTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        doubleJumpTransitionsList.Add(pFSMTH.checkToWallRunState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToFallState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToGroundPoundState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToFullStopState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToBurstState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToUpwardDashState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToWallRunState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
+        doubleJumpTransitionsList.Add(transitionHandler.checkToWallRunState);
         doubleJumpState = new DoubleJumpState(this, doubleJumpTransitionsList);
 
         // Full Stop Transitions
         List<Func<BasicState>> fullStopTransitionsList = new List<Func<BasicState>>();
-        fullStopTransitionsList.Add(pFSMTH.checkToFallState);
+        fullStopTransitionsList.Add(transitionHandler.checkToFallState);
         fullStopState = new FullStopState(this, fullStopTransitionsList);
 
         // Grapple Pole Transitions
         List<Func<BasicState>> grapplePoleTransistionsList = new List<Func<BasicState>>();
-        grapplePoleTransistionsList.Add(pFSMTH.checkToFallState);
-        grapplePoleTransistionsList.Add(pFSMTH.checkToJumpState);
+        grapplePoleTransistionsList.Add(transitionHandler.checkToFallState);
+        grapplePoleTransistionsList.Add(transitionHandler.checkToJumpState);
         grapplePoleState = new GrapplePoleState(this, grapplePoleTransistionsList);
+
+        // Grapple Pole Anchor Transitions
+        List<Func<BasicState>> GrapplePoleAnchorTransitions = new List<Func<BasicState>>();
+        GrapplePoleAnchorTransitions.Add(transitionHandler.checkToGrappleGroundPoundState);
+        grapplePoleState.GetSubStateArray()[0] = new GrapplePoleAnchoredState(this, GrapplePoleAnchorTransitions);
 
         // Ground Pound Transitions
         List<Func<BasicState>> groundPoundTransitionsList = new List<Func<BasicState>>();
-        groundPoundTransitionsList.Add(pFSMTH.checkToFallState);
-        groundPoundTransitionsList.Add(pFSMTH.checkToJumpState);
-        groundPoundTransitionsList.Add(pFSMTH.checkToFullStopState);
-        groundPoundTransitionsList.Add(pFSMTH.checkToUpwardDashState);
-        groundPoundTransitionsList.Add(pFSMTH.checkToDoubleJumpState);
+        groundPoundTransitionsList.Add(transitionHandler.checkToFallState);
+        groundPoundTransitionsList.Add(transitionHandler.checkToJumpState);
+        groundPoundTransitionsList.Add(transitionHandler.checkToFullStopState);
+        groundPoundTransitionsList.Add(transitionHandler.checkToUpwardDashState);
+        groundPoundTransitionsList.Add(transitionHandler.checkToDoubleJumpState);
+        groundPoundTransitionsList.Add(transitionHandler.checkToGrappleGroundPoundState);
         groundPoundState = new GroundPoundState(this, groundPoundTransitionsList);
 
         // Upward Dash Transitions
         List<Func<BasicState>> upwardDashTransitionsList = new List<Func<BasicState>>();
-        upwardDashTransitionsList.Add(pFSMTH.checkToFallState);
-        upwardDashTransitionsList.Add(pFSMTH.checkToFullStopState);
-        upwardDashTransitionsList.Add(pFSMTH.checkToGroundPoundState);
-        upwardDashTransitionsList.Add(pFSMTH.checkToDoubleJumpState);
-        upwardDashTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
+        upwardDashTransitionsList.Add(transitionHandler.checkToFallState);
+        upwardDashTransitionsList.Add(transitionHandler.checkToFullStopState);
+        upwardDashTransitionsList.Add(transitionHandler.checkToGroundPoundState);
+        upwardDashTransitionsList.Add(transitionHandler.checkToDoubleJumpState);
+        upwardDashTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
         upwardDashState = new UpwardDashState(this, upwardDashTransitionsList);
 
         // Wall Run Transisitons
         List<Func<BasicState>> wallRunTransitionsList = new List<Func<BasicState>>();
-        wallRunTransitionsList.Add(pFSMTH.checkToFallState);
-        wallRunTransitionsList.Add(pFSMTH.checkToIdleState);
-        wallRunTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
-        wallRunTransitionsList.Add(pFSMTH.checkToFullStopState);
-        wallRunTransitionsList.Add(pFSMTH.checkToGroundPoundState);
-        wallRunTransitionsList.Add(pFSMTH.checkToBurstState);
-        wallRunTransitionsList.Add(pFSMTH.checkToUpwardDashState);
+        wallRunTransitionsList.Add(transitionHandler.checkToFallState);
+        wallRunTransitionsList.Add(transitionHandler.checkToIdleState);
+        wallRunTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
+        wallRunTransitionsList.Add(transitionHandler.checkToFullStopState);
+        wallRunTransitionsList.Add(transitionHandler.checkToGroundPoundState);
+        wallRunTransitionsList.Add(transitionHandler.checkToBurstState);
+        wallRunTransitionsList.Add(transitionHandler.checkToUpwardDashState);
         wallRunState = new WallRunState(this, wallRunTransitionsList);
 
         // Wall Run Wall Running Transitions
         List<Func<BasicState>> wallRunSideWallRunningTransitions = new List<Func<BasicState>>();
-        wallRunSideWallRunningTransitions.Add(pFSMTH.checkToWallRunWallClimbingState);
-        wallRunSideWallRunningTransitions.Add(pFSMTH.checkToWallRunWallJumpState);
+        wallRunSideWallRunningTransitions.Add(transitionHandler.checkToWallRunWallClimbingState);
+        wallRunSideWallRunningTransitions.Add(transitionHandler.checkToWallRunWallJumpState);
         wallRunState.GetSubStateArray()[0] = new SideWallRunningState(this, wallRunSideWallRunningTransitions);
 
         // Burst Transitions
@@ -180,10 +186,21 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         LevelController.PlayerRespawned -= PlayerSpawned;
     }
 
+    protected override void EndLoop()
+    {
+        transitionHandler.ResetInputs();
+    }
+
     // perform anything that is independent of being in any one single state
     public override void PerformStateIndependentBehaviors()
     {
-        if (pFSMTH.jumpPressed)
+        JumpBuffer();
+        GrappleFiring();
+    }
+
+    private void JumpBuffer()
+    {
+        if (transitionHandler.jumpPressed.value)
         {
             abilities.jumpBehavior.jumpBufferTimer.ResetTimer();
         }
@@ -191,7 +208,11 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         {
             abilities.jumpBehavior.jumpBufferTimer.CountDownFixed();
         }
-        if (pFSMTH.grapplePressed && abilities.grapplePoleBehavior.UnlockedAndReady && previousState.GetType() != typeof(GrapplePoleState))
+    }
+
+    private void GrappleFiring()
+    {
+        if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.UnlockedAndReady && previousState.GetType() != typeof(GrapplePoleState))
         {
             if (grappleFiring)
             {

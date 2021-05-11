@@ -19,28 +19,20 @@ public class DoubleJumpState : PlayerState
         // deactivate jump hold timer
         playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.DeactivateTimer();
         playerMachineCenter.abilities.doubleJumpBehavior.ExitAction();
-        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
     public override BasicState TransitionState()
     {
-        foreach (Func<BasicState> stateCheck in this.stateTransitions)
-        {
-            BasicState tempState = stateCheck();
-            if (tempState != null)
-            {
-                return tempState;
-            }
-        }
+        BasicState state = CheckTransitions();
 
-        playerMachineCenter.pFSMTH.ResetInputs();
-        return this;
+        return state;
     }
 
     public override void PerformBehavior()
     {
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.CountDownFixed();
+        playerMachineCenter.abilities.movementBehavior.PlayerMove();
         playerMachineCenter.abilities.doubleJumpBehavior.Action();
     }
 }

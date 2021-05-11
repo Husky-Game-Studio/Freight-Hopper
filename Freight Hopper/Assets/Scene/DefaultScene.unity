@@ -635,7 +635,7 @@ MonoBehaviour:
   climbTimer:
     duration: 0.5
     current: 0
-  jumpIniitalPush: 4
+  jumpIniitalPush: 10
   jumpContinousForce: 15
   jumpContinousPush: 5
   coyoteTimer:
@@ -1093,7 +1093,13 @@ VisualEffect:
     m_Vector2f:
       m_Array: []
     m_Vector3f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 0, y: 0, z: 5}
+        m_Name: Velocity
+        m_Overridden: 1
+      - m_Value: {x: 0, y: 0, z: 1}
+        m_Name: Direction
+        m_Overridden: 1
     m_Vector4f:
       m_Array: []
     m_Uint:

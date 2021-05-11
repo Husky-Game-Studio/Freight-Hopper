@@ -32,6 +32,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
         // checks if the prevousState is not the currentState
         this.CheckAndChangeCurrentStateListeners();
+        EndLoop();
 
         // Debugging
         currentStateName = currentState.ToString();
@@ -45,6 +46,10 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
             currentSubState = currentState.GetCurrentSubState();
             currentSubStateName = currentSubState.ToString();
         }
+    }
+
+    protected virtual void EndLoop()
+    {
     }
 
     // perform anything that is independent of being in any one single state

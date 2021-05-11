@@ -10,6 +10,7 @@ public class CameraEffects : MonoBehaviour
     private Camera cam;
 
     private VisualEffect speedLines;
+
     [SerializeField] private Volume speedVolume;
     private readonly float speedEffectsStart = 15;
     private Average playerSpeed;
@@ -50,6 +51,8 @@ public class CameraEffects : MonoBehaviour
 
     private void Update()
     {
+        Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
+        speedLines.SetVector3("Direction", speedLineDirection);
         playerSpeed.Update(playerRB.velocity.magnitude);
         if (playerRB.velocity.magnitude <= 1)
         {

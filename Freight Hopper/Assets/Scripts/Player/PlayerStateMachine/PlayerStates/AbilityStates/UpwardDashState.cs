@@ -15,22 +15,13 @@ public class UpwardDashState : PlayerState
     public override void ExitState()
     {
         playerMachineCenter.abilities.upwardDashBehavior.ExitAction();
-        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
     public override BasicState TransitionState()
     {
-        foreach (Func<BasicState> stateCheck in this.stateTransitions)
-        {
-            BasicState tempState = stateCheck();
-            if (tempState != null)
-            {
-                return tempState;
-            }
-        }
-        playerMachineCenter.pFSMTH.ResetInputs();
+        BasicState state = CheckTransitions();
 
-        return this;
+        return state;
     }
 
     public override void PerformBehavior()

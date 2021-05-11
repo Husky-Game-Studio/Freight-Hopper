@@ -9,7 +9,7 @@ public class WallRunState : PlayerState
     public WallRunState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
         miniStateArray = new BasicState[3];
-        miniStateArray[0] = null;//new SideWallRunningState();
+        miniStateArray[0] = null; // Done already by playerMachineCenter
         miniStateArray[1] = new WallClimbingState(playerMachineCenter, myTransitions);
         miniStateArray[2] = new WallJumpState(playerMachineCenter, myTransitions);
 
@@ -32,22 +32,13 @@ public class WallRunState : PlayerState
 
         pSSMC.GetCurrentSubState().ExitState();
         playerMachineCenter.abilities.wallRunBehavior.ExitAction();
-        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
     public override BasicState TransitionState()
     {
-        foreach (Func<BasicState> stateCheck in this.stateTransitions)
-        {
-            BasicState tempState = stateCheck();
-            if (tempState != null)
-            {
-                return tempState;
-            }
-        }
+        BasicState state = CheckTransitions();
 
-        playerMachineCenter.pFSMTH.ResetInputs();
-        return this;
+        return state;
     }
 
     public override void PerformBehavior()

@@ -19,16 +19,7 @@ public class FullStopState : PlayerState
 
     public override BasicState TransitionState()
     {
-        foreach (Func<BasicState> stateCheck in this.stateTransitions)
-        {
-            BasicState tempState = stateCheck();
-            if (tempState != null)
-            {
-                return tempState;
-            }
-        }
-
-        return this;
+        return CheckTransitions();
     }
 
     public override void PerformBehavior()

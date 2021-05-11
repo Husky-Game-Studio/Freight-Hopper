@@ -14,74 +14,36 @@ public class PlayerStatesTransitions
     // MOVE ALL THE SUBSCRIPTIONS FOR CHECKING INPUT FROM THE STATES TO HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // Input Trackers //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public bool jumpPressed = false;
-    public bool grapplePressed = false;
-    public bool groundPoundPressed = false;
-    public bool upwardDashPressed = false;
-    public bool fullStopPressed = false;
-    public bool burstPressed = false;
-    public bool releasedJumpPressed = false;
-    public bool groundPoundReleased = false;
-    public bool releasedUpwardDash = false;
-
-    // Functions to to indicate user pressing inputs ///////////////////////////////////////////////////////////////////////////
-    private void JumpButtonPressed()
+    public class Toggle
     {
-        jumpPressed = true;
+        public bool value = false;
+
+        public void Reset() => value = false;
+
+        public void Trigger() => value = true;
     }
 
-    private void GroundPoundButtonPressed()
-    {
-        groundPoundPressed = true;
-    }
-
-    private void UpwardDashPressed()
-    {
-        upwardDashPressed = true;
-    }
-
-    private void GrappleButtonPressed()
-    {
-        grapplePressed = true;
-    }
-
-    private void FullStopPressed()
-    {
-        fullStopPressed = true;
-    }
-
-    private void BurstPressed()
-    {
-        burstPressed = true;
-    }
-
-    public void ReleasedJumpButtonPressed()
-    {
-        releasedJumpPressed = true;
-    }
-
-    private void GroundPoundButtonReleased()
-    {
-        groundPoundReleased = true;
-    }
-
-    private void ReleasedUpwardDash()
-    {
-        releasedUpwardDash = true;
-    }
+    public Toggle jumpPressed = new Toggle();
+    public Toggle releasedJump = new Toggle();
+    public Toggle grapplePressed = new Toggle();
+    public Toggle groundPoundPressed = new Toggle();
+    public Toggle groundPoundReleased = new Toggle();
+    public Toggle upwardDashPressed = new Toggle();
+    public Toggle fullStopPressed = new Toggle();
+    public Toggle burstPressed = new Toggle();
+    public Toggle releasedUpwardDash = new Toggle();
 
     public void ResetInputs()
     {
-        jumpPressed = false;
-        grapplePressed = false;
-        groundPoundPressed = false;
-        upwardDashPressed = false;
-        fullStopPressed = false;
-        burstPressed = false;
-        releasedJumpPressed = false;
-        groundPoundReleased = false;
-        releasedUpwardDash = false;
+        jumpPressed.Reset();
+        releasedJump.Reset();
+        grapplePressed.Reset();
+        groundPoundPressed.Reset();
+        groundPoundReleased.Reset();
+        upwardDashPressed.Reset();
+        fullStopPressed.Reset();
+        burstPressed.Reset();
+        releasedUpwardDash.Reset();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +60,7 @@ public class PlayerStatesTransitions
     public Func<BasicState> checkToFullStopState;
     public Func<BasicState> checkToBurstState;
     public Func<BasicState> checkToGrapplePoleState;
+    public Func<BasicState> checkToGrappleGroundPoundState;
     public Func<BasicState> checkToWallRunState;
     public Func<BasicState> checkToWallRunWallClimbingState;
     public Func<BasicState> checkToWallRunWallJumpState;
@@ -111,28 +74,28 @@ public class PlayerStatesTransitions
 
     private void SubToListeners()
     {
-        UserInput.Instance.JumpInput += this.JumpButtonPressed;
-        UserInput.Instance.JumpInputCanceled += this.ReleasedJumpButtonPressed;
-        UserInput.Instance.GrappleInput += this.GrappleButtonPressed;
-        UserInput.Instance.GroundPoundInput += this.GroundPoundButtonPressed;
-        UserInput.Instance.GroundPoundCanceled += this.GroundPoundButtonReleased;
-        UserInput.Instance.UpwardDashInput += this.UpwardDashPressed;
-        UserInput.Instance.FullStopInput += this.FullStopPressed;
-        UserInput.Instance.BurstInput += this.BurstPressed;
-        UserInput.Instance.UpwardDashInputCanceled += this.ReleasedUpwardDash;
+        UserInput.Instance.JumpInput += jumpPressed.Trigger;
+        UserInput.Instance.JumpInputCanceled += releasedJump.Trigger;
+        UserInput.Instance.GrappleInput += grapplePressed.Trigger;
+        UserInput.Instance.GroundPoundInput += groundPoundPressed.Trigger;
+        UserInput.Instance.GroundPoundCanceled += groundPoundReleased.Trigger;
+        UserInput.Instance.UpwardDashInput += upwardDashPressed.Trigger;
+        UserInput.Instance.FullStopInput += fullStopPressed.Trigger;
+        UserInput.Instance.BurstInput += burstPressed.Trigger;
+        UserInput.Instance.UpwardDashInputCanceled += releasedUpwardDash.Trigger;
     }
 
     private void UnsubToListeners()
     {
-        UserInput.Instance.JumpInput -= this.JumpButtonPressed;
-        UserInput.Instance.JumpInputCanceled -= this.ReleasedJumpButtonPressed;
-        UserInput.Instance.GrappleInput -= this.GrappleButtonPressed;
-        UserInput.Instance.GroundPoundInput -= this.GroundPoundButtonPressed;
-        UserInput.Instance.GroundPoundCanceled -= this.GroundPoundButtonReleased;
-        UserInput.Instance.UpwardDashInput -= this.UpwardDashPressed;
-        UserInput.Instance.FullStopInput -= this.FullStopPressed;
-        UserInput.Instance.BurstInput -= this.BurstPressed;
-        UserInput.Instance.UpwardDashInputCanceled -= this.ReleasedUpwardDash;
+        UserInput.Instance.JumpInput -= jumpPressed.Trigger;
+        UserInput.Instance.JumpInputCanceled -= releasedJump.Trigger;
+        UserInput.Instance.GrappleInput -= grapplePressed.Trigger;
+        UserInput.Instance.GroundPoundInput -= groundPoundPressed.Trigger;
+        UserInput.Instance.GroundPoundCanceled -= groundPoundReleased.Trigger;
+        UserInput.Instance.UpwardDashInput -= upwardDashPressed.Trigger;
+        UserInput.Instance.FullStopInput -= fullStopPressed.Trigger;
+        UserInput.Instance.BurstInput -= burstPressed.Trigger;
+        UserInput.Instance.UpwardDashInputCanceled -= releasedUpwardDash.Trigger;
     }
 
     public PlayerStatesTransitions(FiniteStateMachineCenter machineCenter)
@@ -151,6 +114,7 @@ public class PlayerStatesTransitions
         checkToFullStopState = ShouldTransitionToFullStopState;
         checkToBurstState = ShouldTransitionToBurstState;
         checkToGrapplePoleState = ShouldTransitionToGrapplePoleState;
+        checkToGrappleGroundPoundState = ShouldTransitionToGrappleGroundPoundState;
         checkToWallRunState = ShouldTransitionToWallRunState;
         checkToWallRunWallClimbingState = ShouldTransistionToWallRunWallClimbingState;
         checkToWallRunWallJumpState = ShouldTransistionToWallRunWallJumpState;
@@ -163,7 +127,7 @@ public class PlayerStatesTransitions
     // Common transistion check to fall
     private BasicState ShouldTransitionToFallState()
     {
-        if ((releasedJumpPressed || !playerMachine.abilities.jumpBehavior.jumpHoldingTimer.TimerActive()) &&
+        if ((releasedJump.value || !playerMachine.abilities.jumpBehavior.jumpHoldingTimer.TimerActive()) &&
             (playerMachine.currentState == playerMachine.jumpState || playerMachine.currentState == playerMachine.doubleJumpState))
         {
             if (playerMachine.currentState == playerMachine.doubleJumpState)
@@ -179,17 +143,17 @@ public class PlayerStatesTransitions
             return playerMachine.fallState;
         }
 
-        if (releasedUpwardDash && playerMachine.currentState == playerMachine.upwardDashState)
+        if (releasedUpwardDash.value && playerMachine.currentState == playerMachine.upwardDashState)
         {
             return playerMachine.fallState;
         }
 
-        if (groundPoundReleased && playerMachine.currentState == playerMachine.groundPoundState)
+        if (groundPoundReleased.value && playerMachine.currentState == playerMachine.groundPoundState)
         {
             return playerMachine.fallState;
         }
 
-        if ((grapplePressed || (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() &&
+        if ((grapplePressed.value || (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() &&
             playerMachine.abilities.grapplePoleBehavior.IsAnchored())) &&
             (playerMachine.currentState == playerMachine.grapplePoleState))
         {
@@ -217,7 +181,7 @@ public class PlayerStatesTransitions
                 }
             }
             if (playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState == playerMachine.wallRunState.GetSubStateArray()[2]
-                && (releasedJumpPressed || !playerMachine.abilities.wallRunBehavior.jumpHoldingTimer.TimerActive()))
+                && (releasedJump.value || !playerMachine.abilities.wallRunBehavior.jumpHoldingTimer.TimerActive()))
             {
                 return playerMachine.fallState;
             }
@@ -233,20 +197,20 @@ public class PlayerStatesTransitions
     // Common transition check to jump
     private BasicState ShouldTransitionToJumpState()
     {
-        if ((playerMachine.GetCurrentState() != playerMachine.fallState && (jumpPressed || playerMachine.abilities.jumpBehavior.jumpBufferTimer.TimerActive())
+        if ((playerMachine.GetCurrentState() != playerMachine.fallState && (jumpPressed.value || playerMachine.abilities.jumpBehavior.jumpBufferTimer.TimerActive())
                     && (!playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)) ||
-            (playerMachine.GetCurrentState() == playerMachine.fallState && (jumpPressed && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive()
+            (playerMachine.GetCurrentState() == playerMachine.fallState && (jumpPressed.value && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive()
                     && playerMachine.GetPreviousState() != playerMachine.jumpState && playerMachine.abilities.jumpBehavior.UnlockedAndReady))
         )
         {
             return playerMachine.jumpState;
         }
-        if ((jumpPressed && playerMachine.abilities.jumpBehavior.UnlockedAndReady) &&
+        if ((jumpPressed.value && playerMachine.abilities.jumpBehavior.UnlockedAndReady) &&
             (playerMachine.currentState == playerMachine.groundPoundState))
         {
             return playerMachine.jumpState;
         }
-        if (jumpPressed && playerMachine.currentState == playerMachine.grapplePoleState)
+        if (jumpPressed.value && playerMachine.currentState == playerMachine.grapplePoleState)
         {
             return playerMachine.jumpState;
         }
@@ -279,12 +243,12 @@ public class PlayerStatesTransitions
 
     private BasicState ShouldTransitionToDoubleJumpState()
     {
-        if (jumpPressed && playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady &&
+        if (jumpPressed.value && playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady &&
             playerMachine.currentState == playerMachine.fallState)
         {
             return playerMachine.doubleJumpState;
         }
-        if (jumpPressed && playerMachine.abilities.jumpBehavior.Consumed &&
+        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.Consumed &&
             playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady &&
             playerMachine.currentState == playerMachine.doubleJumpState)
         {
@@ -295,25 +259,56 @@ public class PlayerStatesTransitions
 
     private BasicState ShouldTransitionToGroundPoundState()
     {
-        Debug.Log("Ground pound pressed: " + groundPoundPressed);
-        if (groundPoundPressed &&
+        if (groundPoundPressed.value &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
             playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
         {
-            if (playerMachine.currentState == playerMachine.idleState || playerMachine.currentState == playerMachine.runState)
+            if (playerMachine.playerCM.IsGrounded.current)
             {
                 playerMachine.abilities.groundPoundBehavior.PreventConsumption();
             }
-            Debug.Log("Ground pound");
+
             return playerMachine.groundPoundState;
         }
 
         return null;
     }
 
+    private BasicState ShouldTransitionToGrappleGroundPoundState()
+    {
+        if (groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleState)
+        {
+            if ((playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
+                playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
+            {
+                if (playerMachine.playerCM.IsGrounded.current)
+                {
+                    playerMachine.abilities.groundPoundBehavior.PreventConsumption();
+                }
+
+                return playerMachine.grapplePoleState.GetSubStateArray()[1];
+            }
+        }
+        if (grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState)
+        {
+            if ((playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
+                playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
+            {
+                if (playerMachine.playerCM.IsGrounded.current)
+                {
+                    playerMachine.abilities.groundPoundBehavior.PreventConsumption();
+                }
+                GrapplePoleState state = playerMachine.grapplePoleState;
+                state.TransitioningFromGroundPound();
+                return playerMachine.grapplePoleState;
+            }
+        }
+        return null;
+    }
+
     private BasicState ShouldTransitionToUpwardDashState()
     {
-        if (upwardDashPressed && playerMachine.abilities.upwardDashBehavior.UnlockedAndReady)
+        if (upwardDashPressed.value && playerMachine.abilities.upwardDashBehavior.UnlockedAndReady)
         {
             if (playerMachine.currentState == playerMachine.idleState || playerMachine.currentState == playerMachine.runState)
             {
@@ -326,7 +321,7 @@ public class PlayerStatesTransitions
 
     private BasicState ShouldTransitionToFullStopState()
     {
-        if (fullStopPressed && playerMachine.abilities.fullstopBehavior.UnlockedAndReady)
+        if (fullStopPressed.value && playerMachine.abilities.fullstopBehavior.UnlockedAndReady)
         {
             return playerMachine.fullStopState;
         }
@@ -335,7 +330,7 @@ public class PlayerStatesTransitions
 
     private BasicState ShouldTransitionToBurstState()
     {
-        if (burstPressed && playerMachine.abilities.burstBehavior.UnlockedAndReady)
+        if (burstPressed.value && playerMachine.abilities.burstBehavior.UnlockedAndReady)
         {
             if (playerMachine.currentState == playerMachine.idleState || playerMachine.currentState == playerMachine.runState)
             {
@@ -386,7 +381,7 @@ public class PlayerStatesTransitions
 
     private BasicState ShouldTransistionToWallRunWallJumpState()
     {
-        if (jumpPressed)
+        if (jumpPressed.value)
         {
             return playerMachine.GetCurrentState().GetSubStateArray()[2];
         }
