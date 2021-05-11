@@ -23,7 +23,7 @@ public class SideWallRunningState : PlayerState
             }
         }
 
-        playerMachineCenter.pFSMTH.ResetInputs();
+        //playerMachineCenter.pFSMTH.ResetInputs();
         return this;
     }
 
