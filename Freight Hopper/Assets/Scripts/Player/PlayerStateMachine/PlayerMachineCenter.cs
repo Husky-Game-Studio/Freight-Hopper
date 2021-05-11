@@ -12,6 +12,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public PlayerStatesTransitions pFSMTH;
 
     // State independent fields
+    private bool grappleFiring;
 
     // Player States
 
@@ -64,6 +65,11 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         // Jump Transitions
         List<Func<BasicState>> jumpTransitionsList = new List<Func<BasicState>>();
         jumpTransitionsList.Add(pFSMTH.checkToFallState);
+        jumpTransitionsList.Add(pFSMTH.checkToGroundPoundState);
+        jumpTransitionsList.Add(pFSMTH.checkToFullStopState);
+        jumpTransitionsList.Add(pFSMTH.checkToBurstState);
+        jumpTransitionsList.Add(pFSMTH.checkToUpwardDashState);
+        jumpTransitionsList.Add(pFSMTH.checkToWallRunState);
         jumpTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
         jumpState = new JumpState(this, jumpTransitionsList);
 
@@ -83,7 +89,13 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         // Double Jump Transitions
         List<Func<BasicState>> doubleJumpTransitionsList = new List<Func<BasicState>>();
         doubleJumpTransitionsList.Add(pFSMTH.checkToFallState);
+        doubleJumpTransitionsList.Add(pFSMTH.checkToGroundPoundState);
+        doubleJumpTransitionsList.Add(pFSMTH.checkToFullStopState);
+        doubleJumpTransitionsList.Add(pFSMTH.checkToBurstState);
+        doubleJumpTransitionsList.Add(pFSMTH.checkToUpwardDashState);
+        doubleJumpTransitionsList.Add(pFSMTH.checkToWallRunState);
         doubleJumpTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
+        doubleJumpTransitionsList.Add(pFSMTH.checkToWallRunState);
         doubleJumpState = new DoubleJumpState(this, doubleJumpTransitionsList);
 
         // Full Stop Transitions
@@ -97,21 +109,21 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         grapplePoleTransistionsList.Add(pFSMTH.checkToJumpState);
         grapplePoleState = new GrapplePoleState(this, grapplePoleTransistionsList);
 
-        // Gapple Pole Grapple Fire Transitions
-        List<Func<BasicState>> grapplePoleGrappleFireTransitionsList = new List<Func<BasicState>>();
-        grapplePoleGrappleFireTransitionsList.Add(pFSMTH.checkToGrapplePoleAnchoredState);
-        grapplePoleState.GetSubStateArray()[0] = new GrappleFireState(this, grapplePoleGrappleFireTransitionsList);
-
         // Ground Pound Transitions
         List<Func<BasicState>> groundPoundTransitionsList = new List<Func<BasicState>>();
         groundPoundTransitionsList.Add(pFSMTH.checkToFallState);
         groundPoundTransitionsList.Add(pFSMTH.checkToJumpState);
+        groundPoundTransitionsList.Add(pFSMTH.checkToFullStopState);
+        groundPoundTransitionsList.Add(pFSMTH.checkToUpwardDashState);
         groundPoundTransitionsList.Add(pFSMTH.checkToDoubleJumpState);
         groundPoundState = new GroundPoundState(this, groundPoundTransitionsList);
 
         // Upward Dash Transitions
         List<Func<BasicState>> upwardDashTransitionsList = new List<Func<BasicState>>();
         upwardDashTransitionsList.Add(pFSMTH.checkToFallState);
+        upwardDashTransitionsList.Add(pFSMTH.checkToFullStopState);
+        upwardDashTransitionsList.Add(pFSMTH.checkToGroundPoundState);
+        upwardDashTransitionsList.Add(pFSMTH.checkToDoubleJumpState);
         upwardDashTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
         upwardDashState = new UpwardDashState(this, upwardDashTransitionsList);
 
@@ -119,6 +131,11 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         List<Func<BasicState>> wallRunTransitionsList = new List<Func<BasicState>>();
         wallRunTransitionsList.Add(pFSMTH.checkToFallState);
         wallRunTransitionsList.Add(pFSMTH.checkToIdleState);
+        wallRunTransitionsList.Add(pFSMTH.checkToGrapplePoleState);
+        wallRunTransitionsList.Add(pFSMTH.checkToFullStopState);
+        wallRunTransitionsList.Add(pFSMTH.checkToGroundPoundState);
+        wallRunTransitionsList.Add(pFSMTH.checkToBurstState);
+        wallRunTransitionsList.Add(pFSMTH.checkToUpwardDashState);
         wallRunState = new WallRunState(this, wallRunTransitionsList);
 
         // Wall Run Wall Running Transitions
@@ -173,6 +190,30 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         if (abilities.jumpBehavior.jumpBufferTimer.TimerActive())
         {
             abilities.jumpBehavior.jumpBufferTimer.CountDownFixed();
+        }
+        if (pFSMTH.grapplePressed && abilities.grapplePoleBehavior.UnlockedAndReady && previousState.GetType() != typeof(GrapplePoleState))
+        {
+            if (grappleFiring)
+            {
+                abilities.grapplePoleBehavior.ResetPole();
+                grappleFiring = false;
+            }
+            else
+            {
+                abilities.grapplePoleBehavior.EntryAction();
+                grappleFiring = true;
+            }
+        }
+        if (grappleFiring)
+        {
+            if (abilities.grapplePoleBehavior.IsAnchored())
+            {
+                grappleFiring = false;
+            }
+            else
+            {
+                abilities.grapplePoleBehavior.GrappleTransition();
+            }
         }
     }
 }

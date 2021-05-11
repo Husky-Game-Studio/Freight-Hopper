@@ -99,7 +99,6 @@ public class PlayerStatesTransitions
     public Func<BasicState> checkToBurstState;
     public Func<BasicState> checkToGrapplePoleState;
     public Func<BasicState> checkToWallRunState;
-    public Func<BasicState> checkToGrapplePoleAnchoredState;
     public Func<BasicState> checkToWallRunWallClimbingState;
     public Func<BasicState> checkToWallRunWallJumpState;
 
@@ -153,7 +152,6 @@ public class PlayerStatesTransitions
         checkToBurstState = ShouldTransitionToBurstState;
         checkToGrapplePoleState = ShouldTransitionToGrapplePoleState;
         checkToWallRunState = ShouldTransitionToWallRunState;
-        checkToGrapplePoleAnchoredState = ShouldTransitionToGrapplePoleAnchoredState;
         checkToWallRunWallClimbingState = ShouldTransistionToWallRunWallClimbingState;
         checkToWallRunWallJumpState = ShouldTransistionToWallRunWallJumpState;
     }
@@ -297,6 +295,7 @@ public class PlayerStatesTransitions
 
     private BasicState ShouldTransitionToGroundPoundState()
     {
+        Debug.Log("Ground pound pressed: " + groundPoundPressed);
         if (groundPoundPressed &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
             playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
@@ -305,6 +304,7 @@ public class PlayerStatesTransitions
             {
                 playerMachine.abilities.groundPoundBehavior.PreventConsumption();
             }
+            Debug.Log("Ground pound");
             return playerMachine.groundPoundState;
         }
 
@@ -348,7 +348,7 @@ public class PlayerStatesTransitions
 
     private BasicState ShouldTransitionToGrapplePoleState()
     {
-        if (grapplePressed && playerMachine.abilities.grapplePoleBehavior.UnlockedAndReady)
+        if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
         {
             if (playerMachine.currentState == playerMachine.idleState || playerMachine.currentState == playerMachine.runState)
             {
@@ -356,7 +356,6 @@ public class PlayerStatesTransitions
             }
             return playerMachine.grapplePoleState;
         }
-
         return null;
     }
 
@@ -371,15 +370,6 @@ public class PlayerStatesTransitions
             }
         }
 
-        return null;
-    }
-
-    private BasicState ShouldTransitionToGrapplePoleAnchoredState()
-    {
-        if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
-        {
-            return playerMachine.GetCurrentState().GetSubStateArray()[1];
-        }
         return null;
     }
 

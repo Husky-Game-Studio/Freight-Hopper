@@ -115,11 +115,7 @@ public class GrapplePoleBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
-        length = 0;
-        anchoredRb = null;
-        anchoredRbLocalPosition = Vector3.zero;
         playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
-        anchored = false;
 
         pole.enabled = true;
         pole.SetPosition(1, pole.GetPosition(0));
@@ -133,6 +129,15 @@ public class GrapplePoleBehavior : AbilityBehavior
     public override void ExitAction()
     {
         base.ExitAction();
+        ResetPole();
+    }
+
+    public void ResetPole()
+    {
+        length = 0;
+        anchoredRb = null;
+        anchoredRbLocalPosition = Vector3.zero;
+        anchored = false;
         pole.enabled = false;
     }
 }

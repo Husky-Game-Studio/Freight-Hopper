@@ -10,9 +10,8 @@ public class GrapplePoleState : PlayerState
     {
         this.stateTransitions = myTransitions;
 
-        miniStateArray = new BasicState[2];
-        miniStateArray[0] = null;//new GrappleFireState();
-        miniStateArray[1] = new GrappleAnchoredState(playerMachineCenter, null);
+        miniStateArray = new BasicState[1];
+        miniStateArray[0] = new GrappleAnchoredState(playerMachineCenter, null);
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, playerMachineCenter);
     }
 

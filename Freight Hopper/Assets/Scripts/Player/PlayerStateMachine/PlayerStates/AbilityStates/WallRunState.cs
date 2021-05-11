@@ -29,9 +29,10 @@ public class WallRunState : PlayerState
         {
             playerMachineCenter.abilities.wallRunBehavior.WallClimbExit();
         }
+
         pSSMC.GetCurrentSubState().ExitState();
         playerMachineCenter.abilities.wallRunBehavior.ExitAction();
-        playerMachineCenter.pFSMTH.releasedJumpPressed = false;
+        playerMachineCenter.pFSMTH.ResetInputs();
     }
 
     public override BasicState TransitionState()
@@ -45,7 +46,7 @@ public class WallRunState : PlayerState
             }
         }
 
-        playerMachineCenter.pFSMTH.releasedJumpPressed = false;
+        playerMachineCenter.pFSMTH.ResetInputs();
         return this;
     }
 
