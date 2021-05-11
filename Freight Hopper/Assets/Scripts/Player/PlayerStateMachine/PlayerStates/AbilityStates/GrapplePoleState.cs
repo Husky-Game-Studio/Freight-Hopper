@@ -13,9 +13,11 @@ public class GrapplePoleState : PlayerState
     {
         this.stateTransitions = myTransitions;
 
-        miniStateArray = new BasicState[2];
+        miniStateArray = new BasicState[4];
         miniStateArray[0] = null;
         miniStateArray[1] = new GrappleGroundPoundState(playerMachineCenter, myTransitions);
+        miniStateArray[2] = new GrappleBurst(playerMachineCenter, null);
+        miniStateArray[3] = new GrappleFullstop(playerMachineCenter, myTransitions);
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, playerMachineCenter);
     }
 

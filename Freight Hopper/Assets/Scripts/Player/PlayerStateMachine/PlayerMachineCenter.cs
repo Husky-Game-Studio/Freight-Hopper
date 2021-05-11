@@ -112,6 +112,9 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         // Grapple Pole Anchor Transitions
         List<Func<BasicState>> GrapplePoleAnchorTransitions = new List<Func<BasicState>>();
         GrapplePoleAnchorTransitions.Add(transitionHandler.CheckToGrappleGroundPoundState);
+        GrapplePoleAnchorTransitions.Add(transitionHandler.CheckToGrappleBurstState);
+        GrapplePoleAnchorTransitions.Add(transitionHandler.CheckToGrappleFullStopState);
+        //GrapplePoleAnchorTransitions.Add(transitionHandler.CheckToGrappleUpwardDashState);
         grapplePoleState.GetSubStateArray()[0] = new GrapplePoleAnchoredState(this, GrapplePoleAnchorTransitions);
 
         // Ground Pound Transitions

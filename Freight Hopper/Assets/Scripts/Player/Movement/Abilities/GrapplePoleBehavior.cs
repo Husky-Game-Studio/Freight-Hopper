@@ -116,7 +116,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     public override void EntryAction()
     {
         playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
-
+        ResetPole();
         pole.enabled = true;
         pole.SetPosition(1, pole.GetPosition(0));
     }

@@ -296,15 +296,37 @@ public class PlayerStatesTransitions
         return null;
     }
 
+    public BasicState CheckToGrappleFullStopState()
+    {
+        if (fullStopPressed.value && playerMachine.abilities.fullstopBehavior.UnlockedAndReady)
+        {
+            return playerMachine.grapplePoleState.GetSubStateArray()[3];
+        }
+        return null;
+    }
+
     public BasicState CheckToBurstState()
     {
         if (burstPressed.value && playerMachine.abilities.burstBehavior.UnlockedAndReady)
         {
-            if (playerMachine.currentState == playerMachine.idleState || playerMachine.currentState == playerMachine.runState)
+            if (playerMachine.playerCM.IsGrounded.current)
             {
                 playerMachine.abilities.burstBehavior.PreventConsumption();
             }
             return playerMachine.burstState;
+        }
+        return null;
+    }
+
+    public BasicState CheckToGrappleBurstState()
+    {
+        if (burstPressed.value && playerMachine.abilities.burstBehavior.UnlockedAndReady)
+        {
+            if (playerMachine.playerCM.IsGrounded.current)
+            {
+                playerMachine.abilities.burstBehavior.PreventConsumption();
+            }
+            return playerMachine.grapplePoleState.GetSubStateArray()[2];
         }
         return null;
     }
