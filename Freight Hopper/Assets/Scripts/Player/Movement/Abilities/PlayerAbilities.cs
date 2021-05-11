@@ -31,7 +31,6 @@ public class PlayerAbilities : MonoBehaviour
     private Dictionary<Name, AbilityBehavior> behavior = new Dictionary<Name, AbilityBehavior>();
 
     private List<AbilityBehavior> abilities = new List<AbilityBehavior>();
-    public List<AbilityBehavior> Abilities => abilities;
     private Rigidbody playerRb;
     private CollisionManagement playerCM;
     private SoundManager playerSM;
@@ -88,6 +87,16 @@ public class PlayerAbilities : MonoBehaviour
         doubleJumpBehavior.GetJumpBehavior(jumpBehavior);
     }
 
+    // Recharges all abilities. Meaning they can be used again
+    public void Recharge()
+    {
+        foreach (AbilityBehavior ability in abilities)
+        {
+            ability.Recharge();
+        }
+    }
+
+    // Unlocks/locks abilities according to current level settings
     public void SetActiveAbilities(Name[] abilitiesNames)
     {
         foreach (AbilityBehavior ability in abilities)

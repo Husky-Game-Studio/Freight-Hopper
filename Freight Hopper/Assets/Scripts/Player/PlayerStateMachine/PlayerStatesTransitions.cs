@@ -67,7 +67,7 @@ public class PlayerStatesTransitions
 
     public PlayerStatesTransitions(FiniteStateMachineCenter machineCenter)
     {
-        this.SubToListeners();
+        SubToListeners();
 
         playerMachine = (PlayerMachineCenter)machineCenter;
     }
@@ -78,6 +78,7 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToFallState()
     {
+        // Jump or Double Jump
         if ((releasedJump.value || !playerMachine.abilities.jumpBehavior.jumpHoldingTimer.TimerActive()) &&
             (playerMachine.currentState == playerMachine.jumpState || playerMachine.currentState == playerMachine.doubleJumpState))
         {
@@ -88,22 +89,26 @@ public class PlayerStatesTransitions
             return playerMachine.fallState;
         }
 
+        // Idle
         if ((!playerMachine.playerCM.IsGrounded.current) &&
             (playerMachine.currentState == playerMachine.runState || playerMachine.currentState == playerMachine.idleState))
         {
             return playerMachine.fallState;
         }
 
+        // Upward Dash
         if (releasedUpwardDash.value && playerMachine.currentState == playerMachine.upwardDashState)
         {
             return playerMachine.fallState;
         }
 
+        // Ground Pound
         if (groundPoundReleased.value && playerMachine.currentState == playerMachine.groundPoundState)
         {
             return playerMachine.fallState;
         }
 
+        // Grapple
         if ((grapplePressed.value || (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() &&
             playerMachine.abilities.grapplePoleBehavior.IsAnchored())) &&
             (playerMachine.currentState == playerMachine.grapplePoleState))
@@ -111,11 +116,13 @@ public class PlayerStatesTransitions
             return playerMachine.fallState;
         }
 
+        // Full stop
         if ((playerMachine.abilities.fullstopBehavior.FullStopFinished()) && (playerMachine.currentState == playerMachine.fullStopState))
         {
             return playerMachine.fallState;
         }
 
+        // Wall run
         if (playerMachine.currentState == playerMachine.wallRunState)
         {
             bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
@@ -147,19 +154,30 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToJumpState()
     {
-        if ((playerMachine.GetCurrentState() != playerMachine.fallState && (jumpPressed.value || playerMachine.abilities.jumpBehavior.jumpBufferTimer.TimerActive())
-                    && (!playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)) ||
-            (playerMachine.GetCurrentState() == playerMachine.fallState && (jumpPressed.value && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive()
-                    && playerMachine.GetPreviousState() != playerMachine.jumpState && playerMachine.abilities.jumpBehavior.UnlockedAndReady))
-        )
+        // Other
+        if (playerMachine.GetCurrentState() != playerMachine.fallState &&
+            (jumpPressed.value || playerMachine.abilities.jumpBehavior.jumpBufferTimer.TimerActive()) &&
+            playerMachine.abilities.jumpBehavior.UnlockedAndReady)
         {
             return playerMachine.jumpState;
         }
-        if ((jumpPressed.value && playerMachine.abilities.jumpBehavior.UnlockedAndReady) &&
-            (playerMachine.currentState == playerMachine.groundPoundState))
+
+        // Fall
+        if (playerMachine.GetCurrentState() == playerMachine.fallState &&
+            jumpPressed.value && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive() &&
+            playerMachine.GetPreviousState() != playerMachine.jumpState && playerMachine.abilities.jumpBehavior.UnlockedAndReady)
         {
             return playerMachine.jumpState;
         }
+
+        // Ground Pound
+        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.UnlockedAndReady &&
+            playerMachine.currentState == playerMachine.groundPoundState)
+        {
+            return playerMachine.jumpState;
+        }
+
+        // Grapple Pole
         if (jumpPressed.value && playerMachine.currentState == playerMachine.grapplePoleState)
         {
             return playerMachine.jumpState;

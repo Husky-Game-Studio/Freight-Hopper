@@ -51,6 +51,12 @@ public class GrapplePoleState : PlayerState
     {
         pSSMC.PerformSubMachineBehavior();
         playerMachineCenter.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
+
+        if (playerMachineCenter.playerCM.IsGrounded.current && !playerMachineCenter.playerCM.IsGrounded.old)
+        {
+            playerMachineCenter.abilities.Recharge();
+            playerMachineCenter.abilities.grapplePoleBehavior.PreventConsumption();
+        }
     }
 
     public override bool HasSubStateMachine()
