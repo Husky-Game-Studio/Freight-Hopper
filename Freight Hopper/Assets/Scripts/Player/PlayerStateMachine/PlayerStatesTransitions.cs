@@ -11,18 +11,6 @@ public class PlayerStatesTransitions
 {
     private PlayerMachineCenter playerMachine;
 
-    // MOVE ALL THE SUBSCRIPTIONS FOR CHECKING INPUT FROM THE STATES TO HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    // Input Trackers //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public class Toggle
-    {
-        public bool value = false;
-
-        public void Reset() => value = false;
-
-        public void Trigger() => value = true;
-    }
-
     public Toggle jumpPressed = new Toggle();
     public Toggle releasedJump = new Toggle();
     public Toggle grapplePressed = new Toggle();
@@ -45,27 +33,6 @@ public class PlayerStatesTransitions
         burstPressed.Reset();
         releasedUpwardDash.Reset();
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Delagates to store condition functions to transition to other states //////////////////////////////////////////////////
-
-    public Func<BasicState> checkToIdleState;
-    public Func<BasicState> checkToRunState;
-    public Func<BasicState> checkToJumpState;
-    public Func<BasicState> checkToFallState;
-    public Func<BasicState> checkToDoubleJumpState;
-    public Func<BasicState> checkToGroundPoundState;
-    public Func<BasicState> checkToUpwardDashState;
-    public Func<BasicState> checkToFullStopState;
-    public Func<BasicState> checkToBurstState;
-    public Func<BasicState> checkToGrapplePoleState;
-    public Func<BasicState> checkToGrappleGroundPoundState;
-    public Func<BasicState> checkToWallRunState;
-    public Func<BasicState> checkToWallRunWallClimbingState;
-    public Func<BasicState> checkToWallRunWallJumpState;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void OnDisable()
     {
@@ -103,29 +70,13 @@ public class PlayerStatesTransitions
         this.SubToListeners();
 
         playerMachine = (PlayerMachineCenter)machineCenter;
-
-        checkToIdleState = ShouldTransisitonToIdleState;
-        checkToRunState = ShouldTransitionToRunState;
-        checkToJumpState = ShouldTransitionToJumpState;
-        checkToFallState = ShouldTransitionToFallState;
-        checkToDoubleJumpState = ShouldTransitionToDoubleJumpState;
-        checkToGroundPoundState = ShouldTransitionToGroundPoundState;
-        checkToUpwardDashState = ShouldTransitionToUpwardDashState;
-        checkToFullStopState = ShouldTransitionToFullStopState;
-        checkToBurstState = ShouldTransitionToBurstState;
-        checkToGrapplePoleState = ShouldTransitionToGrapplePoleState;
-        checkToGrappleGroundPoundState = ShouldTransitionToGrappleGroundPoundState;
-        checkToWallRunState = ShouldTransitionToWallRunState;
-        checkToWallRunWallClimbingState = ShouldTransistionToWallRunWallClimbingState;
-        checkToWallRunWallJumpState = ShouldTransistionToWallRunWallJumpState;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // The conditional functions to check if the PFSM should transition to a different state ///////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Common transistion check to fall
-    private BasicState ShouldTransitionToFallState()
+    public BasicState CheckToFallState()
     {
         if ((releasedJump.value || !playerMachine.abilities.jumpBehavior.jumpHoldingTimer.TimerActive()) &&
             (playerMachine.currentState == playerMachine.jumpState || playerMachine.currentState == playerMachine.doubleJumpState))
@@ -194,8 +145,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    // Common transition check to jump
-    private BasicState ShouldTransitionToJumpState()
+    public BasicState CheckToJumpState()
     {
         if ((playerMachine.GetCurrentState() != playerMachine.fallState && (jumpPressed.value || playerMachine.abilities.jumpBehavior.jumpBufferTimer.TimerActive())
                     && (!playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.jumpBehavior.Unlocked)) ||
@@ -218,7 +168,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransisitonToIdleState()
+    public BasicState CheckToIdleState()
     {
         if ((playerMachine.playerCM.IsGrounded.current && playerMachine.GetCurrentState() == playerMachine.fallState) ||
             (UserInput.Instance.Move() == Vector3.zero && playerMachine.GetCurrentState() == playerMachine.runState))
@@ -232,7 +182,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToRunState()
+    public BasicState CheckToRunState()
     {
         if (UserInput.Instance.Move() != Vector3.zero && playerMachine.abilities.movementBehavior.Unlocked)
         {
@@ -241,7 +191,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToDoubleJumpState()
+    public BasicState CheckToDoubleJumpState()
     {
         if (jumpPressed.value && playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady &&
             playerMachine.currentState == playerMachine.fallState)
@@ -257,7 +207,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToGroundPoundState()
+    public BasicState CheckToGroundPoundState()
     {
         if (groundPoundPressed.value &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
@@ -274,7 +224,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToGrappleGroundPoundState()
+    public BasicState CheckToGrappleGroundPoundState()
     {
         if (groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleState)
         {
@@ -306,7 +256,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToUpwardDashState()
+    public BasicState CheckToUpwardDashState()
     {
         if (upwardDashPressed.value && playerMachine.abilities.upwardDashBehavior.UnlockedAndReady)
         {
@@ -319,7 +269,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToFullStopState()
+    public BasicState CheckToFullStopState()
     {
         if (fullStopPressed.value && playerMachine.abilities.fullstopBehavior.UnlockedAndReady)
         {
@@ -328,7 +278,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToBurstState()
+    public BasicState CheckToBurstState()
     {
         if (burstPressed.value && playerMachine.abilities.burstBehavior.UnlockedAndReady)
         {
@@ -341,7 +291,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToGrapplePoleState()
+    public BasicState CheckToGrapplePoleState()
     {
         if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
         {
@@ -354,7 +304,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransitionToWallRunState()
+    public BasicState CheckToWallRunState()
     {
         if (playerMachine.abilities.wallRunBehavior.Unlocked)
         {
@@ -368,7 +318,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransistionToWallRunWallClimbingState()
+    public BasicState CheckToWallRunWallClimbingState()
     {
         bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
         // Wall Climb
@@ -379,7 +329,7 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    private BasicState ShouldTransistionToWallRunWallJumpState()
+    public BasicState CheckToWallRunWallJumpState()
     {
         if (jumpPressed.value)
         {
@@ -387,8 +337,4 @@ public class PlayerStatesTransitions
         }
         return null;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

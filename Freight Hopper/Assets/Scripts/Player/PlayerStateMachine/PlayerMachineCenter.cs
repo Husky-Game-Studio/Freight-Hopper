@@ -40,114 +40,114 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
         // Idle Transitions
         List<Func<BasicState>> idleTransitionsList = new List<Func<BasicState>>();
-        idleTransitionsList.Add(transitionHandler.checkToRunState);
-        idleTransitionsList.Add(transitionHandler.checkToJumpState);
-        idleTransitionsList.Add(transitionHandler.checkToFallState);
-        idleTransitionsList.Add(transitionHandler.checkToGroundPoundState);
-        idleTransitionsList.Add(transitionHandler.checkToFullStopState);
-        idleTransitionsList.Add(transitionHandler.checkToBurstState);
-        idleTransitionsList.Add(transitionHandler.checkToUpwardDashState);
-        idleTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
+        idleTransitionsList.Add(transitionHandler.CheckToRunState);
+        idleTransitionsList.Add(transitionHandler.CheckToJumpState);
+        idleTransitionsList.Add(transitionHandler.CheckToFallState);
+        idleTransitionsList.Add(transitionHandler.CheckToGroundPoundState);
+        idleTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        idleTransitionsList.Add(transitionHandler.CheckToBurstState);
+        idleTransitionsList.Add(transitionHandler.CheckToUpwardDashState);
+        idleTransitionsList.Add(transitionHandler.CheckToGrapplePoleState);
         idleState = new IdleState(this, idleTransitionsList);
 
         // Run Transitions
         List<Func<BasicState>> runTransitionsList = new List<Func<BasicState>>();
-        runTransitionsList.Add(transitionHandler.checkToIdleState);
-        runTransitionsList.Add(transitionHandler.checkToJumpState);
-        runTransitionsList.Add(transitionHandler.checkToFallState);
-        runTransitionsList.Add(transitionHandler.checkToGroundPoundState);
-        runTransitionsList.Add(transitionHandler.checkToFullStopState);
-        runTransitionsList.Add(transitionHandler.checkToBurstState);
-        runTransitionsList.Add(transitionHandler.checkToUpwardDashState);
-        runTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
+        runTransitionsList.Add(transitionHandler.CheckToIdleState);
+        runTransitionsList.Add(transitionHandler.CheckToJumpState);
+        runTransitionsList.Add(transitionHandler.CheckToFallState);
+        runTransitionsList.Add(transitionHandler.CheckToGroundPoundState);
+        runTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        runTransitionsList.Add(transitionHandler.CheckToBurstState);
+        runTransitionsList.Add(transitionHandler.CheckToUpwardDashState);
+        runTransitionsList.Add(transitionHandler.CheckToGrapplePoleState);
         runState = new RunState(this, runTransitionsList);
 
         // Jump Transitions
         List<Func<BasicState>> jumpTransitionsList = new List<Func<BasicState>>();
-        jumpTransitionsList.Add(transitionHandler.checkToFallState);
-        jumpTransitionsList.Add(transitionHandler.checkToGroundPoundState);
-        jumpTransitionsList.Add(transitionHandler.checkToFullStopState);
-        jumpTransitionsList.Add(transitionHandler.checkToBurstState);
-        jumpTransitionsList.Add(transitionHandler.checkToUpwardDashState);
-        jumpTransitionsList.Add(transitionHandler.checkToWallRunState);
-        jumpTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
+        jumpTransitionsList.Add(transitionHandler.CheckToFallState);
+        jumpTransitionsList.Add(transitionHandler.CheckToGroundPoundState);
+        jumpTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        jumpTransitionsList.Add(transitionHandler.CheckToBurstState);
+        jumpTransitionsList.Add(transitionHandler.CheckToUpwardDashState);
+        jumpTransitionsList.Add(transitionHandler.CheckToWallRunState);
+        jumpTransitionsList.Add(transitionHandler.CheckToGrapplePoleState);
         jumpState = new JumpState(this, jumpTransitionsList);
 
         // Fall Transitions
         List<Func<BasicState>> fallTransitionsList = new List<Func<BasicState>>();
-        fallTransitionsList.Add(transitionHandler.checkToIdleState);
-        fallTransitionsList.Add(transitionHandler.checkToJumpState);
-        fallTransitionsList.Add(transitionHandler.checkToDoubleJumpState);
-        fallTransitionsList.Add(transitionHandler.checkToGroundPoundState);
-        fallTransitionsList.Add(transitionHandler.checkToFullStopState);
-        fallTransitionsList.Add(transitionHandler.checkToBurstState);
-        fallTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
-        fallTransitionsList.Add(transitionHandler.checkToUpwardDashState);
-        fallTransitionsList.Add(transitionHandler.checkToWallRunState);
+        fallTransitionsList.Add(transitionHandler.CheckToIdleState);
+        fallTransitionsList.Add(transitionHandler.CheckToJumpState);
+        fallTransitionsList.Add(transitionHandler.CheckToDoubleJumpState);
+        fallTransitionsList.Add(transitionHandler.CheckToGroundPoundState);
+        fallTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        fallTransitionsList.Add(transitionHandler.CheckToBurstState);
+        fallTransitionsList.Add(transitionHandler.CheckToGrapplePoleState);
+        fallTransitionsList.Add(transitionHandler.CheckToUpwardDashState);
+        fallTransitionsList.Add(transitionHandler.CheckToWallRunState);
         fallState = new FallState(this, fallTransitionsList);
 
         // Double Jump Transitions
         List<Func<BasicState>> doubleJumpTransitionsList = new List<Func<BasicState>>();
-        doubleJumpTransitionsList.Add(transitionHandler.checkToFallState);
-        doubleJumpTransitionsList.Add(transitionHandler.checkToGroundPoundState);
-        doubleJumpTransitionsList.Add(transitionHandler.checkToFullStopState);
-        doubleJumpTransitionsList.Add(transitionHandler.checkToBurstState);
-        doubleJumpTransitionsList.Add(transitionHandler.checkToUpwardDashState);
-        doubleJumpTransitionsList.Add(transitionHandler.checkToWallRunState);
-        doubleJumpTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
-        doubleJumpTransitionsList.Add(transitionHandler.checkToWallRunState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToFallState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToGroundPoundState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToBurstState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToUpwardDashState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToWallRunState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToGrapplePoleState);
+        doubleJumpTransitionsList.Add(transitionHandler.CheckToWallRunState);
         doubleJumpState = new DoubleJumpState(this, doubleJumpTransitionsList);
 
         // Full Stop Transitions
         List<Func<BasicState>> fullStopTransitionsList = new List<Func<BasicState>>();
-        fullStopTransitionsList.Add(transitionHandler.checkToFallState);
+        fullStopTransitionsList.Add(transitionHandler.CheckToFallState);
         fullStopState = new FullStopState(this, fullStopTransitionsList);
 
         // Grapple Pole Transitions
         List<Func<BasicState>> grapplePoleTransistionsList = new List<Func<BasicState>>();
-        grapplePoleTransistionsList.Add(transitionHandler.checkToFallState);
-        grapplePoleTransistionsList.Add(transitionHandler.checkToJumpState);
+        grapplePoleTransistionsList.Add(transitionHandler.CheckToFallState);
+        grapplePoleTransistionsList.Add(transitionHandler.CheckToJumpState);
         grapplePoleState = new GrapplePoleState(this, grapplePoleTransistionsList);
 
         // Grapple Pole Anchor Transitions
         List<Func<BasicState>> GrapplePoleAnchorTransitions = new List<Func<BasicState>>();
-        GrapplePoleAnchorTransitions.Add(transitionHandler.checkToGrappleGroundPoundState);
+        GrapplePoleAnchorTransitions.Add(transitionHandler.CheckToGrappleGroundPoundState);
         grapplePoleState.GetSubStateArray()[0] = new GrapplePoleAnchoredState(this, GrapplePoleAnchorTransitions);
 
         // Ground Pound Transitions
         List<Func<BasicState>> groundPoundTransitionsList = new List<Func<BasicState>>();
-        groundPoundTransitionsList.Add(transitionHandler.checkToFallState);
-        groundPoundTransitionsList.Add(transitionHandler.checkToJumpState);
-        groundPoundTransitionsList.Add(transitionHandler.checkToFullStopState);
-        groundPoundTransitionsList.Add(transitionHandler.checkToUpwardDashState);
-        groundPoundTransitionsList.Add(transitionHandler.checkToDoubleJumpState);
-        groundPoundTransitionsList.Add(transitionHandler.checkToGrappleGroundPoundState);
+        groundPoundTransitionsList.Add(transitionHandler.CheckToFallState);
+        groundPoundTransitionsList.Add(transitionHandler.CheckToJumpState);
+        groundPoundTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        groundPoundTransitionsList.Add(transitionHandler.CheckToUpwardDashState);
+        groundPoundTransitionsList.Add(transitionHandler.CheckToDoubleJumpState);
+        groundPoundTransitionsList.Add(transitionHandler.CheckToGrappleGroundPoundState);
         groundPoundState = new GroundPoundState(this, groundPoundTransitionsList);
 
         // Upward Dash Transitions
         List<Func<BasicState>> upwardDashTransitionsList = new List<Func<BasicState>>();
-        upwardDashTransitionsList.Add(transitionHandler.checkToFallState);
-        upwardDashTransitionsList.Add(transitionHandler.checkToFullStopState);
-        upwardDashTransitionsList.Add(transitionHandler.checkToGroundPoundState);
-        upwardDashTransitionsList.Add(transitionHandler.checkToDoubleJumpState);
-        upwardDashTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
+        upwardDashTransitionsList.Add(transitionHandler.CheckToFallState);
+        upwardDashTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        upwardDashTransitionsList.Add(transitionHandler.CheckToGroundPoundState);
+        upwardDashTransitionsList.Add(transitionHandler.CheckToDoubleJumpState);
+        upwardDashTransitionsList.Add(transitionHandler.CheckToGrapplePoleState);
         upwardDashState = new UpwardDashState(this, upwardDashTransitionsList);
 
         // Wall Run Transisitons
         List<Func<BasicState>> wallRunTransitionsList = new List<Func<BasicState>>();
-        wallRunTransitionsList.Add(transitionHandler.checkToFallState);
-        wallRunTransitionsList.Add(transitionHandler.checkToIdleState);
-        wallRunTransitionsList.Add(transitionHandler.checkToGrapplePoleState);
-        wallRunTransitionsList.Add(transitionHandler.checkToFullStopState);
-        wallRunTransitionsList.Add(transitionHandler.checkToGroundPoundState);
-        wallRunTransitionsList.Add(transitionHandler.checkToBurstState);
-        wallRunTransitionsList.Add(transitionHandler.checkToUpwardDashState);
+        wallRunTransitionsList.Add(transitionHandler.CheckToFallState);
+        wallRunTransitionsList.Add(transitionHandler.CheckToIdleState);
+        wallRunTransitionsList.Add(transitionHandler.CheckToGrapplePoleState);
+        wallRunTransitionsList.Add(transitionHandler.CheckToFullStopState);
+        wallRunTransitionsList.Add(transitionHandler.CheckToGroundPoundState);
+        wallRunTransitionsList.Add(transitionHandler.CheckToBurstState);
+        wallRunTransitionsList.Add(transitionHandler.CheckToUpwardDashState);
         wallRunState = new WallRunState(this, wallRunTransitionsList);
 
         // Wall Run Wall Running Transitions
         List<Func<BasicState>> wallRunSideWallRunningTransitions = new List<Func<BasicState>>();
-        wallRunSideWallRunningTransitions.Add(transitionHandler.checkToWallRunWallClimbingState);
-        wallRunSideWallRunningTransitions.Add(transitionHandler.checkToWallRunWallJumpState);
+        wallRunSideWallRunningTransitions.Add(transitionHandler.CheckToWallRunWallClimbingState);
+        wallRunSideWallRunningTransitions.Add(transitionHandler.CheckToWallRunWallJumpState);
         wallRunState.GetSubStateArray()[0] = new SideWallRunningState(this, wallRunSideWallRunningTransitions);
 
         // Burst Transitions
