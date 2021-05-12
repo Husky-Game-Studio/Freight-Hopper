@@ -62,7 +62,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         if (previousState != currentState)
         {
             previousState.ExitState();
-            currentState.EnterState();
+            currentState.EntryState();
             previousState = currentState;
         }
     }

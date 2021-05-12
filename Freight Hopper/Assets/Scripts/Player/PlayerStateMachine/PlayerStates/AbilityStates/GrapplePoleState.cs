@@ -16,12 +16,12 @@ public class GrapplePoleState : PlayerState
         miniStateArray = new BasicState[4];
         miniStateArray[0] = null;
         miniStateArray[1] = new GrappleGroundPoundState(playerMachineCenter, myTransitions);
-        miniStateArray[2] = new GrappleBurst(playerMachineCenter, null);
-        miniStateArray[3] = new GrappleFullstop(playerMachineCenter, myTransitions);
+        miniStateArray[2] = new GrappleBurstState(playerMachineCenter, null);
+        miniStateArray[3] = new GrappleFullstopState(playerMachineCenter, myTransitions);
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, playerMachineCenter);
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         if (transitioningFromGroundPound)
         {
@@ -33,13 +33,12 @@ public class GrapplePoleState : PlayerState
             pSSMC.SetPrevCurrState(miniStateArray[0]);
         }
 
-        pSSMC.GetCurrentSubState().EnterState();
+        pSSMC.GetCurrentSubState().EntryState();
     }
 
     public override void ExitState()
     {
         pSSMC.GetCurrentSubState().ExitState();
-        playerMachineCenter.abilities.grapplePoleBehavior.ExitAction();
     }
 
     public override BasicState TransitionState()

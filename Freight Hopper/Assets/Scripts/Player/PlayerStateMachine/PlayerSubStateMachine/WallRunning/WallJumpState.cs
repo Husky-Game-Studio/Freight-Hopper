@@ -7,7 +7,7 @@ public class WallJumpState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         playerMachineCenter.abilities.wallRunBehavior.jumpHoldingTimer.ResetTimer();
         playerMachineCenter.abilities.wallRunBehavior.WallJumpInitial();

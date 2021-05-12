@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
     public static event Action PlayerLoadedIn;
 
     private static Player instance;
+
+    // If there is a null reference error try subscribing to the PlayerLoadedIn event
     public static Player Instance { get => instance; set => _ = instance; }
 
     private void Awake()

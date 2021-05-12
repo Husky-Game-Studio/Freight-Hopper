@@ -7,7 +7,7 @@ public class DoubleJumpState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         // reset jump hold timer
         playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.ResetTimer();

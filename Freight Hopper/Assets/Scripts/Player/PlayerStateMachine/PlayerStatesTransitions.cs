@@ -244,7 +244,8 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToGrappleGroundPoundState()
     {
-        if (groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleState)
+        if (groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleState ||
+            grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState)
         {
             if ((playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
                 playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
@@ -254,23 +255,10 @@ public class PlayerStatesTransitions
                     playerMachine.abilities.groundPoundBehavior.PreventConsumption();
                 }
 
-                return playerMachine.grapplePoleState.GetSubStateArray()[1];
+                return playerMachine.grapplePoleGroundPoundState;
             }
         }
-        if (grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState)
-        {
-            if ((playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-                playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
-            {
-                if (playerMachine.playerCM.IsGrounded.current)
-                {
-                    playerMachine.abilities.groundPoundBehavior.PreventConsumption();
-                }
-                GrapplePoleState state = playerMachine.grapplePoleState;
-                state.TransitioningFromGroundPound();
-                return playerMachine.grapplePoleState;
-            }
-        }
+
         return null;
     }
 
@@ -300,7 +288,7 @@ public class PlayerStatesTransitions
     {
         if (fullStopPressed.value && playerMachine.abilities.fullstopBehavior.UnlockedAndReady)
         {
-            return playerMachine.grapplePoleState.GetSubStateArray()[3];
+            return playerMachine.grapplePoleFullStopState;
         }
         return null;
     }
@@ -326,12 +314,12 @@ public class PlayerStatesTransitions
             {
                 playerMachine.abilities.burstBehavior.PreventConsumption();
             }
-            return playerMachine.grapplePoleState.GetSubStateArray()[2];
+            return playerMachine.grapplePoleBurstState;
         }
         return null;
     }
 
-    public BasicState CheckToGrapplePoleState()
+    public BasicState CheckToGrapplePoleAnchoredState()
     {
         if (playerMachine.abilities.grapplePoleBehavior.IsAnchored())
         {
@@ -339,7 +327,15 @@ public class PlayerStatesTransitions
             {
                 playerMachine.abilities.grapplePoleBehavior.PreventConsumption();
             }
-            return playerMachine.grapplePoleState;
+            if (playerMachine.currentState == playerMachine.grapplePoleFullStopState && !playerMachine.abilities.fullstopBehavior.FullStopFinished())
+            {
+                return null;
+            }
+            if (playerMachine.currentState == playerMachine.grapplePoleGroundPoundState && !groundPoundReleased.value)
+            {
+                return null;
+            }
+            return playerMachine.grapplePoleAnchoredState;
         }
         return null;
     }

@@ -7,7 +7,7 @@ public class GrappleGroundPoundState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
     }
@@ -24,6 +24,14 @@ public class GrappleGroundPoundState : PlayerState
 
     public override void PerformBehavior()
     {
+        playerMachineCenter.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
         playerMachineCenter.abilities.groundPoundBehavior.Action();
+
+        if (playerMachineCenter.playerCM.IsGrounded.current && !playerMachineCenter.playerCM.IsGrounded.old)
+        {
+            playerMachineCenter.abilities.Recharge();
+            playerMachineCenter.abilities.groundPoundBehavior.PreventConsumption();
+            playerMachineCenter.abilities.grapplePoleBehavior.PreventConsumption();
+        }
     }
 }

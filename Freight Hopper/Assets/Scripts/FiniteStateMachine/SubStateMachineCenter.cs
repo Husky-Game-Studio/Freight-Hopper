@@ -29,7 +29,7 @@ public abstract class SubStateMachineCenter
         // If current state is a new transisiton, unsub from old listeners, and sub to new ones
         if (previousState != currentState)
         {
-            currentState.EnterState();
+            currentState.EntryState();
             previousState.ExitState();
             previousState = currentState;
         }

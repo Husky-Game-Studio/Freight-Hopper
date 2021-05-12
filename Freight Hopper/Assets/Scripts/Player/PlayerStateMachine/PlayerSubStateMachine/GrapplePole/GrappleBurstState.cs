@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System;
 
-public class GrappleBurst : PlayerState
+public class GrappleBurstState : PlayerState
 {
-    public GrappleBurst(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
+    public GrappleBurstState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
     }
 
@@ -14,7 +14,7 @@ public class GrappleBurst : PlayerState
 
     public override BasicState TransitionState()
     {
-        return playerMachineCenter.grapplePoleState.GetSubStateArray()[0];
+        return playerMachineCenter.grapplePoleAnchoredState;
     }
 
     public override void PerformBehavior()

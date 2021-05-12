@@ -7,7 +7,7 @@ public class GroundPoundState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
     }

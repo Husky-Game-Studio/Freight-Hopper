@@ -7,7 +7,7 @@ public class FallState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         if (playerMachineCenter.GetPreviousState() != playerMachineCenter.jumpState)
         {

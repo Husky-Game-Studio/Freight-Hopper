@@ -7,7 +7,7 @@ public class WallClimbingState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         playerMachineCenter.abilities.wallRunBehavior.InitialWallClimb();
     }

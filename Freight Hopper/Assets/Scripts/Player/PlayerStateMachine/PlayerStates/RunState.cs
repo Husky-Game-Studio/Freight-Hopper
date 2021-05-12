@@ -7,7 +7,7 @@ public class RunState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
     }

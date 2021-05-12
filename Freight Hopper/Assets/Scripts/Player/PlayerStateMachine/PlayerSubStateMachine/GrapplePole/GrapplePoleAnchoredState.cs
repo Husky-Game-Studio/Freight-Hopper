@@ -7,6 +7,16 @@ public class GrapplePoleAnchoredState : PlayerState
     {
     }
 
+    public override void EntryState()
+    {
+        playerMachineCenter.abilities.grapplePoleBehavior.EntryAction();
+    }
+
+    public override void ExitState()
+    {
+        playerMachineCenter.abilities.grapplePoleBehavior.ExitAction();
+    }
+
     public override BasicState TransitionState()
     {
         return CheckTransitions();
@@ -14,5 +24,12 @@ public class GrapplePoleAnchoredState : PlayerState
 
     public override void PerformBehavior()
     {
+        playerMachineCenter.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
+
+        if (playerMachineCenter.playerCM.IsGrounded.current && !playerMachineCenter.playerCM.IsGrounded.old)
+        {
+            playerMachineCenter.abilities.Recharge();
+            playerMachineCenter.abilities.grapplePoleBehavior.PreventConsumption();
+        }
     }
 }

@@ -15,12 +15,13 @@ public abstract class BasicState
         this.stateTransitions = stateTransitions;
     }
 
-    public BasicState(FiniteStateMachineCenter machineCenter) {
+    public BasicState(FiniteStateMachineCenter machineCenter)
+    {
         this.machineCenter = machineCenter;
         this.stateTransitions = null;
     }
 
-    public virtual void EnterState()
+    public virtual void EntryState()
     {
     }
 

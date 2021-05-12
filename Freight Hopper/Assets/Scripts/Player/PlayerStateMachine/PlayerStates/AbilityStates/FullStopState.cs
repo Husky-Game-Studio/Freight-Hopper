@@ -7,7 +7,7 @@ public class FullStopState : PlayerState
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         playerMachineCenter.abilities.fullstopBehavior.EntryAction();
     }

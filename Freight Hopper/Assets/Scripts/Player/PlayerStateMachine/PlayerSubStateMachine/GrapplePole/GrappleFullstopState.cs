@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System;
 
-public class GrappleFullstop : PlayerState
+public class GrappleFullstopState : PlayerState
 {
-    public GrappleFullstop(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
+    public GrappleFullstopState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         playerMachineCenter.abilities.fullstopBehavior.EntryAction();
     }
@@ -19,7 +19,7 @@ public class GrappleFullstop : PlayerState
 
     public override BasicState TransitionState()
     {
-        return this;
+        return CheckTransitions();
     }
 
     public override void PerformBehavior()

@@ -16,10 +16,10 @@ public class WallRunState : PlayerState
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, playerMachineCenter);
     }
 
-    public override void EnterState()
+    public override void EntryState()
     {
         pSSMC.SetPrevCurrState(miniStateArray[0]);
-        pSSMC.GetCurrentSubState().EnterState();
+        pSSMC.GetCurrentSubState().EntryState();
         playerMachineCenter.abilities.wallRunBehavior.EntryAction();
     }
 
