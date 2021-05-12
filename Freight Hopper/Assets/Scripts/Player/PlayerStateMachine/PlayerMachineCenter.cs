@@ -27,7 +27,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public FullStopState fullStopState;
     public UpwardDashState upwardDashState;
     public WallRunState wallRunState;
-    public GrapplePoleState grapplePoleState;
     public GrapplePoleAnchoredState grapplePoleAnchoredState;
     public GrappleGroundPoundState grapplePoleGroundPoundState;
     public GrappleFullstopState grapplePoleFullStopState;
@@ -232,7 +231,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void GrappleFiring()
     {
-        if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.UnlockedAndReady && previousState.GetType() != typeof(GrapplePoleState))
+        if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.UnlockedAndReady && previousState.GetType() != typeof(GrapplePoleAnchoredState))
         {
             if (grappleFiring)
             {

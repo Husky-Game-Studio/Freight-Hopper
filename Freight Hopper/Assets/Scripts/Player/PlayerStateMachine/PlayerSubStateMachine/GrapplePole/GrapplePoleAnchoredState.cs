@@ -9,11 +9,16 @@ public class GrapplePoleAnchoredState : PlayerState
 
     public override void EntryState()
     {
-        playerMachineCenter.abilities.grapplePoleBehavior.EntryAction();
     }
 
     public override void ExitState()
     {
+        if (playerMachineCenter.currentState == playerMachineCenter.grapplePoleBurstState ||
+            playerMachineCenter.currentState == playerMachineCenter.grapplePoleFullStopState ||
+            playerMachineCenter.currentState == playerMachineCenter.grapplePoleGroundPoundState)
+        {
+            return;
+        }
         playerMachineCenter.abilities.grapplePoleBehavior.ExitAction();
     }
 

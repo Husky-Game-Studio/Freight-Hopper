@@ -111,7 +111,7 @@ public class PlayerStatesTransitions
         // Grapple
         if ((grapplePressed.value || (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() &&
             playerMachine.abilities.grapplePoleBehavior.IsAnchored())) &&
-            (playerMachine.currentState == playerMachine.grapplePoleState))
+            (playerMachine.currentState == playerMachine.grapplePoleAnchoredState))
         {
             return playerMachine.fallState;
         }
@@ -178,7 +178,7 @@ public class PlayerStatesTransitions
         }
 
         // Grapple Pole
-        if (jumpPressed.value && playerMachine.currentState == playerMachine.grapplePoleState)
+        if (jumpPressed.value && playerMachine.currentState == playerMachine.grapplePoleAnchoredState)
         {
             return playerMachine.jumpState;
         }
@@ -244,7 +244,7 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToGrappleGroundPoundState()
     {
-        if (groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleState ||
+        if (groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleAnchoredState ||
             grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState)
         {
             if ((playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
@@ -327,13 +327,21 @@ public class PlayerStatesTransitions
             {
                 playerMachine.abilities.grapplePoleBehavior.PreventConsumption();
             }
-            if (playerMachine.currentState == playerMachine.grapplePoleFullStopState && !playerMachine.abilities.fullstopBehavior.FullStopFinished())
+
+            if (playerMachine.currentState == playerMachine.grapplePoleFullStopState)
             {
-                return null;
+                if (!playerMachine.abilities.fullstopBehavior.FullStopFinished())
+                {
+                    return null;
+                }
             }
-            if (playerMachine.currentState == playerMachine.grapplePoleGroundPoundState && !groundPoundReleased.value)
+
+            if (playerMachine.currentState == playerMachine.grapplePoleGroundPoundState)
             {
-                return null;
+                if (!groundPoundReleased.value)
+                {
+                    return null;
+                }
             }
             return playerMachine.grapplePoleAnchoredState;
         }
