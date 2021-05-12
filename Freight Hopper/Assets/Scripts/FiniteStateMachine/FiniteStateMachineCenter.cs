@@ -70,8 +70,5 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     // Returns currentState field
     public BasicState GetCurrentState() { return currentState; }
 
-    public BasicState GetPreviousState()
-    {
-        return previousState;
-    }
+    public BasicState GetPreviousState() { return previousState; }
 }
