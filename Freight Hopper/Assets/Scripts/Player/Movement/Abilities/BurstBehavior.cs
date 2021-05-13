@@ -1,26 +1,15 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class BurstBehavior : AbilityBehavior
 {
-    [SerializeField] private float airBurstForce;
-
-    // with 0 being level with the ground
-    [Range(-90, 90)] [SerializeField] private float burstAngle;
-
-    [SerializeField] private float groundBurstForce;
-    [Range(-90, 90)] [SerializeField] private float groundBurstAngle;
-
-    [SerializeField] private float wallBurstForce;
-    [Range(-90, 90)] [SerializeField] private float wallBurstAngle;
+    [SerializeField] private Transform burstExplosionEffectTransform;
+    [SerializeField] private VisualEffect burstExplosionEffect;
+    [SerializeField] private float burstMaxDistance = 1.5f;
+    [SerializeField] private LayerMask targetedLayers;
+    [SerializeField] private float forceMultiplier = 2;
+    [SerializeField] private float velocityGainMultiplier = 1.5f;
     private Transform cameraTransform;
-
-    private void OnDrawGizmosSelected()
-    {
-        float radians = burstAngle * Mathf.Deg2Rad;
-        Vector3 direction = new Vector3(0, Mathf.Sin(radians), Mathf.Cos(radians));
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(this.transform.position, this.transform.TransformDirection(direction));
-    }
 
     private void Awake()
     {
@@ -31,29 +20,29 @@ public class BurstBehavior : AbilityBehavior
     {
     }
 
+    public override void ExitAction()
+    {
+        base.ExitAction();
+        burstExplosionEffect.Play();
+    }
+
     public override void Action()
     {
-        AirBurst();
-    }
+        float distanceFromExplosion = burstMaxDistance;
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, burstMaxDistance, targetedLayers))
+        {
+            distanceFromExplosion = (cameraTransform.position - hit.point).magnitude;
+        }
 
-    public void GroundBurst()
-    {
-        float radians = groundBurstAngle * Mathf.Deg2Rad;
-        Vector3 direction = new Vector3(0, Mathf.Sin(radians), Mathf.Cos(radians));
-        playerRb.AddForce(this.cameraTransform.TransformDirection(direction) * groundBurstForce, ForceMode.VelocityChange);
-    }
+        // Only velocity that is causing the player to go slower will be added to the burst force speed
+        Vector3 velocityFromDirection = Vector3.Project(playerRb.velocity, cameraTransform.forward);
+        if (Mathf.Sign(Vector3.Dot(velocityFromDirection, cameraTransform.forward)) == 1)
+        {
+            playerRb.AddForce(-cameraTransform.forward * velocityFromDirection.magnitude * velocityGainMultiplier, ForceMode.VelocityChange);
+        }
 
-    public void WallBurst()
-    {
-        float radians = wallBurstAngle * Mathf.Deg2Rad;
-        Vector3 direction = new Vector3(0, Mathf.Sin(radians), Mathf.Cos(radians));
-        playerRb.AddForce(this.cameraTransform.TransformDirection(direction) * wallBurstForce, ForceMode.VelocityChange);
-    }
-
-    public void AirBurst()
-    {
-        float radians = burstAngle * Mathf.Deg2Rad;
-        Vector3 direction = new Vector3(0, Mathf.Sin(radians), Mathf.Cos(radians));
-        playerRb.AddForce(this.cameraTransform.TransformDirection(direction) * airBurstForce, ForceMode.VelocityChange);
+        playerRb.AddForce(-cameraTransform.forward * forceMultiplier / distanceFromExplosion, ForceMode.VelocityChange);
+        burstExplosionEffectTransform.position = cameraTransform.position + cameraTransform.forward * distanceFromExplosion;
+        //Debug.DrawLine(playerRb.position, playerRb.position + direction, Color.red, 5);
     }
 }

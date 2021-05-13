@@ -7,6 +7,11 @@ public class GrappleBurstState : PlayerState
     {
     }
 
+    public override void EntryState()
+    {
+        playerMachineCenter.abilities.burstBehavior.EntryAction();
+    }
+
     public override void ExitState()
     {
         playerMachineCenter.abilities.burstBehavior.ExitAction();
@@ -19,20 +24,6 @@ public class GrappleBurstState : PlayerState
 
     public override void PerformBehavior()
     {
-        if (playerMachineCenter.playerCM.IsGrounded.current)
-        {
-            playerMachineCenter.abilities.burstBehavior.GroundBurst();
-        }
-        else
-        {
-            if (playerMachineCenter.abilities.wallRunBehavior.CheckWalls()[2])
-            {
-                playerMachineCenter.abilities.burstBehavior.WallBurst();
-            }
-            else
-            {
-                playerMachineCenter.abilities.burstBehavior.AirBurst();
-            }
-        }
+        playerMachineCenter.abilities.burstBehavior.Action();
     }
 }

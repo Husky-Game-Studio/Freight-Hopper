@@ -11,7 +11,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public InputActionAsset asset { get; }
     public @InputMaster()
     {
-        this.asset = InputActionAsset.FromJson(@"{
+        asset = InputActionAsset.FromJson(@"{
     ""name"": ""InputMaster"",
     ""maps"": [
         {
@@ -194,7 +194,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1e93637b-176f-472d-ae71-78c7ec8a5a4c"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -205,7 +205,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fc96117b-391c-44b2-808b-da68dc8961d7"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -241,7 +241,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     ""controlSchemes"": []
 }");
         // Player
-        m_Player = this.asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
@@ -255,31 +255,31 @@ public class @InputMaster : IInputActionCollection, IDisposable
 
     public void Dispose()
     {
-        UnityEngine.Object.Destroy(this.asset);
+        UnityEngine.Object.Destroy(asset);
     }
 
     public InputBinding? bindingMask
     {
-        get => this.asset.bindingMask;
-        set => this.asset.bindingMask = value;
+        get => asset.bindingMask;
+        set => asset.bindingMask = value;
     }
 
     public ReadOnlyArray<InputDevice>? devices
     {
-        get => this.asset.devices;
-        set => this.asset.devices = value;
+        get => asset.devices;
+        set => asset.devices = value;
     }
 
-    public ReadOnlyArray<InputControlScheme> controlSchemes => this.asset.controlSchemes;
+    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
 
     public bool Contains(InputAction action)
     {
-        return this.asset.Contains(action);
+        return asset.Contains(action);
     }
 
     public IEnumerator<InputAction> GetEnumerator()
     {
-        return this.asset.GetEnumerator();
+        return asset.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -289,12 +289,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
 
     public void Enable()
     {
-        this.asset.Enable();
+        asset.Enable();
     }
 
     public void Disable()
     {
-        this.asset.Disable();
+        asset.Disable();
     }
 
     // Player
@@ -331,64 +331,64 @@ public class @InputMaster : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
-                this.@Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                this.@Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                this.@Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                this.@Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                this.@Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                this.@Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                this.@Look.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                this.@Look.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                this.@Look.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                this.@Restart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
-                this.@Restart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
-                this.@Restart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
-                this.@GroundPound.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
-                this.@GroundPound.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
-                this.@GroundPound.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
-                this.@Burst.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
-                this.@Burst.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
-                this.@Burst.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
-                this.@UpwardDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
-                this.@UpwardDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
-                this.@UpwardDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
-                this.@FullStop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
-                this.@FullStop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
-                this.@FullStop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
-                this.@GrapplePole.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
-                this.@GrapplePole.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
-                this.@GrapplePole.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
+                @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Look.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
+                @Look.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
+                @Look.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
+                @Restart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
+                @Restart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
+                @Restart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
+                @GroundPound.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
+                @GroundPound.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
+                @GroundPound.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
+                @Burst.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
+                @Burst.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
+                @Burst.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
+                @UpwardDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
+                @UpwardDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
+                @UpwardDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
+                @FullStop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
+                @FullStop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
+                @FullStop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
+                @GrapplePole.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
+                @GrapplePole.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
+                @GrapplePole.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                this.@Movement.started += instance.OnMovement;
-                this.@Movement.performed += instance.OnMovement;
-                this.@Movement.canceled += instance.OnMovement;
-                this.@Jump.started += instance.OnJump;
-                this.@Jump.performed += instance.OnJump;
-                this.@Jump.canceled += instance.OnJump;
-                this.@Look.started += instance.OnLook;
-                this.@Look.performed += instance.OnLook;
-                this.@Look.canceled += instance.OnLook;
-                this.@Restart.started += instance.OnRestart;
-                this.@Restart.performed += instance.OnRestart;
-                this.@Restart.canceled += instance.OnRestart;
-                this.@GroundPound.started += instance.OnGroundPound;
-                this.@GroundPound.performed += instance.OnGroundPound;
-                this.@GroundPound.canceled += instance.OnGroundPound;
-                this.@Burst.started += instance.OnBurst;
-                this.@Burst.performed += instance.OnBurst;
-                this.@Burst.canceled += instance.OnBurst;
-                this.@UpwardDash.started += instance.OnUpwardDash;
-                this.@UpwardDash.performed += instance.OnUpwardDash;
-                this.@UpwardDash.canceled += instance.OnUpwardDash;
-                this.@FullStop.started += instance.OnFullStop;
-                this.@FullStop.performed += instance.OnFullStop;
-                this.@FullStop.canceled += instance.OnFullStop;
-                this.@GrapplePole.started += instance.OnGrapplePole;
-                this.@GrapplePole.performed += instance.OnGrapplePole;
-                this.@GrapplePole.canceled += instance.OnGrapplePole;
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
+                @Restart.started += instance.OnRestart;
+                @Restart.performed += instance.OnRestart;
+                @Restart.canceled += instance.OnRestart;
+                @GroundPound.started += instance.OnGroundPound;
+                @GroundPound.performed += instance.OnGroundPound;
+                @GroundPound.canceled += instance.OnGroundPound;
+                @Burst.started += instance.OnBurst;
+                @Burst.performed += instance.OnBurst;
+                @Burst.canceled += instance.OnBurst;
+                @UpwardDash.started += instance.OnUpwardDash;
+                @UpwardDash.performed += instance.OnUpwardDash;
+                @UpwardDash.canceled += instance.OnUpwardDash;
+                @FullStop.started += instance.OnFullStop;
+                @FullStop.performed += instance.OnFullStop;
+                @FullStop.canceled += instance.OnFullStop;
+                @GrapplePole.started += instance.OnGrapplePole;
+                @GrapplePole.performed += instance.OnGrapplePole;
+                @GrapplePole.canceled += instance.OnGrapplePole;
             }
         }
     }
