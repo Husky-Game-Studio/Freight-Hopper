@@ -19,7 +19,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     public abstract void OnDisable();
 
     // Pefromed each LateFixedUpdate
-    public void LateFixedUpdate()
+    public void UpdateLoop()
     {
         // perform anything that is independent of being in any one single state
         this.PerformStateIndependentBehaviors();

@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 
     private static Player instance;
 
+    public static bool loadedIn = false;
+
     // If there is a null reference error try subscribing to the PlayerLoadedIn event
     public static Player Instance { get => instance; set => _ = instance; }
 
@@ -21,5 +23,6 @@ public class Player : MonoBehaviour
             instance = this;
         }
         PlayerLoadedIn?.Invoke();
+        loadedIn = true;
     }
 }

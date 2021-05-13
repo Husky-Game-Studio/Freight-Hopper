@@ -9,6 +9,6 @@ public class SearchState : BasicState
     {
         this.turretMachineCenter = turretMachineCenter;
     }
-    public override BasicState TransitionState() { return null; }
+    public override BasicState TransitionState() { return this; }
     public override void PerformBehavior() {}
 }

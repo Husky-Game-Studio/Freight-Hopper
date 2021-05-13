@@ -19,32 +19,48 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         searchState = new SearchState(this);
         targetState = new TargetState(this);
         fireState = new FireState(this);
+
+        
+
+        if (Player.loadedIn) {
+            setPlayerReference();
+        }
+        else {
+            Player.PlayerLoadedIn += setPlayerReference;
+        }
     }
 
-    // Get other components so this gameobject to use them
+    // Get other components to use them
     public override void OnValidate() {
-        if (thePlayer == null) {
-            //thePlayer = Player.Instance.transform.gameObject;
-            //Debug.Log("The Player found by Turret: " + (thePlayer != null));
-        }
+        
     }
 
     // Assign initial state and subscribe to any event listeners
     public override void OnEnable() {
         //thePlayer = Player.Instance.transform.gameObject;
         //Debug.Log("The Player found by Turret: " + (thePlayer != null));
+        this.currentState = searchState;
+        this.previousState = searchState;
+        this.currentState.EntryState();
     }
 
     // Unsubscribe from any assigned event listeners
-    public override void OnDisable() {}
+    public override void OnDisable() {
+        Player.PlayerLoadedIn -= setPlayerReference;
+    }
+
+    private void setPlayerReference() {
+        thePlayer = Player.Instance.transform.gameObject;
+    }
 
     // Perform any behavior that is not exclusive to any one single state
     public override void PerformStateIndependentBehaviors() {
-        Debug.Log("test");
         if (thePlayer == null) {
-            //thePlayer = Player.Instance.transform.gameObject;
-            //Debug.Log("The Player found by Turret: " + (thePlayer != null) + " on " + Time.time);
+            setPlayerReference();
         }
     }
+    
+    public void FixedUpdate(){
+        this.UpdateLoop();
+    }
 }
-

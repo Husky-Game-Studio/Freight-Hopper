@@ -192,7 +192,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         currentState = idleState;
         previousState = idleState;
         currentState.EntryState();
-        playerCM.CollisionDataCollected += LateFixedUpdate;
+        playerCM.CollisionDataCollected += UpdateLoop;
 
         LevelController.PlayerRespawned += PlayerSpawned;
     }
@@ -200,7 +200,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public override void OnDisable()
     {
         currentState.ExitState();
-        playerCM.CollisionDataCollected -= LateFixedUpdate;
+        playerCM.CollisionDataCollected -= UpdateLoop;
 
         LevelController.PlayerRespawned -= PlayerSpawned;
     }
