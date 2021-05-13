@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class TurretMachineCenter : FiniteStateMachineCenter
 {
-    // The Player Character, set in the inspector
+    // The Player Character and Information
     public GameObject thePlayer;
+    public RaycastHit toPlayerRaycast;
+    public LayerMask targetedLayers;
     
     // TFSM States
     public BasicState searchState;
@@ -20,25 +22,19 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         targetState = new TargetState(this);
         fireState = new FireState(this);
 
-        
-
         if (Player.loadedIn) {
-            setPlayerReference();
+            SetPlayerReference();
         }
         else {
-            Player.PlayerLoadedIn += setPlayerReference;
+            Player.PlayerLoadedIn += SetPlayerReference;
         }
     }
 
     // Get other components to use them
-    public override void OnValidate() {
-        
-    }
+    public override void OnValidate() {}
 
     // Assign initial state and subscribe to any event listeners
     public override void OnEnable() {
-        //thePlayer = Player.Instance.transform.gameObject;
-        //Debug.Log("The Player found by Turret: " + (thePlayer != null));
         this.currentState = searchState;
         this.previousState = searchState;
         this.currentState.EntryState();
@@ -46,21 +42,31 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     // Unsubscribe from any assigned event listeners
     public override void OnDisable() {
-        Player.PlayerLoadedIn -= setPlayerReference;
-    }
-
-    private void setPlayerReference() {
-        thePlayer = Player.Instance.transform.gameObject;
+        Player.PlayerLoadedIn -= SetPlayerReference;
     }
 
     // Perform any behavior that is not exclusive to any one single state
     public override void PerformStateIndependentBehaviors() {
         if (thePlayer == null) {
-            setPlayerReference();
+            SetPlayerReference();
+        } else {
+            Ray ray = new Ray(this.gameObject.transform.position, thePlayer.transform.position);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, targetedLayers))
+            {
+                if (hit.rigidbody != null && hit.rigidbody.tag.Equals("Player")) {
+
+                }
+            }
         }
     }
     
+    // Calls the loop tick
     public void FixedUpdate(){
         this.UpdateLoop();
+    }
+
+    // Sets the player reference
+    private void SetPlayerReference() {
+        thePlayer = Player.Instance.transform.gameObject;
     }
 }
