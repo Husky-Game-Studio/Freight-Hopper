@@ -49,14 +49,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public override void PerformStateIndependentBehaviors() {
         if (thePlayer == null) {
             SetPlayerReference();
-        } else {
-            Ray ray = new Ray(this.gameObject.transform.position, thePlayer.transform.position);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, targetedLayers))
-            {
-                if (hit.rigidbody != null && hit.rigidbody.tag.Equals("Player")) {
-
-                }
-            }
         }
     }
     
