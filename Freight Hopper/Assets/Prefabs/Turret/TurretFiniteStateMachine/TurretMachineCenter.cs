@@ -8,6 +8,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public GameObject thePlayer;
     public RaycastHit toPlayerRaycast;
     public LayerMask targetedLayers;
+    public GameObject bullet;
     
     // TFSM States
     public BasicState searchState;
@@ -60,5 +61,11 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     // Sets the player reference
     private void SetPlayerReference() {
         thePlayer = Player.Instance.transform.gameObject;
+    }
+
+    // Fire Projectile
+    public void shootBullet(GameObject spawner) {
+        GameObject spawnedBullet = Instantiate(bullet, spawner.transform.position, Quaternion.identity);
+        spawnedBullet.transform.LookAt(thePlayer.transform);
     }
 }

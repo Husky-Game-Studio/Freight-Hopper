@@ -5,9 +5,13 @@ using UnityEngine;
 public class FireState : BasicState
 {
     protected TurretMachineCenter turretMachineCenter;
+    private GameObject bulletSpawner;
+
     public FireState(TurretMachineCenter turretMachineCenter) : base(turretMachineCenter)
     {
         this.turretMachineCenter = turretMachineCenter;
+
+        bulletSpawner = turretMachineCenter.gameObject.transform.Find("Barrel_Base").transform.Find("Turret_Barrel").transform.Find("Bullet_Spawner").gameObject;
     }
 
     // Only in this state for one tick
@@ -23,7 +27,8 @@ public class FireState : BasicState
         return turretMachineCenter.targetState;
     }
 
+    // Fire Projectile
     public override void PerformBehavior() {
-        //Debug.Log("Fire");
+        turretMachineCenter.shootBullet(bulletSpawner);
     }
 }
