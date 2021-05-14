@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "Sound", menuName = "Scriptable Objects/Sound")]
 public class Sound : ScriptableObject
@@ -25,11 +26,15 @@ public class Sound : ScriptableObject
     public bool isLoop;
     public bool hasCooldown;
 
+    [Range(0f, 1f)]
+    public float spatialBlend = 0;
+
     [Min(0)]
     public float delay = 0f;
 
     [Range(0, 256), Tooltip("Lower is higher priority")]
     public int priority = 128;
 
-    [HideInInspector] public AudioSource source;
+    [HideInInspector] public AudioSource componentAudioSource;
+    [HideInInspector] public Dictionary<Vector3, AudioSource> audioSources = new Dictionary<Vector3, AudioSource>();
 }

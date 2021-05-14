@@ -42,7 +42,9 @@ public class BurstBehavior : AbilityBehavior
         }
 
         playerRb.AddForce(-cameraTransform.forward * forceMultiplier / distanceFromExplosion, ForceMode.VelocityChange);
-        burstExplosionEffectTransform.position = cameraTransform.position + cameraTransform.forward * distanceFromExplosion;
+        Vector3 burstPosition = cameraTransform.position + cameraTransform.forward * distanceFromExplosion;
+        playerSM.Play("Burst Explosion", burstPosition);
+        burstExplosionEffectTransform.position = burstPosition;
         //Debug.DrawLine(playerRb.position, playerRb.position + direction, Color.red, 5);
     }
 }

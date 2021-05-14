@@ -13,7 +13,7 @@ public class SoundManager : MonoBehaviour
 
     protected void CreateAudioSource(Sound sound)
     {
-        sound.source = this.gameObject.AddComponent<AudioSource>();
+        sound.componentAudioSource = this.gameObject.AddComponent<AudioSource>();
 #if !UNITY_EDITOR
         UpdateAudioSource(sound);
 #endif
@@ -23,14 +23,32 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    protected void UpdateAudioSource(Sound sound)
+    protected void CreateAudioSource(Sound sound, Vector3 location)
     {
-        sound.source.clip = sound.clip;
-        sound.source.outputAudioMixerGroup = mixerGroup;
-        sound.source.volume = sound.volume;
-        sound.source.pitch = sound.pitch;
-        sound.source.loop = sound.isLoop;
-        sound.source.priority = sound.priority;
+        string spawnedObjectName = (location + " sound " + sound.name);
+        GameObject spawnedObject = new GameObject(spawnedObjectName);
+        Instantiate(spawnedObject, location, Quaternion.identity, this.transform);
+        sound.audioSources[location] = spawnedObject.AddComponent<AudioSource>();
+        Destroy(spawnedObject, sound.clip.length);
+
+#if !UNITY_EDITOR
+        UpdateAudioSource(sound, location);
+#endif
+        if (sound.hasCooldown)
+        {
+            soundTimerDictionary[GetSoundName(sound)] = -100;
+        }
+    }
+
+    protected void UpdateAudioSource(Sound sound, AudioSource source)
+    {
+        source.clip = sound.clip;
+        source.outputAudioMixerGroup = mixerGroup;
+        source.volume = sound.volume;
+        source.pitch = sound.pitch;
+        source.loop = sound.isLoop;
+        source.priority = sound.priority;
+        source.spatialBlend = sound.spatialBlend;
     }
 
     protected Sound FindSound(string name)
@@ -41,12 +59,12 @@ public class SoundManager : MonoBehaviour
             {
                 if (sound.filename.Equals(name))
                 {
-                    if (sound.source == null)
+                    if (sound.componentAudioSource == null)
                     {
                         CreateAudioSource(sound);
                     }
 #if UNITY_EDITOR
-                    UpdateAudioSource(sound);
+                    UpdateAudioSource(sound, sound.componentAudioSource);
 #endif
                     return sound;
                 }
@@ -57,6 +75,31 @@ public class SoundManager : MonoBehaviour
         return null;
     }
 
+    protected Sound FindSound(string name, Vector3 location)
+    {
+        foreach (SoundCollection soundCollection in sounds)
+        {
+            foreach (Sound sound in soundCollection.sounds)
+            {
+                if (sound.filename.Equals(name))
+                {
+                    if (!sound.audioSources.ContainsKey(location) || sound.audioSources[location] == null)
+                    {
+                        CreateAudioSource(sound, location);
+                    }
+#if UNITY_EDITOR
+                    UpdateAudioSource(sound, sound.audioSources[location]);
+#endif
+                    return sound;
+                }
+            }
+        }
+
+        Debug.LogError("Sound " + name + " Not Found!");
+        return null;
+    }
+
+    // Play sound with name, will be created if it doesn't exist
     public void Play(string name)
     {
         Sound sound = FindSound(name);
@@ -67,15 +110,37 @@ public class SoundManager : MonoBehaviour
         }
         if (sound.pitchVarience > 0)
         {
-            sound.source.pitch += UnityEngine.Random.Range(-sound.pitchVarience, sound.pitchVarience);
+            sound.componentAudioSource.pitch += UnityEngine.Random.Range(-sound.pitchVarience, sound.pitchVarience);
         }
         if (sound.volumeVarience > 0)
         {
-            sound.source.volume += UnityEngine.Random.Range(-sound.volumeVarience, sound.volumeVarience);
+            sound.componentAudioSource.volume += UnityEngine.Random.Range(-sound.volumeVarience, sound.volumeVarience);
         }
-        sound.source.Play();
-        sound.source.pitch = sound.pitch;
-        sound.source.volume = sound.volume;
+        sound.componentAudioSource.Play();
+        sound.componentAudioSource.pitch = sound.pitch;
+        sound.componentAudioSource.volume = sound.volume;
+    }
+
+    // Plays sound with name at location, creates a new one if it doesn't exist at absolute location. Sound temp object is deleted after being played
+    public void Play(string name, Vector3 location)
+    {
+        Sound sound = FindSound(name, location);
+
+        if (!CanPlaySound(sound))
+        {
+            return;
+        }
+        if (sound.pitchVarience > 0)
+        {
+            sound.audioSources[location].pitch += UnityEngine.Random.Range(-sound.pitchVarience, sound.pitchVarience);
+        }
+        if (sound.volumeVarience > 0)
+        {
+            sound.audioSources[location].volume += UnityEngine.Random.Range(-sound.volumeVarience, sound.volumeVarience);
+        }
+        sound.audioSources[location].Play();
+        sound.audioSources[location].pitch = sound.pitch;
+        sound.audioSources[location].volume = sound.volume;
     }
 
     public void PlayRandom(string name, int size)
@@ -87,7 +152,7 @@ public class SoundManager : MonoBehaviour
     {
         Sound sound = FindSound(name);
         soundTimerDictionary[GetSoundName(sound)] = 0;
-        sound.source.Stop();
+        sound.componentAudioSource.Stop();
     }
 
     protected string GetSoundName(Sound sound)
