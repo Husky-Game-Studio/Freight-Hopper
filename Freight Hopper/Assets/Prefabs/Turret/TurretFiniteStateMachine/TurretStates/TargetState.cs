@@ -16,7 +16,6 @@ public class TargetState : BasicState
     public TargetState(TurretMachineCenter turretMachineCenter) : base(turretMachineCenter)
     {
         this.turretMachineCenter = turretMachineCenter;
-        //thePlayerTransform = turretMachineCenter.thePlayer.transform;
         turretTransform = turretMachineCenter.gameObject.transform;
         barrelBaseTransform = turretTransform.Find("Barrel_Base").transform;
         countDownToTimer = new Timer(2f);
@@ -24,10 +23,11 @@ public class TargetState : BasicState
 
     // Conditions to change states
     public override BasicState TransitionState() {
-        // Debugging
         Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
                           turretMachineCenter.thePlayer.transform.position
                           - turretMachineCenter.gameObject.transform.position);
+
+        // Debugging
         Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.thePlayer.transform.position
                                                    - turretMachineCenter.gameObject.transform.position).magnitude, Color.yellow);
 
@@ -47,16 +47,11 @@ public class TargetState : BasicState
         return this;
     }
 
-    public override void EntryState()
-    {
-        countDownToTimer.ResetTimer();
-    }
+    public override void EntryState() { countDownToTimer.ResetTimer(); }
 
     // Rotate Turret to aim at player
     public override void PerformBehavior() {
         thePlayerTransform = turretMachineCenter.thePlayer.transform;
-        //turretTransform = turretMachineCenter.gameObject.transform;
-        //barrelBaseTransform = turretTransform.Find("Barrel_Base").transform;
 
         // Turn whole turret to follow the player on the xz-plane
         Vector3 direction = (thePlayerTransform.position - turretTransform.position);

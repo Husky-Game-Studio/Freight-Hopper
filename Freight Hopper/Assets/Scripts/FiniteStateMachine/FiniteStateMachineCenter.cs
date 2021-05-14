@@ -12,7 +12,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     public BasicState currentSubState;
 
     // MonoBehavior functions
-    public abstract void OnValidate();
+    public virtual void OnValidate() {}
 
     public abstract void OnEnable();
 
@@ -48,12 +48,10 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         }
     }
 
-    protected virtual void EndLoop()
-    {
-    }
+    protected virtual void EndLoop() {}
 
     // perform anything that is independent of being in any one single state
-    public abstract void PerformStateIndependentBehaviors();
+    public virtual void PerformStateIndependentBehaviors() {}
 
     // checks if the prevousState is not the currentState
     private void CheckAndChangeCurrentStateListeners()

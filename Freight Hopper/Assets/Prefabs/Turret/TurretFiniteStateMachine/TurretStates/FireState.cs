@@ -11,7 +11,8 @@ public class FireState : BasicState
     {
         this.turretMachineCenter = turretMachineCenter;
 
-        bulletSpawner = turretMachineCenter.gameObject.transform.Find("Barrel_Base").transform.Find("Turret_Barrel").transform.Find("Bullet_Spawner").gameObject;
+        bulletSpawner =
+                turretMachineCenter.gameObject.transform.Find("Barrel_Base").transform.Find("Turret_Barrel").transform.Find("Bullet_Spawner").gameObject;
     }
 
     // Only in this state for one tick

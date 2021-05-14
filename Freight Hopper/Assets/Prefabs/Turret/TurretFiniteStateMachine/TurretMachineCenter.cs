@@ -15,9 +15,8 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public BasicState targetState;
     public BasicState fireState;
 
-    // Can construct your states in Awake() or in class constructor,
-    // depending if using delates for transitions. In this case
-    // we are not using delates, so we can use the class constructor.
+    // It is best to construct your states in Awake()
+    // and subcribe to any event listeners
     private void Awake() {
         searchState = new SearchState(this);
         targetState = new TargetState(this);
@@ -31,19 +30,20 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         }
     }
 
-    // Get other components to use them
-    public override void OnValidate() {}
-
     // Assign initial state and subscribe to any event listeners
     public override void OnEnable() {
         this.currentState = searchState;
         this.previousState = searchState;
-        this.currentState.EntryState();
     }
 
     // Unsubscribe from any assigned event listeners
     public override void OnDisable() {
         Player.PlayerLoadedIn -= SetPlayerReference;
+    }
+
+    // Calls the loop tick
+    public void FixedUpdate(){
+        this.UpdateLoop();
     }
 
     // Perform any behavior that is not exclusive to any one single state
@@ -53,11 +53,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         }
     }
     
-    // Calls the loop tick
-    public void FixedUpdate(){
-        this.UpdateLoop();
-    }
-
     // Sets the player reference
     private void SetPlayerReference() {
         thePlayer = Player.Instance.transform.gameObject;

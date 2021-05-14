@@ -12,10 +12,11 @@ public class SearchState : BasicState
 
     // Conditions to change states
     public override BasicState TransitionState() {
-        // Debugging
         Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
                           turretMachineCenter.thePlayer.transform.position
                           - turretMachineCenter.gameObject.transform.position);
+
+        // Debugging
         Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.thePlayer.transform.position
                                                    - turretMachineCenter.gameObject.transform.position).magnitude, Color.blue);
 
