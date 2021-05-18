@@ -31,6 +31,9 @@ public abstract class BasicState
 
     protected BasicState CheckTransitions()
     {
+        if (this.stateTransitions == null) {
+            return null;
+        }
         foreach (Func<BasicState> stateCheck in this.stateTransitions)
         {
             BasicState tempState = stateCheck();
