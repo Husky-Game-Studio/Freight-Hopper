@@ -18,7 +18,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
     public abstract void OnDisable();
 
-    // Pefromed each LateFixedUpdate
+    // Pefromed each Update Tick
     public void UpdateLoop()
     {
         // perform anything that is independent of being in any one single state
