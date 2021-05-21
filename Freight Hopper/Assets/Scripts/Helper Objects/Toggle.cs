@@ -1,4 +1,5 @@
-﻿public class Toggle
+﻿[System.Serializable]
+public class Toggle
 {
     public bool value = false;
 

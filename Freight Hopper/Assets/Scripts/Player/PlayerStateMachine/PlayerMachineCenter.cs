@@ -11,9 +11,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // Player State Machine Transition Handler
     public PlayerStatesTransitions transitionHandler;
 
-    // State independent fields
-    private bool grappleFiring;
-
     // Player States
 
     public IdleState idleState;
@@ -31,6 +28,9 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public GrappleGroundPoundState grapplePoleGroundPoundState;
     public GrappleFullstopState grapplePoleFullStopState;
     public GrappleBurstState grapplePoleBurstState;
+
+    // State independent fields
+    [SerializeField, ReadOnly] private bool grappleFiring;
 
     // Input Components
     [HideInInspector] public PlayerAbilities abilities;
@@ -233,27 +233,16 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     {
         if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.UnlockedAndReady && previousState.GetType() != typeof(GrapplePoleAnchoredState))
         {
-            if (grappleFiring)
-            {
-                abilities.grapplePoleBehavior.ResetPole();
-                grappleFiring = false;
-            }
-            else
-            {
-                abilities.grapplePoleBehavior.EntryAction();
-                grappleFiring = true;
-            }
+            abilities.grapplePoleBehavior.EntryAction();
+            grappleFiring = true;
         }
-        if (grappleFiring)
+        else if (transitionHandler.grappleReleased.value)
         {
-            if (abilities.grapplePoleBehavior.IsAnchored())
-            {
-                grappleFiring = false;
-            }
-            else
-            {
-                abilities.grapplePoleBehavior.GrappleTransition();
-            }
+            grappleFiring = false;
+        }
+        else if (grappleFiring && !abilities.grapplePoleBehavior.IsAnchored())
+        {
+            abilities.grapplePoleBehavior.GrappleTransition();
         }
     }
 }

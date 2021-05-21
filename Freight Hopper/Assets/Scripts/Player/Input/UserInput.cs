@@ -27,6 +27,8 @@ public class UserInput : MonoBehaviour
 
     public event PressEventHandler GrappleInput;
 
+    public event PressEventHandler GrappleInputCanceled;
+
     public event PressEventHandler UpwardDashInput;
 
     public event PressEventHandler UpwardDashInputCanceled;
@@ -34,6 +36,7 @@ public class UserInput : MonoBehaviour
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
     [ReadOnly, SerializeField] private bool upwardDashHeld;
+    [ReadOnly, SerializeField] private bool grapplePoleHeld;
 
     private void OnEnable()
     {
@@ -46,7 +49,8 @@ public class UserInput : MonoBehaviour
         master.Player.Jump.canceled += JumpReleased;
         master.Player.FullStop.performed += FullStopPressed;
         master.Player.Burst.performed += BurstPressed;
-        master.Player.GrapplePole.performed += GrapplePressed;
+        master.Player.GrapplePole.performed += GrappleHeld;
+        master.Player.GrapplePole.performed += GrappleReleased;
         if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
         {
             LevelController.LevelLoadedIn += RespawnLinked;
@@ -102,6 +106,15 @@ public class UserInput : MonoBehaviour
         }
     }
 
+    private void GrappleHeld(InputAction.CallbackContext context)
+    {
+        grapplePoleHeld = !grapplePoleHeld;
+        if (grapplePoleHeld)
+        {
+            GrappleInput?.Invoke();
+        }
+    }
+
     private void JumpReleased(InputAction.CallbackContext context)
     {
         JumpInputCanceled?.Invoke();
@@ -126,19 +139,14 @@ public class UserInput : MonoBehaviour
         GroundPoundCanceled?.Invoke();
     }
 
-    private void GrapplePressed(InputAction.CallbackContext context)
+    private void GrappleReleased(InputAction.CallbackContext context)
     {
-        GrappleInput?.Invoke();
+        GrappleInputCanceled?.Invoke();
     }
 
     private void FullStopPressed(InputAction.CallbackContext context)
     {
         FullStopInput?.Invoke();
-    }
-
-    private void UpwardDashPressed(InputAction.CallbackContext context)
-    {
-        UpwardDashInput?.Invoke();
     }
 
     private void BurstPressed(InputAction.CallbackContext context)

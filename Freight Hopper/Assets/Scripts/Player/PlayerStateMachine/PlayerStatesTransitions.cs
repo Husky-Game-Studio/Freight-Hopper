@@ -6,14 +6,14 @@ using UnityEngine.SceneManagement;
 
 // Help developing this and related code using this YouTube video: https://www.youtube.com/watch?v=V75hgcsCGOM&t=944s
 // Addition help from this link on delagate funcs: https://www.tutorialsteacher.com/csharp/csharp-func-delegate
-
 public class PlayerStatesTransitions
 {
     private PlayerMachineCenter playerMachine;
 
     public Toggle jumpPressed = new Toggle();
-    public Toggle releasedJump = new Toggle();
+    public Toggle jumpReleased = new Toggle();
     public Toggle grapplePressed = new Toggle();
+    public Toggle grappleReleased = new Toggle();
     public Toggle groundPoundPressed = new Toggle();
     public Toggle groundPoundReleased = new Toggle();
     public Toggle upwardDashPressed = new Toggle();
@@ -24,8 +24,9 @@ public class PlayerStatesTransitions
     public void ResetInputs()
     {
         jumpPressed.Reset();
-        releasedJump.Reset();
+        jumpReleased.Reset();
         grapplePressed.Reset();
+        grappleReleased.Reset();
         groundPoundPressed.Reset();
         groundPoundReleased.Reset();
         upwardDashPressed.Reset();
@@ -42,8 +43,9 @@ public class PlayerStatesTransitions
     private void SubToListeners()
     {
         UserInput.Instance.JumpInput += jumpPressed.Trigger;
-        UserInput.Instance.JumpInputCanceled += releasedJump.Trigger;
+        UserInput.Instance.JumpInputCanceled += jumpReleased.Trigger;
         UserInput.Instance.GrappleInput += grapplePressed.Trigger;
+        UserInput.Instance.GrappleInputCanceled += grappleReleased.Trigger;
         UserInput.Instance.GroundPoundInput += groundPoundPressed.Trigger;
         UserInput.Instance.GroundPoundCanceled += groundPoundReleased.Trigger;
         UserInput.Instance.UpwardDashInput += upwardDashPressed.Trigger;
@@ -55,8 +57,9 @@ public class PlayerStatesTransitions
     private void UnsubToListeners()
     {
         UserInput.Instance.JumpInput -= jumpPressed.Trigger;
-        UserInput.Instance.JumpInputCanceled -= releasedJump.Trigger;
+        UserInput.Instance.JumpInputCanceled -= jumpReleased.Trigger;
         UserInput.Instance.GrappleInput -= grapplePressed.Trigger;
+        UserInput.Instance.GrappleInputCanceled -= grappleReleased.Trigger;
         UserInput.Instance.GroundPoundInput -= groundPoundPressed.Trigger;
         UserInput.Instance.GroundPoundCanceled -= groundPoundReleased.Trigger;
         UserInput.Instance.UpwardDashInput -= upwardDashPressed.Trigger;
@@ -79,7 +82,7 @@ public class PlayerStatesTransitions
     public BasicState CheckToFallState()
     {
         // Jump or Double Jump
-        if ((releasedJump.value || !playerMachine.abilities.jumpBehavior.jumpHoldingTimer.TimerActive()) &&
+        if ((jumpReleased.value || !playerMachine.abilities.jumpBehavior.jumpHoldingTimer.TimerActive()) &&
             (playerMachine.currentState == playerMachine.jumpState || playerMachine.currentState == playerMachine.doubleJumpState))
         {
             if (playerMachine.currentState == playerMachine.doubleJumpState)
@@ -109,7 +112,7 @@ public class PlayerStatesTransitions
         }
 
         // Grapple
-        if ((grapplePressed.value || (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() &&
+        if ((grappleReleased.value || (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() &&
             playerMachine.abilities.grapplePoleBehavior.IsAnchored())) &&
             (playerMachine.currentState == playerMachine.grapplePoleAnchoredState))
         {
@@ -139,7 +142,7 @@ public class PlayerStatesTransitions
                 }
             }
             if (playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState == playerMachine.wallRunState.GetSubStateArray()[2]
-                && (releasedJump.value || !playerMachine.abilities.wallRunBehavior.jumpHoldingTimer.TimerActive()))
+                && (jumpReleased.value || !playerMachine.abilities.wallRunBehavior.jumpHoldingTimer.TimerActive()))
             {
                 return playerMachine.fallState;
             }
