@@ -47,7 +47,8 @@ public class FollowPath : MonoBehaviour
     {
         rb = this.transform.GetComponent<Rigidbody>();
         path = pathCreator.path;
-        Initialize_PIDs();
+        //Initialize_PIDs();
+        //rb.velocity = Vector3.forward * targetVelocity;
         /*
         ApplyVelocityChange(2.0f, 0.5f);
         forwardPID.Initialize(forwardPIDData);
@@ -65,41 +66,33 @@ public class FollowPath : MonoBehaviour
     private void FixedUpdate()
     {
         AdjustTarget();
-        Follow2();
-    }
-
-    /*
-    void Follow1()
-    {
-        //Transform matrices
-        Matrix4x4 mat = Matrix4x4.TRS(this.transform.position, this.transform.rotation, Vector3.one);
-        Matrix4x4 matDir = Matrix4x4.Rotate(this.transform.rotation);
-        //Transformed variables
-        Vector3 deltaPosRelative = mat.inverse.MultiplyPoint3x4(targetPos);
-        float currentForwardVelocity = (matDir.inverse * rb.velocity).z;
-        //Turning calculations
-        float turnRadius = deltaPosRelative.sqrMagnitude / (2.0f * new Vector2(deltaPosRelative.x, deltaPosRelative.y).magnitude);
-        float targetAngularVelocity = targetVelocity / turnRadius;
-        float turnXYAngle = Mathf.Atan2(deltaPosRelative.y, deltaPosRelative.x);
-        float targetAngularVelocityY = targetAngularVelocity * Mathf.Cos(turnXYAngle);
-        float targetAngularVelocityX = targetAngularVelocity * Mathf.Sin(turnXYAngle);
-        //Calculate Acceleration to apply
-        float forwardForce = forwardPID.GetOutput(targetVelocity - currentForwardVelocity, Time.fixedDeltaTime);
-        float torqueY = rotatePID_Y.GetOutput(targetAngularVelocityY - rb.angularVelocity.y, Time.fixedDeltaTime);
-        float torqueX = -rotatePID_X.GetOutput(targetAngularVelocityX - rb.angularVelocity.x, Time.fixedDeltaTime);
-        //Apply Forces
-        rb.AddRelativeForce(Vector3.forward * forwardForce, ForceMode.Acceleration);
-        rb.AddRelativeTorque(Vector3.up * torqueY, ForceMode.Acceleration);
-        rb.AddRelativeTorque(Vector3.right * torqueX, ForceMode.Acceleration);
-        //Turning Constraint Force
-        Vector3 radialVector = new Vector3(Mathf.Cos(turnXYAngle), Mathf.Sin(turnXYAngle), 0);
-        rb.AddRelativeForce(radialVector * currentForwardVelocity * new Vector2(rb.angularVelocity.x, rb.angularVelocity.y).magnitude, ForceMode.Acceleration);
-        //Debug Drawing
-        Debug.DrawLine(rb.position, rb.position + 4.0f * (Vector3)(mat * radialVector));
         Debug.DrawLine(rb.position, targetPos);
+        Follow();
     }
-    */
 
+    
+
+    void Follow()
+    {
+        Vector3 target = targetPos - rb.position;
+        Quaternion rot = Quaternion.Inverse(transform.rotation);
+        //Current
+        Vector3 currentVel = rot * rb.velocity;
+        Vector3 currentAngVel = rot * rb.angularVelocity;
+        //Target
+        Vector3 targetVel = Vector3.forward * targetVelocity;
+        Vector3 targetAngVel = currentVel.z * TargetSphereDrive.TargetAngularVelocity(rot * target);
+        //Change
+        Vector3 deltaVel = targetVel - currentVel;
+        Vector3 deltaAngVel = targetAngVel - currentAngVel;
+        //Forces
+        rb.AddRelativeForce(Vector3.forward * deltaVel.z, ForceMode.VelocityChange);
+        rb.AddRelativeTorque(deltaAngVel, ForceMode.VelocityChange);
+        rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
+
+    }
+
+    //Testing PIDs
     void Follow2()
     {
         Debug.DrawLine(rb.position, targetPos);
@@ -110,7 +103,7 @@ public class FollowPath : MonoBehaviour
         rb.AddRelativeTorque(Vector3.forward * roll_torque, ForceMode.Acceleration);
 
         hover_PID.Initialize(hover_PID_data);
-        Matrix4x4 matY = Matrix4x4.TRS(this.transform.position, Quaternion.Euler(0,transform.eulerAngles.y,0), Vector3.one);
+        Matrix4x4 matY = Matrix4x4.TRS(this.transform.position, Quaternion.Euler(0, transform.eulerAngles.y, 0), Vector3.one);
         Vector3 localDisplacement = matY.inverse.MultiplyPoint3x4(targetPos);
         float hover_error = localDisplacement.y;
         float hover_force = Mathf.Clamp(hover_PID.GetOutput(hover_error, Time.fixedDeltaTime), 0.0f, 75.0f);
@@ -118,8 +111,6 @@ public class FollowPath : MonoBehaviour
 
         Debug.Log("Hover Error: " + hover_error);
         //Debug.Log("Displacement: " + localDisplacement);
-
-
     }
 
     float wrap_difference(float diff, float range)
@@ -130,7 +121,7 @@ public class FollowPath : MonoBehaviour
     private void AdjustTarget() //TODO: If entire path is within follow distance, this will be a forever loop. Prevent this
     {
         Vector3 parentPos = new Vector3(0, 3, 0);
-        while ((path.GetPathPoint(t) - this.transform.position).magnitude < followDistance)
+        while ((path.GetPathPoint(t) + parentPos - this.transform.position).magnitude < followDistance)
         {
             t += 0.01f;
             if (t >= path.NumSegments)
@@ -141,20 +132,8 @@ public class FollowPath : MonoBehaviour
         targetPos = path.GetPathPoint(t) + parentPos;
     }
 
-    private void ApplyVelocityChange(float forward, float turn)
+    private Vector3 TurningConstraint(Vector3 vel, Vector3 angVel)
     {
-        rb.AddRelativeForce(Vector3.forward * forward, ForceMode.VelocityChange);
-        rb.AddRelativeTorque(Vector3.up * turn, ForceMode.VelocityChange);
-    }
-
-    private void ApplyForce(float forward, float turn)
-    {
-        rb.AddRelativeForce(Vector3.forward * forward, ForceMode.Acceleration);
-        rb.AddRelativeTorque(Vector3.up * turn, ForceMode.Acceleration);
-    }
-
-    private void TurningConstraintForce(float currentForwardVelocity, float deltaTheta)
-    {
-        rb.AddRelativeForce(Vector3.right * currentForwardVelocity * deltaTheta, ForceMode.Acceleration);
+        return -Vector3.Cross(Vector3.ProjectOnPlane(vel, angVel), angVel);
     }
 }
