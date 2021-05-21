@@ -42,6 +42,10 @@ public class CollisionManagement : MonoBehaviour
         {
             if (Physics.Raycast(rb.position, rb.transform.TransformDirection(directions[i]), out hit, distance, layers))
             {
+                if (!hit.transform.CompareTag("landable"))
+                {
+                    continue;
+                }
                 float collisionAngle = Vector3.Angle(hit.normal, this.ValidUpAxis);
                 if (collisionAngle > maxSlope)
                 {

@@ -1347,7 +1347,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbccf86e791a42e4f8062f572022a0e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelData: {fileID: 11400000, guid: 87a2d05e6e1f80b419a7ef0032f6a158, type: 2}
+  levelName:
+    worldSeriesName: Wind
+    worldID: 1
+    levelID: 1
+  levelData:
+    nextLevelStatus: 0
+    spawnPosition: {x: 0, y: 0, z: 0}
+    activeAbilities: 00000000010000000200000003000000
 --- !u!1 &1960732034
 GameObject:
   m_ObjectHideFlags: 0
@@ -2879,7 +2886,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2013737743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a3ac6989e5dd9642b14c2498e92dea8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useGravity: 1
