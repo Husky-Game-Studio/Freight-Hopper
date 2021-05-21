@@ -34,9 +34,14 @@ public class SoundManager : MonoBehaviour
 #if !UNITY_EDITOR
         UpdateAudioSource(sound, location);
 #endif
+        ResetTimer(sound);
+    }
+
+    private void ResetTimer(Sound sound)
+    {
         if (sound.hasCooldown)
         {
-            soundTimerDictionary[GetSoundName(sound)] = -100;
+            soundTimerDictionary[GetSoundName(sound)] = int.MinValue;
         }
     }
 
@@ -151,7 +156,7 @@ public class SoundManager : MonoBehaviour
     public void Stop(string name)
     {
         Sound sound = FindSound(name);
-        soundTimerDictionary[GetSoundName(sound)] = 0;
+        ResetTimer(sound);
         sound.componentAudioSource.Stop();
     }
 

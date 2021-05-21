@@ -231,13 +231,17 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void GrappleFiring()
     {
-        if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.UnlockedAndReady && previousState.GetType() != typeof(GrapplePoleAnchoredState))
+        if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.UnlockedAndReady)
         {
             abilities.grapplePoleBehavior.EntryAction();
             grappleFiring = true;
         }
         else if (transitionHandler.grappleReleased.value)
         {
+            if (!abilities.grapplePoleBehavior.IsAnchored())
+            {
+                abilities.grapplePoleBehavior.ResetPole();
+            }
             grappleFiring = false;
         }
         else if (grappleFiring && !abilities.grapplePoleBehavior.IsAnchored())

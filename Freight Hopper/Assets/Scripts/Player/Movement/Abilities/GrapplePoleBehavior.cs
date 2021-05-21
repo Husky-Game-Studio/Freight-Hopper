@@ -91,6 +91,7 @@ public class GrapplePoleBehavior : AbilityBehavior
                 anchoredRbLocalPosition = anchoredRb.transform.InverseTransformPoint(hit.point);
             }
             distanceController.Reset();
+            playerSM.Play("GrappleAnchor", hit.point);
         }
     }
 
@@ -113,6 +114,7 @@ public class GrapplePoleBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
+        playerSM.Play("GrappleFire");
         playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
         pole.enabled = true;
         pole.SetPosition(1, pole.GetPosition(0));

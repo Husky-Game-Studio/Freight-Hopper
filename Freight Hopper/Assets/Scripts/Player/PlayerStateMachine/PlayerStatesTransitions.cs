@@ -100,7 +100,7 @@ public class PlayerStatesTransitions
         }
 
         // Upward Dash
-        if (releasedUpwardDash.value && playerMachine.currentState == playerMachine.upwardDashState)
+        if ((releasedUpwardDash.value || !playerMachine.abilities.upwardDashBehavior.duration.TimerActive()) && playerMachine.currentState == playerMachine.upwardDashState)
         {
             return playerMachine.fallState;
         }

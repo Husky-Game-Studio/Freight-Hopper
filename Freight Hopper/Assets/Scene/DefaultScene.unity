@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 3564.375, g: 1987.3828, b: 1225.5879, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -919,7 +919,10 @@ MonoBehaviour:
   preventConsumption: 0
   storedVelocity: {x: 0, y: 0, z: 0}
   initialUpwardsForce: 20
-  consistentForce: 0.6
+  consistentForce: 2
+  duration:
+    duration: 0.6
+    current: 0
 --- !u!114 &1798020248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1180,6 +1183,7 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
+  grappleFiring: 0
   abilities: {fileID: 4493642203787552936}
   playerCM: {fileID: 4493642203787552937}
 --- !u!114 &4493642203787552939
@@ -1651,6 +1655,7 @@ MonoBehaviour:
   groundPoundHeld: 0
   jumpHeld: 0
   upwardDashHeld: 0
+  grapplePoleHeld: 0
 --- !u!4 &6851446874724608892
 Transform:
   m_ObjectHideFlags: 0
