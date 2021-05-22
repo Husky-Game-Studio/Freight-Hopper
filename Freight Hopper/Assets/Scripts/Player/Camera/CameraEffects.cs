@@ -50,6 +50,8 @@ public class CameraEffects : MonoBehaviour
         speedLines.Stop();
     }
 
+    private bool goingSlowAgain = false;
+
     private void Update()
     {
         Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
@@ -75,10 +77,16 @@ public class CameraEffects : MonoBehaviour
         {
             speedLines.Play();
             playerSounds.Play("GoingFast");
+            goingSlowAgain = true;
         }
         else
         {
             speedLines.Stop();
+        }
+        if (goingSlowAgain && playerSpeed.GetAverage() < speedEffectsStart)
+        {
+            playerSounds.Stop("GoingFast");
+            goingSlowAgain = false;
         }
     }
 
