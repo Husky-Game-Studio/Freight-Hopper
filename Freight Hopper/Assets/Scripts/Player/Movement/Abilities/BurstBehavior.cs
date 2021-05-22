@@ -34,6 +34,11 @@ public class BurstBehavior : AbilityBehavior
             distanceFromExplosion = (cameraTransform.position - hit.point).magnitude;
         }
 
+        if (distanceFromExplosion < .6f)
+        {
+            playerSM.Play("FastBurst");
+        }
+
         // Only velocity that is causing the player to go slower will be added to the burst force speed
         Vector3 velocityFromDirection = Vector3.Project(playerRb.velocity, cameraTransform.forward);
         if (Mathf.Sign(Vector3.Dot(velocityFromDirection, cameraTransform.forward)) == 1)
@@ -43,7 +48,7 @@ public class BurstBehavior : AbilityBehavior
 
         playerRb.AddForce(-cameraTransform.forward * forceMultiplier / distanceFromExplosion, ForceMode.VelocityChange);
         Vector3 burstPosition = cameraTransform.position + cameraTransform.forward * distanceFromExplosion;
-        playerSM.Play("Burst Explosion", burstPosition);
+        playerSM.Play("BurstExplosion", burstPosition);
         burstExplosionEffectTransform.position = burstPosition;
         //Debug.DrawLine(playerRb.position, playerRb.position + direction, Color.red, 5);
     }

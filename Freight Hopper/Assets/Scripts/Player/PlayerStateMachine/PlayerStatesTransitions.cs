@@ -146,8 +146,7 @@ public class PlayerStatesTransitions
             {
                 return playerMachine.fallState;
             }
-            if (playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState == playerMachine.wallRunState.GetSubStateArray()[1] &&
-                !playerMachine.abilities.wallRunBehavior.climbTimer.TimerActive())
+            if (playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState == playerMachine.wallRunState.GetSubStateArray()[1] && !status[0])
             {
                 return playerMachine.fallState;
             }
@@ -184,6 +183,12 @@ public class PlayerStatesTransitions
         if (jumpPressed.value && playerMachine.currentState == playerMachine.grapplePoleAnchoredState)
         {
             return playerMachine.jumpState;
+        }
+
+        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.Unlocked && playerMachine.abilities.jumpBehavior.Consumed &&
+            !playerMachine.abilities.doubleJumpBehavior.Unlocked)
+        {
+            playerMachine.abilities.jumpBehavior.PlayerSoundManager().Play("JumpFail");
         }
 
         return null;
@@ -225,6 +230,10 @@ public class PlayerStatesTransitions
         {
             return playerMachine.doubleJumpState;
         }
+        if (jumpPressed.value && playerMachine.abilities.doubleJumpBehavior.Unlocked && playerMachine.abilities.doubleJumpBehavior.Consumed)
+        {
+            playerMachine.abilities.doubleJumpBehavior.PlayerSoundManager().Play("JumpFail");
+        }
         return null;
     }
 
@@ -232,13 +241,8 @@ public class PlayerStatesTransitions
     {
         if (groundPoundPressed.value &&
             (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-            playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
+            playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
-            if (playerMachine.playerCM.IsGrounded.current)
-            {
-                playerMachine.abilities.groundPoundBehavior.PreventConsumption();
-            }
-
             return playerMachine.groundPoundState;
         }
 
@@ -251,7 +255,7 @@ public class PlayerStatesTransitions
             grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState)
         {
             if ((playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-                playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.UnlockedAndReady)
+                playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.Unlocked)
             {
                 if (playerMachine.playerCM.IsGrounded.current)
                 {
@@ -275,6 +279,10 @@ public class PlayerStatesTransitions
             }
             return playerMachine.upwardDashState;
         }
+        if (upwardDashPressed.value && playerMachine.abilities.upwardDashBehavior.Unlocked && playerMachine.abilities.upwardDashBehavior.Consumed)
+        {
+            playerMachine.abilities.upwardDashBehavior.PlayerSoundManager().Play("UpwardDashFail");
+        }
         return null;
     }
 
@@ -284,6 +292,10 @@ public class PlayerStatesTransitions
         {
             return playerMachine.fullStopState;
         }
+        if (fullStopPressed.value && playerMachine.abilities.fullstopBehavior.Unlocked && playerMachine.abilities.fullstopBehavior.Consumed)
+        {
+            playerMachine.abilities.fullstopBehavior.PlayerSoundManager().Play("FullstopFail");
+        }
         return null;
     }
 
@@ -292,6 +304,10 @@ public class PlayerStatesTransitions
         if (fullStopPressed.value && playerMachine.abilities.fullstopBehavior.UnlockedAndReady)
         {
             return playerMachine.grapplePoleFullStopState;
+        }
+        if (fullStopPressed.value && playerMachine.abilities.fullstopBehavior.Unlocked && playerMachine.abilities.fullstopBehavior.Consumed)
+        {
+            playerMachine.abilities.fullstopBehavior.PlayerSoundManager().Play("FullstopFail");
         }
         return null;
     }
@@ -306,6 +322,10 @@ public class PlayerStatesTransitions
             }
             return playerMachine.burstState;
         }
+        if (burstPressed.value && playerMachine.abilities.burstBehavior.Unlocked && playerMachine.abilities.burstBehavior.Consumed)
+        {
+            playerMachine.abilities.burstBehavior.PlayerSoundManager().Play("BurstFail");
+        }
         return null;
     }
 
@@ -318,6 +338,10 @@ public class PlayerStatesTransitions
                 playerMachine.abilities.burstBehavior.PreventConsumption();
             }
             return playerMachine.grapplePoleBurstState;
+        }
+        if (burstPressed.value && playerMachine.abilities.burstBehavior.Unlocked && playerMachine.abilities.burstBehavior.Consumed)
+        {
+            playerMachine.abilities.burstBehavior.PlayerSoundManager().Play("BurstFail");
         }
         return null;
     }
@@ -369,7 +393,7 @@ public class PlayerStatesTransitions
     {
         bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
         // Wall Climb
-        if (status[0] && !status[1] && !status[3] && !playerMachine.abilities.wallRunBehavior.Consumed)
+        if (status[0] && !status[1] && !status[3])
         {
             return playerMachine.GetCurrentState().GetSubStateArray()[1];
         }

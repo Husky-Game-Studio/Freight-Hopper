@@ -12,9 +12,10 @@ public class CameraEffects : MonoBehaviour
     private VisualEffect speedLines;
 
     [SerializeField] private Volume speedVolume;
-    private readonly float speedEffectsStart = 15;
+    [SerializeField] private float speedEffectsStart = 15;
     private Average playerSpeed;
 
+    [SerializeField] private SoundManager playerSounds;
     [SerializeField] private CameraEffect<float> fov;
     [SerializeField] private CameraEffect<float> tilt;
     [SerializeField] private CameraEffect<float> postProcessing;
@@ -73,6 +74,7 @@ public class CameraEffects : MonoBehaviour
         if (playerSpeed.GetAverage() > speedEffectsStart)
         {
             speedLines.Play();
+            playerSounds.Play("GoingFast");
         }
         else
         {

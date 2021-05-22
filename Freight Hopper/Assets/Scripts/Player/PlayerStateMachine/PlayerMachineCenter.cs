@@ -32,6 +32,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // State independent fields
     [SerializeField, ReadOnly] private bool grappleFiring;
 
+    [SerializeField] public Timer initialGroundPoundBurstCoolDown;
+
     // Input Components
     [HideInInspector] public PlayerAbilities abilities;
 
@@ -215,6 +217,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     {
         JumpBuffer();
         GrappleFiring();
+        initialGroundPoundBurstCoolDown.CountDownFixed();
     }
 
     private void JumpBuffer()
@@ -236,7 +239,11 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
             abilities.grapplePoleBehavior.EntryAction();
             grappleFiring = true;
         }
-        else if (transitionHandler.grappleReleased.value)
+        else if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.Unlocked && abilities.grapplePoleBehavior.Consumed)
+        {
+            abilities.grapplePoleBehavior.PlayerSoundManager().Play("GrappleFail");
+        }
+        else if (transitionHandler.grappleReleased.value || currentState == grapplePoleAnchoredState)
         {
             if (!abilities.grapplePoleBehavior.IsAnchored())
             {

@@ -11,15 +11,18 @@ public class GroundPoundBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
-        if (playerRb.velocity.y > 0)
+        playerSM.Play("GroundPoundBurst");
+        Vector3 upAxis = playerCM.ValidUpAxis;
+        if (Vector3.Dot(Vector3.Project(playerRb.velocity, upAxis), playerRb.transform.up) > 0)
         {
-            playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
+            playerRb.velocity = Vector3.ProjectOnPlane(playerRb.velocity, upAxis);
         }
-        playerRb.AddForce(-playerCM.ValidUpAxis * initialBurstForce, ForceMode.VelocityChange);
+        playerRb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
     }
 
     public override void Action()
     {
+        playerSM.Play("GroundPoundTick");
         Vector3 upAxis = playerCM.ValidUpAxis;
         Vector3 direction = -upAxis;
         if (playerCM.IsGrounded.current)
@@ -41,6 +44,7 @@ public class GroundPoundBehavior : AbilityBehavior
     public override void ExitAction()
     {
         base.ExitAction();
+        playerSM.Play("GroundPoundExit");
         increasingForce.RevertCurrent();
     }
 }

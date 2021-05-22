@@ -60,6 +60,10 @@ public class GrapplePoleBehavior : AbilityBehavior
         //move.Normalize();
 
         playerRb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);
+        if (playerRb.velocity.magnitude > 5)
+        {
+            playerSM.Play("GrappleMove");
+        }
 
         float expectedLength = length;
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
@@ -67,6 +71,8 @@ public class GrapplePoleBehavior : AbilityBehavior
         Vector3 tensionVelocity = up * distanceController.GetOutput(error, Time.fixedDeltaTime);
         playerRb.AddForce(tensionVelocity, ForceMode.VelocityChange);
     }
+
+    private bool reachedMaxLength = false;
 
     /// <summary>
     /// Grapple transition is the firing code. Tries to attach to a surface
@@ -77,6 +83,15 @@ public class GrapplePoleBehavior : AbilityBehavior
 
         length += Time.fixedDeltaTime * grappleExtensionSpeed;
         length = Mathf.Min(length, maxLength);
+        if (length == maxLength && !reachedMaxLength)
+        {
+            reachedMaxLength = true;
+            playerSM.Play("GrappleMaxLength");
+        }
+        else
+        {
+            playerSM.Play("GrappleFiring");
+        }
         pole.SetPosition(1, playerRb.transform.InverseTransformPoint(playerAnchor.GetPoint(length)));
 
         Debug.DrawLine(playerAnchor.origin, playerAnchor.GetPoint(length), Color.yellow, Time.fixedDeltaTime);
@@ -115,6 +130,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     public override void EntryAction()
     {
         playerSM.Play("GrappleFire");
+        reachedMaxLength = false;
         playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
         pole.enabled = true;
         pole.SetPosition(1, pole.GetPosition(0));
@@ -128,6 +144,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     public override void ExitAction()
     {
         base.ExitAction();
+        playerSM.Play("GrappleDetach");
         ResetPole();
     }
 

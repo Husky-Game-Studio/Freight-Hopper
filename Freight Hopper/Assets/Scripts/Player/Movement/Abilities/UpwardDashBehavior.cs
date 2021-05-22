@@ -12,6 +12,7 @@ public class UpwardDashBehavior : AbilityBehavior
     {
         storedVelocity = playerRb.velocity;
         duration.ResetTimer();
+        playerSM.Play("UpwardDashEntry");
         playerRb.velocity = Vector3.zero;
         playerRb.AddForce(playerCM.ValidUpAxis * initialUpwardsForce, ForceMode.VelocityChange);
     }
@@ -28,6 +29,7 @@ public class UpwardDashBehavior : AbilityBehavior
     {
         base.ExitAction();
         playerSM.Stop("UpwardDashTick");
+        playerSM.Play("UpwardDashExit");
         playerRb.velocity = storedVelocity;
         storedVelocity = Vector3.zero;
     }

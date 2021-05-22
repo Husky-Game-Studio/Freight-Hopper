@@ -13,7 +13,6 @@ public class WallRunBehavior : AbilityBehavior
     [SerializeField] private float rightForce = 5; // force applied towards the wall
     [SerializeField] private float initialClimbForce = 5;
     [SerializeField] private float climbForce = 10;
-    public Timer climbTimer = new Timer(0.5f);
 
     [Space]
     [SerializeField] private float jumpIniitalPush = 10;
@@ -67,8 +66,6 @@ public class WallRunBehavior : AbilityBehavior
     public void InitialWallClimb()
     {
         cameraController.ResetUpAxis();
-        playerSM.Play("Jump");
-        climbTimer.ResetTimer();
         if (Vector3.Dot(playerRb.velocity, playerCM.ValidUpAxis) < 0)
         {
             playerRb.velocity = playerRb.velocity.ProjectOnContactPlane(playerCM.ValidUpAxis);
@@ -80,8 +77,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public void WallClimb()
     {
-        playerSM.Play("WallSkid");
-        climbTimer.CountDownFixed();
+        playerSM.Play("WallClimb");
         Vector3 upAlongWall = GetUpAlongWall(wallNormals[0]);
         cameraController.TiltUpAxis(Vector3.Cross(-wallNormals[0], upAlongWall) * wallrunCameraTilt);
         playerRb.AddForce(rightForce * -wallNormals[0], ForceMode.Acceleration);
@@ -91,7 +87,7 @@ public class WallRunBehavior : AbilityBehavior
     public void WallJumpInitial()
     {
         cameraController.ResetUpAxis();
-        playerSM.Play("Jump");
+        playerSM.Play("WallJump");
         Vector3 sumNormals = Vector3.zero;
         foreach (Vector3 normal in wallNormals)
         {

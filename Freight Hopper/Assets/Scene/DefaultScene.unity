@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3564.375, g: 1987.3828, b: 1225.5879, a: 1}
+  m_IndirectSpecularColor: {r: 3573.504, g: 1988.5029, b: 1220.0293, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -786,9 +786,9 @@ MonoBehaviour:
     old: 1
     current: 1
   deltaIncreaseForce: 0.01
-  initialBurstForce: 15
-  downwardsForce: 8
-  slopeDownForce: 200
+  initialBurstForce: 18
+  downwardsForce: 10
+  slopeDownForce: 300
 --- !u!114 &1798020243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,9 +890,6 @@ MonoBehaviour:
   rightForce: 4
   initialClimbForce: 5
   climbForce: 50
-  climbTimer:
-    duration: 0.5
-    current: 0
   jumpIniitalPush: 10
   jumpContinousForce: 15
   jumpContinousPush: 5
@@ -1184,6 +1181,9 @@ MonoBehaviour:
   currentSubStateName: 
   previousStateName: 
   grappleFiring: 0
+  initialGroundPoundBurstCoolDown:
+    duration: 1
+    current: 0
   abilities: {fileID: 4493642203787552936}
   playerCM: {fileID: 4493642203787552937}
 --- !u!114 &4493642203787552939
@@ -1571,6 +1571,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedVolume: {fileID: 6851446874724608893}
+  speedEffectsStart: 25
+  playerSounds: {fileID: 2129630602}
   fov:
     baseValue: 0
     value: 0

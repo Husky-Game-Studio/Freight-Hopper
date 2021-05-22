@@ -9,6 +9,7 @@ public class FullStopBehavior : AbilityBehavior
     public override void Action()
     {
         fullstopDuration.CountDownFixed();
+        playerSM.Play("Fullstop");
         float ratio = fullstopDuration.current / fullstopDuration.duration;
         fullstopEffect.weight = Mathf.Sin(Mathf.PI * ratio);
         playerRb.velocity = Vector3.zero;

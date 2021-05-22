@@ -26,6 +26,8 @@ public abstract class AbilityBehavior : MonoBehaviour
         this.playerSM = sm;
     }
 
+    public SoundManager PlayerSoundManager() => playerSM;
+
     /// <summary>
     /// Action played when entering state for ability
     /// </summary>
