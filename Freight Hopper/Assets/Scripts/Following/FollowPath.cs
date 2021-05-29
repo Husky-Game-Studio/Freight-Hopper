@@ -17,6 +17,9 @@ public class FollowPath : MonoBehaviour
     FloatBounds horizontal;
     [SerializeField]
     Vector3 followOffset;
+    [SerializeField]
+    bool disablePitch;
+
 
     
 
@@ -81,7 +84,7 @@ public class FollowPath : MonoBehaviour
     {
         AdjustTarget();
         Debug.DrawLine(rb.position, targetPos);
-        Follow3();
+        Follow4();
     }
 
     
@@ -108,10 +111,8 @@ public class FollowPath : MonoBehaviour
         rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
     }
 
-    void Follow3() //Misleading, Follow works with ForceMode changed to Acceleration
+    void Follow3()
     {
-        //Bounds, Accelerometer
-
         Vector3 target = targetPos - rb.position;
         Quaternion rot = Quaternion.Inverse(transform.rotation);
         //Current
@@ -123,6 +124,12 @@ public class FollowPath : MonoBehaviour
         //Target Change
         Vector3 deltaVel = targetVel - currentVel;
         Vector3 deltaAngVel = targetAngVel - currentAngVel;
+        //if (disablePitch)
+        //{
+        //    deltaVel = new Vector3(0.0f, deltaAng)
+        //}
+        deltaAngVel = new Vector3((disablePitch) ? 0.0f : deltaAngVel.x, deltaAngVel.y, deltaAngVel.z);
+        
         //Doable Change
         //deltaVel = new Vector3(horizontal.Clamp(deltaVel.x), vertical.Clamp(deltaVel.y), forward.Clamp(deltaVel.z));
         //Too tight of turn to make? Slow down
@@ -135,6 +142,33 @@ public class FollowPath : MonoBehaviour
         rb.AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
         //Turning Constraint
         rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
+    }
+
+    void Follow4()
+    {
+        Vector3 target = targetPos - rb.position;
+        Quaternion rot = Quaternion.Inverse(transform.rotation);
+        //Current
+        Vector3 currentVel = rb.velocity;
+        Vector3 currentAngVel = rb.angularVelocity;
+        //Target
+        Vector3 targetVel = (target.normalized) * targetVelocity;
+        Vector3 targetAngVel = currentVel.z * TargetSphereDrive.TargetAngularVelocity(rot * target);
+        //Target Change
+        Vector3 deltaVel = targetVel - currentVel;
+        Vector3 deltaAngVel = targetAngVel - currentAngVel;
+        deltaAngVel = new Vector3((disablePitch) ? 0.0f : deltaAngVel.x, deltaAngVel.y, deltaAngVel.z);
+
+        //Doable Change
+        //deltaVel = new Vector3(horizontal.Clamp(deltaVel.x), vertical.Clamp(deltaVel.y), forward.Clamp(deltaVel.z));
+        //Too tight of turn to make? Slow down
+        //Forces
+        rb.AddForce(deltaVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+        //Rolling Correction
+        //float z = transform.eulerAngles.z;
+        //z -= (z > 180) ? 360 : 0;
+        //Turning Constraint
+        //rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
     }
 
     //Testing PIDs
@@ -186,5 +220,14 @@ public class FollowPath : MonoBehaviour
     private Vector3 TurningConstraint(Vector3 vel, Vector3 angVel)
     {
         return -Vector3.Cross(Vector3.ProjectOnPlane(vel, angVel), angVel);
+    }
+
+    private Vector3 TargetAngVel(Quaternion targetRot)
+    {
+        Vector3 axis;
+        float angle;
+        targetRot.ToAngleAxis(out angle, out axis);
+        angle -= (angle > 180) ? 360 : 0;
+        return Mathf.Deg2Rad * angle * axis.normalized;
     }
 }
