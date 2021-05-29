@@ -21,7 +21,7 @@ public class Accelerometer : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
+    /*
     private void FixedUpdate()
     {
         //Translational Velocity
@@ -33,14 +33,21 @@ public class Accelerometer : MonoBehaviour
         angAcc = (angVelF - angVelI) / Time.fixedDeltaTime;
         angVelI = rb.angularVelocity;
     }
+    */
 
     public Vector3 GetAcceleration()
     {
+        velF = rb.velocity;
+        acc = (velF - velI) / Time.fixedDeltaTime;
+        velI = rb.velocity;
         return acc;
     }
 
     public Vector3 GetAngularAcceleration()
     {
+        angVelF = rb.angularVelocity;
+        angAcc = (angVelF - angVelI) / Time.fixedDeltaTime;
+        angVelI = rb.angularVelocity;
         return angAcc;
     }
 }

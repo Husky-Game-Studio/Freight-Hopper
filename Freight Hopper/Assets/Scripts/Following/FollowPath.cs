@@ -8,15 +8,27 @@ public class FollowPath : MonoBehaviour
     private Vector3 targetPos;
     private Rigidbody rb;
     private float t = 0.0f;
+    Accelerometer accelerometer;
+    [SerializeField]
+    FloatBounds vertical;
+    [SerializeField]
+    FloatBounds forward;
+    [SerializeField]
+    FloatBounds horizontal;
+    [SerializeField]
+    Vector3 followOffset;
+
+    
 
     [SerializeField]
-    private PathCreator pathCreator;
+    private GameObject pathObject;
 
     [SerializeField]
     private float targetVelocity;
 
     [SerializeField]
     private float followDistance;
+
     /*
     [SerializeField]
     private PID.Data forwardPIDData;
@@ -46,7 +58,9 @@ public class FollowPath : MonoBehaviour
     private void Start()
     {
         rb = this.transform.GetComponent<Rigidbody>();
-        path = pathCreator.path;
+        rb.maxAngularVelocity = 50;
+        path = pathObject.GetComponent<PathCreator>().path;
+        accelerometer = GetComponent<Accelerometer>();
         //Initialize_PIDs();
         //rb.velocity = Vector3.forward * targetVelocity;
         /*
@@ -67,7 +81,7 @@ public class FollowPath : MonoBehaviour
     {
         AdjustTarget();
         Debug.DrawLine(rb.position, targetPos);
-        Follow();
+        Follow3();
     }
 
     
@@ -88,8 +102,39 @@ public class FollowPath : MonoBehaviour
         //Forces
         rb.AddRelativeForce(Vector3.forward * deltaVel.z, ForceMode.VelocityChange);
         rb.AddRelativeTorque(deltaAngVel, ForceMode.VelocityChange);
+        float z = transform.eulerAngles.z;
+        z -= (z > 180) ? 360 : 0;
+        rb.AddRelativeTorque(Vector3.forward * -0.05f* z, ForceMode.VelocityChange);
         rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
+    }
 
+    void Follow3() //Misleading, Follow works with ForceMode changed to Acceleration
+    {
+        //Bounds, Accelerometer
+
+        Vector3 target = targetPos - rb.position;
+        Quaternion rot = Quaternion.Inverse(transform.rotation);
+        //Current
+        Vector3 currentVel = rot * rb.velocity;
+        Vector3 currentAngVel = rot * rb.angularVelocity;
+        //Target
+        Vector3 targetVel = Vector3.forward * targetVelocity;
+        Vector3 targetAngVel = currentVel.z * TargetSphereDrive.TargetAngularVelocity(rot * target);
+        //Target Change
+        Vector3 deltaVel = targetVel - currentVel;
+        Vector3 deltaAngVel = targetAngVel - currentAngVel;
+        //Doable Change
+        //deltaVel = new Vector3(horizontal.Clamp(deltaVel.x), vertical.Clamp(deltaVel.y), forward.Clamp(deltaVel.z));
+        //Too tight of turn to make? Slow down
+        //Forces
+        rb.AddRelativeForce(Vector3.forward * deltaVel.z / Time.fixedDeltaTime, ForceMode.Acceleration);
+        rb.AddRelativeTorque(deltaAngVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+        //Rolling Correction
+        float z = transform.eulerAngles.z;
+        z -= (z > 180) ? 360 : 0;
+        rb.AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
+        //Turning Constraint
+        rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
     }
 
     //Testing PIDs
@@ -118,10 +163,10 @@ public class FollowPath : MonoBehaviour
         return (Mathf.Abs(diff) <= range / 2.0f) ? diff : (diff - Mathf.Sign(diff) * range);
     }
 
-    private void AdjustTarget() //TODO: If entire path is within follow distance, this will be a forever loop. Prevent this
+    private void AdjustTarget()
     {
-        Vector3 parentPos = new Vector3(0, 3, 0);
-        while ((path.GetPathPoint(t) + parentPos - this.transform.position).magnitude < followDistance)
+        Vector3 parentPos = pathObject.transform.position;
+        while ((TargetPos(t) - this.transform.position).magnitude < followDistance)
         {
             t += 0.01f;
             if (t >= path.NumSegments)
@@ -129,7 +174,13 @@ public class FollowPath : MonoBehaviour
                 break;
             }
         }
-        targetPos = path.GetPathPoint(t) + parentPos;
+        targetPos = TargetPos(t);
+        //targetPos = path.GetPathPoint(t) + parentPos + followOffset;
+    }
+
+    private Vector3 TargetPos(float t)
+    {
+        return pathObject.transform.TransformPoint(path.GetPathPoint(t)) + followOffset;
     }
 
     private Vector3 TurningConstraint(Vector3 vel, Vector3 angVel)
