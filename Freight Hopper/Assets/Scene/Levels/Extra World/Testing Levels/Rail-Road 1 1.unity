@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3556.9111, g: 1990.4414, b: 1237.3008, a: 1}
+  m_IndirectSpecularColor: {r: 3565.087, g: 1984.3799, b: 1219.4277, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -668,17 +668,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7631039515532287707, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7631039515532287708, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
       propertyPath: m_Name
       value: Train Head
-      objectReference: {fileID: 0}
-    - target: {fileID: 7631039515532287708, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
@@ -1608,11 +1600,10 @@ GameObject:
   - component: {fileID: 626863454}
   - component: {fileID: 626863453}
   - component: {fileID: 626863452}
-  - component: {fileID: 626863451}
   - component: {fileID: 626863450}
   - component: {fileID: 626863449}
   - component: {fileID: 626863448}
-  - component: {fileID: 626863447}
+  - component: {fileID: 626863446}
   m_Layer: 2
   m_Name: Follow Cube 2
   m_TagString: Untagged
@@ -1636,19 +1627,61 @@ Transform:
   m_Father: {fileID: 792658863}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &626863447
+--- !u!114 &626863446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 626863444}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cea8d53168fc4a24080ba006dc1e5d28, type: 3}
+  m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useGravity: 1
+  gravity:
+    useGravity: 1
+    aerial: 1
+  friction:
+    defaultFriction: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
+  collisionManager:
+    maxSlope: 30
+    isGrounded:
+      old: 0
+      current: 0
+    contactNormal:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    contactCount: 0
+    steepCount: 0
+    rigidbodyLinker:
+      connectedRb:
+        old: {fileID: 0}
+        current: {fileID: 0}
+      connectionWorldPosition: {x: 0, y: 0, z: 0}
+      connectionLocalPosition: {x: 0, y: 0, z: 0}
+      connectionVelocity:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+      connectionAcceleration:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+    validUpAxis: {x: 0, y: 0, z: 0}
+  rigidbodyLinker:
+    connectedRb:
+      old: {fileID: 0}
+      current: {fileID: 0}
+    connectionWorldPosition: {x: 0, y: 0, z: 0}
+    connectionLocalPosition: {x: 0, y: 0, z: 0}
+    connectionVelocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    connectionAcceleration:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
 --- !u!114 &626863448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1713,43 +1746,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acc: {x: 0, y: 0, z: 0}
   angAcc: {x: 0, y: 0, z: 0}
---- !u!114 &626863451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626863444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6fe17683d2efe4abea007baae20b30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGrounded:
-    old: 0
-    current: 0
-  contactNormal:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  velocity:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  contactCount: 0
-  steepCount: 0
-  rigidbodyLinker:
-    connectedRb:
-      old: {fileID: 0}
-      current: {fileID: 0}
-    connectionWorldPosition: {x: 0, y: 0, z: 0}
-    connectionLocalPosition: {x: 0, y: 0, z: 0}
-    connectionVelocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    connectionAcceleration:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-  validUpAxis: {x: 0, y: 0, z: 0}
-  maxSlope: 30
 --- !u!54 &626863452
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2081,61 +2077,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &900187110 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7631039515532287708, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
-  m_PrefabInstance: {fileID: 322440280}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &900187111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900187110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cea8d53168fc4a24080ba006dc1e5d28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useGravity: 1
---- !u!114 &900187113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900187110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6fe17683d2efe4abea007baae20b30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGrounded:
-    old: 0
-    current: 0
-  contactNormal:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  velocity:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  contactCount: 0
-  steepCount: 0
-  rigidbodyLinker:
-    connectedRb:
-      old: {fileID: 0}
-      current: {fileID: 0}
-    connectionWorldPosition: {x: 0, y: 0, z: 0}
-    connectionLocalPosition: {x: 0, y: 0, z: 0}
-    connectionVelocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    connectionAcceleration:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-  validUpAxis: {x: 0, y: 0, z: 0}
-  maxSlope: 30
 --- !u!1001 &970087766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2626,7 +2567,6 @@ GameObject:
   - component: {fileID: 1656372297}
   - component: {fileID: 1656372296}
   - component: {fileID: 1656372302}
-  - component: {fileID: 1656372301}
   - component: {fileID: 1656372299}
   - component: {fileID: 1656372303}
   - component: {fileID: 1656372304}
@@ -2735,35 +2675,42 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656372294}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cea8d53168fc4a24080ba006dc1e5d28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useGravity: 1
---- !u!114 &1656372301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656372294}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6fe17683d2efe4abea007baae20b30, type: 3}
+  m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGrounded:
-    old: 0
-    current: 0
-  contactNormal:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  velocity:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  contactCount: 0
-  steepCount: 0
+  gravity:
+    useGravity: 0
+    aerial: 1
+  friction:
+    defaultFriction: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
+  collisionManager:
+    maxSlope: 30
+    isGrounded:
+      old: 0
+      current: 0
+    contactNormal:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    contactCount: 0
+    steepCount: 0
+    rigidbodyLinker:
+      connectedRb:
+        old: {fileID: 0}
+        current: {fileID: 0}
+      connectionWorldPosition: {x: 0, y: 0, z: 0}
+      connectionLocalPosition: {x: 0, y: 0, z: 0}
+      connectionVelocity:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+      connectionAcceleration:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+    validUpAxis: {x: 0, y: 0, z: 0}
   rigidbodyLinker:
     connectedRb:
       old: {fileID: 0}
@@ -2776,8 +2723,6 @@ MonoBehaviour:
     connectionAcceleration:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
-  validUpAxis: {x: 0, y: 0, z: 0}
-  maxSlope: 30
 --- !u!54 &1656372302
 Rigidbody:
   m_ObjectHideFlags: 0
