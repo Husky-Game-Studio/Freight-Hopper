@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3565.087, g: 1984.3799, b: 1219.4277, a: 1}
+  m_IndirectSpecularColor: {r: 3550.7432, g: 1990.9414, b: 1244.9766, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1601,7 +1601,6 @@ GameObject:
   - component: {fileID: 626863453}
   - component: {fileID: 626863452}
   - component: {fileID: 626863450}
-  - component: {fileID: 626863449}
   - component: {fileID: 626863448}
   - component: {fileID: 626863446}
   m_Layer: 2
@@ -1619,7 +1618,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 626863444}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.6, y: 9.24, z: 15.09}
+  m_LocalPosition: {x: -6.61, y: 9.24, z: 9.79}
   m_LocalScale: {x: 20, y: 5, z: 10}
   m_Children:
   - {fileID: 2050745097}
@@ -1643,7 +1642,7 @@ MonoBehaviour:
     useGravity: 1
     aerial: 1
   friction:
-    defaultFriction: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
+    defaultFriction: {fileID: 11400000, guid: 1b68d00f0a67640488ebc3f9fda540c0, type: 2}
   collisionManager:
     maxSlope: 30
     isGrounded:
@@ -1653,6 +1652,9 @@ MonoBehaviour:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
     velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    position:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
     contactCount: 0
@@ -1694,20 +1696,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0001d4aca8e78954da17141e454effc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertical:
-    min: -5
-    max: 5
-  forward:
-    min: -1
-    max: 1
-  horizontal:
-    min: -1
-    max: 1
-  followOffset: {x: 0, y: 20, z: 0}
+  vertical_bounds:
+    min: -60
+    max: 60
+  forward_bounds:
+    min: -60
+    max: 60
+  horizontal_bounds:
+    min: -60
+    max: 60
+  followOffset: {x: 0, y: 15, z: 0}
   disablePitch: 1
-  pathObject: {fileID: 1874902747}
-  targetVelocity: 80
-  followDistance: 30
+  pathObjects:
+  - {fileID: 1874902747}
+  targetVelocity: 60
+  followDistance: 10
+  derailDistance: 50
   roll_PID_data:
     Kp: 0.05
     Ki: 0
@@ -1716,22 +1720,6 @@ MonoBehaviour:
     Kp: 5
     Ki: 5
     Kd: 10
---- !u!114 &626863449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626863444}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06c8023b029fef448acac5dfaca08c3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posTarget: {x: 10, y: 1, z: 10}
-  velTarget: {x: 0, y: 0, z: 5}
-  rotCurrent: 1.5707964
-  newPos: {x: 0, y: 0, z: 0}
 --- !u!114 &626863450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2498,6 +2486,7 @@ Transform:
   - {fileID: 579109189}
   - {fileID: 1874902748}
   - {fileID: 193273201}
+  - {fileID: 1564847349}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2521,6 +2510,70 @@ MonoBehaviour:
     nextLevelStatus: 0
     spawnPosition: {x: 0, y: 0, z: 0}
     activeAbilities: 00000000010000000200000003000000
+--- !u!1 &1564847348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1564847349}
+  - component: {fileID: 1564847351}
+  - component: {fileID: 1564847350}
+  m_Layer: 0
+  m_Name: Wind
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1564847349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564847348}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 83, y: 12.9, z: 113}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1335493215}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1564847350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564847348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5796a5d89909d844bf9543979006794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  forcePerParticle: 500
+  size: {x: 20.82, y: 30.14, z: 42.1}
+  offset: {x: 0, y: 0, z: 0}
+  density: 1.1
+  affectedLayers:
+    serializedVersion: 2
+    m_Bits: 5
+--- !u!114 &1564847351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564847348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36cff9868dc904a4fa1d13f60357fba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1617635130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2568,7 +2621,6 @@ GameObject:
   - component: {fileID: 1656372296}
   - component: {fileID: 1656372302}
   - component: {fileID: 1656372299}
-  - component: {fileID: 1656372303}
   - component: {fileID: 1656372304}
   - component: {fileID: 1656372300}
   m_Layer: 0
@@ -2696,6 +2748,9 @@ MonoBehaviour:
     velocity:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
+    position:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
     contactCount: 0
     steepCount: 0
     rigidbodyLinker:
@@ -2739,22 +2794,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1656372303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656372294}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06c8023b029fef448acac5dfaca08c3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posTarget: {x: 10, y: 1, z: 10}
-  velTarget: {x: 0, y: 0, z: 5}
-  rotCurrent: 1.5707964
-  newPos: {x: 0, y: 0, z: 0}
 --- !u!114 &1656372304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2767,20 +2806,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0001d4aca8e78954da17141e454effc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertical:
-    min: -5
-    max: 5
-  forward:
-    min: -1
-    max: 1
-  horizontal:
-    min: -1
-    max: 1
+  vertical_bounds:
+    min: 0
+    max: 0
+  forward_bounds:
+    min: 0
+    max: 0
+  horizontal_bounds:
+    min: 0
+    max: 0
   followOffset: {x: 0, y: 2, z: 0}
   disablePitch: 0
-  pathObject: {fileID: 193273199}
+  pathObjects: []
   targetVelocity: 5
   followDistance: 3
+  derailDistance: 0
   roll_PID_data:
     Kp: 0.05
     Ki: 0
@@ -3389,7 +3429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2050745097
 Transform:
   m_ObjectHideFlags: 0

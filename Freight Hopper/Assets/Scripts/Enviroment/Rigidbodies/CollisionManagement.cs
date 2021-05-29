@@ -9,6 +9,7 @@ public class CollisionManagement
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Var<Vector3> velocity;
+    [ReadOnly, SerializeField] private Var<Vector3> position;
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
     [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
@@ -19,6 +20,7 @@ public class CollisionManagement
     public Var<bool> IsGrounded => isGrounded;
 
     public Var<Vector3> Velocity => velocity;
+    public Var<Vector3> Position => position;
 
     public delegate void CollisionEventHandler();
 
@@ -155,6 +157,7 @@ public class CollisionManagement
         contactNormal.UpdateOld();
         rigidbodyLinker.UpdateOldValues();
         velocity.UpdateOld();
+        position.UpdateOld();
     }
 
     private void ClearValues()
@@ -163,6 +166,7 @@ public class CollisionManagement
         contactCount = 0;
         steepCount = 0;
         velocity.current = rb.velocity;
+        position.current = rb.position;
 
         Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
         if (upAxis != Vector3.zero)

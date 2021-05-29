@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class FollowPath : MonoBehaviour
 {
-    private BezierPath path;
+    private List<BezierPath> paths;
+    private int currentPath = 0;
     private Vector3 targetPos;
     private Rigidbody rb;
     private float t = 0.0f;
     Accelerometer accelerometer;
     [SerializeField]
-    FloatBounds vertical;
+    FloatBounds vertical_bounds;
     [SerializeField]
-    FloatBounds forward;
+    FloatBounds forward_bounds;
     [SerializeField]
-    FloatBounds horizontal;
+    FloatBounds horizontal_bounds;
     [SerializeField]
     Vector3 followOffset;
     [SerializeField]
@@ -24,13 +25,16 @@ public class FollowPath : MonoBehaviour
     
 
     [SerializeField]
-    private GameObject pathObject;
+    private List<GameObject> pathObjects;
 
     [SerializeField]
     private float targetVelocity;
 
     [SerializeField]
     private float followDistance;
+
+    [SerializeField]
+    private float derailDistance;
 
     /*
     [SerializeField]
@@ -62,7 +66,11 @@ public class FollowPath : MonoBehaviour
     {
         rb = this.transform.GetComponent<Rigidbody>();
         rb.maxAngularVelocity = 50;
-        path = pathObject.GetComponent<PathCreator>().path;
+        paths = new List<BezierPath>();
+        for(int i = 0; i < pathObjects.Count; i++)
+        {
+            paths.Add(pathObjects[i].GetComponent<PathCreator>().path);
+        }
         accelerometer = GetComponent<Accelerometer>();
         //Initialize_PIDs();
         //rb.velocity = Vector3.forward * targetVelocity;
@@ -82,9 +90,12 @@ public class FollowPath : MonoBehaviour
 
     private void FixedUpdate()
     {
-        AdjustTarget();
-        Debug.DrawLine(rb.position, targetPos);
-        Follow4();
+        if (currentPath < paths.Count)
+        {
+            AdjustTarget();
+            //Debug.DrawLine(rb.position, targetPos);
+            Follow4();
+        }
     }
 
     
@@ -146,24 +157,39 @@ public class FollowPath : MonoBehaviour
 
     void Follow4()
     {
-        Vector3 target = targetPos - rb.position;
+        Vector3 target = targetPos - TargetPos(lastT);
+        Debug.DrawLine(TargetPos(lastT), targetPos);
         Quaternion rot = Quaternion.Inverse(transform.rotation);
         //Current
         Vector3 currentVel = rb.velocity;
         Vector3 currentAngVel = rb.angularVelocity;
+
         //Target
         Vector3 targetVel = (target.normalized) * targetVelocity;
-        Vector3 targetAngVel = currentVel.z * TargetSphereDrive.TargetAngularVelocity(rot * target);
+
+        // Vector3 targetAngVel = currentVel.z * TargetSphereDrive.TargetAngularVelocity(rot * target);
+        Vector3 forward = target.normalized;
+        Vector3 right = Vector3.Cross(GetComponent<PhysicsManager>().collisionManager.ValidUpAxis, target.normalized);
+        Vector3 up = Vector3.Cross(target.normalized, right);
+        Debug.DrawLine(transform.position, transform.position + forward, Color.blue, Time.fixedDeltaTime);
+        Debug.DrawLine(transform.position, transform.position + right, Color.red, Time.fixedDeltaTime);
+        Debug.DrawLine(transform.position, transform.position + up, Color.green, Time.fixedDeltaTime);
+
+        Vector3 targetAngVel = TargetAngVel(Quaternion.LookRotation(target.normalized, up) * rot);
+
+        // Vector3 targetAngVel = currentVel * (rot * target);
+
         //Target Change
         Vector3 deltaVel = targetVel - currentVel;
         Vector3 deltaAngVel = targetAngVel - currentAngVel;
-        deltaAngVel = new Vector3((disablePitch) ? 0.0f : deltaAngVel.x, deltaAngVel.y, deltaAngVel.z);
+        //deltaAngVel = new Vector3((disablePitch) ? 0.0f : deltaAngVel.x, deltaAngVel.y, deltaAngVel.z);
 
         //Doable Change
-        //deltaVel = new Vector3(horizontal.Clamp(deltaVel.x), vertical.Clamp(deltaVel.y), forward.Clamp(deltaVel.z));
+        deltaVel = new Vector3(horizontal_bounds.Clamp(deltaVel.x), vertical_bounds.Clamp(deltaVel.y), forward_bounds.Clamp(deltaVel.z));
         //Too tight of turn to make? Slow down
         //Forces
-        rb.AddForce(deltaVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+        rb.AddForce(Vector3.ProjectOnPlane(deltaVel, GetComponent<PhysicsManager>().collisionManager.ValidUpAxis) / Time.fixedDeltaTime, ForceMode.Acceleration);
+        rb.AddTorque(deltaAngVel / Time.fixedDeltaTime, ForceMode.Acceleration);
         //Rolling Correction
         //float z = transform.eulerAngles.z;
         //z -= (z > 180) ? 360 : 0;
@@ -197,24 +223,58 @@ public class FollowPath : MonoBehaviour
         return (Mathf.Abs(diff) <= range / 2.0f) ? diff : (diff - Mathf.Sign(diff) * range);
     }
 
+    private float lastT;
     private void AdjustTarget()
     {
-        Vector3 parentPos = pathObject.transform.position;
+        if ((TargetPos(t) - this.transform.position).magnitude < followDistance)
+        {
+            lastT = t;
+        }
         while ((TargetPos(t) - this.transform.position).magnitude < followDistance)
         {
             t += 0.01f;
-            if (t >= path.NumSegments)
+            if (t >= paths[currentPath].NumSegments)
             {
-                break;
+                t = paths[currentPath].NumSegments;
+                EndPath();
+                return;
             }
+            
+        }
+        if (IsDerail())
+        {
+            Derail();
+            return;
         }
         targetPos = TargetPos(t);
-        //targetPos = path.GetPathPoint(t) + parentPos + followOffset;
+    }
+
+    private void EndPath()
+    {
+        // STOP FOLLOWING THE PATH
+        currentPath++;
+    }
+
+    // 
+    private bool IsDerail()
+    {
+        float distanceFromCurve = (TargetPos(t) - this.transform.position).magnitude;
+        if (distanceFromCurve > derailDistance)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // 
+    private void Derail()
+    {
+        currentPath = paths[currentPath].NumSegments;
     }
 
     private Vector3 TargetPos(float t)
     {
-        return pathObject.transform.TransformPoint(path.GetPathPoint(t)) + followOffset;
+        return pathObjects[currentPath].transform.TransformPoint(paths[currentPath].GetPathPoint(t)) + followOffset;
     }
 
     private Vector3 TurningConstraint(Vector3 vel, Vector3 angVel)
@@ -222,11 +282,11 @@ public class FollowPath : MonoBehaviour
         return -Vector3.Cross(Vector3.ProjectOnPlane(vel, angVel), angVel);
     }
 
-    private Vector3 TargetAngVel(Quaternion targetRot)
+    private Vector3 TargetAngVel(Quaternion targetDeltaRot)
     {
         Vector3 axis;
         float angle;
-        targetRot.ToAngleAxis(out angle, out axis);
+        targetDeltaRot.ToAngleAxis(out angle, out axis);
         angle -= (angle > 180) ? 360 : 0;
         return Mathf.Deg2Rad * angle * axis.normalized;
     }
