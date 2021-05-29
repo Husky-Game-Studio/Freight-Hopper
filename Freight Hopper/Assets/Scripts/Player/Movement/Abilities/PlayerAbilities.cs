@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[RequireComponent(typeof(CollisionManagement), typeof(Rigidbody))]
+[RequireComponent(typeof(PhysicsManager), typeof(Rigidbody))]
 public class PlayerAbilities : MonoBehaviour
 {
     public MovementBehavior movementBehavior;
@@ -73,7 +73,7 @@ public class PlayerAbilities : MonoBehaviour
     private void Awake()
     {
         playerRb = GetComponent<Rigidbody>();
-        playerCM = GetComponent<CollisionManagement>();
+        playerCM = GetComponent<PhysicsManager>().collisionManager;
         playerSM = GetComponentInChildren<SoundManager>();
 
         foreach (AbilityBehavior ability in abilities)

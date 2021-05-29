@@ -23,12 +23,12 @@ public class FullStopBehavior : AbilityBehavior
     public override void ExitAction()
     {
         base.ExitAction();
-        Player.Instance.GetComponent<Gravity>().EnableGravity();
+        Player.Instance.GetComponent<PhysicsManager>().gravity.EnableGravity();
     }
 
     public override void EntryAction()
     {
         fullstopDuration.ResetTimer();
-        Player.Instance.GetComponent<Gravity>().DisableGravity();
+        Player.Instance.GetComponent<PhysicsManager>().gravity.DisableGravity();
     }
 }

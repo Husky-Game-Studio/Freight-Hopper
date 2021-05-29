@@ -178,7 +178,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public override void OnValidate()
     {
         abilities = GetComponent<PlayerAbilities>();
-        playerCM = GetComponent<CollisionManagement>();
+        playerCM = GetComponent<PhysicsManager>().collisionManager;
     }
 
     private void PlayerSpawned()

@@ -59,7 +59,7 @@ public class Portal : MonoBehaviour
     {
         if (other.attachedRigidbody != null)
         {
-            if (other.GetComponent<CollisionManagement>() == null)
+            if (other.GetComponent<PhysicsManager>() == null)
             {
                 return;
             }
@@ -84,7 +84,7 @@ public class Portal : MonoBehaviour
         Vector3 velocity = Vector3.zero;
         if (velocity == Vector3.zero)
         {
-            velocity = other.GetComponent<CollisionManagement>().Velocity.old;
+            velocity = other.GetComponent<PhysicsManager>().collisionManager.Velocity.old;
         }
 
         Vector3 reflectionNormal = (this.transform.forward + otherPortal.transform.forward).normalized;

@@ -25,7 +25,6 @@ public class RigidbodyLinker
     /// Applies acceleration to ourRigidbody if applicable. Not applicable if mass of linked rigidbody
     /// is too small or its not kinematic
     /// </summary>
-    /// <param name="ourRigidbody"></param>
     public void UpdateConnectionState(Rigidbody ourRigidbody)
     {
         if (!connectedRb.current)

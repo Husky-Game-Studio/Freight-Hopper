@@ -1,12 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class CollisionManagement : MonoBehaviour
+[System.Serializable]
+public class CollisionManagement
 {
     private Rigidbody rb;
-
+    [SerializeField] private float maxSlope = 30;
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Var<Vector3> velocity;
@@ -21,13 +20,13 @@ public class CollisionManagement : MonoBehaviour
 
     public Var<Vector3> Velocity => velocity;
 
-    [SerializeField] private float maxSlope = 30;
-
     public delegate void CollisionEventHandler();
 
     public event CollisionEventHandler Landed;
 
     public event CollisionEventHandler CollisionDataCollected;
+
+    private MonoBehaviour component;
 
     /// <summary>
     /// Checks cardinal direction (relative) walls for their normals in range
@@ -65,13 +64,14 @@ public class CollisionManagement : MonoBehaviour
         return walls;
     }
 
-    private void Awake()
+    public void Initialize(Rigidbody rb, MonoBehaviour component)
     {
-        rb = GetComponent<Rigidbody>();
+        this.rb = rb;
+        this.component = component;
         contactNormal.current = CustomGravity.GetUpAxis(rb.position);
         contactNormal.UpdateOld();
 
-        StartCoroutine(LateFixedUpdate());
+        component.StartCoroutine(LateFixedUpdate());
     }
 
     private void EvaulateCollisions(Collision collision)
@@ -116,7 +116,8 @@ public class CollisionManagement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    // Call using OnCollisionEnter from a monobehavior
+    public void CollisionEnter(Collision collision)
     {
         EvaulateCollisions(collision);
         if (isGrounded.current)
@@ -125,7 +126,8 @@ public class CollisionManagement : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    // Call using OnCollisionStay from a monobehavior
+    public void CollisionStay(Collision collision)
     {
         EvaulateCollisions(collision);
         if (isGrounded.current && !isGrounded.old)

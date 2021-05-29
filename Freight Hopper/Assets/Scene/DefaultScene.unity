@@ -1081,11 +1081,9 @@ GameObject:
   - component: {fileID: 6851446874579196112}
   - component: {fileID: 6851446874579196117}
   - component: {fileID: 4493642203787552938}
-  - component: {fileID: 4493642203787552937}
-  - component: {fileID: 4493642203787552935}
   - component: {fileID: 4493642203787552936}
+  - component: {fileID: 4493642203787552935}
   - component: {fileID: 4493642203787552939}
-  - component: {fileID: 4493642203787552940}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -1102,11 +1100,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 4493642203787552934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7f837b1f1de82a48aba93d23de70d17, type: 3}
+  m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airFriction: 0.01
-  kineticGroundFriction: 0.08
+  gravity:
+    useGravity: 1
+    aerial: 0
+  friction:
+    defaultFriction: {fileID: 11400000, guid: 1b68d00f0a67640488ebc3f9fda540c0, type: 2}
+  collisionManager:
+    maxSlope: 30
+    isGrounded:
+      old: 0
+      current: 0
+    contactNormal:
+      old: {x: -0, y: -0, z: -0}
+      current: {x: -0, y: -0, z: -0}
+    velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    contactCount: 0
+    steepCount: 0
+    rigidbodyLinker:
+      connectedRb:
+        old: {fileID: 0}
+        current: {fileID: 0}
+      connectionWorldPosition: {x: 0, y: 0, z: 0}
+      connectionLocalPosition: {x: 0, y: 0, z: 0}
+      connectionVelocity:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+      connectionAcceleration:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+    validUpAxis: {x: 0, y: 0, z: 0}
+  rigidbodyLinker:
+    connectedRb:
+      old: {fileID: 0}
+      current: {fileID: 0}
+    connectionWorldPosition: {x: 0, y: 0, z: 0}
+    connectionLocalPosition: {x: 0, y: 0, z: 0}
+    connectionVelocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    connectionAcceleration:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
 --- !u!114 &4493642203787552936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1128,43 +1167,6 @@ MonoBehaviour:
   upwardDashBehavior: {fileID: 1798020247}
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
---- !u!114 &4493642203787552937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6fe17683d2efe4abea007baae20b30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGrounded:
-    old: 0
-    current: 0
-  contactNormal:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  velocity:
-    old: {x: 0, y: 0, z: 0}
-    current: {x: 0, y: 0, z: 0}
-  contactCount: 0
-  steepCount: 0
-  rigidbodyLinker:
-    connectedRb:
-      old: {fileID: 0}
-      current: {fileID: 0}
-    connectionWorldPosition: {x: 0, y: 0, z: 0}
-    connectionLocalPosition: {x: 0, y: 0, z: 0}
-    connectionVelocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    connectionAcceleration:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-  validUpAxis: {x: 0, y: 0, z: 0}
-  maxSlope: 60
 --- !u!114 &4493642203787552938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1185,7 +1187,32 @@ MonoBehaviour:
     duration: 1
     current: 0
   abilities: {fileID: 4493642203787552936}
-  playerCM: {fileID: 4493642203787552937}
+  playerCM:
+    maxSlope: 30
+    isGrounded:
+      old: 0
+      current: 0
+    contactNormal:
+      old: {x: -0, y: -0, z: -0}
+      current: {x: -0, y: -0, z: -0}
+    velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    contactCount: 0
+    steepCount: 0
+    rigidbodyLinker:
+      connectedRb:
+        old: {fileID: 0}
+        current: {fileID: 0}
+      connectionWorldPosition: {x: 0, y: 0, z: 0}
+      connectionLocalPosition: {x: 0, y: 0, z: 0}
+      connectionVelocity:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+      connectionAcceleration:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+    validUpAxis: {x: 0, y: 0, z: 0}
 --- !u!114 &4493642203787552939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1198,19 +1225,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5f4d43103d85845830e2fc2a5d3716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4493642203787552940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a3ac6989e5dd9642b14c2498e92dea8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useGravity: 1
 --- !u!114 &6851446874351635506
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,21 +1,24 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-// Classes that inherit from this must call gravity loop on their own loops
-public abstract class Gravity : MonoBehaviour
+[System.Serializable]
+public class Gravity
 {
-    [SerializeField] protected bool useGravity = true;
-    protected Rigidbody rb;
+    [SerializeField] private bool useGravity = true;
+    [SerializeField] private bool aerial = false;
+    private Rigidbody rb;
+    private CollisionManagement collisionManagement;
 
-    private void Awake()
+    public void Initialize(Rigidbody rb, CollisionManagement collisionManagement)
     {
-        InitializeComponents();
+        this.rb = rb;
+        this.collisionManagement = collisionManagement;
+        rb.useGravity = false;
+        collisionManagement.CollisionDataCollected += GravityLoop;
     }
 
-    protected virtual void InitializeComponents()
+    ~Gravity()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.useGravity = false;
+        collisionManagement.CollisionDataCollected -= GravityLoop;
     }
 
     public void DisableGravity()
@@ -28,17 +31,12 @@ public abstract class Gravity : MonoBehaviour
         useGravity = true;
     }
 
-    protected virtual void GravityLoop()
+    private void GravityLoop()
     {
-        if (!useGravity)
+        if (!useGravity || (collisionManagement.IsGrounded.current && !aerial))
         {
             return;
         }
-        ApplyGravityForce();
-    }
-
-    protected void ApplyGravityForce()
-    {
         rb.AddForce(CustomGravity.GetGravity(rb.position), ForceMode.Acceleration);
     }
 }

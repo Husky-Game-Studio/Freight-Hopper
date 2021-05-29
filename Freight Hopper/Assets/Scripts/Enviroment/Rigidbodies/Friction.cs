@@ -1,35 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CollisionManagement))]
-public class Friction : MonoBehaviour
+[System.Serializable]
+public class Friction
 {
     private CollisionManagement playerCollision;
     private Rigidbody rb;
 
-    [SerializeField] private float airFriction = 0.01f;
-    [SerializeField] private float kineticGroundFriction = 0.08f;
+    [SerializeField] private FrictionData defaultFriction;
 
-    private void Awake()
+    public void Initialize(Rigidbody rb, CollisionManagement collisionManagement)
     {
-        playerCollision = GetComponent<CollisionManagement>();
-        rb = GetComponent<Rigidbody>();
-    }
-
-    private void OnEnable()
-    {
+        playerCollision = collisionManagement;
+        this.rb = rb;
         playerCollision.CollisionDataCollected += ApplyFriction;
     }
 
-    private void OnDisable()
+    ~Friction()
     {
         playerCollision.CollisionDataCollected -= ApplyFriction;
     }
 
     private void ApplyFriction()
     {
-        float amount = playerCollision.IsGrounded.current ? kineticGroundFriction : airFriction;
+        float amount = playerCollision.IsGrounded.current ? defaultFriction.Ground : defaultFriction.Air;
 
         Vector3 force = (rb.velocity - playerCollision.rigidbodyLinker.ConnectionVelocity.current) * amount;
 
