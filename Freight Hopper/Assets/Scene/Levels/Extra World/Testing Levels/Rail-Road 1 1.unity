@@ -628,6 +628,14 @@ PrefabInstance:
       propertyPath: aerial
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 900187112, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
+      propertyPath: friction.defaultFriction.air
+      value: 
+      objectReference: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    - target: {fileID: 900187112, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
+      propertyPath: friction.defaultFriction.ground
+      value: 
+      objectReference: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
     - target: {fileID: 7110399510810264678, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1646,8 +1654,9 @@ MonoBehaviour:
   gravity:
     useGravity: 1
   friction:
-    defaultFriction: {fileID: 11400000, guid: 1b68d00f0a67640488ebc3f9fda540c0, type: 2}
-    currentFriction: {fileID: 0}
+    defaultFriction:
+      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+      ground: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
   collisionManager:
     maxSlope: 30
     isGrounded:
@@ -2741,8 +2750,9 @@ MonoBehaviour:
   gravity:
     useGravity: 0
   friction:
-    defaultFriction: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
-    currentFriction: {fileID: 0}
+    defaultFriction:
+      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+      ground: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
   collisionManager:
     maxSlope: 30
     isGrounded:

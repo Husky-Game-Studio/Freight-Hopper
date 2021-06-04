@@ -185,5 +185,6 @@ public class CollisionManagement
         }
         contactNormal.current = validUpAxis;
         rigidbodyLinker.ClearValues();
+        frictionManager.ClearValues();
     }
 }

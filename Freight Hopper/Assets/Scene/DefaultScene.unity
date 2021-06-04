@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3573.504, g: 1988.5029, b: 1220.0293, a: 1}
+  m_IndirectSpecularColor: {r: 3564.5508, g: 1983.6826, b: 1218.2559, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1107,8 +1107,12 @@ MonoBehaviour:
   gravity:
     useGravity: 1
   friction:
-    defaultFriction: {fileID: 11400000, guid: 1b68d00f0a67640488ebc3f9fda540c0, type: 2}
-    currentFriction: {fileID: 0}
+    defaultFriction:
+      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+      ground: {fileID: 11400000, guid: 4b438a26d56c340408c86e43cf1c0583, type: 2}
+    currentFriction:
+      air: {fileID: 0}
+      ground: {fileID: 0}
   collisionManager:
     maxSlope: 60
     isGrounded:
