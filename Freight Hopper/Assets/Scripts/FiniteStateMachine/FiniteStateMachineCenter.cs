@@ -4,18 +4,16 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 {
     // Machine Fields
     [SerializeField] private string currentStateName;
-
     [SerializeField] private string currentSubStateName;
     [SerializeField] private string previousStateName;
     public BasicState currentState;
     public BasicState previousState;
     public BasicState currentSubState;
+    private bool amSubStateMachine = false;
 
     // MonoBehavior functions
     public virtual void OnValidate() {}
-
     public abstract void OnEnable();
-
     public abstract void OnDisable();
 
     // Pefromed each Update Tick
@@ -69,4 +67,6 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     public BasicState GetCurrentState() { return currentState; }
 
     public BasicState GetPreviousState() { return previousState; }
+
+    public void SetAsSubStateMachine() { amSubStateMachine = true; }
 }
