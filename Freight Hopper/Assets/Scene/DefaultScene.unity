@@ -1103,13 +1103,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aerial: 0
   gravity:
     useGravity: 1
-    aerial: 0
   friction:
     defaultFriction: {fileID: 11400000, guid: 1b68d00f0a67640488ebc3f9fda540c0, type: 2}
+    currentFriction: {fileID: 0}
   collisionManager:
-    maxSlope: 30
+    maxSlope: 60
     isGrounded:
       old: 0
       current: 0
@@ -1117,6 +1118,9 @@ MonoBehaviour:
       old: {x: -0, y: -0, z: -0}
       current: {x: -0, y: -0, z: -0}
     velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    position:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
     contactCount: 0
@@ -1188,7 +1192,7 @@ MonoBehaviour:
     current: 0
   abilities: {fileID: 4493642203787552936}
   playerCM:
-    maxSlope: 30
+    maxSlope: 60
     isGrounded:
       old: 0
       current: 0
@@ -1196,6 +1200,9 @@ MonoBehaviour:
       old: {x: -0, y: -0, z: -0}
       current: {x: -0, y: -0, z: -0}
     velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    position:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
     contactCount: 0

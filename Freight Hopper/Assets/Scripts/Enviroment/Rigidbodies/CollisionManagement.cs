@@ -4,8 +4,12 @@ using UnityEngine;
 [System.Serializable]
 public class CollisionManagement
 {
-    private Rigidbody rb;
-    [SerializeField] private float maxSlope = 30;
+    [System.NonSerialized] private MonoBehaviour component;
+    [System.NonSerialized] private Rigidbody rb;
+    [System.NonSerialized] private Friction frictionManager;
+    [System.NonSerialized] private bool aerial;
+
+    [SerializeField] private float maxSlope = 60;
     [ReadOnly, SerializeField] private Var<bool> isGrounded;
     [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Var<Vector3> velocity;
@@ -27,8 +31,6 @@ public class CollisionManagement
     public event CollisionEventHandler Landed;
 
     public event CollisionEventHandler CollisionDataCollected;
-
-    private MonoBehaviour component;
 
     /// <summary>
     /// Checks cardinal direction (relative) walls for their normals in range
@@ -66,10 +68,13 @@ public class CollisionManagement
         return walls;
     }
 
-    public void Initialize(Rigidbody rb, MonoBehaviour component)
+    public void Initialize(Rigidbody rb, MonoBehaviour component, Friction frictionManager, bool aerial)
     {
         this.rb = rb;
         this.component = component;
+        this.frictionManager = frictionManager;
+        this.aerial = aerial;
+
         contactNormal.current = CustomGravity.GetUpAxis(rb.position);
         contactNormal.UpdateOld();
 
@@ -78,6 +83,11 @@ public class CollisionManagement
 
     private void EvaulateCollisions(Collision collision)
     {
+        if (aerial)
+        {
+            return;
+        }
+
         contactNormal.current = Vector3.zero;
         Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
         for (int i = 0; i < collision.contactCount; i++)
@@ -96,7 +106,7 @@ public class CollisionManagement
                 isGrounded.current = true;
                 contactNormal.current += normal;
                 contactCount++;
-
+                frictionManager.EvalauteSurface(collision);
                 rigidbodyLinker.UpdateLink(collision.rigidbody);
             }
             else

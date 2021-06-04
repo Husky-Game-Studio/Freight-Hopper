@@ -3,6 +3,7 @@ using UnityEngine;
 [System.Serializable, RequireComponent(typeof(Rigidbody))]
 public class PhysicsManager : MonoBehaviour
 {
+    [SerializeField] private bool aerial = false;
     public Gravity gravity;
     public Friction friction;
     public CollisionManagement collisionManager;
@@ -17,8 +18,8 @@ public class PhysicsManager : MonoBehaviour
 
     private void Start()
     {
-        collisionManager.Initialize(rb, this);
-        gravity.Initialize(rb, collisionManager);
+        collisionManager.Initialize(rb, this, friction, aerial);
+        gravity.Initialize(rb, collisionManager, aerial);
         friction.Initialize(rb, collisionManager);
     }
 

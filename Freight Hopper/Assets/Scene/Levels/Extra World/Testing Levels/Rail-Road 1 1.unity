@@ -624,6 +624,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 792658863}
     m_Modifications:
+    - target: {fileID: 900187112, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
+      propertyPath: aerial
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7110399510810264678, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1638,11 +1642,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aerial: 1
   gravity:
     useGravity: 1
-    aerial: 1
   friction:
     defaultFriction: {fileID: 11400000, guid: 1b68d00f0a67640488ebc3f9fda540c0, type: 2}
+    currentFriction: {fileID: 0}
   collisionManager:
     maxSlope: 30
     isGrounded:
@@ -2732,11 +2737,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aerial: 1
   gravity:
     useGravity: 0
-    aerial: 1
   friction:
     defaultFriction: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
+    currentFriction: {fileID: 0}
   collisionManager:
     maxSlope: 30
     isGrounded:

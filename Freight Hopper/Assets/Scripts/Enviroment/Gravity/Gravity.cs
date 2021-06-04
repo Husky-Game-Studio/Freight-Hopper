@@ -4,14 +4,15 @@ using UnityEngine;
 public class Gravity
 {
     [SerializeField] private bool useGravity = true;
-    [SerializeField] private bool aerial = false;
-    private Rigidbody rb;
-    private CollisionManagement collisionManagement;
+    [System.NonSerialized] private bool aerial;
+    [System.NonSerialized] private Rigidbody rb;
+    [System.NonSerialized] private CollisionManagement collisionManagement;
 
-    public void Initialize(Rigidbody rb, CollisionManagement collisionManagement)
+    public void Initialize(Rigidbody rb, CollisionManagement collisionManagement, bool aerial)
     {
         this.rb = rb;
         this.collisionManagement = collisionManagement;
+        this.aerial = aerial;
         rb.useGravity = false;
         collisionManagement.CollisionDataCollected += GravityLoop;
     }
