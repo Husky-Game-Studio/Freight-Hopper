@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6392157}
+  m_Color: {r: 0.3915094, g: 0.6125316, b: 1, a: 0.6392157}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -926,7 +926,7 @@ MonoBehaviour:
   pole: {fileID: 840649353}
   breakMaxLengthPercent: 1.25
   maxLength: 40
-  grappleExtensionSpeed: 100
+  grappleExtensionSpeed: 200
   grappleMoveSpeed: 40
   affectedLayers:
     serializedVersion: 2
@@ -991,10 +991,10 @@ MonoBehaviour:
   consumed: 0
   preventConsumption: 0
   storedVelocity: {x: 0, y: 0, z: 0}
-  initialUpwardsForce: 20
-  consistentForce: 2
+  initialUpwardsForce: 30
+  consistentForce: 3
   duration:
-    duration: 0.6
+    duration: 0.3
     current: 0
 --- !u!114 &1798020248
 MonoBehaviour:
@@ -1017,7 +1017,7 @@ MonoBehaviour:
   targetedLayers:
     serializedVersion: 2
     m_Bits: 1
-  forceMultiplier: 35
+  forceMultiplier: 40
   velocityGainMultiplier: 1.5
 --- !u!1 &1882243771
 GameObject:
@@ -1265,7 +1265,7 @@ MonoBehaviour:
   previousStateName: 
   grappleFiring: 0
   defaultCrosshair: {fileID: 1882243771}
-  grappleCrosshair: {fileID: 0}
+  grappleCrosshair: {fileID: 27818065}
   initialGroundPoundBurstCoolDown:
     duration: 1
     current: 0
