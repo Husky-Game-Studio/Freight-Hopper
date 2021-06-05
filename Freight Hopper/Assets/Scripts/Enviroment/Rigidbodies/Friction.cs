@@ -42,7 +42,7 @@ public class Friction
             force = force.ProjectOnContactPlane(playerCollision.ContactNormal.current);
         }
 
-        rb.AddForce(-force, ForceMode.VelocityChange);
+        rb.AddForce(-force / Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
     // This assumes that the surface is valid (e.g. slope angle not too steep). Called by collisionManagement

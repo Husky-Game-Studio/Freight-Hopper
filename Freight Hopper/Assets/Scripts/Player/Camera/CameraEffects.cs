@@ -54,7 +54,7 @@ public class CameraEffects : MonoBehaviour
 
     private void Update()
     {
-        Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
+        Vector3 speedLineDirection = cam.transform.InverseTransformDirection(playerRB.velocity.normalized);
         speedLines.SetVector3("Direction", speedLineDirection);
         playerSpeed.Update(playerRB.velocity.magnitude);
         if (playerRB.velocity.magnitude <= 1)
