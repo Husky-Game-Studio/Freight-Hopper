@@ -5,7 +5,7 @@ using System;
 // https://www.youtube.com/watch?v=nnrOhb5UdRc
 
 public abstract class BasicState
-{
+{ 
     protected List<Func<BasicState>> stateTransitions;
     protected FiniteStateMachineCenter machineCenter;
 
