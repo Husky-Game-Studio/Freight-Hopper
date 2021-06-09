@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3550.7432, g: 1990.9414, b: 1244.9766, a: 1}
+  m_IndirectSpecularColor: {r: 3564.4736, g: 1986.5566, b: 1224.2598, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -624,6 +624,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 792658863}
     m_Modifications:
+    - target: {fileID: 900187112, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
+      propertyPath: aerial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 900187112, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
+      propertyPath: friction.defaultFriction.air
+      value: 
+      objectReference: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    - target: {fileID: 900187112, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
+      propertyPath: friction.defaultFriction.ground
+      value: 
+      objectReference: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
     - target: {fileID: 7110399510810264678, guid: 6664ce9997c5f7d458c9fa37e9c4cd8d, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -838,6 +850,70 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &493732375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 493732376}
+  - component: {fileID: 493732378}
+  - component: {fileID: 493732377}
+  m_Layer: 0
+  m_Name: Wind (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &493732376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493732375}
+  m_LocalRotation: {x: -0.717154, y: 0, z: 0, w: 0.6969148}
+  m_LocalPosition: {x: 198.9, y: 27.6, z: 251.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1335493215}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: -91.64, y: 0, z: 0}
+--- !u!114 &493732377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493732375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5796a5d89909d844bf9543979006794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  forcePerParticle: 8
+  size: {x: 36.15, y: 30.14, z: 42.1}
+  offset: {x: 0, y: 0, z: 0}
+  density: 1.1
+  affectedLayers:
+    serializedVersion: 2
+    m_Bits: 5
+--- !u!114 &493732378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493732375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36cff9868dc904a4fa1d13f60357fba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &579109188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,11 +1714,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aerial: 1
   gravity:
     useGravity: 1
-    aerial: 1
   friction:
-    defaultFriction: {fileID: 11400000, guid: 1b68d00f0a67640488ebc3f9fda540c0, type: 2}
+    defaultFriction:
+      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+      ground: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
   collisionManager:
     maxSlope: 30
     isGrounded:
@@ -1706,12 +1784,12 @@ MonoBehaviour:
     min: -60
     max: 60
   followOffset: {x: 0, y: 15, z: 0}
-  disablePitch: 1
+  disablePitch: 0
   pathObjects:
   - {fileID: 1874902747}
-  targetVelocity: 60
-  followDistance: 10
-  derailDistance: 50
+  targetVelocity: 40
+  followDistance: 15
+  derailDistance: 30
   roll_PID_data:
     Kp: 0.05
     Ki: 0
@@ -2487,6 +2565,7 @@ Transform:
   - {fileID: 1874902748}
   - {fileID: 193273201}
   - {fileID: 1564847349}
+  - {fileID: 493732376}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2527,7 +2606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1564847349
 Transform:
   m_ObjectHideFlags: 0
@@ -2535,13 +2614,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1564847348}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 83, y: 12.9, z: 113}
+  m_LocalRotation: {x: -0.1714993, y: 0, z: 0, w: 0.9851843}
+  m_LocalPosition: {x: 83, y: 0.33, z: 113}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1335493215}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -19.75, y: 0, z: 0}
 --- !u!114 &1564847350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2555,7 +2634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   active: 1
-  forcePerParticle: 500
+  forcePerParticle: 5
   size: {x: 20.82, y: 30.14, z: 42.1}
   offset: {x: 0, y: 0, z: 0}
   density: 1.1
@@ -2732,11 +2811,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aerial: 1
   gravity:
     useGravity: 0
-    aerial: 1
   friction:
-    defaultFriction: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
+    defaultFriction:
+      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+      ground: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
   collisionManager:
     maxSlope: 30
     isGrounded:
@@ -3074,9 +3155,12 @@ MonoBehaviour:
     - {x: 58.30165, y: 2.5192907, z: 65.3522}
     - {x: 73.26812, y: 2.559384, z: 52.792713}
     - {x: 88.961975, y: 2.601424, z: 39.622906}
-    - {x: 88.76735, y: 22.772701, z: 36.967293}
-    - {x: 99.06891, y: 22.800314, z: 28.322514}
-  focusIndex: 4
+    - {x: 88.25389, y: 28.425545, z: 36.775963}
+    - {x: 98.409744, y: 26.208815, z: 28.24357}
+    - {x: 99.16499, y: 26.044012, z: 27.609112}
+    - {x: 134.59001, y: 24.885878, z: 3.132043}
+    - {x: 135.3452, y: 24.721045, z: 2.4975853}
+  focusIndex: 6
 --- !u!64 &1874902753
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3429,7 +3513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2050745097
 Transform:
   m_ObjectHideFlags: 0

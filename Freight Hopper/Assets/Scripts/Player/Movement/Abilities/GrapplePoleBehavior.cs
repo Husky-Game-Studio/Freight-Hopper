@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class GrapplePoleBehavior : AbilityBehavior
 {
-    [SerializeField, ReadOnly] private float length;
     [SerializeField] private LineRenderer pole;
     [SerializeField, Range(0.9f, 3)] private float breakMaxLengthPercent = 1.2f;
     [SerializeField] private float maxLength = 10;
     [SerializeField] private float grappleExtensionSpeed = 10;
     [SerializeField] private float grappleMoveSpeed = 10;
-
     [SerializeField] private LayerMask affectedLayers;
+    [SerializeField, ReadOnly] private float length;
 
     private Ray playerAnchor;
     private Ray anchor;
@@ -125,6 +124,13 @@ public class GrapplePoleBehavior : AbilityBehavior
     {
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
         return actualLength > maxLength * breakMaxLengthPercent;
+    }
+
+    // returns true if the grapple can reach a surface. False if it can't reach anything
+    public bool CanReachSurface()
+    {
+        Ray ray = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
+        return Physics.Raycast(ray, maxLength, affectedLayers);
     }
 
     public override void EntryAction()

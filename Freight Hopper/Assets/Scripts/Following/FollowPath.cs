@@ -93,8 +93,8 @@ public class FollowPath : MonoBehaviour
         if (currentPath < paths.Count)
         {
             AdjustTarget();
-            //Debug.DrawLine(rb.position, targetPos);
-            Follow4();
+            Debug.DrawLine(rb.position, targetPos);
+            Follow6();
         }
     }
 
@@ -175,7 +175,7 @@ public class FollowPath : MonoBehaviour
         Debug.DrawLine(transform.position, transform.position + right, Color.red, Time.fixedDeltaTime);
         Debug.DrawLine(transform.position, transform.position + up, Color.green, Time.fixedDeltaTime);
 
-        Vector3 targetAngVel = TargetAngVel(Quaternion.LookRotation(target.normalized, up) * rot);
+        Vector3 targetAngVel = TargetAngVel4(Quaternion.LookRotation(target.normalized, up) * rot);
 
         // Vector3 targetAngVel = currentVel * (rot * target);
 
@@ -195,6 +195,66 @@ public class FollowPath : MonoBehaviour
         //z -= (z > 180) ? 360 : 0;
         //Turning Constraint
         //rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
+    }
+
+    void Follow5()
+    {
+        Vector3 target = targetPos - rb.position;
+        Quaternion rot = Quaternion.Inverse(transform.rotation);
+        //Quaternion rot = Quaternion.Inverse(Quaternion.LookRotation(rb.velocity));
+        //Current
+        Vector3 currentVel = rot * rb.velocity;
+        Vector3 currentAngVel = rot * rb.angularVelocity;
+        //Target
+        Vector3 targetVel = Vector3.forward * targetVelocity;
+        Vector3 targetAngVel = currentVel.magnitude * TargetAngVel(rot * target);
+        //targetVel += TurningConstraint(targetVel, targetAngVel);
+        //Target Change
+        Vector3 deltaVel = targetVel - currentVel;
+        Vector3 deltaAngVel = targetAngVel - currentAngVel;
+        //Doable Change
+        deltaVel = new Vector3(horizontal_bounds.Clamp(deltaVel.x), vertical_bounds.Clamp(deltaVel.y), forward_bounds.Clamp(deltaVel.z));
+        //Forces
+        rb.AddRelativeForce(deltaVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+        rb.AddRelativeTorque(deltaAngVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+    }
+
+    void Follow6()
+    {
+        Vector3 target = targetPos - rb.position;
+        Quaternion rot = transform.rotation;
+        Quaternion rotInv = Quaternion.Inverse(rot);
+        Vector3 currentVelDir = (rb.velocity.magnitude != 0) ? rb.velocity.normalized : Vector3.forward;
+        Quaternion rotVel = Quaternion.LookRotation(currentVelDir);
+        Quaternion rotVelInv = Quaternion.Inverse(rotVel);
+        Debug.DrawLine(rb.position, rb.position + currentVelDir * 20.0f, Color.magenta);
+        //Current
+        Vector3 currentVel = rb.velocity;
+        Vector3 currentAngVel = rb.angularVelocity;
+
+        //Target (Rotate, Move Forward)
+        Vector3 targetVel = rot * Vector3.forward * targetVelocity;
+        Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
+        //Vector3 targetAngVel = currentVel.magnitude * (rotVel * TargetAngVel(rotVelInv * target)); //Rotate based on translation heading
+
+
+        //Target (Translation, using no rotation data)
+        //Vector3 targetVel = currentVelDir * targetVelocity;
+        //targetVel += TurningConstraint(targetVel, rotVel * (TargetAngVel(rotVelInv * target)));
+        //Vector3 targetAngVel = Vector3.zero;
+        //Vector3 targetAngVel = currentVel.magnitude * (rotVel * TargetAngVel(rotVelInv * target));
+
+        //Target Change
+        Vector3 deltaVel = targetVel - currentVel;
+        Vector3 deltaAngVel = targetAngVel - currentAngVel;
+        //Forces
+        rb.AddForce(deltaVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+        rb.AddTorque(deltaAngVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+
+        //Rolling Correction
+        float z = transform.eulerAngles.z;
+        z -= (z > 180) ? 360 : 0;
+        rb.AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
     //Testing PIDs
@@ -282,7 +342,12 @@ public class FollowPath : MonoBehaviour
         return -Vector3.Cross(Vector3.ProjectOnPlane(vel, angVel), angVel);
     }
 
-    private Vector3 TargetAngVel(Quaternion targetDeltaRot)
+    private Vector3 TargetAngVel(Vector3 target)
+    {
+        return 2 * new Vector3(-target.y, target.x, 0) / target.sqrMagnitude;
+    }
+
+        private Vector3 TargetAngVel4(Quaternion targetDeltaRot)
     {
         Vector3 axis;
         float angle;

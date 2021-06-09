@@ -32,6 +32,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // State independent fields
     [SerializeField, ReadOnly] private bool grappleFiring;
 
+    [SerializeField] private GameObject defaultCrosshair;
+    [SerializeField] private GameObject grappleCrosshair;
     [SerializeField] public Timer initialGroundPoundBurstCoolDown;
 
     // Input Components
@@ -218,6 +220,20 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         JumpBuffer();
         GrappleFiring();
         initialGroundPoundBurstCoolDown.CountDownFixed();
+        if (abilities.grapplePoleBehavior.UnlockedAndReady)
+        {
+            SetCrosshair(abilities.grapplePoleBehavior.CanReachSurface());
+        }
+        else
+        {
+            SetCrosshair(false);
+        }
+    }
+
+    private void SetCrosshair(bool status)
+    {
+        defaultCrosshair.SetActive(!status);
+        grappleCrosshair.SetActive(status);
     }
 
     private void JumpBuffer()
