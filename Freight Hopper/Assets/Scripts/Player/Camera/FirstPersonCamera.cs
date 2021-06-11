@@ -6,7 +6,7 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField, ReadOnly] private Quaternion localRotation;
     private Transform player;
     [SerializeField, ReadOnly] private Vector3 upAxisAngleRotation;
-    [SerializeField, ReadOnly] private Var<Vector3> upAxis;
+    [SerializeField, ReadOnly] private Memory<Vector3> upAxis;
     [SerializeField, ReadOnly] private Vector3 smoothedUpAxis;
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;

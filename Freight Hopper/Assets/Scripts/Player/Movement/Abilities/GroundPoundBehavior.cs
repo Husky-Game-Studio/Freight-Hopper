@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GroundPoundBehavior : AbilityBehavior
 {
-    [ReadOnly, SerializeField] private Var<float> increasingForce = new Var<float>(1, 1);
+    [ReadOnly, SerializeField] private Current<float> increasingForce = new Current<float>(1);
 
     [SerializeField] private float deltaIncreaseForce = 0.01f;
     [SerializeField] private float initialBurstForce = 20;
@@ -43,14 +43,14 @@ public class GroundPoundBehavior : AbilityBehavior
             direction *= downwardsForce;
         }
 
-        playerRb.AddForce(direction * increasingForce.current, ForceMode.Acceleration);
-        increasingForce.current += deltaIncreaseForce * Time.fixedDeltaTime;
+        playerRb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
+        increasingForce.value += deltaIncreaseForce * Time.fixedDeltaTime;
     }
 
     public override void ExitAction()
     {
         base.ExitAction();
         playerSM.Play("GroundPoundExit");
-        increasingForce.RevertCurrent();
+        increasingForce.Reset();
     }
 }

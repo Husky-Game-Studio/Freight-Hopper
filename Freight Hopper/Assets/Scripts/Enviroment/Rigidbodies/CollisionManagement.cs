@@ -10,21 +10,21 @@ public class CollisionManagement
     [System.NonSerialized] private bool aerial;
 
     [SerializeField] private float maxSlope = 60;
-    [ReadOnly, SerializeField] private Var<bool> isGrounded;
-    [ReadOnly, SerializeField] private Var<Vector3> contactNormal;
-    [ReadOnly, SerializeField] private Var<Vector3> velocity;
-    [ReadOnly, SerializeField] private Var<Vector3> position;
+    [ReadOnly, SerializeField] private Memory<bool> isGrounded;
+    [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
+    [ReadOnly, SerializeField] private Memory<Vector3> velocity;
+    [ReadOnly, SerializeField] private Memory<Vector3> position;
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
     [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
     [ReadOnly, SerializeField] private Vector3 validUpAxis;
 
     public Vector3 ValidUpAxis => validUpAxis;
-    public Var<Vector3> ContactNormal => contactNormal;
-    public Var<bool> IsGrounded => isGrounded;
+    public Memory<Vector3> ContactNormal => contactNormal;
+    public Memory<bool> IsGrounded => isGrounded;
     public bool LevelSurface => ValidUpAxis == ContactNormal.current && isGrounded.current;
-    public Var<Vector3> Velocity => velocity;
-    public Var<Vector3> Position => position;
+    public Memory<Vector3> Velocity => velocity;
+    public Memory<Vector3> Position => position;
 
     public delegate void CollisionEventHandler();
 

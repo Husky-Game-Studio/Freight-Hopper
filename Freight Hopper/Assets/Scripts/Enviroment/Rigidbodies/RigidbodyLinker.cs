@@ -3,15 +3,15 @@ using UnityEngine;
 [System.Serializable]
 public class RigidbodyLinker
 {
-    [ReadOnly, SerializeField] private Var<Rigidbody> connectedRb = new Var<Rigidbody>(null, null);
+    [ReadOnly, SerializeField] private Memory<Rigidbody> connectedRb = new Memory<Rigidbody>(null, null);
     [ReadOnly, SerializeField] private Vector3 connectionWorldPosition;
     [ReadOnly, SerializeField] private Vector3 connectionLocalPosition;
-    [ReadOnly, SerializeField] private Var<Vector3> connectionVelocity;
-    [ReadOnly, SerializeField] private Var<Vector3> connectionAcceleration;
+    [ReadOnly, SerializeField] private Memory<Vector3> connectionVelocity;
+    [ReadOnly, SerializeField] private Memory<Vector3> connectionAcceleration;
 
-    public Var<Rigidbody> ConnectedRb => connectedRb;
-    public Var<Vector3> ConnectionAcceleration => connectionAcceleration;
-    public Var<Vector3> ConnectionVelocity => connectionVelocity;
+    public Memory<Rigidbody> ConnectedRb => connectedRb;
+    public Memory<Vector3> ConnectionAcceleration => connectionAcceleration;
+    public Memory<Vector3> ConnectionVelocity => connectionVelocity;
 
     /// <summary>
     /// Assigns connected rigidbody to parameter
