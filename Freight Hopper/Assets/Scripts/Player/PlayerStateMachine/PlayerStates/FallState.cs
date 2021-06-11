@@ -9,7 +9,7 @@ public class FallState : PlayerState
 
     public override void EntryState()
     {
-        if (playerMachineCenter.GetPreviousState() != playerMachineCenter.jumpState)
+        if (playerMachineCenter.GetPreviousState() == playerMachineCenter.idleState || playerMachineCenter.GetPreviousState() == playerMachineCenter.runState)
         {
             playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.ResetTimer();
         }
