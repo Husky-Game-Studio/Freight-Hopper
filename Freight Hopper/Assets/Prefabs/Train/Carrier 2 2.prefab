@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 102810508678352879}
   - component: {fileID: 731431626755741010}
+  - component: {fileID: 8273415392630537356}
   m_Layer: 2
   m_Name: Carrier 2 2
   m_TagString: landable
@@ -24,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731431626755741013}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 152.64359, y: 1.5, z: -194.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -51,6 +52,66 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8273415392630537356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731431626755741013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aerial: 1
+  gravity:
+    useGravity: 1
+  friction:
+    defaultFriction:
+      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+      ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+  collisionManager:
+    maxSlope: 60
+    isGrounded:
+      old: 0
+      current: 0
+    contactNormal:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    velocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    position:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    contactCount: 0
+    steepCount: 0
+    rigidbodyLinker:
+      connectedRb:
+        old: {fileID: 0}
+        current: {fileID: 0}
+      connectionWorldPosition: {x: 0, y: 0, z: 0}
+      connectionLocalPosition: {x: 0, y: 0, z: 0}
+      connectionVelocity:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+      connectionAcceleration:
+        old: {x: 0, y: 0, z: 0}
+        current: {x: 0, y: 0, z: 0}
+    validUpAxis: {x: 0, y: 0, z: 0}
+  rigidbodyLinker:
+    connectedRb:
+      old: {fileID: 0}
+      current: {fileID: 0}
+    connectionWorldPosition: {x: 0, y: 0, z: 0}
+    connectionLocalPosition: {x: 0, y: 0, z: 0}
+    connectionVelocity:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
+    connectionAcceleration:
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
 --- !u!1 &2996111771221675175
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,8 +193,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 731431626755741010}
-  centerOfMass: {fileID: 3928625779141179070}
-  centerOfMassGameObjectName: COM
   hoverEnginePivots:
   - {fileID: 3928625778008923475}
   - {fileID: 6428095821390626741}
@@ -141,14 +200,17 @@ MonoBehaviour:
   - {fileID: 6428095822172524329}
   - {fileID: 6428095821672914999}
   - {fileID: 6428095823213213948}
-  p: 3.5
-  i: 0.2
-  d: 1.5
+  hoverSetting:
+    currentPreset: 0
+    currentData:
+      Kp: 3.5
+      Ki: 0.2
+      Kd: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 1
   targetDistance: 3
-  direction: {x: 0, y: -1, z: 0}
+  automatic: 1
 --- !u!1 &3928625779141179057
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +484,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 731431626755741010}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: automatic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: targetDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kd
+      value: 3999.9998
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Ki
+      value: 799.99994
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kp
+      value: 13999.999
+      objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name
       value: FL
@@ -494,6 +584,34 @@ PrefabInstance:
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 731431626755741010}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: automatic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: targetDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kd
+      value: 3999.9998
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Ki
+      value: 799.99994
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kp
+      value: 13999.999
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name
@@ -568,6 +686,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 731431626755741010}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: automatic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: targetDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kd
+      value: 3999.9998
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Ki
+      value: 799.99994
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kp
+      value: 13999.999
+      objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name
       value: BL
@@ -640,6 +786,34 @@ PrefabInstance:
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 731431626755741010}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: automatic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: targetDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kd
+      value: 3999.9998
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Ki
+      value: 799.99994
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kp
+      value: 13999.999
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name
@@ -714,6 +888,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 731431626755741010}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: automatic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: targetDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kd
+      value: 3999.9998
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Ki
+      value: 799.99994
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kp
+      value: 13999.999
+      objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name
       value: FR
@@ -786,6 +988,34 @@ PrefabInstance:
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 731431626755741010}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: automatic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: targetDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kd
+      value: 3999.9998
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Ki
+      value: 799.99994
+      objectReference: {fileID: 0}
+    - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+      propertyPath: controller.data.Kp
+      value: 13999.999
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name

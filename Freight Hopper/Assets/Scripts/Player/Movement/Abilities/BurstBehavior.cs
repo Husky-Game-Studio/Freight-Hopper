@@ -28,10 +28,13 @@ public class BurstBehavior : AbilityBehavior
 
     public override void Action()
     {
+        Rigidbody hitRigidbody = null;
         float distanceFromExplosion = burstMaxDistance;
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, burstMaxDistance, targetedLayers))
         {
             distanceFromExplosion = (cameraTransform.position - hit.point).magnitude;
+
+            hitRigidbody = hit.rigidbody;
         }
 
         if (distanceFromExplosion < .6f)
@@ -43,10 +46,20 @@ public class BurstBehavior : AbilityBehavior
         Vector3 velocityFromDirection = Vector3.Project(playerRb.velocity, cameraTransform.forward);
         if (Mathf.Sign(Vector3.Dot(velocityFromDirection, cameraTransform.forward)) == 1)
         {
-            playerRb.AddForce(-cameraTransform.forward * velocityFromDirection.magnitude * velocityGainMultiplier, ForceMode.VelocityChange);
+            Vector3 forceV = -cameraTransform.forward * velocityFromDirection.magnitude * velocityGainMultiplier;
+            playerRb.AddForce(forceV, ForceMode.VelocityChange);
+            if (hitRigidbody != null)
+            {
+                hitRigidbody.AddForce(-forceV * playerRb.mass, ForceMode.Impulse);
+            }
+        }
+        Vector3 force = -cameraTransform.forward * forceMultiplier / distanceFromExplosion;
+        playerRb.AddForce(force, ForceMode.VelocityChange);
+        if (hitRigidbody != null)
+        {
+            hitRigidbody.AddForce(-force * playerRb.mass, ForceMode.Impulse);
         }
 
-        playerRb.AddForce(-cameraTransform.forward * forceMultiplier / distanceFromExplosion, ForceMode.VelocityChange);
         Vector3 burstPosition = cameraTransform.position + cameraTransform.forward * distanceFromExplosion;
         playerSM.Play("BurstExplosion", burstPosition);
         burstExplosionEffectTransform.position = burstPosition;
