@@ -14,11 +14,13 @@ public class GroundPoundState : PlayerState
             playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
             playerMachineCenter.initialGroundPoundBurstCoolDown.ResetTimer();
         }
+        playerMachineCenter.playerPM.friction.ReduceFriction(playerMachineCenter.abilities.groundPoundBehavior.FrictionReduction);
     }
 
     public override void ExitState()
     {
         playerMachineCenter.abilities.groundPoundBehavior.ExitAction();
+        playerMachineCenter.playerPM.friction.ResetFrictionReduction();
     }
 
     public override BasicState TransitionState()

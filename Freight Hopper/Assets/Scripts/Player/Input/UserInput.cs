@@ -33,6 +33,7 @@ public class UserInput : MonoBehaviour
 
     public event PressEventHandler UpwardDashInputCanceled;
 
+    public bool GroundPoundHeld => groundPoundHeld;
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
     [ReadOnly, SerializeField] private bool upwardDashHeld;
@@ -41,15 +42,15 @@ public class UserInput : MonoBehaviour
     private void OnEnable()
     {
         master.Enable();
-        master.Player.GroundPound.performed += GroundPoundHeld;
+        master.Player.GroundPound.performed += GroundPoundPressed;
         master.Player.GroundPound.canceled += GroundPoundReleased;
         master.Player.UpwardDash.performed += UpwardDashHeld;
         master.Player.UpwardDash.canceled += UpwardDashReleased;
-        master.Player.Jump.performed += JumpHeld;
+        master.Player.Jump.performed += JumpPressed;
         master.Player.Jump.canceled += JumpReleased;
         master.Player.FullStop.performed += FullStopPressed;
         master.Player.Burst.performed += BurstPressed;
-        master.Player.GrapplePole.performed += GrappleHeld;
+        master.Player.GrapplePole.performed += GrapplePressed;
         master.Player.GrapplePole.performed += GrappleReleased;
         if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
         {
@@ -88,7 +89,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void GroundPoundHeld(InputAction.CallbackContext context)
+    private void GroundPoundPressed(InputAction.CallbackContext context)
     {
         groundPoundHeld = !groundPoundHeld;
         if (groundPoundHeld)
@@ -97,7 +98,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void JumpHeld(InputAction.CallbackContext context)
+    private void JumpPressed(InputAction.CallbackContext context)
     {
         jumpHeld = !jumpHeld;
         if (jumpHeld)
@@ -106,7 +107,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void GrappleHeld(InputAction.CallbackContext context)
+    private void GrapplePressed(InputAction.CallbackContext context)
     {
         grapplePoleHeld = !grapplePoleHeld;
         if (grapplePoleHeld)

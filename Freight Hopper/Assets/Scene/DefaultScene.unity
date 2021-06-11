@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3564.537, g: 1986.0918, b: 1223.3574, a: 1}
+  m_IndirectSpecularColor: {r: 3564.0723, g: 1990.0537, b: 1221.127, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -865,6 +865,7 @@ MonoBehaviour:
   initialBurstForce: 18
   downwardsForce: 10
   slopeDownForce: 300
+  groundFrictionReductionPercent: 0.95
 --- !u!114 &1798020243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1270,6 +1271,7 @@ MonoBehaviour:
     duration: 1
     current: 0
   abilities: {fileID: 4493642203787552936}
+  playerPM: {fileID: 4493642203787552935}
   playerCM:
     maxSlope: 60
     isGrounded:
@@ -2054,7 +2056,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 71.93, y: 50, z: -3.04}
+  m_LocalPosition: {x: 72, y: 50, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1798020240}

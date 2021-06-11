@@ -8,6 +8,8 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float initialBurstForce = 20;
     [SerializeField] private float downwardsForce = 10;
     [SerializeField] private float slopeDownForce = 500;
+    [SerializeField] private float groundFrictionReductionPercent = 0.95f;
+    public float FrictionReduction => groundFrictionReductionPercent;
 
     public override void EntryAction()
     {
@@ -30,6 +32,10 @@ public class GroundPoundBehavior : AbilityBehavior
             Vector3 acrossSlope = Vector3.Cross(upAxis, playerCM.ContactNormal.current);
             Vector3 downSlope = Vector3.Cross(acrossSlope, playerCM.ContactNormal.current);
             direction = downSlope;
+            if (!playerCM.IsGrounded.old)
+            {
+                playerRb.AddForce(direction * playerCM.Velocity.old.magnitude, ForceMode.VelocityChange);
+            }
             direction *= slopeDownForce;
         }
         else

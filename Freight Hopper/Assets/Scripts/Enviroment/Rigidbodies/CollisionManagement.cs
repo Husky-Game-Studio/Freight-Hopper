@@ -22,7 +22,7 @@ public class CollisionManagement
     public Vector3 ValidUpAxis => validUpAxis;
     public Var<Vector3> ContactNormal => contactNormal;
     public Var<bool> IsGrounded => isGrounded;
-
+    public bool LevelSurface => ValidUpAxis == ContactNormal.current && isGrounded.current;
     public Var<Vector3> Velocity => velocity;
     public Var<Vector3> Position => position;
 

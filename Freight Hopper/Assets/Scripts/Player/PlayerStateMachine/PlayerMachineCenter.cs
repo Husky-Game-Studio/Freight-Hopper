@@ -39,6 +39,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // Input Components
     [HideInInspector] public PlayerAbilities abilities;
 
+    [HideInInspector] public PhysicsManager playerPM;
     [HideInInspector] public CollisionManagement playerCM;
 
     private void Awake()
@@ -180,7 +181,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public override void OnValidate()
     {
         abilities = GetComponent<PlayerAbilities>();
-        playerCM = GetComponent<PhysicsManager>().collisionManager;
+        playerPM = GetComponent<PhysicsManager>();
+        playerCM = playerPM.collisionManager;
     }
 
     private void PlayerSpawned()

@@ -8,6 +8,7 @@ public class Friction
 
     [SerializeField] private FrictionData defaultFriction;
     private FrictionData currentFriction;
+    private float frictionReductionPercent = 1;
 
     public void Initialize(Rigidbody rb, CollisionManagement collisionManagement)
     {
@@ -23,12 +24,24 @@ public class Friction
         playerCollision.CollisionDataCollected -= ApplyFriction;
     }
 
+    // Expects numbers like "5% friction reduction" or 0.05f. Will only apply when grounded
+    public void ReduceFriction(float percent)
+    {
+        frictionReductionPercent = 1 - percent;
+    }
+
+    // Resets friction reduction, meaning it doesn't occur anymore
+    public void ResetFrictionReduction()
+    {
+        frictionReductionPercent = 1;
+    }
+
     private void ApplyFriction()
     {
         float amount;
         if (playerCollision.IsGrounded.current)
         {
-            amount = currentFriction.ground.Value;
+            amount = currentFriction.ground.Value * frictionReductionPercent;
         }
         else
         {
