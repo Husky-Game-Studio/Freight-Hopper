@@ -220,6 +220,16 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public override void PerformStateIndependentBehaviors()
     {
         JumpBuffer();
+
+        if (playerCM.IsGrounded.current)
+        {
+            abilities.jumpBehavior.coyoteeTimer.ResetTimer();
+        }
+        else
+        {
+            abilities.jumpBehavior.coyoteeTimer.CountDown();
+        }
+
         GrappleFiring();
         initialGroundPoundBurstCoolDown.CountDownFixed();
         if (abilities.grapplePoleBehavior.UnlockedAndReady)

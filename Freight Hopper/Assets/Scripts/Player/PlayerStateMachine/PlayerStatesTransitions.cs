@@ -174,7 +174,7 @@ public class PlayerStatesTransitions
         }
 
         // Ground Pound
-        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.UnlockedAndReady &&
+        if (jumpPressed.value && (playerMachine.abilities.jumpBehavior.UnlockedAndReady && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive()) &&
             playerMachine.currentState == playerMachine.groundPoundState)
         {
             return playerMachine.jumpState;
@@ -220,14 +220,17 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToDoubleJumpState()
     {
-        if (jumpPressed.value && playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady &&
+        // Fall state
+        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady &&
             playerMachine.currentState == playerMachine.fallState)
         {
             return playerMachine.doubleJumpState;
         }
+
+        // Ground pound
         if (jumpPressed.value && playerMachine.abilities.jumpBehavior.Consumed &&
             playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady &&
-            playerMachine.currentState == playerMachine.doubleJumpState)
+            playerMachine.currentState == playerMachine.groundPoundState)
         {
             return playerMachine.doubleJumpState;
         }

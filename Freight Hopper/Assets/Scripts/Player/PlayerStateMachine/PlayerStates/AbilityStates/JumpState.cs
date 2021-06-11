@@ -11,6 +11,7 @@ public class JumpState : PlayerState
     {
         // reset jump hold timer
         playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.ResetTimer();
+        playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
         playerMachineCenter.abilities.jumpBehavior.EntryAction();
     }
 
