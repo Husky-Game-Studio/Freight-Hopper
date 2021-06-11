@@ -14,6 +14,9 @@ public class Sound : ScriptableObject
     [Range(0f, 1f)]
     public float volume = 1f;
 
+    public float fadeInTime = 0;
+    public float fadeOutTime = 0;
+
     [Range(0f, 0.5f)]
     public float volumeVarience = 0f;
 

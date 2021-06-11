@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
+using System.Collections;
 
 // From comments from https://www.youtube.com/watch?v=QL29aTa7J5Q
 // Probably heavily modified by the time anyone reads this
@@ -123,7 +124,20 @@ public class SoundManager : MonoBehaviour
         }
         sound.componentAudioSource.Play();
         sound.componentAudioSource.pitch = sound.pitch;
-        sound.componentAudioSource.volume = sound.volume;
+        sound.componentAudioSource.volume = 0;
+        StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+    }
+
+    private IEnumerator Fade(AudioSource source, float duration, float finalVolume)
+    {
+        float startVolume = source.volume;
+        float t = 0;
+        while (t < 1)
+        {
+            t += Time.deltaTime / duration;
+            source.volume = Mathf.Lerp(startVolume, finalVolume, t);
+            yield return null;
+        }
     }
 
     // Plays sound with name at location, creates a new one if it doesn't exist at absolute location. Sound temp object is deleted after being played
@@ -145,7 +159,8 @@ public class SoundManager : MonoBehaviour
         }
         sound.audioSources[location].Play();
         sound.audioSources[location].pitch = sound.pitch;
-        sound.audioSources[location].volume = sound.volume;
+        sound.audioSources[location].volume = 0;
+        StartCoroutine(Fade(sound.audioSources[location], sound.fadeInTime, sound.volume));
     }
 
     public void PlayRandom(string name, int size)
@@ -156,8 +171,15 @@ public class SoundManager : MonoBehaviour
     public void Stop(string name)
     {
         Sound sound = FindSound(name);
+        StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime);
+        StartCoroutine(Fade(sound.componentAudioSource, sound.fadeOutTime, 0));
         ResetTimer(sound);
-        sound.componentAudioSource.Stop();
+    }
+
+    private IEnumerator StopAfterSeconds(AudioSource source, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        source.Stop();
     }
 
     protected string GetSoundName(Sound sound)
