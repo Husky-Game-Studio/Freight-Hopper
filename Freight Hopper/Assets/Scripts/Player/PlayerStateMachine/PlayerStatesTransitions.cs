@@ -240,9 +240,7 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToGroundPoundState()
     {
-        if (UserInput.Instance.GroundPoundHeld &&
-            (playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
-            playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.Unlocked)
+        if (UserInput.Instance.GroundPoundHeld && !playerMachine.playerCM.LevelSurface && playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
             return playerMachine.groundPoundState;
         }
