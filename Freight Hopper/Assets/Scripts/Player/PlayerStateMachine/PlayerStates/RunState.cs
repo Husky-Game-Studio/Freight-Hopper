@@ -9,7 +9,6 @@ public class RunState : PlayerState
 
     public override void EntryState()
     {
-        playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
     }
 
     public override BasicState TransitionState()

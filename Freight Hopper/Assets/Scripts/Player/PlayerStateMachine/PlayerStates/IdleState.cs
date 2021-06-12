@@ -9,7 +9,6 @@ public class IdleState : PlayerState
 
     public override void EntryState()
     {
-        playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
         playerMachineCenter.abilities.Recharge();
     }
 
