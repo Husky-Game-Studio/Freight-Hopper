@@ -6,60 +6,72 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 {
     // The Player Character and Information
     public GameObject thePlayer;
+
     public RaycastHit toPlayerRaycast;
     public LayerMask targetedLayers;
     public GameObject bullet;
-    
+
     // TFSM States
     public BasicState searchState;
+
     public BasicState targetState;
     public BasicState fireState;
 
     // It is best to construct your states in Awake()
     // and subcribe to any event listeners
-    private void Awake() {
+    private void Awake()
+    {
         searchState = new SearchState(this);
         targetState = new TargetState(this);
         fireState = new FireState(this);
 
-        if (Player.loadedIn) {
+        if (Player.loadedIn)
+        {
             SetPlayerReference();
         }
-        else {
+        else
+        {
             Player.PlayerLoadedIn += SetPlayerReference;
         }
     }
 
     // Assign initial state and subscribe to any event listeners
-    public override void OnEnable() {
+    public void OnEnable()
+    {
         this.currentState = searchState;
         this.previousState = searchState;
     }
 
     // Unsubscribe from any assigned event listeners
-    public override void OnDisable() {
+    public void OnDisable()
+    {
         Player.PlayerLoadedIn -= SetPlayerReference;
     }
 
     // Calls the loop tick
-    public void FixedUpdate(){
+    public void FixedUpdate()
+    {
         this.UpdateLoop();
     }
 
     // Perform any behavior that is not exclusive to any one single state
-    public override void PerformStateIndependentBehaviors() {
-        if (thePlayer == null) {
+    public override void PerformStateIndependentBehaviors()
+    {
+        if (thePlayer == null)
+        {
             SetPlayerReference();
         }
     }
-    
+
     // Sets the player reference
-    private void SetPlayerReference() {
+    private void SetPlayerReference()
+    {
         thePlayer = Player.Instance.transform.gameObject;
     }
 
     // Fire Projectile
-    public void shootBullet(GameObject spawner) {
+    public void ShootBullet(GameObject spawner)
+    {
         GameObject spawnedBullet = Instantiate(bullet, spawner.transform.position, Quaternion.identity);
         spawnedBullet.transform.LookAt(thePlayer.transform);
     }

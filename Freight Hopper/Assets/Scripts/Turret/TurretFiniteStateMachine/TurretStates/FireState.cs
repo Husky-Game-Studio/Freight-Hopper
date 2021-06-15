@@ -16,20 +16,22 @@ public class FireState : BasicState
     }
 
     // Only in this state for one tick
-    public override BasicState TransitionState() {
+    public override BasicState TransitionState()
+    {
         // Debugging
         Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
                           turretMachineCenter.thePlayer.transform.position
                           - turretMachineCenter.gameObject.transform.position);
         Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.thePlayer.transform.position
                                                    - turretMachineCenter.gameObject.transform.position).magnitude, Color.red);
-        
+
         // Return to target state
         return turretMachineCenter.targetState;
     }
 
     // Fire Projectile
-    public override void PerformBehavior() {
-        turretMachineCenter.shootBullet(bulletSpawner);
+    public override void PerformBehavior()
+    {
+        turretMachineCenter.ShootBullet(bulletSpawner);
     }
 }

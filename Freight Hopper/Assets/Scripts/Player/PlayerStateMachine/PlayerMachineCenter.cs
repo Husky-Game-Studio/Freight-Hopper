@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -178,7 +177,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         burstState = new BurstState(this, null);
     }
 
-    public override void OnValidate()
+    public void OnValidate()
     {
         abilities = GetComponent<PlayerAbilities>();
         playerPM = GetComponent<PhysicsManager>();
@@ -193,7 +192,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         currentState.EntryState();
     }
 
-    public override void OnEnable()
+    public void OnEnable()
     {
         currentState = idleState;
         previousState = idleState;
@@ -203,7 +202,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         LevelController.PlayerRespawned += PlayerSpawned;
     }
 
-    public override void OnDisable()
+    public void OnDisable()
     {
         currentState.ExitState();
         playerCM.CollisionDataCollected -= UpdateLoop;
