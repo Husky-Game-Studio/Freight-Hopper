@@ -7,17 +7,21 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
     [SerializeField] private string currentSubStateName;
     [SerializeField] private string previousStateName;
+
     public BasicState currentState;
     public BasicState previousState;
     public BasicState currentSubState;
+
+    public DefaultState defaultState;
+
     private bool amSubStateMachine = false;
 
-    public void StartFSM()
+    public void RestartFSM()
     {
-    }
-
-    public void EndFSM()
-    {
+        currentState?.ExitState();
+        currentState = defaultState;
+        previousState = defaultState;
+        currentState.EntryState();
     }
 
     // Pefromed each Update Tick

@@ -19,7 +19,7 @@ public class BurstState : PlayerState
 
     public override BasicState TransitionState()
     {
-        return playerMachineCenter.fallState;
+        return playerMachineCenter.defaultState;
     }
 
     public override void PerformBehavior()

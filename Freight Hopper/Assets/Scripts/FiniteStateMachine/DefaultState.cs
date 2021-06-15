@@ -1,16 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System;
 
 public class DefaultState : BasicState
 {
-    public DefaultState(FiniteStateMachineCenter turretMachineCenter) : base(turretMachineCenter)
+    public DefaultState(FiniteStateMachineCenter finiteStateMachineCenter, List<Func<BasicState>> stateTransitions) : base(finiteStateMachineCenter, stateTransitions)
     {
     }
 
     public override BasicState TransitionState()
     {
-        return this;
+        BasicState state = CheckTransitions();
+        return state;
     }
 
     public override void PerformBehavior()

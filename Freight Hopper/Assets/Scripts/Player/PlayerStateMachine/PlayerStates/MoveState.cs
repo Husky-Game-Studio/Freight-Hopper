@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System;
 
-public class RunState : PlayerState
+public class MoveState : PlayerState
 {
-    public RunState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
+    public MoveState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
     }
 
