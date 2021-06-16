@@ -2,15 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class FollowPathState : BasicState
 {
-    [SerializeField]
-    private float targetVelocity;
-
-    [SerializeField]
-    private float followDistance;
-
     private TrainMachineCenter trainMachineCenter;
     private BezierPath path;
     private Vector3 targetPos;
@@ -47,7 +40,7 @@ public class FollowPathState : BasicState
         Vector3 currentAngVel = trainMachineCenter.rb.angularVelocity;
 
         //Target (Rotate, Move Forward)
-        Vector3 targetVel = rot * Vector3.forward * targetVelocity;
+        Vector3 targetVel = rot * Vector3.forward * trainMachineCenter.TargetVelocity;
         Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
 
         //Target Change
@@ -65,7 +58,7 @@ public class FollowPathState : BasicState
 
     private void AdjustTarget()
     {
-        while ((trainMachineCenter.TargetPos(t) - trainMachineCenter.transform.position).magnitude < followDistance)
+        while ((trainMachineCenter.TargetPos(t) - trainMachineCenter.transform.position).magnitude < trainMachineCenter.FollowDistance)
         {
             t += 0.01f;
             if (t >= path.NumSegments)

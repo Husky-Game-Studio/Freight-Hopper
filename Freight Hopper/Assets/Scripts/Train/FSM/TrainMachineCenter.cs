@@ -25,8 +25,11 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField]
     private List<RoadCreator> pathObjects;
 
-    private int currentPath = -1;
-
+    private int currentPath = 0;
+    [SerializeField] private float targetVelocity;
+    public float TargetVelocity => targetVelocity;
+    [SerializeField] private float followDistance;
+    public float FollowDistance => followDistance;
     [SerializeField] private Vector3 followOffset;
     public Vector3 FollowOffset => followOffset;
 
