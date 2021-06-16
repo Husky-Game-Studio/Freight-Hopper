@@ -9,20 +9,22 @@ public class FollowPath : MonoBehaviour
     private Vector3 targetPos;
     private Rigidbody rb;
     private float t = 0.0f;
-    Accelerometer accelerometer;
-    [SerializeField]
-    FloatBounds vertical_bounds;
-    [SerializeField]
-    FloatBounds forward_bounds;
-    [SerializeField]
-    FloatBounds horizontal_bounds;
-    [SerializeField]
-    Vector3 followOffset;
-    [SerializeField]
-    bool disablePitch;
+    private Accelerometer accelerometer;
 
+    [SerializeField]
+    private FloatBounds vertical_bounds;
 
-    
+    [SerializeField]
+    private FloatBounds forward_bounds;
+
+    [SerializeField]
+    private FloatBounds horizontal_bounds;
+
+    [SerializeField]
+    private Vector3 followOffset;
+
+    [SerializeField]
+    private bool disablePitch;
 
     [SerializeField]
     private List<GameObject> pathObjects;
@@ -53,21 +55,20 @@ public class FollowPath : MonoBehaviour
 
     [SerializeField]
     private PID.Data roll_PID_data;
+
     private PID roll_PID = new PID();
 
     [SerializeField]
     private PID.Data hover_PID_data;
+
     private PID hover_PID = new PID();
-
-
-
 
     private void Start()
     {
         rb = this.transform.GetComponent<Rigidbody>();
         rb.maxAngularVelocity = 50;
         paths = new List<BezierPath>();
-        for(int i = 0; i < pathObjects.Count; i++)
+        for (int i = 0; i < pathObjects.Count; i++)
         {
             paths.Add(pathObjects[i].GetComponent<PathCreator>().path);
         }
@@ -98,9 +99,7 @@ public class FollowPath : MonoBehaviour
         }
     }
 
-    
-
-    void Follow()
+    private void Follow()
     {
         Vector3 target = targetPos - rb.position;
         Quaternion rot = Quaternion.Inverse(transform.rotation);
@@ -118,11 +117,11 @@ public class FollowPath : MonoBehaviour
         rb.AddRelativeTorque(deltaAngVel, ForceMode.VelocityChange);
         float z = transform.eulerAngles.z;
         z -= (z > 180) ? 360 : 0;
-        rb.AddRelativeTorque(Vector3.forward * -0.05f* z, ForceMode.VelocityChange);
+        rb.AddRelativeTorque(Vector3.forward * -0.05f * z, ForceMode.VelocityChange);
         rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
     }
 
-    void Follow3()
+    private void Follow3()
     {
         Vector3 target = targetPos - rb.position;
         Quaternion rot = Quaternion.Inverse(transform.rotation);
@@ -140,7 +139,7 @@ public class FollowPath : MonoBehaviour
         //    deltaVel = new Vector3(0.0f, deltaAng)
         //}
         deltaAngVel = new Vector3((disablePitch) ? 0.0f : deltaAngVel.x, deltaAngVel.y, deltaAngVel.z);
-        
+
         //Doable Change
         //deltaVel = new Vector3(horizontal.Clamp(deltaVel.x), vertical.Clamp(deltaVel.y), forward.Clamp(deltaVel.z));
         //Too tight of turn to make? Slow down
@@ -155,7 +154,7 @@ public class FollowPath : MonoBehaviour
         rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
     }
 
-    void Follow4()
+    private void Follow4()
     {
         Vector3 target = targetPos - TargetPos(lastT);
         Debug.DrawLine(TargetPos(lastT), targetPos);
@@ -197,7 +196,7 @@ public class FollowPath : MonoBehaviour
         //rb.AddForce(TurningConstraint(rb.velocity, rb.angularVelocity), ForceMode.Acceleration);
     }
 
-    void Follow5()
+    private void Follow5()
     {
         Vector3 target = targetPos - rb.position;
         Quaternion rot = Quaternion.Inverse(transform.rotation);
@@ -219,7 +218,7 @@ public class FollowPath : MonoBehaviour
         rb.AddRelativeTorque(deltaAngVel / Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
-    void Follow6()
+    private void Follow6()
     {
         Vector3 target = targetPos - rb.position;
         Quaternion rot = transform.rotation;
@@ -236,7 +235,6 @@ public class FollowPath : MonoBehaviour
         Vector3 targetVel = rot * Vector3.forward * targetVelocity;
         Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
         //Vector3 targetAngVel = currentVel.magnitude * (rotVel * TargetAngVel(rotVelInv * target)); //Rotate based on translation heading
-
 
         //Target (Translation, using no rotation data)
         //Vector3 targetVel = currentVelDir * targetVelocity;
@@ -258,7 +256,7 @@ public class FollowPath : MonoBehaviour
     }
 
     //Testing PIDs
-    void Follow2()
+    private void Follow2()
     {
         Debug.DrawLine(rb.position, targetPos);
 
@@ -278,12 +276,13 @@ public class FollowPath : MonoBehaviour
         //Debug.Log("Displacement: " + localDisplacement);
     }
 
-    float wrap_difference(float diff, float range)
+    private float wrap_difference(float diff, float range)
     {
         return (Mathf.Abs(diff) <= range / 2.0f) ? diff : (diff - Mathf.Sign(diff) * range);
     }
 
     private float lastT;
+
     private void AdjustTarget()
     {
         if ((TargetPos(t) - this.transform.position).magnitude < followDistance)
@@ -299,7 +298,6 @@ public class FollowPath : MonoBehaviour
                 EndPath();
                 return;
             }
-            
         }
         if (IsDerail())
         {
@@ -315,7 +313,7 @@ public class FollowPath : MonoBehaviour
         currentPath++;
     }
 
-    // 
+    //
     private bool IsDerail()
     {
         float distanceFromCurve = (TargetPos(t) - this.transform.position).magnitude;
@@ -326,7 +324,7 @@ public class FollowPath : MonoBehaviour
         return false;
     }
 
-    // 
+    //
     private void Derail()
     {
         currentPath = paths[currentPath].NumSegments;
@@ -347,7 +345,7 @@ public class FollowPath : MonoBehaviour
         return 2 * new Vector3(-target.y, target.x, 0) / target.sqrMagnitude;
     }
 
-        private Vector3 TargetAngVel4(Quaternion targetDeltaRot)
+    private Vector3 TargetAngVel4(Quaternion targetDeltaRot)
     {
         Vector3 axis;
         float angle;

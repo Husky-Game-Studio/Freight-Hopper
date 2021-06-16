@@ -7,11 +7,12 @@ using UnityEngine;
 public class RoadCreator : MonoBehaviour
 {
     public PathCreator pathCreator;
-    
+
     public Road road;
     private MeshFilter meshFilter;
     public RoadSlice slice;
-    [Range(1,100)]
+
+    [Range(1, 100)]
     public int roadDetail;
 
     public void CreateRoad()
@@ -19,6 +20,11 @@ public class RoadCreator : MonoBehaviour
         pathCreator = this.gameObject.GetComponent<PathCreator>();
         meshFilter = this.gameObject.GetComponent<MeshFilter>();
         road = new Road(pathCreator.path);
+    }
+
+    public Vector3 GetPositionOnPath(float t)
+    {
+        return transform.TransformPoint(pathCreator.path.GetPathPoint(t));
     }
 
     public void UpdateMesh()
