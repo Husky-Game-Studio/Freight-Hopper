@@ -9,6 +9,9 @@ public class HoverEngine : MonoBehaviour
     [SerializeField, ReadOnly] private PID controller = new PID();
     [SerializeField, ReadOnly] private float targetDistance;
     [SerializeField, ReadOnly] private bool automatic;
+    [SerializeField, ReadOnly] private bool firing;
+
+    public bool Firing => firing;
 
     public void Initialize(Rigidbody rb, LayerMask layerMask, PID.Data data, float targetDistance, bool automatic)
     {
@@ -29,6 +32,7 @@ public class HoverEngine : MonoBehaviour
     {
         if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, height + 0.1f, layerMask))
         {
+            firing = true;
             float error = height - hit.distance;
             Debug.DrawLine(this.transform.position, this.transform.position + (Vector3.up * error), Color.white);
             // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
@@ -38,6 +42,10 @@ public class HoverEngine : MonoBehaviour
 
                 rb.AddForceAtPosition(force, this.transform.position, ForceMode.Force);
             }
+        }
+        else
+        {
+            firing = false;
         }
     }
 

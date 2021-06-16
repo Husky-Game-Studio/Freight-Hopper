@@ -23,4 +23,12 @@ public static class Vector3Extensions
     {
         return vector == Vector3.zero;
     }
+
+    public static Vector3 ClampComponents(this Vector3 vector, Vector3 minBounds, Vector3 maxBounds)
+    {
+        return new Vector3(
+            Mathf.Clamp(vector.x, minBounds.x, maxBounds.x),
+            Mathf.Clamp(vector.y, minBounds.y, maxBounds.y),
+            Mathf.Clamp(vector.z, minBounds.z, maxBounds.z));
+    }
 }

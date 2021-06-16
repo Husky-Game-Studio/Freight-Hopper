@@ -10,6 +10,9 @@ public class HoverController : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private float targetDistance;
     [SerializeField] private bool automatic = true;
+    [SerializeField, ReadOnly] private bool enginesFiring;
+
+    public bool EnginesFiring => enginesFiring;
 
     public void AddHoverEngine(Vector3 position, string name = "")
     {
@@ -65,6 +68,15 @@ public class HoverController : MonoBehaviour
             }
 
             hoverEngine.Initialize(rb, layerMask, hoverSetting.CurrentPreset(), targetDistance, automatic);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        enginesFiring = false;
+        foreach (HoverEngine eng in hoverEnginePivots)
+        {
+            enginesFiring |= eng.Firing;
         }
     }
 }

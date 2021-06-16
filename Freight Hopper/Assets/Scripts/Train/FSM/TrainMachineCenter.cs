@@ -33,8 +33,15 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private Vector3 followOffset;
     public Vector3 FollowOffset => followOffset;
 
+    [SerializeField] private Vector3 forceBounds;
+    public Vector3 ForceBounds => forceBounds;
+    [SerializeField] private Vector3 torqueBounds;
+    public Vector3 TorqueBounds => torqueBounds;
+
+
     [HideInInspector] public PhysicsManager physicsManager;
     [HideInInspector] public Rigidbody rb;
+    [HideInInspector] public HoverController hoverController;
 
     public Vector3 TargetPos(float t)
     {
@@ -60,6 +67,7 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     {
         physicsManager = GetComponent<PhysicsManager>();
         rb = physicsManager.rb;
+        hoverController = GetComponentInChildren<HoverController>();
     }
 
     private void Awake()

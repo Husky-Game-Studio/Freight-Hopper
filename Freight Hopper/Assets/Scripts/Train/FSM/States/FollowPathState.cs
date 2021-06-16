@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class FollowPathState : BasicState
 {
-    private TrainMachineCenter trainMachineCenter;
+    private TrainMachineCenter trainFSM;
     private BezierPath path;
     private Vector3 targetPos;
     private float t = 0.0f;
 
     public FollowPathState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions) : base(machineCenter, stateTransitions)
     {
-        this.trainMachineCenter = (TrainMachineCenter)machineCenter;
+        this.trainFSM = (TrainMachineCenter)machineCenter;
     }
 
     public override void EntryState()
     {
-        path = trainMachineCenter.GetCurrentPath();
+        path = trainFSM.GetCurrentPath();
         // Sparks fly
     }
 
@@ -27,38 +27,51 @@ public class FollowPathState : BasicState
 
     private void Follow()
     {
-        Vector3 target = targetPos - trainMachineCenter.rb.position;
-        Quaternion rot = trainMachineCenter.transform.rotation;
+        if(!trainFSM.hoverController.EnginesFiring) {
+            return;
+        }
+
+        Vector3 target = targetPos - trainFSM.rb.position;
+        Quaternion rot = trainFSM.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
-        Vector3 currentVelDir = (trainMachineCenter.rb.velocity.magnitude != 0) ? trainMachineCenter.rb.velocity.normalized : Vector3.forward;
+        Vector3 currentVelDir = (trainFSM.rb.velocity.magnitude != 0) ? trainFSM.rb.velocity.normalized : Vector3.forward;
         Quaternion rotVel = Quaternion.LookRotation(currentVelDir);
         Quaternion rotVelInv = Quaternion.Inverse(rotVel);
-        Debug.DrawLine(trainMachineCenter.rb.position, trainMachineCenter.rb.position + currentVelDir * 20.0f, Color.magenta);
+        Debug.DrawLine(trainFSM.rb.position, trainFSM.rb.position + currentVelDir * 20.0f, Color.magenta);
 
         //Current
-        Vector3 currentVel = trainMachineCenter.rb.velocity;
-        Vector3 currentAngVel = trainMachineCenter.rb.angularVelocity;
+        Vector3 currentVel = trainFSM.rb.velocity;
+        Vector3 currentAngVel = trainFSM.rb.angularVelocity;
 
         //Target (Rotate, Move Forward)
-        Vector3 targetVel = rot * Vector3.forward * trainMachineCenter.TargetVelocity;
+        Vector3 targetVel = rot * Vector3.forward * trainFSM.TargetVelocity;
         Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
 
         //Target Change
         Vector3 deltaVel = targetVel - currentVel;
         Vector3 deltaAngVel = targetAngVel - currentAngVel;
+
+        //Target Acceleration
+        Vector3 acc = deltaVel / Time.fixedDeltaTime;
+        Vector3 angAcc = deltaAngVel / Time.fixedDeltaTime;
+        
+        //Limit Change
+        acc = rot * (rotInv * acc).ClampComponents(new Vector3(-trainFSM.ForceBounds.x,0,0), trainFSM.ForceBounds);
+        angAcc = rot * (rotInv * angAcc).ClampComponents(-trainFSM.TorqueBounds, trainFSM.TorqueBounds);
+
         //Forces
-        trainMachineCenter.rb.AddForce(deltaVel / Time.fixedDeltaTime, ForceMode.Acceleration);
-        trainMachineCenter.rb.AddTorque(deltaAngVel / Time.fixedDeltaTime, ForceMode.Acceleration);
+        trainFSM.rb.AddForce(acc, ForceMode.Acceleration);
+        trainFSM.rb.AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
-        float z = trainMachineCenter.transform.eulerAngles.z;
+        float z = trainFSM.transform.eulerAngles.z;
         z -= (z > 180) ? 360 : 0;
-        trainMachineCenter.rb.AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
+        trainFSM.rb.AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
     private void AdjustTarget()
     {
-        while ((trainMachineCenter.TargetPos(t) - trainMachineCenter.transform.position).magnitude < trainMachineCenter.FollowDistance)
+        while ((trainFSM.TargetPos(t) - trainFSM.transform.position).magnitude < trainFSM.FollowDistance)
         {
             t += 0.01f;
             if (t >= path.NumSegments)
@@ -68,13 +81,13 @@ public class FollowPathState : BasicState
             }
         }
 
-        targetPos = trainMachineCenter.TargetPos(t);
+        targetPos = trainFSM.TargetPos(t);
     }
 
     public override void PerformBehavior()
     {
         AdjustTarget();
-        Debug.DrawLine(trainMachineCenter.rb.position, targetPos);
+        Debug.DrawLine(trainFSM.rb.position, targetPos);
         Follow();
     }
 

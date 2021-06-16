@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3283.249, g: 1713.5479, b: 880.8721, a: 1}
+  m_IndirectSpecularColor: {r: 3541.5098, g: 1991.4658, b: 1255.4004, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -346,6 +346,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 792658863}
     m_Modifications:
+    - target: {fileID: 1568575070535975682, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1898025699592017268, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3232944291832441749, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5310546843615238902, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: m_Name
       value: Train
@@ -499,6 +511,7 @@ MonoBehaviour:
       Kd: 1.5
   targetDistance: 10
   automatic: 1
+  firing: 0
 --- !u!1 &181141992
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,6 +830,7 @@ MonoBehaviour:
       Kd: 1.5
   targetDistance: 10
   automatic: 1
+  firing: 0
 --- !u!1 &305469971
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,6 +886,7 @@ MonoBehaviour:
       Kd: 1.5
   targetDistance: 10
   automatic: 1
+  firing: 0
 --- !u!1001 &322440280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -951,7 +966,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25318
+  m_Name: pb_Mesh24806
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1208,11 +1223,14 @@ MonoBehaviour:
     value: 0
   pathObjects:
   - {fileID: 1874902750}
-  targetVelocity: 40
+  targetVelocity: 400
   followDistance: 15
   followOffset: {x: 0, y: 15, z: 0}
+  forceBounds: {x: 10, y: 10, z: 400}
+  torqueBounds: {x: 3, y: 400, z: 3}
   physicsManager: {fileID: 426796523}
   rb: {fileID: 426796519}
+  hoverController: {fileID: 1615547501}
 --- !u!1 &493732375
 GameObject:
   m_ObjectHideFlags: 0
@@ -2309,6 +2327,7 @@ MonoBehaviour:
       Kd: 1.5
   targetDistance: 10
   automatic: 1
+  firing: 0
 --- !u!1 &792658862
 GameObject:
   m_ObjectHideFlags: 0
@@ -3016,6 +3035,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36cff9868dc904a4fa1d13f60357fba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1615547501 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5310546844362697447, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+  m_PrefabInstance: {fileID: 84784218}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05852190c9073be4395f46a6aa214239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1617635130
@@ -3743,6 +3773,7 @@ MonoBehaviour:
     m_Bits: 1
   targetDistance: 3
   automatic: 1
+  enginesFiring: 0
 --- !u!65 &2037852648
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4033,3 +4064,4 @@ MonoBehaviour:
     m_Bits: 1
   targetDistance: 10
   automatic: 1
+  enginesFiring: 0
