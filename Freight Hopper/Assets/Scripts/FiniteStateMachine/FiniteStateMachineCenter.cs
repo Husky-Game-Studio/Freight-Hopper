@@ -3,8 +3,8 @@ using UnityEngine;
 public abstract class FiniteStateMachineCenter : MonoBehaviour
 {
     // Machine Fields
-    [SerializeField] private string currentStateName;
 
+    [SerializeField] private string currentStateName;
     [SerializeField] private string currentSubStateName;
     [SerializeField] private string previousStateName;
 
@@ -24,7 +24,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         currentState.EntryState();
     }
 
-    // Pefromed each Update Tick
+    // Pefromed each Update Tick. NEEDS TO BE CALLED BY INHERITTED CLASS
     public void UpdateLoop()
     {
         // perform anything that is independent of being in any one single state
@@ -43,6 +43,15 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         // Debugging
         currentStateName = currentState.ToString();
         previousStateName = previousState.ToString();
+        if (currentState == null)
+        {
+            currentStateName = "Null State";
+            currentSubStateName = "No Sub States";
+        }
+        if (previousState == null)
+        {
+            previousStateName = "Null State";
+        }
         if (!currentState.HasSubStateMachine())
         {
             currentSubStateName = "No Sub States";

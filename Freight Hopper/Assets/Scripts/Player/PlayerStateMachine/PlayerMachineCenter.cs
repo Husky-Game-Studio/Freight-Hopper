@@ -8,7 +8,7 @@ using System;
 public class PlayerMachineCenter : FiniteStateMachineCenter
 {
     // Player State Machine Transition Handler
-    public PlayerStatesTransitions transitionHandler;
+    private PlayerStatesTransitions transitionHandler;
 
     // Player States
 
