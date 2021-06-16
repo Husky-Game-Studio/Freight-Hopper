@@ -19,6 +19,6 @@ public class TrainStateTransitions
             return trainMachineCenter.waiting;
         }
 
-        return trainMachineCenter.findNextPath;
+        return trainMachineCenter.followPath;
     }
 }
