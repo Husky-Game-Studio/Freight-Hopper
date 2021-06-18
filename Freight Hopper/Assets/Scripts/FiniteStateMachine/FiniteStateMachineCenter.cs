@@ -14,7 +14,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
     public DefaultState defaultState;
 
-    //private bool amSubStateMachine = false;
+    protected bool amSubStateMachine = false;
 
     public void RestartFSM()
     {
@@ -90,8 +90,8 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         return previousState;
     }
 
-    /*public void SetAsSubStateMachine()
+    public void SetAsSubStateMachine()
     {
         amSubStateMachine = true;
-    }*/
+    }
 }

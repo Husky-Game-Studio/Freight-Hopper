@@ -11,7 +11,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     private PlayerStatesTransitions transitionHandler;
 
     // Player States
-
     public MoveState moveState;
     public JumpState jumpState;
     public DoubleJumpState doubleJumpState;

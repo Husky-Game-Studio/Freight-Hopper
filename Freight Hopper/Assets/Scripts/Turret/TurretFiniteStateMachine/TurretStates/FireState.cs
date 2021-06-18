@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class FireState : BasicState
 {
-    protected TurretMachineCenter turretMachineCenter;
+    protected TurretSubStateMachineCenter turretMachineCenter;
     private GameObject bulletSpawner;
 
-    public FireState(TurretMachineCenter turretMachineCenter) : base(turretMachineCenter)
+    public FireState(TurretSubStateMachineCenter turretMachineCenter) : base(turretMachineCenter)
     {
         this.turretMachineCenter = turretMachineCenter;
 
@@ -19,11 +19,8 @@ public class FireState : BasicState
     public override BasicState TransitionState()
     {
         // Debugging
-        Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
-                          turretMachineCenter.thePlayer.transform.position
-                          - turretMachineCenter.gameObject.transform.position);
-        Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.thePlayer.transform.position
-                                                   - turretMachineCenter.gameObject.transform.position).magnitude, Color.red);
+        Ray ray = new Ray(turretMachineCenter.gameObject.transform.position, turretMachineCenter.parentMachineCenter.thePlayer.transform.position - turretMachineCenter.gameObject.transform.position);
+        Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.parentMachineCenter.thePlayer.transform.position - turretMachineCenter.gameObject.transform.position).magnitude, Color.red);
 
         // Return to target state
         return turretMachineCenter.targetState;
@@ -32,6 +29,6 @@ public class FireState : BasicState
     // Fire Projectile
     public override void PerformBehavior()
     {
-        turretMachineCenter.ShootBullet(bulletSpawner);
+        turretMachineCenter.parentMachineCenter.ShootBullet(bulletSpawner);
     }
 }
