@@ -10,25 +10,8 @@ public class TestState : BasicState
     public TestState(FiniteStateMachineCenter myMachine) : base(myMachine)
     {
         this.myMachine = myMachine;
-
-        /*mySubCenter = myMachine.gameObject.AddComponent(typeof(TurretSubStateMachineCenter)) as TurretSubStateMachineCenter;
-        mySubCenter.TurretSubStateMachineCenter(myMachine);*/
-
-        
         myMachine.gameObject.AddComponent<TurretSubStateMachineCenter>().parentMachineCenter = (TurretMachineCenter)myMachine;
-        
         mySubCenter = myMachine.gameObject.GetComponent<TurretSubStateMachineCenter>();
-        
-        /*public static TurretSubStateMachineCenter CreateComponent (GameObject this.myMachine.gameObject, FiniteStateMachineCenter myMachine) {
-            TurretSubStateMachineCenter subCenter = this.myMachine.gameObject.AddComponent<TurretSubStateMachineCenter>();
-            subCenter.parentMachineCenter = myMachine;
-            return subCenter;
-        }*/
-        
-        //mySubCenter.TurretSubSTateMachineCenter();
-        
-        //myMachine.gameObject.AddComponent(TurretSubStateMachineCenter(myMachine));
-        //mySubCenter = new TurretSubStateMachineCenter(myMachine);
     } 
     
     public override BasicState TransitionState()
