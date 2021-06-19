@@ -18,7 +18,7 @@ public class TestState : BasicState
         myMachine.gameObject.AddComponent<TurretSubStateMachineCenter>().parentMachineCenter = (TurretMachineCenter)myMachine;
         
         mySubCenter = myMachine.gameObject.GetComponent<TurretSubStateMachineCenter>();
-         
+        
         /*public static TurretSubStateMachineCenter CreateComponent (GameObject this.myMachine.gameObject, FiniteStateMachineCenter myMachine) {
             TurretSubStateMachineCenter subCenter = this.myMachine.gameObject.AddComponent<TurretSubStateMachineCenter>();
             subCenter.parentMachineCenter = myMachine;
