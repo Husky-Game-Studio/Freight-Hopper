@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class SearchState : BasicState
 {
@@ -12,13 +14,15 @@ public class SearchState : BasicState
 
     // Conditions to change states
     public override BasicState TransitionState() {
-        Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
-                          turretMachineCenter.parentMachineCenter.thePlayer.transform.position
-                          - turretMachineCenter.gameObject.transform.position);
+        Vector3 transformOrigin = turretMachineCenter.parentMachineCenter.gameObject.transform.position;
+        Vector3 transformPlayerOrigin = turretMachineCenter.parentMachineCenter.thePlayer.transform.position - transformOrigin;
+
+        Debug.Log("turret origin: " + transformOrigin + "\n" + "Player Origin: " + transformPlayerOrigin);
+        
+        Ray ray = new Ray(transformOrigin, transformPlayerOrigin);
 
         // Debugging
-        Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.parentMachineCenter.thePlayer.transform.position
-                                                   - turretMachineCenter.gameObject.transform.position).magnitude, Color.blue);
+        Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.blue);
 
         // Transition to Targetting State
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, turretMachineCenter.parentMachineCenter.targetedLayers))

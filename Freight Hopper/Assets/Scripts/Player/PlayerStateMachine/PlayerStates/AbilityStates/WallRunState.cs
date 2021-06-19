@@ -6,7 +6,6 @@ public class WallRunState : PlayerState
     private PlayerSubStateMachineCenter pSSMC;
     private BasicState[] miniStateArray;
 
-    private WallRunSubStateMachineCenter wRSSMC;
 
     public WallRunState(PlayerMachineCenter playerMachineCenter, List<Func<BasicState>> myTransitions) : base(playerMachineCenter, myTransitions)
     {
@@ -16,8 +15,6 @@ public class WallRunState : PlayerState
         miniStateArray[2] = new WallJumpState(playerMachineCenter, myTransitions);
 
         pSSMC = new PlayerSubStateMachineCenter(this, miniStateArray, playerMachineCenter);
-
-        wRSSMC = new WallRunSubStateMachineCenter();
     }
 
     public override void EntryState()

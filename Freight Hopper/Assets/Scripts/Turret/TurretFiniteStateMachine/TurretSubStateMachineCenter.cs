@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,13 +19,13 @@ public class TurretSubStateMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
-        searchState = new SearchState(this);
+        /*searchState = new SearchState(this);
         targetState = new TargetState(this);
         fireState = new FireState(this);
         if (this.amSubStateMachine)
         {
             Debug.Log("SubStateMachineActivated");
-        }
+        }*/
     }
     
     public void OnEnable()
@@ -32,5 +33,18 @@ public class TurretSubStateMachineCenter : FiniteStateMachineCenter
         this.currentState = searchState;
         this.previousState = searchState;
     }
-    
+
+    private void Start()
+    {
+        searchState = new SearchState(this);
+        targetState = new TargetState(this);
+        fireState = new FireState(this);
+        if (this.amSubStateMachine)
+        {
+            Debug.Log("SubStateMachineActivated");
+        }
+        
+        this.currentState = searchState;
+        this.previousState = searchState;
+    }
 }

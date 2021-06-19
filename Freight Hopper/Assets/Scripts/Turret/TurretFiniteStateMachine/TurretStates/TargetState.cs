@@ -25,11 +25,11 @@ public class TargetState : BasicState
     public override BasicState TransitionState() {
         Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
                           turretMachineCenter.parentMachineCenter.thePlayer.transform.position
-                          - turretMachineCenter.gameObject.transform.position);
+                          - turretMachineCenter.parentMachineCenter.gameObject.transform.position);
 
         // Debugging
         Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.parentMachineCenter.thePlayer.transform.position
-                                                   - turretMachineCenter.gameObject.transform.position).magnitude, Color.yellow);
+                                                   - turretMachineCenter.parentMachineCenter.gameObject.transform.position).magnitude, Color.yellow);
 
         // Transition to Search State
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, turretMachineCenter.parentMachineCenter.targetedLayers))

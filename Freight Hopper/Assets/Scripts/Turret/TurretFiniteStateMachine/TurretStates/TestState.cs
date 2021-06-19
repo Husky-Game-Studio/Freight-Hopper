@@ -30,6 +30,4 @@ public class TestState : BasicState
     {
         mySubCenter.UpdateLoop();
     }
-    
-    
 }

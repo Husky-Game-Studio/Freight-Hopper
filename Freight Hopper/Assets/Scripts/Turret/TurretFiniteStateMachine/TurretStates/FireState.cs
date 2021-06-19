@@ -19,8 +19,8 @@ public class FireState : BasicState
     public override BasicState TransitionState()
     {
         // Debugging
-        Ray ray = new Ray(turretMachineCenter.gameObject.transform.position, turretMachineCenter.parentMachineCenter.thePlayer.transform.position - turretMachineCenter.gameObject.transform.position);
-        Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.parentMachineCenter.thePlayer.transform.position - turretMachineCenter.gameObject.transform.position).magnitude, Color.red);
+        Ray ray = new Ray(turretMachineCenter.parentMachineCenter.gameObject.transform.position, turretMachineCenter.parentMachineCenter.thePlayer.transform.position - turretMachineCenter.parentMachineCenter.gameObject.transform.position);
+        Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.parentMachineCenter.thePlayer.transform.position - turretMachineCenter.parentMachineCenter.gameObject.transform.position).magnitude, Color.red);
 
         // Return to target state
         return turretMachineCenter.targetState;
