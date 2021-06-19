@@ -16,8 +16,6 @@ public class SearchState : BasicState
     public override BasicState TransitionState() {
         Vector3 transformOrigin = turretMachineCenter.parentMachineCenter.gameObject.transform.position;
         Vector3 transformPlayerOrigin = turretMachineCenter.parentMachineCenter.thePlayer.transform.position - transformOrigin;
-
-        Debug.Log("turret origin: " + transformOrigin + "\n" + "Player Origin: " + transformPlayerOrigin);
         
         Ray ray = new Ray(transformOrigin, transformPlayerOrigin);
 
