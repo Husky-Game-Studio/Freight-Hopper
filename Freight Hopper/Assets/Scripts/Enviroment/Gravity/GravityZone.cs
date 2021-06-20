@@ -7,6 +7,7 @@ public class GravityZone : GravitySource
     [SerializeField] private Quaternion gravityDirection;
     [SerializeField] private Vector3 centerOffset = Vector3.zero;
     [SerializeField] private Vector3 zone = Vector3.one;
+#if UNITY_EDITOR
 
     private void OnDrawGizmosSelected()
     {
@@ -17,12 +18,9 @@ public class GravityZone : GravitySource
         Gizmos.DrawWireCube(centerOffset, 2 * zone);
     }
 
-    private void Awake()
-    {
-        OnValidate();
-    }
+#endif
 
-    private void OnValidate()
+    private void Awake()
     {
         zone = Vector3.Max(zone, Vector3.zero);
     }

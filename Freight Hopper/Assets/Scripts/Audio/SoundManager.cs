@@ -16,7 +16,7 @@ public class SoundManager : MonoBehaviour
     {
         sound.componentAudioSource = this.gameObject.AddComponent<AudioSource>();
 #if !UNITY_EDITOR
-        UpdateAudioSource(sound);
+        UpdateAudioSource(sound, sound.componentAudioSource);
 #endif
         if (sound.hasCooldown)
         {
@@ -33,7 +33,7 @@ public class SoundManager : MonoBehaviour
         Destroy(spawnedObject, sound.clip.length);
 
 #if !UNITY_EDITOR
-        UpdateAudioSource(sound, location);
+        UpdateAudioSource(sound, sound.audioSources[location]);
 #endif
         ResetTimer(sound);
     }

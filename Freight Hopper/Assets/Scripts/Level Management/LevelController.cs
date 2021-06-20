@@ -15,12 +15,29 @@ public class LevelController : MonoBehaviour
     public static LevelController Instance => instance;
     private static LevelController instance;
 
+#if UNITY_EDITOR
+
     private void OnDrawGizmosSelected()
     {
         GizmosExtensions.DrawGizmosArrow(levelData.spawnPosition, Vector3.forward);
     }
 
-    private void OnValidate()
+#endif
+
+    public string GetNextLevel()
+    {
+        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextLevel)
+        {
+            return levelName.NextLevel();
+        }
+        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextWorld)
+        {
+            return levelName.NextWorld();
+        }
+        return levelName.CurrentLevel();
+    }
+
+    private void Awake()
     {
         if (levelData != null)
         {
@@ -38,23 +55,6 @@ public class LevelController : MonoBehaviour
 #endif
             levelName = new LevelName(levelScene.name);
         }
-    }
-
-    public string GetNextLevel()
-    {
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextLevel)
-        {
-            return levelName.NextLevel();
-        }
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextWorld)
-        {
-            return levelName.NextWorld();
-        }
-        return levelName.CurrentLevel();
-    }
-
-    private void Awake()
-    {
         if (instance != null && instance != this)
         {
             Destroy(this.gameObject);

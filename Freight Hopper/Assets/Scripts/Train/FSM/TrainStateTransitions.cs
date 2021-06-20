@@ -4,21 +4,31 @@ using UnityEngine;
 
 public class TrainStateTransitions
 {
-    private TrainMachineCenter trainMachineCenter;
+    private TrainMachineCenter trainFSM;
 
     public TrainStateTransitions(FiniteStateMachineCenter machineCenter)
     {
-        trainMachineCenter = (TrainMachineCenter)machineCenter;
+        trainFSM = (TrainMachineCenter)machineCenter;
     }
 
     public BasicState CheckStartState()
     {
-        if ((trainMachineCenter.StartWaitTime.Enabled && trainMachineCenter.StartWaitTime.value > 0) ||
-            trainMachineCenter.StartWhenDistanceFromPlayer.Enabled && trainMachineCenter.StartWhenDistanceFromPlayer.value > 0)
+        if (trainFSM.StartWaitTime.Enabled ||
+            trainFSM.StartWhenDistanceFromPlayer.Enabled)
         {
-            return trainMachineCenter.waiting;
+            return trainFSM.waiting;
         }
 
-        return trainMachineCenter.followPath;
+        return trainFSM.followPath;
+    }
+
+    public BasicState CheckFindNextPath()
+    {
+        // Waiting
+        if (trainFSM.currentState == trainFSM.waiting && trainFSM.waiting.WaitingFinished())
+        {
+            return trainFSM.followPath;
+        }
+        return null;
     }
 }

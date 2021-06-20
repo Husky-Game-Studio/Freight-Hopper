@@ -28,14 +28,24 @@ public class PlayerAbilities : MonoBehaviour
         FullStopBehavior
     }
 
-    private Dictionary<Name, AbilityBehavior> behavior = new Dictionary<Name, AbilityBehavior>();
+    private List<Name> abilityNames = new List<Name>() {
+        (Name)Enum.Parse(typeof(Name), nameof(MovementBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(JumpBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(GroundPoundBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(GrapplePoleBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(DoubleJumpBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(WallRunBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(UpwardDashBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(BurstBehavior)),
+        (Name)Enum.Parse(typeof(Name), nameof(FullStopBehavior))
+    };
 
-    private List<AbilityBehavior> abilities = new List<AbilityBehavior>();
-    private Rigidbody playerRb;
-    private CollisionManagement playerCM;
-    private SoundManager playerSM;
+    [SerializeField, HideInInspector] private List<AbilityBehavior> abilities = new List<AbilityBehavior>();
+    [SerializeField, HideInInspector] private Rigidbody playerRb;
+    [SerializeField, HideInInspector] private CollisionManagement playerCM;
+    [SerializeField, HideInInspector] private SoundManager playerSM;
 
-    private void OnValidate()
+    private void Awake()
     {
         movementBehavior = GetComponentInChildren<MovementBehavior>();
         jumpBehavior = GetComponentInChildren<JumpBehavior>();
@@ -47,35 +57,9 @@ public class PlayerAbilities : MonoBehaviour
         burstBehavior = GetComponentInChildren<BurstBehavior>();
         fullstopBehavior = GetComponentInChildren<FullStopBehavior>();
 
-        abilities.Clear();
-        abilities.Add(movementBehavior);
-        abilities.Add(jumpBehavior);
-        abilities.Add(groundPoundBehavior);
-        abilities.Add(grapplePoleBehavior);
-        abilities.Add(doubleJumpBehavior);
-        abilities.Add(wallRunBehavior);
-        abilities.Add(upwardDashBehavior);
-        abilities.Add(burstBehavior);
-        abilities.Add(fullstopBehavior);
-
-        behavior.Clear();
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(MovementBehavior)), movementBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(JumpBehavior)), jumpBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(GroundPoundBehavior)), groundPoundBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(GrapplePoleBehavior)), grapplePoleBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(DoubleJumpBehavior)), doubleJumpBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(WallRunBehavior)), wallRunBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(UpwardDashBehavior)), upwardDashBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(BurstBehavior)), burstBehavior);
-        behavior.Add((Name)Enum.Parse(typeof(Name), nameof(FullStopBehavior)), fullstopBehavior);
-    }
-
-    private void Awake()
-    {
         playerRb = GetComponent<Rigidbody>();
         playerCM = GetComponent<PhysicsManager>().collisionManager;
         playerSM = GetComponentInChildren<SoundManager>();
-
         foreach (AbilityBehavior ability in abilities)
         {
             if (ability == null)
@@ -96,16 +80,35 @@ public class PlayerAbilities : MonoBehaviour
         }
     }
 
-    // Unlocks/locks abilities according to current level settings
+    // Unlocks/locks abilities according to current level settings. Bad optimization
     public void SetActiveAbilities(Name[] abilitiesNames)
     {
+        abilities.Clear();
+        abilities.Add(movementBehavior);
+        abilities.Add(jumpBehavior);
+        abilities.Add(groundPoundBehavior);
+        abilities.Add(grapplePoleBehavior);
+        abilities.Add(doubleJumpBehavior);
+        abilities.Add(wallRunBehavior);
+        abilities.Add(upwardDashBehavior);
+        abilities.Add(burstBehavior);
+        abilities.Add(fullstopBehavior);
+
         foreach (AbilityBehavior ability in abilities)
         {
             ability.Lock();
         }
-        foreach (Name name in abilitiesNames)
+        for (int i = 0; i < abilities.Count; i++)
         {
-            behavior[name].Unlock();
+            foreach (Name name in abilitiesNames)
+            {
+                if (abilityNames[i] == name)
+                {
+                    abilities[i].Unlock();
+                    Debug.Log("unlocked " + name.ToString());
+                    break;
+                }
+            }
         }
     }
 }

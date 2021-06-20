@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
+
 public static class GizmosExtensions
 {
     /// <summary>
@@ -71,3 +73,5 @@ public static class GizmosExtensions
         Handles.DrawLine(new Vector3(arg1, arg2, 0f), new Vector3(arg1, arg2, forward));
     }
 }
+
+#endif

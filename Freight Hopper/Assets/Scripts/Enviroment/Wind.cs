@@ -23,6 +23,8 @@ public class Wind : MonoBehaviour
     [SerializeField] private LayerMask affectedLayers;
     private WindParticleController windParticleController;
 
+#if UNITY_EDITOR
+
     // Draws lines for wind direction
     private void OnDrawGizmosSelected()
     {
@@ -43,10 +45,12 @@ public class Wind : MonoBehaviour
         }
     }
 
+#endif
+
     private void Awake()
     {
         windParticleController = this.GetComponent<WindParticleController>();
-        OnValidate();
+        rayWidth = 1 / density;
     }
 
     private void OnValidate()

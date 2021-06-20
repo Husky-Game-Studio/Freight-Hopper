@@ -52,6 +52,12 @@ public class WallRunBehavior : AbilityBehavior
     /// </summary>
     public bool[] CheckWalls()
     {
+        if (playerRb == null)
+        {
+            // Null reference errors are occuring, this is a temp fix
+            bool[] falseArray = { false, false, false, false };
+            return falseArray;
+        }
         return UpdateWallStatus(playerCM.CheckWalls(wallCheckDistance, validWalls));
     }
 

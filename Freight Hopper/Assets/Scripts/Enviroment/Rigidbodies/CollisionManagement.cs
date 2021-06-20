@@ -55,25 +55,18 @@ public class CollisionManagement
                     walls[i] = hit.normal;
                 }
             }
-            if (walls[i] != Vector3.zero)
-            {
-                //Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.red, Time.fixedDeltaTime);
-            }
-            else
-            {
-                //Debug.DrawLine(rb.position, rb.position + (rb.transform.TransformDirection(directions[i]) * distance), Color.yellow, Time.fixedDeltaTime);
-            }
         }
 
         return walls;
     }
 
-    public void Initialize(Rigidbody rb, MonoBehaviour component, Friction frictionManager, bool aerial)
+    public void Initialize(Rigidbody rb, MonoBehaviour component, RigidbodyLinker linker, Friction frictionManager, bool aerial)
     {
         this.rb = rb;
         this.component = component;
         this.frictionManager = frictionManager;
         this.aerial = aerial;
+        this.rigidbodyLinker = linker;
 
         contactNormal.current = CustomGravity.GetUpAxis(rb.position);
         contactNormal.UpdateOld();

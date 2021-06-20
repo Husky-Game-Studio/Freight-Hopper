@@ -9,16 +9,12 @@ public class PhysicsManager : MonoBehaviour
     public CollisionManagement collisionManager;
     public RigidbodyLinker rigidbodyLinker;
 
-    public Rigidbody rb;
-
-    private void OnValidate()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
+    [HideInInspector] public Rigidbody rb;
 
     private void Start()
     {
-        collisionManager.Initialize(rb, this, friction, aerial);
+        rb = GetComponent<Rigidbody>();
+        collisionManager.Initialize(rb, this, rigidbodyLinker, friction, aerial);
         gravity.Initialize(rb, collisionManager, aerial);
         friction.Initialize(rb, collisionManager);
     }

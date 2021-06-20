@@ -27,6 +27,11 @@ public class HoverController : MonoBehaviour
         InitializeEngines();
     }
 
+    private void Awake()
+    {
+        InitializeEngines();
+    }
+
     private void OnValidate()
     {
         if (this.gameObject != null)

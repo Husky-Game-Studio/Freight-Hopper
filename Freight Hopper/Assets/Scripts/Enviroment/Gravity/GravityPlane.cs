@@ -6,6 +6,8 @@ public class GravityPlane : GravitySource
     [SerializeField] private Vector3 centerOffset = Vector3.zero;
     [SerializeField] private Optional<float> falloffRange = new Optional<float>(1);
 
+#if UNITY_EDITOR
+
     // Draws squares representing an infinite plane. Anything below this is applied for the gravity
     private void OnDrawGizmosSelected()
     {
@@ -24,6 +26,8 @@ public class GravityPlane : GravitySource
             Gizmos.DrawWireCube((Vector3.up * falloffRange.value) + centerOffset, size);
         }
     }
+
+#endif
 
     /// <summary>
     /// Like a plane, spans infinitely despite what gizmos shows

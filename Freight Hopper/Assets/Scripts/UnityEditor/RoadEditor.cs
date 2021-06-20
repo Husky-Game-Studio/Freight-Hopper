@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
+
 [CustomEditor(typeof(RoadCreator))]
 public class RoadEditor : Editor
 {
-    RoadCreator creator;
+    private RoadCreator creator;
+
     private void OnEnable()
     {
         creator = (RoadCreator)this.target;
@@ -48,3 +51,5 @@ public class RoadEditor : Editor
         }
     }
 }
+
+#endif

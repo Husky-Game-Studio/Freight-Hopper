@@ -261,7 +261,7 @@ public class FollowPath : MonoBehaviour
         Debug.DrawLine(rb.position, targetPos);
 
         float roll_target = 0.0f;
-        float roll_error = wrap_difference(roll_target - transform.eulerAngles.z, 360);
+        float roll_error = WrapDifference(roll_target - transform.eulerAngles.z, 360);
         float roll_torque = roll_PID.GetOutput(roll_error, Time.fixedDeltaTime);
         rb.AddRelativeTorque(Vector3.forward * roll_torque, ForceMode.Acceleration);
 
@@ -276,7 +276,7 @@ public class FollowPath : MonoBehaviour
         //Debug.Log("Displacement: " + localDisplacement);
     }
 
-    private float wrap_difference(float diff, float range)
+    private float WrapDifference(float diff, float range)
     {
         return (Mathf.Abs(diff) <= range / 2.0f) ? diff : (diff - Mathf.Sign(diff) * range);
     }

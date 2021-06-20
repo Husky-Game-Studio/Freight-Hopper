@@ -12,6 +12,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     // Player States
     public MoveState moveState;
+
     public JumpState jumpState;
     public DoubleJumpState doubleJumpState;
     public GroundPoundState groundPoundState;
@@ -39,6 +40,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
+        Debug.Log("DO I even exist?");
         transitionHandler = new PlayerStatesTransitions(this);
 
         // Default
@@ -162,16 +164,13 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         burstState = new BurstState(this, null);
     }
 
-    public void OnValidate()
+    public void OnEnable()
     {
         abilities = GetComponent<PlayerAbilities>();
         playerPM = GetComponent<PhysicsManager>();
         playerCM = playerPM.collisionManager;
-    }
-
-    public void OnEnable()
-    {
         RestartFSM();
+        Debug.Log("Update loop working?");
         playerCM.CollisionDataCollected += UpdateLoop;
         playerCM.Landed += abilities.Recharge;
         LevelController.PlayerRespawned += RestartFSM;
@@ -181,12 +180,13 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     {
         currentState.ExitState();
         playerCM.CollisionDataCollected -= UpdateLoop;
-
+        transitionHandler.OnDisable();
         LevelController.PlayerRespawned -= RestartFSM;
     }
 
     protected override void EndLoop()
     {
+        Debug.Log("Current states is: " + currentState.ToString());
         transitionHandler.ResetInputs();
     }
 

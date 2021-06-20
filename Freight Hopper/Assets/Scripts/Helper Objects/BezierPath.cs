@@ -9,7 +9,12 @@ using UnityEngine;
 public class BezierPath
 {
     [SerializeField]
-    List<Vector3> points;
+    private List<Vector3> points;
+
+    public void ReversePoints()
+    {
+        points.Reverse();
+    }
 
     public BezierPath()
     {
@@ -21,6 +26,7 @@ public class BezierPath
             Vector3.right
         };
     }
+
     public Vector3 this[int i]
     {
         get
@@ -133,7 +139,6 @@ public class BezierPath
         }
         else if (seg == this.NumSegments + 1)
         {
-
             index = (3 * seg) - 2;
         }
         else
@@ -183,7 +188,6 @@ public class BezierPath
         }
         else if (anc == this.NumAnchors - 1)
         {
-
             index = (3 * anc) - 2;
         }
         else

@@ -1,6 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 [CustomPropertyDrawer(typeof(Optional<>))]
 public class OptionalPropertyDrawer : PropertyDrawer
 {
@@ -32,3 +34,5 @@ public class OptionalPropertyDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 }
+
+#endif

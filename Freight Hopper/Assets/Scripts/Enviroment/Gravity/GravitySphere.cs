@@ -23,7 +23,16 @@ public class GravitySphere : GravitySource
 
     private void Awake()
     {
-        OnValidate();
+        if (falloffRadius.Enabled)
+        {
+            falloffRadius.value = Mathf.Max(falloffRadius.value, radius);
+
+            falloffFactor = 1 / (falloffRadius.value - radius);
+        }
+        else
+        {
+            falloffRadius.value = radius;
+        }
     }
 
     private void OnValidate()
