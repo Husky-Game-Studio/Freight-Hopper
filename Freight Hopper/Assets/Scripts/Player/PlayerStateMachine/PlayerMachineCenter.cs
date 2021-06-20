@@ -40,7 +40,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
-        Debug.Log("DO I even exist?");
         transitionHandler = new PlayerStatesTransitions(this);
 
         // Default
@@ -170,7 +169,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         playerPM = GetComponent<PhysicsManager>();
         playerCM = playerPM.collisionManager;
         RestartFSM();
-        Debug.Log("Update loop working?");
         playerCM.CollisionDataCollected += UpdateLoop;
         playerCM.Landed += abilities.Recharge;
         LevelController.PlayerRespawned += RestartFSM;
@@ -186,7 +184,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     protected override void EndLoop()
     {
-        Debug.Log("Current states is: " + currentState.ToString());
         transitionHandler.ResetInputs();
     }
 

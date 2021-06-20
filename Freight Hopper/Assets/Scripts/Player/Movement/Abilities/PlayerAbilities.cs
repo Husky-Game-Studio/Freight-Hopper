@@ -105,7 +105,6 @@ public class PlayerAbilities : MonoBehaviour
                 if (abilityNames[i] == name)
                 {
                     abilities[i].Unlock();
-                    Debug.Log("unlocked " + name.ToString());
                     break;
                 }
             }

@@ -18,7 +18,6 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
     public virtual void RestartFSM()
     {
-        Debug.Log("restarting FSM, current states is " + currentState);
         currentState?.ExitState();
         currentState = defaultState;
         previousState = defaultState;
