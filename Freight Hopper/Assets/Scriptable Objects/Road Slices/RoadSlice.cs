@@ -5,12 +5,17 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Scriptable Objects/Road Slice")]
 public class RoadSlice : ScriptableObject
 {
-    [SerializeField]
-    private Vector3[] points;
-    [SerializeField]
-    private Vector2Int[] connections;
+    [SerializeField] private Optional<float> railSize;
+    [SerializeField] private Optional<float> railSeperationDistance;
+
+    [SerializeField] private Vector3[] points;
+    [SerializeField] private Vector2Int[] connections;
+
     [SerializeField]
     private Vector2[] uvs;
+
+    public Optional<float> RailSize => railSize;
+    public Optional<float> RailSeperationDistance => railSeperationDistance;
 
     public Vector3[] Points
     {
@@ -35,6 +40,4 @@ public class RoadSlice : ScriptableObject
             return uvs;
         }
     }
-
-
 }

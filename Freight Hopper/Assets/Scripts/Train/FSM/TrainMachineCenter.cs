@@ -56,6 +56,11 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         return pathObjects[currentPath].pathCreator.path;
     }
 
+    public Vector3 GetStartOfCurrentPath()
+    {
+        return pathObjects[currentPath].pathCreator.path.GetPathPoint(0);
+    }
+
     public RoadCreator GetCurrentPathObject()
     {
         return pathObjects[currentPath];
