@@ -14,7 +14,7 @@ public class Goal : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            LevelLoader.NextLevel(nextLevelName);
+            LevelLoader.LoadLevel(nextLevelName);
         }
     }
 }

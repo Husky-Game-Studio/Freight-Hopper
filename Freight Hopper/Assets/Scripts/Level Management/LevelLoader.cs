@@ -9,16 +9,16 @@ public class LevelLoader : MonoBehaviour
     /// Format for name: "World #"
     /// For example: 1 1
     /// </summary>
-    public void LoadLevel(string levelName)
+    public void LoadLevelButton(string levelName)
     {
-        NextLevel(levelName);
+        LoadLevel(levelName);
     }
 
     /// <summary>
     /// Format for name: "World #"
     /// For example: 1 1
     /// </summary>
-    public static void NextLevel(string levelName)
+    public static void LoadLevel(string levelName)
     {
         SceneManager.LoadScene(levelName, LoadSceneMode.Single);
         SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);

@@ -63,14 +63,14 @@ public class LevelController : MonoBehaviour
         {
             instance = this;
         }
-        Player.PlayerLoadedIn += Respawn;
+        Player.PlayerLoadedIn += ResetPlayerPosition;
         Player.PlayerLoadedIn += UnlockAbilities;
+
         LevelLoadedIn?.Invoke();
     }
 
     private void OnDestroy()
     {
-        Player.PlayerLoadedIn -= Respawn;
         Player.PlayerLoadedIn -= UnlockAbilities;
     }
 
@@ -79,7 +79,7 @@ public class LevelController : MonoBehaviour
         Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.activeAbilities);
     }
 
-    public void Respawn()
+    private void ResetPlayerPosition()
     {
         GameObject player = Player.Instance.gameObject;
         if (player == null)
@@ -88,6 +88,11 @@ public class LevelController : MonoBehaviour
         }
         player.transform.position = levelData.spawnPosition;
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    public void Respawn()
+    {
+        LevelLoader.LoadLevel(levelName.CurrentLevel());
         PlayerRespawned?.Invoke();
         //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }

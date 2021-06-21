@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class FindNextPathState : BasicState
 {
-    private TrainMachineCenter trainMachineCenter;
-    private Vector3 startPosition;
+    private TrainMachineCenter trainFSM;
+    private Vector3 targetPosition;
 
     public FindNextPathState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions) : base(machineCenter, stateTransitions)
     {
-        this.trainMachineCenter = (TrainMachineCenter)machineCenter;
+        this.trainFSM = (TrainMachineCenter)machineCenter;
     }
 
     public override void EntryState()
     {
-        trainMachineCenter.ChangePath();
-        startPosition = trainMachineCenter.TargetPos(0);
-
-        // Sparks fly
+        trainFSM.ChangePath();
+        targetPosition = trainFSM.GetStartOfCurrentPath();
     }
 
     public override void ExitState()
     {
-        // Sparks fly
+    }
+
+    public bool ReachedTarget()
+    {
+        return Vector3.Distance(trainFSM.rb[0].position, targetPosition) <= trainFSM.RailSnappingDistance;
     }
 
     public override void PerformBehavior()
     {
+        trainFSM.Follow(targetPosition);
     }
 
     public override BasicState TransitionState()
