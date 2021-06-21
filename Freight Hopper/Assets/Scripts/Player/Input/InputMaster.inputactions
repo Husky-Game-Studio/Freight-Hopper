@@ -46,7 +46,7 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "Dash",
+                    "name": "Burst",
                     "type": "Button",
                     "id": "eb8a9c01-9b08-4665-9dcf-cd0993eabc85",
                     "expectedControlType": "Button",
@@ -59,7 +59,7 @@
                     "id": "b1bc063b-999f-44b6-a2c1-91c3bb09649d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Press(behavior=2)"
                 },
                 {
                     "name": "Full Stop",
@@ -75,7 +75,7 @@
                     "id": "ded072bd-f6d3-4ec4-985d-12fe0fe19b03",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
@@ -181,18 +181,18 @@
                 {
                     "name": "",
                     "id": "1e93637b-176f-472d-ae71-78c7ec8a5a4c",
-                    "path": "<Keyboard>/leftShift",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dash",
+                    "action": "Burst",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "fc96117b-391c-44b2-808b-da68dc8961d7",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

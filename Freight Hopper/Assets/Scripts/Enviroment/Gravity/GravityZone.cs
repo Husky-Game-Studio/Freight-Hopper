@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class GravityZone : GravitySource
 {
-    [SerializeField] private float gravity = 25f;
     [SerializeField] private Quaternion gravityDirection;
     [SerializeField] private Vector3 centerOffset = Vector3.zero;
     [SerializeField] private Vector3 zone = Vector3.one;
+#if UNITY_EDITOR
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        GizmosExtensions.DrawGizmosArrow(transform.position + centerOffset, gravityDirection * -transform.up);
-        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale);
+        GizmosExtensions.DrawGizmosArrow(this.transform.position + centerOffset, gravityDirection * -this.transform.up);
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position, this.transform.rotation, this.transform.localScale);
 
         Gizmos.DrawWireCube(centerOffset, 2 * zone);
     }
 
-    private void Awake()
-    {
-        OnValidate();
-    }
+#endif
 
-    private void OnValidate()
+    private void Awake()
     {
         zone = Vector3.Max(zone, Vector3.zero);
     }
@@ -38,7 +35,7 @@ public class GravityZone : GravitySource
             return Vector3.zero;
         }
 
-        return gravity * (gravityDirection * -transform.up).normalized;
+        return gravity * (gravityDirection * -this.transform.up).normalized;
     }
 
     /// <summary>

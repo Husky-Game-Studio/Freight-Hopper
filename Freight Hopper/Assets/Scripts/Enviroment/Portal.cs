@@ -12,7 +12,7 @@ public class Portal : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawRay(transform.position, transform.forward);
+        Gizmos.DrawRay(this.transform.position, this.transform.forward);
         UnityEditor.Handles.color = Color.yellow;
         UnityEditor.Handles.DrawDottedLine(this.transform.position, otherPortal.transform.position, 2);
         UnityEditor.Handles.DrawWireCube(otherPortal.transform.position, Vector3.one * 0.25f);
@@ -24,7 +24,7 @@ public class Portal : MonoBehaviour
     /// Grabs transform of connected portal
     /// </summary>
     /// <returns></returns>
-    public Transform GetOtherPortal()
+    public Transform OtherPortal()
     {
         return otherPortal.transform;
     }
@@ -33,14 +33,15 @@ public class Portal : MonoBehaviour
     /// Takes in a ray and teleports it to the other portal.
     /// Needs point the portal gets hit on by the raw to teleport
     /// </summary>
-    /// <param name="ray"></param>
-    /// <param name="hitPoint"></param>
     public void TeleportRay(ref Ray ray, Vector3 hitPoint)
     {
-        ray.origin = otherPortal.transform.TransformPoint(transform.InverseTransformPoint(hitPoint));
-        ray.direction = otherPortal.transform.TransformDirection(transform.InverseTransformDirection(-ray.direction));
+        ray.origin = otherPortal.transform.TransformPoint(this.transform.InverseTransformPoint(hitPoint));
+        ray.direction = otherPortal.transform.TransformDirection(this.transform.InverseTransformDirection(-ray.direction));
     }
 
+    /// <summary>
+    /// Adds rigidbody to teleporting objects set. This set is to indicate to the portal to not reteleport the object instantly
+    /// </summary>
     public void AddTeleportingRigidbody(Rigidbody rb)
     {
         teleportingObjects.Add(rb);
@@ -58,7 +59,7 @@ public class Portal : MonoBehaviour
     {
         if (other.attachedRigidbody != null)
         {
-            if (other.GetComponent<CollisionManagement>() == null)
+            if (other.GetComponent<PhysicsManager>() == null)
             {
                 return;
             }
@@ -83,7 +84,7 @@ public class Portal : MonoBehaviour
         Vector3 velocity = Vector3.zero;
         if (velocity == Vector3.zero)
         {
-            velocity = other.GetComponent<CollisionManagement>().Velocity.old;
+            velocity = other.GetComponent<PhysicsManager>().collisionManager.Velocity.old;
         }
 
         Vector3 reflectionNormal = (this.transform.forward + otherPortal.transform.forward).normalized;

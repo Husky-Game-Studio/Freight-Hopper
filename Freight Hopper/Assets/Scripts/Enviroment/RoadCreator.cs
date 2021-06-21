@@ -2,92 +2,85 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PathCreator))]
 [RequireComponent(typeof(MeshFilter))]
 public class RoadCreator : MonoBehaviour
 {
     public PathCreator pathCreator;
-    
+
     public Road road;
     private MeshFilter meshFilter;
+    public RoadSlice slice;
+
+    [Range(1, 100)]
+    public int roadDetail;
 
     public void CreateRoad()
     {
-        pathCreator = gameObject.GetComponent<PathCreator>();
-        meshFilter = gameObject.GetComponent<MeshFilter>();
+        if (pathCreator == null)
+        {
+            pathCreator = this.gameObject.GetComponent<PathCreator>();
+            if (pathCreator == null)
+            {
+                Debug.Log("No path creator found, please input one or add one as a component");
+            }
+        }
+
+        meshFilter = this.gameObject.GetComponent<MeshFilter>();
         road = new Road(pathCreator.path);
-        RoadDefaultShape();
+    }
+
+    public Vector3 GetPositionOnPath(float t)
+    {
+        return transform.TransformPoint(pathCreator.path.GetPathPoint(t));
     }
 
     public void UpdateMesh()
     {
-        RoadDefaultShape();
-        //RailroadShape();
-        road.UpdateRoadPoints(pathCreator.path, 10);
-        gameObject.GetComponent<MeshFilter>().mesh = road.CreateMesh();
+        RoadShape(slice);
+        road.UpdateRoadPoints(pathCreator.path, roadDetail);
+        this.gameObject.GetComponent<MeshFilter>().mesh = road.CreateMesh();
     }
 
-    private void RoadDefaultShape()
+    private void RoadShape(RoadSlice slice)
     {
-        Vector3[] points = new Vector3[]
+        Vector3[] points = new Vector3[slice.Points.Length];
+        for (int i = 0; i < slice.Points.Length; i++)
         {
-            new Vector3(4,1,0),
-            new Vector3(4,-1,0),
-            new Vector3(-4,-1,0),
-            new Vector3(-4,1,0)
-        };
-        int[] connections = new int[]
-        {
-            0, 1,
-            1, 2,
-            2, 3,
-            3, 0
-        };
-        Vector2[] uvs = new Vector2[]
-        {
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(1,0),
-            new Vector2(0,0)
-        };
-        road.ChangeSegmentShape(points, connections, uvs);
-    }
-
-    private void RailroadShape()
-    {
-        Vector3[] points = new Vector3[]
-        {
-            new Vector3(1,0.5f,0),
-            new Vector3(2,0.5f,0),
-            new Vector3(2,-0.5f,0),
-            new Vector3(1,-0.5f,0),
-            new Vector3(-2,0.5f,0),
-            new Vector3(-1,0.5f,0),
-            new Vector3(-1,-0.5f,0),
-            new Vector3(-2,-0.5f,0)
-        };
-        int[] connections = new int[]
-        {
-            0, 1,
-            1, 2,
-            2, 3,
-            3, 0,
-            4, 5,
-            5, 6,
-            6, 7,
-            7, 4
-        };
-        Vector2[] uvs = new Vector2[]
-        {
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(0,0),
-            new Vector2(1,0),
-            new Vector2(0,0),
-            new Vector2(1,0)
-        };
-        road.ChangeSegmentShape(points, connections, uvs);
+            if (!slice.RailSeperationDistance.Enabled && slice.RailSize.Enabled)
+            {
+                points[i] = slice.Points[i] / slice.RailSize.value;
+            }
+            else if (slice.RailSeperationDistance.Enabled && !slice.RailSize.Enabled)
+            {
+                float seperationValue = slice.RailSeperationDistance.value / 2;
+                if (i < slice.Points.Length / 2)
+                {
+                    points[i] = new Vector3(slice.Points[i].x + seperationValue, slice.Points[i].y, slice.Points[i].z);
+                }
+                else
+                {
+                    points[i] = new Vector3(slice.Points[i].x - seperationValue, slice.Points[i].y, slice.Points[i].z);
+                }
+            }
+            else if (slice.RailSeperationDistance.Enabled && slice.RailSize.Enabled)
+            {
+                float seperationValue = slice.RailSeperationDistance.value / 2;
+                points[i] = slice.Points[i] / slice.RailSize.value;
+                if (i < slice.Points.Length / 2)
+                {
+                    points[i] = new Vector3(points[i].x + seperationValue, points[i].y, points[i].z);
+                }
+                else
+                {
+                    points[i] = new Vector3(points[i].x - seperationValue, points[i].y, points[i].z);
+                }
+            }
+            else
+            {
+                points = slice.Points;
+                break;
+            }
+        }
+        road.ChangeSegmentShape(points, slice.Connections, slice.Uvs);
     }
 }

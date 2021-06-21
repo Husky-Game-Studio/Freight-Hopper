@@ -3,34 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
+
 [CustomEditor(typeof(PathCreator))]
 public class PathEditor : Editor
 {
-    Rect windowRect = new Rect(20,40,10,10); //Window for editor controls
-    PathCreator creator;
-    BezierPath path;
-    RaycastHit lastMouseRaycastHit = new RaycastHit();
-    bool newRaycastHit = false;
-    
+    private Rect windowRect = new Rect(20, 40, 10, 10); //Window for editor controls
+    private PathCreator creator;
+    private BezierPath path;
+    private RaycastHit lastMouseRaycastHit = new RaycastHit();
+    private bool newRaycastHit = false;
 
-    enum Operation
+    private enum Operation
     {
         Translate,
         Rotate
     }
-    Operation operation = Operation.Translate;
 
-    
+    private Operation operation = Operation.Translate;
 
     private void OnEnable()
     {
-        creator = (PathCreator)target;
+        creator = (PathCreator)this.target;
         if (creator.path == null)
         {
             creator.CreatePath();
         }
         path = creator.path;
     }
+
     public override void OnInspectorGUI()
     {
         if (creator == null)
@@ -58,7 +59,7 @@ public class PathEditor : Editor
         Visuals();
     }
 
-    void HotKeys()
+    private void HotKeys()
     {
         Event guiEvent = Event.current;
         if (KeyDown(guiEvent, KeyCode.Keypad1))
@@ -80,7 +81,7 @@ public class PathEditor : Editor
             newRaycastHit = false;
     }
 
-    void Window(int windowID)
+    private void Window(int windowID)
     {
         Color defaultColor = GUI.color;
         GUI.color = Color.red;
@@ -129,6 +130,7 @@ public class PathEditor : Editor
             creator.focusIndex += 1;
         }
     }
+
     private void ActionSwitchOperation()
     {
         Undo.RecordObject(creator, "Switch Path Operation");
@@ -140,7 +142,7 @@ public class PathEditor : Editor
         Undo.RecordObject(creator, "Add Segment");
         Vector3 direction = -CalculatePathDirection(creator.focusIndex);
         Vector3 origin = path[3 * creator.focusIndex];
-        path.AddSegment(creator.focusIndex, origin + 3 * direction, origin + 2 * direction, origin + 1 * direction);
+        path.AddSegment(creator.focusIndex, origin + (3 * direction), origin + (2 * direction), origin + (1 * direction));
     }
 
     private void ActionCreateSegmentAhead()
@@ -148,7 +150,7 @@ public class PathEditor : Editor
         Undo.RecordObject(creator, "Add Segment");
         Vector3 direction = CalculatePathDirection(creator.focusIndex);
         Vector3 origin = path[3 * creator.focusIndex];
-        path.AddSegment(creator.focusIndex + 1, origin + 1 * direction, origin + 2 * direction, origin + 3 * direction);
+        path.AddSegment(creator.focusIndex + 1, origin + (1 * direction), origin + (2 * direction), origin + (3 * direction));
         creator.focusIndex += 1;
     }
 
@@ -159,7 +161,7 @@ public class PathEditor : Editor
         creator.focusIndex = Mathf.Clamp(creator.focusIndex, 0, path.NumAnchors - 1);
     }
 
-    bool MouseRaycast(Event guiEvent, out RaycastHit raycastHit)
+    private bool MouseRaycast(Event guiEvent, out RaycastHit raycastHit)
     {
         return Physics.Raycast(HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition), out raycastHit);
     }
@@ -168,10 +170,10 @@ public class PathEditor : Editor
     {
         if (0 <= anc && anc <= path.NumAnchors - 1)
         {
-            if (3 * anc + 1 <= path.NumPoints - 1)
-                return (path[3 * creator.focusIndex + 1] - path[3 * creator.focusIndex]).normalized;
+            if ((3 * anc) + 1 <= path.NumPoints - 1)
+                return (path[(3 * creator.focusIndex) + 1] - path[3 * creator.focusIndex]).normalized;
             else
-                return (path[3 * creator.focusIndex] - path[3 * creator.focusIndex - 1]).normalized;
+                return (path[3 * creator.focusIndex] - path[(3 * creator.focusIndex) - 1]).normalized;
         }
         else
         {
@@ -211,7 +213,6 @@ public class PathEditor : Editor
 
     private void TranslateAnchorHandles()
     {
-        
         int indexCurrent = creator.focusIndex * 3;
         Vector3 anchorStoredPos = path[indexCurrent];
         Vector3 anchorHandle = Handles.PositionHandle(creator.transform.TransformPoint(anchorStoredPos), Quaternion.identity);
@@ -244,9 +245,9 @@ public class PathEditor : Editor
         {
             Undo.RecordObject(creator, "Rotate Anchor Point");
             if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
-                path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, path[indexCurrent + 1]) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent + 1, anchorStoredPos + (Vector3.Distance(anchorStoredPos, path[indexCurrent + 1]) * (anchorHandleRot * Vector3.forward)));
             if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
-                path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, path[indexCurrent - 1]) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent - 1, anchorStoredPos - (Vector3.Distance(anchorStoredPos, path[indexCurrent - 1]) * (anchorHandleRot * Vector3.forward)));
         }
         //Moving strength handle ahead constrained by rotation
         if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
@@ -256,7 +257,7 @@ public class PathEditor : Editor
             if (path[indexCurrent + 1] != strengthHandlePos)
             {
                 Undo.RecordObject(creator, "Adjust Path Strength");
-                path.MovePoint(indexCurrent + 1, anchorStoredPos + Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent + 1, anchorStoredPos + (Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward)));
             }
         }
         //Moving strength handle behind constrained by rotation
@@ -267,7 +268,7 @@ public class PathEditor : Editor
             if (path[indexCurrent - 1] != strengthHandlePos)
             {
                 Undo.RecordObject(creator, "Adjust Path Strength");
-                path.MovePoint(indexCurrent - 1, anchorStoredPos - Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward));
+                path.MovePoint(indexCurrent - 1, anchorStoredPos - (Vector3.Distance(anchorStoredPos, strengthHandlePos) * (anchorHandleRot * Vector3.forward)));
             }
         }
     }
@@ -296,3 +297,5 @@ public class PathEditor : Editor
         return (guiEvent.keyCode == key && guiEvent.type == EventType.KeyDown);
     }
 }
+
+#endif

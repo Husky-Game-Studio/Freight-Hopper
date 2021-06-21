@@ -10,10 +10,12 @@ public class CameraEffects : MonoBehaviour
     private Camera cam;
 
     private VisualEffect speedLines;
-    private Volume speedVolume;
-    private readonly float speedEffectsStart = 15;
+
+    [SerializeField] private Volume speedVolume;
+    [SerializeField] private float speedEffectsStart = 15;
     private Average playerSpeed;
 
+    [SerializeField] private SoundManager playerSounds;
     [SerializeField] private CameraEffect<float> fov;
     [SerializeField] private CameraEffect<float> tilt;
     [SerializeField] private CameraEffect<float> postProcessing;
@@ -38,7 +40,6 @@ public class CameraEffects : MonoBehaviour
         fov.baseValue = cam.fieldOfView;
         fov.value = fov.baseValue;
 
-        speedVolume = Camera.main.GetComponentInChildren<Volume>();
         postProcessing.baseValue = 0;
         postProcessing.value = postProcessing.baseValue;
 
@@ -49,8 +50,12 @@ public class CameraEffects : MonoBehaviour
         speedLines.Stop();
     }
 
+    private bool goingSlowAgain = false;
+
     private void Update()
     {
+        Vector3 speedLineDirection = cam.transform.InverseTransformDirection(playerRB.velocity.normalized);
+        speedLines.SetVector3("Direction", speedLineDirection);
         playerSpeed.Update(playerRB.velocity.magnitude);
         if (playerRB.velocity.magnitude <= 1)
         {
@@ -71,10 +76,17 @@ public class CameraEffects : MonoBehaviour
         if (playerSpeed.GetAverage() > speedEffectsStart)
         {
             speedLines.Play();
+            playerSounds.Play("GoingFast");
+            goingSlowAgain = true;
         }
         else
         {
             speedLines.Stop();
+        }
+        if (goingSlowAgain && playerSpeed.GetAverage() < speedEffectsStart)
+        {
+            playerSounds.Stop("GoingFast");
+            goingSlowAgain = false;
         }
     }
 

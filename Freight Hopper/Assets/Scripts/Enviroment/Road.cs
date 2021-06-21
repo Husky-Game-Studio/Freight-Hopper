@@ -14,7 +14,7 @@ public class Road
     int detail;
 
     Vector3[] segmentPoints;
-    int[] segmentConnections;
+    Vector2Int[] segmentConnections;
     Vector2[] segmentUVs;
 
     public Vector3[] RoadPoints { get; }
@@ -26,7 +26,7 @@ public class Road
         this.path = path;
     }
 
-    public void ChangeSegmentShape(Vector3[] points, int[] connections, Vector2[] uvs)
+    public void ChangeSegmentShape(Vector3[] points, Vector2Int[] connections, Vector2[] uvs)
     {
         segmentPoints = points;
         segmentConnections = connections;
@@ -37,7 +37,7 @@ public class Road
     {
         this.path = path;
         this.detail = detail;
-        roadPoints = new Vector3[detail * path.NumSegments + 1];
+        roadPoints = new Vector3[(detail * path.NumSegments) + 1];
         for (int i = 0; i <= detail * path.NumSegments; i++)
         {
             roadPoints[i] = path.GetPathPoint((float)i / detail);
@@ -54,12 +54,12 @@ public class Road
         if (AllSettingsExist())
         {
             int pointsPerSegment = segmentPoints.Length;
-            Vector3[] vers = new Vector3[pointsPerSegment * (detail * path.NumSegments + 1)];
-            Vector2[] uvs = new Vector2[pointsPerSegment * (detail * path.NumSegments + 1)];
-            int[] tris = new int[(3 * segmentConnections.Length) * (detail * path.NumSegments)];
+            Vector3[] vers = new Vector3[pointsPerSegment * ((detail * path.NumSegments) + 1)];
+            Vector2[] uvs = new Vector2[pointsPerSegment * ((detail * path.NumSegments) + 1)];
+            int[] tris = new int[(6 * segmentConnections.Length) * (detail * path.NumSegments)];
 
             float cummulativeDistance = 0;
-            for (int i = 0; i < detail * path.NumSegments + 1; i++)
+            for (int i = 0; i < (detail * path.NumSegments) + 1; i++)
             {
                 if (i > 0)
                 {
@@ -72,7 +72,7 @@ public class Road
             }
             for (int i = 0; i < detail * path.NumSegments; i++)
             {
-                SegmentTris(i).CopyTo(tris, (3 * segmentConnections.Length) * i);
+                SegmentTris(i).CopyTo(tris, (6 * segmentConnections.Length) * i);
                 /*
                 int[] theTris = SegmentTris(i);
                 Debug.Log("Segment " + i);
@@ -159,19 +159,19 @@ public class Road
 
     private int[] SegmentTris(int segmentNumber)
     {
-        int segSize = segmentConnections.Length / 2;
+        int segSize = segmentConnections.Length;
         int baseIndex = segmentPoints.Length * segmentNumber;
 
         int[] tris = new int[6 * segSize];
         for(int i = 0; i < segSize; i++)
         {
-            tris[6 * i] = baseIndex + segmentConnections[2 * i + 1];
-            tris[6 * i + 1] = baseIndex + segmentConnections[2 * i];
-            tris[6 * i + 2] = baseIndex + segmentConnections[2 * i] + segmentPoints.Length;
+            tris[6 * i] = baseIndex + segmentConnections[i].y;
+            tris[(6 * i) + 1] = baseIndex + segmentConnections[i].x;
+            tris[(6 * i) + 2] = baseIndex + segmentConnections[i].x + segmentPoints.Length;
 
-            tris[6 * i + 3] = baseIndex + segmentConnections[2 * i + 1];
-            tris[6 * i + 4] = baseIndex + segmentConnections[2 * i] + segmentPoints.Length;
-            tris[6 * i + 5] = baseIndex + segmentConnections[2 * i + 1] + segmentPoints.Length;
+            tris[(6 * i) + 3] = baseIndex + segmentConnections[i].y;
+            tris[(6 * i) + 4] = baseIndex + segmentConnections[i].x + segmentPoints.Length;
+            tris[(6 * i) + 5] = baseIndex + segmentConnections[i].y + segmentPoints.Length;
         }
         return tris;
     }

@@ -9,11 +9,18 @@ public class LevelLoader : MonoBehaviour
     /// Format for name: "World #"
     /// For example: 1 1
     /// </summary>
-    /// <param name="worldName"></param>
-    public void LoadLevel(string levelName)
+    public void LoadLevelButton(string levelName)
+    {
+        LoadLevel(levelName);
+    }
+
+    /// <summary>
+    /// Format for name: "World #"
+    /// For example: 1 1
+    /// </summary>
+    public static void LoadLevel(string levelName)
     {
         SceneManager.LoadScene(levelName, LoadSceneMode.Single);
-
         SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);
     }
 

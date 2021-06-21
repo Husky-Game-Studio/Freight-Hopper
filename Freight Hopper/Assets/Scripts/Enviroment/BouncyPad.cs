@@ -12,7 +12,7 @@ public class BouncyPad : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * percentReflection);
+        Gizmos.DrawRay(this.transform.position, this.transform.TransformDirection(Vector3.up) * percentReflection);
     }
 
     private void Awake()

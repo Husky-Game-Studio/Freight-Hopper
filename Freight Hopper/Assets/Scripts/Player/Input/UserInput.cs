@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class UserInput : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public InputMaster UserInputMaster => master;
     private InputMaster master;
 
     private static UserInput input;
 
-    public static UserInput Input => input;
+    public static UserInput Instance => input;
 
     public delegate void PressEventHandler();
 
@@ -18,27 +19,60 @@ public class UserInput : MonoBehaviour
 
     public event PressEventHandler GroundPoundInput;
 
+    public event PressEventHandler GroundPoundCanceled;
+
     public event PressEventHandler FullStopInput;
 
-    public event PressEventHandler DashInput;
+    public event PressEventHandler BurstInput;
+
+    public event PressEventHandler GrappleInput;
+
+    public event PressEventHandler GrappleInputCanceled;
 
     public event PressEventHandler UpwardDashInput;
 
+    public event PressEventHandler UpwardDashInputCanceled;
+
+    public bool GroundPoundHeld => groundPoundHeld;
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
+    [ReadOnly, SerializeField] private bool upwardDashHeld;
+    [ReadOnly, SerializeField] private bool grapplePoleHeld;
 
     private void OnEnable()
     {
         master.Enable();
-        master.Player.GroundPound.performed += GroundPoundHeld;
-        master.Player.Jump.performed += JumpHeld;
+        master.Player.GroundPound.performed += GroundPoundPressed;
+        master.Player.GroundPound.canceled += GroundPoundReleased;
+        master.Player.UpwardDash.performed += UpwardDashHeld;
+        master.Player.UpwardDash.canceled += UpwardDashReleased;
+        master.Player.Jump.performed += JumpPressed;
         master.Player.Jump.canceled += JumpReleased;
         master.Player.FullStop.performed += FullStopPressed;
+        master.Player.Burst.performed += BurstPressed;
+        master.Player.GrapplePole.performed += GrapplePressed;
+        master.Player.GrapplePole.performed += GrappleReleased;
+        if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
+        {
+            LevelController.LevelLoadedIn += RespawnLinked;
+        }
+        else
+        {
+            Player.PlayerLoadedIn += RespawnLinked;
+        }
+    }
+
+    private void RespawnLinked()
+    {
+        master.Player.Restart.performed += LevelController.Instance.Respawn;
     }
 
     private void OnDisable()
     {
         master.Disable();
+        LevelController.LevelLoadedIn -= RespawnLinked;
+        master.Player.Restart.performed -= LevelController.Instance.Respawn;
+        Player.PlayerLoadedIn -= RespawnLinked;
     }
 
     private void Awake()
@@ -55,7 +89,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void GroundPoundHeld(InputAction.CallbackContext context)
+    private void GroundPoundPressed(InputAction.CallbackContext context)
     {
         groundPoundHeld = !groundPoundHeld;
         if (groundPoundHeld)
@@ -64,7 +98,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void JumpHeld(InputAction.CallbackContext context)
+    private void JumpPressed(InputAction.CallbackContext context)
     {
         jumpHeld = !jumpHeld;
         if (jumpHeld)
@@ -73,9 +107,42 @@ public class UserInput : MonoBehaviour
         }
     }
 
+    private void GrapplePressed(InputAction.CallbackContext context)
+    {
+        grapplePoleHeld = !grapplePoleHeld;
+        if (grapplePoleHeld)
+        {
+            GrappleInput?.Invoke();
+        }
+    }
+
     private void JumpReleased(InputAction.CallbackContext context)
     {
         JumpInputCanceled?.Invoke();
+    }
+
+    private void UpwardDashHeld(InputAction.CallbackContext context)
+    {
+        upwardDashHeld = !upwardDashHeld;
+        if (upwardDashHeld)
+        {
+            UpwardDashInput?.Invoke();
+        }
+    }
+
+    private void UpwardDashReleased(InputAction.CallbackContext context)
+    {
+        UpwardDashInputCanceled?.Invoke();
+    }
+
+    private void GroundPoundReleased(InputAction.CallbackContext context)
+    {
+        GroundPoundCanceled?.Invoke();
+    }
+
+    private void GrappleReleased(InputAction.CallbackContext context)
+    {
+        GrappleInputCanceled?.Invoke();
     }
 
     private void FullStopPressed(InputAction.CallbackContext context)
@@ -83,20 +150,16 @@ public class UserInput : MonoBehaviour
         FullStopInput?.Invoke();
     }
 
-    private void UpwardDashPressed(InputAction.CallbackContext context)
+    private void BurstPressed(InputAction.CallbackContext context)
     {
-        UpwardDashInput?.Invoke();
-    }
-
-    private void DashPressed(InputAction.CallbackContext context)
-    {
-        DashInput?.Invoke();
+        BurstInput?.Invoke();
     }
 
     // Returns the direction the player wants to move
-    public Vector2 Move()
+    public Vector3 Move()
     {
-        return master.Player.Movement.ReadValue<Vector2>();
+        Vector2 rawInput = master.Player.Movement.ReadValue<Vector2>();
+        return new Vector3(rawInput.x, 0, rawInput.y);
     }
 
     public Vector2 Look()
@@ -104,45 +167,9 @@ public class UserInput : MonoBehaviour
         return master.Player.Look.ReadValue<Vector2>();
     }
 
-    // Returns if the player jumped
-    public bool Jump()
-    {
-        return jumpHeld;
-    }
-
     // Returns true if the player press the restart key/button
     public bool Restart()
     {
         return master.Player.Restart.triggered;
-    }
-
-    // Returns true if player presses the dash key/button
-    public bool Dash()
-    {
-        return master.Player.Dash.triggered;
-    }
-
-    // Returns true if player presses the FullStop key/button
-    public bool FullStopTriggered()
-    {
-        return master.Player.FullStop.triggered;
-    }
-
-    // Returns true if player presses the UpwardDash key/button
-    public bool UpwardDashTriggered()
-    {
-        return master.Player.UpwardDash.triggered;
-    }
-
-    // Returns true if player presses the GrapplePole key/button
-    public bool GrapplePole()
-    {
-        return master.Player.GrapplePole.triggered;
-    }
-
-    // Returns true if player is holding the GroundPound key/button down
-    public bool GroundPoundTriggered()
-    {
-        return groundPoundHeld;
     }
 }

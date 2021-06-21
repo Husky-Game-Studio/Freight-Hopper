@@ -59,7 +59,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
-                    ""name"": ""Dash"",
+                    ""name"": ""Burst"",
                     ""type"": ""Button"",
                     ""id"": ""eb8a9c01-9b08-4665-9dcf-cd0993eabc85"",
                     ""expectedControlType"": ""Button"",
@@ -72,7 +72,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""id"": ""b1bc063b-999f-44b6-a2c1-91c3bb09649d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press(behavior=2)""
                 },
                 {
                     ""name"": ""Full Stop"",
@@ -88,7 +88,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""id"": ""ded072bd-f6d3-4ec4-985d-12fe0fe19b03"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -194,18 +194,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1e93637b-176f-472d-ae71-78c7ec8a5a4c"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Dash"",
+                    ""action"": ""Burst"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""fc96117b-391c-44b2-808b-da68dc8961d7"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -247,7 +247,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Restart = m_Player.FindAction("Restart", throwIfNotFound: true);
         m_Player_GroundPound = m_Player.FindAction("Ground Pound", throwIfNotFound: true);
-        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_Burst = m_Player.FindAction("Burst", throwIfNotFound: true);
         m_Player_UpwardDash = m_Player.FindAction("Upward Dash", throwIfNotFound: true);
         m_Player_FullStop = m_Player.FindAction("Full Stop", throwIfNotFound: true);
         m_Player_GrapplePole = m_Player.FindAction("Grapple Pole", throwIfNotFound: true);
@@ -305,7 +305,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Restart;
     private readonly InputAction m_Player_GroundPound;
-    private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_Burst;
     private readonly InputAction m_Player_UpwardDash;
     private readonly InputAction m_Player_FullStop;
     private readonly InputAction m_Player_GrapplePole;
@@ -318,7 +318,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Restart => m_Wrapper.m_Player_Restart;
         public InputAction @GroundPound => m_Wrapper.m_Player_GroundPound;
-        public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @Burst => m_Wrapper.m_Player_Burst;
         public InputAction @UpwardDash => m_Wrapper.m_Player_UpwardDash;
         public InputAction @FullStop => m_Wrapper.m_Player_FullStop;
         public InputAction @GrapplePole => m_Wrapper.m_Player_GrapplePole;
@@ -346,9 +346,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @GroundPound.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
                 @GroundPound.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
                 @GroundPound.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
-                @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Burst.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
+                @Burst.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
+                @Burst.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
                 @UpwardDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
                 @UpwardDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
                 @UpwardDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
@@ -377,9 +377,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @GroundPound.started += instance.OnGroundPound;
                 @GroundPound.performed += instance.OnGroundPound;
                 @GroundPound.canceled += instance.OnGroundPound;
-                @Dash.started += instance.OnDash;
-                @Dash.performed += instance.OnDash;
-                @Dash.canceled += instance.OnDash;
+                @Burst.started += instance.OnBurst;
+                @Burst.performed += instance.OnBurst;
+                @Burst.canceled += instance.OnBurst;
                 @UpwardDash.started += instance.OnUpwardDash;
                 @UpwardDash.performed += instance.OnUpwardDash;
                 @UpwardDash.canceled += instance.OnUpwardDash;
@@ -400,7 +400,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
         void OnGroundPound(InputAction.CallbackContext context);
-        void OnDash(InputAction.CallbackContext context);
+        void OnBurst(InputAction.CallbackContext context);
         void OnUpwardDash(InputAction.CallbackContext context);
         void OnFullStop(InputAction.CallbackContext context);
         void OnGrapplePole(InputAction.CallbackContext context);
