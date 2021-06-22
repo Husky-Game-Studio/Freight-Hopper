@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuOpener : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class MenuOpener : MonoBehaviour
         }
     }
 
+    public void playLevel() {
+
+        SceneManager.LoadScene("CustomLevel", LoadSceneMode.Single);
+        
+    }
     void exitOnClick() {
 
         menu.SetActive(false);
