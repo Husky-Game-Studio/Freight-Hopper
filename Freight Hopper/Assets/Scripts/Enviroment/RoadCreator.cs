@@ -11,7 +11,6 @@ public class RoadCreator : MonoBehaviour
     private MeshFilter meshFilter;
     public RoadSlice slice;
 
-    [SerializeField] private bool automaticlyRemoveAndAddMeshCollider;
     [Range(1, 100)]
     public int roadDetail;
 
@@ -38,9 +37,9 @@ public class RoadCreator : MonoBehaviour
     public void UpdateMesh()
     {
         RoadShape(slice);
-        if (automaticlyRemoveAndAddMeshCollider && GetComponent<MeshCollider>() != null)
+        if (GetComponent<MeshCollider>() != null)
         {
-            DestroyImmediate(this.GetComponent<MeshCollider>());
+            DestroyImmediate(GetComponent<MeshCollider>());
             this.gameObject.AddComponent<MeshCollider>();
         }
         road.UpdateRoadPoints(pathCreator.path, roadDetail);
