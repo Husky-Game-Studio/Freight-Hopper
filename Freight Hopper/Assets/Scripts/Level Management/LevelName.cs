@@ -36,7 +36,7 @@ public struct LevelName
             worldSeriesName = "";
             worldID = 0;
             levelID = 0;
-            Debug.LogWarning("Unknown scene level name format. Please use 'Name 0 0 0' format or '0 0 0' format");
+            Debug.LogWarning("Unknown scene level name format. Please use 'Name 0 0' format or '0 0' format");
         }
     }
 
