@@ -24,13 +24,18 @@ public class TrainStateTransitions
 
     public BasicState CheckFindNextPath()
     {
+        // On Final Path
+        if (trainFSM.OnFinalPath)
+        {
+            return null;
+        }
         // Waiting
         if (trainFSM.currentState == trainFSM.waiting && trainFSM.waiting.WaitingFinished())
         {
             return trainFSM.findNextPath;
         }
         // Follow Path
-        if (trainFSM.currentState == trainFSM.followPath && (trainFSM.followPath.EndOfPath && !trainFSM.OnFinalPath))
+        if (trainFSM.currentState == trainFSM.followPath && (trainFSM.followPath.EndOfPath))
         {
             return trainFSM.findNextPath;
         }
@@ -54,6 +59,10 @@ public class TrainStateTransitions
             (trainFSM.followPath.EndOfPath && trainFSM.OnFinalPath) ||
             ((trainFSM.rb[0].position - trainFSM.followPath.TargetPos).magnitude > trainFSM.DerailDistance))
         {
+            if (trainFSM.derailToWait)
+            {
+                return trainFSM.waiting;
+            }
             return trainFSM.wander;
         }
         return null;
