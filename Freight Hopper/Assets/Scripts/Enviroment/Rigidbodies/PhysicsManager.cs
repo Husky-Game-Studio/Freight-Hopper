@@ -11,7 +11,7 @@ public class PhysicsManager : MonoBehaviour
 
     [HideInInspector] public Rigidbody rb;
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         collisionManager.Initialize(rb, this, rigidbodyLinker, friction, aerial);
