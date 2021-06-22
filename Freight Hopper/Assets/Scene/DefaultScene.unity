@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: 217675793}
   - component: {fileID: 217675792}
   - component: {fileID: 217675791}
+  - component: {fileID: 217675795}
   m_Layer: 0
   m_Name: UI Canvas
   m_TagString: Untagged
@@ -300,6 +301,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &217675795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217675790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalControllerSettings:
+    Kp: 0
+    Ki: 0
+    Kd: 0
+  followDistance: 0
+  offset: {x: 0, y: 0, z: 0}
+  derailThreshold: 0
+  linkedTrainObjects: []
 --- !u!1 &308967563
 GameObject:
   m_ObjectHideFlags: 0
@@ -1865,7 +1886,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   serializedVersion: 2
-  m_Mass: 5
+  m_Mass: 0.1
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
@@ -2065,7 +2086,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &6851446874874222866
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,7 +2206,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16, y: -2, z: -101}
+  m_LocalPosition: {x: 27, y: -2, z: -224}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1798020240}

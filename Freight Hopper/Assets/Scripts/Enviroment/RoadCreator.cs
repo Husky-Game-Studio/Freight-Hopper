@@ -11,6 +11,7 @@ public class RoadCreator : MonoBehaviour
     private MeshFilter meshFilter;
     public RoadSlice slice;
 
+    [SerializeField] private bool automaticlyRemoveAndAddMeshCollider;
     [Range(1, 100)]
     public int roadDetail;
 
@@ -31,12 +32,17 @@ public class RoadCreator : MonoBehaviour
 
     public Vector3 GetPositionOnPath(float t)
     {
-        return transform.TransformPoint(pathCreator.path.GetPathPoint(t));
+        return pathCreator.GetPositionOnPath(t);
     }
 
     public void UpdateMesh()
     {
         RoadShape(slice);
+        if (automaticlyRemoveAndAddMeshCollider && GetComponent<MeshCollider>() != null)
+        {
+            DestroyImmediate(this.GetComponent<MeshCollider>());
+            this.gameObject.AddComponent<MeshCollider>();
+        }
         road.UpdateRoadPoints(pathCreator.path, roadDetail);
         this.gameObject.GetComponent<MeshFilter>().mesh = road.CreateMesh();
     }
@@ -44,43 +50,37 @@ public class RoadCreator : MonoBehaviour
     private void RoadShape(RoadSlice slice)
     {
         Vector3[] points = new Vector3[slice.Points.Length];
+
         for (int i = 0; i < slice.Points.Length; i++)
         {
-            if (!slice.RailSeperationDistance.Enabled && slice.RailSize.Enabled)
+            points[i] = slice.Points[i];
+        }
+
+        for (int i = 0; i < slice.Points.Length; i++)
+        {
+            if (slice.RailSize.Enabled)
             {
-                points[i] = slice.Points[i] / slice.RailSize.value;
+                points[i] /= slice.RailSize.value;
             }
-            else if (slice.RailSeperationDistance.Enabled && !slice.RailSize.Enabled)
+            if (slice.RailSeperationDistance.Enabled)
             {
                 float seperationValue = slice.RailSeperationDistance.value / 2;
                 if (i < slice.Points.Length / 2)
                 {
-                    points[i] = new Vector3(slice.Points[i].x + seperationValue, slice.Points[i].y, slice.Points[i].z);
+                    points[i] += Vector3.right * seperationValue;
                 }
                 else
                 {
-                    points[i] = new Vector3(slice.Points[i].x - seperationValue, slice.Points[i].y, slice.Points[i].z);
+                    points[i] -= Vector3.right * seperationValue;
                 }
             }
-            else if (slice.RailSeperationDistance.Enabled && slice.RailSize.Enabled)
+
+            if (!slice.RailSeperationDistance.Enabled && !slice.RailSize.Enabled)
             {
-                float seperationValue = slice.RailSeperationDistance.value / 2;
-                points[i] = slice.Points[i] / slice.RailSize.value;
-                if (i < slice.Points.Length / 2)
-                {
-                    points[i] = new Vector3(points[i].x + seperationValue, points[i].y, points[i].z);
-                }
-                else
-                {
-                    points[i] = new Vector3(points[i].x - seperationValue, points[i].y, points[i].z);
-                }
-            }
-            else
-            {
-                points = slice.Points;
                 break;
             }
         }
+
         road.ChangeSegmentShape(points, slice.Connections, slice.Uvs);
     }
 }

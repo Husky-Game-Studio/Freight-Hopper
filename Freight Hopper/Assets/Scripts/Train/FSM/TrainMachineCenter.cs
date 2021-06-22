@@ -16,7 +16,6 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private float railSnappingDistance;
     [SerializeField] private Optional<float> startWaitTime;
     [SerializeField] private Optional<float> startWhenDistanceFromPlayer;
-    [SerializeField] private PID.Data trainHorizontalCorrection;
     [SerializeField] private List<RoadCreator> pathObjects;
     [SerializeField] private float targetVelocity;
     [SerializeField] private float followDistance;
@@ -25,6 +24,8 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private Vector3 torqueBounds;
 
     [SerializeField, ReadOnly] private int currentPath = -1;
+    
+    [SerializeField] public bool derailToWait = false;
 
     // Accessors
     public bool OnFinalPath => currentPath == pathObjects.Count - 1;

@@ -5,7 +5,8 @@ using UnityEngine;
 public class FollowPathState : BasicState
 {
     private TrainMachineCenter trainFSM;
-    private BezierPath path;
+    private PathCreator pathCreator;
+    private TrainRailLinker railLinker;
     private Vector3 targetPos;
     private bool endOfPath;
     public bool EndOfPath => endOfPath;
@@ -19,7 +20,13 @@ public class FollowPathState : BasicState
 
     public override void EntryState()
     {
-        path = trainFSM.GetCurrentPath();
+        pathCreator = trainFSM.GetCurrentPathObject().pathCreator;
+        railLinker = pathCreator.GetComponent<TrainRailLinker>();
+
+        for (int i = 0; i < trainFSM.rb.Length; i++)
+        {
+            railLinker.Link(trainFSM.rb[i]);
+        }
         t = 0.0f;
         endOfPath = false;
         // Sparks fly
@@ -35,9 +42,9 @@ public class FollowPathState : BasicState
         while ((trainFSM.TargetPos(t) - trainFSM.rb[0].transform.position).magnitude < trainFSM.FollowDistance)
         {
             t += 0.01f;
-            if (t >= path.NumSegments)
+            if (t >= pathCreator.path.NumSegments)
             {
-                t = path.NumSegments;
+                t = pathCreator.path.NumSegments;
                 endOfPath = true;
                 return;
             }
