@@ -29,6 +29,13 @@ public class PID
             Kd = d;
         }
 
+        public Data(PIDSettings settings)
+        {
+            Kp = settings.Kp * settings.scalar;
+            Ki = settings.Ki * settings.scalar;
+            Kd = settings.Kd * settings.scalar;
+        }
+
         public static Data operator *(Data a, float b)
         {
             return new Data(a.Kp * b, a.Ki * b, a.Kd * b);

@@ -3125,7 +3125,6 @@ MonoBehaviour:
     - {x: 97.72673, y: 22.675474, z: 29.465773}
     - {x: 99.06891, y: 22.800314, z: 28.322514}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 22
 --- !u!33 &1874902751
 MeshFilter:
@@ -3195,14 +3194,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 11400000, guid: 8296216a7ae7d7f4f85eeebc86783c47, type: 2}
   followDistance: 15
   offset: {x: 0, y: 5, z: 0}
   derailThreshold: 25
-  linkedTrainObjects: []
 --- !u!1 &1908452298
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class TrainRailLinker : MonoBehaviour
 {
-    [SerializeField] private PID.Data horizontalControllerSettings;
+    [SerializeField] private PIDSettings horizontalControllerSettings;
     [SerializeField] private float followDistance;
     [SerializeField] private Vector3 offset;
     [SerializeField] private float derailThreshold;
+    public float FollowDistance => followDistance;
+    public Vector3 Offset => offset;
+    public float DerailThreshold => derailThreshold;
+
     private List<int> indexesToRemove = new List<int>();
-    [SerializeField, ReadOnly] private List<TrainData> linkedTrainObjects = new List<TrainData>();
+    private List<TrainData> linkedTrainObjects = new List<TrainData>();
 
     private PathCreator pathCreator;
 
@@ -26,13 +30,15 @@ public class TrainRailLinker : MonoBehaviour
         pathCreator = GetComponent<PathCreator>();
     }
 
+    // Links rigidbody to the rail, assuming its a cart
     public void Link(Rigidbody rb)
     {
         TrainData trainObject = new TrainData();
         trainObject.rb = rb;
         trainObject.t = 0;
+        PID.Data controllerData = new PID.Data(horizontalControllerSettings);
         trainObject.controller = new PID();
-        trainObject.controller.Initialize(horizontalControllerSettings * rb.mass);
+        trainObject.controller.Initialize(controllerData * rb.mass);
         linkedTrainObjects.Add(trainObject);
     }
 
@@ -44,12 +50,13 @@ public class TrainRailLinker : MonoBehaviour
             trainObject.t += 0.01f;
             if (trainObject.t >= pathCreator.path.NumSegments)
             {
-                trainObject.t = pathCreator.path.NumSegments;
+                trainObject.t = pathCreator.path.NumSegments - 0.01f;
                 return;
             }
         }
     }
 
+    // Gets position on path given t, but with the offset considered
     public Vector3 TargetPos(float t)
     {
         return pathCreator.GetPositionOnPath(t) + offset;
@@ -60,33 +67,21 @@ public class TrainRailLinker : MonoBehaviour
         return (TargetPos(trainObject.t + 0.01f) - TargetPos(trainObject.t)).normalized;
     }
 
-    private float GetError(TrainData trainObject, Vector3 forward, Vector3 right)
+    // Gets error for PID, the error is the horizontal distance from the rail
+    private float GetError(TrainData trainObject, Vector3 right)
     {
         Vector3 displacement = TargetPos(trainObject.t) - trainObject.rb.position;
         Vector3 rightDisplacement = Vector3.Project(displacement, right);
 
-        float scalar = 0;
-        if (rightDisplacement.x != 0)
-        {
-            scalar = right.x / rightDisplacement.x;
-        }
-        else if (rightDisplacement.y != 0)
-        {
-            scalar = right.y / rightDisplacement.y;
-        }
-        else
-        {
-            scalar = right.z / rightDisplacement.z;
-        }
-        float direction = Mathf.Sign(scalar);
-        if (direction < 0)
+        float direction = Mathf.Sign(Vector3.Dot(right, rightDisplacement));
+        /*if (direction < 0)
         {
             Debug.DrawLine(rightDisplacement + trainObject.rb.position, trainObject.rb.position, Color.blue);
         }
         else
         {
             Debug.DrawLine(rightDisplacement + trainObject.rb.position, trainObject.rb.position, Color.red);
-        }
+        }*/
 
         return direction * rightDisplacement.magnitude;
     }
@@ -100,17 +95,14 @@ public class TrainRailLinker : MonoBehaviour
             {
                 continue;
             }
-            if (linkedTrainObjects[i].t + 0.01f >= pathCreator.path.NumSegments)
+            if (linkedTrainObjects[i].t + 0.01f > pathCreator.path.NumSegments)
             {
                 indexesToRemove.Add(i);
                 continue;
             }
 
-            Vector3 forward = ForwardDirection(linkedTrainObjects[i]);
-            Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + forward, Color.blue);
-            Vector3 right = Vector3.Cross(CustomGravity.GetUpAxis(linkedTrainObjects[i].rb.position), forward);
-            Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right, Color.green);
-            float error = GetError(linkedTrainObjects[i], forward, right);
+            Vector3 right = Vector3.Cross(CustomGravity.GetUpAxis(linkedTrainObjects[i].rb.position), ForwardDirection(linkedTrainObjects[i]));
+            float error = GetError(linkedTrainObjects[i], right);
             Vector3 force = linkedTrainObjects[i].controller.GetOutput(error, Time.fixedDeltaTime) * right;
             linkedTrainObjects[i].rb.AddForce(force, ForceMode.Force);
             if ((linkedTrainObjects[i].rb.position - TargetPos(linkedTrainObjects[i].t)).magnitude > derailThreshold)

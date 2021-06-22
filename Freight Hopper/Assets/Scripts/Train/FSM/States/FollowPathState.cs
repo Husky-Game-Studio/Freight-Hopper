@@ -23,9 +23,9 @@ public class FollowPathState : BasicState
         pathCreator = trainFSM.GetCurrentPathObject().pathCreator;
         railLinker = pathCreator.GetComponent<TrainRailLinker>();
 
-        for (int i = 0; i < trainFSM.rb.Length; i++)
+        for (int i = 0; i < trainFSM.cartRigidbodies.Length; i++)
         {
-            railLinker.Link(trainFSM.rb[i]);
+            railLinker.Link(trainFSM.cartRigidbodies[i]);
         }
         t = 0.0f;
         endOfPath = false;
@@ -39,7 +39,7 @@ public class FollowPathState : BasicState
 
     private void AdjustTarget()
     {
-        while ((trainFSM.TargetPos(t) - trainFSM.rb[0].transform.position).magnitude < trainFSM.FollowDistance)
+        while ((trainFSM.currentRailLinker.TargetPos(t) - trainFSM.cartRigidbodies[0].transform.position).magnitude < trainFSM.currentRailLinker.FollowDistance)
         {
             t += 0.01f;
             if (t >= pathCreator.path.NumSegments)
@@ -50,13 +50,13 @@ public class FollowPathState : BasicState
             }
         }
 
-        targetPos = trainFSM.TargetPos(t);
+        targetPos = trainFSM.currentRailLinker.TargetPos(t);
     }
 
     public override void PerformBehavior()
     {
         AdjustTarget();
-        Debug.DrawLine(trainFSM.rb[0].position, targetPos);
+        Debug.DrawLine(trainFSM.cartRigidbodies[0].position, targetPos);
         trainFSM.Follow(targetPos);
     }
 

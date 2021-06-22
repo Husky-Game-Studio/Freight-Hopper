@@ -57,7 +57,7 @@ public class TrainStateTransitions
         // Follow Path
         if (trainFSM.currentState == trainFSM.followPath &&
             (trainFSM.followPath.EndOfPath && trainFSM.OnFinalPath) ||
-            ((trainFSM.rb[0].position - trainFSM.followPath.TargetPos).magnitude > trainFSM.DerailDistance))
+            ((trainFSM.cartRigidbodies[0].position - trainFSM.followPath.TargetPos).magnitude > trainFSM.currentRailLinker.DerailThreshold))
         {
             if (trainFSM.derailToWait)
             {
