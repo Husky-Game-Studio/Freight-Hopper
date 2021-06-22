@@ -50,8 +50,9 @@ public class TrainStateTransitions
     public BasicState CheckWander()
     {
         // Follow Path
-        if (trainFSM.currentState == trainFSM.followPath && (trainFSM.followPath.EndOfPath && trainFSM.OnFinalPath) ||
-            Vector3.Distance(trainFSM.rb[0].position, trainFSM.followPath.TargetPos) < trainFSM.DerailDistance)
+        if (trainFSM.currentState == trainFSM.followPath &&
+            (trainFSM.followPath.EndOfPath && trainFSM.OnFinalPath) ||
+            ((trainFSM.rb[0].position - trainFSM.followPath.TargetPos).magnitude > trainFSM.DerailDistance))
         {
             return trainFSM.wander;
         }

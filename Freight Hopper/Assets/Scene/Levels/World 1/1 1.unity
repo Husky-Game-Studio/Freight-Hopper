@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 1787.6904, g: 1281.6396, b: 983.3916, a: 1}
+  m_IndirectSpecularColor: {r: 1810.0703, g: 1312.3916, b: 1019.8496, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1006,7 +1006,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
-    enabled: 1
+    enabled: 0
     value: 30
   pathObjects:
   - {fileID: 670707943}
@@ -1557,6 +1557,7 @@ GameObject:
   - component: {fileID: 670707944}
   - component: {fileID: 670707943}
   - component: {fileID: 670707946}
+  - component: {fileID: 670707947}
   m_Layer: 0
   m_Name: Path 1
   m_TagString: Untagged
@@ -1991,9 +1992,9 @@ MonoBehaviour:
     - {x: -88.83672, y: -0.6750947, z: -0.9386564}
     - {x: -89.335175, y: -0.42670822, z: -1.5237885}
     - {x: -90.85782, y: 0.33205473, z: -3.3112307}
-    - {x: -109.23895, y: 0.73350763, z: -3.0757663}
-    - {x: -110.467834, y: 0.6000881, z: -3.18161}
-    - {x: -111.25601, y: 0.5145409, z: -3.2494774}
+    - {x: -110.46173, y: 0.73350763, z: -3.0757663}
+    - {x: -111.69061, y: 0.6000881, z: -3.18161}
+    - {x: -112.47879, y: 0.5145409, z: -3.2494774}
     - {x: -112.338455, y: 0.10229623, z: -4.2520604}
     - {x: -114.8999, y: -1.3155327, z: -4.47258}
     - {x: -116.90596, y: -2.4259396, z: -4.645285}
@@ -2059,6 +2060,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &670707947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670707941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalControllerSettings:
+    Kp: 10
+    Ki: 0
+    Kd: 0.1
+  followDistance: 15
+  offset: {x: 0, y: 10, z: 0}
+  linkedTrainObjects: []
 --- !u!43 &683155082
 Mesh:
   m_ObjectHideFlags: 0
