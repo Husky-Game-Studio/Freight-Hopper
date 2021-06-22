@@ -8,13 +8,13 @@ public class MenuOpener : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public GameObject menu;
+    [SerializeField] private GameObject menu;
     public Button exit;
 
     private void Start()
     {
         Button x = exit.GetComponent<Button>();
-        x.onClick.AddListener(exitOnClick); 
+        x.onClick.AddListener(ExitOnClick); 
     }
 
     public void OpenMenu() {
@@ -26,12 +26,12 @@ public class MenuOpener : MonoBehaviour
         }
     }
 
-    public void playLevel() {
+    public void PlayLevel() {
 
-        SceneManager.LoadScene("CustomLevel", LoadSceneMode.Single);
+        SceneManager.LoadScene("CustomLevel 0 0", LoadSceneMode.Single);
         
     }
-    void exitOnClick() {
+    void ExitOnClick() {
 
         menu.SetActive(false);
     

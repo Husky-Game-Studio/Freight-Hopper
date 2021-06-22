@@ -11,6 +11,11 @@ public class DemoDropdown : MonoBehaviour
     Dropdown gameDropdown;
     public GameObject targetObject;
 
+    private enum Meshes { 
+    
+        Cube = 1    
+    }
+
     //public GameObject targetAccess;
     public void Start()
     {
@@ -21,7 +26,7 @@ public class DemoDropdown : MonoBehaviour
     public void Update()
     {
         // Cube 
-        if (gameDropdown.value == 1)
+        if (gameDropdown.value == (int)Meshes.Cube)
         {
             Debug.Log("Train Head Spawned");
             Instantiate(trainHead,
