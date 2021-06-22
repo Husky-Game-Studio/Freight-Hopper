@@ -9,6 +9,11 @@ public class PathCreator : MonoBehaviour
 
     public int focusIndex; //Saved editor value
 
+    public Vector3 GetPositionOnPath(float t)
+    {
+        return transform.TransformPoint(path.GetPathPoint(t));
+    }
+
     [ContextMenu("Reverse Path")]
     public void ReversePathOrder()
     {
