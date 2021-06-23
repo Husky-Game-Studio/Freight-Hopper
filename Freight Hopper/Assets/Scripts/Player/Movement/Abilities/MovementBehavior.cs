@@ -4,6 +4,10 @@ public class MovementBehavior : AbilityBehavior
 {
     [SerializeField] private float groundAcceleration = 20;
     [SerializeField] private float airAcceleration = 10;
+    [Space]
+    [SerializeField] private float deltaIncreaseMomentumBonus;
+    [SerializeField] private float decayMultiplier = 2;
+    [ReadOnly, SerializeField] private Current<float> momentumBonus = new Current<float>(1);
 
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
@@ -32,10 +36,25 @@ public class MovementBehavior : AbilityBehavior
         rigidbody.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }
 
+    private void FixedUpdate()
+    {
+        if (UserInput.Instance.Move().z > 0)
+        {
+            momentumBonus.value += deltaIncreaseMomentumBonus * Time.fixedDeltaTime;
+        }
+        else
+        {
+            momentumBonus.value -= deltaIncreaseMomentumBonus * Time.fixedDeltaTime * decayMultiplier;
+            momentumBonus.value = Mathf.Max(momentumBonus.Stored, momentumBonus.value);
+        }
+    }
+
     public void PlayerMove()
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
-        Move(playerPM.rb, playerPM.collisionManager, relativeMove, playerPM.collisionManager.IsGrounded.current ? groundAcceleration : airAcceleration);
+
+        Move(playerPM.rb, playerPM.collisionManager, relativeMove, playerPM.collisionManager.IsGrounded.current ?
+            groundAcceleration * momentumBonus.value : airAcceleration * momentumBonus.value);
     }
 
     public override void EntryAction()
@@ -45,8 +64,11 @@ public class MovementBehavior : AbilityBehavior
     public override void Action()
     {
         PlayerMove();
-        playerSM.PlayRandom("Move", 7);
-        playerSM.PlayRandom("Stone", 5);
+        if (playerPM.collisionManager.IsGrounded.current)
+        {
+            playerSM.PlayRandom("Move", 7);
+            playerSM.PlayRandom("Stone", 5);
+        }
     }
 
     public override void ExitAction()
