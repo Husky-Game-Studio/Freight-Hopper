@@ -160,9 +160,9 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         cartRigidbodies[0].AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
-        float z = cartRigidbodies[0].transform.eulerAngles.z;
-        z -= (z > 180) ? 360 : 0;
-        cartRigidbodies[0].AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
+        //float z = cartRigidbodies[0].transform.eulerAngles.z;
+        //z -= (z > 180) ? 360 : 0;
+        //cartRigidbodies[0].AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
     private Vector3 TargetAngVel(Vector3 target)
