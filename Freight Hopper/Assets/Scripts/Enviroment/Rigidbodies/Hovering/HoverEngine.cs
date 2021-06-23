@@ -34,7 +34,7 @@ public class HoverEngine : MonoBehaviour
         {
             firing = true;
             float error = height - hit.distance;
-            Debug.DrawLine(this.transform.position, this.transform.position + (Vector3.up * error), Color.white);
+            Debug.DrawLine(this.transform.position, this.transform.position + (-direction * error), Color.white);
             // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
             if (error > -0.1f)
             {
@@ -59,7 +59,7 @@ public class HoverEngine : MonoBehaviour
     {
         if (automatic)
         {
-            SetDirection(Physics.gravity);
+            SetDirection(-CustomGravity.GetUpAxis(this.transform.position));
             Hover(targetDistance);
         }
     }
