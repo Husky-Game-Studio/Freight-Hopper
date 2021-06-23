@@ -190,6 +190,7 @@ MonoBehaviour:
     m_Bits: 1
   targetDistance: 3
   automatic: 1
+  enginesFiring: 0
 --- !u!1 &7631039515532287708
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +303,7 @@ MonoBehaviour:
     connectionAcceleration:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
+  rb: {fileID: 0}
 --- !u!145 &8435527232403281627
 SpringJoint:
   m_ObjectHideFlags: 0

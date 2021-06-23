@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class Manager : MonoBehaviour
+public partial class UIManager : MonoBehaviour
 {
     public Camera MainCamera = null;
     public GameObject mSelectedObject = null;
