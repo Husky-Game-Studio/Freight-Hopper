@@ -32,9 +32,13 @@ public class FirstPersonCamera : MonoBehaviour
         playerCM = player.GetComponent<PhysicsManager>().collisionManager;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         FollowPlayer();
+    }
+
+    private void FixedUpdate()
+    {
         RotatePlayer();
     }
 
