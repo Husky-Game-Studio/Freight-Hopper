@@ -15,6 +15,7 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private Optional<float> startWaitTime;
     [SerializeField] private Optional<float> startWhenDistanceFromPlayer;
     [SerializeField] private bool derailToWait = false;
+    [SerializeField] private bool loop = false;
     [SerializeField] private List<RoadCreator> pathObjects;
     [SerializeField] private float targetVelocity;
     [SerializeField] private Vector3 forceBounds;
@@ -23,8 +24,9 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField, ReadOnly] private int currentPath = -1;
 
     // Accessors
-    public bool OnFinalPath => currentPath == pathObjects.Count - 1;
+    public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
     public bool DerailToWait => derailToWait;
+    public bool Loop => loop;
     public float TargetVelocity => targetVelocity;
     public Vector3 ForceBounds => forceBounds;
     public Vector3 TorqueBounds => torqueBounds;
@@ -71,6 +73,10 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         if (currentPath < pathObjects.Count)
         {
             currentRailLinker = GetCurrentPathObject().GetComponent<TrainRailLinker>();
+        }
+        else if (loop && pathObjects.Count > 0)
+        {
+            currentPath = 0;
         }
     }
 
