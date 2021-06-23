@@ -87,7 +87,7 @@ public class CollisionManagement
         {
             Vector3 normal = collision.GetContact(i).normal;
 
-            if (!collision.gameObject.CompareTag("landable"))
+            if (!collision.gameObject.CompareTag("landable") && rb.gameObject.CompareTag("Player"))
             {
                 LevelController.Instance.Respawn();
             }

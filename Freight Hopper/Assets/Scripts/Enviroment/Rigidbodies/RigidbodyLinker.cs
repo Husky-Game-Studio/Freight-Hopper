@@ -29,7 +29,7 @@ public class RigidbodyLinker
     // is too small and is not kinematic
     public void UpdateConnectionState(Rigidbody ourRigidbody)
     {
-        if (!connectedRb.current)
+        if (connectedRb.current == null)
         {
             return;
         }
@@ -39,16 +39,12 @@ public class RigidbodyLinker
             return;
         }
 
+        connectionVelocity.current = connectedRb.current.GetPointVelocity(ourRigidbody.position);
         if (connectedRb.current == connectedRb.old)
         {
-            connectionVelocity.current = (connectedRb.current.transform.TransformPoint(connectionLocalPosition) - connectionWorldPosition) / Time.fixedDeltaTime;
-            //Debug.Log("connection velocity magnitude: " + connectionVelocity.current.magnitude);
             connectionAcceleration.current = (connectionVelocity.current - connectionVelocity.old);
-            ourRigidbody.AddForce(connectionVelocity.current, ForceMode.Acceleration);
+            ourRigidbody.AddForce(connectionAcceleration.current, ForceMode.VelocityChange);
         }
-
-        connectionWorldPosition = ourRigidbody.position;
-        connectionLocalPosition = connectedRb.current.transform.InverseTransformPoint(connectionWorldPosition);
     }
 
     public void UpdateOldValues()
