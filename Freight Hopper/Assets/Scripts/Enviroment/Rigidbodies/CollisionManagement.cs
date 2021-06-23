@@ -25,40 +25,13 @@ public class CollisionManagement
     public bool LevelSurface => ValidUpAxis == ContactNormal.current && isGrounded.current;
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
+    public float MaxSlope => maxSlope;
 
     public delegate void CollisionEventHandler();
 
     public event CollisionEventHandler Landed;
 
     public event CollisionEventHandler CollisionDataCollected;
-
-    /// <summary>
-    /// Checks cardinal direction (relative) walls for their normals in range
-    /// </summary>
-    /// <returns>returns normals of all 4 walls</returns>
-    public Vector3[] CheckWalls(float distance, LayerMask layers)
-    {
-        Vector3[] walls = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
-        Vector3[] directions = { Vector3.forward, Vector3.right, -Vector3.forward, -Vector3.right };
-        RaycastHit hit;
-        for (int i = 0; i < 4; ++i)
-        {
-            if (Physics.Raycast(rb.position, rb.transform.TransformDirection(directions[i]), out hit, distance, layers))
-            {
-                if (!hit.transform.CompareTag("landable"))
-                {
-                    continue;
-                }
-                float collisionAngle = Vector3.Angle(hit.normal, this.ValidUpAxis);
-                if (collisionAngle > maxSlope)
-                {
-                    walls[i] = hit.normal;
-                }
-            }
-        }
-
-        return walls;
-    }
 
     public void Initialize(Rigidbody rb, MonoBehaviour component, RigidbodyLinker linker, Friction frictionManager, bool aerial)
     {

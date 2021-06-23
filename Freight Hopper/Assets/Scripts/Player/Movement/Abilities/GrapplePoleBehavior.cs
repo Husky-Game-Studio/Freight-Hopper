@@ -21,9 +21,9 @@ public class GrapplePoleBehavior : AbilityBehavior
 
     private Transform cameraTransform;
 
-    public override void Initialize(Rigidbody rb, CollisionManagement cm, SoundManager sm)
+    public override void Initialize(PhysicsManager pm, SoundManager sm)
     {
-        base.Initialize(rb, cm, sm);
+        base.Initialize(pm, sm);
         cameraTransform = Camera.main.transform;
     }
 
@@ -41,8 +41,8 @@ public class GrapplePoleBehavior : AbilityBehavior
         {
             anchor = new Ray(anchoredRb.transform.TransformPoint(anchoredRbLocalPosition), -playerAnchor.direction);
         }
-        playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), playerAnchor.direction);
-        pole.SetPosition(1, playerRb.transform.InverseTransformPoint(anchor.origin));
+        playerAnchor = new Ray(playerPM.rb.position + pole.GetPosition(0), playerAnchor.direction);
+        pole.SetPosition(1, playerPM.rb.transform.InverseTransformPoint(anchor.origin));
 
         //Transform playerTransform = rb.transform;
         Vector3 up = (playerAnchor.origin - anchor.origin).normalized;
@@ -58,8 +58,8 @@ public class GrapplePoleBehavior : AbilityBehavior
         Vector3 move = right + forward;
         //move.Normalize();
 
-        playerRb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);
-        if (playerRb.velocity.magnitude > 5)
+        playerPM.rb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);
+        if (playerPM.rb.velocity.magnitude > 5)
         {
             playerSM.Play("GrappleMove");
         }
@@ -68,7 +68,7 @@ public class GrapplePoleBehavior : AbilityBehavior
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
         float error = (expectedLength - actualLength);
         Vector3 tensionVelocity = up * distanceController.GetOutput(error, Time.fixedDeltaTime);
-        playerRb.AddForce(tensionVelocity, ForceMode.VelocityChange);
+        playerPM.rb.AddForce(tensionVelocity, ForceMode.VelocityChange);
     }
 
     private bool reachedMaxLength = false;
@@ -78,7 +78,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     /// </summary>
     public void GrappleTransition()
     {
-        playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
+        playerAnchor = new Ray(playerPM.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
 
         length += Time.fixedDeltaTime * grappleExtensionSpeed;
         length = Mathf.Min(length, maxLength);
@@ -91,7 +91,7 @@ public class GrapplePoleBehavior : AbilityBehavior
         {
             playerSM.Play("GrappleFiring");
         }
-        pole.SetPosition(1, playerRb.transform.InverseTransformPoint(playerAnchor.GetPoint(length)));
+        pole.SetPosition(1, playerPM.rb.transform.InverseTransformPoint(playerAnchor.GetPoint(length)));
 
         Debug.DrawLine(playerAnchor.origin, playerAnchor.GetPoint(length), Color.yellow, Time.fixedDeltaTime);
         if (Physics.Raycast(playerAnchor, out RaycastHit hit, length, affectedLayers))
@@ -129,7 +129,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     // returns true if the grapple can reach a surface. False if it can't reach anything
     public bool CanReachSurface()
     {
-        Ray ray = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
+        Ray ray = new Ray(playerPM.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
         return Physics.Raycast(ray, maxLength, affectedLayers);
     }
 
@@ -137,7 +137,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     {
         playerSM.Play("GrappleFire");
         reachedMaxLength = false;
-        playerAnchor = new Ray(playerRb.position + pole.GetPosition(0), cameraTransform.transform.forward);
+        playerAnchor = new Ray(playerPM.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
         pole.enabled = true;
         pole.SetPosition(1, pole.GetPosition(0));
     }
