@@ -12,17 +12,15 @@ public abstract class AbilityBehavior : MonoBehaviour
     // Ready meaning not consumed
     public bool UnlockedAndReady => Unlocked && !Consumed;
 
-    protected Rigidbody playerRb;
-    protected CollisionManagement playerCM;
+    protected PhysicsManager playerPM;
     protected SoundManager playerSM;
 
     /// <summary>
     /// Links abilities to components they will need to function
     /// </summary>
-    public virtual void Initialize(Rigidbody rb, CollisionManagement cm, SoundManager sm)
+    public virtual void Initialize(PhysicsManager pm, SoundManager sm)
     {
-        this.playerRb = rb;
-        this.playerCM = cm;
+        this.playerPM = pm;
         this.playerSM = sm;
     }
 

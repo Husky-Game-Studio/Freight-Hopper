@@ -22,11 +22,11 @@ public class JumpBehavior : AbilityBehavior
     /// </summary>
     public void Jump(float height)
     {
-        Vector3 gravity = CustomGravity.GetGravity(playerRb.position, out Vector3 upAxis);
+        Vector3 gravity = CustomGravity.GetGravity(playerPM.rb.position, out Vector3 upAxis);
 
-        if (Vector3.Dot(playerRb.velocity, upAxis) < 0)
+        if (Vector3.Dot(playerPM.rb.velocity, upAxis) < 0)
         {
-            playerRb.velocity = playerRb.velocity.ProjectOnContactPlane(upAxis);
+            playerPM.rb.velocity = playerPM.rb.velocity.ProjectOnContactPlane(upAxis);
         }
 
         // Basic physics, except the force required to reach this height may not work if we consider holding space
@@ -34,20 +34,20 @@ public class JumpBehavior : AbilityBehavior
         float jumpForce = Mathf.Sqrt(2f * gravity.magnitude * height);
 
         // Upward bias for sloped jumping
-        Vector3 jumpDirection = (playerCM.ContactNormal.old + upAxis).normalized;
+        Vector3 jumpDirection = (playerPM.collisionManager.ContactNormal.old + upAxis).normalized;
 
         // Considers velocity when jumping on slopes and the slope angle
-        float alignedSpeed = Vector3.Dot(playerRb.velocity, jumpDirection);
+        float alignedSpeed = Vector3.Dot(playerPM.rb.velocity, jumpDirection);
         if (alignedSpeed > 0)
         {
             jumpForce = Mathf.Max(jumpForce - alignedSpeed, 0);
         }
 
         // Actual jump itself
-        playerRb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
-        if (playerCM.rigidbodyLinker.ConnectedRb.current != null)
+        playerPM.rb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
+        if (playerPM.collisionManager.rigidbodyLinker.ConnectedRb.current != null)
         {
-            playerRb.AddForce(Vector3.Project(playerCM.rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
+            playerPM.rb.AddForce(Vector3.Project(playerPM.collisionManager.rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
         }
 
         playerSM.Play("Jump");
@@ -60,6 +60,6 @@ public class JumpBehavior : AbilityBehavior
 
     public override void Action()
     {
-        playerRb.AddForce(CustomGravity.GetUpAxis(playerRb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
+        playerPM.rb.AddForce(CustomGravity.GetUpAxis(playerPM.rb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
     }
 }

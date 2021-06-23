@@ -41,8 +41,7 @@ public class PlayerAbilities : MonoBehaviour
     };
 
     [SerializeField, HideInInspector] private List<AbilityBehavior> abilities = new List<AbilityBehavior>();
-    [SerializeField, HideInInspector] private Rigidbody playerRb;
-    [SerializeField, HideInInspector] private CollisionManagement playerCM;
+    [SerializeField, HideInInspector] private PhysicsManager playerPM;
     [SerializeField, HideInInspector] private SoundManager playerSM;
 
     private void Awake()
@@ -57,8 +56,7 @@ public class PlayerAbilities : MonoBehaviour
         burstBehavior = GetComponentInChildren<BurstBehavior>();
         fullstopBehavior = GetComponentInChildren<FullStopBehavior>();
 
-        playerRb = GetComponent<Rigidbody>();
-        playerCM = GetComponent<PhysicsManager>().collisionManager;
+        playerPM = GetComponent<PhysicsManager>();
         playerSM = GetComponentInChildren<SoundManager>();
         foreach (AbilityBehavior ability in abilities)
         {
@@ -66,7 +64,7 @@ public class PlayerAbilities : MonoBehaviour
             {
                 Debug.LogError("Ability script links not found");
             }
-            ability.Initialize(playerRb, playerCM, playerSM);
+            ability.Initialize(playerPM, playerSM);
         }
         doubleJumpBehavior.GetJumpBehavior(jumpBehavior);
     }

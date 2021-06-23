@@ -14,27 +14,27 @@ public class GroundPoundBehavior : AbilityBehavior
     public override void EntryAction()
     {
         playerSM.Play("GroundPoundBurst");
-        Vector3 upAxis = playerCM.ValidUpAxis;
-        if (Vector3.Dot(Vector3.Project(playerRb.velocity, upAxis), playerRb.transform.up) > 0)
+        Vector3 upAxis = playerPM.collisionManager.ValidUpAxis;
+        if (Vector3.Dot(Vector3.Project(playerPM.rb.velocity, upAxis), playerPM.rb.transform.up) > 0)
         {
-            playerRb.velocity = Vector3.ProjectOnPlane(playerRb.velocity, upAxis);
+            playerPM.rb.velocity = Vector3.ProjectOnPlane(playerPM.rb.velocity, upAxis);
         }
-        playerRb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
+        playerPM.rb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
     }
 
     public override void Action()
     {
         playerSM.Play("GroundPoundTick");
-        Vector3 upAxis = playerCM.ValidUpAxis;
+        Vector3 upAxis = playerPM.collisionManager.ValidUpAxis;
         Vector3 direction = -upAxis;
-        if (playerCM.IsGrounded.current)
+        if (playerPM.collisionManager.IsGrounded.current)
         {
-            Vector3 acrossSlope = Vector3.Cross(upAxis, playerCM.ContactNormal.current);
-            Vector3 downSlope = Vector3.Cross(acrossSlope, playerCM.ContactNormal.current);
+            Vector3 acrossSlope = Vector3.Cross(upAxis, playerPM.collisionManager.ContactNormal.current);
+            Vector3 downSlope = Vector3.Cross(acrossSlope, playerPM.collisionManager.ContactNormal.current);
             direction = downSlope;
-            if (!playerCM.IsGrounded.old)
+            if (!playerPM.collisionManager.IsGrounded.old)
             {
-                playerRb.AddForce(direction * playerCM.Velocity.old.magnitude, ForceMode.VelocityChange);
+                playerPM.rb.AddForce(direction * playerPM.collisionManager.Velocity.old.magnitude, ForceMode.VelocityChange);
             }
             direction *= slopeDownForce;
         }
@@ -43,7 +43,7 @@ public class GroundPoundBehavior : AbilityBehavior
             direction *= downwardsForce;
         }
 
-        playerRb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
+        playerPM.rb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
         increasingForce.value += deltaIncreaseForce * Time.fixedDeltaTime;
     }
 

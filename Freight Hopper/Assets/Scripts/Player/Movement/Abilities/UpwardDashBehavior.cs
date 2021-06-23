@@ -10,19 +10,19 @@ public class UpwardDashBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
-        storedVelocity = playerRb.velocity;
+        storedVelocity = playerPM.rb.velocity;
         duration.ResetTimer();
         playerSM.Play("UpwardDashEntry");
-        playerRb.velocity = Vector3.zero;
-        playerRb.AddForce(playerCM.ValidUpAxis * initialUpwardsForce, ForceMode.VelocityChange);
+        playerPM.rb.velocity = Vector3.zero;
+        playerPM.rb.AddForce(playerPM.collisionManager.ValidUpAxis * initialUpwardsForce, ForceMode.VelocityChange);
     }
 
     public override void Action()
     {
         playerSM.Play("UpwardDashTick");
         duration.CountDownFixed();
-        playerRb.AddForce(playerCM.ValidUpAxis * consistentForce, ForceMode.VelocityChange);
-        playerRb.velocity = Vector3.Project(playerRb.velocity, playerCM.ValidUpAxis);
+        playerPM.rb.AddForce(playerPM.collisionManager.ValidUpAxis * consistentForce, ForceMode.VelocityChange);
+        playerPM.rb.velocity = Vector3.Project(playerPM.rb.velocity, playerPM.collisionManager.ValidUpAxis);
     }
 
     public override void ExitAction()
@@ -30,7 +30,7 @@ public class UpwardDashBehavior : AbilityBehavior
         base.ExitAction();
         playerSM.Stop("UpwardDashTick");
         playerSM.Play("UpwardDashExit");
-        playerRb.velocity = storedVelocity;
+        playerPM.rb.velocity = storedVelocity;
         storedVelocity = Vector3.zero;
     }
 }

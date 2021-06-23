@@ -8,16 +8,16 @@ public class MovementBehavior : AbilityBehavior
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
 
-    public override void Initialize(Rigidbody rb, CollisionManagement cm, SoundManager sm)
+    public override void Initialize(PhysicsManager pm, SoundManager sm)
     {
-        base.Initialize(rb, cm, sm);
+        base.Initialize(pm, sm);
         cameraTransform = Camera.main.transform;
     }
 
     private Vector3 RelativeMove(Vector3 forward, Vector3 right)
     {
-        forward = forward.ProjectOnContactPlane(playerCM.ValidUpAxis);
-        right = right.ProjectOnContactPlane(playerCM.ValidUpAxis);
+        forward = forward.ProjectOnContactPlane(playerPM.collisionManager.ValidUpAxis);
+        right = right.ProjectOnContactPlane(playerPM.collisionManager.ValidUpAxis);
 
         // Moves relative to the camera
         Vector3 input = UserInput.Instance.Move();
@@ -35,7 +35,7 @@ public class MovementBehavior : AbilityBehavior
     public void PlayerMove()
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
-        Move(playerRb, playerCM, relativeMove, playerCM.IsGrounded.current ? groundAcceleration : airAcceleration);
+        Move(playerPM.rb, playerPM.collisionManager, relativeMove, playerPM.collisionManager.IsGrounded.current ? groundAcceleration : airAcceleration);
     }
 
     public override void EntryAction()

@@ -13,12 +13,15 @@ public class TrainStateTransitions
 
     public BasicState CheckStartState()
     {
-        if (trainFSM.StartWaitTime.Enabled ||
+        if (trainFSM.OnFinalPath && !trainFSM.DerailToWait)
+        {
+            return trainFSM.wander;
+        }
+        if (trainFSM.OnFinalPath || trainFSM.StartWaitTime.Enabled ||
             trainFSM.StartWhenDistanceFromPlayer.Enabled)
         {
             return trainFSM.waiting;
         }
-
         return trainFSM.findNextPath;
     }
 
@@ -59,7 +62,7 @@ public class TrainStateTransitions
             (trainFSM.followPath.EndOfPath && trainFSM.OnFinalPath) ||
             ((trainFSM.cartRigidbodies[0].position - trainFSM.followPath.TargetPos).magnitude > trainFSM.currentRailLinker.DerailThreshold))
         {
-            if (trainFSM.derailToWait)
+            if (trainFSM.DerailToWait)
             {
                 return trainFSM.waiting;
             }
