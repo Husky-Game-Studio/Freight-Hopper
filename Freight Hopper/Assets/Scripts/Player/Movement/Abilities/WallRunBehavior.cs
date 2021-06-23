@@ -29,7 +29,7 @@ public class WallRunBehavior : AbilityBehavior
     private void Awake()
     {
         cameraController = Camera.main.GetComponent<FirstPersonCamera>();
-        jumpBehavior = playerPM.rb.GetComponentInChildren<JumpBehavior>();
+        jumpBehavior = this.GetComponent<JumpBehavior>();
     }
 
     private bool[] UpdateWallStatus(Vector3[] walls)

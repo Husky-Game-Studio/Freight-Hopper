@@ -129,7 +129,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     // returns true if the grapple can reach a surface. False if it can't reach anything
     public bool CanReachSurface()
     {
-        Ray ray = new Ray(playerPM.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
+        Ray ray = new Ray(this.transform.position + pole.GetPosition(0), cameraTransform.transform.forward);
         return Physics.Raycast(ray, maxLength, affectedLayers);
     }
 
