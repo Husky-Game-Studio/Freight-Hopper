@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3573.4883, g: 1988.4873, b: 1220.0254, a: 1}
+  m_IndirectSpecularColor: {r: 4992.824, g: 2970.3477, b: 1997.1406, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -646,6 +646,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 1
+  loop: 0
   pathObjects:
   - {fileID: 1553784399}
   targetVelocity: 60
@@ -1459,13 +1460,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186608563}
-  m_LocalRotation: {x: -0.032375067, y: 0.653252, z: -0.5749464, w: 0.49157947}
+  m_LocalRotation: {x: 0.03234643, y: 0.6639446, z: -0.6028289, w: 0.4412807}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 92638000}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 134, y: -102, z: -241}
+  m_LocalEulerAnglesHint: {x: 124, y: -102, z: -241}
 --- !u!114 &186608565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1486,7 +1487,7 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 81981.98
+  m_Intensity: 100640.03
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -1516,12 +1517,12 @@ MonoBehaviour:
   m_AreaLightShadowCone: 120
   m_UseScreenSpaceShadows: 0
   m_InteractsWithSky: 1
-  m_AngularDiameter: 0.5
-  m_FlareSize: 2
-  m_FlareTint: {r: 1, g: 1, b: 1, a: 1}
-  m_FlareFalloff: 4
+  m_AngularDiameter: 8
+  m_FlareSize: 0.1
+  m_FlareTint: {r: 1, g: 0.5613208, b: 0.5613208, a: 1}
+  m_FlareFalloff: 1
   m_SurfaceTexture: {fileID: 0}
-  m_SurfaceTint: {r: 1, g: 1, b: 1, a: 1}
+  m_SurfaceTint: {r: 1, g: 0.5330188, b: 0.5330188, a: 1}
   m_Distance: 1.5e+11
   m_UseRayTracedShadows: 0
   m_NumRayTracingSamples: 4
@@ -1600,7 +1601,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 81981.98
+  m_Intensity: 100640.03
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1643,13 +1644,13 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
-  m_ColorTemperature: 5336
+  m_ColorTemperature: 5990
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
-  m_ShadowAngle: 0
+  m_ShadowAngle: 8
 --- !u!1 &197491069
 GameObject:
   m_ObjectHideFlags: 0
@@ -2517,6 +2518,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 0
+  loop: 0
   pathObjects:
   - {fileID: 2069138777}
   targetVelocity: 40
@@ -2804,6 +2806,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 0
+  loop: 0
   pathObjects:
   - {fileID: 1121666654}
   targetVelocity: 35
@@ -5471,6 +5474,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 0
+  loop: 0
   pathObjects:
   - {fileID: 1205581914}
   targetVelocity: 35
@@ -5513,6 +5517,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 1
+  loop: 0
   pathObjects:
   - {fileID: 1634680526}
   targetVelocity: 50
@@ -5818,6 +5823,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 1
+  loop: 0
   pathObjects:
   - {fileID: 1542081175}
   targetVelocity: 35
@@ -6495,6 +6501,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 1
+  loop: 0
   pathObjects:
   - {fileID: 1542081175}
   targetVelocity: 37
@@ -8511,6 +8518,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 1
+  loop: 0
   pathObjects:
   - {fileID: 942816223}
   targetVelocity: 34
@@ -10631,6 +10639,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 1
+  loop: 0
   pathObjects:
   - {fileID: 411117649}
   targetVelocity: 37
@@ -11490,6 +11499,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 0
+  loop: 0
   pathObjects:
   - {fileID: 2069138777}
   targetVelocity: 37
@@ -12463,6 +12473,7 @@ MonoBehaviour:
     enabled: 0
     value: 0
   derailToWait: 1
+  loop: 0
   pathObjects:
   - {fileID: 411117649}
   targetVelocity: 37
