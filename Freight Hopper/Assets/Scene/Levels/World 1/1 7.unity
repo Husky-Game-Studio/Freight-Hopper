@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3550.9775, g: 1990.9121, b: 1244.7012, a: 1}
+  m_IndirectSpecularColor: {r: 3505.7998, g: 1989.501, b: 1287.8398, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -413,27 +413,23 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  derailDistance: 30
-  railSnappingDistance: 15
   startWaitTime:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  derailToWait: 1
   pathObjects:
   - {fileID: 1553784399}
   targetVelocity: 50
-  followDistance: 15
-  followOffset: {x: 0, y: 3, z: 0}
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  derailToWait: 1
   physicsManagers: []
-  rb:
-  - {fileID: 0}
+  cartRigidbodies: []
   hoverController: {fileID: 528062794}
+  currentRailLinker: {fileID: 0}
 --- !u!43 &84739905
 Mesh:
   m_ObjectHideFlags: 0
@@ -1519,7 +1515,6 @@ MonoBehaviour:
     - {x: 0.05584181, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &197491073
 MeshFilter:
@@ -2698,7 +2693,6 @@ MonoBehaviour:
     - {x: -0.015712066, y: 0, z: 486.25208}
     - {x: -0.015640259, y: 0, z: 488.3268}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 27
 --- !u!114 &411117650
 MonoBehaviour:
@@ -2739,14 +2733,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 11400000, guid: 63401f3a260c68e42b974393be7f6f97, type: 2}
   followDistance: 15
   offset: {x: 0, y: 5, z: 0}
   derailThreshold: 25
-  linkedTrainObjects: []
 --- !u!1 &446675547
 GameObject:
   m_ObjectHideFlags: 0
@@ -3105,7 +3095,6 @@ MonoBehaviour:
     - {x: 0.05584181, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &507786018
 MeshFilter:
@@ -3616,14 +3605,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 0}
   followDistance: 15
   offset: {x: 0, y: 5, z: 0}
   derailThreshold: 25
-  linkedTrainObjects: []
 --- !u!114 &548664424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3680,7 +3665,6 @@ MonoBehaviour:
     - {x: -0.26958552, y: -0.008785934, z: 90.458855}
     - {x: -0.35814667, y: -0.008850098, z: 91.19943}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 20
 --- !u!33 &548664426
 MeshFilter:
@@ -4458,27 +4442,23 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  derailDistance: 25
-  railSnappingDistance: 10
   startWaitTime:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  derailToWait: 1
   pathObjects:
   - {fileID: 1634680526}
   targetVelocity: 50
-  followDistance: 15
-  followOffset: {x: 0, y: 3, z: 0}
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  derailToWait: 1
   physicsManagers: []
-  rb:
-  - {fileID: 0}
+  cartRigidbodies: []
   hoverController: {fileID: 2079595741}
+  currentRailLinker: {fileID: 0}
 --- !u!1001 &749484333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4641,7 +4621,6 @@ MonoBehaviour:
     - {x: 0.05584181, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &781102863
 MeshFilter:
@@ -4766,27 +4745,23 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  derailDistance: 25
-  railSnappingDistance: 10
   startWaitTime:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  derailToWait: 1
   pathObjects:
   - {fileID: 1542081175}
   targetVelocity: 50
-  followDistance: 15
-  followOffset: {x: 0, y: 3, z: 0}
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  derailToWait: 1
   physicsManagers: []
-  rb:
-  - {fileID: 0}
+  cartRigidbodies: []
   hoverController: {fileID: 1444946607}
+  currentRailLinker: {fileID: 0}
 --- !u!4 &814872128 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000492185342984021, guid: 8da525e1a1dc3594f95f5672f67b458c, type: 3}
@@ -5447,27 +5422,23 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  derailDistance: 25
-  railSnappingDistance: 10
   startWaitTime:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  derailToWait: 1
   pathObjects:
   - {fileID: 1542081175}
   targetVelocity: 20
-  followDistance: 15
-  followOffset: {x: 0, y: 3, z: 0}
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  derailToWait: 1
   physicsManagers: []
-  rb:
-  - {fileID: 0}
+  cartRigidbodies: []
   hoverController: {fileID: 1108372841}
+  currentRailLinker: {fileID: 0}
 --- !u!1001 &896105235
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6376,7 +6347,6 @@ MonoBehaviour:
     - {x: 0.052518185, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: d88bfca969e5fd14da95c374604d0d64, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &1048786380
 MeshFilter:
@@ -6841,27 +6811,23 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  derailDistance: 25
-  railSnappingDistance: 10
   startWaitTime:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  derailToWait: 0
   pathObjects:
   - {fileID: 2069138777}
   targetVelocity: 20
-  followDistance: 15
-  followOffset: {x: 0, y: 3, z: 0}
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  derailToWait: 0
   physicsManagers: []
-  rb:
-  - {fileID: 0}
+  cartRigidbodies: []
   hoverController: {fileID: 90592294}
+  currentRailLinker: {fileID: 0}
 --- !u!114 &1108372841 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5310546844362697447, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
@@ -6976,14 +6942,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 11400000, guid: 63401f3a260c68e42b974393be7f6f97, type: 2}
   followDistance: 15
   offset: {x: 0, y: 5, z: 0}
   derailThreshold: 25
-  linkedTrainObjects: []
 --- !u!114 &1121666653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7067,7 +7029,6 @@ MonoBehaviour:
     - {x: 2.8504906, y: 0, z: 131.84291}
     - {x: 2.8696518, y: 0, z: 132.30176}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 22
 --- !u!33 &1121666655
 MeshFilter:
@@ -7638,7 +7599,6 @@ MonoBehaviour:
     - {x: 0.05584181, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &1222466794
 MeshFilter:
@@ -8131,7 +8091,6 @@ MonoBehaviour:
     - {x: 0.052518185, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: d88bfca969e5fd14da95c374604d0d64, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 30
 --- !u!33 &1309387057
 MeshFilter:
@@ -8464,27 +8423,23 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  derailDistance: 25
-  railSnappingDistance: 10
   startWaitTime:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  derailToWait: 1
   pathObjects:
   - {fileID: 411117649}
   targetVelocity: 20
-  followDistance: 15
-  followOffset: {x: 0, y: 3, z: 0}
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  derailToWait: 1
   physicsManagers: []
-  rb:
-  - {fileID: 0}
+  cartRigidbodies: []
   hoverController: {fileID: 1061302957}
+  currentRailLinker: {fileID: 0}
 --- !u!114 &1444946607 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5310546844362697447, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
@@ -8848,7 +8803,6 @@ MonoBehaviour:
     - {x: 0.052518185, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: d88bfca969e5fd14da95c374604d0d64, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &1528262823
 MeshFilter:
@@ -9050,7 +9004,6 @@ MonoBehaviour:
     - {x: 15.684351, y: 0, z: 477.00818}
     - {x: 18.193672, y: 0, z: 479.8245}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 27
 --- !u!114 &1542081176
 MonoBehaviour:
@@ -9091,14 +9044,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 11400000, guid: 63401f3a260c68e42b974393be7f6f97, type: 2}
   followDistance: 15
   offset: {x: 0, y: 5, z: 0}
   derailThreshold: 25
-  linkedTrainObjects: []
 --- !u!1 &1553784395
 GameObject:
   m_ObjectHideFlags: 0
@@ -9234,7 +9183,6 @@ MonoBehaviour:
     - {x: -17.251493, y: 0, z: 401.9921}
     - {x: -20.48265, y: 0, z: 403.8604}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 27
 --- !u!114 &1553784400
 MonoBehaviour:
@@ -9275,14 +9223,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 11400000, guid: 63401f3a260c68e42b974393be7f6f97, type: 2}
   followDistance: 15
   offset: {x: 0, y: 3, z: 0}
   derailThreshold: 30
-  linkedTrainObjects: []
 --- !u!43 &1557953607
 Mesh:
   m_ObjectHideFlags: 0
@@ -9788,27 +9732,23 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  derailDistance: 25
-  railSnappingDistance: 10
   startWaitTime:
     enabled: 0
     value: 0
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  derailToWait: 1
   pathObjects:
   - {fileID: 411117649}
   targetVelocity: 20
-  followDistance: 15
-  followOffset: {x: 0, y: 3, z: 0}
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  derailToWait: 1
   physicsManagers: []
-  rb:
-  - {fileID: 0}
+  cartRigidbodies: []
   hoverController: {fileID: 927311548}
+  currentRailLinker: {fileID: 0}
 --- !u!1 &1634680523
 GameObject:
   m_ObjectHideFlags: 0
@@ -10038,7 +9978,6 @@ MonoBehaviour:
     - {x: -53.37721, y: 25.666262, z: 1057.9822}
     - {x: -53.371292, y: 25.663303, z: 1060.1179}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 27
 --- !u!33 &1634680527
 MeshFilter:
@@ -10094,14 +10033,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 11400000, guid: 63401f3a260c68e42b974393be7f6f97, type: 2}
   followDistance: 15
   offset: {x: 0, y: 5, z: 0}
   derailThreshold: 25
-  linkedTrainObjects: []
 --- !u!23 &1634680530
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10523,7 +10458,6 @@ MonoBehaviour:
     - {x: 0.05584181, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &1659586125
 MeshFilter:
@@ -11097,7 +11031,6 @@ MonoBehaviour:
     - {x: 0.05584181, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &1803354186
 MeshFilter:
@@ -11363,7 +11296,6 @@ MonoBehaviour:
     - {x: 0.052518185, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: d88bfca969e5fd14da95c374604d0d64, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &1885130390
 MeshFilter:
@@ -12044,7 +11976,6 @@ MonoBehaviour:
     - {x: -21.88776, y: 0, z: 702.95856}
     - {x: -21.854717, y: 0, z: 703.2296}
   slice: {fileID: 11400000, guid: 438b1b76283490542b2416f27d3dfdcc, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 1
   roadDetail: 31
 --- !u!114 &2069138778
 MonoBehaviour:
@@ -12094,14 +12025,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 10
-    Ki: 0.3
-    Kd: 0.5
+  horizontalControllerSettings: {fileID: 11400000, guid: 63401f3a260c68e42b974393be7f6f97, type: 2}
   followDistance: 15
   offset: {x: 0, y: 5, z: 0}
   derailThreshold: 25
-  linkedTrainObjects: []
 --- !u!114 &2079595741 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5310546844362697447, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
@@ -12272,7 +12199,6 @@ MonoBehaviour:
     - {x: 0.052518185, y: 2.0828176, z: 264.7695}
     - {x: 0.054014206, y: 2.0896282, z: 265.83142}
   slice: {fileID: 11400000, guid: d88bfca969e5fd14da95c374604d0d64, type: 2}
-  automaticlyRemoveAndAddMeshCollider: 0
   roadDetail: 30
 --- !u!33 &2114158550
 MeshFilter:

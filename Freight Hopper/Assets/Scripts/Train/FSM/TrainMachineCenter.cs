@@ -10,30 +10,21 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     public FollowPathState followPath;
     public WaitingState waiting;
     public WanderState wander;
-
+    [Space]
     // Independent Data
-    [SerializeField] private float derailDistance;
-    [SerializeField] private float railSnappingDistance;
     [SerializeField] private Optional<float> startWaitTime;
     [SerializeField] private Optional<float> startWhenDistanceFromPlayer;
+    [SerializeField] public bool derailToWait = false;
     [SerializeField] private List<RoadCreator> pathObjects;
     [SerializeField] private float targetVelocity;
-    [SerializeField] private float followDistance;
-    [SerializeField] private Vector3 followOffset;
     [SerializeField] private Vector3 forceBounds;
     [SerializeField] private Vector3 torqueBounds;
 
     [SerializeField, ReadOnly] private int currentPath = -1;
-    
-    [SerializeField] public bool derailToWait = false;
 
     // Accessors
     public bool OnFinalPath => currentPath == pathObjects.Count - 1;
-    public float DerailDistance => derailDistance;
-    public float RailSnappingDistance => railSnappingDistance;
     public float TargetVelocity => targetVelocity;
-    public float FollowDistance => followDistance;
-    public Vector3 FollowOffset => followOffset;
     public Vector3 ForceBounds => forceBounds;
     public Vector3 TorqueBounds => torqueBounds;
     public Optional<float> StartWaitTime => startWaitTime;
@@ -41,45 +32,57 @@ public class TrainMachineCenter : FiniteStateMachineCenter
 
     // Dependecies
     [HideInInspector] public PhysicsManager[] physicsManagers;
-    [HideInInspector] public Rigidbody[] rb;
+    [HideInInspector] public Rigidbody[] cartRigidbodies;
     [HideInInspector] public HoverController hoverController;
+    [HideInInspector] public TrainRailLinker currentRailLinker;
     private TrainStateTransitions transitionHandler;
 
-    public Vector3 TargetPos(float t)
-    {
-        return GetCurrentPathObject().GetPositionOnPath(t) + FollowOffset;
-    }
-
+    // Returns current BezierPath
     public BezierPath GetCurrentPath()
     {
+        if (currentPath >= pathObjects.Count)
+        {
+            return null;
+        }
         return pathObjects[currentPath].pathCreator.path;
     }
 
+    // Returns the start of the current path the train is trying to reach
     public Vector3 GetStartOfCurrentPath()
     {
-        return GetCurrentPathObject().GetPositionOnPath(0) + FollowOffset;
+        return GetCurrentPathObject().GetPositionOnPath(0) + currentRailLinker.Offset;
     }
 
+    // Returns the RoadCreator object which contains the current path. Good for getting the object the path is likely on
     public RoadCreator GetCurrentPathObject()
     {
+        if (currentPath >= pathObjects.Count)
+        {
+            return null;
+        }
         return pathObjects[currentPath];
     }
 
+    // Updates the current path to be the next one if it does exist
     public void ChangePath()
     {
         currentPath++;
+        if (currentPath < pathObjects.Count)
+        {
+            currentRailLinker = GetCurrentPathObject().GetComponent<TrainRailLinker>();
+        }
     }
 
     private void Awake()
     {
         physicsManagers = GetComponentsInChildren<PhysicsManager>();
-        rb = new Rigidbody[physicsManagers.Length];
+        cartRigidbodies = new Rigidbody[physicsManagers.Length];
         for (int i = 0; i < physicsManagers.Length; i++)
         {
-            rb[i] = physicsManagers[i].rb;
+            cartRigidbodies[i] = physicsManagers[i].rb;
         }
 
-        hoverController = rb[0].GetComponentInChildren<HoverController>();
+        hoverController = cartRigidbodies[0].GetComponentInChildren<HoverController>();
 
         transitionHandler = new TrainStateTransitions(this);
 
@@ -109,6 +112,7 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         wander = new WanderState(this, wanderTransitionsList);
     }
 
+    // Given a position, the train will try to rotate and move towards that position
     public void Follow(Vector3 targetPosition)
     {
         if (!hoverController.EnginesFiring)
@@ -116,17 +120,17 @@ public class TrainMachineCenter : FiniteStateMachineCenter
             return;
         }
 
-        Vector3 target = targetPosition - rb[0].position;
-        Quaternion rot = rb[0].transform.rotation;
+        Vector3 target = targetPosition - cartRigidbodies[0].position;
+        Quaternion rot = cartRigidbodies[0].transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
-        Vector3 currentVelDir = (rb[0].velocity.magnitude != 0) ? rb[0].velocity.normalized : Vector3.forward;
+        Vector3 currentVelDir = (cartRigidbodies[0].velocity.magnitude != 0) ? cartRigidbodies[0].velocity.normalized : Vector3.forward;
         Quaternion rotVel = Quaternion.LookRotation(currentVelDir);
         Quaternion rotVelInv = Quaternion.Inverse(rotVel);
-        Debug.DrawLine(rb[0].position, rb[0].position + currentVelDir * 20.0f, Color.magenta);
+        Debug.DrawLine(cartRigidbodies[0].position, cartRigidbodies[0].position + currentVelDir * 20.0f, Color.magenta);
 
         //Current
-        Vector3 currentVel = rb[0].velocity;
-        Vector3 currentAngVel = rb[0].angularVelocity;
+        Vector3 currentVel = cartRigidbodies[0].velocity;
+        Vector3 currentAngVel = cartRigidbodies[0].angularVelocity;
 
         //Target (Rotate, Move Forward)
         Vector3 targetVel = rot * Vector3.forward * TargetVelocity;
@@ -141,17 +145,17 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         Vector3 angAcc = deltaAngVel / Time.fixedDeltaTime;
 
         //Limit Change
-        acc = rot * (rotInv * acc).ClampComponents(new Vector3(-ForceBounds.x, 0, 0), ForceBounds);
+        acc = rot * (rotInv * acc).ClampComponents(-ForceBounds, ForceBounds);
         angAcc = rot * (rotInv * angAcc).ClampComponents(-TorqueBounds, TorqueBounds);
 
         //Forces
-        rb[0].AddForce(acc, ForceMode.Acceleration);
-        rb[0].AddTorque(angAcc, ForceMode.Acceleration);
+        cartRigidbodies[0].AddForce(acc, ForceMode.Acceleration);
+        cartRigidbodies[0].AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
-        float z = rb[0].transform.eulerAngles.z;
+        float z = cartRigidbodies[0].transform.eulerAngles.z;
         z -= (z > 180) ? 360 : 0;
-        rb[0].AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
+        cartRigidbodies[0].AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
     private Vector3 TargetAngVel(Vector3 target)

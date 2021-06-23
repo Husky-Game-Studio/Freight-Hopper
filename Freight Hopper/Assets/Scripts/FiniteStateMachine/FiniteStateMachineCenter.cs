@@ -16,6 +16,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
     protected bool amSubStateMachine = false;
 
+    // Resets the FSM to be the default state
     public virtual void RestartFSM()
     {
         currentState?.ExitState();

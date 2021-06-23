@@ -25,10 +25,8 @@ public class RigidbodyLinker
         connectedRb.current = rigidbody;
     }
 
-    /// <summary>
-    /// Applies acceleration to ourRigidbody if applicable. Not applicable if mass of linked rigidbody
-    /// is too small and is not kinematic
-    /// </summary>
+    // Applies acceleration to ourRigidbody if applicable. Not applicable if mass of linked rigidbody
+    // is too small and is not kinematic
     public void UpdateConnectionState(Rigidbody ourRigidbody)
     {
         if (!connectedRb.current)
@@ -43,10 +41,10 @@ public class RigidbodyLinker
 
         if (connectedRb.current == connectedRb.old)
         {
-            connectionVelocity.current = connectedRb.current.velocity;
-            //(connectedRb.current.transform.TransformPoint(connectionLocalPosition) - connectionWorldPosition) / Time.fixedDeltaTime;
+            connectionVelocity.current = (connectedRb.current.transform.TransformPoint(connectionLocalPosition) - connectionWorldPosition) / Time.fixedDeltaTime;
+            //Debug.Log("connection velocity magnitude: " + connectionVelocity.current.magnitude);
             connectionAcceleration.current = (connectionVelocity.current - connectionVelocity.old);
-            ourRigidbody.AddForce(connectionAcceleration.current, ForceMode.Acceleration);
+            ourRigidbody.AddForce(connectionVelocity.current, ForceMode.Acceleration);
         }
 
         connectionWorldPosition = ourRigidbody.position;
