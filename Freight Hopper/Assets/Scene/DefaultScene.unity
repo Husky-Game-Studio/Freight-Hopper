@@ -313,14 +313,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3658eed4ca22459adcca5dd2dcc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalControllerSettings:
-    Kp: 0
-    Ki: 0
-    Kd: 0
+  horizontalControllerSettings: {fileID: 0}
   followDistance: 0
   offset: {x: 0, y: 0, z: 0}
   derailThreshold: 0
-  linkedTrainObjects: []
 --- !u!1 &308967563
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,6 +926,10 @@ MonoBehaviour:
   preventConsumption: 0
   groundAcceleration: 50
   airAcceleration: 20
+  deltaIncreaseMomentumBonus: 0.01
+  decayMultiplier: 20
+  momentumBonus:
+    value: 1
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1368,36 +1368,7 @@ MonoBehaviour:
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
   abilities: []
-  playerRb: {fileID: 0}
-  playerCM:
-    maxSlope: 60
-    isGrounded:
-      old: 0
-      current: 0
-    contactNormal:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    velocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    position:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    contactCount: 0
-    steepCount: 0
-    rigidbodyLinker:
-      connectedRb:
-        old: {fileID: 0}
-        current: {fileID: 0}
-      connectionWorldPosition: {x: 0, y: 0, z: 0}
-      connectionLocalPosition: {x: 0, y: 0, z: 0}
-      connectionVelocity:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-      connectionAcceleration:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-    validUpAxis: {x: 0, y: 0, z: 0}
+  playerPM: {fileID: 0}
   playerSM: {fileID: 0}
 --- !u!114 &4493642203787552938
 MonoBehaviour:
