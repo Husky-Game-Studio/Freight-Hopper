@@ -5,8 +5,11 @@ using UnityEngine.SceneManagement;
 public class LevelController : MonoBehaviour
 {
     public LevelName CurrentLevelName => levelName;
+    [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
     [SerializeField] private LevelData levelData;
+
+    private const int highHeight = 999999;
 
     public static event Action PlayerRespawned;
 
@@ -19,7 +22,8 @@ public class LevelController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        GizmosExtensions.DrawGizmosArrow(levelData.spawnPosition, Vector3.forward);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(levelData.spawnPosition, GizmosExtensions.GetGizmoSize(levelData.spawnPosition) / 5);
     }
 
 #endif
@@ -86,7 +90,15 @@ public class LevelController : MonoBehaviour
         {
             Debug.LogWarning("Can't find player");
         }
-        player.transform.position = levelData.spawnPosition;
+        if (spawnPlayerHigh)
+        {
+            player.transform.position = levelData.spawnPosition + transform.up * highHeight;
+        }
+        else
+        {
+            player.transform.position = levelData.spawnPosition;
+        }
+
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
