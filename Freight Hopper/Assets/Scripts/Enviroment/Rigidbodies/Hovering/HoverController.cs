@@ -34,6 +34,7 @@ public class HoverController : MonoBehaviour
 
     private void OnValidate()
     {
+        InitializeRigidBody();
         if (this.gameObject != null)
         {
             InitializeEngines();
@@ -43,20 +44,25 @@ public class HoverController : MonoBehaviour
     private void Reset()
     {
         layerMask = LayerMask.GetMask("Default");
-        if (this.transform.parent.GetComponent<Rigidbody>() != null)
-        {
-            rb = this.transform.parent.GetComponent<Rigidbody>();
-        }
-        else
-        {
-            Debug.LogWarning("HoverController: Rigidbody not found in parent");
-        }
+        InitializeRigidBody();
 
         targetDistance = 3;
 
         InitializeEngines();
     }
 
+    private void InitializeRigidBody()
+    {
+        if (this.transform.parent.GetComponent<Rigidbody>() != null)
+        {
+            rb = this.transform.parent.GetComponent<Rigidbody>();
+        }
+        else
+        {
+            Debug.LogWarning("HoverController: Rigidbody not found in parent", this.gameObject);
+        }
+    }
+ 
     private void InitializeEngines()
     {
         hoverEnginePivots = new List<HoverEngine>();
