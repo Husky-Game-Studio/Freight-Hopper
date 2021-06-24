@@ -39,7 +39,7 @@ public class SaveLoadLevel : MonoBehaviour
     //This is for UI -- Need to be able to access file names for Loading Level Selection
     public List<String> allLevels = new List<string>();
 
-    List<LevelObjectInfo> saveObjectInfoList = new List<LevelObjectInfo>();
+    List<LevelObjectData> saveObjectInfoList = new List<LevelObjectData>();
 
     LevelManager levelM; 
 
@@ -54,7 +54,7 @@ public class SaveLoadLevel : MonoBehaviour
 
         
         SavingLevel(levelName);
-        MenuOpener.GetInstance().reloadLevels();
+        MenuOpener.GetInstance().ReloadLevels();
     }
 
     public void LoadButton(string levelName) {
@@ -70,13 +70,13 @@ public class SaveLoadLevel : MonoBehaviour
         
         //}
         
-        LevelObjectInfo[] obj = FindObjectsOfType<LevelObjectInfo>();
+        LevelObjectInfo [] obj = FindObjectsOfType<LevelObjectInfo>();
 
         saveObjectInfoList.Clear();
 
         foreach (LevelObjectInfo levelObj in obj) {
 
-            saveObjectInfoList.Add(levelObj);
+            saveObjectInfoList.Add(levelObj.GetObject());
         
         }
     
@@ -138,8 +138,8 @@ public class SaveLoadLevel : MonoBehaviour
 
         }
 
+      
         return savingLocation + levelName;
-
     }
 
     void LoadActualLevel(SaveLevel savedLevel) {
@@ -148,28 +148,37 @@ public class SaveLoadLevel : MonoBehaviour
 
         for (int i = 0; i < savedLevel.SaveObject_List.Count; i++) {
            
-            LevelObjectInfo s_obj = savedLevel.SaveObject_List[i];
+            //LevelObjectInfo s_obj = savedLevel.SaveObject_List[i];
+            LevelObjectData s_obj_data = savedLevel.SaveObject_List[i];
 
             Vector3 pos; 
-            pos.x = s_obj.posX;
-            pos.y = s_obj.posY;
-            pos.z = s_obj.posZ;
+            pos.x = s_obj_data.posX;
+            pos.y = s_obj_data.posY;
+            pos.z = s_obj_data.posZ;
 
 
-            GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().getObject(s_obj.objectID).objPrefab, pos, 
-                Quaternion.Euler(s_obj.rotX, s_obj.rotY, s_obj.rotZ)) as GameObject;
+            Debug.Log("POS: " + pos.x + pos.y + pos.z);
+            Debug.Log("Rotation: " + s_obj_data.rotX + s_obj_data.rotY + s_obj_data.rotZ);
+            
+
+            GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab, pos, 
+                Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
+
+            if (load == null) { 
+               
+            }
 
             load.AddComponent<LevelObjectInfo>();
 
-            levelM.o[s_obj.posY].inSceneObjects.Add(load);
-            load.transform.parent = levelM.o[s_obj.posY].obj.transform;
+            levelM.o[s_obj_data.posY].inSceneObjects.Add(load);
+            load.transform.parent = levelM.o[s_obj_data.posY].obj.transform;
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class SaveLevel {
 
-        public List<LevelObjectInfo> SaveObject_List; 
+        [SerializeField]public List<LevelObjectData> SaveObject_List; 
     }
 
     public void LoadAllLevels() { 

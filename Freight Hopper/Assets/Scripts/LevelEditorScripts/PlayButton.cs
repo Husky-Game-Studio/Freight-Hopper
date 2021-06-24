@@ -24,6 +24,7 @@ namespace HGSLevelEditor
         public void LoadAtPlay(string levelName) {
 
             SceneManager.LoadScene("CustomLevel 0 0", LoadSceneMode.Single);
+            SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);
             //Load the game objects 
 
         }

@@ -21,11 +21,12 @@ namespace HGSLevelEditor
 
         void Awake()
         {
+            Cursor.lockState = CursorLockMode.None;
             instance = this;
         }
 
         //Might not need this 
-        void storeLevelObjects()
+        void StoreLevelObjects()
         {
 
             if (o[index].inSceneObjects.Count > 0)

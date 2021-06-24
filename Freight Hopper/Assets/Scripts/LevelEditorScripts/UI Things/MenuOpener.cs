@@ -23,7 +23,7 @@ namespace HGSLevelEditor
         SaveLoadLevel level;
         PlayButton play;
 
-        string movingLevel; 
+        string movingLevel = "Hi"; 
         public Button exit;
 
         private void Start()
@@ -52,8 +52,11 @@ namespace HGSLevelEditor
 
         public void PlayLevel()
         {
-            //need to pass level name ...this probably is not the place for it ... 
-            play.LoadAtPlay(movingLevel); 
+            //need to pass level name ...this probably is not the place for it ... ]
+            //play.LoadAtPlay(movingLevel); -- not workin rn -- oops
+
+            SceneManager.LoadScene("CustomLevel 0 0", LoadSceneMode.Single);
+            SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);
 
         }
         public void ExitOnClick()
@@ -73,7 +76,7 @@ namespace HGSLevelEditor
                 LoadLevelUI levelButton = buttons.GetComponent<LoadLevelUI>();
                 levelButton.levelName = name;
                 Debug.Log(name + "Checking");
-                levelButton.txt.text = name;
+                levelButton.SetText(name);
                 movingLevel = name; 
                
             }
@@ -119,14 +122,14 @@ namespace HGSLevelEditor
             instance = this;     
         }
 
-        public void newLevel() {
+        public void NewLevel() {
 
             LevelManager.GetInstance().ClearLevel();
         
         }
 
         //Will refresh buttons at runtime when level is added?? hopefully?? 
-        public void reloadLevels() {
+        public void ReloadLevels() {
 
 
             Button[] prev = LoadLevelButtons.GetComponentsInChildren<Button>();

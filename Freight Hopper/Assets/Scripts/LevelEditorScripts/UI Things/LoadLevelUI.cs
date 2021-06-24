@@ -6,7 +6,8 @@ using HGSLevelEditor;
 
 public class LoadLevelUI : MonoBehaviour
 {
-    public Text txt;
+    [SerializeField]
+    private Text txt;
     public string levelName;
 
     public void LoadLevel() {
@@ -14,6 +15,12 @@ public class LoadLevelUI : MonoBehaviour
 
         SaveLoadLevel.GetInstance().LoadButton(levelName);
         MenuOpener.GetInstance().CloseLoadLevelButtons();
+    
+    }
+    public void SetText(string newText) {
+
+
+        txt.text = newText; 
     
     }
 

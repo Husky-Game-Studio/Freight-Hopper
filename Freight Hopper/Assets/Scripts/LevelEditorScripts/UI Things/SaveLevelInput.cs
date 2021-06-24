@@ -11,8 +11,9 @@ namespace HGSLevelEditor
         [SerializeField]
         private InputField input;
         public GameObject menu;
-
+        
         string levelName;
+
         public void SaveLevel()
         {
             levelName = input.text;
@@ -20,7 +21,7 @@ namespace HGSLevelEditor
 
         }
 
-        public void closeMenu() {
+        public void CloseMenu() {
 
             menu.SetActive(false);
         }

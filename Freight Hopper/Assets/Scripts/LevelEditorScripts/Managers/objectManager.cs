@@ -10,7 +10,6 @@ namespace HGSLevelEditor {
         //List holds info. for all level objects available in Level Editor 
         public List<LevelObject> LevelObjects = new List<LevelObject>();
 
-        
         private static ObjectManager instance = null;
 
         void Awake()
@@ -24,9 +23,9 @@ namespace HGSLevelEditor {
             return instance;
         }
 
-        public LevelObject getObject(string objectID) {
+        public LevelObject GetObject(string objectID) {
 
-            LevelObject retrieve = null;
+            LevelObject retrieve = new LevelObject();
 
             for (int i = 0; i < LevelObjects.Count; i++) {
 
@@ -35,6 +34,11 @@ namespace HGSLevelEditor {
                     retrieve = LevelObjects[i];
                     break;
                 }
+            }
+
+            if (retrieve == null) {
+
+                Debug.Log("Retrieve is NULL");
             }
 
             return retrieve;

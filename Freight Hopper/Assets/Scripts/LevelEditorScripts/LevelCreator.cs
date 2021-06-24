@@ -11,7 +11,7 @@ namespace HGSLevelEditor
 
         public void PassObject(string ID) {
 
-            objToPlace = ObjectManager.GetInstance().getObject(ID).objPrefab;
+            objToPlace = ObjectManager.GetInstance().GetObject(ID).objPrefab;
         
         } 
 
