@@ -6,13 +6,14 @@ using HGSLevelEditor;
 
 public class LoadLevelUI : MonoBehaviour
 {
-    public Text text;
+    public Text txt;
     public string levelName;
 
-    public void LoadLevel() { 
-    
-        
-    
+    public void LoadLevel() {
+
+
+        SaveLoadLevel.GetInstance().LoadButton(levelName);
+        MenuOpener.GetInstance().CloseLoadLevelButtons();
     
     }
 

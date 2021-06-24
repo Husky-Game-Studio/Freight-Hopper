@@ -45,20 +45,33 @@ namespace HGSLevelEditor
             LevelObjectInfo savedObj = new LevelObjectInfo();
             savedObj.objectID = objectID;
             savedObj.posX = posX;
+            savedObj.posY = posY;
             savedObj.posZ = posZ;
+
+            savedObj.rotX = rotX;
+            savedObj.rotY = rotY;
+            savedObj.rotZ = rotZ;
 
 
             return savedObj;
 
         }
 
-        /* [System.Serializable]
-         public class SaveObjectInfo
-        {
-            public string objID;
-            public int Xpos;
-            public int Zpos;
+        //[System.Serializable]
+        // public class SaveObjectInfo
+        //{
+        //    public string objID;
+        //    public int Xpos;
+        //    public int Ypos;
+        //    public int Zpos;
 
-        } */
+        //    public float Xrot;
+        //    public float Yrot;
+        //    public float Zrot;
+
+
+
+
+        //} 
     }
 }

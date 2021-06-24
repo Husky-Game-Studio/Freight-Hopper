@@ -151,7 +151,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50886339}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -258.35953}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1806614015}
@@ -270,6 +270,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1793763749}
+  LoadLevelButtons: {fileID: 1799104302}
+  otherUI: []
+  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 1538238972}
 --- !u!1 &60013999
 GameObject:
@@ -395,6 +398,7 @@ GameObject:
   - component: {fileID: 145468830}
   - component: {fileID: 145468829}
   - component: {fileID: 145468828}
+  - component: {fileID: 145468832}
   m_Layer: 5
   m_Name: Load
   m_TagString: Untagged
@@ -410,10 +414,11 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145468826}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -258.35953}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1037967738}
+  - {fileID: 1799104302}
   m_Father: {fileID: 640380083}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -435,6 +440,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1160656914}
+  LoadLevelButtons: {fileID: 1799104302}
+  otherUI: []
+  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 2098463042}
 --- !u!114 &145468829
 MonoBehaviour:
@@ -481,8 +489,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 145468828}
-        m_TargetAssemblyTypeName: MenuOpener, Assembly-CSharp
-        m_MethodName: OpenMenu
+        m_TargetAssemblyTypeName: HGSLevelEditor.MenuOpener, Assembly-CSharp
+        m_MethodName: OpenCloseLevelButtons
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -530,6 +538,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145468826}
   m_CullTransparentMesh: 1
+--- !u!114 &145468832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145468826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6a8a87e5f3d1f6469f495ca1017cfcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allLevels: []
 --- !u!1 &157172625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,7 +1063,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 395728966}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -258.35953}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 640307119}
@@ -1161,6 +1182,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 2096353857}
+  LoadLevelButtons: {fileID: 1799104302}
+  otherUI: []
+  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 1685787755}
 --- !u!1 &396081147
 GameObject:
@@ -1322,6 +1346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 445788459}
   - component: {fileID: 445788458}
+  - component: {fileID: 445788460}
   m_Layer: 0
   m_Name: Resources
   m_TagString: Untagged
@@ -1358,6 +1383,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &445788460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445788457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed9db63c2980d3b4d8ed066599dbcb2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  o: []
+  index: 0
 --- !u!1 &509840145
 GameObject:
   m_ObjectHideFlags: 0
@@ -1566,7 +1605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70400864771d43246b930087c2149fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainHead: {fileID: 919132149155446097, guid: 74e0d014461bfba4c86b2c4970940280, type: 3}
+  trainHead: {fileID: 7631039515532287708, guid: 6715bcfba93c64340901706b97175576, type: 3}
   targetObject: {fileID: 772112139}
 --- !u!114 &560924597
 MonoBehaviour:
@@ -3508,7 +3547,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1082486844}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -258.35953}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1822419954}
@@ -3627,6 +3666,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1160656914}
+  LoadLevelButtons: {fileID: 1799104302}
+  otherUI: []
+  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 2098463042}
 --- !u!1 &1159114362
 GameObject:
@@ -4673,7 +4715,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1591637701}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1795526635}
+        m_TargetAssemblyTypeName: HGSLevelEditor.SaveLevelInput, Assembly-CSharp
+        m_MethodName: closeMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1591637701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5850,6 +5904,7 @@ GameObject:
   - component: {fileID: 1795526634}
   - component: {fileID: 1795526633}
   - component: {fileID: 1795526632}
+  - component: {fileID: 1795526635}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -5931,7 +5986,31 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1795526635}
+        m_TargetAssemblyTypeName: HGSLevelEditor.SaveLevelInput, Assembly-CSharp
+        m_MethodName: SaveLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1795526635}
+        m_TargetAssemblyTypeName: HGSLevelEditor.SaveLevelInput, Assembly-CSharp
+        m_MethodName: closeMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5980,6 +6059,80 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1795526630}
   m_CullTransparentMesh: 1
+--- !u!114 &1795526635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795526630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89486ca726e4be04cb99f3828169d2c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 1795526632}
+  menu: {fileID: 1793763749}
+--- !u!1 &1799104301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1799104302}
+  - component: {fileID: 1799104303}
+  m_Layer: 0
+  m_Name: 'Load Grid '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1799104302
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799104301}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 145468827}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -63}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1799104303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799104301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 5
+    m_Bottom: 0
+  m_ChildAlignment: 1
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 238.7404, y: 62.8095}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1806614014
 GameObject:
   m_ObjectHideFlags: 0
