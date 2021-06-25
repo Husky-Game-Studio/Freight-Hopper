@@ -14,21 +14,21 @@ public class TrainBuilder : MonoBehaviour
     [SerializeField] private float jointSnappingLength = 0.0f;
     [SerializeField] private float breakTorque = 3000;
 
-    [SerializeField] private TrainCargos insertedCargo;
+    //[SerializeField] private TrainCargos insertedCargo;
     [SerializeField] private List<GameObject> cartModelsToPickFrom;
-    [SerializeField] private List<GameObject> cargoModelsToPickFrom;
+    //[SerializeField] private List<GameObject> cargoModelsToPickFrom;
 
     [SerializeField] private GameObject baseCart;
 
     private GameObject locomotive;
 
     // This order matters, if this is different from the model order for the list this WON'T work
-    public enum TrainCargos
+    /*public enum TrainCargos
     {
         None,
         Cargo1,
         Cargo2,
-    }
+    }*/
 
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCarts
@@ -37,8 +37,12 @@ public class TrainBuilder : MonoBehaviour
         EmptyCart2,
         BillBoardCarrier,
         BillBoardLFModel,
-        BillBoardRFModel
-    }
+        BillBoardRFModel,
+        CargoCart11,
+        CargoCart12,
+        CargoCart21,
+        CargoCart22
+    } 
 
     [System.Serializable]
     private struct Cart
