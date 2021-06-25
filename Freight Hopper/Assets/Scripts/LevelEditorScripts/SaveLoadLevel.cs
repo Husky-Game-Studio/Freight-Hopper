@@ -33,32 +33,50 @@ using System;
 //    }
 //}
 
-//[System.Serializable]
+[System.Serializable]
 public class SaveLoadLevel : MonoBehaviour
 {
     //This is for UI -- Need to be able to access file names for Loading Level Selection
     public List<String> allLevels = new List<string>();
 
+    List<LevelObjectData> saveObjectInfoList = new List<LevelObjectData>();
+
+    LevelManager levelM; 
+
     public static string saveFolderName = "Level";
-    List<LevelObjectInfo> saveObjectInfoList = new List<LevelObjectInfo>();
 
-    public void SaveButton() {
+    void Start()
+    {
+        levelM = LevelManager.GetInstance();
 
-        SavingLevel("test");
+    }
+    public void SaveLevelButton(string levelName) {
+
+        
+        SavingLevel(levelName);
+        MenuOpener.GetInstance().ReloadLevels();
     }
 
-    public void LoadButton() {
+    public void LoadButton(string levelName) {
 
-        LoadingLevel("test");
+        LoadingLevel(levelName);
     }
 
     void SavingLevel(string levelName) {
-        LevelObjectInfo[] obj = FindObjectsOfType<LevelObjectInfo>();
+
+        //for (int i = 0; i < levelM.o.Count; i++) {
+
+        //    levelM.o[i].obj.SetActive(true);
         
+        //}
+        
+        LevelObjectInfo [] obj = FindObjectsOfType<LevelObjectInfo>();
+
+        saveObjectInfoList.Clear();
 
         foreach (LevelObjectInfo levelObj in obj) {
 
-            saveObjectInfoList.Add(levelObj);
+            saveObjectInfoList.Add(levelObj.GetObject());
         
         }
     
@@ -66,6 +84,8 @@ public class SaveLoadLevel : MonoBehaviour
         //currentLevel = new Level(saveObjectInfoList, levelName);
 
         SaveLevel levelSave = new SaveLevel();
+        levelSave.SaveObject_List = saveObjectInfoList;
+
         string saveLocation = SavingLocation(levelName);
 
         //Saving Level
@@ -74,7 +94,7 @@ public class SaveLoadLevel : MonoBehaviour
         formatter.Serialize(stream, levelSave);
         stream.Close();
 
-        Debug.Log(saveLocation);
+        Debug.Log(saveLocation + "works");
     }
 
     bool LoadingLevel(string levelName) {
@@ -82,10 +102,11 @@ public class SaveLoadLevel : MonoBehaviour
         bool retrieve = true;
 
         string fileName = SavingLocation(levelName);
+        Debug.Log(fileName);
 
-        if (!File.Exists(levelName))
+        if (!File.Exists(fileName))
         {
-
+            Debug.Log("Cannot find level!");
             retrieve = false;
 
         }
@@ -108,7 +129,7 @@ public class SaveLoadLevel : MonoBehaviour
     static string SavingLocation(string levelName) {
 
         //Creating new location
-        string savingLocation = Application.persistentDataPath + "/" + saveFolderName + "/";
+        string savingLocation = Application.streamingAssetsPath + "/Levels/";
 
         if (!Directory.Exists(savingLocation))
         {
@@ -117,33 +138,47 @@ public class SaveLoadLevel : MonoBehaviour
 
         }
 
+      
         return savingLocation + levelName;
-
     }
 
     void LoadActualLevel(SaveLevel savedLevel) {
-        for (int i = 0; i < savedLevel.SaveObject_List.Count; i++) {
 
-        
-            LevelObjectInfo s_obj = savedLevel.SaveObject_List[i];
+        LevelManager.GetInstance().ClearLevel();
+
+        for (int i = 0; i < savedLevel.SaveObject_List.Count; i++) {
+           
+            //LevelObjectInfo s_obj = savedLevel.SaveObject_List[i];
+            LevelObjectData s_obj_data = savedLevel.SaveObject_List[i];
 
             Vector3 pos; 
-            pos.x = s_obj.posX;
-            pos.y = s_obj.posY;
-            pos.z = s_obj.posZ;
+            pos.x = s_obj_data.posX;
+            pos.y = s_obj_data.posY;
+            pos.z = s_obj_data.posZ;
 
 
-            GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().getObject(s_obj.objectID).objPrefab, pos, 
-                Quaternion.Euler(s_obj.rotX, s_obj.rotY, s_obj.rotZ)) as GameObject;
+            Debug.Log("POS: " + pos.x + pos.y + pos.z);
+            Debug.Log("Rotation: " + s_obj_data.rotX + s_obj_data.rotY + s_obj_data.rotZ);
             
-        
+
+            GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab, pos, 
+                Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
+
+            if (load == null) { 
+               
+            }
+
+            load.AddComponent<LevelObjectInfo>();
+
+            levelM.o[s_obj_data.posY].inSceneObjects.Add(load);
+            load.transform.parent = levelM.o[s_obj_data.posY].obj.transform;
         }
     }
 
     [Serializable]
     public class SaveLevel {
 
-        public List<LevelObjectInfo> SaveObject_List; 
+        [SerializeField]public List<LevelObjectData> SaveObject_List; 
     }
 
     public void LoadAllLevels() { 
@@ -153,17 +188,15 @@ public class SaveLoadLevel : MonoBehaviour
 
         foreach (FileInfo file in fileInfo) {
 
-            string[] readLevel = file.Name.Split(new string[] { "_" }, StringSplitOptions.RemoveEmptyEntries);
+            allLevels.Add(file.Name);
+            Debug.Log(file.Name);
 
-
-        
-        
         }
 
     }
 
     public static SaveLoadLevel instance;
-    public static SaveLoadLevel getInstance() {
+    public static SaveLoadLevel GetInstance() {
 
         return instance;
     }
