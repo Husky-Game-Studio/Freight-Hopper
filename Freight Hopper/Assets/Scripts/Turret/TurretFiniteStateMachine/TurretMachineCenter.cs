@@ -12,19 +12,19 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public GameObject bullet;
 
     // TFSM States
-    public BasicState testState;
-    /*public BasicState searchState;
+    //public BasicState testState;
+    public BasicState searchState;
     public BasicState targetState;
-    public BasicState fireState;*/
+    public BasicState fireState;
 
     // It is best to construct your states in Awake()
     // and subcribe to any event listeners
     private void Awake()
     {
-        testState = new TestState(this);
-        /*searchState = new SearchState(this);
+        //testState = new TestState(this);
+        searchState = new SearchState(this);
         targetState = new TargetState(this);
-        fireState = new FireState(this);*/
+        fireState = new FireState(this);
 
         if (Player.loadedIn)
         {
@@ -39,11 +39,11 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     // Assign initial state and subscribe to any event listeners
     public void OnEnable()
     {
-        /*this.currentState = searchState;
-        this.previousState = searchState;*/
+        this.currentState = searchState;
+        this.previousState = searchState;
         
-        this.currentState = testState;
-        this.previousState = testState;
+        //this.currentState = testState;
+        //this.previousState = testState;
     }
 
     // Unsubscribe from any assigned event listeners
