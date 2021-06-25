@@ -102,7 +102,7 @@ public class TrainMachineCenter : FiniteStateMachineCenter
             currentState?.ExitState();
             previousState = null;
             currentState = null;
-            Destroy(this.gameObject, carts.First.Value.destructable.ExplosionTime);
+            Destroy(this, carts.First.Value.destructable.ExplosionTime);
         }
         for (int i = carts.Count; i > index; i--)
         {
