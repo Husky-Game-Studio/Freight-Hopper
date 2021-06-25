@@ -76,8 +76,14 @@ public class TrainBuilder : MonoBehaviour
             cartsList.Add(ourCart);
         
         
-    } 
-    
+    }
+
+    private void AddCargo()
+    {
+        
+        
+    }
+
     // Removes last cart in the chain
     [ContextMenu("Remove Cart")] 
     public void RemoveCart()

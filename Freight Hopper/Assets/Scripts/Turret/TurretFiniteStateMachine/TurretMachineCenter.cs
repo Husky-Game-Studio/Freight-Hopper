@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TurretMachineCenter : FiniteStateMachineCenter
 {
+    public InputMaster UserInputMaster => master;
+    private InputMaster master;
+    
     // The Player Character and Information
     public GameObject thePlayer;
 
@@ -15,7 +19,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public BasicState searchState;
     public BasicState targetState;
     public BasicState fireState;
-
+    
     // It is best to construct your states in Awake()
     // and subcribe to any event listeners
     private void Awake()
@@ -27,13 +31,17 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
         if (Player.loadedIn)
         {
+            Debug.Log("player loaded in");
             SetPlayerReference();
         }
         else
         {
+            Debug.Log("Player not loaded yet");
             Player.PlayerLoadedIn += SetPlayerReference;
+            LevelController.PlayerRespawned += SetPlayerReference;
         }
     }
+
 
     // Assign initial state and subscribe to any event listeners
     public void OnEnable()
@@ -46,6 +54,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public void OnDisable()
     {
         Player.PlayerLoadedIn -= SetPlayerReference;
+        LevelController.PlayerRespawned -= SetPlayerReference;
     }
 
     // Calls the loop tick
