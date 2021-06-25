@@ -12,5 +12,12 @@ public class Exit : MonoBehaviour
 
             SceneManager.LoadScene("LevelEditorBeginning");
         }
+
+       
+    }
+
+    public void openNew()
+    {
+        SceneManager.LoadScene("LevelEditorBeginning");
     }
 }
