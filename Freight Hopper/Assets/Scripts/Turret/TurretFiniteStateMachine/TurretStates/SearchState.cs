@@ -6,16 +6,16 @@ using Vector3 = UnityEngine.Vector3;
 
 public class SearchState : BasicState
 {
-    protected TurretSubStateMachineCenter turretMachineCenter;
-    public SearchState(TurretSubStateMachineCenter turretMachineCenter) : base(turretMachineCenter)
+    protected TurretMachineCenter turretMachineCenter;
+    public SearchState(TurretMachineCenter turretMachineCenter) : base(turretMachineCenter)
     {
         this.turretMachineCenter = turretMachineCenter;
     }
 
     // Conditions to change states
     public override BasicState TransitionState() {
-        Vector3 transformOrigin = turretMachineCenter.parentMachineCenter.gameObject.transform.position;
-        Vector3 transformPlayerOrigin = turretMachineCenter.parentMachineCenter.thePlayer.transform.position - transformOrigin;
+        Vector3 transformOrigin = turretMachineCenter.gameObject.transform.position;
+        Vector3 transformPlayerOrigin = turretMachineCenter.thePlayer.transform.position - transformOrigin;
         
         Ray ray = new Ray(transformOrigin, transformPlayerOrigin);
 
@@ -23,7 +23,7 @@ public class SearchState : BasicState
         Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.blue);
 
         // Transition to Targetting State
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, turretMachineCenter.parentMachineCenter.targetedLayers))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
         {
             if (hit.rigidbody != null && hit.rigidbody.tag.Equals("Player")) {
                 return turretMachineCenter.targetState;

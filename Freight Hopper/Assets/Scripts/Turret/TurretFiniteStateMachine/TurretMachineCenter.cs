@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TurretMachineCenter : FiniteStateMachineCenter
 {
+    public InputMaster UserInputMaster => master;
+    private InputMaster master;
+    
     // The Player Character and Information
     public GameObject thePlayer;
 
@@ -12,44 +16,45 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public GameObject bullet;
 
     // TFSM States
-    public BasicState testState;
-    /*public BasicState searchState;
+    public BasicState searchState;
     public BasicState targetState;
-    public BasicState fireState;*/
-
+    public BasicState fireState;
+    
     // It is best to construct your states in Awake()
     // and subcribe to any event listeners
     private void Awake()
     {
-        testState = new TestState(this);
-        /*searchState = new SearchState(this);
+        //testState = new TestState(this);
+        searchState = new SearchState(this);
         targetState = new TargetState(this);
-        fireState = new FireState(this);*/
+        fireState = new FireState(this);
 
         if (Player.loadedIn)
         {
+            Debug.Log("player loaded in");
             SetPlayerReference();
         }
         else
         {
+            Debug.Log("Player not loaded yet");
             Player.PlayerLoadedIn += SetPlayerReference;
+            LevelController.PlayerRespawned += SetPlayerReference;
         }
     }
+
 
     // Assign initial state and subscribe to any event listeners
     public void OnEnable()
     {
-        /*this.currentState = searchState;
-        this.previousState = searchState;*/
-        
-        this.currentState = testState;
-        this.previousState = testState;
+        this.currentState = searchState;
+        this.previousState = searchState;
     }
 
     // Unsubscribe from any assigned event listeners
     public void OnDisable()
     {
         Player.PlayerLoadedIn -= SetPlayerReference;
+        LevelController.PlayerRespawned -= SetPlayerReference;
     }
 
     // Calls the loop tick

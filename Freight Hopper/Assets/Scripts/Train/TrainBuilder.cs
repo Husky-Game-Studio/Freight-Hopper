@@ -7,13 +7,17 @@ public class TrainBuilder : MonoBehaviour
 {
     [SerializeField] private List<Cart> cartsList;
     [SerializeField] private TrainCarts insertCart;
+    
     [SerializeField] private float locomotiveLength = 42.243f;
     [SerializeField] private float cartLength = 40;
     [SerializeField] private float gapLength = 4;
     [SerializeField] private float jointSnappingLength = 0.0f;
     [SerializeField] private float breakTorque = 3000;
+    
     [SerializeField] private TrainCargos insertedCargo;
     [SerializeField] private List<GameObject> cartModelsToPickFrom;
+    [SerializeField] private List<GameObject> cargoModelsToPickFrom;
+    
     [SerializeField] private GameObject baseCart;
     
     private GameObject locomotive;
@@ -39,6 +43,7 @@ public class TrainBuilder : MonoBehaviour
     [System.Serializable]
     struct Cart
     {
+        public CartProperties cartProperties;
         public GameObject cart;
         public ConfigurableJoint joint;
         public GameObject model;
@@ -58,6 +63,8 @@ public class TrainBuilder : MonoBehaviour
             Cart ourCart = new Cart();
             Vector3 position = Vector3.forward * -(((cartsList.Count * cartLength/2) + locomotiveLength/2) + (cartsList.Count + 1) * (gapLength + jointSnappingLength));
             ourCart.cart = Instantiate(baseCart, position, Quaternion.identity, this.transform);
+            ourCart.cartProperties = ourCart.cart.GetComponent<CartProperties>();
+            ourCart.cartProperties.setCartIndex(cartsList.Count + 1);
             ourCart.joint = ourCart.cart.GetComponent<ConfigurableJoint>();
             if(cartsList.Count == 0){
                 ourCart.joint.connectedBody = locomotive.GetComponent<Rigidbody>();
@@ -76,8 +83,8 @@ public class TrainBuilder : MonoBehaviour
             cartsList.Add(ourCart);
         
         
-    } 
-    
+    }
+
     // Removes last cart in the chain
     [ContextMenu("Remove Cart")] 
     public void RemoveCart()

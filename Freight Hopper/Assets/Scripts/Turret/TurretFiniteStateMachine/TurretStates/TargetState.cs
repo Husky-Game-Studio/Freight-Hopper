@@ -6,14 +6,14 @@ using UnityEngine;
 
 public class TargetState : BasicState
 {
-    protected TurretSubStateMachineCenter turretMachineCenter;
+    protected TurretMachineCenter turretMachineCenter;
     private Transform thePlayerTransform;
     private Transform turretTransform;
     private Transform barrelBaseTransform;
     private float speedOfRotation = 5f;
     private Timer countDownToTimer;
 
-    public TargetState(TurretSubStateMachineCenter turretMachineCenter) : base(turretMachineCenter)
+    public TargetState(TurretMachineCenter turretMachineCenter) : base(turretMachineCenter)
     {
         this.turretMachineCenter = turretMachineCenter;
         turretTransform = turretMachineCenter.gameObject.transform;
@@ -24,15 +24,15 @@ public class TargetState : BasicState
     // Conditions to change states
     public override BasicState TransitionState() {
         Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
-                          turretMachineCenter.parentMachineCenter.thePlayer.transform.position
-                          - turretMachineCenter.parentMachineCenter.gameObject.transform.position);
+                          turretMachineCenter.thePlayer.transform.position
+                          - turretMachineCenter.gameObject.transform.position);
 
         // Debugging
-        Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.parentMachineCenter.thePlayer.transform.position
-                                                   - turretMachineCenter.parentMachineCenter.gameObject.transform.position).magnitude, Color.yellow);
+        Debug.DrawRay(ray.origin, ray.direction * (turretMachineCenter.thePlayer.transform.position
+                                                   - turretMachineCenter.gameObject.transform.position).magnitude, Color.yellow);
 
         // Transition to Search State
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, turretMachineCenter.parentMachineCenter.targetedLayers))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
         {
             if ((hit.rigidbody != null && !hit.rigidbody.tag.Equals("Player")) || (hit.rigidbody == null)) {
                 return turretMachineCenter.searchState;
@@ -51,7 +51,7 @@ public class TargetState : BasicState
 
     // Rotate Turret to aim at player
     public override void PerformBehavior() {
-        thePlayerTransform = turretMachineCenter.parentMachineCenter.thePlayer.transform;
+        thePlayerTransform = turretMachineCenter.thePlayer.transform;
 
         // Turn whole turret to follow the player on the xz-plane
         Vector3 direction = (thePlayerTransform.position - turretTransform.position);
