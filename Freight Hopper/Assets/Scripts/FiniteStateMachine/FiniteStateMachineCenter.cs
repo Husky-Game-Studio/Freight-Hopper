@@ -28,6 +28,12 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     // Pefromed each Update Tick. NEEDS TO BE CALLED BY INHERITTED CLASS
     public void UpdateLoop()
     {
+        if (currentState == null)
+        {
+            currentStateName = "Null State";
+            currentSubStateName = "No Sub States";
+            return;
+        }
         // perform anything that is independent of being in any one single state
         this.PerformStateIndependentBehaviors();
 

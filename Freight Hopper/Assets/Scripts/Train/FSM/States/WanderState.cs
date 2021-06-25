@@ -12,7 +12,7 @@ public class WanderState : BasicState
 
     public override void PerformBehavior()
     {
-        trainFSM.Follow(trainFSM.cartRigidbodies[0].transform.forward + trainFSM.cartRigidbodies[0].transform.position);
+        trainFSM.Follow(trainFSM.carts.First.Value.rb.transform.forward + trainFSM.carts.First.Value.rb.transform.position);
     }
 
     public override BasicState TransitionState()

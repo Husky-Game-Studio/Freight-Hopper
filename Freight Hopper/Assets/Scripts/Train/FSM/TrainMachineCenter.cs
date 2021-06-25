@@ -33,9 +33,24 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
 
+    public class Cart
+    {
+        public PhysicsManager physicsManager;
+        public Rigidbody rb;
+        public CartProperties cartProperties;
+        public Destructable destructable;
+
+        public event Action<int> DestoryCart;
+
+        public void DestroyCartFunc()
+        {
+            int cartIndex = cartProperties.IndexOfCart;
+            DestoryCart?.Invoke(cartIndex);
+        }
+    }
+
     // Dependecies
-    [HideInInspector] public PhysicsManager[] physicsManagers;
-    [HideInInspector] public Rigidbody[] cartRigidbodies;
+    [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
     [HideInInspector] public HoverController hoverController;
     [HideInInspector] public TrainRailLinker currentRailLinker;
     private TrainStateTransitions transitionHandler;
@@ -80,16 +95,41 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         }
     }
 
+    public void RemoveCartsUntilIndex(int index)
+    {
+        if (index == 0)
+        {
+            currentState?.ExitState();
+            previousState = null;
+            currentState = null;
+            Destroy(this.gameObject, carts.First.Value.destructable.ExplosionTime);
+        }
+        for (int i = carts.Count; i > index; i--)
+        {
+            Cart cart = carts.Last.Value;
+            cart.destructable.RigidbodyDestroyed -= cart.DestroyCartFunc;
+            cart.DestoryCart -= RemoveCartsUntilIndex;
+            carts.RemoveLast();
+        }
+    }
+
     private void Awake()
     {
-        physicsManagers = GetComponentsInChildren<PhysicsManager>();
-        cartRigidbodies = new Rigidbody[physicsManagers.Length];
-        for (int i = 0; i < physicsManagers.Length; i++)
+        PhysicsManager[] physics = GetComponentsInChildren<PhysicsManager>();
+
+        for (int i = 0; i < physics.Length; i++)
         {
-            cartRigidbodies[i] = physicsManagers[i].rb;
+            Cart cart = new Cart();
+            cart.physicsManager = physics[i];
+            cart.rb = cart.physicsManager.rb;
+            cart.cartProperties = cart.rb.GetComponent<CartProperties>();
+            cart.destructable = cart.rb.GetComponent<Destructable>();
+            cart.destructable.RigidbodyDestroyed += cart.DestroyCartFunc;
+            cart.DestoryCart += RemoveCartsUntilIndex;
+            carts.AddLast(cart);
         }
 
-        hoverController = cartRigidbodies[0].GetComponentInChildren<HoverController>();
+        hoverController = carts.First.Value.rb.GetComponentInChildren<HoverController>();
 
         transitionHandler = new TrainStateTransitions(this);
 
@@ -127,17 +167,17 @@ public class TrainMachineCenter : FiniteStateMachineCenter
             return;
         }
 
-        Vector3 target = targetPosition - cartRigidbodies[0].position;
-        Quaternion rot = cartRigidbodies[0].transform.rotation;
+        Vector3 target = targetPosition - carts.First.Value.rb.position;
+        Quaternion rot = carts.First.Value.rb.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
-        Vector3 currentVelDir = (cartRigidbodies[0].velocity.magnitude != 0) ? cartRigidbodies[0].velocity.normalized : Vector3.forward;
+        Vector3 currentVelDir = (carts.First.Value.rb.velocity.magnitude != 0) ? carts.First.Value.rb.velocity.normalized : Vector3.forward;
         Quaternion rotVel = Quaternion.LookRotation(currentVelDir);
         Quaternion rotVelInv = Quaternion.Inverse(rotVel);
-        Debug.DrawLine(cartRigidbodies[0].position, cartRigidbodies[0].position + currentVelDir * 20.0f, Color.magenta);
+        Debug.DrawLine(carts.First.Value.rb.position, carts.First.Value.rb.position + currentVelDir * 20.0f, Color.magenta);
 
         //Current
-        Vector3 currentVel = cartRigidbodies[0].velocity;
-        Vector3 currentAngVel = cartRigidbodies[0].angularVelocity;
+        Vector3 currentVel = carts.First.Value.rb.velocity;
+        Vector3 currentAngVel = carts.First.Value.rb.angularVelocity;
 
         //Target (Rotate, Move Forward)
         Vector3 targetVel = rot * Vector3.forward * TargetVelocity;
@@ -156,8 +196,8 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         angAcc = rot * (rotInv * angAcc).ClampComponents(-TorqueBounds, TorqueBounds);
 
         //Forces
-        cartRigidbodies[0].AddForce(acc, ForceMode.Acceleration);
-        cartRigidbodies[0].AddTorque(angAcc, ForceMode.Acceleration);
+        carts.First.Value.rb.AddForce(acc, ForceMode.Acceleration);
+        carts.First.Value.rb.AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
         //float z = cartRigidbodies[0].transform.eulerAngles.z;
@@ -187,7 +227,7 @@ public class TrainMachineCenter : FiniteStateMachineCenter
 
     public void OnDisable()
     {
-        currentState.ExitState();
+        currentState?.ExitState();
         LevelController.PlayerRespawned -= RestartFSM;
     }
 
