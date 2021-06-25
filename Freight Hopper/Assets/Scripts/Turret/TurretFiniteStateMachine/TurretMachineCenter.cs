@@ -12,7 +12,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public GameObject bullet;
 
     // TFSM States
-    //public BasicState testState;
     public BasicState searchState;
     public BasicState targetState;
     public BasicState fireState;
@@ -41,9 +40,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     {
         this.currentState = searchState;
         this.previousState = searchState;
-        
-        //this.currentState = testState;
-        //this.previousState = testState;
     }
 
     // Unsubscribe from any assigned event listeners

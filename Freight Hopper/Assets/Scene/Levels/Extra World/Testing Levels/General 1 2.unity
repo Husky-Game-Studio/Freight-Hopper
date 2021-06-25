@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3540.5479, g: 1991.4307, b: 1256.2168, a: 1}
+  m_IndirectSpecularColor: {r: 3564.9062, g: 1984.8076, b: 1220.7441, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1592,7 +1592,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbccf86e791a42e4f8062f572022a0e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelData: {fileID: 11400000, guid: 87a2d05e6e1f80b419a7ef0032f6a158, type: 2}
+  spawnPlayerHigh: 0
+  levelName:
+    worldSeriesName: 
+    worldID: 0
+    levelID: 0
+  levelData:
+    nextLevelStatus: 0
+    spawnPosition: {x: 0, y: 0, z: 0}
+    activeAbilities: 00000000010000000200000003000000
 --- !u!114 &1831331152
 MonoBehaviour:
   m_ObjectHideFlags: 0
