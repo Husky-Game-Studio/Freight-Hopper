@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 2737155112348486779}
   - component: {fileID: 3376033112551355086}
   - component: {fileID: 5545337806903874819}
-  m_Layer: 0
+  - component: {fileID: 98317723388589944}
+  m_Layer: 11
   m_Name: Cargo2
-  m_TagString: Untagged
+  m_TagString: landable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &98317723388589944
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6773133878984370838}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 939547014813929993, guid: b5e7d6c01e60a6b4c9a3a3669207c47a, type: 3}
