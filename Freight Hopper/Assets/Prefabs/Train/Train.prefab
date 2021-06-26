@@ -62,8 +62,6 @@ MonoBehaviour:
   forceBounds: {x: 2, y: 2, z: 30}
   torqueBounds: {x: 2, y: 40, z: 2}
   currentPath: -1
-  physicsManagers: []
-  cartRigidbodies: []
   hoverController: {fileID: 0}
   currentRailLinker: {fileID: 0}
 --- !u!114 &8828049057225272882
@@ -79,13 +77,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cartsList: []
-  insertCart: 0
+  insertCart: 8
   locomotiveLength: 42.243
   cartLength: 40
   gapLength: 4
   jointSnappingLength: -3
   breakTorque: 3000
-  insertedCargo: 0
   cartModelsToPickFrom:
   - {fileID: 3777815452056588140, guid: add97f5c0767b594ea362e604622db6b, type: 3}
   - {fileID: 5027634762359815765, guid: 9df1f55f4274a354484af233d653d57d, type: 3}
@@ -96,10 +93,6 @@ MonoBehaviour:
   - {fileID: 3777815452056588140, guid: 802d77ed2e6138041a53b32db84815aa, type: 3}
   - {fileID: 5027634762359815765, guid: 164ab02083f3a8c4e8a8b2bf5dc491de, type: 3}
   - {fileID: 5027634762359815765, guid: 8d6743a63f0124844883d1ea015730cb, type: 3}
-  cargoModelsToPickFrom:
-  - {fileID: 0}
-  - {fileID: 4485057313656768321, guid: feb209b8b131f8644bbf4041003c9b33, type: 3}
-  - {fileID: 6773133878984370838, guid: 1b93d7575f646b34d8e2fb9da12724bf, type: 3}
   baseCart: {fileID: 5098807932008158715, guid: 32d96c1fb460e2a4a97160be9d4c19fa, type: 3}
 --- !u!1001 &8828049057815456783
 PrefabInstance:

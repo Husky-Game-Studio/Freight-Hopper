@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 4992.824, g: 2970.3477, b: 1997.1406, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -879,6 +879,7 @@ MonoBehaviour:
   increasingForce:
     value: 1
   deltaIncreaseForce: 0.01
+  angleToBeConsideredFlat: 7
   initialBurstForce: 18
   downwardsForce: 10
   slopeDownForce: 300
@@ -924,9 +925,9 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
-  groundAcceleration: 50
+  groundAcceleration: 55
   airAcceleration: 20
-  deltaIncreaseMomentumBonus: 0.01
+  deltaIncreaseMomentumBonus: 0.02
   decayMultiplier: 20
   momentumBonus:
     value: 1
@@ -983,11 +984,14 @@ MonoBehaviour:
   wallCheckDistance: 1
   validWalls:
     serializedVersion: 2
-    m_Bits: 5
+    m_Bits: 2049
   upwardsForce: 20
   rightForce: 4
   initialClimbForce: 5
   climbForce: 50
+  wallFriction:
+    air: {fileID: 0}
+    ground: {fileID: 0}
   jumpIniitalPush: 10
   jumpContinousForce: 15
   jumpContinousPush: 5
@@ -1324,8 +1328,6 @@ MonoBehaviour:
       connectedRb:
         old: {fileID: 0}
         current: {fileID: 0}
-      connectionWorldPosition: {x: 0, y: 0, z: 0}
-      connectionLocalPosition: {x: 0, y: 0, z: 0}
       connectionVelocity:
         old: {x: 0, y: 0, z: 0}
         current: {x: 0, y: 0, z: 0}
@@ -1337,8 +1339,6 @@ MonoBehaviour:
     connectedRb:
       old: {fileID: 0}
       current: {fileID: 0}
-    connectionWorldPosition: {x: 0, y: 0, z: 0}
-    connectionLocalPosition: {x: 0, y: 0, z: 0}
     connectionVelocity:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
@@ -1413,8 +1413,6 @@ MonoBehaviour:
       connectedRb:
         old: {fileID: 0}
         current: {fileID: 0}
-      connectionWorldPosition: {x: 0, y: 0, z: 0}
-      connectionLocalPosition: {x: 0, y: 0, z: 0}
       connectionVelocity:
         old: {x: 0, y: 0, z: 0}
         current: {x: 0, y: 0, z: 0}
@@ -1864,7 +1862,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!114 &6851446874579196117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2177,7 +2175,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493642203787552934}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1798020240}

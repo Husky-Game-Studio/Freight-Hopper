@@ -5,11 +5,16 @@ public class GroundPoundBehavior : AbilityBehavior
     [ReadOnly, SerializeField] private Current<float> increasingForce = new Current<float>(1);
 
     [SerializeField] private float deltaIncreaseForce = 0.01f;
+    [SerializeField] private float angleToBeConsideredFlat;
     [SerializeField] private float initialBurstForce = 20;
     [SerializeField] private float downwardsForce = 10;
     [SerializeField] private float slopeDownForce = 500;
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
     public float FrictionReduction => groundFrictionReductionPercent;
+
+    public bool FlatSurface =>
+         playerPM.collisionManager.IsGrounded.current
+            && Vector3.Angle(playerPM.collisionManager.ValidUpAxis, playerPM.collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
 
     public override void EntryAction()
     {

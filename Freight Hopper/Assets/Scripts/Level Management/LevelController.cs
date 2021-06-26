@@ -20,10 +20,10 @@ public class LevelController : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(levelData.spawnPosition, GizmosExtensions.GetGizmoSize(levelData.spawnPosition) / 5);
+        Gizmos.DrawWireSphere(levelData.spawnPosition, 1);
     }
 
 #endif

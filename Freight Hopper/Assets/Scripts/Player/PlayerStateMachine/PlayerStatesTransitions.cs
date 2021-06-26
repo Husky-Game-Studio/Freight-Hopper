@@ -105,7 +105,7 @@ public class PlayerStatesTransitions
 
         // Ground Pound
         if (groundPoundReleased.value && playerMachine.currentState == playerMachine.groundPoundState ||
-            (playerMachine.playerCM.LevelSurface && playerMachine.currentState == playerMachine.groundPoundState))
+            (playerMachine.abilities.groundPoundBehavior.FlatSurface && playerMachine.currentState == playerMachine.groundPoundState))
         {
             return playerMachine.defaultState;
         }
@@ -133,7 +133,7 @@ public class PlayerStatesTransitions
         // Wall run
         if (playerMachine.currentState == playerMachine.wallRunState)
         {
-            bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
+            bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus.Clone() as bool[];
             // Fall from wall climb
             if (!status[0] && !status[1] && !status[3] &&
                 playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[2] &&
@@ -218,7 +218,9 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToGroundPoundState()
     {
-        if (UserInput.Instance.GroundPoundHeld && !playerMachine.playerCM.LevelSurface && playerMachine.abilities.groundPoundBehavior.Unlocked)
+        if (UserInput.Instance.GroundPoundHeld &&
+            !(playerMachine.abilities.groundPoundBehavior.FlatSurface) &&
+            playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
             return playerMachine.groundPoundState;
         }
@@ -367,7 +369,7 @@ public class PlayerStatesTransitions
     {
         if (playerMachine.abilities.wallRunBehavior.Unlocked && !playerMachine.playerCM.IsGrounded.current)
         {
-            bool[] walls = playerMachine.abilities.wallRunBehavior.CheckWalls();
+            bool[] walls = playerMachine.abilities.wallRunBehavior.WallStatus.Clone() as bool[];
             if (walls[0] || walls[1] || walls[3])
             {
                 return playerMachine.wallRunState;
@@ -379,7 +381,7 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToWallRunWallClimbingState()
     {
-        bool[] status = playerMachine.abilities.wallRunBehavior.CheckWalls();
+        bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus.Clone() as bool[];
         // Wall Climb
         if (status[0] && !status[1] && !status[3])
         {

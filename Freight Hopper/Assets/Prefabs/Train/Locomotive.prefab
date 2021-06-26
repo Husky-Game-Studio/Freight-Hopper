@@ -163,6 +163,8 @@ GameObject:
   - component: {fileID: 4735605026481358126}
   - component: {fileID: 5400923174265790355}
   - component: {fileID: 2527936665447236256}
+  - component: {fileID: 1109776650627392963}
+  - component: {fileID: -3548527690878655890}
   m_Layer: 11
   m_Name: Locomotive
   m_TagString: landable
@@ -264,6 +266,35 @@ MonoBehaviour:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
+--- !u!114 &1109776650627392963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400923174265790356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a55c6fcdd184041927bb2d8460ca18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indexOfCart: 0
+--- !u!114 &-3548527690878655890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400923174265790356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0289f1e8a93fe274ab133c2add96e3d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: 1
+  explosionTime: 1
+  maximumForce: 10000
+  scale: 4
 --- !u!1 &6128237999412313123
 GameObject:
   m_ObjectHideFlags: 0

@@ -62,7 +62,7 @@ public class HoverController : MonoBehaviour
             Debug.LogWarning("HoverController: Rigidbody not found in parent", this.gameObject);
         }
     }
- 
+
     private void InitializeEngines()
     {
         hoverEnginePivots = new List<HoverEngine>();
@@ -77,11 +77,11 @@ public class HoverController : MonoBehaviour
                 Debug.LogWarning("Hover engine not found");
                 continue;
             }
-
             hoverEngine.Initialize(rb, layerMask, hoverSetting.CurrentPreset(), targetDistance, automatic);
         }
     }
 
+    //  arrigato
     private void FixedUpdate()
     {
         enginesFiring = false;
