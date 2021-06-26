@@ -4,8 +4,6 @@ using UnityEngine;
 public class RigidbodyLinker
 {
     [ReadOnly, SerializeField] private Memory<Rigidbody> connectedRb = new Memory<Rigidbody>(null, null);
-    [ReadOnly, SerializeField] private Vector3 connectionWorldPosition;
-    [ReadOnly, SerializeField] private Vector3 connectionLocalPosition;
     [ReadOnly, SerializeField] private Memory<Vector3> connectionVelocity;
     [ReadOnly, SerializeField] private Memory<Vector3> connectionAcceleration;
 
