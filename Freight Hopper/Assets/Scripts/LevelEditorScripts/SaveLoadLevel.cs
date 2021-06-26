@@ -145,11 +145,14 @@ public class SaveLoadLevel : MonoBehaviour
     void LoadActualLevel(SaveLevel savedLevel) {
 
         LevelManager.GetInstance().ClearLevel();
-
+    
         for (int i = 0; i < savedLevel.SaveObject_List.Count; i++) {
            
             //LevelObjectInfo s_obj = savedLevel.SaveObject_List[i];
             LevelObjectData s_obj_data = savedLevel.SaveObject_List[i];
+
+            Debug.Log("savedLevel Count: " + savedLevel.SaveObject_List.Count);
+            Debug.Log("i: " + i); 
 
             Vector3 pos; 
             pos.x = s_obj_data.posX;
@@ -164,14 +167,13 @@ public class SaveLoadLevel : MonoBehaviour
             GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab, pos, 
                 Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
 
-            if (load == null) { 
-               
-            }
+           
+            //I don't think I need any of this !! yay !! I'm gonna keep it here juuuuust in case. 
+            //load.AddComponent<LevelObjectInfo>()
+            //Error here !! 
+            //levelM.o[Mathf.RoundToInt(load.transform.position.y)].inSceneObjects.Add(load);
+            //load.transform.parent = levelM.o[Mathf.RoundToInt(load.transform.position.y)].obj.transform;
 
-            load.AddComponent<LevelObjectInfo>();
-
-            levelM.o[s_obj_data.posY].inSceneObjects.Add(load);
-            load.transform.parent = levelM.o[s_obj_data.posY].obj.transform;
         }
     }
 
