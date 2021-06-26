@@ -105,7 +105,7 @@ public class PlayerStatesTransitions
 
         // Ground Pound
         if (groundPoundReleased.value && playerMachine.currentState == playerMachine.groundPoundState ||
-            (playerMachine.playerCM.LevelSurface && playerMachine.currentState == playerMachine.groundPoundState))
+            (playerMachine.abilities.groundPoundBehavior.FlatSurface && playerMachine.currentState == playerMachine.groundPoundState))
         {
             return playerMachine.defaultState;
         }
@@ -218,7 +218,9 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToGroundPoundState()
     {
-        if (UserInput.Instance.GroundPoundHeld && !playerMachine.playerCM.LevelSurface && playerMachine.abilities.groundPoundBehavior.Unlocked)
+        if (UserInput.Instance.GroundPoundHeld &&
+            !(playerMachine.abilities.groundPoundBehavior.FlatSurface) &&
+            playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
             return playerMachine.groundPoundState;
         }
