@@ -13,6 +13,7 @@ public class WallRunBehavior : AbilityBehavior
     [SerializeField] private float rightForce = 5; // force applied towards the wall
     [SerializeField] private float initialClimbForce = 5;
     [SerializeField] private float climbForce = 10;
+    [SerializeField] private FrictionData wallFriction; // This should be removed in the future
 
     [Space]
     [SerializeField] private float jumpIniitalPush = 10;
@@ -25,11 +26,18 @@ public class WallRunBehavior : AbilityBehavior
     private Vector3 jumpNormalCache;
     private FirstPersonCamera cameraController;
     private JumpBehavior jumpBehavior;
+    private bool[] wallStatus;
+    public bool[] WallStatus => wallStatus;
 
     private void Awake()
     {
         cameraController = Camera.main.GetComponent<FirstPersonCamera>();
         jumpBehavior = this.GetComponent<JumpBehavior>();
+    }
+
+    private void FixedUpdate()
+    {
+        wallStatus = CheckWalls();
     }
 
     private bool[] UpdateWallStatus(Vector3[] walls)
@@ -99,6 +107,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public override void Action()
     {
+        //playerPM.friction.ReduceFriction(3);
     }
 
     public void InitialWallClimb()

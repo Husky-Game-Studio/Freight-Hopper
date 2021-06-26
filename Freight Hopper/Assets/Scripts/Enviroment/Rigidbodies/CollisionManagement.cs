@@ -120,8 +120,8 @@ public class CollisionManagement
         {
             yield return new WaitForFixedUpdate();
             rigidbodyLinker.UpdateConnectionState(rb);
-
             CollisionDataCollected?.Invoke();
+
             UpdateOldValues();
             ClearValues();
         }
