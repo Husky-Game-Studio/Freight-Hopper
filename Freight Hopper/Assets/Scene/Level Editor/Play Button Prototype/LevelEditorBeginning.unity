@@ -270,9 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1793763749}
-  LoadLevelButtons: {fileID: 1799104302}
   otherUI: []
-  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 1538238972}
 --- !u!1 &60013999
 GameObject:
@@ -399,6 +397,7 @@ GameObject:
   - component: {fileID: 145468829}
   - component: {fileID: 145468828}
   - component: {fileID: 145468832}
+  - component: {fileID: 145468833}
   m_Layer: 5
   m_Name: Load
   m_TagString: Untagged
@@ -440,9 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1160656914}
-  LoadLevelButtons: {fileID: 1799104302}
   otherUI: []
-  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 2098463042}
 --- !u!114 &145468829
 MonoBehaviour:
@@ -488,8 +485,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 145468828}
-        m_TargetAssemblyTypeName: HGSLevelEditor.MenuOpener, Assembly-CSharp
+      - m_Target: {fileID: 145468833}
+        m_TargetAssemblyTypeName: HGSLevelEditor.GridLoadLevelUI, Assembly-CSharp
         m_MethodName: OpenCloseLevelButtons
         m_Mode: 1
         m_Arguments:
@@ -551,6 +548,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allLevels: []
+--- !u!114 &145468833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145468826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10eff36fa00d1cf41a5cdca16c1c6b3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LoadLevelButtons: {fileID: 1799104302}
+  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
 --- !u!1 &157172625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1313,9 +1324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 2096353857}
-  LoadLevelButtons: {fileID: 1799104302}
   otherUI: []
-  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 1685787755}
 --- !u!1 &396081147
 GameObject:
@@ -4039,9 +4048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1160656914}
-  LoadLevelButtons: {fileID: 1799104302}
   otherUI: []
-  loadLevelButtonPrefab: {fileID: 1232475641765787515, guid: f58a16c018b28e54a86cd34a17a75da5, type: 3}
   exit: {fileID: 2098463042}
 --- !u!1 &1159114362
 GameObject:

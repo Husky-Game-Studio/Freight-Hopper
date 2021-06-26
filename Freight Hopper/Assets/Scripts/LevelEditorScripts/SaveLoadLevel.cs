@@ -54,7 +54,7 @@ public class SaveLoadLevel : MonoBehaviour
 
         
         SavingLevel(levelName);
-        MenuOpener.GetInstance().ReloadLevels();
+        GridLoadLevelUI.GetInstance().ReloadLevels();
     }
 
     public void LoadButton(string levelName) {
