@@ -925,9 +925,9 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
-  groundAcceleration: 50
+  groundAcceleration: 55
   airAcceleration: 20
-  deltaIncreaseMomentumBonus: 0.01
+  deltaIncreaseMomentumBonus: 0.02
   decayMultiplier: 20
   momentumBonus:
     value: 1
@@ -989,6 +989,9 @@ MonoBehaviour:
   rightForce: 4
   initialClimbForce: 5
   climbForce: 50
+  wallFriction:
+    air: {fileID: 0}
+    ground: {fileID: 0}
   jumpIniitalPush: 10
   jumpContinousForce: 15
   jumpContinousPush: 5
@@ -1325,8 +1328,6 @@ MonoBehaviour:
       connectedRb:
         old: {fileID: 0}
         current: {fileID: 0}
-      connectionWorldPosition: {x: 0, y: 0, z: 0}
-      connectionLocalPosition: {x: 0, y: 0, z: 0}
       connectionVelocity:
         old: {x: 0, y: 0, z: 0}
         current: {x: 0, y: 0, z: 0}
@@ -1338,8 +1339,6 @@ MonoBehaviour:
     connectedRb:
       old: {fileID: 0}
       current: {fileID: 0}
-    connectionWorldPosition: {x: 0, y: 0, z: 0}
-    connectionLocalPosition: {x: 0, y: 0, z: 0}
     connectionVelocity:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
@@ -1414,8 +1413,6 @@ MonoBehaviour:
       connectedRb:
         old: {fileID: 0}
         current: {fileID: 0}
-      connectionWorldPosition: {x: 0, y: 0, z: 0}
-      connectionLocalPosition: {x: 0, y: 0, z: 0}
       connectionVelocity:
         old: {x: 0, y: 0, z: 0}
         current: {x: 0, y: 0, z: 0}
