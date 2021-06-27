@@ -38,6 +38,10 @@ public class LevelController : MonoBehaviour
         {
             return levelName.NextWorld();
         }
+        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.Menu)
+        {
+            return "MainMenu";
+        }
         return levelName.CurrentLevel();
     }
 
