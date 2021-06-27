@@ -16,7 +16,7 @@ public class Goal : MonoBehaviour
         {
             if (nextLevelName != "MainMenu")
             {
-                LevelLoader.LoadLevel(nextLevelName);
+                //LevelLoader.LoadLevel(nextLevelName);
             }
             else
             {

@@ -41,15 +41,9 @@ public class SaveLoadLevel : MonoBehaviour
 
     List<LevelObjectData> saveObjectInfoList = new List<LevelObjectData>();
 
-    LevelManager levelM; 
-
     public static string saveFolderName = "Level";
 
-    void Start()
-    {
-        levelM = LevelManager.GetInstance();
 
-    }
     public void SaveLevelButton(string levelName) {
 
         

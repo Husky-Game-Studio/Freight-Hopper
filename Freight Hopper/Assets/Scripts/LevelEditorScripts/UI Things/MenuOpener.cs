@@ -52,6 +52,8 @@ namespace HGSLevelEditor
 
             SceneManager.LoadScene("CustomLevel 0 0", LoadSceneMode.Single);
             SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);
+            
+    
 
         }
         public void ExitOnClick()

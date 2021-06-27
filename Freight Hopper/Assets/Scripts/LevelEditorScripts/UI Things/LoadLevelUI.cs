@@ -15,7 +15,7 @@ public class LoadLevelUI : MonoBehaviour
 
         SaveLoadLevel.GetInstance().LoadButton(levelName);
         GridLoadLevelUI.GetInstance().CloseLoadLevelButtons();
-    
+        LevelManager.levelNameLoad = levelName;
     }
     public void SetText(string newText) {
 

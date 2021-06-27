@@ -11,6 +11,7 @@ namespace HGSLevelEditor
 
         public List<LevelObjects> o = new List<LevelObjects>();
         public int index;
+        public static string levelNameLoad;
 
         private static LevelManager instance;
         public static LevelManager GetInstance()
@@ -23,25 +24,16 @@ namespace HGSLevelEditor
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            
+
             instance = this;
-        }
 
-        //Might not need this 
-        void StoreLevelObjects()
-        {
+            if (levelNameLoad != null) {
 
-            if (o[index].inSceneObjects.Count > 0)
-            {
+                SaveLoadLevel.GetInstance().LoadButton(levelNameLoad);
 
-                for (int i = 0; i < o[index].inSceneObjects.Count; i++)
-                {
-
-                    LevelObjectInfo ob = o[index].inSceneObjects[i].GetComponent<LevelObjectInfo>();
-
-                }
             }
         }
+     
         public void ClearLevel()
         {
 
