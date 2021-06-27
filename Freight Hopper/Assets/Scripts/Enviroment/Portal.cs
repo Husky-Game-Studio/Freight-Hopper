@@ -57,29 +57,36 @@ public class Portal : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.attachedRigidbody != null)
+        RigidbodyReference rbReference = other.GetComponent<RigidbodyReference>();
+        if (other.attachedRigidbody != null || rbReference != null)
         {
-            if (other.GetComponent<PhysicsManager>() == null)
+            Rigidbody rb = other.attachedRigidbody == null ? rbReference.reference : other.attachedRigidbody;
+            if (rb.GetComponent<PhysicsManager>() == null)
             {
                 return;
             }
-            if (teleportingObjects.Contains(other.attachedRigidbody))
+            if (teleportingObjects.Contains(rb))
             {
                 return;
             }
 
-            otherPortal.AddTeleportingRigidbody(other.attachedRigidbody);
-            Teleport(other);
-            RotateVelocity(other);
+            otherPortal.AddTeleportingRigidbody(rb);
+            Teleport(rb);
+            RotateVelocity(rb);
+            Rotate(rb);
         }
     }
 
-    private void Teleport(Collider other)
+    private void Rotate(Rigidbody other)
     {
-        other.transform.position = otherPortal.transform.position;
     }
 
-    private void RotateVelocity(Collider other)
+    private void Teleport(Rigidbody other)
+    {
+        other.position = otherPortal.transform.TransformPoint(this.transform.InverseTransformPoint(other.position));
+    }
+
+    private void RotateVelocity(Rigidbody other)
     {
         Vector3 velocity = Vector3.zero;
         if (velocity == Vector3.zero)
@@ -89,6 +96,6 @@ public class Portal : MonoBehaviour
 
         Vector3 reflectionNormal = (this.transform.forward + otherPortal.transform.forward).normalized;
         Vector3 newVelocity = Vector3.Reflect(velocity, reflectionNormal);
-        other.attachedRigidbody.velocity = newVelocity;
+        other.velocity = newVelocity;
     }
 }

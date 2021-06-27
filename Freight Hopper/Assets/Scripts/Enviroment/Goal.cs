@@ -14,7 +14,16 @@ public class Goal : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            LevelLoader.LoadLevel(nextLevelName);
+            if (nextLevelName != "MainMenu")
+            {
+                LevelLoader.LoadLevel(nextLevelName);
+            }
+            else
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                SceneManager.LoadScene(nextLevelName);
+            }
         }
     }
 }
