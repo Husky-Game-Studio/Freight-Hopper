@@ -50,17 +50,6 @@ public class LevelController : MonoBehaviour
         if (levelData != null)
         {
             Scene levelScene = SceneManager.GetActiveScene();
-
-#if UNITY_EDITOR
-            string playerSceneName = "DefaultScene";
-            for (int i = 0; i < SceneManager.sceneCount; i++)
-            {
-                if (!playerSceneName.Equals(SceneManager.GetSceneAt(i).name))
-                {
-                    levelScene = SceneManager.GetSceneAt(i);
-                }
-            }
-#endif
             levelName = new LevelName(levelScene.name);
         }
         if (instance != null && instance != this)
@@ -73,7 +62,7 @@ public class LevelController : MonoBehaviour
         }
         Player.PlayerLoadedIn += ResetPlayerPosition;
         Player.PlayerLoadedIn += UnlockAbilities;
-
+        SceneLoader.LoadPlayerScene();
         LevelLoadedIn?.Invoke();
     }
 
@@ -108,7 +97,7 @@ public class LevelController : MonoBehaviour
 
     public void Respawn()
     {
-        //LevelLoader.LoadLevel(levelName.CurrentLevel());
+        SceneLoader.LoadLevel(levelName.CurrentLevel());
         PlayerRespawned?.Invoke();
         //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }
