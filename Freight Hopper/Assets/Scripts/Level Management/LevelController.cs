@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
+    private bool respawning = false;
     public LevelName CurrentLevelName => levelName;
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
@@ -47,20 +48,10 @@ public class LevelController : MonoBehaviour
 
     private void Awake()
     {
+        respawning = false;
         if (levelData != null)
         {
             Scene levelScene = SceneManager.GetActiveScene();
-
-#if UNITY_EDITOR
-            string playerSceneName = "DefaultScene";
-            for (int i = 0; i < SceneManager.sceneCount; i++)
-            {
-                if (!playerSceneName.Equals(SceneManager.GetSceneAt(i).name))
-                {
-                    levelScene = SceneManager.GetSceneAt(i);
-                }
-            }
-#endif
             levelName = new LevelName(levelScene.name);
         }
         if (instance != null && instance != this)
@@ -73,7 +64,7 @@ public class LevelController : MonoBehaviour
         }
         Player.PlayerLoadedIn += ResetPlayerPosition;
         Player.PlayerLoadedIn += UnlockAbilities;
-
+        SceneLoader.LoadPlayerScene();
         LevelLoadedIn?.Invoke();
     }
 
@@ -106,10 +97,18 @@ public class LevelController : MonoBehaviour
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
+    // Respawns player. Reloads scene for now. Respawning var is used to prevent spamming of respawn button
     public void Respawn()
     {
-        //LevelLoader.LoadLevel(levelName.CurrentLevel());
+        if (respawning)
+        {
+            return;
+        }
+
+        respawning = true;
+        SceneLoader.LoadLevel(levelName.CurrentLevel());
         PlayerRespawned?.Invoke();
+
         //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }
 
