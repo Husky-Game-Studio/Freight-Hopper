@@ -16,10 +16,8 @@ namespace HGSLevelEditor
 
         [SerializeField] private GameObject menu;
 
-        public Transform LoadLevelButtons;
         public GameObject[] otherUI;
-        public GameObject loadLevelButtonPrefab; 
-
+       
         SaveLoadLevel level;
         PlayButton play;
 
@@ -31,12 +29,9 @@ namespace HGSLevelEditor
             Button x = exit.GetComponent<Button>();
             x.onClick.AddListener(ExitOnClick);
 
-            CloseLoadLevelButtons();
-
             level = SaveLoadLevel.GetInstance();
             play = PlayButton.GetInstance();
 
-            CreateUIButtonsForLevels(); 
         }
 
         public void OpenMenu()
@@ -57,6 +52,8 @@ namespace HGSLevelEditor
 
             SceneManager.LoadScene("CustomLevel 0 0", LoadSceneMode.Single);
             SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);
+            
+    
 
         }
         public void ExitOnClick()
@@ -66,51 +63,7 @@ namespace HGSLevelEditor
 
         }
 
-        void CreateUIButtonsForLevels() {
-
-            foreach (string name in level.allLevels) {
-
-                GameObject buttons = Instantiate(loadLevelButtonPrefab) as GameObject;
-                buttons.transform.SetParent(LoadLevelButtons);
-
-                LoadLevelUI levelButton = buttons.GetComponent<LoadLevelUI>();
-                levelButton.levelName = name;
-                Debug.Log(name + "Checking");
-                levelButton.SetText(name);
-                movingLevel = name; 
-               
-            }
-        }
-
-        public void OpenCloseLevelButtons()
-        {
-
-            if (LoadLevelButtons.gameObject.activeInHierarchy)
-            {
-
-                CloseLoadLevelButtons();
-
-            }
-            else {
-
-                OpenLoadLevelButtons();
-                
-            }
-
-        }
-
-        public void CloseLoadLevelButtons() {
-
-            LoadLevelButtons.gameObject.SetActive(false);
-        
-        }
-
-        public void OpenLoadLevelButtons() {
-
-            LoadLevelButtons.gameObject.SetActive(true);
-        
-        }
-
+       
         public static MenuOpener instance;
         public static MenuOpener GetInstance() {
 
@@ -128,21 +81,6 @@ namespace HGSLevelEditor
         
         }
 
-        //Will refresh buttons at runtime when level is added?? hopefully?? 
-        public void ReloadLevels() {
-
-
-            Button[] prev = LoadLevelButtons.GetComponentsInChildren<Button>();
-            foreach (Button p in prev) {
-
-                Destroy(p.gameObject);
-            }
-
-            level.allLevels.Clear();
-
-            level.LoadAllLevels();
-            CreateUIButtonsForLevels(); 
-        }
     }
 
 }

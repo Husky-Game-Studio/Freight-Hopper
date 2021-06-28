@@ -108,7 +108,7 @@ public class LevelController : MonoBehaviour
 
     public void Respawn()
     {
-        LevelLoader.LoadLevel(levelName.CurrentLevel());
+        //LevelLoader.LoadLevel(levelName.CurrentLevel());
         PlayerRespawned?.Invoke();
         //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }
