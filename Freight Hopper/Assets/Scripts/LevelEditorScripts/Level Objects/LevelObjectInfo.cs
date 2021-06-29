@@ -7,8 +7,6 @@ namespace HGSLevelEditor
     [System.Serializable]
     public class LevelObjectInfo : MonoBehaviour
     {
-
-        //Might just need this variable instead -- if this is still commented, shh no it isn't 
         public Vector3 worldRotation;
 
         public LevelObjectData data;
@@ -32,15 +30,6 @@ namespace HGSLevelEditor
         public LevelObjectData GetObject()
         {
             LevelObjectData savedObj = data;
-            //savedObj.objectID = objectID;
-            //savedObj.posX = posX;
-            //savedObj.posY = posY;
-            //savedObj.posZ = posZ;
-
-            //savedObj.rotX = rotX;
-            //savedObj.rotY = rotY;
-            //savedObj.rotZ = rotZ;
-
 
             return savedObj;
 

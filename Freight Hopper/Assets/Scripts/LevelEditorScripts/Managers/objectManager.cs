@@ -23,6 +23,7 @@ namespace HGSLevelEditor {
             return instance;
         }
 
+        //Will return the obj's prefab within the list, based off the objectID given.
         public LevelObject GetObject(string objectID) {
 
             LevelObject retrieve = new LevelObject();
@@ -43,7 +44,6 @@ namespace HGSLevelEditor {
 
             return retrieve;
         }
-
 
         //Stores object ID + prefab information
         [System.Serializable]

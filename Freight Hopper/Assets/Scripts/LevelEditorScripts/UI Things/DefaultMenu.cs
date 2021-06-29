@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//I don't think that I am using this -- this can be smited 
 public class DefaultMenu : MonoBehaviour
 {
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.M)) {

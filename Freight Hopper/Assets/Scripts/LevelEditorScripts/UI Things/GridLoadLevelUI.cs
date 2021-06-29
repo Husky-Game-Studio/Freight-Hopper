@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//This script helps create the level buttons under 'Load' at runtime. 
+
 namespace HGSLevelEditor
 {
     public class GridLoadLevelUI : MonoBehaviour
     {
+        //Transform = Load Grid
         public Transform LoadLevelButtons;
         public GameObject loadLevelButtonPrefab;
 
+        //Helps access all level names within the 'Streaming Assets' folder -- in order to create a button for each of the levels.  
         SaveLoadLevel level;
-        string movingLevel = "Hi";
+       
         // Start is called before the first frame update
         private void Start()
         {
@@ -24,10 +28,9 @@ namespace HGSLevelEditor
 
         void CreateUIButtonsForLevels()
         {
-
+            //Creates a button for each level
             foreach (string name in level.allLevels)
             {
-
                 GameObject buttons = Instantiate(loadLevelButtonPrefab) as GameObject;
                 buttons.transform.SetParent(LoadLevelButtons);
 
@@ -35,7 +38,6 @@ namespace HGSLevelEditor
                 levelButton.levelName = name;
                 Debug.Log(name + "Checking");
                 levelButton.SetText(name);
-                movingLevel = name;
 
             }
         }
@@ -51,9 +53,7 @@ namespace HGSLevelEditor
             }
             else
             {
-
                 OpenLoadLevelButtons();
-
             }
 
         }
@@ -72,10 +72,9 @@ namespace HGSLevelEditor
 
         }
 
+        //Allows the new saved button to be added on the grid at runtime 
         public void ReloadLevels()
         {
-
-
             Button[] prev = LoadLevelButtons.GetComponentsInChildren<Button>();
             foreach (Button p in prev)
             {
