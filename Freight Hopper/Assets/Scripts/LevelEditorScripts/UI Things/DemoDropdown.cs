@@ -8,12 +8,14 @@ public class DemoDropdown : MonoBehaviour
 
     //public Dropdown gameDropdown; 
     public GameObject trainHead;
+    public GameObject turret; 
     Dropdown gameDropdown;
     public GameObject targetObject;
 
     private enum Meshes { 
     
-        Cube = 1    
+        TrainHead = 1,    
+        Turret = 2
     }
 
     //public GameObject targetAccess;
@@ -26,7 +28,7 @@ public class DemoDropdown : MonoBehaviour
     public void Update()
     {
         // Cube 
-        if (gameDropdown.value == (int)Meshes.Cube)
+        if (gameDropdown.value == (int)Meshes.TrainHead)
         {
             Debug.Log("Train Head Spawned");
             Instantiate(trainHead,
@@ -36,6 +38,15 @@ public class DemoDropdown : MonoBehaviour
             //Reverts back to 0 to prevent endless spawning 
             gameDropdown.value = 0;
 
+        }
+        if (gameDropdown.value == (int)Meshes.Turret) {
+
+            Debug.Log("Turret Spawned");
+            Instantiate(turret,
+            new Vector3(targetObject.transform.position.x, turret.transform.position.y, turret.transform.position.z),
+            turret.transform.rotation);
+
+            gameDropdown.value = 0;
         }
 
 

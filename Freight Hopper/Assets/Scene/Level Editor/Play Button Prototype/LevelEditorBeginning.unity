@@ -270,7 +270,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1793763749}
-  otherUI: []
   exit: {fileID: 1538238972}
 --- !u!1 &60013999
 GameObject:
@@ -439,7 +438,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1160656914}
-  otherUI: []
   exit: {fileID: 2098463042}
 --- !u!114 &145468829
 MonoBehaviour:
@@ -1324,7 +1322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 2096353857}
-  otherUI: []
   exit: {fileID: 1685787755}
 --- !u!1 &396081147
 GameObject:
@@ -1511,7 +1508,9 @@ MonoBehaviour:
   - objID: floor
     objPrefab: {fileID: 1806886896241544937, guid: 7c61f5b5dca269e47a69729a63a75437, type: 3}
   - objID: train head
-    objPrefab: {fileID: 7631039515532287708, guid: 6715bcfba93c64340901706b97175576, type: 3}
+    objPrefab: {fileID: 5400923174265790356, guid: 27eb5001541578e40a9b92d45c7c67e1, type: 3}
+  - objID: turret
+    objPrefab: {fileID: 3672927658055239323, guid: a0670d4a849c64b41b7579c41425b3f5, type: 3}
 --- !u!4 &445788459
 Transform:
   m_ObjectHideFlags: 0
@@ -1839,7 +1838,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70400864771d43246b930087c2149fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainHead: {fileID: 7631039515532287708, guid: 6715bcfba93c64340901706b97175576, type: 3}
+  trainHead: {fileID: 5400923174265790356, guid: 27eb5001541578e40a9b92d45c7c67e1, type: 3}
+  turret: {fileID: 3672927658055239323, guid: a0670d4a849c64b41b7579c41425b3f5, type: 3}
   targetObject: {fileID: 772112139}
 --- !u!114 &560924597
 MonoBehaviour:
@@ -1894,7 +1894,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Train Head
       m_Image: {fileID: 0}
-    - m_Text: 
+    - m_Text: Turret
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4048,7 +4048,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1160656914}
-  otherUI: []
   exit: {fileID: 2098463042}
 --- !u!1 &1159114362
 GameObject:

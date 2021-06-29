@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
 using HGSLevelEditor;
+using UnityEngine.SceneManagement;
 
 public class LoadLevelUI : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class LoadLevelUI : MonoBehaviour
 
     public void LoadLevel() {
 
-
+        SceneManager.LoadScene("LevelEditorBeginning");
         SaveLoadLevel.GetInstance().LoadButton(levelName);
         GridLoadLevelUI.GetInstance().CloseLoadLevelButtons();
         LevelManager.levelNameLoad = levelName;

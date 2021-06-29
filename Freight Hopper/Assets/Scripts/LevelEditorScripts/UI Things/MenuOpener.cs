@@ -16,21 +16,13 @@ namespace HGSLevelEditor
 
         [SerializeField] private GameObject menu;
 
-        public GameObject[] otherUI;
-       
-        SaveLoadLevel level;
-        PlayButton play;
-
-        string movingLevel = "Hi"; 
+        private GameObject[] otherUI;
         public Button exit;
 
         private void Start()
         {
             Button x = exit.GetComponent<Button>();
             x.onClick.AddListener(ExitOnClick);
-
-            level = SaveLoadLevel.GetInstance();
-            play = PlayButton.GetInstance();
 
         }
 
@@ -39,28 +31,18 @@ namespace HGSLevelEditor
 
             if (menu != null)
             {
-
                 menu.SetActive(true);
-
             }
         }
 
         public void PlayLevel()
         {
-            //need to pass level name ...this probably is not the place for it ... ]
-            //play.LoadAtPlay(movingLevel); -- not workin rn -- oops
-
             SceneManager.LoadScene("CustomLevel 0 0", LoadSceneMode.Single);
-            SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);
-            
-    
 
         }
         public void ExitOnClick()
         {
-
             menu.SetActive(false);
-
         }
 
        
