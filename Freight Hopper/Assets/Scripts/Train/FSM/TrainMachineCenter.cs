@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class TrainMachineCenter : FiniteStateMachineCenter
+public partial class TrainMachineCenter : FiniteStateMachineCenter
 {
     // States
     public FindNextPathState findNextPath;
@@ -32,22 +32,6 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     public Vector3 TorqueBounds => torqueBounds;
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
-
-    public class Cart
-    {
-        public PhysicsManager physicsManager;
-        public Rigidbody rb;
-        public CartProperties cartProperties;
-        public Destructable destructable;
-
-        public event Action<int> DestoryCart;
-
-        public void DestroyCartFunc()
-        {
-            int cartIndex = cartProperties.IndexOfCart;
-            DestoryCart?.Invoke(cartIndex);
-        }
-    }
 
     // Dependecies
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
@@ -119,13 +103,7 @@ public class TrainMachineCenter : FiniteStateMachineCenter
 
         for (int i = 0; i < physics.Length; i++)
         {
-            Cart cart = new Cart
-            {
-                physicsManager = physics[i]
-            };
-            cart.rb = cart.physicsManager.rb;
-            cart.cartProperties = cart.rb.GetComponent<CartProperties>();
-            cart.destructable = cart.rb.GetComponent<Destructable>();
+            Cart cart = new Cart(physics[i]);
             cart.destructable.RigidbodyDestroyed += cart.DestroyCartFunc;
             cart.DestoryCart += RemoveCartsUntilIndex;
             carts.AddLast(cart);
