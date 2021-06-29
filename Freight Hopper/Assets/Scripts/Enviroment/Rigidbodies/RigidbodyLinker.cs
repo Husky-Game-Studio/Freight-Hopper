@@ -40,7 +40,7 @@ public class RigidbodyLinker
         connectionVelocity.current = connectedRb.current.GetPointVelocity(ourRigidbody.position);
         if (connectedRb.current == connectedRb.old)
         {
-            connectionAcceleration.current = (connectionVelocity.current - connectionVelocity.old);
+            connectionAcceleration.current = connectionVelocity.current - connectionVelocity.old;
             ourRigidbody.AddForce(connectionAcceleration.current, ForceMode.VelocityChange);
         }
     }

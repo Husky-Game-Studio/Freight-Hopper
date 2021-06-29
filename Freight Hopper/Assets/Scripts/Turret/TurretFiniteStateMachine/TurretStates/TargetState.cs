@@ -22,7 +22,8 @@ public class TargetState : BasicState
     }
 
     // Conditions to change states
-    public override BasicState TransitionState() {
+    public override BasicState TransitionState()
+    {
         Ray ray = new Ray(turretMachineCenter.gameObject.transform.position,
                           turretMachineCenter.thePlayer.transform.position
                           - turretMachineCenter.gameObject.transform.position);
@@ -34,7 +35,8 @@ public class TargetState : BasicState
         // Transition to Search State
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
         {
-            if ((hit.rigidbody != null && !hit.rigidbody.tag.Equals("Player")) || (hit.rigidbody == null)) {
+            if ((hit.rigidbody != null && !hit.rigidbody.tag.Equals("Player")) || (hit.rigidbody == null))
+            {
                 return turretMachineCenter.searchState;
             }
         }
@@ -47,14 +49,18 @@ public class TargetState : BasicState
         return this;
     }
 
-    public override void EntryState() { countDownToTimer.ResetTimer(); }
+    public override void EntryState()
+    {
+        countDownToTimer.ResetTimer();
+    }
 
     // Rotate Turret to aim at player
-    public override void PerformBehavior() {
+    public override void PerformBehavior()
+    {
         thePlayerTransform = turretMachineCenter.thePlayer.transform;
 
         // Turn whole turret to follow the player on the xz-plane
-        Vector3 direction = (thePlayerTransform.position - turretTransform.position);
+        Vector3 direction = thePlayerTransform.position - turretTransform.position;
         Quaternion xzRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z), Vector3.up);
         turretTransform.rotation
                 = Quaternion.Lerp(turretTransform.rotation, xzRotation, speedOfRotation * Time.fixedDeltaTime);

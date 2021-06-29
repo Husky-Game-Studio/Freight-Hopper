@@ -22,7 +22,7 @@ public class CollisionManagement
     public Vector3 ValidUpAxis => validUpAxis;
     public Memory<Vector3> ContactNormal => contactNormal;
     public Memory<bool> IsGrounded => isGrounded;
-    public bool LevelSurface => ValidUpAxis == ContactNormal.current && isGrounded.current;
+    public bool LevelSurface => this.ValidUpAxis == this.ContactNormal.current && isGrounded.current;
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
     public float MaxSlope => maxSlope;

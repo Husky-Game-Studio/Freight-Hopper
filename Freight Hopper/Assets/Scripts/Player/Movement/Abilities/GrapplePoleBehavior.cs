@@ -66,7 +66,7 @@ public class GrapplePoleBehavior : AbilityBehavior
 
         float expectedLength = length;
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
-        float error = (expectedLength - actualLength);
+        float error = expectedLength - actualLength;
         Vector3 tensionVelocity = up * distanceController.GetOutput(error, Time.fixedDeltaTime);
         playerPM.rb.AddForce(tensionVelocity, ForceMode.VelocityChange);
     }

@@ -17,17 +17,17 @@ public class WallRunBehavior : AbilityBehavior
 
     [Space]
     [SerializeField] private float jumpIniitalPush = 10;
-
     [SerializeField] private float jumpContinousForce = 10;
-
     [SerializeField] private float jumpContinousPush = 10;
+
     public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
     private Vector3 jumpNormalCache;
     private FirstPersonCamera cameraController;
     private JumpBehavior jumpBehavior;
     private bool[] wallStatus;
-    public bool[] WallStatus => wallStatus;
+
+    public bool[] WallStatus() => wallStatus.Clone() as bool[];
 
     private void Awake()
     {
@@ -62,10 +62,9 @@ public class WallRunBehavior : AbilityBehavior
     {
         Vector3[] walls = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
         Vector3[] directions = { Vector3.forward, Vector3.right, -Vector3.forward, -Vector3.right };
-        RaycastHit hit;
         for (int i = 0; i < 4; ++i)
         {
-            if (Physics.Raycast(playerPM.rb.position, playerPM.rb.transform.TransformDirection(directions[i]), out hit, distance, layers))
+            if (Physics.Raycast(playerPM.rb.position, playerPM.rb.transform.TransformDirection(directions[i]), out RaycastHit hit, distance, layers))
             {
                 if (!hit.transform.CompareTag("landable"))
                 {

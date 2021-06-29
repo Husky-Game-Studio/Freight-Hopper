@@ -104,7 +104,7 @@ public class PlayerStatesTransitions
         }
 
         // Ground Pound
-        if (groundPoundReleased.value && playerMachine.currentState == playerMachine.groundPoundState ||
+        if ((groundPoundReleased.value && playerMachine.currentState == playerMachine.groundPoundState) ||
             (playerMachine.abilities.groundPoundBehavior.FlatSurface && playerMachine.currentState == playerMachine.groundPoundState))
         {
             return playerMachine.defaultState;
@@ -119,7 +119,7 @@ public class PlayerStatesTransitions
         }
 
         // Full stop
-        if ((playerMachine.abilities.fullstopBehavior.FullStopFinished()) && (playerMachine.currentState == playerMachine.fullStopState))
+        if (playerMachine.abilities.fullstopBehavior.FullStopFinished() && (playerMachine.currentState == playerMachine.fullStopState))
         {
             return playerMachine.defaultState;
         }
@@ -133,7 +133,7 @@ public class PlayerStatesTransitions
         // Wall run
         if (playerMachine.currentState == playerMachine.wallRunState)
         {
-            bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus.Clone() as bool[];
+            bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus();
             // Fall from wall climb
             if (!status[0] && !status[1] && !status[3] &&
                 playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[2] &&
@@ -163,7 +163,7 @@ public class PlayerStatesTransitions
     public BasicState CheckToJumpState()
     {
         // Ground Pound
-        if (jumpPressed.value && (playerMachine.abilities.jumpBehavior.UnlockedAndReady && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive()) &&
+        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.UnlockedAndReady && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive() &&
             playerMachine.currentState == playerMachine.groundPoundState)
         {
             return playerMachine.jumpState;
@@ -219,7 +219,7 @@ public class PlayerStatesTransitions
     public BasicState CheckToGroundPoundState()
     {
         if (UserInput.Instance.GroundPoundHeld &&
-            !(playerMachine.abilities.groundPoundBehavior.FlatSurface) &&
+            !playerMachine.abilities.groundPoundBehavior.FlatSurface &&
             playerMachine.abilities.groundPoundBehavior.Unlocked)
         {
             return playerMachine.groundPoundState;
@@ -230,8 +230,8 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToGrappleGroundPoundState()
     {
-        if (groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleAnchoredState ||
-            grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState)
+        if ((groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleAnchoredState) ||
+            (grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState))
         {
             if ((playerMachine.playerCM.ContactNormal.current != playerMachine.playerCM.ValidUpAxis ||
                 playerMachine.playerCM.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.Unlocked)
@@ -369,7 +369,7 @@ public class PlayerStatesTransitions
     {
         if (playerMachine.abilities.wallRunBehavior.Unlocked && !playerMachine.playerCM.IsGrounded.current)
         {
-            bool[] walls = playerMachine.abilities.wallRunBehavior.WallStatus.Clone() as bool[];
+            bool[] walls = playerMachine.abilities.wallRunBehavior.WallStatus();
             if (walls[0] || walls[1] || walls[3])
             {
                 return playerMachine.wallRunState;
@@ -381,7 +381,7 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToWallRunWallClimbingState()
     {
-        bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus.Clone() as bool[];
+        bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus();
         // Wall Climb
         if (status[0] && !status[1] && !status[3])
         {

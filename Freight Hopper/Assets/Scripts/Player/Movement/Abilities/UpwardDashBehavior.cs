@@ -6,7 +6,7 @@ public class UpwardDashBehavior : AbilityBehavior
 
     [SerializeField] private float initialUpwardsForce;
     [SerializeField] private float consistentForce;
-    [SerializeField] public Timer duration = new Timer(1);
+    public Timer duration = new Timer(1);
 
     public override void EntryAction()
     {

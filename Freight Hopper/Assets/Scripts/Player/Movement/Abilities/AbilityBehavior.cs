@@ -10,7 +10,7 @@ public abstract class AbilityBehavior : MonoBehaviour
     public bool Consumed => consumed;
 
     // Ready meaning not consumed
-    public bool UnlockedAndReady => Unlocked && !Consumed;
+    public bool UnlockedAndReady => this.Unlocked && !this.Consumed;
 
     protected PhysicsManager playerPM;
     protected SoundManager playerSM;
