@@ -2,29 +2,35 @@ using UnityEngine;
 
 public class WallRunBehavior : AbilityBehavior
 {
-    /// Front, Right, Back, Left
-    [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[4];
+    // Front, Right, Back, Left is what the array represents
 
-    [SerializeField] private float wallrunCameraTilt = 10;
+    [Space]
     [SerializeField] private float wallCheckDistance = 1;
-
     [SerializeField] private LayerMask validWalls;
+
+    [Space]
+    [SerializeField] private float wallrunCameraTilt = 5;
     [SerializeField] private float upwardsForce = 10;
-    [SerializeField] private float rightForce = 5; // force applied towards the wall
+    [SerializeField] private float rightForce = 5;
+
+    [Space]
     [SerializeField] private float initialClimbForce = 5;
     [SerializeField] private float climbForce = 10;
-    [SerializeField] private FrictionData wallFriction; // This should be removed in the future
 
     [Space]
     [SerializeField] private float jumpIniitalPush = 10;
     [SerializeField] private float jumpContinousForce = 10;
     [SerializeField] private float jumpContinousPush = 10;
 
+    [Space]
     public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
+
     private Vector3 jumpNormalCache;
     private FirstPersonCamera cameraController;
     private JumpBehavior jumpBehavior;
+
+    [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[4];
     private bool[] wallStatus;
 
     public bool[] WallStatus() => wallStatus.Clone() as bool[];
@@ -40,6 +46,7 @@ public class WallRunBehavior : AbilityBehavior
         wallStatus = CheckWalls();
     }
 
+    // bool[] represents the relative cardinal directions. If there is a wall forward then bool[0] = true
     private bool[] UpdateWallStatus(Vector3[] walls)
     {
         bool[] nearWall = { false, false, false, false };
@@ -54,10 +61,7 @@ public class WallRunBehavior : AbilityBehavior
         return nearWall;
     }
 
-    /// <summary>
-    /// Checks cardinal direction (relative) walls for their normals in range
-    /// </summary>
-    /// <returns>returns normals of all 4 walls</returns>
+    // Returns the 4 relative cardinal directions as normals. Vector3.zero if no wall is found in the relative cardinal direction
     public Vector3[] CheckWalls(float distance, LayerMask layers)
     {
         Vector3[] walls = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
@@ -85,28 +89,17 @@ public class WallRunBehavior : AbilityBehavior
         return walls;
     }
 
-    /// <summary>
-    /// Returns if "touching" one of the 4 cardinal walls.
-    /// Also updates internal wall normal storage
-    /// </summary>
+    // Returns if "touching" one of the 4 relative cardinal walls.
+    // Also updates internal wall normal storage
     public bool[] CheckWalls()
     {
-        if (playerPM.rb == null)
-        {
-            // Null reference errors are occuring, this is a temp fix
-            bool[] falseArray = { false, false, false, false };
-            return falseArray;
-        }
+        /*        if (playerPM.rb == null)
+                {
+                    // Null reference errors are occuring, this is a temp fix
+                    bool[] falseArray = { false, false, false, false };
+                    return falseArray;
+                }*/
         return UpdateWallStatus(CheckWalls(wallCheckDistance, validWalls));
-    }
-
-    public override void EntryAction()
-    {
-    }
-
-    public override void Action()
-    {
-        //playerPM.friction.ReduceFriction(3);
     }
 
     public void InitialWallClimb()

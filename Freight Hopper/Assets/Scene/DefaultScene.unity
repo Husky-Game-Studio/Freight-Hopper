@@ -975,23 +975,15 @@ MonoBehaviour:
   unlocked: 0
   consumed: 0
   preventConsumption: 0
-  wallNormals:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  wallrunCameraTilt: 10
   wallCheckDistance: 1
   validWalls:
     serializedVersion: 2
     m_Bits: 2049
-  upwardsForce: 20
+  wallrunCameraTilt: 4
+  upwardsForce: 22
   rightForce: 4
   initialClimbForce: 5
   climbForce: 50
-  wallFriction:
-    air: {fileID: 0}
-    ground: {fileID: 0}
   jumpIniitalPush: 10
   jumpContinousForce: 15
   jumpContinousPush: 5
@@ -1001,6 +993,11 @@ MonoBehaviour:
   jumpHoldingTimer:
     duration: 0.5
     current: 0
+  wallNormals:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &1798020247
 MonoBehaviour:
   m_ObjectHideFlags: 0
