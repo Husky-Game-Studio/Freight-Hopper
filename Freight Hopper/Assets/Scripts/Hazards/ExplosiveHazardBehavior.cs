@@ -19,7 +19,12 @@ public class ExplosiveHazardBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (detonated)
+        {
+            Debug.Log("collided");
+        }
+
+        //Debug.Log("test");
     }
 
     private void OnCollisionEnter(Collision other)
