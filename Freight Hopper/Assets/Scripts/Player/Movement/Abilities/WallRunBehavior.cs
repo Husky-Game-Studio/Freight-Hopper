@@ -2,27 +2,25 @@ using UnityEngine;
 
 public class WallRunBehavior : AbilityBehavior
 {
-    // Front, Right, Back, Left is what the array represents
-
-    [Space]
+    [Header("Wall detection")]
     [SerializeField] private float wallCheckDistance = 1;
+    [SerializeField] private float wallrunCameraTilt = 5;
     [SerializeField] private LayerMask validWalls;
 
-    [Space]
-    [SerializeField] private float wallrunCameraTilt = 5;
+    [Space, Header("Wall Running")]
     [SerializeField] private float upwardsForce = 10;
     [SerializeField] private float rightForce = 5;
 
-    [Space]
+    [Space, Header("Wall Climbing")]
     [SerializeField] private float initialClimbForce = 5;
     [SerializeField] private float climbForce = 10;
 
-    [Space]
+    [Space, Header("Wall Jump")]
     [SerializeField] private float jumpIniitalPush = 10;
     [SerializeField] private float jumpContinousForce = 10;
     [SerializeField] private float jumpContinousPush = 10;
 
-    [Space]
+    [Space, Header("Timers")]
     public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
 
@@ -30,6 +28,7 @@ public class WallRunBehavior : AbilityBehavior
     private FirstPersonCamera cameraController;
     private JumpBehavior jumpBehavior;
 
+    // Front, Right, Back, Left is what the array represents
     [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[4];
     private bool[] wallStatus;
 
@@ -68,7 +67,7 @@ public class WallRunBehavior : AbilityBehavior
         Vector3[] directions = { Vector3.forward, Vector3.right, -Vector3.forward, -Vector3.right };
         for (int i = 0; i < 4; ++i)
         {
-            if (Physics.Raycast(playerPM.rb.position, playerPM.rb.transform.TransformDirection(directions[i]), out RaycastHit hit, distance, layers))
+            if (Physics.Raycast(physicsManager.rb.position, physicsManager.rb.transform.TransformDirection(directions[i]), out RaycastHit hit, distance, layers))
             {
                 if (!hit.transform.CompareTag("landable"))
                 {
@@ -76,10 +75,10 @@ public class WallRunBehavior : AbilityBehavior
                 }
                 if (hit.rigidbody != null)
                 {
-                    playerPM.rigidbodyLinker.UpdateLink(hit.rigidbody);
+                    physicsManager.rigidbodyLinker.UpdateLink(hit.rigidbody);
                 }
-                float collisionAngle = Vector3.Angle(hit.normal, playerPM.collisionManager.ValidUpAxis);
-                if (collisionAngle > playerPM.collisionManager.MaxSlope)
+                float collisionAngle = Vector3.Angle(hit.normal, physicsManager.collisionManager.ValidUpAxis);
+                if (collisionAngle > physicsManager.collisionManager.MaxSlope)
                 {
                     walls[i] = hit.normal;
                 }
@@ -93,66 +92,67 @@ public class WallRunBehavior : AbilityBehavior
     // Also updates internal wall normal storage
     public bool[] CheckWalls()
     {
-        /*        if (playerPM.rb == null)
-                {
-                    // Null reference errors are occuring, this is a temp fix
-                    bool[] falseArray = { false, false, false, false };
-                    return falseArray;
-                }*/
         return UpdateWallStatus(CheckWalls(wallCheckDistance, validWalls));
     }
 
     public void InitialWallClimb()
     {
         cameraController.ResetUpAxis();
-        if (Vector3.Dot(playerPM.rb.velocity, playerPM.collisionManager.ValidUpAxis) < 0)
+        StopPlayerFalling();
+        Vector3 upAlongWall = Vector3.Cross(physicsManager.rb.transform.right, wallNormals[0]);
+
+        physicsManager.rb.AddForce(rightForce * -wallNormals[0], ForceMode.VelocityChange);
+        physicsManager.rb.AddForce(initialClimbForce * upAlongWall, ForceMode.VelocityChange);
+    }
+
+    private void StopPlayerFalling()
+    {
+        bool playerFalling = Vector3.Dot(physicsManager.rb.velocity, physicsManager.collisionManager.ValidUpAxis) < 0;
+        if (playerFalling)
         {
-            playerPM.rb.velocity = playerPM.rb.velocity.ProjectOnContactPlane(playerPM.collisionManager.ValidUpAxis);
+            physicsManager.rb.velocity = physicsManager.rb.velocity.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
         }
-        Vector3 upAlongWall = Vector3.Cross(playerPM.rb.transform.right, wallNormals[0]);
-        playerPM.rb.AddForce(rightForce * -wallNormals[0], ForceMode.VelocityChange);
-        playerPM.rb.AddForce(initialClimbForce * upAlongWall, ForceMode.VelocityChange);
     }
 
     public void WallClimb()
     {
-        playerSM.Play("WallClimb");
+        soundManager.Play("WallClimb");
         Vector3 upAlongWall = GetUpAlongWall(wallNormals[0]);
         cameraController.TiltUpAxis(Vector3.Cross(-wallNormals[0], upAlongWall) * wallrunCameraTilt);
-        playerPM.rb.AddForce(rightForce * -wallNormals[0], ForceMode.Acceleration);
-        playerPM.rb.AddForce(climbForce * upAlongWall, ForceMode.Acceleration);
+
+        physicsManager.rb.AddForce(rightForce * -wallNormals[0], ForceMode.Acceleration);
+        physicsManager.rb.AddForce(climbForce * upAlongWall, ForceMode.Acceleration);
     }
 
     public void WallJumpInitial()
     {
         cameraController.ResetUpAxis();
-        playerSM.Play("WallJump");
+        soundManager.Play("WallJump");
+
         Vector3 sumNormals = Vector3.zero;
         foreach (Vector3 normal in wallNormals)
         {
             sumNormals += normal;
         }
         sumNormals.Normalize();
-        if (Vector3.Dot(playerPM.rb.velocity, playerPM.collisionManager.ValidUpAxis) < 0)
-        {
-            playerPM.rb.velocity = playerPM.rb.velocity.ProjectOnContactPlane(playerPM.collisionManager.ValidUpAxis);
-        }
+
+        StopPlayerFalling();
 
         jumpNormalCache = sumNormals;
         jumpBehavior.Jump();
-        playerPM.rb.AddForce(jumpIniitalPush * sumNormals, ForceMode.VelocityChange);
+        physicsManager.rb.AddForce(jumpIniitalPush * sumNormals, ForceMode.VelocityChange);
     }
 
     public void WallJumpContinous()
     {
         jumpHoldingTimer.CountDownFixed();
-        playerPM.rb.AddForce(jumpContinousPush * jumpNormalCache, ForceMode.Acceleration);
-        playerPM.rb.AddForce(jumpContinousForce * playerPM.collisionManager.ValidUpAxis, ForceMode.Acceleration);
+        physicsManager.rb.AddForce(jumpContinousPush * jumpNormalCache, ForceMode.Acceleration);
+        physicsManager.rb.AddForce(jumpContinousForce * physicsManager.collisionManager.ValidUpAxis, ForceMode.Acceleration);
     }
 
     private Vector3 GetUpAlongWall(Vector3 normal)
     {
-        return Vector3.Cross(normal, Vector3.Cross(playerPM.collisionManager.ValidUpAxis, normal));
+        return Vector3.Cross(normal, Vector3.Cross(physicsManager.collisionManager.ValidUpAxis, normal));
     }
 
     public void RightWallRun()
@@ -167,10 +167,10 @@ public class WallRunBehavior : AbilityBehavior
 
     private void WallRun(Vector3 right, Vector3 up)
     {
-        playerSM.Play("WallSkid");
+        soundManager.Play("WallSkid");
         cameraController.TiltUpAxis(Vector3.Cross(right, up) * wallrunCameraTilt);
-        playerPM.rb.AddForce(right * rightForce, ForceMode.Acceleration);
-        playerPM.rb.AddForce(up * upwardsForce, ForceMode.Acceleration);
+        physicsManager.rb.AddForce(right * rightForce, ForceMode.Acceleration);
+        physicsManager.rb.AddForce(up * upwardsForce, ForceMode.Acceleration);
     }
 
     public void WallClimbExit()
@@ -181,7 +181,7 @@ public class WallRunBehavior : AbilityBehavior
 
     public override void ExitAction()
     {
-        playerSM.Stop("WallSkid");
+        soundManager.Stop("WallSkid");
         cameraController.ResetUpAxis();
     }
 }

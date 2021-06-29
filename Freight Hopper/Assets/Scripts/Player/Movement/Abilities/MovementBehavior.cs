@@ -20,8 +20,8 @@ public class MovementBehavior : AbilityBehavior
 
     private Vector3 RelativeMove(Vector3 forward, Vector3 right)
     {
-        forward = forward.ProjectOnContactPlane(playerPM.collisionManager.ValidUpAxis);
-        right = right.ProjectOnContactPlane(playerPM.collisionManager.ValidUpAxis);
+        forward = forward.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
+        right = right.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
 
         // Moves relative to the camera
         Vector3 input = UserInput.Instance.Move();
@@ -53,7 +53,7 @@ public class MovementBehavior : AbilityBehavior
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
-        Move(playerPM.rb, playerPM.collisionManager, relativeMove, playerPM.collisionManager.IsGrounded.current ?
+        Move(physicsManager.rb, physicsManager.collisionManager, relativeMove, physicsManager.collisionManager.IsGrounded.current ?
             groundAcceleration * momentumBonus.value : airAcceleration * momentumBonus.value);
     }
 
@@ -64,10 +64,10 @@ public class MovementBehavior : AbilityBehavior
     public override void Action()
     {
         PlayerMove();
-        if (playerPM.collisionManager.IsGrounded.current)
+        if (physicsManager.collisionManager.IsGrounded.current)
         {
-            playerSM.PlayRandom("Move", 7);
-            playerSM.PlayRandom("Stone", 5);
+            soundManager.PlayRandom("Move", 7);
+            soundManager.PlayRandom("Stone", 5);
         }
     }
 

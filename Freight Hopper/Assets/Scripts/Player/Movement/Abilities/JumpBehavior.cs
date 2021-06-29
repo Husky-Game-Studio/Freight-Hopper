@@ -22,11 +22,11 @@ public class JumpBehavior : AbilityBehavior
     /// </summary>
     public void Jump(float height)
     {
-        Vector3 gravity = CustomGravity.GetGravity(playerPM.rb.position, out Vector3 upAxis);
+        Vector3 gravity = CustomGravity.GetGravity(physicsManager.rb.position, out Vector3 upAxis);
 
-        if (Vector3.Dot(playerPM.rb.velocity, upAxis) < 0)
+        if (Vector3.Dot(physicsManager.rb.velocity, upAxis) < 0)
         {
-            playerPM.rb.velocity = playerPM.rb.velocity.ProjectOnContactPlane(upAxis);
+            physicsManager.rb.velocity = physicsManager.rb.velocity.ProjectOnContactPlane(upAxis);
         }
 
         // Basic physics, except the force required to reach this height may not work if we consider holding space
@@ -34,23 +34,23 @@ public class JumpBehavior : AbilityBehavior
         float jumpForce = Mathf.Sqrt(2f * gravity.magnitude * height);
 
         // Upward bias for sloped jumping
-        Vector3 jumpDirection = (playerPM.collisionManager.ContactNormal.old + upAxis).normalized;
+        Vector3 jumpDirection = (physicsManager.collisionManager.ContactNormal.old + upAxis).normalized;
 
         // Considers velocity when jumping on slopes and the slope angle
-        float alignedSpeed = Vector3.Dot(playerPM.rb.velocity, jumpDirection);
+        float alignedSpeed = Vector3.Dot(physicsManager.rb.velocity, jumpDirection);
         if (alignedSpeed > 0)
         {
             jumpForce = Mathf.Max(jumpForce - alignedSpeed, 0);
         }
 
         // Actual jump itself
-        playerPM.rb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
-        if (playerPM.collisionManager.rigidbodyLinker.ConnectedRb.current != null)
+        physicsManager.rb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
+        if (physicsManager.collisionManager.rigidbodyLinker.ConnectedRb.current != null)
         {
-            playerPM.rb.AddForce(Vector3.Project(playerPM.collisionManager.rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
+            physicsManager.rb.AddForce(Vector3.Project(physicsManager.collisionManager.rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
         }
 
-        playerSM.Play("Jump");
+        soundManager.Play("Jump");
     }
 
     public override void EntryAction()
@@ -60,6 +60,6 @@ public class JumpBehavior : AbilityBehavior
 
     public override void Action()
     {
-        playerPM.rb.AddForce(CustomGravity.GetUpAxis(playerPM.rb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
+        physicsManager.rb.AddForce(CustomGravity.GetUpAxis(physicsManager.rb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
     }
 }

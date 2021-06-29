@@ -9,10 +9,10 @@ public class FullStopBehavior : AbilityBehavior
     public override void Action()
     {
         fullstopDuration.CountDownFixed();
-        playerSM.Play("Fullstop");
+        soundManager.Play("Fullstop");
         float ratio = fullstopDuration.current / fullstopDuration.duration;
         fullstopEffect.weight = Mathf.Sin(Mathf.PI * ratio);
-        playerPM.rb.velocity = Vector3.zero;
+        physicsManager.rb.velocity = Vector3.zero;
     }
 
     public bool FullStopFinished()
