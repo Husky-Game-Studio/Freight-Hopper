@@ -35,14 +35,18 @@ public class Wind : MonoBehaviour
         {
             return;
         }
-        for (float x = -size.x / 2; x <= size.x / 2; x += rayWidth)
+        for (float x = -1; x <= 1; x += rayWidth)
         {
-            for (float y = -size.y / 2; y <= size.y / 2; y += rayWidth)
+            for (float y = -1; y <= 1; y += rayWidth)
             {
                 Vector3 position = this.transform.TransformPoint(new Vector3(x, y, 0) + offset);
                 Gizmos.DrawRay(position, this.transform.TransformDirection(Vector3.forward) * size.z);
             }
         }
+
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position + (this.transform.forward * size.z / 2), this.transform.rotation, this.transform.localScale);
+
+        Gizmos.DrawWireCube(offset, size);
     }
 
 #endif
