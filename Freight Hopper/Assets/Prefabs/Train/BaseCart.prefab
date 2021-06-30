@@ -200,8 +200,6 @@ MonoBehaviour:
       connectedRb:
         old: {fileID: 0}
         current: {fileID: 0}
-      connectionWorldPosition: {x: 0, y: 0, z: 0}
-      connectionLocalPosition: {x: 0, y: 0, z: 0}
       connectionVelocity:
         old: {x: 0, y: 0, z: 0}
         current: {x: 0, y: 0, z: 0}
@@ -213,8 +211,6 @@ MonoBehaviour:
     connectedRb:
       old: {fileID: 0}
       current: {fileID: 0}
-    connectionWorldPosition: {x: 0, y: 0, z: 0}
-    connectionLocalPosition: {x: 0, y: 0, z: 0}
     connectionVelocity:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
@@ -304,7 +300,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  targetDistance: 3
+  targetDistance: 5
   automatic: 1
   enginesFiring: 0
 --- !u!1001 &315564748189979772
@@ -328,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.48
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -380,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: targetDistance
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: layerMask.m_Bits
@@ -445,7 +441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -497,7 +493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: targetDistance
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: layerMask.m_Bits
@@ -562,7 +558,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.48
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -614,7 +610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: targetDistance
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: layerMask.m_Bits
@@ -679,7 +675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.5099974
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -731,7 +727,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: targetDistance
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: layerMask.m_Bits
@@ -796,7 +792,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.51
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -848,7 +844,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: targetDistance
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: layerMask.m_Bits
@@ -913,7 +909,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.44999266
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -965,7 +961,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: targetDistance
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: layerMask.m_Bits
