@@ -42,7 +42,7 @@ public class TrainBuilder : MonoBehaviour
         CargoCart12,
         CargoCart21,
         CargoCart22
-    } 
+    }
 
     [System.Serializable]
     private struct Cart
@@ -65,7 +65,7 @@ public class TrainBuilder : MonoBehaviour
         GameObject model = cartModelsToPickFrom[(int)insertCart];
 
         Cart ourCart = new Cart();
-        Vector3 position = this.transform.position + transform.forward * -(((cartsList.Count * cartLength / 2) + locomotiveLength / 2) + (cartsList.Count + 1) * (gapLength + jointSnappingLength));
+        Vector3 position = this.transform.position + (this.transform.forward * -((cartsList.Count * cartLength / 2) + (locomotiveLength / 2) + ((cartsList.Count + 1) * (gapLength + jointSnappingLength))));
         ourCart.cart = Instantiate(baseCart, position, this.transform.rotation, this.transform);
         ourCart.cartProperties = ourCart.cart.GetComponent<CartProperties>();
         ourCart.cartProperties.setCartIndex(cartsList.Count + 1);
@@ -79,8 +79,10 @@ public class TrainBuilder : MonoBehaviour
             ourCart.joint.connectedBody = cartsList[cartsList.Count - 1].cart.GetComponent<Rigidbody>();
         }
 
-        SoftJointLimit temp = new SoftJointLimit();
-        temp.limit = gapLength;
+        SoftJointLimit temp = new SoftJointLimit
+        {
+            limit = gapLength
+        };
         ourCart.joint.linearLimit = temp;
         ourCart.joint.breakTorque = breakTorque;
         ourCart.model = Instantiate(model, position, this.transform.rotation, ourCart.cart.transform);

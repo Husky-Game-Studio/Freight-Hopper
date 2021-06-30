@@ -39,29 +39,29 @@ public class BurstBehavior : AbilityBehavior
 
         if (distanceFromExplosion < .6f)
         {
-            playerSM.Play("FastBurst");
+            soundManager.Play("FastBurst");
         }
 
         // Only velocity that is causing the player to go slower will be added to the burst force speed
-        Vector3 velocityFromDirection = Vector3.Project(playerPM.rb.velocity, cameraTransform.forward);
+        Vector3 velocityFromDirection = Vector3.Project(physicsManager.rb.velocity, cameraTransform.forward);
         if (Mathf.Sign(Vector3.Dot(velocityFromDirection, cameraTransform.forward)) == 1)
         {
             Vector3 forceV = -cameraTransform.forward * velocityFromDirection.magnitude * velocityGainMultiplier;
-            playerPM.rb.AddForce(forceV, ForceMode.VelocityChange);
+            physicsManager.rb.AddForce(forceV, ForceMode.VelocityChange);
             if (hitRigidbody != null)
             {
-                hitRigidbody.AddForce(-forceV * playerPM.rb.mass, ForceMode.Impulse);
+                hitRigidbody.AddForce(-forceV * physicsManager.rb.mass, ForceMode.Impulse);
             }
         }
         Vector3 force = -cameraTransform.forward * forceMultiplier / distanceFromExplosion;
-        playerPM.rb.AddForce(force, ForceMode.VelocityChange);
+        physicsManager.rb.AddForce(force, ForceMode.VelocityChange);
         if (hitRigidbody != null)
         {
-            hitRigidbody.AddForce(-force * playerPM.rb.mass, ForceMode.Impulse);
+            hitRigidbody.AddForce(-force * physicsManager.rb.mass, ForceMode.Impulse);
         }
 
         Vector3 burstPosition = cameraTransform.position + cameraTransform.forward * distanceFromExplosion;
-        playerSM.Play("BurstExplosion", burstPosition);
+        soundManager.Play("BurstExplosion", burstPosition);
         burstExplosionEffectTransform.position = burstPosition;
         //Debug.DrawLine(playerRb.position, playerRb.position + direction, Color.red, 5);
     }

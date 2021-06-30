@@ -14,7 +14,7 @@ public class DoubleJumpBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
-        playerSM.Play("DoubleJump");
+        soundManager.Play("DoubleJump");
         jumpBehavior.Jump(jumpBehavior.JumpHeight * (percentStrengthComparedToNormalJump / 100));
     }
 

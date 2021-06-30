@@ -17,27 +17,9 @@ public class RoadSlice : ScriptableObject
     public Optional<float> RailSize => railSize;
     public Optional<float> RailSeperationDistance => railSeperationDistance;
 
-    public Vector3[] Points
-    {
-        get
-        {
-            return points;
-        }
-    }
+    public Vector3[] Points() => points.Clone() as Vector3[];
 
-    public Vector2Int[] Connections
-    {
-        get
-        {
-            return connections;
-        }
-    }
+    public Vector2Int[] Connections() => connections.Clone() as Vector2Int[];
 
-    public Vector2[] Uvs
-    {
-        get
-        {
-            return uvs;
-        }
-    }
+    public Vector2[] Uvs() => uvs.Clone() as Vector2[];
 }

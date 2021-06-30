@@ -87,7 +87,7 @@ public class LevelController : MonoBehaviour
         }
         if (spawnPlayerHigh)
         {
-            player.transform.position = levelData.spawnPosition + transform.up * highHeight;
+            player.transform.position = levelData.spawnPosition + (this.transform.up * highHeight);
         }
         else
         {

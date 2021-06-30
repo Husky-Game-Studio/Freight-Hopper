@@ -41,8 +41,8 @@ public class GrapplePoleBehavior : AbilityBehavior
         {
             anchor = new Ray(anchoredRb.transform.TransformPoint(anchoredRbLocalPosition), -playerAnchor.direction);
         }
-        playerAnchor = new Ray(playerPM.rb.position + pole.GetPosition(0), playerAnchor.direction);
-        pole.SetPosition(1, playerPM.rb.transform.InverseTransformPoint(anchor.origin));
+        playerAnchor = new Ray(physicsManager.rb.position + pole.GetPosition(0), playerAnchor.direction);
+        pole.SetPosition(1, physicsManager.rb.transform.InverseTransformPoint(anchor.origin));
 
         //Transform playerTransform = rb.transform;
         Vector3 up = (playerAnchor.origin - anchor.origin).normalized;
@@ -58,17 +58,17 @@ public class GrapplePoleBehavior : AbilityBehavior
         Vector3 move = right + forward;
         //move.Normalize();
 
-        playerPM.rb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);
-        if (playerPM.rb.velocity.magnitude > 5)
+        physicsManager.rb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);
+        if (physicsManager.rb.velocity.magnitude > 5)
         {
-            playerSM.Play("GrappleMove");
+            soundManager.Play("GrappleMove");
         }
 
         float expectedLength = length;
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
-        float error = (expectedLength - actualLength);
+        float error = expectedLength - actualLength;
         Vector3 tensionVelocity = up * distanceController.GetOutput(error, Time.fixedDeltaTime);
-        playerPM.rb.AddForce(tensionVelocity, ForceMode.VelocityChange);
+        physicsManager.rb.AddForce(tensionVelocity, ForceMode.VelocityChange);
     }
 
     private bool reachedMaxLength = false;
@@ -78,20 +78,20 @@ public class GrapplePoleBehavior : AbilityBehavior
     /// </summary>
     public void GrappleTransition()
     {
-        playerAnchor = new Ray(playerPM.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
+        playerAnchor = new Ray(physicsManager.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
 
         length += Time.fixedDeltaTime * grappleExtensionSpeed;
         length = Mathf.Min(length, maxLength);
         if (length == maxLength && !reachedMaxLength)
         {
             reachedMaxLength = true;
-            playerSM.Play("GrappleMaxLength");
+            soundManager.Play("GrappleMaxLength");
         }
         else
         {
-            playerSM.Play("GrappleFiring");
+            soundManager.Play("GrappleFiring");
         }
-        pole.SetPosition(1, playerPM.rb.transform.InverseTransformPoint(playerAnchor.GetPoint(length)));
+        pole.SetPosition(1, physicsManager.rb.transform.InverseTransformPoint(playerAnchor.GetPoint(length)));
 
         Debug.DrawLine(playerAnchor.origin, playerAnchor.GetPoint(length), Color.yellow, Time.fixedDeltaTime);
         if (Physics.Raycast(playerAnchor, out RaycastHit hit, length, affectedLayers))
@@ -105,7 +105,7 @@ public class GrapplePoleBehavior : AbilityBehavior
                 anchoredRbLocalPosition = anchoredRb.transform.InverseTransformPoint(hit.point);
             }
             distanceController.Reset();
-            playerSM.Play("GrappleAnchor", hit.point);
+            soundManager.Play("GrappleAnchor", hit.point);
         }
     }
 
@@ -135,9 +135,9 @@ public class GrapplePoleBehavior : AbilityBehavior
 
     public override void EntryAction()
     {
-        playerSM.Play("GrappleFire");
+        soundManager.Play("GrappleFire");
         reachedMaxLength = false;
-        playerAnchor = new Ray(playerPM.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
+        playerAnchor = new Ray(physicsManager.rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
         pole.enabled = true;
         pole.SetPosition(1, pole.GetPosition(0));
     }
@@ -150,7 +150,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     public override void ExitAction()
     {
         base.ExitAction();
-        playerSM.Play("GrappleDetach");
+        soundManager.Play("GrappleDetach");
         ResetPole();
     }
 

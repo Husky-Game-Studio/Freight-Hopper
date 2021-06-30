@@ -33,9 +33,11 @@ public class TrainRailLinker : MonoBehaviour
     // Links rigidbody to the rail, assuming its a cart
     public void Link(Rigidbody rb)
     {
-        TrainData trainObject = new TrainData();
-        trainObject.rb = rb;
-        trainObject.t = 0;
+        TrainData trainObject = new TrainData
+        {
+            rb = rb,
+            t = 0
+        };
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
         trainObject.controller = new PID();
         trainObject.controller.Initialize(controllerData * rb.mass);

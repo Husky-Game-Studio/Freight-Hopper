@@ -13,33 +13,33 @@ public class GroundPoundBehavior : AbilityBehavior
     public float FrictionReduction => groundFrictionReductionPercent;
 
     public bool FlatSurface =>
-         playerPM.collisionManager.IsGrounded.current
-            && Vector3.Angle(playerPM.collisionManager.ValidUpAxis, playerPM.collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
+         physicsManager.collisionManager.IsGrounded.current
+            && Vector3.Angle(physicsManager.collisionManager.ValidUpAxis, physicsManager.collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
 
     public override void EntryAction()
     {
-        playerSM.Play("GroundPoundBurst");
-        Vector3 upAxis = playerPM.collisionManager.ValidUpAxis;
-        if (Vector3.Dot(Vector3.Project(playerPM.rb.velocity, upAxis), playerPM.rb.transform.up) > 0)
+        soundManager.Play("GroundPoundBurst");
+        Vector3 upAxis = physicsManager.collisionManager.ValidUpAxis;
+        if (Vector3.Dot(Vector3.Project(physicsManager.rb.velocity, upAxis), physicsManager.rb.transform.up) > 0)
         {
-            playerPM.rb.velocity = Vector3.ProjectOnPlane(playerPM.rb.velocity, upAxis);
+            physicsManager.rb.velocity = Vector3.ProjectOnPlane(physicsManager.rb.velocity, upAxis);
         }
-        playerPM.rb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
+        physicsManager.rb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
     }
 
     public override void Action()
     {
-        playerSM.Play("GroundPoundTick");
-        Vector3 upAxis = playerPM.collisionManager.ValidUpAxis;
+        soundManager.Play("GroundPoundTick");
+        Vector3 upAxis = physicsManager.collisionManager.ValidUpAxis;
         Vector3 direction = -upAxis;
-        if (playerPM.collisionManager.IsGrounded.current)
+        if (physicsManager.collisionManager.IsGrounded.current)
         {
-            Vector3 acrossSlope = Vector3.Cross(upAxis, playerPM.collisionManager.ContactNormal.current);
-            Vector3 downSlope = Vector3.Cross(acrossSlope, playerPM.collisionManager.ContactNormal.current);
+            Vector3 acrossSlope = Vector3.Cross(upAxis, physicsManager.collisionManager.ContactNormal.current);
+            Vector3 downSlope = Vector3.Cross(acrossSlope, physicsManager.collisionManager.ContactNormal.current);
             direction = downSlope;
-            if (!playerPM.collisionManager.IsGrounded.old)
+            if (!physicsManager.collisionManager.IsGrounded.old)
             {
-                playerPM.rb.AddForce(direction * playerPM.collisionManager.Velocity.old.magnitude, ForceMode.VelocityChange);
+                physicsManager.rb.AddForce(direction * physicsManager.collisionManager.Velocity.old.magnitude, ForceMode.VelocityChange);
             }
             direction *= slopeDownForce;
         }
@@ -48,14 +48,14 @@ public class GroundPoundBehavior : AbilityBehavior
             direction *= downwardsForce;
         }
 
-        playerPM.rb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
+        physicsManager.rb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
         increasingForce.value += deltaIncreaseForce * Time.fixedDeltaTime;
     }
 
     public override void ExitAction()
     {
         base.ExitAction();
-        playerSM.Play("GroundPoundExit");
+        soundManager.Play("GroundPoundExit");
         increasingForce.Reset();
     }
 }

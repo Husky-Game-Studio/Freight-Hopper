@@ -23,7 +23,7 @@ public class FollowPathState : BasicState
         pathCreator = trainFSM.GetCurrentPathObject().pathCreator;
         railLinker = pathCreator.GetComponent<TrainRailLinker>();
 
-        foreach (TrainMachineCenter.Cart cart in trainFSM.carts)
+        foreach (Cart cart in trainFSM.carts)
         {
             railLinker.Link(cart.rb);
         }

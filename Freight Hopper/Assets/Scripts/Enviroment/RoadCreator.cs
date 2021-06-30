@@ -48,14 +48,9 @@ public class RoadCreator : MonoBehaviour
 
     private void RoadShape(RoadSlice slice)
     {
-        Vector3[] points = new Vector3[slice.Points.Length];
+        Vector3[] points = slice.Points();
 
-        for (int i = 0; i < slice.Points.Length; i++)
-        {
-            points[i] = slice.Points[i];
-        }
-
-        for (int i = 0; i < slice.Points.Length; i++)
+        for (int i = 0; i < points.Length; i++)
         {
             if (slice.RailSize.Enabled)
             {
@@ -64,7 +59,7 @@ public class RoadCreator : MonoBehaviour
             if (slice.RailSeperationDistance.Enabled)
             {
                 float seperationValue = slice.RailSeperationDistance.value / 2;
-                if (i < slice.Points.Length / 2)
+                if (i < points.Length / 2)
                 {
                     points[i] += Vector3.right * seperationValue;
                 }
@@ -80,6 +75,6 @@ public class RoadCreator : MonoBehaviour
             }
         }
 
-        road.ChangeSegmentShape(points, slice.Connections, slice.Uvs);
+        road.ChangeSegmentShape(points, slice.Connections(), slice.Uvs());
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class TrainMachineCenter : FiniteStateMachineCenter
+public partial class TrainMachineCenter : FiniteStateMachineCenter
 {
     // States
     public FindNextPathState findNextPath;
@@ -32,22 +32,6 @@ public class TrainMachineCenter : FiniteStateMachineCenter
     public Vector3 TorqueBounds => torqueBounds;
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
-
-    public class Cart
-    {
-        public PhysicsManager physicsManager;
-        public Rigidbody rb;
-        public CartProperties cartProperties;
-        public Destructable destructable;
-
-        public event Action<int> DestoryCart;
-
-        public void DestroyCartFunc()
-        {
-            int cartIndex = cartProperties.IndexOfCart;
-            DestoryCart?.Invoke(cartIndex);
-        }
-    }
 
     // Dependecies
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
@@ -119,11 +103,7 @@ public class TrainMachineCenter : FiniteStateMachineCenter
 
         for (int i = 0; i < physics.Length; i++)
         {
-            Cart cart = new Cart();
-            cart.physicsManager = physics[i];
-            cart.rb = cart.physicsManager.rb;
-            cart.cartProperties = cart.rb.GetComponent<CartProperties>();
-            cart.destructable = cart.rb.GetComponent<Destructable>();
+            Cart cart = new Cart(physics[i]);
             cart.destructable.RigidbodyDestroyed += cart.DestroyCartFunc;
             cart.DestoryCart += RemoveCartsUntilIndex;
             carts.AddLast(cart);
@@ -134,24 +114,32 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         transitionHandler = new TrainStateTransitions(this);
 
         // Default
-        List<Func<BasicState>> defaultTransitionsList = new List<Func<BasicState>>();
-        defaultTransitionsList.Add(transitionHandler.CheckStartState);
+        List<Func<BasicState>> defaultTransitionsList = new List<Func<BasicState>>
+        {
+            transitionHandler.CheckStartState
+        };
         defaultState = new DefaultState(this, defaultTransitionsList);
 
         // Find Next Path
-        List<Func<BasicState>> findNextPathTransitionsList = new List<Func<BasicState>>();
-        findNextPathTransitionsList.Add(transitionHandler.CheckFollowPath);
+        List<Func<BasicState>> findNextPathTransitionsList = new List<Func<BasicState>>
+        {
+            transitionHandler.CheckFollowPath
+        };
         findNextPath = new FindNextPathState(this, findNextPathTransitionsList);
 
         // Follow Path
-        List<Func<BasicState>> followPathTransitionsList = new List<Func<BasicState>>();
-        followPathTransitionsList.Add(transitionHandler.CheckFindNextPath);
-        followPathTransitionsList.Add(transitionHandler.CheckWander);
+        List<Func<BasicState>> followPathTransitionsList = new List<Func<BasicState>>
+        {
+            transitionHandler.CheckFindNextPath,
+            transitionHandler.CheckWander
+        };
         followPath = new FollowPathState(this, followPathTransitionsList);
 
         // Waiting
-        List<Func<BasicState>> waitingTransitionsList = new List<Func<BasicState>>();
-        waitingTransitionsList.Add(transitionHandler.CheckFindNextPath);
+        List<Func<BasicState>> waitingTransitionsList = new List<Func<BasicState>>
+        {
+            transitionHandler.CheckFindNextPath
+        };
         waiting = new WaitingState(this, waitingTransitionsList);
 
         // Wander
@@ -171,16 +159,14 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         Quaternion rot = carts.First.Value.rb.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
         Vector3 currentVelDir = (carts.First.Value.rb.velocity.magnitude != 0) ? carts.First.Value.rb.velocity.normalized : Vector3.forward;
-        Quaternion rotVel = Quaternion.LookRotation(currentVelDir);
-        Quaternion rotVelInv = Quaternion.Inverse(rotVel);
-        Debug.DrawLine(carts.First.Value.rb.position, carts.First.Value.rb.position + currentVelDir * 20.0f, Color.magenta);
+        Debug.DrawLine(carts.First.Value.rb.position, carts.First.Value.rb.position + (currentVelDir * 20.0f), Color.magenta);
 
         //Current
         Vector3 currentVel = carts.First.Value.rb.velocity;
         Vector3 currentAngVel = carts.First.Value.rb.angularVelocity;
 
         //Target (Rotate, Move Forward)
-        Vector3 targetVel = rot * Vector3.forward * TargetVelocity;
+        Vector3 targetVel = rot * Vector3.forward * this.TargetVelocity;
         Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
 
         //Target Change
@@ -192,8 +178,8 @@ public class TrainMachineCenter : FiniteStateMachineCenter
         Vector3 angAcc = deltaAngVel / Time.fixedDeltaTime;
 
         //Limit Change
-        acc = rot * (rotInv * acc).ClampComponents(-ForceBounds, ForceBounds);
-        angAcc = rot * (rotInv * angAcc).ClampComponents(-TorqueBounds, TorqueBounds);
+        acc = rot * (rotInv * acc).ClampComponents(-this.ForceBounds, this.ForceBounds);
+        angAcc = rot * (rotInv * angAcc).ClampComponents(-this.TorqueBounds, this.TorqueBounds);
 
         //Forces
         carts.First.Value.rb.AddForce(acc, ForceMode.Acceleration);

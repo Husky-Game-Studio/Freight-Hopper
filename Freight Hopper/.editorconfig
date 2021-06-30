@@ -1,0 +1,49 @@
+﻿[*.cs]
+
+# IDE0090: Use 'new(...)'
+dotnet_diagnostic.IDE0090.severity = none
+
+# CA1819: Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = warning
+
+# IDE0032: Use auto property
+dotnet_diagnostic.IDE0032.severity = none
+
+# IDE0048: Add parentheses for clarity
+dotnet_diagnostic.IDE0048.severity = warning
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_diagnostic.IDE0047.severity = warning
+
+# IDE0017: Simplify object initialization
+dotnet_diagnostic.IDE0017.severity = warning
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
+
+# IDE0028: Simplify collection initialization
+dotnet_diagnostic.IDE0028.severity = warning
+
+# IDE0009: Member access should be qualified.
+dotnet_diagnostic.IDE0009.severity = warning
+
+# UNT0002: Inefficient tag comparison
+dotnet_diagnostic.UNT0002.severity = warning
+
+# UNT0013: Remove invalid SerializeField attribute
+dotnet_diagnostic.UNT0013.severity = warning
+
+# IDE0052: Remove unread private members
+dotnet_diagnostic.IDE0052.severity = silent
+
+# IDE0051: Remove unused private members
+dotnet_diagnostic.IDE0051.severity = silent
+
+# IDE0060: Remove unused parameter
+dotnet_diagnostic.IDE0060.severity = silent
+
+# IDE0059: Unnecessary assignment of a value
+dotnet_diagnostic.IDE0059.severity = warning
+
+# CA1034: Nested types should not be visible
+dotnet_diagnostic.CA1034.severity = warning

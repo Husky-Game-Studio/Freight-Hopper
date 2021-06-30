@@ -128,7 +128,7 @@ public class BezierPath
     /// <param name="p3"> The point that will have the highest index.</param>
     public void AddSegment(int seg, Vector3 p1, Vector3 p2, Vector3 p3)
     {
-        int index = 0;
+        int index;
         if (seg == 0)
         {
             index = 0;
@@ -177,7 +177,7 @@ public class BezierPath
         {
             throw new System.Exception("BezierPath must have at least 1 segment");
         }
-        int index = 0;
+        int index;
         if (anc == 0)
         {
             index = 0;

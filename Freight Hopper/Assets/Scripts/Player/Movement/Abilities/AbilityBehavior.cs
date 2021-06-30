@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public abstract class AbilityBehavior : MonoBehaviour
+public class AbilityBehavior : MonoBehaviour
 {
     [SerializeField, ReadOnly] protected bool unlocked = false;
     [SerializeField, ReadOnly] protected bool consumed = false;
@@ -10,30 +10,23 @@ public abstract class AbilityBehavior : MonoBehaviour
     public bool Consumed => consumed;
 
     // Ready meaning not consumed
-    public bool UnlockedAndReady => Unlocked && !Consumed;
+    public bool UnlockedAndReady => this.Unlocked && !this.Consumed;
 
-    protected PhysicsManager playerPM;
-    protected SoundManager playerSM;
+    protected PhysicsManager physicsManager;
+    protected SoundManager soundManager;
 
-    /// <summary>
-    /// Links abilities to components they will need to function
-    /// </summary>
     public virtual void Initialize(PhysicsManager pm, SoundManager sm)
     {
-        this.playerPM = pm;
-        this.playerSM = sm;
+        this.physicsManager = pm;
+        this.soundManager = sm;
     }
 
-    public SoundManager PlayerSoundManager() => playerSM;
+    public SoundManager PlayerSoundManager() => soundManager;
 
-    /// <summary>
-    /// Action played when entering state for ability
-    /// </summary>
-    public abstract void EntryAction();
+    public virtual void EntryAction()
+    {
+    }
 
-    /// <summary>
-    /// Action player when leaving state for ability
-    /// </summary>
     public virtual void ExitAction()
     {
         if (preventConsumption)
@@ -46,14 +39,9 @@ public abstract class AbilityBehavior : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Action played while in Ability state
-    /// </summary>
-    public abstract void Action();
+    // Action played while in Ability state
+    public virtual void Action() { }
 
-    /// <summary>
-    /// Sets consumed to false to allow ability to be used again
-    /// </summary>
     public virtual void Recharge()
     {
         consumed = false;
@@ -64,17 +52,11 @@ public abstract class AbilityBehavior : MonoBehaviour
         preventConsumption = true;
     }
 
-    /// <summary>
-    /// Sets unlocked to false
-    /// </summary>
     public void Lock()
     {
         unlocked = false;
     }
 
-    /// <summary>
-    /// Sets unlocked to true
-    /// </summary>
     public void Unlock()
     {
         unlocked = true;
