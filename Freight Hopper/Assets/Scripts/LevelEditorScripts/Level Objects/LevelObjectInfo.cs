@@ -34,5 +34,10 @@ namespace HGSLevelEditor
             return savedObj;
 
         }
+        public string GetID() {
+
+            LevelObjectData savedObj = data;
+            return savedObj.objectID;
+        }
     }
 }

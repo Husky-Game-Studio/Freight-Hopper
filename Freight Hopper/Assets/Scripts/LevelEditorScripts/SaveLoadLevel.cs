@@ -50,6 +50,9 @@ public class SaveLoadLevel : MonoBehaviour
 
     public static string saveFolderName = "Level";
 
+    //Need something like this for loading objects between editor and play button 
+    public static bool editorOn = true; 
+
 
     //Will save level + update Load Button UI 
     public void SaveLevelButton(string levelName) {
