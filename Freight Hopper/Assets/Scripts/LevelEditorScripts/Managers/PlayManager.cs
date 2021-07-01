@@ -10,7 +10,7 @@ namespace HGSLevelEditor
     {
         void Start()
         {
-            SaveLoadLevel.GetInstance().LoadButton(LevelManager.levelNameLoad);
+            SaveLoadLevel.GetInstance().LoadButton(LevelManager.levelNameLoad, false);
         }
 
     }

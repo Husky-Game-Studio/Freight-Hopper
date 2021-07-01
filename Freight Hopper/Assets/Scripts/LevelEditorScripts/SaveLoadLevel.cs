@@ -51,10 +51,16 @@ public class SaveLoadLevel : MonoBehaviour
     public static string saveFolderName = "Level";
 
     //Need something like this for loading objects between editor and play button 
-    public static bool editorOn = true; 
+    public static bool editorOn = true;
 
+    GhostObjectMaker ghost;
 
     //Will save level + update Load Button UI 
+
+    private void Start()
+    {
+        //ghost = GhostObjectMaker.GetInstance();
+    }
     public void SaveLevelButton(string levelName) {
 
         SavingLevel(levelName);
@@ -63,9 +69,9 @@ public class SaveLoadLevel : MonoBehaviour
     }
 
     //Loads the level 
-    public void LoadButton(string levelName) {
+    public void LoadButton(string levelName, bool editorOn) {
 
-        LoadingLevel(levelName);
+        LoadingLevel(levelName, editorOn);
     }
 
     //Save level -- Saves all objects + their info/data into a file 
@@ -99,7 +105,7 @@ public class SaveLoadLevel : MonoBehaviour
     }
 
     //Loads file + saves files info within 'SaveLevel save'
-    bool LoadingLevel(string levelName) {
+    bool LoadingLevel(string levelName, bool editorOn) {
 
         bool retrieve = true;
 
@@ -121,7 +127,7 @@ public class SaveLoadLevel : MonoBehaviour
             //Notes for Nina: Need to change this to work with Level class 
             SaveLevel save = (SaveLevel)formatter.Deserialize(stream);
             stream.Close();
-            LoadActualLevel(save);
+            LoadActualLevel(save, editorOn);
         
         }
 
@@ -143,7 +149,7 @@ public class SaveLoadLevel : MonoBehaviour
     }
 
     //Instantiates game objects + data saved in file 
-    void LoadActualLevel(SaveLevel savedLevel) {
+    void LoadActualLevel(SaveLevel savedLevel, bool editorOn) {
 
         LevelManager.GetInstance().ClearLevel();
     
@@ -163,10 +169,35 @@ public class SaveLoadLevel : MonoBehaviour
             Debug.Log("POS: " + pos.x + pos.y + pos.z);
             Debug.Log("Rotation: " + s_obj_data.rotX + s_obj_data.rotY + s_obj_data.rotZ);
 
-            //GameObject newy = HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab;
+            GameObject loadingObject = HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab;
 
-            GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab, pos, 
+            Debug.Log("EditorOn: " + editorOn);
+      
+            if (editorOn == true)
+            {
+                
+                ghost = GhostObjectMaker.GetInstance();
+
+                Debug.Log("Object: " + loadingObject.name + " Children: " + loadingObject.transform.childCount);
+
+                GameObject spooky = ghost.ReturnGhost(loadingObject);
+
+                Instantiate(spooky, pos,
                 Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
+
+                Destroy(spooky);
+
+
+            }
+            else if (editorOn == false){
+
+                Instantiate(loadingObject, pos,
+                Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
+
+
+            }
+            //GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab, pos, 
+            //Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
         }
     }
 
