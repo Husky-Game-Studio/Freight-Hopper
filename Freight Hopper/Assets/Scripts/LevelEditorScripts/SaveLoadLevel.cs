@@ -162,7 +162,8 @@ public class SaveLoadLevel : MonoBehaviour
 
             Debug.Log("POS: " + pos.x + pos.y + pos.z);
             Debug.Log("Rotation: " + s_obj_data.rotX + s_obj_data.rotY + s_obj_data.rotZ);
-            
+
+            //GameObject newy = HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab;
 
             GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab, pos, 
                 Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
