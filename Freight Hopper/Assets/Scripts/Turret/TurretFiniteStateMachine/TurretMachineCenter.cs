@@ -10,21 +10,24 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     // The Player Character and Information
     public GameObject thePlayer;
-
+    private Ray ray;
     public RaycastHit toPlayerRaycast;
     public LayerMask targetedLayers;
     public GameObject bullet;
+    public GameObject bulletSpawner;
 
     // TFSM States
     public BasicState searchState;
     public BasicState targetState;
     public BasicState fireState;
 
-    // It is best to construct your states in Awake()
-    // and subcribe to any event listeners
     private void Awake()
     {
-        //testState = new TestState(this);
+        CreateStatesAndFindPlayer();
+    }
+
+    private void CreateStatesAndFindPlayer()
+    {
         searchState = new SearchState(this);
         targetState = new TargetState(this);
         fireState = new FireState(this);
@@ -54,31 +57,53 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         LevelController.PlayerRespawned -= SetPlayerReference;
     }
 
-    // Calls the loop tick
     public void FixedUpdate()
     {
         this.UpdateLoop();
     }
 
-    // Perform any behavior that is not exclusive to any one single state
     public override void PerformStateIndependentBehaviors()
     {
         if (thePlayer == null)
         {
             SetPlayerReference();
         }
+        SetRayToPlayer();
     }
 
-    // Sets the player reference
+    private void SetRayToPlayer()
+    {
+        Vector3 transformOrigin = this.gameObject.transform.position;
+        Vector3 transformPlayerOrigin = this.thePlayer.transform.position - transformOrigin;
+        ray = new Ray(transformOrigin, transformPlayerOrigin);
+        
+        //Debugging
+        if (currentState == searchState)
+        {
+            Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.blue);
+        } else if (currentState == targetState)
+        {
+            Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.yellow);
+        }
+        else // if (currentState == fireState)
+        {
+            Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.red);
+        }
+    }
+
     private void SetPlayerReference()
     {
         thePlayer = Player.Instance.transform.gameObject;
     }
 
-    // Fire Projectile
     public void ShootBullet(GameObject spawner)
     {
         GameObject spawnedBullet = Instantiate(bullet, spawner.transform.position, Quaternion.identity);
         spawnedBullet.transform.LookAt(thePlayer.transform);
+    }
+
+    public Ray getRay()
+    {
+        return this.ray;
     }
 }
