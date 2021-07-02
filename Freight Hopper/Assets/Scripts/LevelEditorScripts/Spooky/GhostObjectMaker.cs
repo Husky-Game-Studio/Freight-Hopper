@@ -18,36 +18,60 @@ namespace HGSLevelEditor
             instance = this;
             
         }
+
+
+ 
         public GameObject MakeGhost(GameObject objectSpawn)
         {
 
-            GameObject spook = new GameObject("spook");
-            Debug.Log("spook made!");
+            GameObject ghost = new GameObject("Ghost " + objectSpawn.name);
+            string id = objectSpawn.GetComponent<LevelObjectInfo>().data.objectID;
 
-            if (objectSpawn.transform.childCount > 0)
-            {
+            ghost.transform.position = objectSpawn.transform.position;
+            // Check parent for mesh filter, copy it, save its location and move the new parent to location
+            if (objectSpawn.GetComponent<MeshFilter>() != null)
+                {
+                    GameObject child = new GameObject(objectSpawn.name);
 
-                spook.AddComponent<MeshFilter>().mesh = objectSpawn.transform.GetChild(0).gameObject.GetComponent<MeshFilter>().sharedMesh;
-                spook.AddComponent<MeshRenderer>().material = objectSpawn.transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial;
+                    child.transform.localPosition = Vector3.zero;
+                    child.AddComponent<MeshFilter>().mesh = objectSpawn.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
+                    child.AddComponent<MeshRenderer>().material = objectSpawn.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
+                }
 
-            }
-            else {
+                // Check children of parent for mesh filters, copy them if applicable, save locations, and move to new locations while keeping it as parent
+                CopyMeshes(objectSpawn, ghost);
 
-                spook.AddComponent<MeshFilter>().mesh = objectSpawn.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
-                spook.AddComponent<MeshRenderer>().material = objectSpawn.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
 
-            }
+                ghost.AddComponent<LevelObjectInfo>();
+
+                Debug.Log("Object ID for debug: " + objectSpawn.GetComponent<LevelObjectInfo>().data.objectID);
+
+                ghost.GetComponent<LevelObjectInfo>().data = objectSpawn.GetComponent<LevelObjectInfo>().GetObject();
             
-            spook.AddComponent<LevelObjectInfo>();
-
-            Debug.Log("Object ID for debug: " + objectSpawn.GetComponent<LevelObjectInfo>().data.objectID);
-
-            spook.GetComponent<LevelObjectInfo>().data = objectSpawn.GetComponent<LevelObjectInfo>().GetObject();
-            //spook.GetComponent<LevelObjectInfo>().data.objectID = objectSpawn.GetComponent<LevelObjectInfo>().GetID();
-           
-            return spook;
+                return ghost;
             
         }
+
+        private void CopyMeshes(GameObject oldParent, GameObject ghost)
+        {
+            for (int i = 0; i < oldParent.transform.childCount; i++)
+            {
+                GameObject oldChild = oldParent.transform.GetChild(i).gameObject;
+
+                if (oldChild.GetComponent<MeshFilter>() != null)
+                {
+                    Vector3 globalLocation = oldChild.transform.position;
+                    GameObject child = new GameObject(oldChild.name);
+
+                    child.transform.position = globalLocation;
+                    child.transform.parent = ghost.transform;
+                    child.AddComponent<MeshFilter>().mesh = oldChild.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
+                    child.AddComponent<MeshRenderer>().material = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
+                }
+                CopyMeshes(oldChild, ghost);
+            }
+        }
+
 
         public GameObject ReturnGhost(GameObject spooky) {
             
@@ -57,16 +81,18 @@ namespace HGSLevelEditor
 
         public void SpawnGhost(GameObject spooky) {
 
-            GameObject spook = MakeGhost(spooky);
+            GameObject ghost = MakeGhost(spooky);
 
-            spook.transform.position = new Vector3(targetObject.transform.position.x, targetObject.transform.position.y, targetObject.transform.position.z);
+            ghost.transform.position = new Vector3(targetObject.transform.position.x, targetObject.transform.position.y, targetObject.transform.position.z);
 
-            Instantiate(spook,
+            Instantiate(ghost,
                new Vector3(targetObject.transform.position.x, targetObject.transform.position.y, targetObject.transform.position.z),
-               spook.transform.rotation);
+               ghost.transform.rotation);
 
-            Destroy(spook);
+            Destroy(ghost);
         }
+
+        
     }
 }
 
