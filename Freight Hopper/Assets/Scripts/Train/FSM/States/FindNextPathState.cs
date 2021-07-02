@@ -15,7 +15,7 @@ public class FindNextPathState : BasicState
     public override void EntryState()
     {
         trainFSM.ChangePath();
-        targetPosition = trainFSM.GetStartOfCurrentPath();
+        targetPosition = trainFSM.GetClosestPointOnCurrentPath();
     }
 
     public override void ExitState()

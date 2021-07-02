@@ -14,6 +14,11 @@ public class PathCreator : MonoBehaviour
         return transform.TransformPoint(path.GetPathPoint(t));
     }
 
+    public float GetPathSegmentCount()
+    {
+        return path.NumSegments;
+    }
+
     [ContextMenu("Reverse Path")]
     public void ReversePathOrder()
     {

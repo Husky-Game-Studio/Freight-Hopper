@@ -27,7 +27,7 @@ public class FollowPathState : BasicState
         {
             railLinker.Link(cart.rb);
         }
-        t = 0.0f;
+        t = trainFSM.GetClosestTValueOnCurrentPath();
         endOfPath = false;
         // Sparks fly
     }
