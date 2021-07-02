@@ -68,10 +68,10 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         {
             SetPlayerReference();
         }
-        SetRayToPlayer();
+        RayCastToPlayer();
     }
 
-    private void SetRayToPlayer()
+    private void RayCastToPlayer()
     {
         Vector3 transformOrigin = this.gameObject.transform.position;
         Vector3 transformPlayerOrigin = this.thePlayer.transform.position - transformOrigin;
@@ -102,7 +102,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         spawnedBullet.transform.LookAt(thePlayer.transform);
     }
 
-    public Ray getRay()
+    public Ray GetRay()
     {
         return this.ray;
     }
