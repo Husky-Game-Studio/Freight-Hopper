@@ -64,7 +64,19 @@ public class LevelController : MonoBehaviour
         }
         Player.PlayerLoadedIn += ResetPlayerPosition;
         Player.PlayerLoadedIn += UnlockAbilities;
-        SceneLoader.LoadPlayerScene();
+        bool defaultSceneAlreadyLoaded = false;
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).name.Equals(""))
+            {
+                defaultSceneAlreadyLoaded = true;
+            }
+        }
+        if (!defaultSceneAlreadyLoaded)
+        {
+            SceneLoader.LoadPlayerScene();
+        }
+
         LevelLoadedIn?.Invoke();
     }
 
