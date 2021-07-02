@@ -67,7 +67,7 @@ public class LevelController : MonoBehaviour
         bool defaultSceneAlreadyLoaded = false;
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
-            if (SceneManager.GetSceneAt(i).name.Equals(""))
+            if (SceneManager.GetSceneAt(i).name.Equals("DefaultScene"))
             {
                 defaultSceneAlreadyLoaded = true;
             }
