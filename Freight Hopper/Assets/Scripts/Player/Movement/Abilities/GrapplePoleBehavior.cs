@@ -7,6 +7,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     [SerializeField] private float maxLength = 10;
     [SerializeField] private float grappleExtensionSpeed = 10;
     [SerializeField] private float grappleMoveSpeed = 10;
+    [SerializeField] private float additionalSlack = 0.5f;
     [SerializeField] private LayerMask affectedLayers;
     [SerializeField, ReadOnly] private float length;
 
@@ -66,9 +67,13 @@ public class GrapplePoleBehavior : AbilityBehavior
 
         float expectedLength = length;
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
+
         float error = expectedLength - actualLength;
-        Vector3 tensionVelocity = up * distanceController.GetOutput(error, Time.fixedDeltaTime);
-        physicsManager.rb.AddForce(tensionVelocity, ForceMode.VelocityChange);
+        if (error < -additionalSlack)
+        {
+            Vector3 tensionVelocity = up * distanceController.GetOutput(error, Time.fixedDeltaTime);
+            physicsManager.rb.AddForce(tensionVelocity, ForceMode.VelocityChange);
+        }
     }
 
     private bool reachedMaxLength = false;

@@ -44,7 +44,7 @@ public class Wind : MonoBehaviour
             }
         }
 
-        Gizmos.matrix = Matrix4x4.TRS(this.transform.position + (this.transform.forward * size.z / 2), this.transform.rotation, this.transform.localScale);
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position + (this.transform.forward * size.z / 2), this.transform.rotation, Vector3.one);
 
         Gizmos.DrawWireCube(offset, size);
     }
@@ -105,7 +105,6 @@ public class Wind : MonoBehaviour
             affectedBodies[rb].Clear();
         }
 
-        RaycastHit hit;
         Vector3 direction = source.transform.forward;
         for (float x = -windSize.x / 2; x <= windSize.x / 2; x += rayWidth)
         {
@@ -113,7 +112,7 @@ public class Wind : MonoBehaviour
             {
                 Vector3 position = source.transform.TransformPoint(new Vector3(x, y, 0) + offset);
                 Ray ray = new Ray(position, direction);
-                SendRay(ref ray, out hit, windSize.z);
+                SendRay(ref ray, out _, windSize.z);
             }
         }
     }
