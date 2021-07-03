@@ -339,7 +339,7 @@ public class PathEditor : Editor
         }
         //Handle for anchor focused on
         Vector3 pos = creator.transform.TransformPoint(path.GetAnchor(creator.focusIndex));
-        Handles.SphereHandleCap(0, pos, Quaternion.identity, HandleSize(pos), EventType.Repaint);
+        Handles.SphereHandleCap(0, pos, Quaternion.identity, 0.3f * HandleSize(pos), EventType.Repaint);
     }
 
     private bool KeyDown(Event guiEvent, KeyCode key)
