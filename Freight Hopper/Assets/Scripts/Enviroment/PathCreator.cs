@@ -8,10 +8,17 @@ public class PathCreator : MonoBehaviour
     public BezierPath path; //The data
 
     public int focusIndex; //Saved editor value
+    [Range(0.01f, 0.1f)]
+    public float pointSize = 0.05f;
 
     public Vector3 GetPositionOnPath(float t)
     {
-        return transform.TransformPoint(path.GetPathPoint(t));
+        return this.transform.TransformPoint(path.GetPathPoint(t));
+    }
+
+    public float GetPathSegmentCount()
+    {
+        return path.NumSegments;
     }
 
     [ContextMenu("Reverse Path")]

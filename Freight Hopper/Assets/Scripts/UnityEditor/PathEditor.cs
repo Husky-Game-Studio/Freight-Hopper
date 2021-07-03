@@ -13,6 +13,8 @@ public class PathEditor : Editor
     private BezierPath path;
     private RaycastHit lastMouseRaycastHit = new RaycastHit();
     private bool newRaycastHit = false;
+    private SceneView scene;
+    private Vector3 sceneViewCameraPos = Vector3.zero;
 
     private enum Operation
     {
@@ -25,6 +27,7 @@ public class PathEditor : Editor
     private void OnEnable()
     {
         creator = (PathCreator)this.target;
+        scene = EditorWindow.GetWindow<SceneView>();
         if (creator.path == null)
         {
             creator.CreatePath();
@@ -55,8 +58,14 @@ public class PathEditor : Editor
 
         HotKeys();
         windowRect = GUILayout.Window(0, windowRect, Window, "Path Editor");
+        sceneViewCameraPos = scene.camera.transform.position;
         InteractableHandles();
         Visuals();
+    }
+
+    private float HandleSize(Vector3 handlePos)
+    {
+        return creator.pointSize * Vector3.Distance(sceneViewCameraPos, handlePos);
     }
 
     private void HotKeys()
@@ -183,8 +192,6 @@ public class PathEditor : Editor
 
     private void InteractableHandles()
     {
-        //creator.transform.TransformPoint();
-        //creator.transform.InverseTransformPoint();
         ClickableAnchorHandles();
         if (operation == Operation.Translate)
         {
@@ -203,7 +210,8 @@ public class PathEditor : Editor
         {
             if (i != creator.focusIndex) //For all anchors except the one in focus
             {
-                if (Handles.Button(creator.transform.TransformPoint(path.GetAnchor(i)), Quaternion.identity, 0.2f, 0.2f, Handles.SphereHandleCap)) //Click SphereHandleCap to focus on clicked anchor
+                Vector3 pos = creator.transform.TransformPoint(path.GetAnchor(i));
+                if (Handles.Button(pos, Quaternion.identity, HandleSize(pos), HandleSize(pos), Handles.SphereHandleCap)) //Click SphereHandleCap to focus on clicked anchor
                 {
                     creator.focusIndex = i;
                 }
@@ -217,8 +225,47 @@ public class PathEditor : Editor
         Vector3 anchorStoredPos = path[indexCurrent];
         Vector3 anchorHandle = Handles.PositionHandle(creator.transform.TransformPoint(anchorStoredPos), Quaternion.identity);
         Vector3 anchorHandlePos = creator.transform.InverseTransformPoint(anchorHandle);
+
+        if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
+        {
+            Vector3 strength1StoredPos = path[indexCurrent - 1];
+            Vector3 strength1Handle = Handles.PositionHandle(creator.transform.TransformPoint(strength1StoredPos), Quaternion.identity);
+            Vector3 strength1HandlePos = creator.transform.InverseTransformPoint(strength1Handle);
+
+            if (strength1StoredPos != strength1HandlePos)
+            {
+                Undo.RecordObject(creator, "Translate Strength Point");
+                if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
+                {
+                    Vector3 direction = (path[indexCurrent] - path[indexCurrent - 1]).normalized;
+                    float strength2 = (path[indexCurrent + 1] - path[indexCurrent]).magnitude;
+                    path.MovePoint(indexCurrent + 1, path[indexCurrent] + (strength2 * direction));
+                }
+                path.MovePoint(indexCurrent - 1, strength1HandlePos);
+            }
+        }
+
+        if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
+        {
+            Vector3 strength2StoredPos = path[indexCurrent + 1];
+            Vector3 strength2Handle = Handles.PositionHandle(creator.transform.TransformPoint(strength2StoredPos), Quaternion.identity);
+            Vector3 strength2HandlePos = creator.transform.InverseTransformPoint(strength2Handle);
+
+            if (strength2StoredPos != strength2HandlePos)
+            {
+                Undo.RecordObject(creator, "Translate Strength Point");
+                if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
+                {
+                    Vector3 direction = (path[indexCurrent + 1] - path[indexCurrent]).normalized;
+                    float strength1 = (path[indexCurrent] - path[indexCurrent - 1]).magnitude;
+                    path.MovePoint(indexCurrent - 1, path[indexCurrent] - (strength1 * direction));
+                }
+                path.MovePoint(indexCurrent + 1, strength2HandlePos);
+            }
+        }
+
         if (newRaycastHit)
-            anchorHandlePos = lastMouseRaycastHit.point;
+            anchorHandlePos = creator.transform.InverseTransformPoint(lastMouseRaycastHit.point);
         if (anchorStoredPos != anchorHandlePos)
         {
             Undo.RecordObject(creator, "Translate Anchor Point");
@@ -252,7 +299,8 @@ public class PathEditor : Editor
         //Moving strength handle ahead constrained by rotation
         if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
         {
-            Vector3 strengthHandle = Handles.FreeMoveHandle(creator.transform.TransformPoint(path[indexCurrent + 1]), Quaternion.identity, 0.2f, Vector3.zero, Handles.SphereHandleCap);
+            Vector3 pos = creator.transform.TransformPoint(path[indexCurrent + 1]);
+            Vector3 strengthHandle = Handles.FreeMoveHandle(pos, Quaternion.identity, HandleSize(pos), Vector3.zero, Handles.SphereHandleCap);
             Vector3 strengthHandlePos = creator.transform.InverseTransformPoint(strengthHandle);
             if (path[indexCurrent + 1] != strengthHandlePos)
             {
@@ -263,7 +311,8 @@ public class PathEditor : Editor
         //Moving strength handle behind constrained by rotation
         if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
         {
-            Vector3 strengthHandle = Handles.FreeMoveHandle(creator.transform.TransformPoint(path[indexCurrent - 1]), Quaternion.identity, 0.2f, Vector3.zero, Handles.SphereHandleCap);
+            Vector3 pos = creator.transform.TransformPoint(path[indexCurrent - 1]);
+            Vector3 strengthHandle = Handles.FreeMoveHandle(pos, Quaternion.identity, HandleSize(pos), Vector3.zero, Handles.SphereHandleCap);
             Vector3 strengthHandlePos = creator.transform.InverseTransformPoint(strengthHandle);
             if (path[indexCurrent - 1] != strengthHandlePos)
             {
@@ -289,7 +338,8 @@ public class PathEditor : Editor
             Handles.DrawBezier(points[0], points[3], points[1], points[2], Color.white, null, 2);
         }
         //Handle for anchor focused on
-        Handles.SphereHandleCap(0, creator.transform.TransformPoint(path.GetAnchor(creator.focusIndex)), Quaternion.identity, 0.3f, EventType.Repaint);
+        Vector3 pos = creator.transform.TransformPoint(path.GetAnchor(creator.focusIndex));
+        Handles.SphereHandleCap(0, pos, Quaternion.identity, 0.3f * HandleSize(pos), EventType.Repaint);
     }
 
     private bool KeyDown(Event guiEvent, KeyCode key)

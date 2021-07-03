@@ -12,9 +12,9 @@ public class GravityZone : GravitySource
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        GizmosExtensions.DrawGizmosArrow(this.transform.position + centerOffset, gravityDirection * -this.transform.up);
-        Gizmos.matrix = Matrix4x4.TRS(this.transform.position, this.transform.rotation, this.transform.localScale);
 
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position, this.transform.rotation, this.transform.localScale);
+        GizmosExtensions.DrawGizmosArrow(centerOffset, gravityDirection * Vector3.down);
         Gizmos.DrawWireCube(centerOffset, 2 * zone);
     }
 

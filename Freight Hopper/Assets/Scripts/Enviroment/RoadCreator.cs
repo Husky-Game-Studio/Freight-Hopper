@@ -12,7 +12,7 @@ public class RoadCreator : MonoBehaviour
     public RoadSlice slice;
 
     [Range(1, 100)]
-    public int roadDetail;
+    public int roadDetail = 20;
 
     public void CreateRoad()
     {
@@ -21,7 +21,11 @@ public class RoadCreator : MonoBehaviour
             pathCreator = this.gameObject.GetComponent<PathCreator>();
             if (pathCreator == null)
             {
-                Debug.Log("No path creator found, please input one or add one as a component");
+                pathCreator = this.transform.parent.GetComponent<PathCreator>();
+                if (pathCreator == null)
+                {
+                    Debug.Log("No path creator found, please input one or add one as a component to this or the parent");
+                }
             }
         }
 
@@ -32,6 +36,19 @@ public class RoadCreator : MonoBehaviour
     public Vector3 GetPositionOnPath(float t)
     {
         return pathCreator.GetPositionOnPath(t);
+    }
+    public float FindClosestT(Vector3 currentPosition)
+    {
+        float test_t = 0.5f * pathCreator.GetPathSegmentCount();
+        float dt = 0.25f * pathCreator.GetPathSegmentCount();
+        for (int i = 0; i < 8; i++) //2^8 possible points to select on the path
+        {
+            float d1 = (GetPositionOnPath(test_t + dt) - currentPosition).sqrMagnitude;
+            float d2 = (GetPositionOnPath(test_t - dt) - currentPosition).sqrMagnitude;
+            test_t += (d1 < d2) ? dt : -dt;
+            dt /= 2;
+        }
+        return test_t;
     }
 
     public void UpdateMesh()

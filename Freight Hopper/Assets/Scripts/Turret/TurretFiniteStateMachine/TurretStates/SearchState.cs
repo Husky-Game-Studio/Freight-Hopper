@@ -13,7 +13,7 @@ public class SearchState : BasicState
 
     public override BasicState TransitionState() {
         // Transition to Targetting State
-        if (Physics.Raycast(turretMachineCenter.getRay(), out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
+        if (Physics.Raycast(turretMachineCenter.GetRay(), out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
         {
             if (hit.rigidbody != null && hit.rigidbody.CompareTag("Player")) {
                 return turretMachineCenter.targetState;

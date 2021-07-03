@@ -28,6 +28,14 @@ public class RoadEditor : Editor
         {
             creator.UpdateMesh();
         }
+        if (GUILayout.Button("Add Mesh Render"))
+        {
+            creator.gameObject.AddComponent<MeshRenderer>();
+        }
+        if (GUILayout.Button("Add Mesh Collider"))
+        {
+            creator.gameObject.AddComponent<MeshCollider>();
+        }
 
         base.OnInspectorGUI();
     }

@@ -55,6 +55,16 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         return GetCurrentPathObject().GetPositionOnPath(0) + currentRailLinker.Offset;
     }
 
+    public float GetClosestTValueOnCurrentPath()
+    {
+        return GetCurrentPathObject().FindClosestT(carts.First.Value.rb.position);
+    }
+
+    public Vector3 GetClosestPointOnCurrentPath()
+    {
+        return GetCurrentPathObject().GetPositionOnPath(GetClosestTValueOnCurrentPath()) + currentRailLinker.Offset;
+    }
+
     // Returns the RoadCreator object which contains the current path. Good for getting the object the path is likely on
     public RoadCreator GetCurrentPathObject()
     {
@@ -71,7 +81,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         currentPath++;
         if (currentPath < pathObjects.Count)
         {
-            currentRailLinker = GetCurrentPathObject().GetComponent<TrainRailLinker>();
+            currentRailLinker = GetCurrentPathObject().pathCreator.GetComponent<TrainRailLinker>();
         }
         else if (loop && pathObjects.Count > 0)
         {
