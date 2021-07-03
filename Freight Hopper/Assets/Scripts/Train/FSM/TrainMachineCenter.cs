@@ -81,7 +81,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         currentPath++;
         if (currentPath < pathObjects.Count)
         {
-            currentRailLinker = GetCurrentPathObject().GetComponent<TrainRailLinker>();
+            currentRailLinker = GetCurrentPathObject().pathCreator.GetComponent<TrainRailLinker>();
         }
         else if (loop && pathObjects.Count > 0)
         {
