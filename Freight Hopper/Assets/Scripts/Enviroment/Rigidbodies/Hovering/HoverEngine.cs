@@ -59,7 +59,7 @@ public class HoverEngine : MonoBehaviour
     {
         if (automatic)
         {
-            SetDirection(-this.transform.up);
+            SetDirection(-CustomGravity.GetUpAxis(this.transform.position));
             Hover(targetDistance);
         }
     }
