@@ -1486,6 +1486,7 @@ GameObject:
   - component: {fileID: 445788460}
   - component: {fileID: 445788461}
   - component: {fileID: 445788462}
+  - component: {fileID: 445788463}
   m_Layer: 0
   m_Name: Resources
   m_TagString: Untagged
@@ -1567,6 +1568,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 772112139}
+--- !u!114 &445788463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445788457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93af5124bc225c44879eb24d594cf6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainCamera: {fileID: 1703513651}
+  targetCube: {fileID: 772112139}
 --- !u!1 &483024702
 GameObject:
   m_ObjectHideFlags: 0
