@@ -66,6 +66,7 @@ public class GravitySphere : GravitySource
         if (distance == 0)
         {
             Debug.LogError("Distance from gravity sphere is 0 causing divide by 0 excpetion");
+            Debug.Log("The position of the sphere is " + this.transform.position + " and the position is " + position);
             return gravity * posDifference;
         }
 
