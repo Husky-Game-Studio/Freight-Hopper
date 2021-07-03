@@ -12,7 +12,7 @@ public class RoadCreator : MonoBehaviour
     public RoadSlice slice;
 
     [Range(1, 100)]
-    public int roadDetail;
+    public int roadDetail = 20;
 
     public void CreateRoad()
     {
@@ -21,7 +21,11 @@ public class RoadCreator : MonoBehaviour
             pathCreator = this.gameObject.GetComponent<PathCreator>();
             if (pathCreator == null)
             {
-                Debug.Log("No path creator found, please input one or add one as a component");
+                pathCreator = this.transform.parent.GetComponent<PathCreator>();
+                if (pathCreator == null)
+                {
+                    Debug.Log("No path creator found, please input one or add one as a component to this or the parent");
+                }
             }
         }
 
