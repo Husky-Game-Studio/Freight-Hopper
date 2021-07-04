@@ -83,7 +83,16 @@ public class Portal : MonoBehaviour
 
     private void Teleport(Rigidbody other)
     {
-        other.position = otherPortal.transform.TransformPoint(this.transform.InverseTransformPoint(other.position));
+        // I was always facing 180 degrees the wrong way when doing this math. So I just rotated the otherPortal 180 degrees, did the rotation math, and rotated it back
+        // As stupid as it sounds, it works
+        otherPortal.transform.RotateAround(otherPortal.transform.position, otherPortal.transform.up, 180);
+        otherPortal.transform.RotateAround(otherPortal.transform.position, otherPortal.transform.forward, 180);
+        var transformMatrix = otherPortal.transform.localToWorldMatrix * this.transform.worldToLocalMatrix * other.transform.localToWorldMatrix;
+        otherPortal.transform.RotateAround(otherPortal.transform.position, otherPortal.transform.up, -180);
+        otherPortal.transform.RotateAround(otherPortal.transform.position, otherPortal.transform.forward, -180);
+
+        other.position = transformMatrix.GetColumn(3);
+        other.rotation = transformMatrix.rotation;
     }
 
     private void RotateVelocity(Rigidbody other)
