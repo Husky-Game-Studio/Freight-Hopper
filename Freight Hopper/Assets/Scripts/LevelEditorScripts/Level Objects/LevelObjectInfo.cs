@@ -11,18 +11,11 @@ namespace HGSLevelEditor
 
         public LevelObjectData data;
 
-        private void Update()
+        GameObject movingObject; 
+
+        void Update()
         {
-            data.posX = Mathf.RoundToInt(this.transform.position.x);
-            data.posY = Mathf.RoundToInt(this.transform.position.y);
-            data.posZ = Mathf.RoundToInt(this.transform.position.z);
-
-
-            worldRotation = transform.localEulerAngles;
-
-            data.rotX = worldRotation.x;
-            data.rotY = worldRotation.y;
-            data.rotZ = worldRotation.z;
+            SetData();
 
         }
 
@@ -38,6 +31,25 @@ namespace HGSLevelEditor
 
             LevelObjectData savedObj = data;
             return savedObj.objectID;
+        }
+        public void SetObject(GameObject set) {
+
+            movingObject = set; 
+        }
+
+        public void SetData() {
+
+            data.posX = Mathf.RoundToInt(this.transform.position.x);
+            data.posY = Mathf.RoundToInt(this.transform.position.y);
+            data.posZ = Mathf.RoundToInt(this.transform.position.z);
+
+
+            worldRotation = transform.localEulerAngles;
+
+            data.rotX = worldRotation.x;
+            data.rotY = worldRotation.y;
+            data.rotZ = worldRotation.z;
+
         }
     }
 }

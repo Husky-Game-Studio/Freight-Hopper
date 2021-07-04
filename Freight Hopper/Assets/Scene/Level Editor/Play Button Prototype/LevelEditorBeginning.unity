@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 50886344}
   m_Layer: 5
   m_Name: 'Save '
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 133288501}
   m_Layer: 5
   m_Name: Arrow
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 145468833}
   m_Layer: 5
   m_Name: Load
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1190,7 +1190,7 @@ GameObject:
   - component: {fileID: 395728971}
   m_Layer: 5
   m_Name: 'Edit '
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1582,6 +1582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 1703513651}
   targetCube: {fileID: 772112139}
+  transformSliders: {fileID: 1228562717}
 --- !u!1 &483024702
 GameObject:
   m_ObjectHideFlags: 0
@@ -3804,7 +3805,7 @@ GameObject:
   - component: {fileID: 1053527928}
   m_Layer: 5
   m_Name: New
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3950,7 +3951,7 @@ GameObject:
   - component: {fileID: 1082486849}
   m_Layer: 5
   m_Name: Play
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4245,7 +4246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1228562718}
   - component: {fileID: 1228562717}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: 'MovementControl '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4265,10 +4266,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 1703513651}
-  mSelectedObject: {fileID: 772112139}
+  target: {fileID: 772112139}
   holdXvalue: 0
   xSliderText: {fileID: 881261304}
-  ySlidertext: {fileID: 881190357}
+  ySliderText: {fileID: 881190357}
   zSliderText: {fileID: 841170681}
   xSlider: {fileID: 1237471193}
   ySlider: {fileID: 2013833338}
@@ -4503,7 +4504,7 @@ GameObject:
   - component: {fileID: 1319307041}
   m_Layer: 5
   m_Name: Label
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4749,7 +4750,7 @@ GameObject:
   - component: {fileID: 1379913740}
   m_Layer: 5
   m_Name: Menu
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

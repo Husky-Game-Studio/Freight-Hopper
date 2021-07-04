@@ -8,6 +8,9 @@ namespace HGSLevelEditor
     {
         public GameObject targetObject;
         public static GhostObjectMaker instance;
+
+        Mesh defaultMesh;
+        Material defaultMaterial; 
         public static GhostObjectMaker GetInstance()
         {
             return instance;
@@ -36,7 +39,7 @@ namespace HGSLevelEditor
                     child.transform.localPosition = Vector3.zero;
                     child.AddComponent<MeshFilter>().mesh = objectSpawn.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
                     child.AddComponent<MeshRenderer>().material = objectSpawn.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
-                    child.AddComponent<MeshCollider>();
+                    //child.AddComponent<MeshCollider>();
                 }
 
                 // Check children of parent for mesh filters, copy them if applicable, save locations, and move to new locations while keeping it as parent
@@ -45,6 +48,9 @@ namespace HGSLevelEditor
 
                 ghost.AddComponent<LevelObjectInfo>();
 
+               // ghost.AddComponent<MeshCollider>();
+               // ghost.GetComponent<MeshCollider>().sharedMesh = defaultMesh;
+               // ghost.AddComponent<MeshRenderer>().material = defaultMaterial;
                 Debug.Log("Object ID for debug: " + objectSpawn.GetComponent<LevelObjectInfo>().data.objectID);
 
                 ghost.GetComponent<LevelObjectInfo>().data = objectSpawn.GetComponent<LevelObjectInfo>().GetObject();
@@ -67,7 +73,9 @@ namespace HGSLevelEditor
                     child.transform.position = globalLocation;
                     child.transform.parent = ghost.transform;
                     child.AddComponent<MeshFilter>().mesh = oldChild.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
+                    defaultMesh = oldChild.transform.gameObject.GetComponent<MeshFilter>().sharedMesh; 
                     child.AddComponent<MeshRenderer>().material = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
+                    defaultMaterial = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
                     child.AddComponent<MeshCollider>();
                 }
                 CopyMeshes(oldChild, ghost);

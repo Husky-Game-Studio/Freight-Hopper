@@ -1,17 +1,23 @@
  using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
+namespace HGSLevelEditor { 
 public class LevelEditorMouseSupport : MonoBehaviour
 {
 
     public Camera MainCamera = null;
-    public GameObject targetCube; 
+    public GameObject targetCube;
+    public UIManager transformSliders = null; 
+    GameObject selectedObject = null;
+    private Color selectedColor = Color.green;
+    private Color objColor = Color.white;
 
     // Start is called before the first frame update
     void Start()
     {
         Debug.Assert(MainCamera != null);
+        //Debug.Assert(transformSliders != null); 
     }
 
     // Update is called once per frame
@@ -22,39 +28,76 @@ public class LevelEditorMouseSupport : MonoBehaviour
 
     void mouseSelectObject() {
 
-        if (Input.GetMouseButtonDown(0)) {
-
-            Debug.Log("Mouse is down");
-
-            RaycastHit hitInfo = new RaycastHit();
-
-            bool hit = Physics.Raycast(MainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity, 1);
-
-            if (hit && hitInfo.transform.gameObject.name != "Floor")
+            if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Object selected: " + hitInfo.transform.gameObject.name);
-                SelectObject(hitInfo.transform.gameObject);
+
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    Debug.Log("Mouse is down");
+
+                    RaycastHit hitInfo = new RaycastHit();
+
+                    bool hit = Physics.Raycast(MainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity, 1);
+
+                    if (hit && hitInfo.transform.gameObject.name != "Floor")
+                    {
+                        if (hitInfo.transform.gameObject.layer != 5)
+                        {
+                            Debug.Log("Object selected: " + hitInfo.transform.gameObject.name);
+                            SetMovingObject(hitInfo.transform.gameObject);
+                        }
+                    }
+
+                    else
+                    {
+  
+                        SetMovingObject(null);
+                    }
+
+
+                }
             }
-
-            else {
-
-                SelectObject(null);
-            }
-
-        }
-   
     }
 
-    void SelectObject(GameObject selected) {
+     public void SetMovingObject(GameObject selected) {
 
-        //targetCube.transform.position = selected.transform.position;
+            //targetCube.transform.position = selected.transform.position;
 
-        selected.transform.position = targetCube.transform.position;
+            //selected.transform.position = targetCube.transform.position;
+
+            GameObject a = SetMovingObjectHelper(selected);
+            
+            transformSliders.SetSelectedObject(a);
 
       
     }
 
+        public GameObject SetMovingObjectHelper(GameObject obj) {
 
+            SetColor(obj);
+            return selectedObject; 
+        
+        }
 
+        void SetColor(GameObject selected) {
 
+            if (selectedObject != null)
+            {
+
+                selectedObject.GetComponent<Renderer>().material.color = objColor;
+
+            }
+
+            selectedObject = selected;
+
+            if (selectedObject != null)
+            {
+
+                objColor = selected.GetComponent<Renderer>().material.color;
+                selectedObject.GetComponent<Renderer>().material.color = selectedColor;
+
+            }
+        }
+    }
 }
+    
