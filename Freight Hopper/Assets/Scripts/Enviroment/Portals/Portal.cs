@@ -83,7 +83,14 @@ public class Portal : MonoBehaviour
 
     private void Teleport(Rigidbody other)
     {
-        other.position = otherPortal.transform.TransformPoint(this.transform.InverseTransformPoint(other.position));
+        Quaternion oldRotation = this.transform.rotation;
+        this.transform.rotation = Quaternion.FromToRotation(this.transform.forward, otherPortal.transform.forward) * this.transform.rotation;
+        var transformMatrix = otherPortal.transform.localToWorldMatrix * this.transform.worldToLocalMatrix * other.transform.localToWorldMatrix;
+        this.transform.rotation = oldRotation;
+
+        other.position = transformMatrix.GetColumn(3);
+
+        other.rotation = Quaternion.FromToRotation(-this.transform.forward, otherPortal.transform.forward) * other.rotation;
     }
 
     private void RotateVelocity(Rigidbody other)
