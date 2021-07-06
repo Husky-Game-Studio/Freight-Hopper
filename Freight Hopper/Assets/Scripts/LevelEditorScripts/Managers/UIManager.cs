@@ -42,11 +42,9 @@ namespace HGSLevelEditor
             zSlider.onValueChanged.AddListener(ZValueChanged);
         }
 
-        // Update is called once per frame
         void Update()
         {
             moveShape();
-
         }
 
         public void SetSelectedObject(GameObject g)
@@ -58,7 +56,7 @@ namespace HGSLevelEditor
         public void ObjectSetUI()
         {
             Vector3 p = ReadObjectXfrom();
-            xSlider.value = p.x;  // do not need to call back for this comes from the object
+            xSlider.value = p.x;  
             ySlider.value = p.y;
             zSlider.value = p.z;
         }
@@ -70,7 +68,6 @@ namespace HGSLevelEditor
             xSliderText.text = "X: " + xSlider.value;
             ySliderText.text = "Y: " + ySlider.value;
             zSliderText.text = "Z: " + zSlider.value;
-
         }
 
 
