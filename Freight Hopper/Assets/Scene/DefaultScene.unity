@@ -925,12 +925,15 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  speed: 0
+  horizontalMomentum: {x: 0, y: 0, z: 0}
+  horizontalMomentumSpeed: 0
+  t: 0
+  tIncrement: 0.01
+  oppositeInputAngle: 170
+  stretchMomentumModifier: 100
   groundAcceleration: 55
-  airAcceleration: 20
-  deltaIncreaseMomentumBonus: 0.02
-  decayMultiplier: 20
-  momentumBonus:
-    value: 1
+  airAcceleration: 1
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,7 +1307,7 @@ MonoBehaviour:
     useGravity: 1
   friction:
     defaultFriction:
-      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+      air: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
       ground: {fileID: 11400000, guid: 4b438a26d56c340408c86e43cf1c0583, type: 2}
   collisionManager:
     maxSlope: 60

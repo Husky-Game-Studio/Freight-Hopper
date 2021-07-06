@@ -9,7 +9,7 @@ public class FullStopBehavior : AbilityBehavior
     public override void Action()
     {
         fullstopDuration.CountDownFixed();
-        soundManager.Play("Fullstop");
+
         float ratio = fullstopDuration.current / fullstopDuration.duration;
         fullstopEffect.weight = Mathf.Sin(Mathf.PI * ratio);
         physicsManager.rb.velocity = Vector3.zero;
@@ -29,6 +29,7 @@ public class FullStopBehavior : AbilityBehavior
     public override void EntryAction()
     {
         fullstopDuration.ResetTimer();
+        soundManager.Play("Fullstop");
         Player.Instance.GetComponent<PhysicsManager>().gravity.DisableGravity();
     }
 }
