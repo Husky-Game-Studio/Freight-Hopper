@@ -37,13 +37,12 @@ public class MovementBehavior : AbilityBehavior
     public void Move(Vector3 direction, float acceleration)
     {
         Vector3 relativeDirection = direction.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).normalized;
-
+        if (direction.IsZero())
+        {
+            return;
+        }
         if (physicsManager.collisionManager.IsGrounded.current)
         {
-            if (direction.IsZero())
-            {
-                t -= tIncrement * 100;
-            }
             if (OppositeInput(horizontalMomentum, relativeDirection))
             {
                 t = 0;
@@ -105,6 +104,13 @@ public class MovementBehavior : AbilityBehavior
 
     public void UpdateSpeedometer()
     {
+        if (physicsManager.collisionManager.IsGrounded.current)
+        {
+            if (UserInput.Instance.Move().IsZero())
+            {
+                t -= tIncrement * 100;
+            }
+        }
         Vector3 velocity = physicsManager.rb.velocity;
         speed = velocity.magnitude;
 
