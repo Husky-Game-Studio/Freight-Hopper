@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 50886344}
   m_Layer: 5
   m_Name: 'Save '
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 133288501}
   m_Layer: 5
   m_Name: Arrow
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 145468833}
   m_Layer: 5
   m_Name: Load
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1190,7 +1190,7 @@ GameObject:
   - component: {fileID: 395728971}
   m_Layer: 5
   m_Name: 'Edit '
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1485,6 +1485,8 @@ GameObject:
   - component: {fileID: 445788458}
   - component: {fileID: 445788460}
   - component: {fileID: 445788461}
+  - component: {fileID: 445788462}
+  - component: {fileID: 445788463}
   m_Layer: 0
   m_Name: Resources
   m_TagString: Untagged
@@ -1511,6 +1513,8 @@ MonoBehaviour:
     objPrefab: {fileID: 5400923174265790356, guid: 27eb5001541578e40a9b92d45c7c67e1, type: 3}
   - objID: turret
     objPrefab: {fileID: 3672927658055239323, guid: a0670d4a849c64b41b7579c41425b3f5, type: 3}
+  - objID: flat rock
+    objPrefab: {fileID: 7866407373728879055, guid: d3473c452c0e813488721cb041bc7caa, type: 3}
 --- !u!4 &445788459
 Transform:
   m_ObjectHideFlags: 0
@@ -1551,6 +1555,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb3c69bd5884a5b4998f2f7881ba0b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &445788462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445788457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbdd920d14bf03a47885e8d33c6af787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 772112139}
+--- !u!114 &445788463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445788457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93af5124bc225c44879eb24d594cf6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainCamera: {fileID: 1703513651}
+  targetCube: {fileID: 772112139}
+  transformSliders: {fileID: 1228562717}
 --- !u!1 &483024702
 GameObject:
   m_ObjectHideFlags: 0
@@ -1840,6 +1872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainHead: {fileID: 5400923174265790356, guid: 27eb5001541578e40a9b92d45c7c67e1, type: 3}
   turret: {fileID: 3672927658055239323, guid: a0670d4a849c64b41b7579c41425b3f5, type: 3}
+  flatRock: {fileID: 7866407373728879055, guid: d3473c452c0e813488721cb041bc7caa, type: 3}
   targetObject: {fileID: 772112139}
 --- !u!114 &560924597
 MonoBehaviour:
@@ -1895,6 +1928,8 @@ MonoBehaviour:
     - m_Text: Train Head
       m_Image: {fileID: 0}
     - m_Text: Turret
+      m_Image: {fileID: 0}
+    - m_Text: Flat Rock
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3770,7 +3805,7 @@ GameObject:
   - component: {fileID: 1053527928}
   m_Layer: 5
   m_Name: New
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3916,7 +3951,7 @@ GameObject:
   - component: {fileID: 1082486849}
   m_Layer: 5
   m_Name: Play
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4211,7 +4246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1228562718}
   - component: {fileID: 1228562717}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: 'MovementControl '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4231,10 +4266,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 1703513651}
-  mSelectedObject: {fileID: 772112139}
+  target: {fileID: 772112139}
   holdXvalue: 0
   xSliderText: {fileID: 881261304}
-  ySlidertext: {fileID: 881190357}
+  ySliderText: {fileID: 881190357}
   zSliderText: {fileID: 841170681}
   xSlider: {fileID: 1237471193}
   ySlider: {fileID: 2013833338}
@@ -4469,7 +4504,7 @@ GameObject:
   - component: {fileID: 1319307041}
   m_Layer: 5
   m_Name: Label
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4715,7 +4750,7 @@ GameObject:
   - component: {fileID: 1379913740}
   m_Layer: 5
   m_Name: Menu
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

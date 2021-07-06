@@ -34,7 +34,7 @@ namespace HGSLevelEditor
             //Will reload the level if the user is coming back from the 'Play' scene 
             if (levelNameLoad != null) {
 
-                SaveLoadLevel.GetInstance().LoadButton(levelNameLoad);
+                SaveLoadLevel.GetInstance().LoadButton(levelNameLoad, true);
             }
         }
      

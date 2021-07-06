@@ -11,8 +11,34 @@ namespace HGSLevelEditor
 
         public LevelObjectData data;
 
-        private void Update()
+        GameObject movingObject; 
+
+        void Update()
         {
+            SetData();
+
+        }
+
+        //For Serialization 
+        public LevelObjectData GetObject()
+        {
+            LevelObjectData savedObj = data;
+
+            return savedObj;
+
+        }
+        public string GetID() {
+
+            LevelObjectData savedObj = data;
+            return savedObj.objectID;
+        }
+        public void SetObject(GameObject set) {
+
+            movingObject = set; 
+        }
+
+        public void SetData() {
+
             data.posX = Mathf.RoundToInt(this.transform.position.x);
             data.posY = Mathf.RoundToInt(this.transform.position.y);
             data.posZ = Mathf.RoundToInt(this.transform.position.z);
@@ -23,15 +49,6 @@ namespace HGSLevelEditor
             data.rotX = worldRotation.x;
             data.rotY = worldRotation.y;
             data.rotZ = worldRotation.z;
-
-        }
-
-        //For Serialization 
-        public LevelObjectData GetObject()
-        {
-            LevelObjectData savedObj = data;
-
-            return savedObj;
 
         }
     }

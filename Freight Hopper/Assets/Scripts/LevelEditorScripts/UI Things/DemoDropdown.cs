@@ -2,26 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using HGSLevelEditor;
 public class DemoDropdown : MonoBehaviour
 {
 
     //public Dropdown gameDropdown; 
     public GameObject trainHead;
-    public GameObject turret; 
+    public GameObject turret;
+    public GameObject flatRock;
+
     Dropdown gameDropdown;
     public GameObject targetObject;
+
+    GhostObjectMaker ghost;
 
     private enum Meshes { 
     
         TrainHead = 1,    
-        Turret = 2
+        Turret = 2,
+        FlatRock = 3 
+       
+
     }
 
     //public GameObject targetAccess;
     public void Start()
     {
+        ghost = GhostObjectMaker.GetInstance();
         gameDropdown = GetComponent<Dropdown>();
+
 
     }
     // Update is called once per frame
@@ -30,25 +39,19 @@ public class DemoDropdown : MonoBehaviour
         // Cube 
         if (gameDropdown.value == (int)Meshes.TrainHead)
         {
-            Debug.Log("Train Head Spawned");
-            Instantiate(trainHead,
-            new Vector3(targetObject.transform.position.x, trainHead.transform.position.y, targetObject.transform.position.z),
-            trainHead.transform.rotation);
-
-            //Reverts back to 0 to prevent endless spawning 
             gameDropdown.value = 0;
-
+            ghost.SpawnGhost(trainHead);
         }
-        if (gameDropdown.value == (int)Meshes.Turret) {
-
-            Debug.Log("Turret Spawned");
-            Instantiate(turret,
-            new Vector3(targetObject.transform.position.x, turret.transform.position.y, turret.transform.position.z),
-            turret.transform.rotation);
-
+        else if (gameDropdown.value == (int)Meshes.Turret)
+        {
             gameDropdown.value = 0;
+            ghost.SpawnGhost(turret);
         }
-
+        else if (gameDropdown.value == (int)Meshes.FlatRock) {
+            
+            gameDropdown.value = 0;
+            ghost.SpawnGhost(flatRock);
+        }
 
     }
 }
