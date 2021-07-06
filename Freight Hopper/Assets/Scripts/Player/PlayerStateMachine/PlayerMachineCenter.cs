@@ -215,7 +215,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public override void PerformStateIndependentBehaviors()
     {
         JumpBuffer();
-
+        abilities.movementBehavior.UpdateSpeedometer();
         if (playerCM.IsGrounded.current)
         {
             abilities.jumpBehavior.coyoteeTimer.ResetTimer();
