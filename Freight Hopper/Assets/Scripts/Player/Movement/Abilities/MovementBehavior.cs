@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class MovementBehavior : AbilityBehavior
 {
+    [SerializeField, ReadOnly] private float speed;
+    [SerializeField, ReadOnly] private Vector3 horizontalMomentum;
+    [SerializeField, ReadOnly] private float horizontalMomentumSpeed;
+
     [SerializeField] private float groundAcceleration = 20;
     [SerializeField] private float airAcceleration = 10;
-    [Space]
-    [SerializeField] private float deltaIncreaseMomentumBonus;
-    [SerializeField] private float decayMultiplier = 2;
-    [ReadOnly, SerializeField] private Current<float> momentumBonus = new Current<float>(1);
 
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
@@ -29,32 +29,28 @@ public class MovementBehavior : AbilityBehavior
         return move;
     }
 
-    public void Move(Rigidbody rigidbody, CollisionManagement collision, Vector3 direction, float acceleration)
+    public void Move(Vector3 direction, float acceleration)
     {
-        Vector3 relativeDirection = direction.ProjectOnContactPlane(collision.ContactNormal.current).normalized;
+        Vector3 relativeDirection = direction.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).normalized;
 
-        rigidbody.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
+        physicsManager.rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }
 
     private void FixedUpdate()
     {
-        if (UserInput.Instance.Move().z > 0)
-        {
-            momentumBonus.value += deltaIncreaseMomentumBonus * Time.fixedDeltaTime;
-        }
-        else
-        {
-            momentumBonus.value -= deltaIncreaseMomentumBonus * Time.fixedDeltaTime * decayMultiplier;
-            momentumBonus.value = Mathf.Max(momentumBonus.Stored, momentumBonus.value);
-        }
     }
 
     public void PlayerMove()
     {
+        Vector3 velocity = physicsManager.rb.velocity;
+        speed = velocity.magnitude;
+        horizontalMomentum = velocity.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current);
+        horizontalMomentumSpeed = horizontalMomentum.magnitude;
+
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
-        Move(physicsManager.rb, physicsManager.collisionManager, relativeMove, physicsManager.collisionManager.IsGrounded.current ?
-            groundAcceleration * momentumBonus.value : airAcceleration * momentumBonus.value);
+        Move(relativeMove, physicsManager.collisionManager.IsGrounded.current ?
+            groundAcceleration : airAcceleration);
     }
 
     public override void EntryAction()

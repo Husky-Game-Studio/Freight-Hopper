@@ -7,6 +7,7 @@ public class TrainBuilder : MonoBehaviour
 {
     [SerializeField] private List<Cart> cartsList;
     [SerializeField] private TrainCarts insertCart;
+    [SerializeField, Min(1)] private int repeatActionCount = 1;
 
     [SerializeField] private float locomotiveLength = 42.243f;
     [SerializeField] private float cartLength = 40;
@@ -62,45 +63,51 @@ public class TrainBuilder : MonoBehaviour
     [ContextMenu("Add Cart")]
     public void AddCart()
     {
-        GameObject model = cartModelsToPickFrom[(int)insertCart];
-
-        Cart ourCart = new Cart();
-        Vector3 position = this.transform.position + (this.transform.forward * -((cartsList.Count * cartLength / 2) + (locomotiveLength / 2) + ((cartsList.Count + 1) * (gapLength + jointSnappingLength))));
-        ourCart.cart = Instantiate(baseCart, position, this.transform.rotation, this.transform);
-        ourCart.cartProperties = ourCart.cart.GetComponent<CartProperties>();
-        ourCart.cartProperties.setCartIndex(cartsList.Count + 1);
-        ourCart.joint = ourCart.cart.GetComponent<ConfigurableJoint>();
-        if (cartsList.Count == 0)
+        for (int i = 0; i < repeatActionCount; i++)
         {
-            ourCart.joint.connectedBody = locomotive.GetComponent<Rigidbody>();
+            GameObject model = cartModelsToPickFrom[(int)insertCart];
+
+            Cart ourCart = new Cart();
+            Vector3 position = this.transform.position + (this.transform.forward * -((cartsList.Count * cartLength / 2) + (locomotiveLength / 2) + ((cartsList.Count + 1) * (gapLength + jointSnappingLength))));
+            ourCart.cart = Instantiate(baseCart, position, this.transform.rotation, this.transform);
+            ourCart.cartProperties = ourCart.cart.GetComponent<CartProperties>();
+            ourCart.cartProperties.setCartIndex(cartsList.Count + 1);
+            ourCart.joint = ourCart.cart.GetComponent<ConfigurableJoint>();
+            if (cartsList.Count == 0)
+            {
+                ourCart.joint.connectedBody = locomotive.GetComponent<Rigidbody>();
+            }
+            else
+            {
+                ourCart.joint.connectedBody = cartsList[cartsList.Count - 1].cart.GetComponent<Rigidbody>();
+            }
+
+            SoftJointLimit temp = new SoftJointLimit
+            {
+                limit = gapLength
+            };
+            ourCart.joint.linearLimit = temp;
+            ourCart.joint.breakTorque = breakTorque;
+            ourCart.model = Instantiate(model, position, this.transform.rotation, ourCart.cart.transform);
+
+            cartsList.Add(ourCart);
         }
-        else
-        {
-            ourCart.joint.connectedBody = cartsList[cartsList.Count - 1].cart.GetComponent<Rigidbody>();
-        }
-
-        SoftJointLimit temp = new SoftJointLimit
-        {
-            limit = gapLength
-        };
-        ourCart.joint.linearLimit = temp;
-        ourCart.joint.breakTorque = breakTorque;
-        ourCart.model = Instantiate(model, position, this.transform.rotation, ourCart.cart.transform);
-
-        cartsList.Add(ourCart);
     }
 
     // Removes last cart in the chain
     [ContextMenu("Remove Cart")]
     public void RemoveCart()
     {
-        if (cartsList.Count == 0)
+        for (int i = 0; i < repeatActionCount; i++)
         {
-            return;
-        }
+            if (cartsList.Count == 0)
+            {
+                return;
+            }
 
-        DestroyImmediate(cartsList[cartsList.Count - 1].cart);
-        cartsList.RemoveAt(cartsList.Count - 1);
+            DestroyImmediate(cartsList[cartsList.Count - 1].cart);
+            cartsList.RemoveAt(cartsList.Count - 1);
+        }
     }
 
     [ContextMenu("Clear")]
