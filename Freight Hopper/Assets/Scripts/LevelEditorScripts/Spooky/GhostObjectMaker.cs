@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HGSLevelEditor
 {
@@ -22,8 +23,6 @@ namespace HGSLevelEditor
             
         }
 
-
- 
         public GameObject MakeGhost(GameObject objectSpawn)
         {
 
@@ -48,13 +47,13 @@ namespace HGSLevelEditor
 
                 ghost.AddComponent<LevelObjectInfo>();
 
-               // ghost.AddComponent<MeshCollider>();
-               // ghost.GetComponent<MeshCollider>().sharedMesh = defaultMesh;
-               // ghost.AddComponent<MeshRenderer>().material = defaultMaterial;
+                //ghost.AddComponent<MeshCollider>();
+                //ghost.GetComponent<MeshCollider>().sharedMesh = defaultMesh;
+                //ghost.AddComponent<MeshRenderer>().material = defaultMaterial;
                 Debug.Log("Object ID for debug: " + objectSpawn.GetComponent<LevelObjectInfo>().data.objectID);
 
                 ghost.GetComponent<LevelObjectInfo>().data = objectSpawn.GetComponent<LevelObjectInfo>().GetObject();
-            
+
                 return ghost;
             
         }
@@ -76,7 +75,10 @@ namespace HGSLevelEditor
                     defaultMesh = oldChild.transform.gameObject.GetComponent<MeshFilter>().sharedMesh; 
                     child.AddComponent<MeshRenderer>().material = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
                     defaultMaterial = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
-                    child.AddComponent<MeshCollider>();
+                    child.AddComponent<BoxCollider>();
+                    
+                    
+
                 }
                 CopyMeshes(oldChild, ghost);
             }

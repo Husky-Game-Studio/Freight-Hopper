@@ -1,6 +1,7 @@
  using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; 
 using UnityEngine.EventSystems;
 namespace HGSLevelEditor { 
 public class LevelEditorMouseSupport : MonoBehaviour
@@ -17,7 +18,6 @@ public class LevelEditorMouseSupport : MonoBehaviour
     void Start()
     {
         Debug.Assert(MainCamera != null);
-        //Debug.Assert(transformSliders != null); 
     }
 
     // Update is called once per frame
@@ -50,26 +50,17 @@ public class LevelEditorMouseSupport : MonoBehaviour
 
                     else
                     {
-  
                         SetMovingObject(null);
                     }
-
-
                 }
             }
     }
 
      public void SetMovingObject(GameObject selected) {
 
-            //targetCube.transform.position = selected.transform.position;
-
-            //selected.transform.position = targetCube.transform.position;
-
             GameObject a = SetMovingObjectHelper(selected);
-            
+          
             transformSliders.SetSelectedObject(a);
-
-      
     }
 
         public GameObject SetMovingObjectHelper(GameObject obj) {
@@ -83,16 +74,13 @@ public class LevelEditorMouseSupport : MonoBehaviour
 
             if (selectedObject != null)
             {
-
                 selectedObject.GetComponent<Renderer>().material.color = objColor;
-
             }
 
             selectedObject = selected;
 
             if (selectedObject != null)
             {
-
                 objColor = selected.GetComponent<Renderer>().material.color;
                 selectedObject.GetComponent<Renderer>().material.color = selectedColor;
 

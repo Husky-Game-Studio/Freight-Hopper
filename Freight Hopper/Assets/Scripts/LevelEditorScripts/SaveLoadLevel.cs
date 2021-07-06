@@ -44,10 +44,8 @@ public class SaveLoadLevel : MonoBehaviour
 {
     //Variables 
     //This is for UI -- Need to be able to access file names for Loading Level Selection
-    public List<String> allLevels = new List<string>();
-
+    public List<string> allLevels = new List<string>();
     List<LevelObjectData> saveObjectInfoList = new List<LevelObjectData>();
-
     public static string saveFolderName = "Level";
 
     //Need something like this for loading objects between editor and play button 
@@ -55,12 +53,26 @@ public class SaveLoadLevel : MonoBehaviour
 
     GhostObjectMaker ghost;
 
-    //Will save level + update Load Button UI 
-
-    private void Start()
+    [Serializable]
+    public class SaveLevel
     {
-        //ghost = GhostObjectMaker.GetInstance();
+        [SerializeField] public List<LevelObjectData> SaveObject_List;
     }
+
+    public static SaveLoadLevel instance;
+    public static SaveLoadLevel GetInstance()
+    {
+        return instance;
+    }
+
+    private void Awake()
+    {
+        instance = this;
+        LoadAllLevels();
+    }
+
+
+    //Will save level + update Load Button UI 
     public void SaveLevelButton(string levelName) {
 
         SavingLevel(levelName);
@@ -75,7 +87,7 @@ public class SaveLoadLevel : MonoBehaviour
     }
 
     //Save level -- Saves all objects + their info/data into a file 
-    void SavingLevel(string levelName) {
+    private void SavingLevel(string levelName) {
         
         LevelObjectInfo [] obj = FindObjectsOfType<LevelObjectInfo>();
 
@@ -105,7 +117,7 @@ public class SaveLoadLevel : MonoBehaviour
     }
 
     //Loads file + saves files info within 'SaveLevel save'
-    bool LoadingLevel(string levelName, bool editorOn) {
+    private bool LoadingLevel(string levelName, bool editorOn) {
 
         bool retrieve = true;
 
@@ -127,7 +139,7 @@ public class SaveLoadLevel : MonoBehaviour
             //Notes for Nina: Need to change this to work with Level class 
             SaveLevel save = (SaveLevel)formatter.Deserialize(stream);
             stream.Close();
-            LoadActualLevel(save, editorOn);
+            LoadLevelObjects(save, editorOn);
         
         }
 
@@ -135,7 +147,7 @@ public class SaveLoadLevel : MonoBehaviour
     }
 
     //Assists in saving the file in the 'Streaming Assets' folder 
-    static string SavingLocation(string levelName) {
+    private static string SavingLocation(string levelName) {
 
         //Creating new location
         string savingLocation = Application.streamingAssetsPath + "/Levels/";
@@ -149,7 +161,7 @@ public class SaveLoadLevel : MonoBehaviour
     }
 
     //Instantiates game objects + data saved in file 
-    void LoadActualLevel(SaveLevel savedLevel, bool editorOn) {
+   private void LoadLevelObjects(SaveLevel savedLevel, bool editorOn) {
 
         LevelManager.GetInstance().ClearLevel();
     
@@ -193,21 +205,12 @@ public class SaveLoadLevel : MonoBehaviour
 
                 Instantiate(loadingObject, pos,
                 Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
-
-
             }
-            //GameObject load = Instantiate(HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab, pos, 
-            //Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
         }
     }
 
 
-    [Serializable]
-    public class SaveLevel {
-
-        [SerializeField]public List<LevelObjectData> SaveObject_List; 
-    }
-
+   
     //Gives allLevels all the file names within the 'Levels' folder 
     public void LoadAllLevels() { 
     
@@ -219,17 +222,5 @@ public class SaveLoadLevel : MonoBehaviour
             allLevels.Add(file.Name);
             Debug.Log(file.Name);
         }
-    }
-
-    public static SaveLoadLevel instance;
-    public static SaveLoadLevel GetInstance() {
-
-        return instance;
-    }
-
-    void Awake()
-    {
-        instance = this;
-        LoadAllLevels(); 
     }
 }

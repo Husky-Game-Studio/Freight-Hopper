@@ -98,7 +98,6 @@ namespace HGSLevelEditor
         {
             Vector3 p;
 
-
             if (mSelectedObject != null)
             {
                 p = mSelectedObject.transform.parent.localPosition;
