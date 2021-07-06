@@ -77,6 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cartsList: []
   insertCart: 8
+  repeatActionCount: 1
   locomotiveLength: 42.243
   cartLength: 40
   gapLength: 4
@@ -148,7 +149,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Locomotive
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7077515528789938321, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
 --- !u!4 &4268207889634961697 stripped
 Transform:

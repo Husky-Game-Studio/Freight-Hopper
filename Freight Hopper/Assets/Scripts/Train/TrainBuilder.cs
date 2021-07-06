@@ -46,9 +46,10 @@ public class TrainBuilder : MonoBehaviour
     }
 
     [System.Serializable]
-    private struct Cart
+    private class Cart
     {
         public CartProperties cartProperties;
+        public TrainCarts cartID;
         public GameObject cart;
         public ConfigurableJoint joint;
         public GameObject model;
@@ -59,6 +60,32 @@ public class TrainBuilder : MonoBehaviour
         locomotive = this.transform.GetChild(0).gameObject;
     }
 
+    [ContextMenu("Update All Trains")]
+    public void UpdateAllTrains()
+    {
+        TrainBuilder[] trainBuilders = FindObjectsOfType<TrainBuilder>();
+        foreach (TrainBuilder builder in trainBuilders)
+        {
+            builder.UpdateCarts();
+        }
+    }
+
+    [ContextMenu("Update Cart")]
+    public void UpdateCarts()
+    {
+        for (int i = 0; i < cartsList.Count; i++)
+        {
+            DestroyImmediate(cartsList[i].model);
+            GameObject model = cartModelsToPickFrom[(int)cartsList[i].cartID];
+            cartsList[i].model = Instantiate(model, GetPosition(i), this.transform.rotation, cartsList[i].cart.transform);
+        }
+    }
+
+    public Vector3 GetPosition(int index)
+    {
+        return this.transform.position + (this.transform.forward * -((index * cartLength / 2) + (locomotiveLength / 2) + ((index + 1) * (gapLength + jointSnappingLength))));
+    }
+
     // Adds cart to end of chain
     [ContextMenu("Add Cart")]
     public void AddCart()
@@ -67,8 +94,11 @@ public class TrainBuilder : MonoBehaviour
         {
             GameObject model = cartModelsToPickFrom[(int)insertCart];
 
-            Cart ourCart = new Cart();
-            Vector3 position = this.transform.position + (this.transform.forward * -((cartsList.Count * cartLength / 2) + (locomotiveLength / 2) + ((cartsList.Count + 1) * (gapLength + jointSnappingLength))));
+            Cart ourCart = new Cart
+            {
+                cartID = insertCart
+            };
+            Vector3 position = GetPosition(cartsList.Count);
             ourCart.cart = Instantiate(baseCart, position, this.transform.rotation, this.transform);
             ourCart.cartProperties = ourCart.cart.GetComponent<CartProperties>();
             ourCart.cartProperties.setCartIndex(cartsList.Count + 1);
