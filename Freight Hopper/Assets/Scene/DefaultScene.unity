@@ -928,12 +928,12 @@ MonoBehaviour:
   speed: 0
   horizontalMomentum: {x: 0, y: 0, z: 0}
   horizontalMomentumSpeed: 0
-  t: 0
-  tIncrement: 0.01
   oppositeInputAngle: 170
-  stretchMomentumModifier: 100
   groundAcceleration: 55
   airAcceleration: 0
+  accelerationReverse: 20
+  angleChange: 0.05
+  horizontalMomentumSpeedBarrier: 5
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,14 +5,14 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField, ReadOnly] private float speed;
     [SerializeField, ReadOnly] private Vector3 horizontalMomentum;
     [SerializeField, ReadOnly] private float horizontalMomentumSpeed;
-    [SerializeField, ReadOnly] private float t;
 
-    [SerializeField] private float tIncrement;
     [SerializeField] private float oppositeInputAngle = 170;
-    [SerializeField] private float stretchMomentumModifier = 10;
 
     [SerializeField] private float groundAcceleration = 20;
     [SerializeField] private float airAcceleration = 10;
+    [SerializeField] private float accelerationReverse = 10;
+    [SerializeField] private float angleChange = 1;
+    [SerializeField] private float horizontalMomentumSpeedBarrier = 5;
 
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
@@ -41,19 +41,20 @@ public class MovementBehavior : AbilityBehavior
         {
             return;
         }
-        if (physicsManager.collisionManager.IsGrounded.current)
+        if (!physicsManager.collisionManager.IsGrounded.current)
         {
-            if (OppositeInput(horizontalMomentum, relativeDirection))
+            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < horizontalMomentumSpeedBarrier)
             {
-                t = 0;
+                acceleration = accelerationReverse;
             }
             else
             {
-                acceleration = SampleMomentumFunction();
+                physicsManager.rb.AddForce(-horizontalMomentum, ForceMode.VelocityChange);
+                Vector3 rotatedVector = Vector3.RotateTowards(horizontalMomentum.normalized, relativeDirection, angleChange, 0);
+                physicsManager.rb.AddForce(rotatedVector * horizontalMomentumSpeed, ForceMode.VelocityChange);
             }
         }
-        physicsManager.rb.AddForce(-horizontalMomentum, ForceMode.VelocityChange);
-        physicsManager.rb.AddForce(relativeDirection * horizontalMomentumSpeed, ForceMode.VelocityChange);
+
         physicsManager.rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
     }
 
@@ -61,27 +62,10 @@ public class MovementBehavior : AbilityBehavior
     {
         if (inputDirection.IsZero())
         {
-            return true;
+            return false;
         }
         Vector3 normalizedMomentumDirection = momentumDirection.normalized;
         return Vector3.Angle(normalizedMomentumDirection, inputDirection) > oppositeInputAngle;
-    }
-
-    private float SampleMomentumFunction()
-    {
-        t += tIncrement;
-
-        if (t <= 0)
-        {
-            t = tIncrement;
-        }
-
-        while ((stretchMomentumModifier * Mathf.Log10(t)) + groundAcceleration < 0)
-        {
-            t += tIncrement;
-        }
-
-        return (stretchMomentumModifier * Mathf.Log10(t)) + groundAcceleration;
     }
 
     private void FixedUpdate()
@@ -104,13 +88,6 @@ public class MovementBehavior : AbilityBehavior
 
     public void UpdateSpeedometer()
     {
-        if (physicsManager.collisionManager.IsGrounded.current)
-        {
-            if (UserInput.Instance.Move().IsZero())
-            {
-                t -= tIncrement * 100;
-            }
-        }
         Vector3 velocity = physicsManager.rb.velocity;
         speed = velocity.magnitude;
 
