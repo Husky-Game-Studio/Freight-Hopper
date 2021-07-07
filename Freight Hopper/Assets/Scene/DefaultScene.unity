@@ -982,12 +982,14 @@ MonoBehaviour:
   unlocked: 0
   consumed: 0
   preventConsumption: 0
-  wallCheckDistance: 1
+  wallCheckDistance: 2
   wallrunCameraTilt: 4
   validWalls:
     serializedVersion: 2
     m_Bits: 2049
-  upwardsForce: 24
+  forwardDetectionTiltAngle: 45
+  backwardDetectionTiltAngle: 30
+  upwardsForce: 23
   rightForce: 4
   initialClimbForce: 5
   climbForce: 50
@@ -1000,8 +1002,8 @@ MonoBehaviour:
   jumpHoldingTimer:
     duration: 0.5
     current: 0
+  wallStatus: 000000
   wallNormals:
-  - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}

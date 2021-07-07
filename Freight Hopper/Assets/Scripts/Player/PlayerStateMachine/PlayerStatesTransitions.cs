@@ -135,7 +135,7 @@ public class PlayerStatesTransitions
         {
             bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus();
             // Fall from wall climb
-            if (!status[0] && !status[1] && !status[3] &&
+            if (!status[0] && !status[1] && !status[2] &&
                 playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[2] &&
                 playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[1])
             {
@@ -151,7 +151,7 @@ public class PlayerStatesTransitions
             {
                 return playerMachine.defaultState;
             }
-            if (playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState == playerMachine.wallRunState.GetSubStateArray()[1] && !status[0])
+            if (playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState == playerMachine.wallRunState.GetSubStateArray()[1] && !status[1])
             {
                 return playerMachine.defaultState;
             }
@@ -370,7 +370,7 @@ public class PlayerStatesTransitions
         if (playerMachine.abilities.wallRunBehavior.Unlocked && !playerMachine.playerCM.IsGrounded.current)
         {
             bool[] walls = playerMachine.abilities.wallRunBehavior.WallStatus();
-            if (walls[0] || walls[1] || walls[3])
+            if (walls[0] || walls[1] || walls[2])
             {
                 return playerMachine.wallRunState;
             }
@@ -383,7 +383,7 @@ public class PlayerStatesTransitions
     {
         bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus();
         // Wall Climb
-        if (status[0] && !status[1] && !status[3])
+        if (status[1] && !status[0] && !status[2])
         {
             return playerMachine.GetCurrentState().GetSubStateArray()[1];
         }

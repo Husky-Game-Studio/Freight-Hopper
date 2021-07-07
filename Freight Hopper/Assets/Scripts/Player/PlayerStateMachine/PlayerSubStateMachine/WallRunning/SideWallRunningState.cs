@@ -15,11 +15,11 @@ public class SideWallRunningState : PlayerState
     public override void PerformBehavior()
     {
         bool[] status = playerMachineCenter.abilities.wallRunBehavior.WallStatus();
-        if (status[1])
+        if (status[2])
         {
             playerMachineCenter.abilities.wallRunBehavior.RightWallRun();
         }
-        if (status[3])
+        if (status[0])
         {
             playerMachineCenter.abilities.wallRunBehavior.LeftWallRun();
         }

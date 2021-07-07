@@ -1,11 +1,13 @@
 using UnityEngine;
 
-public class WallRunBehavior : AbilityBehavior
+public partial class WallRunBehavior : AbilityBehavior
 {
     [Header("Wall detection")]
     [SerializeField] private float wallCheckDistance = 1;
     [SerializeField] private float wallrunCameraTilt = 5;
     [SerializeField] private LayerMask validWalls;
+    [SerializeField] private float forwardDetectionTiltAngle = 45;
+    [SerializeField] private float backwardDetectionTiltAngle = 30;
 
     [Space, Header("Wall Running")]
     [SerializeField] private float upwardsForce = 10;
@@ -28,80 +30,65 @@ public class WallRunBehavior : AbilityBehavior
     private FirstPersonCamera cameraController;
     private JumpBehavior jumpBehavior;
 
-    // Front, Right, Back, Left is what the array represents
-    [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[4];
-    private bool[] wallStatus;
+    // left, front, right
+    [SerializeField, ReadOnly] private bool[] wallStatus = new bool[3];
+    [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[3];
 
+    // Left, Front, Right
     public bool[] WallStatus() => wallStatus.Clone() as bool[];
+
+    private WallDetectionLayer[] detectionlayers;
 
     private void Awake()
     {
         cameraController = Camera.main.GetComponent<FirstPersonCamera>();
         jumpBehavior = this.GetComponent<JumpBehavior>();
+        detectionlayers = new WallDetectionLayer[]
+        {
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 0, 0),
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, -1, 0),
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 1, 0)
+        };
     }
 
     private void FixedUpdate()
     {
-        wallStatus = CheckWalls();
-    }
-
-    // bool[] represents the relative cardinal directions. If there is a wall forward then bool[0] = true
-    private bool[] UpdateWallStatus(Vector3[] walls)
-    {
-        bool[] nearWall = { false, false, false, false };
-        for (int i = 0; i < 4; i++)
+        wallStatus = new bool[] { false, false, false };
+        wallNormals = new Vector3[] { Vector3.zero, Vector3.zero, Vector3.zero };
+        foreach (WallDetectionLayer layer in detectionlayers)
         {
-            if (!walls[i].IsZero())
+            layer.CheckWalls(physicsManager, wallCheckDistance, validWalls);
+            (bool, Vector3) temp;
+            temp = layer.LeftDetected();
+            wallStatus[0] |= temp.Item1;
+            if (temp.Item2 != Vector3.zero)
             {
-                nearWall[i] = true;
+                wallNormals[0] = temp.Item2;
+            }
+
+            temp = layer.FrontDetected();
+            wallStatus[1] |= temp.Item1;
+            if (temp.Item2 != Vector3.zero)
+            {
+                wallNormals[1] = temp.Item2;
+            }
+
+            temp = layer.RightDetected();
+            wallStatus[2] |= temp.Item1;
+            if (temp.Item2 != Vector3.zero)
+            {
+                wallNormals[2] = temp.Item2;
             }
         }
-        wallNormals = walls;
-        return nearWall;
-    }
-
-    // Returns the 4 relative cardinal directions as normals. Vector3.zero if no wall is found in the relative cardinal direction
-    public Vector3[] CheckWalls(float distance, LayerMask layers)
-    {
-        Vector3[] walls = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
-        Vector3[] directions = { Vector3.forward, Vector3.right, -Vector3.forward, -Vector3.right };
-        for (int i = 0; i < 4; ++i)
-        {
-            if (Physics.Raycast(physicsManager.rb.position, physicsManager.rb.transform.TransformDirection(directions[i]), out RaycastHit hit, distance, layers))
-            {
-                if (!hit.transform.CompareTag("landable"))
-                {
-                    continue;
-                }
-                if (hit.rigidbody != null)
-                {
-                    physicsManager.rigidbodyLinker.UpdateLink(hit.rigidbody);
-                }
-                float collisionAngle = Vector3.Angle(hit.normal, physicsManager.collisionManager.ValidUpAxis);
-                if (collisionAngle > physicsManager.collisionManager.MaxSlope)
-                {
-                    walls[i] = hit.normal;
-                }
-            }
-        }
-
-        return walls;
-    }
-
-    // Returns if "touching" one of the 4 relative cardinal walls.
-    // Also updates internal wall normal storage
-    public bool[] CheckWalls()
-    {
-        return UpdateWallStatus(CheckWalls(wallCheckDistance, validWalls));
     }
 
     public void InitialWallClimb()
     {
         cameraController.ResetUpAxis();
         StopPlayerFalling();
-        Vector3 upAlongWall = Vector3.Cross(physicsManager.rb.transform.right, wallNormals[0]);
+        Vector3 upAlongWall = Vector3.Cross(physicsManager.rb.transform.right, wallNormals[1]);
 
-        physicsManager.rb.AddForce(rightForce * -wallNormals[0], ForceMode.VelocityChange);
+        physicsManager.rb.AddForce(rightForce * -wallNormals[1], ForceMode.VelocityChange);
         physicsManager.rb.AddForce(initialClimbForce * upAlongWall, ForceMode.VelocityChange);
     }
 
@@ -117,10 +104,10 @@ public class WallRunBehavior : AbilityBehavior
     public void WallClimb()
     {
         soundManager.Play("WallClimb");
-        Vector3 upAlongWall = GetUpAlongWall(wallNormals[0]);
-        cameraController.TiltUpAxis(Vector3.Cross(-wallNormals[0], upAlongWall) * wallrunCameraTilt);
+        Vector3 upAlongWall = GetUpAlongWall(wallNormals[1]);
+        cameraController.TiltUpAxis(Vector3.Cross(-wallNormals[1], upAlongWall) * wallrunCameraTilt);
 
-        physicsManager.rb.AddForce(rightForce * -wallNormals[0], ForceMode.Acceleration);
+        physicsManager.rb.AddForce(rightForce * -wallNormals[1], ForceMode.Acceleration);
         physicsManager.rb.AddForce(climbForce * upAlongWall, ForceMode.Acceleration);
     }
 
@@ -157,12 +144,12 @@ public class WallRunBehavior : AbilityBehavior
 
     public void RightWallRun()
     {
-        WallRun(-wallNormals[1], GetUpAlongWall(wallNormals[1]));
+        WallRun(-wallNormals[2], GetUpAlongWall(wallNormals[2]));
     }
 
     public void LeftWallRun()
     {
-        WallRun(-wallNormals[3], GetUpAlongWall(wallNormals[3]));
+        WallRun(-wallNormals[0], GetUpAlongWall(wallNormals[0]));
     }
 
     private void WallRun(Vector3 right, Vector3 up)
