@@ -900,7 +900,7 @@ MonoBehaviour:
   consumed: 0
   preventConsumption: 0
   minJumpHeight: 3
-  holdingJumpForceMultiplier: 15
+  holdingJumpForceMultiplier: 13
   jumpHoldingTimer:
     duration: 0.5
     current: 0
@@ -931,12 +931,12 @@ MonoBehaviour:
   horizontalMomentumRelative: {x: 0, y: 0, z: 0}
   horizontalMomentumRelativeSpeed: 0
   oppositeInputAngle: 90
-  groundAcceleration: 40
+  groundAcceleration: 80
   airAcceleration: 20
-  groundAngleChange: 0.05
-  airAngleChange: 0.02
-  groundSpeedLimit: 30
-  airSpeedLimit: 10
+  groundAngleChange: 0.02
+  airAngleChange: 0.01
+  groundSpeedLimit: 17
+  airSpeedLimit: 7
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0
