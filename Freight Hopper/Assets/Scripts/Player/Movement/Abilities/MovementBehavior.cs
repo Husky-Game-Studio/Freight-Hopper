@@ -12,11 +12,11 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] private float oppositeInputAngle = 170;
 
     [SerializeField] private float groundAcceleration = 20;
-    [SerializeField] private float accelerationReverse = 10;
+    [SerializeField] private float airAcceleration = 10;
     [SerializeField] private float groundAngleChange = 1;
-    [SerializeField] private float angleChange = 1;
-    [SerializeField] private float horizontalMomentumGroundSpeedBarrier = 15;
-    [SerializeField] private float horizontalMomentumAirSpeedBarrier = 5;
+    [SerializeField] private float airAngleChange = 1;
+    [SerializeField] private float groundSpeedLimit = 15;
+    [SerializeField] private float airSpeedLimit = 5;
 
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
@@ -47,14 +47,14 @@ public class MovementBehavior : AbilityBehavior
         }
         if (!physicsManager.collisionManager.IsGrounded.current)
         {
-            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < (horizontalMomentumAirSpeedBarrier * abilitiesManager.PlayerScale))
+            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < (airSpeedLimit * abilitiesManager.PlayerScale))
             {
-                physicsManager.rb.AddForce(relativeDirection * accelerationReverse * abilitiesManager.PlayerScale, ForceMode.Acceleration);
+                physicsManager.rb.AddForce(relativeDirection * airAcceleration * abilitiesManager.PlayerScale, ForceMode.Acceleration);
             }
             else
             {
                 physicsManager.rb.AddForce(-horizontalMomentum, ForceMode.VelocityChange);
-                Vector3 rotatedVector = Vector3.RotateTowards(horizontalMomentum.normalized, relativeDirection, angleChange, 0);
+                Vector3 rotatedVector = Vector3.RotateTowards(horizontalMomentum.normalized, relativeDirection, airAngleChange, 0);
                 physicsManager.rb.AddForce(rotatedVector * horizontalMomentumSpeed, ForceMode.VelocityChange);
             }
         }
@@ -65,7 +65,7 @@ public class MovementBehavior : AbilityBehavior
             float nextSpeed = ((acceleration * Time.fixedDeltaTime * relativeDirection) +
                 horizontalMomentumRelative).magnitude;
 
-            if (nextSpeed < horizontalMomentumGroundSpeedBarrier * abilitiesManager.PlayerScale)
+            if (nextSpeed < groundSpeedLimit * abilitiesManager.PlayerScale)
             {
                 physicsManager.rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
             }
