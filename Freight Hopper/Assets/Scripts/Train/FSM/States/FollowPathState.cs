@@ -22,12 +22,11 @@ public class FollowPathState : BasicState
     {
         pathCreator = trainFSM.GetCurrentPathObject().pathCreator;
         railLinker = pathCreator.GetComponent<TrainRailLinker>();
-
+        t = trainFSM.GetClosestTValueOnCurrentPath();
         foreach (Cart cart in trainFSM.carts)
         {
-            railLinker.Link(cart.rb);
+            railLinker.Link(cart.rb, t);
         }
-        t = trainFSM.GetClosestTValueOnCurrentPath();
         endOfPath = false;
         // Sparks fly
     }
