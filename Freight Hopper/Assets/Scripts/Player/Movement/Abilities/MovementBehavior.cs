@@ -47,9 +47,9 @@ public class MovementBehavior : AbilityBehavior
         }
         if (!physicsManager.collisionManager.IsGrounded.current)
         {
-            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < (airSpeedLimit * abilitiesManager.PlayerScale))
+            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < airSpeedLimit)
             {
-                physicsManager.rb.AddForce(relativeDirection * airAcceleration * abilitiesManager.PlayerScale, ForceMode.Acceleration);
+                physicsManager.rb.AddForce(relativeDirection * airAcceleration, ForceMode.Acceleration);
             }
             else
             {
@@ -61,11 +61,11 @@ public class MovementBehavior : AbilityBehavior
         else
         {
             physicsManager.friction.ReduceFriction(1);
-            float acceleration = groundAcceleration * abilitiesManager.PlayerScale;
+            float acceleration = groundAcceleration;
             float nextSpeed = ((acceleration * Time.fixedDeltaTime * relativeDirection) +
                 horizontalMomentumRelative).magnitude;
 
-            if (nextSpeed < groundSpeedLimit * abilitiesManager.PlayerScale)
+            if (nextSpeed < groundSpeedLimit)
             {
                 physicsManager.rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
             }

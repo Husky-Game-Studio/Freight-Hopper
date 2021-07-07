@@ -15,9 +15,6 @@ public class PlayerAbilities : MonoBehaviour
     public BurstBehavior burstBehavior;
     public FullStopBehavior fullstopBehavior;
 
-    [SerializeField] private float playerScale = 1;
-    public float PlayerScale => playerScale;
-
     public enum Name
     {
         MovementBehavior,

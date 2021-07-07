@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3573.504, g: 1988.5029, b: 1220.0254, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -931,12 +931,12 @@ MonoBehaviour:
   horizontalMomentumRelative: {x: 0, y: 0, z: 0}
   horizontalMomentumRelativeSpeed: 0
   oppositeInputAngle: 90
-  groundAcceleration: 20
-  accelerationReverse: 20
+  groundAcceleration: 40
+  airAcceleration: 20
   groundAngleChange: 0.05
-  angleChange: 0.02
-  horizontalMomentumGroundSpeedBarrier: 10
-  horizontalMomentumAirSpeedBarrier: 5
+  airAngleChange: 0.02
+  groundSpeedLimit: 30
+  airSpeedLimit: 10
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1371,7 +1371,6 @@ MonoBehaviour:
   upwardDashBehavior: {fileID: 1798020247}
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
-  playerScale: 2
   abilities: []
   playerPM: {fileID: 0}
   playerSM: {fileID: 0}
