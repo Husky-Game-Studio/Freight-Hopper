@@ -9,7 +9,6 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] private float oppositeInputAngle = 170;
 
     [SerializeField] private float groundAcceleration = 20;
-    [SerializeField] private float airAcceleration = 10;
     [SerializeField] private float accelerationReverse = 10;
     [SerializeField] private float angleChange = 1;
     [SerializeField] private float horizontalMomentumSpeedBarrier = 5;
@@ -17,9 +16,9 @@ public class MovementBehavior : AbilityBehavior
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
 
-    public override void Initialize(PhysicsManager pm, SoundManager sm)
+    public override void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
     {
-        base.Initialize(pm, sm);
+        base.Initialize(pm, sm, pa);
         cameraTransform = Camera.main.transform;
     }
 
@@ -34,7 +33,7 @@ public class MovementBehavior : AbilityBehavior
         return move;
     }
 
-    public void Move(Vector3 direction, float acceleration)
+    public void Move(Vector3 direction)
     {
         Vector3 relativeDirection = direction.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).normalized;
         if (direction.IsZero())
@@ -43,9 +42,9 @@ public class MovementBehavior : AbilityBehavior
         }
         if (!physicsManager.collisionManager.IsGrounded.current)
         {
-            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < horizontalMomentumSpeedBarrier)
+            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < (horizontalMomentumSpeedBarrier * abilitiesManager.PlayerScale))
             {
-                acceleration = accelerationReverse;
+                physicsManager.rb.AddForce(relativeDirection * accelerationReverse * abilitiesManager.PlayerScale, ForceMode.Acceleration);
             }
             else
             {
@@ -54,8 +53,10 @@ public class MovementBehavior : AbilityBehavior
                 physicsManager.rb.AddForce(rotatedVector * horizontalMomentumSpeed, ForceMode.VelocityChange);
             }
         }
-
-        physicsManager.rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
+        else
+        {
+            physicsManager.rb.AddForce(relativeDirection * groundAcceleration * abilitiesManager.PlayerScale, ForceMode.Acceleration);
+        }
     }
 
     private bool OppositeInput(Vector3 momentumDirection, Vector3 inputDirection)
@@ -76,15 +77,12 @@ public class MovementBehavior : AbilityBehavior
     {
         Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
 
-        Move(relativeMove, physicsManager.collisionManager.IsGrounded.current ?
-            groundAcceleration : airAcceleration);
+        Move(relativeMove);
     }
 
     public override void EntryAction()
     {
     }
-
-    private Vector3 lastConnectionVelocity;
 
     public void UpdateSpeedometer()
     {
