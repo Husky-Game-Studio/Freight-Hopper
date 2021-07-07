@@ -5,13 +5,18 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField, ReadOnly] private float speed;
     [SerializeField, ReadOnly] private Vector3 horizontalMomentum;
     [SerializeField, ReadOnly] private float horizontalMomentumSpeed;
+    [Space]
+    [SerializeField, ReadOnly] private Vector3 horizontalMomentumRelative;
+    [SerializeField, ReadOnly] private float horizontalMomentumRelativeSpeed;
 
     [SerializeField] private float oppositeInputAngle = 170;
 
     [SerializeField] private float groundAcceleration = 20;
     [SerializeField] private float accelerationReverse = 10;
+    [SerializeField] private float groundAngleChange = 1;
     [SerializeField] private float angleChange = 1;
-    [SerializeField] private float horizontalMomentumSpeedBarrier = 5;
+    [SerializeField] private float horizontalMomentumGroundSpeedBarrier = 15;
+    [SerializeField] private float horizontalMomentumAirSpeedBarrier = 5;
 
     private Transform cameraTransform;
     public float Speed => groundAcceleration;
@@ -42,7 +47,7 @@ public class MovementBehavior : AbilityBehavior
         }
         if (!physicsManager.collisionManager.IsGrounded.current)
         {
-            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < (horizontalMomentumSpeedBarrier * abilitiesManager.PlayerScale))
+            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < (horizontalMomentumAirSpeedBarrier * abilitiesManager.PlayerScale))
             {
                 physicsManager.rb.AddForce(relativeDirection * accelerationReverse * abilitiesManager.PlayerScale, ForceMode.Acceleration);
             }
@@ -55,7 +60,25 @@ public class MovementBehavior : AbilityBehavior
         }
         else
         {
-            physicsManager.rb.AddForce(relativeDirection * groundAcceleration * abilitiesManager.PlayerScale, ForceMode.Acceleration);
+            physicsManager.friction.ReduceFriction(1);
+            float acceleration = groundAcceleration * abilitiesManager.PlayerScale;
+            float nextSpeed = ((acceleration * Time.fixedDeltaTime * relativeDirection) +
+                horizontalMomentumRelative).magnitude;
+
+            if (nextSpeed < horizontalMomentumGroundSpeedBarrier * abilitiesManager.PlayerScale)
+            {
+                physicsManager.rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
+            }
+            else
+            {
+                physicsManager.rb.AddForce(-horizontalMomentumRelative, ForceMode.VelocityChange);
+                Vector3 rotatedVector = Vector3.RotateTowards(horizontalMomentumRelative.normalized, relativeDirection, groundAngleChange, 0);
+                physicsManager.rb.AddForce(rotatedVector * horizontalMomentumRelativeSpeed, ForceMode.VelocityChange);
+            }
+            if (OppositeInput(horizontalMomentumRelative, relativeDirection))
+            {
+                physicsManager.friction.ResetFrictionReduction();
+            }
         }
     }
 
@@ -86,11 +109,17 @@ public class MovementBehavior : AbilityBehavior
 
     public void UpdateSpeedometer()
     {
+        if (UserInput.Instance.Move().IsZero())
+        {
+            physicsManager.friction.ResetFrictionReduction();
+        }
         Vector3 velocity = physicsManager.rb.velocity;
         speed = velocity.magnitude;
 
         horizontalMomentum = velocity.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current);
         horizontalMomentumSpeed = horizontalMomentum.magnitude;
+        horizontalMomentumRelative = horizontalMomentum - physicsManager.rigidbodyLinker.ConnectionVelocity.current;
+        horizontalMomentumRelativeSpeed = horizontalMomentumRelative.magnitude;
     }
 
     public override void Action()
