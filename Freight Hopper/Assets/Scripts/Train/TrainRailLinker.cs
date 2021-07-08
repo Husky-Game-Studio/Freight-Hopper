@@ -21,6 +21,7 @@ public class TrainRailLinker : MonoBehaviour
     private class TrainData
     {
         public Rigidbody rb;
+        public float startingT;
         public float t;
         public PID controller;
     }
@@ -31,12 +32,13 @@ public class TrainRailLinker : MonoBehaviour
     }
 
     // Links rigidbody to the rail, assuming its a cart
-    public void Link(Rigidbody rb)
+    public void Link(Rigidbody rb, float startingT)
     {
         TrainData trainObject = new TrainData
         {
             rb = rb,
-            t = 0
+            startingT = startingT,
+            t = startingT
         };
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
         trainObject.controller = new PID();
@@ -93,7 +95,7 @@ public class TrainRailLinker : MonoBehaviour
         for (int i = 0; i < linkedTrainObjects.Count; i++)
         {
             AdjustT(linkedTrainObjects[i]);
-            if (linkedTrainObjects[i].t == 0)
+            if (linkedTrainObjects[i].t == linkedTrainObjects[i].startingT)
             {
                 continue;
             }

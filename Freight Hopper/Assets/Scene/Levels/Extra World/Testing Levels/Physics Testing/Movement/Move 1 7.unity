@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3292.9658, g: 1717.0703, b: 879.78906, a: 1}
+  m_IndirectSpecularColor: {r: 3506.3281, g: 1989.5859, b: 1287.5859, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1611,7 +1611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e26fb8c17cdf34db395cefe764fe48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 25
+  gravity: 35
   priority: 0
 --- !u!1001 &1106172644
 PrefabInstance:
@@ -1638,7 +1638,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: loop
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: forceBounds.x
@@ -1667,6 +1667,10 @@ PrefabInstance:
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: torqueBounds.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: pathObjects.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: pathObjects.Array.data[0]
@@ -2420,7 +2424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: loop
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: forceBounds.x
@@ -2449,6 +2453,10 @@ PrefabInstance:
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: torqueBounds.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: pathObjects.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: pathObjects.Array.data[0]
@@ -2693,11 +2701,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2123003565903232065, guid: 435ed20324da4f0449bc28e2570c19bb, type: 3}
       propertyPath: path.points.Array.data[2].x
-      value: 60.184647
+      value: 60.184692
       objectReference: {fileID: 0}
     - target: {fileID: 2123003565903232065, guid: 435ed20324da4f0449bc28e2570c19bb, type: 3}
       propertyPath: path.points.Array.data[2].y
-      value: 0.3863658
+      value: 0.38635254
       objectReference: {fileID: 0}
     - target: {fileID: 2123003565903232065, guid: 435ed20324da4f0449bc28e2570c19bb, type: 3}
       propertyPath: path.points.Array.data[2].z

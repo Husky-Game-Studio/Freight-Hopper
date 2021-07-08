@@ -22,9 +22,9 @@ public class GrapplePoleBehavior : AbilityBehavior
 
     private Transform cameraTransform;
 
-    public override void Initialize(PhysicsManager pm, SoundManager sm)
+    public override void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
     {
-        base.Initialize(pm, sm);
+        base.Initialize(pm, sm, pa);
         cameraTransform = Camera.main.transform;
     }
 

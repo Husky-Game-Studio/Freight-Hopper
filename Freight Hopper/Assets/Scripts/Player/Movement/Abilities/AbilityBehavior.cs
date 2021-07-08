@@ -14,11 +14,13 @@ public class AbilityBehavior : MonoBehaviour
 
     protected PhysicsManager physicsManager;
     protected SoundManager soundManager;
+    protected PlayerAbilities abilitiesManager;
 
-    public virtual void Initialize(PhysicsManager pm, SoundManager sm)
+    public virtual void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
     {
         this.physicsManager = pm;
         this.soundManager = sm;
+        this.abilitiesManager = pa;
     }
 
     public SoundManager PlayerSoundManager() => soundManager;

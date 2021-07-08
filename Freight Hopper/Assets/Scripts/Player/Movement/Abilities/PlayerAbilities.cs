@@ -64,7 +64,7 @@ public class PlayerAbilities : MonoBehaviour
             {
                 Debug.LogError("Ability script links not found");
             }
-            ability.Initialize(playerPM, playerSM);
+            ability.Initialize(playerPM, playerSM, this);
         }
         doubleJumpBehavior.GetJumpBehavior(jumpBehavior);
     }

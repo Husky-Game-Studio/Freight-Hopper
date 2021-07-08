@@ -89,6 +89,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""80946741-8662-445a-be86-07b62f08ee5b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -234,6 +242,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Grapple Pole"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1dd3bb63-6b8b-4020-9b4b-a7c103d99c4f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -251,6 +270,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_UpwardDash = m_Player.FindAction("Upward Dash", throwIfNotFound: true);
         m_Player_FullStop = m_Player.FindAction("Full Stop", throwIfNotFound: true);
         m_Player_GrapplePole = m_Player.FindAction("Grapple Pole", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -309,6 +329,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_UpwardDash;
     private readonly InputAction m_Player_FullStop;
     private readonly InputAction m_Player_GrapplePole;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -322,6 +343,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @UpwardDash => m_Wrapper.m_Player_UpwardDash;
         public InputAction @FullStop => m_Wrapper.m_Player_FullStop;
         public InputAction @GrapplePole => m_Wrapper.m_Player_GrapplePole;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -358,6 +380,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @GrapplePole.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
                 @GrapplePole.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
                 @GrapplePole.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
+                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -389,6 +414,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @GrapplePole.started += instance.OnGrapplePole;
                 @GrapplePole.performed += instance.OnGrapplePole;
                 @GrapplePole.canceled += instance.OnGrapplePole;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -404,5 +432,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnUpwardDash(InputAction.CallbackContext context);
         void OnFullStop(InputAction.CallbackContext context);
         void OnGrapplePole(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }
