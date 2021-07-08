@@ -2,7 +2,6 @@
 
 public class WallDetectionLayer
 {
-    private float height = 0;
     private float priority = 0;
 
     public float Priority => priority;
@@ -26,7 +25,6 @@ public class WallDetectionLayer
 
     public WallDetectionLayer(float frontAngles, float backAngles, float height, float priority)
     {
-        this.height = height;
         this.priority = priority;
         Vector3 origin = Vector3.zero + (Vector3.up * height);
 

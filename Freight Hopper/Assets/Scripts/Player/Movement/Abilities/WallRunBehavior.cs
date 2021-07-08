@@ -12,6 +12,7 @@ public partial class WallRunBehavior : AbilityBehavior
     [Space, Header("Wall Running")]
     [SerializeField] private float upwardsForce = 10;
     [SerializeField] private float rightForce = 5;
+    [SerializeField] private float forwardForce = 5;
 
     [Space, Header("Wall Climbing")]
     [SerializeField] private float initialClimbForce = 5;
@@ -116,18 +117,20 @@ public partial class WallRunBehavior : AbilityBehavior
         cameraController.ResetUpAxis();
         soundManager.Play("WallJump");
 
-        Vector3 sumNormals = Vector3.zero;
+        /*Vector3 sumNormals = Vector3.zero;
         foreach (Vector3 normal in wallNormals)
         {
             sumNormals += normal;
         }
-        sumNormals.Normalize();
+        sumNormals.Normalize();*/
+
+        Vector3 jumpNormal = Camera.main.transform.forward;
 
         StopPlayerFalling();
 
-        jumpNormalCache = sumNormals;
+        jumpNormalCache = jumpNormal;
         jumpBehavior.Jump();
-        physicsManager.rb.AddForce(jumpIniitalPush * sumNormals, ForceMode.VelocityChange);
+        physicsManager.rb.AddForce(jumpIniitalPush * jumpNormalCache, ForceMode.VelocityChange);
     }
 
     public void WallJumpContinous()
@@ -155,7 +158,10 @@ public partial class WallRunBehavior : AbilityBehavior
     private void WallRun(Vector3 right, Vector3 up)
     {
         soundManager.Play("WallSkid");
-        cameraController.TiltUpAxis(Vector3.Cross(right, up) * wallrunCameraTilt);
+        Vector3 forward = Vector3.Cross(right, up);
+        cameraController.TiltUpAxis(forward * wallrunCameraTilt);
+        Vector3 cameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, -right);
+        physicsManager.rb.AddForce(cameraForward * forwardForce, ForceMode.Acceleration);
         physicsManager.rb.AddForce(right * rightForce, ForceMode.Acceleration);
         physicsManager.rb.AddForce(up * upwardsForce, ForceMode.Acceleration);
     }
