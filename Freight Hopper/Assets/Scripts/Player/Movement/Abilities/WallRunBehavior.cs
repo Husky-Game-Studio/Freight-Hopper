@@ -3,7 +3,8 @@ using UnityEngine;
 public partial class WallRunBehavior : AbilityBehavior
 {
     [Header("Wall detection")]
-    [SerializeField] private float wallCheckDistance = 1;
+    [SerializeField] private float wallCheckDistance = 2;
+    [SerializeField] private float detectionLayerSpacing = 0.75f;
     [SerializeField] private float wallrunCameraTilt = 5;
     [SerializeField] private LayerMask validWalls;
     [SerializeField] private float forwardDetectionTiltAngle = 45;
@@ -47,8 +48,8 @@ public partial class WallRunBehavior : AbilityBehavior
         detectionlayers = new WallDetectionLayer[]
         {
             new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 0, 0),
-            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, -1, 0),
-            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 1, 0)
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, -detectionLayerSpacing, 0),
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, detectionLayerSpacing, 0)
         };
     }
 
