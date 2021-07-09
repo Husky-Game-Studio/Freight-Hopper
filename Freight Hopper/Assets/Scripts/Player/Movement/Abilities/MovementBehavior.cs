@@ -2,29 +2,19 @@ using UnityEngine;
 
 public class MovementBehavior : AbilityBehavior
 {
-    [SerializeField, ReadOnly] private float speed;
-    [SerializeField, ReadOnly] private Vector3 horizontalMomentum;
-    [SerializeField, ReadOnly] private float horizontalMomentumSpeed;
-    [Space]
-    [SerializeField, ReadOnly] private Vector3 horizontalMomentumRelative;
-    [SerializeField, ReadOnly] private float horizontalMomentumRelativeSpeed;
-
     [SerializeField] private float oppositeInputAngle = 170;
 
-    [SerializeField] private float groundAcceleration = 20;
-    [SerializeField] private float airAcceleration = 10;
-    [SerializeField] private float groundAngleChange = 1;
-    [SerializeField] private float airAngleChange = 1;
-    [SerializeField] private float groundSpeedLimit = 15;
-    [SerializeField] private float airSpeedLimit = 5;
+    [SerializeField] private VelocityController groundController;
+    [SerializeField] private VelocityController airController;
 
     private Transform cameraTransform;
-    public float Speed => groundAcceleration;
 
     public override void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
     {
         base.Initialize(pm, sm, pa);
         cameraTransform = Camera.main.transform;
+        groundController.Initialize(pm, oppositeInputAngle);
+        airController.Initialize(pm, oppositeInputAngle);
     }
 
     private Vector3 RelativeMove(Vector3 forward, Vector3 right)
@@ -47,53 +37,13 @@ public class MovementBehavior : AbilityBehavior
         }
         if (!physicsManager.collisionManager.IsGrounded.current)
         {
-            if (OppositeInput(horizontalMomentum, relativeDirection) || horizontalMomentumSpeed < airSpeedLimit)
-            {
-                physicsManager.rb.AddForce(relativeDirection * airAcceleration, ForceMode.Acceleration);
-            }
-            else
-            {
-                physicsManager.rb.AddForce(-horizontalMomentum, ForceMode.VelocityChange);
-                Vector3 rotatedVector = Vector3.RotateTowards(horizontalMomentum.normalized, relativeDirection, airAngleChange, 0);
-                physicsManager.rb.AddForce(rotatedVector * horizontalMomentumSpeed, ForceMode.VelocityChange);
-            }
+            airController.Move(relativeDirection);
         }
         else
         {
             physicsManager.friction.ReduceFriction(1);
-            float acceleration = groundAcceleration;
-            float nextSpeed = ((acceleration * Time.fixedDeltaTime * relativeDirection) +
-                horizontalMomentumRelative).magnitude;
-
-            if (nextSpeed < groundSpeedLimit)
-            {
-                physicsManager.rb.AddForce(relativeDirection * acceleration, ForceMode.Acceleration);
-            }
-            else
-            {
-                physicsManager.rb.AddForce(-horizontalMomentumRelative, ForceMode.VelocityChange);
-                Vector3 rotatedVector = Vector3.RotateTowards(horizontalMomentumRelative.normalized, relativeDirection, groundAngleChange, 0);
-                physicsManager.rb.AddForce(rotatedVector * horizontalMomentumRelativeSpeed, ForceMode.VelocityChange);
-            }
-            if (OppositeInput(horizontalMomentumRelative, relativeDirection))
-            {
-                physicsManager.friction.ResetFrictionReduction();
-            }
+            groundController.Move(relativeDirection);
         }
-    }
-
-    private bool OppositeInput(Vector3 momentumDirection, Vector3 inputDirection)
-    {
-        if (inputDirection.IsZero())
-        {
-            return false;
-        }
-        Vector3 normalizedMomentumDirection = momentumDirection.normalized;
-        return Vector3.Angle(normalizedMomentumDirection, inputDirection) > oppositeInputAngle;
-    }
-
-    private void FixedUpdate()
-    {
     }
 
     public void PlayerMove()
@@ -107,19 +57,14 @@ public class MovementBehavior : AbilityBehavior
     {
     }
 
-    public void UpdateSpeedometer()
+    public void UpdateMovement()
     {
         if (UserInput.Instance.Move().IsZero())
         {
             physicsManager.friction.ResetFrictionReduction();
         }
-        Vector3 velocity = physicsManager.rb.velocity;
-        speed = velocity.magnitude;
-
-        horizontalMomentum = velocity.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current);
-        horizontalMomentumSpeed = horizontalMomentum.magnitude;
-        horizontalMomentumRelative = horizontalMomentum - physicsManager.rigidbodyLinker.ConnectionVelocity.current;
-        horizontalMomentumRelativeSpeed = horizontalMomentumRelative.magnitude;
+        groundController.UpdateSpeedometer();
+        airController.UpdateSpeedometer();
     }
 
     public override void Action()

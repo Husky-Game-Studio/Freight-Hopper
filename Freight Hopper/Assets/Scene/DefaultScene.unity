@@ -925,18 +925,23 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
-  speed: 0
-  horizontalMomentum: {x: 0, y: 0, z: 0}
-  horizontalMomentumSpeed: 0
-  horizontalMomentumRelative: {x: 0, y: 0, z: 0}
-  horizontalMomentumRelativeSpeed: 0
   oppositeInputAngle: 90
-  groundAcceleration: 80
-  airAcceleration: 20
-  groundAngleChange: 0.02
-  airAngleChange: 0.01
-  groundSpeedLimit: 22
-  airSpeedLimit: 7
+  groundController:
+    speedLimit: 22
+    deltaAngle: 0.02
+    acceleration: 80
+    velocity: {x: 0, y: 0, z: 0}
+    speed: 0
+    relativeHorizontalVelocity: {x: 0, y: 0, z: 0}
+    relativeHorizontalSpeed: 0
+  airController:
+    speedLimit: 7
+    deltaAngle: 0.01
+    acceleration: 20
+    velocity: {x: 0, y: 0, z: 0}
+    speed: 0
+    relativeHorizontalVelocity: {x: 0, y: 0, z: 0}
+    relativeHorizontalSpeed: 0
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,6 +988,7 @@ MonoBehaviour:
   consumed: 0
   preventConsumption: 0
   wallCheckDistance: 2
+  detectionLayerSpacing: 0.75
   wallrunCameraTilt: 4
   validWalls:
     serializedVersion: 2
