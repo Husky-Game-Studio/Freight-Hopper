@@ -5,6 +5,7 @@ using UnityEngine.VFX;
 public class HoverEngine : MonoBehaviour
 {
     private VisualEffect effect;
+    private bool is_effect_playing = false;
 
     [SerializeField, ReadOnly] private Rigidbody rb;
     [SerializeField, ReadOnly] private Vector3 direction = Vector3.down;
@@ -19,6 +20,8 @@ public class HoverEngine : MonoBehaviour
     private void Awake()
     {
         effect = GetComponent<VisualEffect>();
+        effect.SetFloat("Downward", -5.0f);
+        effect.SetFloat("power", 4.0f);
     }
 
     public void Initialize(Rigidbody rb, LayerMask layerMask, PID.Data data, float targetDistance, bool automatic)
@@ -72,11 +75,17 @@ public class HoverEngine : MonoBehaviour
         }
         if (firing)
         {
-            effect.Play();
+            effect.SetVector3("spawn", this.transform.position);
+            if (!is_effect_playing)
+            {
+                effect.Play();
+                is_effect_playing = true;
+            }
         }
-        else
+        else if(!firing && is_effect_playing)
         {
             effect.Stop();
+            is_effect_playing = false;
         }
     }
 }
