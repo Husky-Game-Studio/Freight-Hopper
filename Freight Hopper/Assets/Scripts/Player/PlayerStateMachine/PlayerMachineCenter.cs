@@ -219,10 +219,12 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         if (playerCM.IsGrounded.current)
         {
             abilities.jumpBehavior.coyoteeTimer.ResetTimer();
+            abilities.wallRunBehavior.inAirCooldown.ResetTimer();
         }
         else
         {
-            abilities.jumpBehavior.coyoteeTimer.CountDown();
+            abilities.jumpBehavior.coyoteeTimer.CountDownFixed();
+            abilities.wallRunBehavior.inAirCooldown.CountDownFixed();
         }
 
         GrappleFiring();

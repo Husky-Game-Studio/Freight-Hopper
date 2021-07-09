@@ -368,7 +368,7 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToWallRunState()
     {
-        if (playerMachine.abilities.wallRunBehavior.Unlocked && !playerMachine.playerCM.IsGrounded.current)
+        if (playerMachine.abilities.wallRunBehavior.Unlocked && !playerMachine.abilities.wallRunBehavior.inAirCooldown.TimerActive())
         {
             bool[] walls = playerMachine.abilities.wallRunBehavior.WallStatus();
             if (walls[0] || walls[1] || walls[2])

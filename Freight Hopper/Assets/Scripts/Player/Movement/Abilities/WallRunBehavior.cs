@@ -27,6 +27,7 @@ public partial class WallRunBehavior : AbilityBehavior
     [Space, Header("Timers")]
     public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
+    public Timer inAirCooldown = new Timer(0.1f);
 
     private Vector3 jumpNormalCache;
     private FirstPersonCamera cameraController;
@@ -117,13 +118,6 @@ public partial class WallRunBehavior : AbilityBehavior
     {
         cameraController.ResetUpAxis();
         soundManager.Play("WallJump");
-
-        /*Vector3 sumNormals = Vector3.zero;
-        foreach (Vector3 normal in wallNormals)
-        {
-            sumNormals += normal;
-        }
-        sumNormals.Normalize();*/
 
         Vector3 jumpNormal = Camera.main.transform.forward;
 
