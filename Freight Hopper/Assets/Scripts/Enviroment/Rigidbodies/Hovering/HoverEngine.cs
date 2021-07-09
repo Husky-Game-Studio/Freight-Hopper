@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 [System.Serializable]
 public class HoverEngine : MonoBehaviour
 {
+    private VisualEffect effect;
+
     [SerializeField, ReadOnly] private Rigidbody rb;
     [SerializeField, ReadOnly] private Vector3 direction = Vector3.down;
     [SerializeField, ReadOnly] private LayerMask layerMask;
@@ -12,6 +15,11 @@ public class HoverEngine : MonoBehaviour
     [SerializeField, ReadOnly] private bool firing;
 
     public bool Firing => firing;
+
+    private void Awake()
+    {
+        effect = GetComponent<VisualEffect>();
+    }
 
     public void Initialize(Rigidbody rb, LayerMask layerMask, PID.Data data, float targetDistance, bool automatic)
     {
@@ -61,6 +69,14 @@ public class HoverEngine : MonoBehaviour
         {
             SetDirection(-CustomGravity.GetUpAxis(this.transform.position));
             Hover(targetDistance);
+        }
+        if (firing)
+        {
+            effect.Play();
+        }
+        else
+        {
+            effect.Stop();
         }
     }
 }
