@@ -28,7 +28,6 @@ public class HoverController : MonoBehaviour
         go.name = name;
         go.transform.parent = this.transform;
         go.transform.localPosition = position;
-        go.AddComponent<HoverEngine>();
         InitializeEngines();
     }
 
