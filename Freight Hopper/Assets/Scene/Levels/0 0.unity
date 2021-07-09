@@ -603,7 +603,6 @@ GameObject:
   m_Component:
   - component: {fileID: 563024089}
   - component: {fileID: 563024090}
-  - component: {fileID: 563024092}
   - component: {fileID: 563024091}
   m_Layer: 0
   m_Name: Level
@@ -661,13 +660,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 35
   priority: 0
---- !u!114 &563024092
+--- !u!1 &962898841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 962898843}
+  - component: {fileID: 962898842}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &962898842
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 563024088}
+  m_GameObject: {fileID: 962898841}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0334666c12df1840acf986fc95f46ed, type: 3}
@@ -678,6 +694,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fe9588bcb251e864f9d91a7b3306d3f5, type: 2}
   currentSongName: 1
   playMusicOnAwake: 1
+--- !u!4 &962898843
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962898841}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1317977512
 GameObject:
   m_ObjectHideFlags: 0

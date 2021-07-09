@@ -27,6 +27,8 @@ public class SceneLoader : MonoBehaviour
 
     public static void LoadMenu()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
