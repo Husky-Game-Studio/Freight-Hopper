@@ -18,8 +18,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool loop = false;
     [SerializeField] private List<RoadCreator> pathObjects;
     [SerializeField] private float targetVelocity;
-    [SerializeField] private Vector3 forceBounds;
-    [SerializeField] private Vector3 torqueBounds;
 
     [SerializeField, ReadOnly] private int currentPath = -1;
 
@@ -28,8 +26,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     public bool DerailToWait => derailToWait;
     public bool Loop => loop;
     public float TargetVelocity => targetVelocity;
-    public Vector3 ForceBounds => forceBounds;
-    public Vector3 TorqueBounds => torqueBounds;
+
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
 
@@ -199,8 +196,8 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         Vector3 angAcc = deltaAngVel / Time.fixedDeltaTime;
 
         //Limit Change
-        acc = rot * (rotInv * acc).ClampComponents(-this.ForceBounds, this.ForceBounds);
-        angAcc = rot * (rotInv * angAcc).ClampComponents(-this.TorqueBounds, this.TorqueBounds);
+        acc = rot * Vector3.Project(rotInv * acc, Vector3.forward);
+        angAcc = rot * Vector3.Project(rotInv * angAcc, Vector3.up);
 
         //Forces
         carts.First.Value.rb.AddForce(acc, ForceMode.Acceleration);
