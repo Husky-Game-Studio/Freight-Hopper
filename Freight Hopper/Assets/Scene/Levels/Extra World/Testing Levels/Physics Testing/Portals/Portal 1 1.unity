@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3506.3281, g: 1989.5859, b: 1287.5859, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7321,7 +7321,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1566902992}
   - component: {fileID: 1566902991}
-  - component: {fileID: 1566902990}
   - component: {fileID: 1566902989}
   m_Layer: 0
   m_Name: Level
@@ -7344,23 +7343,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 35
   priority: 0
---- !u!114 &1566902990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1566902988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0334666c12df1840acf986fc95f46ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mixerGroup: {fileID: 24300002, guid: 6fff70b813d3c6347989b8979fe38e28, type: 2}
-  sounds:
-  - {fileID: 11400000, guid: fe9588bcb251e864f9d91a7b3306d3f5, type: 2}
-  currentSongName: 1
-  playMusicOnAwake: 1
 --- !u!114 &1566902991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9300,7 +9282,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305744
+  m_Name: pb_Mesh1423658
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9464,7 +9446,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305220
+  m_Name: pb_Mesh1423134
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

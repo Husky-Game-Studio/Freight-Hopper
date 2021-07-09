@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3556.542, g: 1990.4258, b: 1237.5352, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6641,7 +6641,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh272770
+  m_Name: pb_Mesh1390900
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9694,7 +9694,6 @@ GameObject:
   m_Component:
   - component: {fileID: 563024089}
   - component: {fileID: 563024090}
-  - component: {fileID: 563024092}
   - component: {fileID: 563024091}
   m_Layer: 0
   m_Name: Level
@@ -9757,23 +9756,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 35
   priority: 0
---- !u!114 &563024092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 563024088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0334666c12df1840acf986fc95f46ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mixerGroup: {fileID: 24300002, guid: 8e05b5b5228901c4f8b887cecd0c9fa3, type: 2}
-  sounds:
-  - {fileID: 11400000, guid: fe9588bcb251e864f9d91a7b3306d3f5, type: 2}
-  currentSongName: 1
-  playMusicOnAwake: 1
 --- !u!1 &570761280
 GameObject:
   m_ObjectHideFlags: 0

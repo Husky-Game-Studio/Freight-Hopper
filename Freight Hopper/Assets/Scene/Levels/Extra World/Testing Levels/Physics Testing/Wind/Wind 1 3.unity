@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3531.7598, g: 1991.9219, b: 1265.8535, a: 1}
+  m_IndirectSpecularColor: {r: 3493.8467, g: 1987.1777, b: 1296.4766, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1608,7 +1608,6 @@ GameObject:
   m_Component:
   - component: {fileID: 563024089}
   - component: {fileID: 563024090}
-  - component: {fileID: 563024092}
   - component: {fileID: 563024091}
   m_Layer: 0
   m_Name: Level
@@ -1676,23 +1675,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 35
   priority: 0
---- !u!114 &563024092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 563024088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0334666c12df1840acf986fc95f46ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mixerGroup: {fileID: 24300002, guid: 3b85777551088c54facfbbd140d0de6d, type: 2}
-  sounds:
-  - {fileID: 11400000, guid: fe9588bcb251e864f9d91a7b3306d3f5, type: 2}
-  currentSongName: 1
-  playMusicOnAwake: 1
 --- !u!4 &755250534 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4268207889634961697, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
