@@ -135,9 +135,10 @@ public class PlayerStatesTransitions
         {
             bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus();
             // Fall from wall climb
-            if (!status[0] && !status[1] && !status[2] &&
+            if ((!status[0] && !status[1] && !status[2] &&
                 playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[2] &&
-                playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[1])
+                playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[1]
+                ) || UserInput.Instance.Move().z != 1)
             {
                 playerMachine.abilities.wallRunBehavior.coyoteTimer.CountDownFixed();
                 if (!playerMachine.abilities.wallRunBehavior.coyoteTimer.TimerActive())
@@ -383,7 +384,7 @@ public class PlayerStatesTransitions
     {
         bool[] status = playerMachine.abilities.wallRunBehavior.WallStatus();
         // Wall Climb
-        if (status[1] && !status[0] && !status[2])
+        if (status[1] && !status[0] && !status[2] && UserInput.Instance.Move().z == 1)
         {
             return playerMachine.GetCurrentState().GetSubStateArray()[1];
         }
