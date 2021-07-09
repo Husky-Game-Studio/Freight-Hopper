@@ -39,6 +39,17 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [HideInInspector] public TrainRailLinker currentRailLinker;
     private TrainStateTransitions transitionHandler;
 
+    private void OnDrawGizmosSelected()
+    {
+        if (startWhenDistanceFromPlayer.Enabled)
+        {
+            Vector3 position = this.transform.position;
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(position, startWhenDistanceFromPlayer.value);
+        }
+    }
+
     // Returns current BezierPath
     public BezierPath GetCurrentPath()
     {
@@ -196,9 +207,17 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         carts.First.Value.rb.AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
-        //float z = cartRigidbodies[0].transform.eulerAngles.z;
-        //z -= (z > 180) ? 360 : 0;
-        //cartRigidbodies[0].AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
+        foreach (Cart cart in carts)
+        {
+            Vector3 gravityForward = Vector3.Cross(CustomGravity.GetUpAxis(cart.rb.position), cart.rb.transform.right);
+
+            Vector3 gravityUp = Vector3.ProjectOnPlane(CustomGravity.GetUpAxis(cart.rb.position), gravityForward);
+            Vector3 cartUp = Vector3.ProjectOnPlane(cart.rb.transform.up, gravityForward);
+
+            float angleWrong = Vector3.SignedAngle(gravityUp, cartUp, cart.rb.transform.forward);
+
+            cart.rb.AddRelativeTorque(Vector3.forward * -0.05f * angleWrong, ForceMode.VelocityChange);
+        }
     }
 
     private Vector3 TargetAngVel(Vector3 target)

@@ -24,7 +24,7 @@ public class LevelController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(levelData.spawnPosition, 1);
+        Gizmos.DrawWireSphere(levelData.spawnPosition, 2);
     }
 
 #endif

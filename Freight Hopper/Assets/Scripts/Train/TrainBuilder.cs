@@ -75,6 +75,25 @@ public class TrainBuilder : MonoBehaviour
     {
         for (int i = 0; i < cartsList.Count; i++)
         {
+            DestroyImmediate(cartsList[i].cart);
+            cartsList[i].cart = Instantiate(baseCart, GetPosition(i), this.transform.rotation, this.transform);
+            cartsList[i].joint = cartsList[i].cart.GetComponent<ConfigurableJoint>();
+            if (i == 0)
+            {
+                cartsList[i].joint.connectedBody = locomotive.GetComponent<Rigidbody>();
+            }
+            else
+            {
+                cartsList[i].joint.connectedBody = cartsList[i - 1].cart.GetComponent<Rigidbody>();
+            }
+
+            SoftJointLimit temp = new SoftJointLimit
+            {
+                limit = gapLength
+            };
+            cartsList[i].joint.linearLimit = temp;
+            cartsList[i].joint.breakTorque = breakTorque;
+
             DestroyImmediate(cartsList[i].model);
             GameObject model = cartModelsToPickFrom[(int)cartsList[i].cartID];
             cartsList[i].model = Instantiate(model, GetPosition(i), this.transform.rotation, cartsList[i].cart.transform);

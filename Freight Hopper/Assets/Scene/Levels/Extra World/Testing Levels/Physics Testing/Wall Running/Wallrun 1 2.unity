@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3235.3525, g: 1704.5518, b: 900.0674, a: 1}
+  m_IndirectSpecularColor: {r: 3537.8389, g: 1990.7393, b: 1257.5078, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5755,6 +5755,51 @@ MonoBehaviour:
   targetDistance: 5
   automatic: 1
   firing: 0
+--- !u!1 &201777287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 201777289}
+  - component: {fileID: 201777288}
+  m_Layer: 0
+  m_Name: Gravity
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &201777288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201777287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e26fb8c17cdf34db395cefe764fe48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: 35
+  priority: 0
+--- !u!4 &201777289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201777287}
+  m_LocalRotation: {x: -0.27059805, y: 0.6532815, z: 0.27059805, w: 0.6532815}
+  m_LocalPosition: {x: -462.41846, y: 39.371475, z: 175.99783}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: -45, y: 90, z: 0}
 --- !u!1 &204164805
 GameObject:
   m_ObjectHideFlags: 0
@@ -9989,7 +10034,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: forceBounds.z
-      value: 300
+      value: 30000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: torqueBounds.y
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272882, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: cartsList.Array.size
@@ -17881,7 +17930,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563024088}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46e26fb8c17cdf34db395cefe764fe48, type: 3}
   m_Name: 
@@ -23050,7 +23099,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: forceBounds.z
-      value: 300
+      value: 30000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: torqueBounds.y
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272882, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: cartsList.Array.size
@@ -31963,7 +32016,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: forceBounds.z
-      value: 300
+      value: 30000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: torqueBounds.y
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272882, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: cartsList.Array.size
@@ -53236,7 +53293,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: forceBounds.z
-      value: 300
+      value: 30000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: torqueBounds.y
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272882, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: cartsList.Array.size
@@ -62260,7 +62321,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: forceBounds.z
-      value: 300
+      value: 30000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828049057225272881, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: torqueBounds.y
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272882, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: cartsList.Array.size
