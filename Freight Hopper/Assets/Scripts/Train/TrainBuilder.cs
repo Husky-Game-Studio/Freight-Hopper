@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+using UnityEditor;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -70,35 +69,47 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    [ContextMenu("Update Cart")]
+    [ContextMenu("Update Train")]
     public void UpdateCarts()
     {
         for (int i = 0; i < cartsList.Count; i++)
         {
             DestroyImmediate(cartsList[i].cart);
-            cartsList[i].cart = Instantiate(baseCart, GetPosition(i), this.transform.rotation, this.transform);
-            cartsList[i].joint = cartsList[i].cart.GetComponent<ConfigurableJoint>();
-            if (i == 0)
-            {
-                cartsList[i].joint.connectedBody = locomotive.GetComponent<Rigidbody>();
-            }
-            else
-            {
-                cartsList[i].joint.connectedBody = cartsList[i - 1].cart.GetComponent<Rigidbody>();
-            }
-
-            SoftJointLimit temp = new SoftJointLimit
-            {
-                limit = gapLength
-            };
-            cartsList[i].joint.linearLimit = temp;
-            cartsList[i].joint.breakTorque = breakTorque;
-
             DestroyImmediate(cartsList[i].model);
-            GameObject model = cartModelsToPickFrom[(int)cartsList[i].cartID];
-            cartsList[i].model = Instantiate(model, GetPosition(i), this.transform.rotation, cartsList[i].cart.transform);
+            SetCarts(i, cartsList[i], cartsList[i].cartID);
         }
     }
+
+    void SetCarts(int index, Cart cart, TrainCarts cartID) {
+        GameObject model = cartModelsToPickFrom[(int)cartID];
+        Vector3 position = GetPosition(index);
+        cart.cart = PrefabUtility.InstantiatePrefab(baseCart) as GameObject;
+        cart.cart.transform.position = position;
+        cart.cart.transform.rotation = this.transform.rotation;
+        cart.cart.transform.parent = this.transform;
+        cart.cartProperties = cart.cart.GetComponent<CartProperties>();
+        cart.cartProperties.setCartIndex(index);
+        cart.joint = cart.cart.GetComponent<ConfigurableJoint>();
+        if (index == 0)
+        {
+            cart.joint.connectedBody = locomotive.GetComponent<Rigidbody>();
+        }
+        else
+        {
+            cart.joint.connectedBody = cartsList[index - 1].cart.GetComponent<Rigidbody>();
+        }
+        SoftJointLimit temp = new SoftJointLimit
+        {
+            limit = gapLength
+        };
+        cart.joint.linearLimit = temp;
+        cart.joint.breakTorque = breakTorque;
+        cart.model = PrefabUtility.InstantiatePrefab(model) as GameObject;
+        cart.model.transform.position = position;
+        cart.model.transform.rotation = this.transform.rotation;
+        cart.model.transform.parent = cart.cart.transform;
+    }
+
 
     public Vector3 GetPosition(int index)
     {
@@ -111,35 +122,12 @@ public class TrainBuilder : MonoBehaviour
     {
         for (int i = 0; i < repeatActionCount; i++)
         {
-            GameObject model = cartModelsToPickFrom[(int)insertCart];
-
             Cart ourCart = new Cart
             {
                 cartID = insertCart
             };
-            Vector3 position = GetPosition(cartsList.Count);
-            ourCart.cart = Instantiate(baseCart, position, this.transform.rotation, this.transform);
-            ourCart.cartProperties = ourCart.cart.GetComponent<CartProperties>();
-            ourCart.cartProperties.setCartIndex(cartsList.Count + 1);
-            ourCart.joint = ourCart.cart.GetComponent<ConfigurableJoint>();
-            if (cartsList.Count == 0)
-            {
-                ourCart.joint.connectedBody = locomotive.GetComponent<Rigidbody>();
-            }
-            else
-            {
-                ourCart.joint.connectedBody = cartsList[cartsList.Count - 1].cart.GetComponent<Rigidbody>();
-            }
-
-            SoftJointLimit temp = new SoftJointLimit
-            {
-                limit = gapLength
-            };
-            ourCart.joint.linearLimit = temp;
-            ourCart.joint.breakTorque = breakTorque;
-            ourCart.model = Instantiate(model, position, this.transform.rotation, ourCart.cart.transform);
-
             cartsList.Add(ourCart);
+            SetCarts(cartsList.Count - 1, ourCart, insertCart);
         }
     }
 
