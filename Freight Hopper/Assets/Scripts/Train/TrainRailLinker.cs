@@ -78,14 +78,6 @@ public class TrainRailLinker : MonoBehaviour
         Vector3 rightDisplacement = Vector3.Project(displacement, right);
 
         float direction = Mathf.Sign(Vector3.Dot(right, rightDisplacement));
-        /*if (direction < 0)
-        {
-            Debug.DrawLine(rightDisplacement + trainObject.rb.position, trainObject.rb.position, Color.blue);
-        }
-        else
-        {
-            Debug.DrawLine(rightDisplacement + trainObject.rb.position, trainObject.rb.position, Color.red);
-        }*/
 
         return direction * rightDisplacement.magnitude;
     }

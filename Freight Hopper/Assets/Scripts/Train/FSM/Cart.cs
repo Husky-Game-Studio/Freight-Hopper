@@ -6,6 +6,7 @@ public class Cart
     public PhysicsManager physicsManager;
     public Rigidbody rb;
     public CartProperties properties;
+    public HoverController hoverController;
     public Destructable destructable;
 
     public event Action<int> DestoryCart;
@@ -15,6 +16,7 @@ public class Cart
         this.physicsManager = physicsManager;
         this.rb = physicsManager.rb;
         this.properties = rb.GetComponent<CartProperties>();
+        this.hoverController = rb.GetComponentInChildren<HoverController>();
         this.destructable = rb.GetComponent<Destructable>();
     }
 
