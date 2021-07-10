@@ -13,7 +13,7 @@ public partial class WallRunBehavior : AbilityBehavior
     [Space, Header("Wall Running")]
     [SerializeField] private float upwardsForce = 10;
     [SerializeField] private float rightForce = 5;
-    [SerializeField] private float forwardForce = 5;
+    //[SerializeField] private float forwardForce = 5;
 
     [Space, Header("Wall Climbing")]
     [SerializeField] private float initialClimbForce = 5;
