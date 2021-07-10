@@ -172,8 +172,8 @@ public partial class WallRunBehavior : AbilityBehavior
     private void WallRun(Vector3 right, Vector3 up)
     {
         soundManager.Play("WallSkid");
-        //Vector3 forward = Vector3.Cross(right, up);
-        //cameraController.TiltUpAxis(forward * wallrunCameraTilt);
+        Vector3 forward = Vector3.Cross(right, up);
+        cameraController.TiltUpAxis(forward * wallrunCameraTilt);
         //Vector3 cameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, -right);
         //physicsManager.rb.AddForce(cameraForward * forwardForce, ForceMode.Acceleration);
         physicsManager.rb.AddForce(right * rightForce, ForceMode.Acceleration);
