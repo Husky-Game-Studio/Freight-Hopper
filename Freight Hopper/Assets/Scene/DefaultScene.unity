@@ -1000,14 +1000,18 @@ MonoBehaviour:
   forwardForce: 10
   initialClimbForce: 5
   climbForce: 50
-  jumpIniitalPush: 10
-  jumpContinousForce: 15
+  jumpInitialPush: 10
+  againstWallPush: 5
+  jumpContinousUpForce: 10
   jumpContinousPush: 5
   coyoteTimer:
     duration: 0.5
     current: 0
   jumpHoldingTimer:
     duration: 0.5
+    current: 0
+  inAirCooldown:
+    duration: 0.1
     current: 0
   wallStatus: 000000
   wallNormals:
