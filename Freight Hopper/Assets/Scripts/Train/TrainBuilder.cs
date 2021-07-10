@@ -59,6 +59,8 @@ public class TrainBuilder : MonoBehaviour
         locomotive = this.transform.GetChild(0).gameObject;
     }
 
+#if UNITY_EDITOR
+
     [ContextMenu("Update All Trains")]
     public void UpdateAllTrains()
     {
@@ -80,7 +82,8 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    void SetCarts(int index, Cart cart, TrainCarts cartID) {
+    private void SetCarts(int index, Cart cart, TrainCarts cartID)
+    {
         GameObject model = cartModelsToPickFrom[(int)cartID];
         Vector3 position = GetPosition(index);
         cart.cart = PrefabUtility.InstantiatePrefab(baseCart) as GameObject;
@@ -109,7 +112,6 @@ public class TrainBuilder : MonoBehaviour
         cart.model.transform.rotation = this.transform.rotation;
         cart.model.transform.parent = cart.cart.transform;
     }
-
 
     public Vector3 GetPosition(int index)
     {
@@ -161,4 +163,6 @@ public class TrainBuilder : MonoBehaviour
         }
         cartsList.Clear();
     }
+
+#endif
 }
