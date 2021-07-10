@@ -19,7 +19,6 @@ public class GroundPoundState : PlayerState
     public override void ExitState()
     {
         playerMachineCenter.abilities.groundPoundBehavior.ExitAction();
-        playerMachineCenter.physicsManager.friction.ResetFrictionReduction();
     }
 
     public override BasicState TransitionState()
