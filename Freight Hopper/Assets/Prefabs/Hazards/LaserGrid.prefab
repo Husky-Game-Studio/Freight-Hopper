@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4613969863532683886}
   - component: {fileID: 5348583671179059749}
   - component: {fileID: 1885079889544794213}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 4972229590071469504}
   - component: {fileID: 4292851931722716406}
   - component: {fileID: 5730513167704024910}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 6778664836895335768}
   - component: {fileID: 119973424012120838}
   - component: {fileID: 2336154311867080605}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5662266245147675942}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 8438934623351992723}
   - component: {fileID: 1658408518176667543}
   - component: {fileID: 7058347998874064348}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -486,7 +486,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8727619885438472282}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +519,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2325380483340445215}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LaserGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -557,7 +557,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2242955064377992674}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +590,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1266312163867772945}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +627,7 @@ GameObject:
   - component: {fileID: 6830424731346132739}
   - component: {fileID: 8420336168810404156}
   - component: {fileID: 4492665391291699097}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,7 +734,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2717572998802435805}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -771,7 +771,7 @@ GameObject:
   - component: {fileID: 2592367503219564518}
   - component: {fileID: 8848564023684417683}
   - component: {fileID: 5096954821576466772}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -878,7 +878,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9062950581976041714}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -915,7 +915,8 @@ GameObject:
   - component: {fileID: 5094921431621649769}
   - component: {fileID: 6251070269076038781}
   - component: {fileID: 3344663229772989474}
-  m_Layer: 0
+  - component: {fileID: 1498158962876796052}
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1013,6 +1014,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1498158962876796052
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8114772842256786168}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8451116307725641755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,7 +1039,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8903674858690293934}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1059,7 +1076,7 @@ GameObject:
   - component: {fileID: 8989609228795862784}
   - component: {fileID: 6798111087662631623}
   - component: {fileID: 3998233112800682763}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1166,7 +1183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2250890152007825096}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Layer5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1245,6 +1262,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &485693841935255354 stripped
@@ -1306,6 +1331,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
@@ -1369,6 +1402,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &1118637932040065223 stripped
@@ -1430,6 +1471,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
@@ -1493,6 +1542,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &2253275149303766883 stripped
@@ -1554,6 +1611,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
@@ -1617,6 +1682,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &1836811167230770922 stripped
@@ -1678,6 +1751,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
@@ -1741,6 +1822,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &3204373025980417715 stripped
@@ -1802,6 +1891,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
@@ -1865,6 +1962,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &4551994400554583990 stripped
@@ -1926,6 +2031,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
@@ -1989,6 +2102,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &5412326305139905517 stripped
@@ -2050,6 +2171,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
@@ -2113,6 +2242,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser beam stand (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
 --- !u!4 &7948940638248918818 stripped
@@ -2174,6 +2311,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
       propertyPath: m_Name
       value: Laser beam stand
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7135706350221657228, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70f938a2d99e1d84aac9e1a03d908e01, type: 3}
