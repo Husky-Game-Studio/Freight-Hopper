@@ -40,6 +40,13 @@ namespace HGSLevelEditor
             SceneManager.LoadScene("CustomLevel 0 0", LoadSceneMode.Single);
 
         }
+
+        public void PlayLevelIteration2() {
+
+            SceneManager.LoadScene("CustomLevel 0 1", LoadSceneMode.Single);
+
+        }
+
         public void ExitOnClick()
         {
             menu.SetActive(false);
