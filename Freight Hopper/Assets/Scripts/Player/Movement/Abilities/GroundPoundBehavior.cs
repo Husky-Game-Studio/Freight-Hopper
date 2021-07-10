@@ -39,7 +39,8 @@ public class GroundPoundBehavior : AbilityBehavior
             direction = downSlope;
             if (!physicsManager.collisionManager.IsGrounded.old)
             {
-                physicsManager.rb.AddForce(direction * physicsManager.collisionManager.Velocity.old.magnitude, ForceMode.VelocityChange);
+                Vector3 oldDownForce = Vector3.Project(physicsManager.collisionManager.Velocity.old, upAxis);
+                physicsManager.rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
             }
             direction *= slopeDownForce;
         }

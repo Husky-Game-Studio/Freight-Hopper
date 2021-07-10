@@ -18,8 +18,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool loop = false;
     [SerializeField] private List<RoadCreator> pathObjects;
     [SerializeField] private float targetVelocity;
-    [SerializeField] private Vector3 forceBounds;
-    [SerializeField] private Vector3 torqueBounds;
 
     [SerializeField, ReadOnly] private int currentPath = -1;
 
@@ -28,8 +26,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     public bool DerailToWait => derailToWait;
     public bool Loop => loop;
     public float TargetVelocity => targetVelocity;
-    public Vector3 ForceBounds => forceBounds;
-    public Vector3 TorqueBounds => torqueBounds;
+
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
 
@@ -38,6 +35,17 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [HideInInspector] public HoverController hoverController;
     [HideInInspector] public TrainRailLinker currentRailLinker;
     private TrainStateTransitions transitionHandler;
+
+    private void OnDrawGizmosSelected()
+    {
+        if (startWhenDistanceFromPlayer.Enabled)
+        {
+            Vector3 position = this.transform.position;
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(position, startWhenDistanceFromPlayer.value);
+        }
+    }
 
     // Returns current BezierPath
     public BezierPath GetCurrentPath()
@@ -188,17 +196,25 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         Vector3 angAcc = deltaAngVel / Time.fixedDeltaTime;
 
         //Limit Change
-        acc = rot * (rotInv * acc).ClampComponents(-this.ForceBounds, this.ForceBounds);
-        angAcc = rot * (rotInv * angAcc).ClampComponents(-this.TorqueBounds, this.TorqueBounds);
+        acc = rot * Vector3.Project(rotInv * acc, Vector3.forward);
+        angAcc = rot * Vector3.Project(rotInv * angAcc, Vector3.up);
 
         //Forces
         carts.First.Value.rb.AddForce(acc, ForceMode.Acceleration);
         carts.First.Value.rb.AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
-        //float z = cartRigidbodies[0].transform.eulerAngles.z;
-        //z -= (z > 180) ? 360 : 0;
-        //cartRigidbodies[0].AddRelativeTorque(Vector3.forward * -0.05f * z / Time.fixedDeltaTime, ForceMode.Acceleration);
+        foreach (Cart cart in carts)
+        {
+            Vector3 gravityForward = Vector3.Cross(CustomGravity.GetUpAxis(cart.rb.position), cart.rb.transform.right);
+
+            Vector3 gravityUp = Vector3.ProjectOnPlane(CustomGravity.GetUpAxis(cart.rb.position), gravityForward);
+            Vector3 cartUp = Vector3.ProjectOnPlane(cart.rb.transform.up, gravityForward);
+
+            float angleWrong = Vector3.SignedAngle(gravityUp, cartUp, cart.rb.transform.forward);
+
+            cart.rb.AddRelativeTorque(Vector3.forward * -0.05f * angleWrong, ForceMode.VelocityChange);
+        }
     }
 
     private Vector3 TargetAngVel(Vector3 target)

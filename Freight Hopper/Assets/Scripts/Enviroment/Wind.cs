@@ -156,6 +156,11 @@ public class Wind : MonoBehaviour
         }
     }
 
+    /*  void RigidbodyInsideWind()
+      {
+          Player.Instance.transform.position;
+      }*/
+
     private void ApplyWind()
     {
         foreach (Rigidbody rb in affectedBodies.Keys)

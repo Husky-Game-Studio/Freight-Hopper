@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class HoverController : MonoBehaviour
@@ -10,9 +11,12 @@ public class HoverController : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private float targetDistance;
     [SerializeField] private bool automatic = true;
+    [SerializeField] private GameObject hoverEnginePrefab;
     [SerializeField, ReadOnly] private bool enginesFiring;
 
     public bool EnginesFiring => enginesFiring;
+
+#if UNITY_EDITOR
 
     public void AddHoverEngine(Vector3 position, string name = "")
     {
@@ -20,12 +24,14 @@ public class HoverController : MonoBehaviour
         {
             name = hoverEnginePivots.Count.ToString();
         }
-        GameObject go = new GameObject(name);
+        GameObject go = PrefabUtility.InstantiatePrefab(hoverEnginePrefab) as GameObject;
+        go.name = name;
         go.transform.parent = this.transform;
         go.transform.localPosition = position;
-        go.AddComponent<HoverEngine>();
         InitializeEngines();
     }
+
+#endif
 
     private void Awake()
     {

@@ -925,18 +925,23 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
-  speed: 0
-  horizontalMomentum: {x: 0, y: 0, z: 0}
-  horizontalMomentumSpeed: 0
-  horizontalMomentumRelative: {x: 0, y: 0, z: 0}
-  horizontalMomentumRelativeSpeed: 0
   oppositeInputAngle: 90
-  groundAcceleration: 80
-  airAcceleration: 20
-  groundAngleChange: 0.02
-  airAngleChange: 0.01
-  groundSpeedLimit: 22
-  airSpeedLimit: 7
+  groundController:
+    speedLimit: 22
+    deltaAngle: 0.02
+    acceleration: 80
+    velocity: {x: 0, y: 0, z: 0}
+    speed: 0
+    relativeHorizontalVelocity: {x: 0, y: 0, z: 0}
+    relativeHorizontalSpeed: 0
+  airController:
+    speedLimit: 7
+    deltaAngle: 0.01
+    acceleration: 20
+    velocity: {x: 0, y: 0, z: 0}
+    speed: 0
+    relativeHorizontalVelocity: {x: 0, y: 0, z: 0}
+    relativeHorizontalSpeed: 0
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,6 +988,7 @@ MonoBehaviour:
   consumed: 0
   preventConsumption: 0
   wallCheckDistance: 2
+  detectionLayerSpacing: 0.75
   wallrunCameraTilt: 4
   validWalls:
     serializedVersion: 2
@@ -991,17 +997,20 @@ MonoBehaviour:
   backwardDetectionTiltAngle: 30
   upwardsForce: 20
   rightForce: 4
-  forwardForce: 10
   initialClimbForce: 5
   climbForce: 50
-  jumpIniitalPush: 10
-  jumpContinousForce: 15
+  jumpInitialPush: 10
+  againstWallPush: 5
+  jumpContinousUpForce: 10
   jumpContinousPush: 5
   coyoteTimer:
     duration: 0.5
     current: 0
   jumpHoldingTimer:
     duration: 0.5
+    current: 0
+  inAirCooldown:
+    duration: 0.1
     current: 0
   wallStatus: 000000
   wallNormals:
@@ -1315,6 +1324,7 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
       ground: {fileID: 11400000, guid: 4b438a26d56c340408c86e43cf1c0583, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
     isGrounded:
@@ -1399,15 +1409,15 @@ MonoBehaviour:
     duration: 1
     current: 0
   abilities: {fileID: 4493642203787552936}
-  playerPM: {fileID: 4493642203787552935}
-  playerCM:
+  physicsManager: {fileID: 0}
+  collisionManagement:
     maxSlope: 60
     isGrounded:
       old: 0
       current: 0
     contactNormal:
-      old: {x: -0, y: -0, z: -0}
-      current: {x: -0, y: -0, z: -0}
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
     velocity:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
@@ -1505,7 +1515,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   volumeAnchorOverride: {fileID: 0}
-  antialiasing: 0
+  antialiasing: 3
   SMAAQuality: 2
   dithering: 0
   stopNaNs: 0

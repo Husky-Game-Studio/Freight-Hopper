@@ -18,6 +18,6 @@ public class PlayerSubStateMachineCenter : SubStateMachineCenter
         previousState = currentState;
 
         playerMovement = myPlayerMachine.abilities;
-        collision = myPlayerMachine.playerCM;
+        collision = myPlayerMachine.collisionManagement;
     }
 }
