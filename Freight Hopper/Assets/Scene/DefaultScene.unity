@@ -997,7 +997,6 @@ MonoBehaviour:
   backwardDetectionTiltAngle: 30
   upwardsForce: 20
   rightForce: 4
-  forwardForce: 10
   initialClimbForce: 5
   climbForce: 50
   jumpInitialPush: 10
@@ -1325,6 +1324,7 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
       ground: {fileID: 11400000, guid: 4b438a26d56c340408c86e43cf1c0583, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
     isGrounded:
@@ -1409,15 +1409,15 @@ MonoBehaviour:
     duration: 1
     current: 0
   abilities: {fileID: 4493642203787552936}
-  playerPM: {fileID: 4493642203787552935}
-  playerCM:
+  physicsManager: {fileID: 0}
+  collisionManagement:
     maxSlope: 60
     isGrounded:
       old: 0
       current: 0
     contactNormal:
-      old: {x: -0, y: -0, z: -0}
-      current: {x: -0, y: -0, z: -0}
+      old: {x: 0, y: 0, z: 0}
+      current: {x: 0, y: 0, z: 0}
     velocity:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
