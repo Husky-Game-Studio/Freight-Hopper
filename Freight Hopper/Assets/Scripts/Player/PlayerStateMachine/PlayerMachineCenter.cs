@@ -35,8 +35,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // Input Components
     [HideInInspector] public PlayerAbilities abilities;
 
-    [HideInInspector] public PhysicsManager playerPM;
-    [HideInInspector] public CollisionManagement playerCM;
+    [HideInInspector] public PhysicsManager physicsManager;
+    [HideInInspector] public CollisionManagement collisionManagement;
 
     private void Awake()
     {
@@ -190,18 +190,18 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public void OnEnable()
     {
         abilities = GetComponent<PlayerAbilities>();
-        playerPM = GetComponent<PhysicsManager>();
-        playerCM = playerPM.collisionManager;
+        physicsManager = GetComponent<PhysicsManager>();
+        collisionManagement = physicsManager.collisionManager;
         RestartFSM();
-        playerCM.CollisionDataCollected += UpdateLoop;
-        playerCM.Landed += abilities.Recharge;
+        collisionManagement.CollisionDataCollected += UpdateLoop;
+        collisionManagement.Landed += abilities.Recharge;
         LevelController.PlayerRespawned += RestartFSM;
     }
 
     public void OnDisable()
     {
         currentState.ExitState();
-        playerCM.CollisionDataCollected -= UpdateLoop;
+        collisionManagement.CollisionDataCollected -= UpdateLoop;
         transitionHandler.OnDisable();
         LevelController.PlayerRespawned -= RestartFSM;
     }
@@ -216,7 +216,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     {
         JumpBuffer();
         abilities.movementBehavior.UpdateMovement();
-        if (playerCM.IsGrounded.current)
+        if (collisionManagement.IsGrounded.current)
         {
             abilities.jumpBehavior.coyoteeTimer.ResetTimer();
             abilities.wallRunBehavior.inAirCooldown.ResetTimer();
@@ -225,6 +225,11 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         {
             abilities.jumpBehavior.coyoteeTimer.CountDownFixed();
             abilities.wallRunBehavior.inAirCooldown.CountDownFixed();
+        }
+
+        if (UserInput.Instance.Move().IsZero() && (currentState != groundPoundState || currentState != grapplePoleGroundPoundState))
+        {
+            physicsManager.friction.ResetFrictionReduction();
         }
 
         GrappleFiring();

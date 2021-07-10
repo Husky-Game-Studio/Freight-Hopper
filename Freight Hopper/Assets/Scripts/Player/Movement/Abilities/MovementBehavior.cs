@@ -59,10 +59,6 @@ public class MovementBehavior : AbilityBehavior
 
     public void UpdateMovement()
     {
-        if (UserInput.Instance.Move().IsZero())
-        {
-            physicsManager.friction.ResetFrictionReduction();
-        }
         groundController.UpdateSpeedometer();
         airController.UpdateSpeedometer();
     }

@@ -31,7 +31,7 @@ public class GrappleGroundPoundState : PlayerState
         playerMachineCenter.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
         playerMachineCenter.abilities.groundPoundBehavior.Action();
 
-        if (playerMachineCenter.playerCM.IsGrounded.current && !playerMachineCenter.playerCM.IsGrounded.old)
+        if (playerMachineCenter.collisionManagement.IsGrounded.current && !playerMachineCenter.collisionManagement.IsGrounded.old)
         {
             playerMachineCenter.abilities.Recharge();
             playerMachineCenter.abilities.groundPoundBehavior.PreventConsumption();

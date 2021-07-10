@@ -31,7 +31,7 @@ public class GrapplePoleAnchoredState : PlayerState
     {
         playerMachineCenter.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
 
-        if (playerMachineCenter.playerCM.IsGrounded.current && !playerMachineCenter.playerCM.IsGrounded.old)
+        if (playerMachineCenter.collisionManagement.IsGrounded.current && !playerMachineCenter.collisionManagement.IsGrounded.old)
         {
             playerMachineCenter.abilities.Recharge();
             playerMachineCenter.abilities.grapplePoleBehavior.PreventConsumption();

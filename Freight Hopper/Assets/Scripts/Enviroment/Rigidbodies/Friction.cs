@@ -8,7 +8,7 @@ public class Friction
 
     [SerializeField] private FrictionData defaultFriction;
     private FrictionData currentFriction;
-    private float frictionReductionPercent = 1;
+    [SerializeField, ReadOnly] private float frictionReductionPercent = 1;
 
     public void Initialize(Rigidbody rb, CollisionManagement collisionManagement)
     {

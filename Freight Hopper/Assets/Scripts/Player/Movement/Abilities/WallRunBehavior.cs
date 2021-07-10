@@ -91,14 +91,14 @@ public partial class WallRunBehavior : AbilityBehavior
     public void InitialWallClimb()
     {
         cameraController.ResetUpAxis();
-        StopPlayerFalling();
+        StopPlayerFalling(physicsManager);
         Vector3 upAlongWall = Vector3.Cross(physicsManager.rb.transform.right, wallNormals[1]);
 
         physicsManager.rb.AddForce(rightForce * -wallNormals[1], ForceMode.VelocityChange);
         physicsManager.rb.AddForce(initialClimbForce * upAlongWall, ForceMode.VelocityChange);
     }
 
-    private void StopPlayerFalling()
+    public static void StopPlayerFalling(PhysicsManager physicsManager)
     {
         bool playerFalling = Vector3.Dot(physicsManager.rb.velocity, physicsManager.collisionManager.ValidUpAxis) < 0;
         if (playerFalling)
@@ -131,16 +131,16 @@ public partial class WallRunBehavior : AbilityBehavior
         wallJumpWallDirection = sumNormals.normalized;
         Vector3 cameraFaceDirection = Camera.main.transform.forward;
 
-        if (Vector3.Dot(wallJumpWallDirection, cameraFaceDirection) < 0)
+        /*if (Vector3.Dot(wallJumpWallDirection, cameraFaceDirection) < 0)
         {
             jumpDirection = Vector3.ProjectOnPlane(cameraFaceDirection, wallJumpWallDirection).normalized;
         }
         else
         {
             jumpDirection = cameraFaceDirection;
-        }
-
-        StopPlayerFalling();
+        }*/
+        jumpDirection = Vector3.Project(cameraFaceDirection, wallJumpWallDirection);
+        StopPlayerFalling(physicsManager);
 
         jumpBehavior.Jump();
         physicsManager.rb.AddForce(wallJumpWallDirection * againstWallPush, ForceMode.VelocityChange);
