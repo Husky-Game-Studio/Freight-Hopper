@@ -34,6 +34,10 @@ public class JumpState : PlayerState
     {
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
         playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.CountDownFixed();
+        if (!playerMachineCenter.collisionManagement.IsGrounded.current)
+        {
+            playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
+        }
         playerMachineCenter.abilities.movementBehavior.PlayerMove();
         playerMachineCenter.abilities.jumpBehavior.Action();
     }

@@ -164,26 +164,31 @@ public class PlayerStatesTransitions
     public BasicState CheckToJumpState()
     {
         // Ground Pound
-        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.UnlockedAndReady && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive() &&
+        if ((jumpPressed.value || UserInput.Instance.JumpHeld) &&
+            playerMachine.abilities.jumpBehavior.Unlocked &&
+            (playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive() || playerMachine.collisionManagement.IsGrounded.current) &&
             playerMachine.currentState == playerMachine.groundPoundState)
         {
             return playerMachine.jumpState;
         }
 
         // Grapple Pole
-        if (jumpPressed.value && playerMachine.currentState == playerMachine.grapplePoleAnchoredState)
+        if ((jumpPressed.value || UserInput.Instance.JumpHeld) &&
+            playerMachine.currentState == playerMachine.grapplePoleAnchoredState)
         {
             return playerMachine.jumpState;
         }
 
         // Other
-        if ((jumpPressed.value || playerMachine.abilities.jumpBehavior.jumpBufferTimer.TimerActive()) &&
-            playerMachine.abilities.jumpBehavior.UnlockedAndReady && playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive())
+        if ((jumpPressed.value || UserInput.Instance.JumpHeld) &&
+            playerMachine.abilities.jumpBehavior.Unlocked &&
+            (playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive() || playerMachine.collisionManagement.IsGrounded.current))
         {
             return playerMachine.jumpState;
         }
 
-        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.Unlocked && playerMachine.abilities.jumpBehavior.Consumed &&
+        if (jumpPressed.value &&
+            playerMachine.abilities.jumpBehavior.Unlocked && playerMachine.abilities.jumpBehavior.Consumed &&
             !playerMachine.abilities.doubleJumpBehavior.Unlocked)
         {
             playerMachine.abilities.jumpBehavior.PlayerSoundManager().Play("JumpFail");
@@ -205,7 +210,7 @@ public class PlayerStatesTransitions
     public BasicState CheckToDoubleJumpState()
     {
         // Other
-        if (jumpPressed.value && playerMachine.abilities.jumpBehavior.Consumed && playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady)
+        if (jumpPressed.value && !playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive() && playerMachine.abilities.doubleJumpBehavior.UnlockedAndReady)
         {
             return playerMachine.doubleJumpState;
         }

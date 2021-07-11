@@ -34,6 +34,7 @@ public class UserInput : MonoBehaviour
     public event PressEventHandler UpwardDashInputCanceled;
 
     public bool GroundPoundHeld => groundPoundHeld;
+    public bool JumpHeld => jumpHeld;
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
     [ReadOnly, SerializeField] private bool upwardDashHeld;
