@@ -232,6 +232,11 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
             physicsManager.friction.ResetFrictionReduction();
         }
 
+        if (collisionManagement.IsGrounded.current && !collisionManagement.IsGrounded.old)
+        {
+            initialGroundPoundBurstCoolDown.DeactivateTimer();
+        }
+
         GrappleFiring();
         initialGroundPoundBurstCoolDown.CountDownFixed();
         if (abilities.grapplePoleBehavior.UnlockedAndReady)
