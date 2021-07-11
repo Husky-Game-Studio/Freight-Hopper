@@ -59,11 +59,6 @@ public class BezierPath
         }
     }
 
-    public bool IsIndexInRange(int index)
-    {
-        return 0 <= index && index < points.Count;
-    }
-
     public void MovePoint(int i, Vector3 pos)
     {
         points[i] = pos;
