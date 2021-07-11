@@ -84,7 +84,9 @@ public class SaveLoadLevel : MonoBehaviour
     //Loads the level 
     public void LoadButton(string levelName, bool editorOn) {
 
-        levelText.text = "Current Level: " + levelName;
+        if (levelName != "temp") {
+            levelText.text = "Current Level: " + levelName;
+        }
         LoadingLevel(levelName, editorOn);
     }
 
