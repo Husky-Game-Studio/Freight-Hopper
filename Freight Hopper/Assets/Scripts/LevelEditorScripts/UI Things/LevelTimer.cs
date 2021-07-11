@@ -21,7 +21,7 @@ public class LevelTimer : MonoBehaviour
         float actualTime = Time.time - startTime;
 
         string minutes = ((int) actualTime / 60).ToString();
-        string seconds = (actualTime % 60).ToString("f2");
+        string seconds = (actualTime % 60).ToString("f3");
 
         textTimer.text = minutes + ":" + seconds;
     }
