@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 namespace HGSLevelEditor
 {
     //Attaches to the 'LevelEditorBeginning' scene -- acts as the scene's manager
@@ -10,11 +10,11 @@ namespace HGSLevelEditor
 
         public List<LevelObjects> o = new List<LevelObjects>();
         public int index;
+        public Text levelText; 
 
         //This variable is what allows the level to be played within the 'Play' scene 
         //and also allows the level to reload when the user exits the 'Play' scene 
-
-        public static string levelNameLoad;
+        public static string levelNameLoad = null;
 
         private static LevelManager instance;
         public static LevelManager GetInstance()
@@ -32,9 +32,23 @@ namespace HGSLevelEditor
             instance = this;
 
             //Will reload the level if the user is coming back from the 'Play' scene 
-            if (levelNameLoad != null) {
+            if (levelNameLoad != null)
+            {
 
+                if (levelNameLoad == "temp")
+                {
+                    levelText.text = "Level not saved!";
+                }
+                else
+                {
+
+                    levelText.text = "Current Level: " + levelNameLoad;
+                }
                 SaveLoadLevel.GetInstance().LoadButton(levelNameLoad, true);
+            }
+            else {
+
+                levelText.text = "New Level Opened";
             }
         }
      

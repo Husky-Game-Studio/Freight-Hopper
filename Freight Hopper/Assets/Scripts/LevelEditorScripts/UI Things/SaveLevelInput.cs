@@ -11,13 +11,16 @@ namespace HGSLevelEditor
         [SerializeField]
         private InputField input;
         public GameObject menu;
+        public Text levelText; 
         
         string levelName;
 
         public void SaveLevel()
         {
             levelName = input.text;
+            LevelManager.levelNameLoad = levelName;
             SaveLoadLevel.GetInstance().SaveLevelButton(levelName);
+            levelText.text = "Current Level: " + levelName;
 
         }
 

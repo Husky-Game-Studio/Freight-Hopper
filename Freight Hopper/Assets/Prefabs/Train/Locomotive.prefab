@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 2527936665447236256}
   - component: {fileID: 1109776650627392963}
   - component: {fileID: -3548527690878655890}
+  - component: {fileID: 251620474811124557}
   m_Layer: 11
   m_Name: Locomotive
   m_TagString: landable
@@ -318,6 +319,27 @@ MonoBehaviour:
   explosionTime: 1
   maximumForce: 10000
   scale: 4
+--- !u!114 &251620474811124557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400923174265790356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3d3ea3b8d05304facafa5105be1e76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldRotation: {x: 0, y: 0, z: 0}
+  data:
+    objectID: train head
+    posX: 0
+    posY: 0
+    posZ: 0
+    rotX: 0
+    rotY: 0
+    rotZ: 0
 --- !u!1 &6075870747732061125
 GameObject:
   m_ObjectHideFlags: 0

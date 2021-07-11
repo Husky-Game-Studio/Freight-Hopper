@@ -15,6 +15,7 @@ namespace HGSLevelEditor {
         void Awake()
         {
             instance = this;
+            AudioListener.volume = 0; 
         }
 
         public static ObjectManager GetInstance()

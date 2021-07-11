@@ -29,6 +29,7 @@ public class SceneLoader : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        AudioListener.volume = 1;
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
@@ -39,6 +40,6 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadEditor()
     {
-        SceneManager.LoadScene("LevelEditorBeginning");
+        SceneManager.LoadScene("LevelEditorIteration2");
     }
 }
