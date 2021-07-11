@@ -19,9 +19,14 @@ public class Wind : MonoBehaviour
     // Density of wind, higher densities means more wind particles per square unit. Can cause performance issues
     [SerializeField, Range(1.1f, 2.5f)] private float density = 1.65f;
 
+    private List<Transform> windPossibleTargets = new List<Transform>();
+    private Dictionary<Transform, ObjectScan> windTargets = new Dictionary<Transform, ObjectScan>();
     private Dictionary<Rigidbody, List<Ray>> affectedBodies = new Dictionary<Rigidbody, List<Ray>>();
     [SerializeField] private LayerMask affectedLayers;
+    [SerializeField] private LayerMask targetedLayers;
     private WindParticleController windParticleController;
+
+    private Vector3 Center => this.transform.forward * size.z / 2;
 
 #if UNITY_EDITOR
 
@@ -44,7 +49,7 @@ public class Wind : MonoBehaviour
             }
         }
 
-        Gizmos.matrix = Matrix4x4.TRS(this.transform.position + (this.transform.forward * size.z / 2), this.transform.rotation, Vector3.one);
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position + this.Center, this.transform.rotation, Vector3.one);
 
         Gizmos.DrawWireCube(offset, size);
     }
@@ -54,7 +59,38 @@ public class Wind : MonoBehaviour
     private void Awake()
     {
         windParticleController = this.GetComponent<WindParticleController>();
+
         rayWidth = 1 / density;
+    }
+
+    private void AddWindPossibleTargets()
+    {
+        Rigidbody[] rigidbodies = FindObjectsOfType<Rigidbody>();
+        Portal[] portals = FindObjectsOfType<Portal>();
+        for (int i = 0; i < portals.Length; i++)
+        {
+            windPossibleTargets.Add(portals[i].transform);
+        }
+        for (int i = 0; i < rigidbodies.Length; i++)
+        {
+            windPossibleTargets.Add(rigidbodies[i].transform);
+        }
+        Player.PlayerLoadedIn += AddPlayerRigidbody;
+    }
+
+    private void AddPlayerRigidbody()
+    {
+        windPossibleTargets.Add(Player.Instance.transform);
+    }
+
+    private void OnEnable()
+    {
+        AddWindPossibleTargets();
+    }
+
+    private void OnDisable()
+    {
+        Player.PlayerLoadedIn -= AddPlayerRigidbody;
     }
 
     private void OnValidate()
@@ -62,9 +98,6 @@ public class Wind : MonoBehaviour
         rayWidth = 1 / density;
     }
 
-    /// <summary>
-    /// Activates wind source
-    /// </summary>
     public void Activate()
     {
         if (active && !activated)
@@ -75,9 +108,6 @@ public class Wind : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Deactives wind sources. Do this for performance reasons
-    /// </summary>
     public void Deactivate()
     {
         if (activated)
@@ -96,6 +126,53 @@ public class Wind : MonoBehaviour
             yield return new WaitForSecondsRealtime(1 / (float)frequency);
             FindRigidbodies(size, this.transform);
         }
+    }
+
+    public Ray GetOrigin(Transform transform)
+    {
+        Vector3 back = Vector3.ProjectOnPlane(transform.position, this.transform.position) - (this.transform.forward * size.z / 2);
+
+        return new Ray(back, this.transform.forward);
+    }
+
+    private void TryAddToScanner(Transform transform)
+    {
+        if (PositionInsideWind(transform.position) && !windTargets.ContainsKey(transform))
+        {
+            int arraySize = 0;
+            Collider onObject = transform.GetComponent<Collider>();
+            if (onObject != null)
+            {
+                arraySize++;
+            }
+
+            Collider[] colliders = transform.GetComponentsInChildren<Collider>();
+            arraySize += colliders.Length;
+            Collider[] allColliders = new Collider[arraySize];
+            int j = 0;
+            for (int i = 0; i < allColliders.Length; i++)
+            {
+                if (onObject != null && i == 0)
+                {
+                    allColliders[0] = onObject;
+                    continue;
+                }
+                allColliders[i] = colliders[j];
+                j++;
+            }
+
+            windTargets.Add(transform, new ObjectScan(transform, allColliders, rayWidth, GetOrigin(transform), this.transform, size.z, PositionInsideWind));
+            windTargets[transform].CreateScan();
+        }
+        else if (!PositionInsideWind(transform.position) && windTargets.ContainsKey(transform))
+        {
+            windTargets.Remove(transform);
+        }
+    }
+
+    private bool PositionInsideWind(Vector3 position)
+    {
+        return GravityZone.IsPointInBoxRegion(this.transform, this.Center, size, position);
     }
 
     private void FindRigidbodies(Vector3 windSize, Transform source)
@@ -156,11 +233,6 @@ public class Wind : MonoBehaviour
         }
     }
 
-    /*  void RigidbodyInsideWind()
-      {
-          Player.Instance.transform.position;
-      }*/
-
     private void ApplyWind()
     {
         foreach (Rigidbody rb in affectedBodies.Keys)
@@ -189,6 +261,18 @@ public class Wind : MonoBehaviour
         }
         if (activated)
         {
+            for (int i = 0; i < windPossibleTargets.Count; i++)
+            {
+                TryAddToScanner(windPossibleTargets[i]);
+            }
+            /*foreach (Transform transform in windTargets.Keys)
+            {
+                //Ray rayOrigin = GetOrigin(transform);
+                //windTargets[transform].UpdateOrigin(rayOrigin);
+                //Debug.Log("transform position " + transform.position + " ray origin " + rayOrigin.origin);
+                //windTargets[transform].CreateScan();
+                //windTargets[transform].ShowRays();
+            }*/
             ApplyWind();
         }
     }
