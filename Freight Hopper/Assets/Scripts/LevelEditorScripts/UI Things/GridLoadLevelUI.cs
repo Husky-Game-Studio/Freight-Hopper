@@ -31,14 +31,17 @@ namespace HGSLevelEditor
             //Creates a button for each level
             foreach (string name in level.allLevels)
             {
-                GameObject buttons = Instantiate(loadLevelButtonPrefab) as GameObject;
-                buttons.transform.SetParent(LoadLevelButtons);
+               if (name != "temp") {
 
-                LoadLevelUI levelButton = buttons.GetComponent<LoadLevelUI>();
-                levelButton.levelName = name;
-                Debug.Log(name + "Checking");
-                levelButton.SetText(name);
+                    GameObject buttons = Instantiate(loadLevelButtonPrefab) as GameObject;
+                    buttons.transform.SetParent(LoadLevelButtons);
 
+                    LoadLevelUI levelButton = buttons.GetComponent<LoadLevelUI>();
+                    levelButton.levelName = name;
+                    Debug.Log(name + "Checking");
+                    levelButton.SetText(name);
+
+                }
             }
         }
 

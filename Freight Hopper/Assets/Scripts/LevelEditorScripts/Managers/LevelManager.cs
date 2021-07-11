@@ -14,7 +14,7 @@ namespace HGSLevelEditor
         //This variable is what allows the level to be played within the 'Play' scene 
         //and also allows the level to reload when the user exits the 'Play' scene 
 
-        public static string levelNameLoad;
+        public static string levelNameLoad = null;
 
         private static LevelManager instance;
         public static LevelManager GetInstance()
