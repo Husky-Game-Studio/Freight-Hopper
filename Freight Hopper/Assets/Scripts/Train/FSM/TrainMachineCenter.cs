@@ -21,6 +21,13 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     [SerializeField, ReadOnly] private int currentPath = -1;
 
+    // Destroy Train After Derail Fields
+    [SerializeField] private bool deleteOnDerail = false;
+    [SerializeField] private float timeBeforeDelete = 10;
+    public Timer timerToDelete;
+    public bool trainDerailed;
+    
+
     // Accessors
     public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
     public bool DerailToWait => derailToWait;
@@ -224,6 +231,16 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public override void PerformStateIndependentBehaviors()
     {
+        if (trainDerailed && deleteOnDerail)
+        {
+            timerToDelete.CountDown();
+        }
+
+        if (!timerToDelete.TimerActive())
+        {
+            //RemoveCartsUntilIndex(0);
+        }
+        
     }
 
     public override void RestartFSM()
@@ -235,6 +252,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         RestartFSM();
         LevelController.PlayerRespawned += RestartFSM;
+        timerToDelete = new Timer(timeBeforeDelete);
     }
 
     public void OnDisable()
