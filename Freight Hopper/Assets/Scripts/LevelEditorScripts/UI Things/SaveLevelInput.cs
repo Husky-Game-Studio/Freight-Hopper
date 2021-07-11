@@ -17,6 +17,7 @@ namespace HGSLevelEditor
         public void SaveLevel()
         {
             levelName = input.text;
+            LevelManager.levelNameLoad = levelName;
             SaveLoadLevel.GetInstance().SaveLevelButton(levelName);
 
         }

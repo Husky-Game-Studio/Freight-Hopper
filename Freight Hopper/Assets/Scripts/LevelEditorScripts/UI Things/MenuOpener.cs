@@ -56,6 +56,7 @@ namespace HGSLevelEditor
             }
             if (LevelManager.levelNameLoad != null) {
 
+                SaveLoadLevel.GetInstance().SaveLevelButton(LevelManager.levelNameLoad);
                 SceneManager.LoadScene("CustomLevel 0 1", LoadSceneMode.Single);
 
             }
