@@ -42,7 +42,8 @@ public class TrainBuilder : MonoBehaviour
         CargoCart11,
         CargoCart12,
         CargoCart21,
-        CargoCart22
+        CargoCart22,
+        ForwardBillBoardCarrier
     }
 
     [System.Serializable]
