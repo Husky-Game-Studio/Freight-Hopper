@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// A Monobehavior (added as component) that holds BezierPath data that is visualized using PathEditor.cs
-/// </summary>
 public class PathCreator : MonoBehaviour
 {
     [HideInInspector] //The BezierPath should not be modified directly as some constraints must be met
