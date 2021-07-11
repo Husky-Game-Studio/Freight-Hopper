@@ -13,7 +13,7 @@ public class LoadLevelUI : MonoBehaviour
 
     public void LoadLevel() {
 
-        SceneManager.LoadScene("LevelEditorBeginning");
+       // SceneManager.LoadScene("LevelEditorBeginning");
         SaveLoadLevel.GetInstance().LoadButton(levelName, true);
         GridLoadLevelUI.GetInstance().CloseLoadLevelButtons();
         LevelManager.levelNameLoad = levelName;

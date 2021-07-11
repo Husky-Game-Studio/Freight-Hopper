@@ -51,6 +51,7 @@ public class SaveLoadLevel : MonoBehaviour
     //Need something like this for loading objects between editor and play button 
     public static bool editorOn = true;
 
+    public Text levelText; 
     GhostObjectMaker ghost;
 
     [Serializable]
@@ -83,6 +84,9 @@ public class SaveLoadLevel : MonoBehaviour
     //Loads the level 
     public void LoadButton(string levelName, bool editorOn) {
 
+        if (levelName != "temp") {
+            levelText.text = "Current Level: " + levelName;
+        }
         LoadingLevel(levelName, editorOn);
     }
 
@@ -218,7 +222,7 @@ public class SaveLoadLevel : MonoBehaviour
         FileInfo[] fileInfo = dirInfo.GetFiles();
 
         foreach (FileInfo file in fileInfo) {
-
+      
             allLevels.Add(file.Name);
             Debug.Log(file.Name);
         }

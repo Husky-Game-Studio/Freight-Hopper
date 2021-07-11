@@ -11,6 +11,7 @@ namespace HGSLevelEditor
         void Start()
         {
             SaveLoadLevel.GetInstance().LoadButton(LevelManager.levelNameLoad, false);
+            AudioListener.volume = 1; 
         }
 
     }

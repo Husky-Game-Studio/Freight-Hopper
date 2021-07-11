@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.UI;
 
 namespace HGSLevelEditor
@@ -9,7 +10,7 @@ namespace HGSLevelEditor
     {
         public Camera MainCamera = null;
         private GameObject mSelectedObject = null;
-        public GameObject target; 
+        public GameObject target;
         public float holdXvalue;
 
         //Texts 
@@ -18,9 +19,18 @@ namespace HGSLevelEditor
         public Text zSliderText = null;
 
         //Sliders 
-        public Slider xSlider = null;
-        public Slider ySlider = null;
-        public Slider zSlider = null;
+        public UnityEngine.UI.Slider xSlider = null;
+        public UnityEngine.UI.Slider ySlider = null;
+        public UnityEngine.UI.Slider zSlider = null;
+
+        //Dropdown 
+        public Dropdown transformDropdown = null;
+
+        private enum Transform
+        {
+            Position = 0,
+            Rotation = 1
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -28,76 +38,83 @@ namespace HGSLevelEditor
             Debug.Assert(MainCamera != null);
 
 
-            xSlider.minValue = -100;
-            xSlider.maxValue = 100;
+            xSlider.minValue = -360;
+            xSlider.maxValue = 360;
 
-            ySlider.minValue = -100;
-            ySlider.maxValue = 100;
+            ySlider.minValue = -360;
+            ySlider.maxValue = 360;
 
-            zSlider.minValue = -100;
-            zSlider.maxValue = 100;
+            zSlider.minValue = -360;
+            zSlider.maxValue = 360;
 
             xSlider.onValueChanged.AddListener(XValueChanged);
             ySlider.onValueChanged.AddListener(YValueChanged);
             zSlider.onValueChanged.AddListener(ZValueChanged);
+            transformDropdown.onValueChanged.AddListener(ObjectSetUI);
         }
 
         void Update()
         {
-            moveShape();
+            MoveShape();
+            DeleteObject();
+
+            if (mSelectedObject != null) {
+                SetRotationText(transformDropdown.value);
+            }
+
         }
 
         public void SetSelectedObject(GameObject g)
         {
             mSelectedObject = g;
-            ObjectSetUI();
+            ObjectSetUI(transformDropdown.value);
+  
         }
 
-        public void ObjectSetUI()
+        public void ObjectSetUI(int value)
         {
             Vector3 p = ReadObjectXfrom();
-            xSlider.value = p.x;  
+            xSlider.value = p.x;
             ySlider.value = p.y;
             zSlider.value = p.z;
         }
 
-        void moveShape()
+        private void MoveShape()
         {
-            target.transform.localPosition = new Vector3(xSlider.value, ySlider.value, zSlider.value);
+            if (mSelectedObject == null || transformDropdown.value == (int)Transform.Position) {
 
-            xSliderText.text = "X: " + xSlider.value;
-            ySliderText.text = "Y: " + ySlider.value;
-            zSliderText.text = "Z: " + zSlider.value;
-        }
+                target.transform.localPosition = new Vector3(xSlider.value, ySlider.value, zSlider.value);
 
-
-        void moveListener(bool a)
-        {
-            if (mSelectedObject != null)
-            {
-                xSlider.minValue = -100;
-                xSlider.maxValue = 100;
-
-                ySlider.minValue = -100;
-                ySlider.maxValue = 100;
-
-                zSlider.minValue = -100;
-                zSlider.maxValue = 100;
-
-                xSlider.value = mSelectedObject.transform.parent.localPosition.x;
-                ySlider.value = mSelectedObject.transform.parent.localPosition.y;
-                zSlider.value = mSelectedObject.transform.parent.localPosition.z;
+                xSliderText.text = "X: " + xSlider.value;
+                ySliderText.text = "Y: " + ySlider.value;
+                zSliderText.text = "Z: " + zSlider.value;
 
             }
-
+            
         }
+
+        private void SetRotationText(int dropdownValue) {
+
+            if (dropdownValue == 1) {
+
+                xSliderText.text = "X: " + mSelectedObject.transform.parent.localRotation.eulerAngles.x;
+                ySliderText.text = "Y: " + mSelectedObject.transform.parent.localRotation.eulerAngles.y;
+                zSliderText.text = "Z: " + mSelectedObject.transform.parent.localRotation.eulerAngles.z;
+            }
+        
+        } 
+
         private Vector3 ReadObjectXfrom()
         {
             Vector3 p;
 
-            if (mSelectedObject != null)
+            if (mSelectedObject != null && transformDropdown.value == (int)Transform.Position)
             {
                 p = mSelectedObject.transform.parent.localPosition;
+            }
+            else if (mSelectedObject != null && transformDropdown.value == (int)Transform.Rotation) {
+
+                p = mSelectedObject.transform.parent.localRotation.eulerAngles;
             }
             else
             {
@@ -112,7 +129,18 @@ namespace HGSLevelEditor
             if (mSelectedObject == null)
                 return;
 
-            mSelectedObject.transform.parent.localPosition = p;
+            if (transformDropdown.value == (int)Transform.Position)
+            {
+                mSelectedObject.transform.parent.localPosition = p;
+            }
+            else if (transformDropdown.value == (int)Transform.Rotation) {
+
+                Quaternion objectRot = new Quaternion();
+                objectRot.eulerAngles = p; 
+                mSelectedObject.transform.parent.localRotation = objectRot;
+
+            }
+            
 
         }
 
@@ -135,6 +163,15 @@ namespace HGSLevelEditor
             Vector3 p = ReadObjectXfrom();
             p.z = v;
             UISetObjectXform(ref p);
+        }
+
+        private void DeleteObject() {
+
+            if (Input.GetKeyDown(KeyCode.Delete) && mSelectedObject != null) {
+
+                Destroy(mSelectedObject.transform.parent.gameObject);
+            }
+        
         }
     }
 }
