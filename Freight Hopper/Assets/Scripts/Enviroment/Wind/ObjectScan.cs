@@ -5,29 +5,22 @@ using UnityEngine;
 
 public class ObjectScan
 {
-    private Transform targetTransform;
     private Collider[] targetColliders;
     private Func<Vector3, bool> checkInsideWindFunction;
     private float rayWidth;
-    private Ray rayOrigin;
     private float depth;
     private Transform windTransform;
     private Dictionary<Vector3, Ray> viableRays = new Dictionary<Vector3, Ray>();
 
-    public ObjectScan(Transform targetTransform, Collider[] colliders, float rayWidth, Ray origin, Transform transform, float depth, Func<Vector3, bool> checkInsideWind)
+    public Dictionary<Vector3, Ray> ViableRays => viableRays;
+
+    public ObjectScan(Collider[] colliders, float rayWidth, Transform transform, float depth, Func<Vector3, bool> checkInsideWind)
     {
-        this.targetTransform = targetTransform;
         targetColliders = colliders;
-        this.rayOrigin = origin;
         this.rayWidth = rayWidth;
         windTransform = transform;
         this.depth = depth;
         checkInsideWindFunction = checkInsideWind;
-    }
-
-    public void UpdateOrigin(Ray origin)
-    {
-        this.rayOrigin = origin;
     }
 
     public void ShowRays()
@@ -38,42 +31,70 @@ public class ObjectScan
         }
     }
 
-    public void CreateScan()
+    public void CreateScan(Ray origin)
     {
         viableRays.Clear();
-        AddRay(rayOrigin.origin);
+        AddRays(origin);
     }
 
-    private void AddRay(Vector3 origin)
+    private void AddRays(Ray rayOrigin)
     {
-        Vector3[] offsets =
+        Queue<Ray> origins = new Queue<Ray>();
+
+        Vector3[] directions =
         {
             windTransform.transform.up,
             -windTransform.transform.up,
             windTransform.transform.right,
             -windTransform.transform.right
         };
-        for (int i = 0; i < offsets.Length; i++)
+        Ray w = new Ray(rayOrigin.origin, rayOrigin.direction);
+        origins.Enqueue(w);
+        viableRays.Add(w.origin, w);
+
+        while (origins.Count > 0)
         {
-            Ray ray = new Ray(origin + (offsets[i] * rayWidth), rayOrigin.direction);
-            RaycastHit hit;
-            targetColliders[0].Raycast(ray, out hit, depth);
-            bool hitCollider = false;
-            foreach (Collider collider in targetColliders)
+            w = origins.Dequeue();
+
+            for (int i = 0; i < directions.Length; i++)
             {
-                if (hit.collider == collider)
+                Ray ray = new Ray(w.origin + (directions[i] * rayWidth), rayOrigin.direction);
+                //Debug.DrawRay(ray.origin, ray.direction * 20, Color.red);
+                if (viableRays.ContainsKey(ray.origin) || !checkInsideWindFunction(ray.origin + (ray.direction / 100)))
                 {
-                    hitCollider = true;
+                    continue;
                 }
-            }
-            if (!hitCollider)
-            {
-                continue;
-            }
-            if (!viableRays.ContainsKey(ray.origin) && checkInsideWindFunction(ray.origin))
-            {
+
+                RaycastHit[] hits = new RaycastHit[targetColliders.Length];
+                for (int j = 0; j < targetColliders.Length; j++)
+                {
+                    targetColliders[j].Raycast(ray, out hits[j], depth);
+                }
+
+                bool hitCollider = false;
+                for (int j = 0; j < hits.Length; j++)
+                {
+                    foreach (Collider collider in targetColliders)
+                    {
+                        if (hits[j].collider == collider)
+                        {
+                            hitCollider = true;
+                            break;
+                        }
+                    }
+                    if (hitCollider)
+                    {
+                        break;
+                    }
+                }
+
+                if (!hitCollider)
+                {
+                    continue;
+                }
+
+                origins.Enqueue(ray);
                 viableRays.Add(ray.origin, ray);
-                AddRay(ray.origin);
             }
         }
     }
