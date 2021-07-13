@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4613969863532683886}
   - component: {fileID: 5348583671179059749}
   - component: {fileID: 1885079889544794213}
-  - component: {fileID: 7564440267581365594}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -112,18 +111,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &7564440267581365594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295446575559753134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d44c9094b990c254781b20108cc17797, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1118725268560973002
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5662266245147675942
 Transform:
   m_ObjectHideFlags: 0
@@ -532,6 +519,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2325380483340445215}
+  - component: {fileID: 7484530172171009784}
   m_Layer: 14
   m_Name: LaserGrid
   m_TagString: Untagged
@@ -561,6 +549,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7484530172171009784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3555199343200622880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44c9094b990c254781b20108cc17797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3792873827834583983
 GameObject:
   m_ObjectHideFlags: 0
