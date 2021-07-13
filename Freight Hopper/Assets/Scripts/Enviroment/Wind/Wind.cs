@@ -232,11 +232,11 @@ public class Wind : MonoBehaviour
                     }
                     affectedBodies[colliderRb].Add(new Ray(hit.point, ray.direction));
 
-                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+                    //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
                 }
                 else
                 {
-                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                    //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
                 }
             }
         }
