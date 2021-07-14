@@ -22,10 +22,11 @@ public class Wind : MonoBehaviour
     private List<Transform> windPossibleTargets = new List<Transform>();
     private Dictionary<Transform, ObjectScan> windTargets = new Dictionary<Transform, ObjectScan>();
     private Dictionary<Rigidbody, List<Ray>> affectedBodies = new Dictionary<Rigidbody, List<Ray>>();
+    private Dictionary<Vector3Int, Ray> viableRays = new Dictionary<Vector3Int, Ray>();
     [SerializeField] private LayerMask affectedLayers;
     private WindParticleController windParticleController;
 
-    private Vector3 Center => this.transform.forward * size.z / 2;
+    private Vector3 Center => Vector3.forward * size.z / 2;
 
 #if UNITY_EDITOR
 
@@ -34,6 +35,7 @@ public class Wind : MonoBehaviour
     {
         rayWidth = 1 / density;
         Gizmos.color = Color.yellow;
+
         GizmosExtensions.DrawGizmosArrow(this.transform.position + offset, this.transform.forward);
 
         if (!active)
@@ -49,9 +51,8 @@ public class Wind : MonoBehaviour
             }
         }
 
-        Gizmos.matrix = Matrix4x4.TRS(this.transform.position + this.Center, this.transform.rotation, Vector3.one);
-
-        Gizmos.DrawWireCube(offset, size);
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position, this.transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(offset + this.Center, size);
     }
 
 #endif
@@ -119,7 +120,7 @@ public class Wind : MonoBehaviour
         while (active)
         {
             yield return new WaitForSecondsRealtime(1 / (float)frequency);
-            //UpdateWind();
+            UpdateWind();
         }
     }
 
@@ -135,8 +136,7 @@ public class Wind : MonoBehaviour
         }
         foreach (Transform transform in windTargets.Keys)
         {
-            windTargets[transform].CreateScan(GetOrigin(transform));
-            //windTargets[transform].ShowRays();
+            windTargets[transform].AddToScan(GetOrigin(transform));
             FindRigidbodies(transform);
         }
     }
@@ -148,32 +148,39 @@ public class Wind : MonoBehaviour
         return new Ray(back, this.transform.forward);
     }
 
+    private Collider[] GetColliderInformation(Transform transform)
+    {
+        int arraySize = 0;
+        Collider onObject = transform.GetComponent<Collider>();
+        if (onObject != null)
+        {
+            arraySize++;
+        }
+
+        Collider[] colliders = transform.GetComponentsInChildren<Collider>();
+        arraySize += colliders.Length;
+        Collider[] allColliders = new Collider[arraySize];
+        int j = 0;
+        for (int i = 0; i < allColliders.Length; i++)
+        {
+            if (onObject != null && i == 0)
+            {
+                allColliders[0] = onObject;
+                continue;
+            }
+            allColliders[i] = colliders[j];
+            j++;
+        }
+        return allColliders;
+    }
+
     private void TryAddToScanner(Transform transform)
     {
         if (PositionInsideWind(transform.position) && !windTargets.ContainsKey(transform))
         {
-            int arraySize = 0;
-            Collider onObject = transform.GetComponent<Collider>();
-            if (onObject != null)
-            {
-                arraySize++;
-            }
-
-            Collider[] colliders = transform.GetComponentsInChildren<Collider>();
-            arraySize += colliders.Length;
-            Collider[] allColliders = new Collider[arraySize];
-            int j = 0;
-            for (int i = 0; i < allColliders.Length; i++)
-            {
-                if (onObject != null && i == 0)
-                {
-                    allColliders[0] = onObject;
-                    continue;
-                }
-                allColliders[i] = colliders[j];
-                j++;
-            }
-            windTargets.Add(transform, new ObjectScan(allColliders, rayWidth, this.transform, size.z, PositionInsideWind));
+            windTargets.Add(transform,
+                new ObjectScan(GetColliderInformation(transform), rayWidth, viableRays,
+                this.transform, size.z, PositionInsideWind));
         }
         else if (!PositionInsideWind(transform.position) && windTargets.ContainsKey(transform))
         {
@@ -183,61 +190,74 @@ public class Wind : MonoBehaviour
 
     private bool PositionInsideWind(Vector3 position)
     {
-        return GravityZone.IsPointInBoxRegion(this.transform, this.Center, size / 2, position);
+        return GravityZone.IsPointInBoxRegion(this.transform, this.Center + offset, size / 2, position);
     }
 
     private void FindRigidbodies(Transform transformKey)
     {
-        //List<Rigidbody> deleteList = new List<Rigidbody>();
-        foreach (Ray ray in windTargets[transformKey].ViableRays.Values)
+        foreach (Ray ray in viableRays.Values)
         {
-            RaycastHit hit;
-            SendRay(ray, out hit, size.z);
+            SendRay(ray, size.z);
+        }
+        viableRays.Clear();
+    }
+
+    private void WindPortalTeleportation(RaycastHit hit, float distance, Ray ray)
+    {
+        Portal portal = hit.collider.gameObject.GetComponent<Portal>();
+        if (portal != null)
+        {
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+            float distanceLeft = distance - Vector3.Distance(hit.point, ray.origin);
+            portal.TeleportRay(ref ray, hit.point);
+            Vector3 portalSize = portal.OtherPortal().GetComponent<BoxCollider>().size;
+
+            WindParticleController windParticleController = portal.OtherPortal().GetComponent<WindParticleController>();
+            if (portal.OtherPortal().GetComponent<WindParticleController>() == null)
+            {
+                windParticleController = portal.OtherPortal().gameObject.AddComponent<WindParticleController>();
+            }
+
+            SendRay(ray, distanceLeft);
+            windParticleController.SpawnParticleSystem(Vector3.zero, new Vector3(portalSize.x, portalSize.y, distanceLeft), ray.direction, portal.OtherPortal());
+        }
+        else
+        {
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
         }
     }
 
-    private void SendRay(Ray ray, out RaycastHit hit, float distance)
+    private void WindRigidbodyFind(RaycastHit hit, float distance, Ray ray)
     {
+        Rigidbody colliderRb = hit.collider.attachedRigidbody;
+        if (colliderRb != null)
+        {
+            if (!affectedBodies.ContainsKey(colliderRb))
+            {
+                affectedBodies.Add(colliderRb, new List<Ray>());
+            }
+            affectedBodies[colliderRb].Add(new Ray(hit.point, ray.direction));
+
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+        }
+        else
+        {
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+        }
+    }
+
+    private void SendRay(Ray ray, float distance)
+    {
+        RaycastHit hit;
         if (Physics.Raycast(ray, out hit, distance, affectedLayers))
         {
             if (hit.collider.isTrigger)
             {
-                // Wind portal teleportation
-                Portal portal = hit.collider.gameObject.GetComponent<Portal>();
-                if (portal != null)
-                {
-                    float distanceLeft = distance - Vector3.Distance(hit.point, ray.origin);
-                    portal.TeleportRay(ref ray, hit.point);
-                    Vector3 portalSize = portal.OtherPortal().GetComponent<BoxCollider>().size;
-
-                    WindParticleController windParticleController = portal.OtherPortal().GetComponent<WindParticleController>();
-                    if (portal.OtherPortal().GetComponent<WindParticleController>() == null)
-                    {
-                        windParticleController = portal.OtherPortal().gameObject.AddComponent<WindParticleController>();
-                    }
-
-                    SendRay(ray, out hit, distanceLeft);
-                    windParticleController.SpawnParticleSystem(Vector3.zero, new Vector3(portalSize.x, portalSize.y, distanceLeft), ray.direction, portal.OtherPortal());
-                }
+                WindPortalTeleportation(hit, distance, ray);
             }
             else
             {
-                // Wind on a rigidbody
-                Rigidbody colliderRb = hit.collider.attachedRigidbody;
-                if (colliderRb != null)
-                {
-                    if (!affectedBodies.ContainsKey(colliderRb))
-                    {
-                        affectedBodies.Add(colliderRb, new List<Ray>());
-                    }
-                    affectedBodies[colliderRb].Add(new Ray(hit.point, ray.direction));
-
-                    //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
-                }
-                else
-                {
-                    //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
-                }
+                WindRigidbodyFind(hit, distance, ray);
             }
         }
     }
@@ -270,7 +290,6 @@ public class Wind : MonoBehaviour
         }
         if (activated)
         {
-            UpdateWind();
             ApplyWind();
         }
     }

@@ -10,30 +10,22 @@ public class ObjectScan
     private float rayWidth;
     private float depth;
     private Transform windTransform;
-    private Dictionary<Vector3Int, Ray> viableRays = new Dictionary<Vector3Int, Ray>();
+    private Dictionary<Vector3Int, Ray> viableRays;
 
-    public Dictionary<Vector3Int, Ray> ViableRays => viableRays;
-
-    public ObjectScan(Collider[] colliders, float rayWidth, Transform transform, float depth, Func<Vector3, bool> checkInsideWind)
+    public ObjectScan(Collider[] colliders, float rayWidth, Dictionary<Vector3Int, Ray> viableRays,
+        Transform transform, float depth, Func<Vector3, bool> checkInsideWind)
     {
+        this.viableRays = viableRays;
         targetColliders = colliders;
+        this.viableRays = viableRays;
         this.rayWidth = rayWidth;
         windTransform = transform;
         this.depth = depth;
         checkInsideWindFunction = checkInsideWind;
     }
 
-    public void ShowRays()
+    public void AddToScan(Ray origin)
     {
-        foreach (Ray ray in viableRays.Values)
-        {
-            Debug.DrawRay(ray.origin, ray.direction * depth, Color.blue);
-        }
-    }
-
-    public void CreateScan(Ray origin)
-    {
-        viableRays.Clear();
         AddRays(origin);
     }
 
