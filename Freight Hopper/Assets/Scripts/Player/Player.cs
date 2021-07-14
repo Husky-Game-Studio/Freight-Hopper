@@ -25,4 +25,9 @@ public class Player : MonoBehaviour
         PlayerLoadedIn?.Invoke();
         loadedIn = true;
     }
+
+    private void OnDisable()
+    {
+        loadedIn = false;
+    }
 }

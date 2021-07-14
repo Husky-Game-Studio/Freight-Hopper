@@ -12,7 +12,7 @@ public class FireState : BasicState
         this.turretMachineCenter = turretMachineCenter;
         bulletSpawner = turretMachineCenter.bulletSpawner;
     }
-
+    
     // Only in this state for one tick
     public override BasicState TransitionState()
     {

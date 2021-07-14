@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -14,9 +15,20 @@ public class TargetState : BasicState
     private Transform turretTransform;
     private Transform barrelBaseTransform;
     private float speedOfRotation = 5f;
-    private Timer countDownToTimer = new Timer(2f);
+    public Timer countDownToTimer = new Timer(2f);
+    public Timer CountDownToTimer => countDownToTimer;
 
     public TargetState(TurretMachineCenter turretMachineCenter) : base(turretMachineCenter)
+    {
+        ContructorHelper(turretMachineCenter);
+    }
+    
+    public TargetState(TurretMachineCenter turretMachineCenter, List<Func<BasicState>> stateTransitions) : base(turretMachineCenter, stateTransitions)
+    {
+        ContructorHelper(turretMachineCenter);
+    }
+
+    private void ContructorHelper(TurretMachineCenter turretMachineCenter)
     {
         this.turretMachineCenter = turretMachineCenter;
         turretTransform = turretMachineCenter.gameObject.transform;
@@ -26,19 +38,20 @@ public class TargetState : BasicState
     public override BasicState TransitionState()
     {
         // Transition to Search State
-        if (Physics.Raycast(turretMachineCenter.GetRay(), out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
+        /*if (Physics.Raycast(turretMachineCenter.GetRay(), out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
         {
             if ((hit.rigidbody != null && !hit.rigidbody.CompareTag("Player")) || (hit.rigidbody == null))
             {
                 return turretMachineCenter.searchState;
             }
-        }
+        }*/
         // Transition to Fire State
         if (!countDownToTimer.TimerActive())
         {
             return turretMachineCenter.fireState;
         }
-        return this;
+        BasicState state = CheckTransitions();
+        return state;
     }
 
     public override void EntryState()

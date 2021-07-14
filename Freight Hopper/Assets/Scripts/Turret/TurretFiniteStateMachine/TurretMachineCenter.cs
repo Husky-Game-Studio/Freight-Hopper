@@ -16,6 +16,9 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public GameObject bullet;
     public GameObject bulletSpawner;
 
+    private TurretTransitionsHandler turretTransitionsHandler;
+    //private bool playerNotSpawned = true;
+
     // TFSM States
     public BasicState searchState;
     public BasicState targetState;
@@ -23,13 +26,40 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
+        Debug.Log("Awake Function");
+        turretTransitionsHandler = new TurretTransitionsHandler(this);
+        
+        // Default
+        List<Func<BasicState>> defaultTransitionsList = new List<Func<BasicState>>
+        {
+            turretTransitionsHandler.CheckStartState
+        };
+        defaultState = new DefaultState(this, defaultTransitionsList);
+        
+        List<Func<BasicState>> searchTransitionsList = new List<Func<BasicState>>
+        {
+            turretTransitionsHandler.CheckTargetState
+        };
+        searchState = new SearchState(this, searchTransitionsList);
+        
+        List<Func<BasicState>> targetTransitionsList = new List<Func<BasicState>>
+        {
+            turretTransitionsHandler.CheckSearchState
+        };
+        targetState = new TargetState(this, targetTransitionsList);
+        
         CreateStatesAndFindPlayer();
+        
+        //RestartFSM();
+        currentState = defaultState;
+        previousState = defaultState;
+        Debug.Log("StatesCreated");
     }
 
     private void CreateStatesAndFindPlayer()
     {
-        searchState = new SearchState(this);
-        targetState = new TargetState(this);
+        //searchState = new SearchState(this);
+        //targetState = new TargetState(this);
         fireState = new FireState(this);
 
         if (Player.loadedIn)
@@ -46,13 +76,14 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     // Assign initial state and subscribe to any event listeners
     public void OnEnable()
     {
-        this.currentState = searchState;
-        this.previousState = searchState;
+
     }
 
     // Unsubscribe from any assigned event listeners
     public void OnDisable()
     {
+        thePlayer = null;
+        currentState = defaultState; 
         Player.PlayerLoadedIn -= SetPlayerReference;
         LevelController.PlayerRespawned -= SetPlayerReference;
     }
@@ -64,9 +95,19 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     public override void PerformStateIndependentBehaviors()
     {
+        if (currentState == defaultState)
+        {
+            Debug.Log("DEFAULT STATE");
+        }
+
         if (thePlayer == null)
         {
             SetPlayerReference();
+        }
+        else
+        {
+            //this.currentState = searchState;
+            //this.previousState = searchState;
         }
         RayCastToPlayer();
     }
@@ -85,7 +126,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         {
             Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.yellow);
         }
-        else // if (currentState == fireState)
+        else if (currentState == fireState)
         {
             Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.red);
         }
