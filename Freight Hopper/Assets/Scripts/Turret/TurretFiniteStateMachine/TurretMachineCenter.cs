@@ -26,7 +26,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
-        Debug.Log("Awake Function");
         turretTransitionsHandler = new TurretTransitionsHandler(this);
         
         // Default
@@ -53,7 +52,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         //RestartFSM();
         currentState = defaultState;
         previousState = defaultState;
-        Debug.Log("StatesCreated");
     }
 
     private void CreateStatesAndFindPlayer()
@@ -95,11 +93,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     public override void PerformStateIndependentBehaviors()
     {
-        if (currentState == defaultState)
-        {
-            Debug.Log("DEFAULT STATE");
-        }
-
         if (thePlayer == null)
         {
             SetPlayerReference();

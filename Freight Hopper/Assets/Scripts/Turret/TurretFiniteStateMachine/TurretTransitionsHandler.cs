@@ -14,10 +14,8 @@ public class TurretTransitionsHandler
 
     public BasicState CheckStartState()
     {
-        Debug.Log("CheckStartStart");
         if (Player.loadedIn)
         {
-            Debug.Log("Player Spawned");
             return turretFSM.searchState;
         }
         return null;
