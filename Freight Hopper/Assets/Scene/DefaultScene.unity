@@ -198,6 +198,99 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 27818065}
   m_CullTransparentMesh: 1
+--- !u!1 &96370241
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 96370242}
+  - component: {fileID: 96370244}
+  - component: {fileID: 96370243}
+  - component: {fileID: 96370245}
+  m_Layer: 0
+  m_Name: LevelTimer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &96370242
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96370241}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 217675794}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -107.2, y: 49.8}
+  m_SizeDelta: {x: 186.8, y: 69.9}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &96370243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96370241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 31
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 71
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: TIMER N/A
+--- !u!222 &96370244
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96370241}
+  m_CullTransparentMesh: 1
+--- !u!114 &96370245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96370241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0487e1c913b706a42b6b9f4842816d15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textTimer: {fileID: 96370243}
 --- !u!1 &217675790
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +386,7 @@ RectTransform:
   - {fileID: 1882243772}
   - {fileID: 27818066}
   - {fileID: 367251144}
+  - {fileID: 96370242}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -880,9 +974,9 @@ MonoBehaviour:
     value: 1
   deltaIncreaseForce: 0.01
   angleToBeConsideredFlat: 7
-  initialBurstForce: 18
-  downwardsForce: 10
-  slopeDownForce: 40
+  initialBurstForce: 25
+  downwardsForce: 15
+  slopeDownForce: 65
   groundFrictionReductionPercent: 1
 --- !u!114 &1798020243
 MonoBehaviour:
@@ -908,7 +1002,7 @@ MonoBehaviour:
     duration: 0.75
     current: 0
   jumpBufferTimer:
-    duration: 0.3
+    duration: 0.1
     current: 0
 --- !u!114 &1798020244
 MonoBehaviour:
@@ -927,7 +1021,7 @@ MonoBehaviour:
   preventConsumption: 0
   oppositeInputAngle: 90
   groundController:
-    speedLimit: 22
+    speedLimit: 25
     deltaAngle: 0.02
     acceleration: 80
     velocity: {x: 0, y: 0, z: 0}
@@ -936,7 +1030,7 @@ MonoBehaviour:
     relativeHorizontalSpeed: 0
   airController:
     speedLimit: 7
-    deltaAngle: 0.01
+    deltaAngle: 0.015
     acceleration: 20
     velocity: {x: 0, y: 0, z: 0}
     speed: 0
@@ -995,7 +1089,7 @@ MonoBehaviour:
     m_Bits: 2049
   forwardDetectionTiltAngle: 45
   backwardDetectionTiltAngle: 30
-  upwardsForce: 20
+  upwardsForce: 30
   rightForce: 4
   initialClimbForce: 5
   climbForce: 50
@@ -1714,7 +1808,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6851446874351635515}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1593485738}
@@ -2097,7 +2191,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6851446874874222866}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0.421}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}

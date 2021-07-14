@@ -42,7 +42,7 @@ public class Destructable : MonoBehaviour
         }
     }
 
-    private void DestroyObject()
+    public void DestroyObject()
     {
         RigidbodyDestroyed?.Invoke();
         GameObject go = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);

@@ -59,6 +59,12 @@ MonoBehaviour:
   pathObjects: []
   targetVelocity: 35
   currentPath: -1
+  deleteOnDerail: 0
+  timeBeforeDelete: 10
+  timerToDelete:
+    duration: 0
+    current: 0
+  trainDerailed: 0
   hoverController: {fileID: 0}
   currentRailLinker: {fileID: 0}
 --- !u!114 &8828049057225272882
@@ -91,6 +97,7 @@ MonoBehaviour:
   - {fileID: 3777815452056588140, guid: 802d77ed2e6138041a53b32db84815aa, type: 3}
   - {fileID: 5027634762359815765, guid: 164ab02083f3a8c4e8a8b2bf5dc491de, type: 3}
   - {fileID: 5027634762359815765, guid: 8d6743a63f0124844883d1ea015730cb, type: 3}
+  - {fileID: 5834199224475596160, guid: 41e17ed93ecb78b449d13a31ad674448, type: 3}
   baseCart: {fileID: 5098807932008158715, guid: 32d96c1fb460e2a4a97160be9d4c19fa, type: 3}
 --- !u!1001 &8828049057815456783
 PrefabInstance:
@@ -99,6 +106,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8828049057225272883}
     m_Modifications:
+    - target: {fileID: 1886316016507558034, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4735605026481358126, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -5,13 +5,9 @@ using UnityEditor;
 
 #if UNITY_EDITOR
 
-/// <summary>
-/// A UnityEditor script that visalizes and enables modifications to a BezierPath
-/// </summary>
 [CustomEditor(typeof(PathCreator))]
 public class PathEditor : Editor
 {
-    private const float buttonWidth = 120.0f;
     private Rect windowRect = new Rect(20, 40, 10, 10); //Window for editor controls
     private PathCreator creator;
     private BezierPath path;
@@ -94,33 +90,32 @@ public class PathEditor : Editor
             newRaycastHit = false;
     }
 
-    //Draw a grid of buttons in a numpad layout
     private void Window(int windowID)
     {
         Color defaultColor = GUI.color;
         GUI.color = Color.red;
         GUILayout.BeginHorizontal();
-        GUILayout.Button(new GUIContent(" ", "[Numpad 7]"), GUILayout.Width(buttonWidth)); //Just displaying numpad layout
-        GUILayout.Button(new GUIContent("Match Pos/Rot", "[Numpad 8] (Keybind Only)"), GUILayout.Width(buttonWidth)); //Keybind only
-        GUILayout.Button(new GUIContent(" ", "[Numpad 9]"), GUILayout.Width(buttonWidth)); //Just displaying numpad layout
+        GUILayout.Button(new GUIContent(" ", "[Numpad 7]"), GUILayout.Width(120.0f)); //Just displaying numpad layout
+        GUILayout.Button(new GUIContent("Match Pos/Rot", "[Numpad 8] (Keybind Only)"), GUILayout.Width(120.0f)); //Keybind only
+        GUILayout.Button(new GUIContent(" ", "[Numpad 9]"), GUILayout.Width(120.0f)); //Just displaying numpad layout
         GUILayout.EndHorizontal();
         GUI.color = defaultColor;
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button(new GUIContent("Next Anchor (-)", "[Numpad 4]"), GUILayout.Width(buttonWidth)))
+        if (GUILayout.Button(new GUIContent("Next Anchor (-)", "[Numpad 4]"), GUILayout.Width(120.0f)))
             ActionDecreaseFocusIndex();
-        if (GUILayout.Button(new GUIContent("Switch Operation", "[Numpad 5]"), GUILayout.Width(buttonWidth)))
+        if (GUILayout.Button(new GUIContent("Switch Operation", "[Numpad 5]"), GUILayout.Width(120.0f)))
             ActionSwitchOperation();
-        if (GUILayout.Button(new GUIContent("Next Anchor (+)", "[Numpad 6]"), GUILayout.Width(buttonWidth)))
+        if (GUILayout.Button(new GUIContent("Next Anchor (+)", "[Numpad 6]"), GUILayout.Width(120.0f)))
             ActionIncreaseFocusIndex();
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button(new GUIContent("Add Segment (-)", "[Numpad 1]"), GUILayout.Width(buttonWidth)))
+        if (GUILayout.Button(new GUIContent("Add Segment (-)", "[Numpad 1]"), GUILayout.Width(120.0f)))
             ActionCreateSegmentBehind();
-        if (GUILayout.Button(new GUIContent("Delete Anchor", "[Numpad 2]"), GUILayout.Width(buttonWidth)))
+        if (GUILayout.Button(new GUIContent("Delete Anchor", "[Numpad 2]"), GUILayout.Width(120.0f)))
             ActionRemoveAnchor();
-        if (GUILayout.Button(new GUIContent("Add Segment (+)", "[Numpad 3]"), GUILayout.Width(buttonWidth)))
+        if (GUILayout.Button(new GUIContent("Add Segment (+)", "[Numpad 3]"), GUILayout.Width(120.0f)))
             ActionCreateSegmentAhead();
         GUILayout.EndHorizontal();
 
@@ -156,8 +151,7 @@ public class PathEditor : Editor
         Undo.RecordObject(creator, "Add Segment");
         Vector3 direction = -CalculatePathDirection(creator.focusIndex);
         Vector3 origin = path[3 * creator.focusIndex];
-        float distance = 0.04f * (sceneViewCameraPos - creator.transform.TransformPoint(origin)).magnitude;
-        path.AddSegment(creator.focusIndex, origin + (3f * distance * direction), origin + (2 * distance * direction), origin + (1 * distance * direction));
+        path.AddSegment(creator.focusIndex, origin + (3 * direction), origin + (2 * direction), origin + (1 * direction));
     }
 
     private void ActionCreateSegmentAhead()
@@ -165,8 +159,7 @@ public class PathEditor : Editor
         Undo.RecordObject(creator, "Add Segment");
         Vector3 direction = CalculatePathDirection(creator.focusIndex);
         Vector3 origin = path[3 * creator.focusIndex];
-        float distance = 0.04f * (sceneViewCameraPos - creator.transform.TransformPoint(origin)).magnitude;
-        path.AddSegment(creator.focusIndex + 1, origin + (1 * distance * direction), origin + (2 * distance * direction), origin + (3 * distance * direction));
+        path.AddSegment(creator.focusIndex + 1, origin + (1 * direction), origin + (2 * direction), origin + (3 * direction));
         creator.focusIndex += 1;
     }
 
@@ -228,7 +221,6 @@ public class PathEditor : Editor
 
     private void TranslateAnchorHandles()
     {
-        bool doneTransforming = false;
         int indexCurrent = creator.focusIndex * 3;
         Vector3 anchorStoredPos = path[indexCurrent];
         Vector3 anchorHandle = Handles.PositionHandle(creator.transform.TransformPoint(anchorStoredPos), Quaternion.identity);
@@ -240,7 +232,7 @@ public class PathEditor : Editor
             Vector3 strength1Handle = Handles.PositionHandle(creator.transform.TransformPoint(strength1StoredPos), Quaternion.identity);
             Vector3 strength1HandlePos = creator.transform.InverseTransformPoint(strength1Handle);
 
-            if (strength1StoredPos != strength1HandlePos && !doneTransforming)
+            if (strength1StoredPos != strength1HandlePos)
             {
                 Undo.RecordObject(creator, "Translate Strength Point");
                 if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
@@ -250,7 +242,6 @@ public class PathEditor : Editor
                     path.MovePoint(indexCurrent + 1, path[indexCurrent] + (strength2 * direction));
                 }
                 path.MovePoint(indexCurrent - 1, strength1HandlePos);
-                doneTransforming = true;
             }
         }
 
@@ -260,7 +251,7 @@ public class PathEditor : Editor
             Vector3 strength2Handle = Handles.PositionHandle(creator.transform.TransformPoint(strength2StoredPos), Quaternion.identity);
             Vector3 strength2HandlePos = creator.transform.InverseTransformPoint(strength2Handle);
 
-            if (strength2StoredPos != strength2HandlePos && !doneTransforming)
+            if (strength2StoredPos != strength2HandlePos)
             {
                 Undo.RecordObject(creator, "Translate Strength Point");
                 if (0 <= indexCurrent - 1 && indexCurrent - 1 <= path.NumPoints - 1)
@@ -270,13 +261,12 @@ public class PathEditor : Editor
                     path.MovePoint(indexCurrent - 1, path[indexCurrent] - (strength1 * direction));
                 }
                 path.MovePoint(indexCurrent + 1, strength2HandlePos);
-                doneTransforming = true;
             }
         }
 
         if (newRaycastHit)
             anchorHandlePos = creator.transform.InverseTransformPoint(lastMouseRaycastHit.point);
-        if (anchorStoredPos != anchorHandlePos && !doneTransforming)
+        if (anchorStoredPos != anchorHandlePos)
         {
             Undo.RecordObject(creator, "Translate Anchor Point");
             if (0 <= indexCurrent + 1 && indexCurrent + 1 <= path.NumPoints - 1)
@@ -354,7 +344,7 @@ public class PathEditor : Editor
 
     private bool KeyDown(Event guiEvent, KeyCode key)
     {
-        return guiEvent.keyCode == key && guiEvent.type == EventType.KeyDown;
+        return (guiEvent.keyCode == key && guiEvent.type == EventType.KeyDown);
     }
 }
 

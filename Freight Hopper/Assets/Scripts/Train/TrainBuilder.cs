@@ -16,6 +16,7 @@ public class TrainBuilder : MonoBehaviour
 
     //[SerializeField] private TrainCargos insertedCargo;
     [SerializeField] private List<GameObject> cartModelsToPickFrom;
+    
     //[SerializeField] private List<GameObject> cargoModelsToPickFrom;
 
     [SerializeField] private GameObject baseCart;
@@ -41,7 +42,8 @@ public class TrainBuilder : MonoBehaviour
         CargoCart11,
         CargoCart12,
         CargoCart21,
-        CargoCart22
+        CargoCart22,
+        ForwardBillBoardCarrier
     }
 
     [System.Serializable]

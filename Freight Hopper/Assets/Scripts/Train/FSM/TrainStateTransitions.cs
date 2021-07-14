@@ -15,6 +15,7 @@ public class TrainStateTransitions
     {
         if (trainFSM.OnFinalPath && !trainFSM.DerailToWait)
         {
+            trainFSM.trainDerailed = true;
             return trainFSM.wander;
         }
         if (trainFSM.OnFinalPath || trainFSM.StartWaitTime.Enabled ||
@@ -64,6 +65,7 @@ public class TrainStateTransitions
         {
             if (trainFSM.DerailToWait)
             {
+                trainFSM.trainDerailed = true;
                 return trainFSM.waiting;
             }
             return trainFSM.wander;

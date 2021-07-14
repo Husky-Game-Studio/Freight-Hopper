@@ -107,6 +107,12 @@ public partial class WallRunBehavior : AbilityBehavior
         }
     }
 
+    public override void EntryAction()
+    {
+        base.EntryAction();
+        StopPlayerFalling(physicsManager);
+    }
+
     public void WallClimb()
     {
         soundManager.Play("WallClimb");
