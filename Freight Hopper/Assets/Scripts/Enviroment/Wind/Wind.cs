@@ -207,7 +207,7 @@ public class Wind : MonoBehaviour
         Portal portal = hit.collider.gameObject.GetComponent<Portal>();
         if (portal != null)
         {
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
             float distanceLeft = distance - Vector3.Distance(hit.point, ray.origin);
             portal.TeleportRay(ref ray, hit.point);
             Vector3 portalSize = portal.OtherPortal().GetComponent<BoxCollider>().size;
@@ -223,7 +223,7 @@ public class Wind : MonoBehaviour
         }
         else
         {
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
         }
     }
 
@@ -238,11 +238,11 @@ public class Wind : MonoBehaviour
             }
             affectedBodies[colliderRb].Add(new Ray(hit.point, ray.direction));
 
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
         }
         else
         {
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
         }
     }
 
