@@ -1054,7 +1054,9 @@ MonoBehaviour:
   pole: {fileID: 840649353}
   breakMaxLengthPercent: 1.25
   maxLength: 40
+  minLength: 1
   grappleExtensionSpeed: 200
+  pullSpeed: 40
   grappleMoveSpeed: 40
   additionalSlack: 0.5
   affectedLayers:
@@ -1989,7 +1991,7 @@ MonoBehaviour:
   groundPoundHeld: 0
   jumpHeld: 0
   upwardDashHeld: 0
-  grapplePoleHeld: 0
+  grappleHeld: 0
 --- !u!4 &6851446874724608892
 Transform:
   m_ObjectHideFlags: 0

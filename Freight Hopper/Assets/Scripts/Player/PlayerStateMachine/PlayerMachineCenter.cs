@@ -23,7 +23,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public GrapplePoleAnchoredState grapplePoleAnchoredState;
     public GrappleGroundPoundState grapplePoleGroundPoundState;
     public GrappleFullstopState grapplePoleFullStopState;
-    public GrappleBurstState grapplePoleBurstState;
+    //public GrappleBurstState grapplePoleBurstState;
 
     // State independent fields
     [SerializeField, ReadOnly] private bool grappleFiring;
@@ -113,7 +113,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
             transitionHandler.CheckToDefaultState,
             transitionHandler.CheckToJumpState,
             transitionHandler.CheckToGrappleGroundPoundState,
-            transitionHandler.CheckToGrappleBurstState,
             transitionHandler.CheckToGrappleFullStopState
         };
         grapplePoleAnchoredState = new GrapplePoleAnchoredState(this, grapplePoleAnchorTransitions);
@@ -129,15 +128,15 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         List<Func<BasicState>> grapplePoleGroundPoundTransitions = new List<Func<BasicState>>
         {
             transitionHandler.CheckToGrapplePoleAnchoredState,
-            transitionHandler.CheckToGrappleFullStopState
+            transitionHandler.CheckToGrappleFullStopState,
+            transitionHandler.CheckToDefaultState,
+            transitionHandler.CheckToJumpState,
         };
-        grapplePoleAnchorTransitions.Add(transitionHandler.CheckToDefaultState);
-        grapplePoleAnchorTransitions.Add(transitionHandler.CheckToJumpState);
-        grapplePoleAnchorTransitions.Add(transitionHandler.CheckToGrappleBurstState);
+
         grapplePoleGroundPoundState = new GrappleGroundPoundState(this, grapplePoleGroundPoundTransitions);
 
         // Grapple pole burst
-        grapplePoleBurstState = new GrappleBurstState(this, null);
+        //grapplePoleBurstState = new GrappleBurstState(this, null);
 
         // Ground Pound
         List<Func<BasicState>> groundPoundTransitionsList = new List<Func<BasicState>>
@@ -211,7 +210,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         transitionHandler.ResetInputs();
     }
 
-    // perform anything that is independent of being in any one single state
     public override void PerformStateIndependentBehaviors()
     {
         JumpBuffer();
@@ -278,7 +276,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         {
             abilities.grapplePoleBehavior.PlayerSoundManager().Play("GrappleFail");
         }
-        else if (transitionHandler.grappleReleased.value || currentState == grapplePoleAnchoredState)
+        else if (transitionHandler.jumpPressed.value || transitionHandler.burstPressed.value
+            || currentState == grapplePoleAnchoredState)
         {
             if (!abilities.grapplePoleBehavior.IsAnchored())
             {

@@ -111,8 +111,8 @@ public class PlayerStatesTransitions
         }
 
         // Grapple
-        if ((grappleReleased.value || (playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken() &&
-            playerMachine.abilities.grapplePoleBehavior.IsAnchored())) &&
+        if ((burstPressed.value || playerMachine.abilities.grapplePoleBehavior.GrapplePoleBroken()) &&
+            playerMachine.abilities.grapplePoleBehavior.IsAnchored() &&
             (playerMachine.currentState == playerMachine.grapplePoleAnchoredState))
         {
             return playerMachine.defaultState;
@@ -173,7 +173,7 @@ public class PlayerStatesTransitions
         }
 
         // Grapple Pole
-        if ((jumpPressed.value || UserInput.Instance.JumpHeld) &&
+        if (jumpPressed.value &&
             playerMachine.currentState == playerMachine.grapplePoleAnchoredState)
         {
             return playerMachine.jumpState;
@@ -325,22 +325,22 @@ public class PlayerStatesTransitions
         return null;
     }
 
-    public BasicState CheckToGrappleBurstState()
-    {
-        if (burstPressed.value && playerMachine.abilities.burstBehavior.UnlockedAndReady)
-        {
-            if (playerMachine.collisionManagement.IsGrounded.current)
-            {
-                playerMachine.abilities.burstBehavior.PreventConsumption();
-            }
-            return playerMachine.grapplePoleBurstState;
-        }
-        if (burstPressed.value && playerMachine.abilities.burstBehavior.Unlocked && playerMachine.abilities.burstBehavior.Consumed)
-        {
-            playerMachine.abilities.burstBehavior.PlayerSoundManager().Play("BurstFail");
-        }
-        return null;
-    }
+    /* public BasicState CheckToGrappleBurstState()
+     {
+         if (burstPressed.value && playerMachine.abilities.burstBehavior.UnlockedAndReady)
+         {
+             if (playerMachine.collisionManagement.IsGrounded.current)
+             {
+                 playerMachine.abilities.burstBehavior.PreventConsumption();
+             }
+             return playerMachine.grapplePoleBurstState;
+         }
+         if (burstPressed.value && playerMachine.abilities.burstBehavior.Unlocked && playerMachine.abilities.burstBehavior.Consumed)
+         {
+             playerMachine.abilities.burstBehavior.PlayerSoundManager().Play("BurstFail");
+         }
+         return null;
+     }*/
 
     public BasicState CheckToGrapplePoleAnchoredState()
     {

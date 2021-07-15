@@ -5,7 +5,9 @@ public class GrapplePoleBehavior : AbilityBehavior
     [SerializeField] private LineRenderer pole;
     [SerializeField, Range(0.9f, 3)] private float breakMaxLengthPercent = 1.2f;
     [SerializeField] private float maxLength = 10;
+    [SerializeField] private float minLength = 1;
     [SerializeField] private float grappleExtensionSpeed = 10;
+    [SerializeField] private float pullSpeed;
     [SerializeField] private float grappleMoveSpeed = 10;
     [SerializeField] private float additionalSlack = 0.5f;
     [SerializeField] private LayerMask affectedLayers;
@@ -33,9 +35,13 @@ public class GrapplePoleBehavior : AbilityBehavior
         pole.enabled = false;
     }
 
-    /// <summary>
-    /// Grapple anchored code, direction is the direction the player wants to move
-    /// </summary>
+    public void Pull()
+    {
+        float deltaPull = pullSpeed * Time.fixedDeltaTime;
+        length = Mathf.Max(length - deltaPull, minLength);
+    }
+
+    // direction is the direction the player wants to move
     public void Grapple(Vector3 direction)
     {
         if (anchoredRb != null)
@@ -114,17 +120,11 @@ public class GrapplePoleBehavior : AbilityBehavior
         }
     }
 
-    /// <summary>
-    /// Returns true if the grapple pole is anchored
-    /// </summary>
     public bool IsAnchored()
     {
         return anchored;
     }
 
-    /// <summary>
-    /// Returns true if the pole should be snapped due to extending too far past max distance
-    /// </summary>
     public bool GrapplePoleBroken()
     {
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
