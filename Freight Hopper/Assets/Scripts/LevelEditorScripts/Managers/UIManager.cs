@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.UI;
 
 namespace HGSLevelEditor
@@ -19,12 +18,15 @@ namespace HGSLevelEditor
         public Text zSliderText = null;
 
         //Sliders 
-        public UnityEngine.UI.Slider xSlider = null;
-        public UnityEngine.UI.Slider ySlider = null;
-        public UnityEngine.UI.Slider zSlider = null;
+        public Slider xSlider = null;
+        public Slider ySlider = null;
+        public Slider zSlider = null;
 
         //Dropdown 
         public Dropdown transformDropdown = null;
+
+        //Delete Button 
+        public Button deleteButton = null; 
 
         private enum Transform
         {
@@ -51,17 +53,22 @@ namespace HGSLevelEditor
             ySlider.onValueChanged.AddListener(YValueChanged);
             zSlider.onValueChanged.AddListener(ZValueChanged);
             transformDropdown.onValueChanged.AddListener(ObjectSetUI);
+            //deleteButton.onClick.AddListener(DeleteObject);
         }
 
         void Update()
         {
             MoveShape();
-            DeleteObject();
+           // DeleteObject();
 
-            if (mSelectedObject != null) {
+            if (mSelectedObject != null)
+            {
                 SetRotationText(transformDropdown.value);
+                deleteButton.gameObject.SetActive(true);
             }
-
+            else {
+                deleteButton.gameObject.SetActive(false);
+            }
         }
 
         public void SetSelectedObject(GameObject g)
@@ -165,9 +172,9 @@ namespace HGSLevelEditor
             UISetObjectXform(ref p);
         }
 
-        private void DeleteObject() {
+        public void DeleteObject() {
 
-            if (Input.GetKeyDown(KeyCode.Delete) && mSelectedObject != null) {
+            if (mSelectedObject != null) {
 
                 Destroy(mSelectedObject.transform.parent.gameObject);
             }
