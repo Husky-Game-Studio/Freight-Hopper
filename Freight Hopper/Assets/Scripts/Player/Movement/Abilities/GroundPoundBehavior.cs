@@ -37,7 +37,8 @@ public class GroundPoundBehavior : AbilityBehavior
             Vector3 acrossSlope = Vector3.Cross(upAxis, physicsManager.collisionManager.ContactNormal.current);
             Vector3 downSlope = Vector3.Cross(acrossSlope, physicsManager.collisionManager.ContactNormal.current);
             direction = downSlope;
-            if (!physicsManager.collisionManager.IsGrounded.old)
+            if (!physicsManager.collisionManager.IsGrounded.old &&
+                !this.FlatSurface)
             {
                 Vector3 oldDownForce = Vector3.Project(physicsManager.collisionManager.Velocity.old, upAxis);
                 physicsManager.rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
