@@ -35,10 +35,12 @@ public class UserInput : MonoBehaviour
 
     public bool GroundPoundHeld => groundPoundHeld;
     public bool JumpHeld => jumpHeld;
+    public bool GrappleHeld => grappleHeld;
+
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
     [ReadOnly, SerializeField] private bool upwardDashHeld;
-    [ReadOnly, SerializeField] private bool grapplePoleHeld;
+    [ReadOnly, SerializeField] private bool grappleHeld;
 
     private void OnEnable()
     {
@@ -117,8 +119,8 @@ public class UserInput : MonoBehaviour
 
     private void GrapplePressed(InputAction.CallbackContext context)
     {
-        grapplePoleHeld = !grapplePoleHeld;
-        if (grapplePoleHeld)
+        grappleHeld = !grappleHeld;
+        if (grappleHeld)
         {
             GrappleInput?.Invoke();
         }

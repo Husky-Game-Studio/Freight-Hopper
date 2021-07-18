@@ -4,8 +4,10 @@ public class MovementBehavior : AbilityBehavior
 {
     [SerializeField] private float oppositeInputAngle = 170;
 
+    [SerializeField] private Speedometer speedometer;
     [SerializeField] private VelocityController groundController;
     [SerializeField] private VelocityController airController;
+    [SerializeField] private UnityEngine.UI.Text velocity;
 
     private Transform cameraTransform;
 
@@ -13,8 +15,9 @@ public class MovementBehavior : AbilityBehavior
     {
         base.Initialize(pm, sm, pa);
         cameraTransform = Camera.main.transform;
-        groundController.Initialize(pm, oppositeInputAngle);
-        airController.Initialize(pm, oppositeInputAngle);
+        speedometer.Initialize(pm);
+        groundController.Initialize(pm, speedometer, oppositeInputAngle);
+        airController.Initialize(pm, speedometer, oppositeInputAngle);
     }
 
     private Vector3 RelativeMove(Vector3 forward, Vector3 right)
@@ -59,8 +62,8 @@ public class MovementBehavior : AbilityBehavior
 
     public void UpdateMovement()
     {
-        groundController.UpdateSpeedometer();
-        airController.UpdateSpeedometer();
+        speedometer.UpdateSpeedometer();
+        velocity.text = speedometer.AbsoluteHorzSpeed.ToString("0.00") + " m/s";
     }
 
     public override void Action()

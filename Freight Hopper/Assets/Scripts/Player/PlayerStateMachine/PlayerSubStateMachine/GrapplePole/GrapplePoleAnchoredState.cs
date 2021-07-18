@@ -13,7 +13,7 @@ public class GrapplePoleAnchoredState : PlayerState
 
     public override void ExitState()
     {
-        if (playerMachineCenter.currentState == playerMachineCenter.grapplePoleBurstState ||
+        if (
             playerMachineCenter.currentState == playerMachineCenter.grapplePoleFullStopState ||
             playerMachineCenter.currentState == playerMachineCenter.grapplePoleGroundPoundState)
         {
@@ -30,7 +30,10 @@ public class GrapplePoleAnchoredState : PlayerState
     public override void PerformBehavior()
     {
         playerMachineCenter.abilities.grapplePoleBehavior.Grapple(UserInput.Instance.Move());
-
+        if (UserInput.Instance.GrappleHeld)
+        {
+            playerMachineCenter.abilities.grapplePoleBehavior.Pull();
+        }
         if (playerMachineCenter.collisionManagement.IsGrounded.current && !playerMachineCenter.collisionManagement.IsGrounded.old)
         {
             playerMachineCenter.abilities.Recharge();

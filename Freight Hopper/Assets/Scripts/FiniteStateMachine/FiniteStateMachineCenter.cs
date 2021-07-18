@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class FiniteStateMachineCenter : MonoBehaviour
 {
     // Machine Fields
-
+    [SerializeField] private bool debugging = false;
     [SerializeField] private string currentStateName;
     [SerializeField] private string currentSubStateName;
     [SerializeField] private string previousStateName;
@@ -15,6 +15,11 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
     public DefaultState defaultState;
 
     protected bool amSubStateMachine = false;
+
+    private void Awake()
+    {
+        debugging = false;
+    }
 
     // Resets the FSM to be the default state
     public virtual void RestartFSM()
@@ -48,25 +53,28 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
         EndLoop();
 
         // Debugging
-        currentStateName = currentState.ToString();
-        previousStateName = previousState.ToString();
-        if (currentState == null)
+        if (debugging)
         {
-            currentStateName = "Null State";
-            currentSubStateName = "No Sub States";
-        }
-        if (previousState == null)
-        {
-            previousStateName = "Null State";
-        }
-        if (!currentState.HasSubStateMachine())
-        {
-            currentSubStateName = "No Sub States";
-        }
-        else
-        {
-            currentSubState = currentState.GetCurrentSubState();
-            currentSubStateName = currentSubState.ToString();
+            currentStateName = currentState.ToString();
+            previousStateName = previousState.ToString();
+            if (currentState == null)
+            {
+                currentStateName = "Null State";
+                currentSubStateName = "No Sub States";
+            }
+            if (previousState == null)
+            {
+                previousStateName = "Null State";
+            }
+            if (!currentState.HasSubStateMachine())
+            {
+                currentSubStateName = "No Sub States";
+            }
+            else
+            {
+                currentSubState = currentState.GetCurrentSubState();
+                currentSubStateName = currentSubState.ToString();
+            }
         }
     }
 

@@ -14,7 +14,7 @@ public class HoverEngine : MonoBehaviour
     [SerializeField, ReadOnly] private float targetDistance;
     [SerializeField, ReadOnly] private bool automatic;
     [SerializeField, ReadOnly] private bool firing;
-
+    private Vector3 position;
     public bool Firing => firing;
 
     private void Awake()
@@ -41,17 +41,17 @@ public class HoverEngine : MonoBehaviour
 
     public void Hover(float height)
     {
-        if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, height + 0.1f, layerMask))
+        if (Physics.Raycast(position, direction, out RaycastHit hit, height + 0.1f, layerMask))
         {
             firing = true;
             float error = height - hit.distance;
-            Debug.DrawLine(this.transform.position, this.transform.position + (-direction * error), Color.white);
+            //Debug.DrawLine(this.transform.position, this.transform.position + (-direction * error), Color.white);
             // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
             if (error > -0.1f)
             {
                 Vector3 force = -direction * this.controller.GetOutput(error, Time.fixedDeltaTime);
 
-                rb.AddForceAtPosition(force, this.transform.position, ForceMode.Force);
+                rb.AddForceAtPosition(force, position, ForceMode.Force);
             }
         }
         else
@@ -68,21 +68,22 @@ public class HoverEngine : MonoBehaviour
 
     private void FixedUpdate()
     {
+        position = this.transform.position;
         if (automatic)
         {
-            SetDirection(-CustomGravity.GetUpAxis(this.transform.position));
+            SetDirection(-CustomGravity.GetUpAxis(position));
             Hover(targetDistance);
         }
         if (firing)
         {
-            effect.SetVector3("spawn", this.transform.position);
+            effect.SetVector3("spawn", position);
             if (!is_effect_playing)
             {
                 effect.Play();
                 is_effect_playing = true;
             }
         }
-        else if(!firing && is_effect_playing)
+        else if (!firing && is_effect_playing)
         {
             effect.Stop();
             is_effect_playing = false;

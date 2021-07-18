@@ -10,6 +10,7 @@ public class CollisionManagement
     [System.NonSerialized] private bool aerial;
 
     [SerializeField] private float maxSlope = 60;
+    [SerializeField] private Timer unlandableSurfaceDuration;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
@@ -33,6 +34,8 @@ public class CollisionManagement
 
     public event CollisionEventHandler CollisionDataCollected;
 
+    private Vector3 upAxis;
+
     public void Initialize(Rigidbody rb, MonoBehaviour component, RigidbodyLinker linker, Friction frictionManager, bool aerial)
     {
         this.rb = rb;
@@ -41,11 +44,14 @@ public class CollisionManagement
         this.aerial = aerial;
         this.rigidbodyLinker = linker;
 
-        contactNormal.current = CustomGravity.GetUpAxis(rb.position);
+        upAxis = CustomGravity.GetUpAxis(rb.position);
+        contactNormal.current = upAxis;
         contactNormal.UpdateOld();
 
         component.StartCoroutine(LateFixedUpdate());
     }
+
+    private bool touchedUnlandable = false;
 
     private void EvaulateCollisions(Collision collision)
     {
@@ -55,14 +61,15 @@ public class CollisionManagement
         }
 
         contactNormal.current = Vector3.zero;
-        Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
+
         for (int i = 0; i < collision.contactCount; i++)
         {
             Vector3 normal = collision.GetContact(i).normal;
 
             if (!collision.gameObject.CompareTag("landable") && rb.gameObject.CompareTag("Player"))
             {
-                LevelController.Instance.Respawn();
+                touchedUnlandable = true;
+                continue;
             }
 
             // Is Vector3.angle efficient?
@@ -118,10 +125,24 @@ public class CollisionManagement
     {
         while (true)
         {
+            upAxis = CustomGravity.GetUpAxis(rb.position);
             yield return new WaitForFixedUpdate();
             rigidbodyLinker.UpdateConnectionState(rb);
             CollisionDataCollected?.Invoke();
 
+            if (touchedUnlandable && rb.CompareTag("Player"))
+            {
+                unlandableSurfaceDuration.CountDownFixed();
+                if (!unlandableSurfaceDuration.TimerActive())
+                {
+                    LevelController.Instance.Respawn();
+                }
+            }
+            else
+            {
+                unlandableSurfaceDuration.ResetTimer();
+            }
+            touchedUnlandable = false;
             UpdateOldValues();
             ClearValues();
         }
@@ -144,7 +165,6 @@ public class CollisionManagement
         velocity.current = rb.velocity;
         position.current = rb.position;
 
-        Vector3 upAxis = CustomGravity.GetUpAxis(rb.position);
         if (upAxis != Vector3.zero)
         {
             validUpAxis = upAxis;
