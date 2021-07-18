@@ -74,9 +74,9 @@ public class BezierPath
         return Vector3.Lerp(CubicBezier(a, b, c, t), CubicBezier(b, c, d, t), t);
     }
 
-    private Vector3 QuadraticBezier(Vector3[] p, float t)
+    private Vector3 QuadraticBezier(BezierSegment p, float t)
     {
-        return QuadraticBezier(p[0], p[1], p[2], p[3], t);
+        return QuadraticBezier(p.p1, p.p2, p.p3, p.p4, t);
     }
 
     /// <summary>
@@ -102,16 +102,36 @@ public class BezierPath
         }
     }
 
+    public struct BezierSegment
+    {
+        public Vector3 p1;
+        public Vector3 p2;
+        public Vector3 p3;
+        public Vector3 p4;
+
+        public BezierSegment(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+        {
+            this.p1 = p1;
+            this.p2 = p2;
+            this.p3 = p3;
+            this.p4 = p4;
+        }
+    }
+
     /// <summary>
     /// Returns the points which make up the requested segment
     /// </summary>
     /// <param name="seg"></param>
     /// <returns> A list of 4 3D positions, the 4 points which make up the quadratic bezier curve.</returns>
-    public Vector3[] GetSegment(int seg)
+    public BezierSegment GetSegment(int seg)
     {
         if (0 <= seg && seg < this.NumSegments)
         {
-            return new Vector3[] { points[seg * 3], points[(seg * 3) + 1], points[(seg * 3) + 2], points[(seg * 3) + 3] };
+            return new BezierSegment(
+                points[seg * 3],
+                points[(seg * 3) + 1],
+                points[(seg * 3) + 2],
+                points[(seg * 3) + 3]);
         }
         else
         {

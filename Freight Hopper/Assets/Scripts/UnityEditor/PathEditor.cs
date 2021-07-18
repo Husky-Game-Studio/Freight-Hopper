@@ -328,14 +328,15 @@ public class PathEditor : Editor
         //Bezier Lines
         for (int i = 0; i < path.NumSegments; i++)
         {
-            Vector3[] points = path.GetSegment(i);
-            for (int j = 0; j < points.Length; j++)
-            {
-                points[j] = creator.transform.TransformPoint(points[j]);
-            }
-            Handles.DrawLine(points[0], points[1]);
-            Handles.DrawLine(points[2], points[3]);
-            Handles.DrawBezier(points[0], points[3], points[1], points[2], Color.white, null, 2);
+            BezierPath.BezierSegment points = path.GetSegment(i);
+            points.p1 = creator.transform.TransformPoint(points.p1);
+            points.p2 = creator.transform.TransformPoint(points.p2);
+            points.p3 = creator.transform.TransformPoint(points.p3);
+            points.p4 = creator.transform.TransformPoint(points.p4);
+
+            Handles.DrawLine(points.p1, points.p2);
+            Handles.DrawLine(points.p3, points.p4);
+            Handles.DrawBezier(points.p1, points.p4, points.p2, points.p3, Color.white, null, 2);
         }
         //Handle for anchor focused on
         Vector3 pos = creator.transform.TransformPoint(path.GetAnchor(creator.focusIndex));
@@ -344,7 +345,7 @@ public class PathEditor : Editor
 
     private bool KeyDown(Event guiEvent, KeyCode key)
     {
-        return (guiEvent.keyCode == key && guiEvent.type == EventType.KeyDown);
+        return guiEvent.keyCode == key && guiEvent.type == EventType.KeyDown;
     }
 }
 
