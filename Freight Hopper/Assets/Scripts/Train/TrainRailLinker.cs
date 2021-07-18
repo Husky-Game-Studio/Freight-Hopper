@@ -48,7 +48,7 @@ public class TrainRailLinker : MonoBehaviour
 
     private void AdjustT(TrainData trainObject)
     {
-        Debug.DrawLine(trainObject.rb.position, TargetPos(trainObject.t));
+        //Debug.DrawLine(trainObject.rb.position, TargetPos(trainObject.t));
         while ((TargetPos(trainObject.t) - trainObject.rb.transform.position).magnitude < followDistance)
         {
             trainObject.t += 0.01f;
@@ -107,11 +107,10 @@ public class TrainRailLinker : MonoBehaviour
             }
         }
 
-        foreach (int i in indexesToRemove)
+        for (int i = 0; i < indexesToRemove.Count; i++)
         {
-            linkedTrainObjects.RemoveAt(i);
+            linkedTrainObjects.RemoveAt(indexesToRemove[0]);
+            indexesToRemove.RemoveAt(0);
         }
-
-        indexesToRemove.Clear();
     }
 }

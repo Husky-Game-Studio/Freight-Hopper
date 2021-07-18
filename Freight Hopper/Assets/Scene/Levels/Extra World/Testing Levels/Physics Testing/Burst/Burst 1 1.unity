@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3536.0098, g: 1991.7012, b: 1261.3691, a: 1}
+  m_IndirectSpecularColor: {r: 3571.3252, g: 1986.5859, b: 1217.4219, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -401,6 +401,102 @@ MonoBehaviour:
   targetDistance: 5
   automatic: 1
   firing: 0
+--- !u!1 &90766122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 90766123}
+  - component: {fileID: 90766126}
+  - component: {fileID: 90766125}
+  - component: {fileID: 90766124}
+  m_Layer: 0
+  m_Name: dangerous wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &90766123
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90766122}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 25.6, y: -17, z: -61.2}
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_Children: []
+  m_Father: {fileID: 563024089}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!64 &90766124
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90766122}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &90766125
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90766122}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 257
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &90766126
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90766122}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &92637999
 GameObject:
   m_ObjectHideFlags: 0
@@ -2520,6 +2616,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 563024089}
     m_Modifications:
+    - target: {fileID: 4900680710509657535, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6966520740684231837, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8828049057225272882, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: insertCart
       value: 6
@@ -2755,6 +2859,14 @@ PrefabInstance:
     - target: {fileID: 8828049057225272884, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
       propertyPath: m_Name
       value: Train
+      objectReference: {fileID: 0}
+    - target: {fileID: 8867281338099568400, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9025408744126214433, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52be636a8f6c1a144af219da135d85ea, type: 3}
@@ -4118,6 +4230,7 @@ Transform:
   m_Children:
   - {fileID: 1813893457}
   - {fileID: 313290126}
+  - {fileID: 90766123}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4140,7 +4253,7 @@ MonoBehaviour:
     levelID: 0
   levelData:
     nextLevelStatus: 0
-    spawnPosition: {x: 24.28, y: 3.15, z: -29.87}
+    spawnPosition: {x: 11.95, y: -39.63, z: -80.7}
     activeAbilities: 0000000001000000020000000300000007000000
 --- !u!114 &563024091
 MonoBehaviour:
@@ -4770,8 +4883,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -5367,8 +5484,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -6641,8 +6762,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -7857,8 +7982,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -8618,8 +8747,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -9108,7 +9241,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1380126
+  m_Name: pb_Mesh5022852
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9945,8 +10078,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -10558,8 +10695,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -14100,8 +14241,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0

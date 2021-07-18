@@ -83,7 +83,7 @@ public class HoverController : MonoBehaviour
                 Debug.LogWarning("Hover engine not found");
                 continue;
             }
-            hoverEngine.Initialize(rb, layerMask, hoverSetting.CurrentPreset(), targetDistance, automatic);
+            hoverEngine.Initialize(rb, layerMask, hoverSetting.CurrentPreset() * ((float)6 / hoverEnginePivots.Count), targetDistance, automatic);
         }
     }
 

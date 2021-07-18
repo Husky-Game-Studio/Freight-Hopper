@@ -1501,6 +1501,9 @@ MonoBehaviour:
     frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0.1
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -1586,6 +1589,9 @@ MonoBehaviour:
   physicsManager: {fileID: 0}
   collisionManagement:
     maxSlope: 60
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0

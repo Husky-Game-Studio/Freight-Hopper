@@ -26,7 +26,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private float timeBeforeDelete = 10;
     public Timer timerToDelete;
     public bool trainDerailed;
-    
 
     // Accessors
     public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
@@ -213,9 +212,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         //Rolling Correction
         foreach (Cart cart in carts)
         {
-            Vector3 gravityForward = Vector3.Cross(CustomGravity.GetUpAxis(cart.rb.position), cart.rb.transform.right);
+            Vector3 upAxis = CustomGravity.GetUpAxis(cart.rb.position);
+            Vector3 gravityForward = Vector3.Cross(upAxis, cart.rb.transform.right);
 
-            Vector3 gravityUp = Vector3.ProjectOnPlane(CustomGravity.GetUpAxis(cart.rb.position), gravityForward);
+            Vector3 gravityUp = Vector3.ProjectOnPlane(upAxis, gravityForward);
             Vector3 cartUp = Vector3.ProjectOnPlane(cart.rb.transform.up, gravityForward);
 
             float angleWrong = Vector3.SignedAngle(gravityUp, cartUp, cart.rb.transform.forward);
@@ -240,7 +240,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             //RemoveCartsUntilIndex(0);
         }
-        
     }
 
     public override void RestartFSM()
