@@ -10,7 +10,6 @@ public class BezierPath
 {
     [SerializeField]
     private List<Vector3> points;
-    //private BezierSegment[] segments;
 
     public void ReversePoints()
     {
@@ -85,19 +84,6 @@ public class BezierPath
         return CubicBezier(p.a, p.b, p.c, p.d, t);
     }
 
-    /*public void CreateSegments()
-    {
-        segments = new BezierSegment[this.NumSegments];
-        for (int i = 0; i < segments.Length; i++)
-        {
-            segments[i] = new BezierSegment(
-                points[i * 3],
-                points[(i * 3) + 1],
-                points[(i * 3) + 2],
-                points[(i * 3) + 3]);
-        }
-    }*/
-
     /// <summary>
     /// Returns the position of a point on the path when given t, the progress along the path.
     /// </summary>
@@ -128,12 +114,12 @@ public class BezierPath
         public Vector3 c;
         public Vector3 d;
 
-        public BezierSegment(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+        public BezierSegment(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
         {
-            this.a = p1;
-            this.b = p2;
-            this.c = p3;
-            this.d = p4;
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
         }
     }
 
