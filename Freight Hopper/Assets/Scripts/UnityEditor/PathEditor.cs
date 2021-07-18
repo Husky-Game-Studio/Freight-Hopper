@@ -329,14 +329,14 @@ public class PathEditor : Editor
         for (int i = 0; i < path.NumSegments; i++)
         {
             BezierPath.BezierSegment points = path.GetSegment(i);
-            points.p1 = creator.transform.TransformPoint(points.p1);
-            points.p2 = creator.transform.TransformPoint(points.p2);
-            points.p3 = creator.transform.TransformPoint(points.p3);
-            points.p4 = creator.transform.TransformPoint(points.p4);
+            points.a = creator.transform.TransformPoint(points.a);
+            points.b = creator.transform.TransformPoint(points.b);
+            points.c = creator.transform.TransformPoint(points.c);
+            points.d = creator.transform.TransformPoint(points.d);
 
-            Handles.DrawLine(points.p1, points.p2);
-            Handles.DrawLine(points.p3, points.p4);
-            Handles.DrawBezier(points.p1, points.p4, points.p2, points.p3, Color.white, null, 2);
+            Handles.DrawLine(points.a, points.b);
+            Handles.DrawLine(points.c, points.d);
+            Handles.DrawBezier(points.a, points.d, points.b, points.c, Color.white, null, 2);
         }
         //Handle for anchor focused on
         Vector3 pos = creator.transform.TransformPoint(path.GetAnchor(creator.focusIndex));

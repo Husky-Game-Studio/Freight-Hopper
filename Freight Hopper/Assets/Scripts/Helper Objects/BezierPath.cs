@@ -10,6 +10,7 @@ public class BezierPath
 {
     [SerializeField]
     private List<Vector3> points;
+    //private BezierSegment[] segments;
 
     public void ReversePoints()
     {
@@ -64,20 +65,38 @@ public class BezierPath
         points[i] = pos;
     }
 
-    private Vector3 CubicBezier(Vector3 a, Vector3 b, Vector3 c, float t)
+    // Source: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
+    public static Vector3 CubicBezier(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
     {
-        return Vector3.Lerp(Vector3.Lerp(a, b, t), Vector3.Lerp(b, c, t), t);
+        float oneMinusT = 1 - t;
+        float tCubed = t * t * t;
+        float tSqOmt3 = 3 * t * t * oneMinusT;
+        float tOmtSq3 = 3 * t * oneMinusT * oneMinusT;
+        float omtCubed = oneMinusT * oneMinusT * oneMinusT;
+        return new Vector3(
+            (a.x * omtCubed) + (b.x * tOmtSq3) + (c.x * tSqOmt3) + (d.x * tCubed),
+            (a.y * omtCubed) + (b.y * tOmtSq3) + (c.y * tSqOmt3) + (d.y * tCubed),
+            (a.z * omtCubed) + (b.z * tOmtSq3) + (c.z * tSqOmt3) + (d.z * tCubed)
+        );
     }
 
-    private Vector3 QuadraticBezier(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
+    private Vector3 CubicBezier(BezierSegment p, float t)
     {
-        return Vector3.Lerp(CubicBezier(a, b, c, t), CubicBezier(b, c, d, t), t);
+        return CubicBezier(p.a, p.b, p.c, p.d, t);
     }
 
-    private Vector3 QuadraticBezier(BezierSegment p, float t)
+    /*public void CreateSegments()
     {
-        return QuadraticBezier(p.p1, p.p2, p.p3, p.p4, t);
-    }
+        segments = new BezierSegment[this.NumSegments];
+        for (int i = 0; i < segments.Length; i++)
+        {
+            segments[i] = new BezierSegment(
+                points[i * 3],
+                points[(i * 3) + 1],
+                points[(i * 3) + 2],
+                points[(i * 3) + 3]);
+        }
+    }*/
 
     /// <summary>
     /// Returns the position of a point on the path when given t, the progress along the path.
@@ -93,28 +112,28 @@ public class BezierPath
         }
         if (t == this.NumSegments)
         {
-            return QuadraticBezier(GetSegment(this.NumSegments - 1), 1.0f);
+            return CubicBezier(GetSegment(this.NumSegments - 1), 1.0f);
         }
         else
         {
             int seg = (int)Mathf.Floor(t);
-            return QuadraticBezier(GetSegment(seg), t - Mathf.Floor(t));
+            return CubicBezier(GetSegment(seg), t - Mathf.Floor(t));
         }
     }
 
     public struct BezierSegment
     {
-        public Vector3 p1;
-        public Vector3 p2;
-        public Vector3 p3;
-        public Vector3 p4;
+        public Vector3 a;
+        public Vector3 b;
+        public Vector3 c;
+        public Vector3 d;
 
         public BezierSegment(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
         {
-            this.p1 = p1;
-            this.p2 = p2;
-            this.p3 = p3;
-            this.p4 = p4;
+            this.a = p1;
+            this.b = p2;
+            this.c = p3;
+            this.d = p4;
         }
     }
 
