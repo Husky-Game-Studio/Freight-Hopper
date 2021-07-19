@@ -171,9 +171,12 @@ public class SoundManager : MonoBehaviour
     public void Stop(string name)
     {
         Sound sound = FindSound(name);
-        StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime);
-        StartCoroutine(Fade(sound.componentAudioSource, sound.fadeOutTime, 0));
-        ResetTimer(sound);
+        if (sound.componentAudioSource.isActiveAndEnabled)
+        {
+            StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime);
+            StartCoroutine(Fade(sound.componentAudioSource, sound.fadeOutTime, 0));
+            ResetTimer(sound);
+        }
     }
 
     private IEnumerator StopAfterSeconds(AudioSource source, float seconds)

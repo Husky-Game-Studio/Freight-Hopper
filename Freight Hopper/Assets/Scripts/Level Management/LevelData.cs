@@ -14,7 +14,9 @@ public class LevelData
 
     public NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
     public Vector3 spawnPosition = Vector3.zero;
-    //public float rotationAngle = 0;
+    public float rotationAngle = 0;
+    public Quaternion velocityDirection;
+    public float speed;
 
     [SerializeField]
     public PlayerAbilities.Name[] activeAbilities = {

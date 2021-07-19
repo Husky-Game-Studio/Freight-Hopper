@@ -105,8 +105,10 @@ public class LevelController : MonoBehaviour
         {
             player.transform.position = levelData.spawnPosition;
         }
+        player.transform.rotation = Quaternion.LookRotation(Vector3.forward, CustomGravity.GetUpAxis(player.transform.position)) *
+            Quaternion.AngleAxis(levelData.rotationAngle, Vector3.up);
 
-        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        player.GetComponent<Rigidbody>().velocity = levelData.velocityDirection * Vector3.forward * levelData.speed;
     }
 
     // Respawns player. Reloads scene for now. Respawning var is used to prevent spamming of respawn button
