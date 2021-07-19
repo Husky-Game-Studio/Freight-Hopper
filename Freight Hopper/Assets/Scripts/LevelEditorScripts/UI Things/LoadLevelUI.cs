@@ -15,7 +15,7 @@ public class LoadLevelUI : MonoBehaviour
 
         //Need this for when I'm going back to the first iteration of the level editor 
         // SceneManager.LoadScene("LevelEditorBeginning");
-        SceneManager.LoadScene("LevelEditorIteration2");
+        SceneManager.LoadScene("LevelEditorIteration3");
         SaveLoadLevel.GetInstance().LoadButton(levelName, true);
         GridLoadLevelUI.GetInstance().CloseLoadLevelButtons();
         LevelManager.levelNameLoad = levelName;

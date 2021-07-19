@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 25
   priority: 0
+  dynamic: 0
 --- !u!114 &437496347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +209,9 @@ MonoBehaviour:
   levelData:
     nextLevelStatus: 2
     spawnPosition: {x: 0, y: 66.5, z: -1}
+    rotationAngle: 0
+    velocityDirection: {x: 0, y: 0, z: 0, w: 0}
+    speed: 0
     activeAbilities: 00000000010000000300000002000000
 --- !u!4 &437496348
 Transform:
@@ -264,9 +268,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 446089360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14fddd7bbe857784b880b8804ec825e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 186e03697b4913e4587bf2b2fb3c8902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  validatingMenu: {fileID: 446089360}
 --- !u!1 &513745092
 GameObject:
   m_ObjectHideFlags: 0
