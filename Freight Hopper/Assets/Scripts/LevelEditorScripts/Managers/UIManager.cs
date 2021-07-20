@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.UI;
 
 namespace HGSLevelEditor
@@ -18,13 +17,19 @@ namespace HGSLevelEditor
         public Text ySliderText = null;
         public Text zSliderText = null;
 
-        //Sliders 
-        public UnityEngine.UI.Slider xSlider = null;
-        public UnityEngine.UI.Slider ySlider = null;
-        public UnityEngine.UI.Slider zSlider = null;
+        //Sliders + Snap variables 
+        public Slider xSlider = null;
+        public Slider ySlider = null;
+        public Slider zSlider = null;
+        float sliderValue;
+        float snapInterval = 10.0f;
+
 
         //Dropdown 
         public Dropdown transformDropdown = null;
+
+        //Delete Button 
+        public Button deleteButton = null; 
 
         private enum Transform
         {
@@ -51,17 +56,22 @@ namespace HGSLevelEditor
             ySlider.onValueChanged.AddListener(YValueChanged);
             zSlider.onValueChanged.AddListener(ZValueChanged);
             transformDropdown.onValueChanged.AddListener(ObjectSetUI);
+            //deleteButton.onClick.AddListener(DeleteObject);
         }
 
         void Update()
         {
             MoveShape();
-            DeleteObject();
+           // DeleteObject();
 
-            if (mSelectedObject != null) {
+            if (mSelectedObject != null)
+            {
                 SetRotationText(transformDropdown.value);
+                deleteButton.gameObject.SetActive(true);
             }
-
+            else {
+                deleteButton.gameObject.SetActive(false);
+            }
         }
 
         public void SetSelectedObject(GameObject g)
@@ -74,9 +84,9 @@ namespace HGSLevelEditor
         public void ObjectSetUI(int value)
         {
             Vector3 p = ReadObjectXfrom();
-            xSlider.value = p.x;
-            ySlider.value = p.y;
-            zSlider.value = p.z;
+            xSlider.value = SliderSnap(p.x);
+            ySlider.value = SliderSnap(p.y);
+            zSlider.value = SliderSnap(p.z);
         }
 
         private void MoveShape()
@@ -85,9 +95,9 @@ namespace HGSLevelEditor
 
                 target.transform.localPosition = new Vector3(xSlider.value, ySlider.value, zSlider.value);
 
-                xSliderText.text = "X: " + xSlider.value;
-                ySliderText.text = "Y: " + ySlider.value;
-                zSliderText.text = "Z: " + zSlider.value;
+                xSliderText.text = "X: " + SliderSnap(xSlider.value);
+                ySliderText.text = "Y: " + SliderSnap(ySlider.value);
+                zSliderText.text = "Z: " + SliderSnap(zSlider.value);
 
             }
             
@@ -97,9 +107,9 @@ namespace HGSLevelEditor
 
             if (dropdownValue == 1) {
 
-                xSliderText.text = "X: " + mSelectedObject.transform.parent.localRotation.eulerAngles.x;
-                ySliderText.text = "Y: " + mSelectedObject.transform.parent.localRotation.eulerAngles.y;
-                zSliderText.text = "Z: " + mSelectedObject.transform.parent.localRotation.eulerAngles.z;
+                xSliderText.text = "X: " + SliderSnap(mSelectedObject.transform.parent.localRotation.eulerAngles.x);
+                ySliderText.text = "Y: " + SliderSnap(mSelectedObject.transform.parent.localRotation.eulerAngles.y);
+                zSliderText.text = "Z: " + SliderSnap(mSelectedObject.transform.parent.localRotation.eulerAngles.z);
             }
         
         } 
@@ -147,31 +157,41 @@ namespace HGSLevelEditor
         void XValueChanged(float v)
         {
             Vector3 p = ReadObjectXfrom();
-            p.x = v;
+            p.x = SliderSnap(v);
+            Debug.Log("p.x: " + p.x);
             UISetObjectXform(ref p);
         }
 
         void YValueChanged(float v)
         {
             Vector3 p = ReadObjectXfrom();
-            p.y = v;
+            p.y = SliderSnap(v);
             UISetObjectXform(ref p);
         }
 
         void ZValueChanged(float v)
         {
             Vector3 p = ReadObjectXfrom();
-            p.z = v;
+            p.z = SliderSnap(v);
             UISetObjectXform(ref p);
         }
 
-        private void DeleteObject() {
+        public void DeleteObject() {
 
-            if (Input.GetKeyDown(KeyCode.Delete) && mSelectedObject != null) {
+            if (mSelectedObject != null) {
 
                 Destroy(mSelectedObject.transform.parent.gameObject);
             }
         
+        }
+
+        private float SliderSnap(float sliderFloat) {
+
+            sliderValue = sliderFloat;
+            sliderValue = Mathf.Round(sliderValue / snapInterval) * snapInterval;
+
+            sliderFloat = sliderValue;
+            return sliderFloat;
         }
     }
 }

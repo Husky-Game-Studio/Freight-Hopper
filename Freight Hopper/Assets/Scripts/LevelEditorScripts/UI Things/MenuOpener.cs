@@ -60,9 +60,33 @@ namespace HGSLevelEditor
                 SceneManager.LoadScene("CustomLevel 0 1", LoadSceneMode.Single);
 
             }
-           
-
         }
+
+        public void PlayLevelIteration3()
+        {
+
+            if (LevelManager.levelNameLoad == null)
+            {
+
+                SaveLoadLevel.GetInstance().SaveLevelButton("temp");
+                LevelManager.levelNameLoad = "temp";
+
+            }
+            if (LevelManager.levelNameLoad == "temp")
+            {
+
+                SaveLoadLevel.GetInstance().SaveLevelButton("temp");
+
+            }
+            if (LevelManager.levelNameLoad != null)
+            {
+
+                SaveLoadLevel.GetInstance().SaveLevelButton(LevelManager.levelNameLoad);
+                SceneManager.LoadScene(10, LoadSceneMode.Single);
+
+            }
+        }
+
 
         public void ExitOnClick()
         {

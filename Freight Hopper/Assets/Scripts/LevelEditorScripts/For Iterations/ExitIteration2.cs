@@ -13,9 +13,7 @@ public class ExitIteration2 : MonoBehaviour
             SceneManager.LoadScene("LevelEditorIteration2");
         }
 
-
     }
-
     public void openNew()
     {
         SceneManager.LoadScene("LevelEditorIteration2");
