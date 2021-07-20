@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a8fbfaf73a0d7c64ba4cd4f53cbdc164, type: 2}
+  - {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,6 +108,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cargo1
       objectReference: {fileID: 0}
+    - target: {fileID: 6161736176199916689, guid: feb209b8b131f8644bbf4041003c9b33, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
     - target: {fileID: 6206355213323576226, guid: feb209b8b131f8644bbf4041003c9b33, type: 3}
       propertyPath: m_RootOrder
       value: 0
