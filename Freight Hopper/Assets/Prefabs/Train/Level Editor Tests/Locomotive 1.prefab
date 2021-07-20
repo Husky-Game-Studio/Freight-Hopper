@@ -50,9 +50,9 @@ MonoBehaviour:
     m_Bits: 1
   controller:
     data:
-      Kp: 350
-      Ki: 20
-      Kd: 100
+      Kp: 525
+      Ki: 30.000002
+      Kd: 150
   targetDistance: 3
   automatic: 1
   firing: 0
@@ -96,7 +96,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3998674075263887181}
-  m_Mesh: {fileID: -2432090755550338912, guid: 98780088efbb0214fa5716078411fce3, type: 3}
+  m_Mesh: {fileID: -5993647835149918624, guid: 98780088efbb0214fa5716078411fce3, type: 3}
 --- !u!23 &5781107763521644968
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -116,7 +116,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a8fbfaf73a0d7c64ba4cd4f53cbdc164, type: 2}
+  - {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -225,8 +225,12 @@ MonoBehaviour:
     defaultFriction:
       air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
       ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
+    frictionReductionPercent: 1
   collisionManager:
     maxSlope: 30
+    unlandableSurfaceDuration:
+      duration: 0
+      current: 0
     isGrounded:
       old: 0
       current: 0
@@ -363,9 +367,9 @@ MonoBehaviour:
     m_Bits: 1
   controller:
     data:
-      Kp: 350
-      Ki: 20
-      Kd: 100
+      Kp: 525
+      Ki: 30.000002
+      Kd: 150
   targetDistance: 3
   automatic: 1
   firing: 0
@@ -463,6 +467,7 @@ MonoBehaviour:
     m_Bits: 1
   targetDistance: 3
   automatic: 1
+  hoverEnginePrefab: {fileID: 0}
   enginesFiring: 0
 --- !u!1 &8725561858409038933
 GameObject:
@@ -514,9 +519,9 @@ MonoBehaviour:
     m_Bits: 1
   controller:
     data:
-      Kp: 350
-      Ki: 20
-      Kd: 100
+      Kp: 525
+      Ki: 30.000002
+      Kd: 150
   targetDistance: 3
   automatic: 1
   firing: 0
@@ -570,9 +575,9 @@ MonoBehaviour:
     m_Bits: 1
   controller:
     data:
-      Kp: 350
-      Ki: 20
-      Kd: 100
+      Kp: 525
+      Ki: 30.000002
+      Kd: 150
   targetDistance: 3
   automatic: 1
   firing: 0
