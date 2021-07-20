@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a8fbfaf73a0d7c64ba4cd4f53cbdc164, type: 2}
+  - {fileID: 2100000, guid: 7b0b4d7713477294f92561b868563bf8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -128,15 +128,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23dfe216b4df7244cb3c834dcde2af48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugging: 0
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  bulletSpawner: {fileID: 1716389824928568584}
   thePlayer: {fileID: 0}
   targetedLayers:
     serializedVersion: 2
     m_Bits: 128
   bullet: {fileID: 6118396219264821415, guid: 7bccc103caf98434e8684c0e33053cdd, type: 3}
+  bulletSpawner: {fileID: 1716389824928568584}
 --- !u!114 &5181359248319560049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +218,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a8fbfaf73a0d7c64ba4cd4f53cbdc164, type: 2}
+  - {fileID: 2100000, guid: 7b0b4d7713477294f92561b868563bf8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -300,7 +301,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: 7b0b4d7713477294f92561b868563bf8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

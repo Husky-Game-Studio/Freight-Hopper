@@ -55,7 +55,7 @@ public class FollowPathState : BasicState
     public override void PerformBehavior()
     {
         AdjustTarget();
-        Debug.DrawLine(trainFSM.carts.First.Value.rb.position, targetPos);
+        //Debug.DrawLine(trainFSM.carts.First.Value.rb.position, targetPos);
         trainFSM.Follow(targetPos);
     }
 
