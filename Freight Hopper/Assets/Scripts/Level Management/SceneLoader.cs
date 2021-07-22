@@ -40,6 +40,6 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadEditor()
     {
-        SceneManager.LoadScene("LevelEditorIteration2");
+        SceneManager.LoadScene("LevelEditorIteration3");
     }
 }
