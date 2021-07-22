@@ -17,7 +17,6 @@ public class ObjectScan
     {
         this.viableRays = viableRays;
         targetColliders = colliders;
-        this.viableRays = viableRays;
         this.rayWidth = rayWidth;
         windTransform = transform;
         this.depth = depth;
