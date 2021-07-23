@@ -14,7 +14,7 @@ GameObject:
   m_Layer: 0
   m_Name: Train
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58c06c7b731866445bce9089e7a20353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugging: 0
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
@@ -80,24 +81,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cartsList: []
-  insertCart: 8
-  repeatActionCount: 1
+  insertCart: 3
+  insertedCargo: 2
+  repeatActionCount: 8
   locomotiveLength: 42.243
   cartLength: 40
   gapLength: 4
   jointSnappingLength: -3
-  breakTorque: 3000
-  cartModelsToPickFrom:
+  breakTorque: Infinity
+  cartPrefabs:
   - {fileID: 3777815452056588140, guid: add97f5c0767b594ea362e604622db6b, type: 3}
   - {fileID: 5027634762359815765, guid: 9df1f55f4274a354484af233d653d57d, type: 3}
-  - {fileID: 6078174702721354088, guid: 93b64d6caba92a842afa8afebdc47be2, type: 3}
   - {fileID: 7109759690113313865, guid: 3e687bc0a35adf3409011184693dd184, type: 3}
   - {fileID: 4143848478288295322, guid: c119482f3e90a3d428f5bae02972a909, type: 3}
-  - {fileID: 3777815452056588140, guid: 642c9c9f41ef4ea46b830016b09b808a, type: 3}
-  - {fileID: 3777815452056588140, guid: 802d77ed2e6138041a53b32db84815aa, type: 3}
-  - {fileID: 5027634762359815765, guid: 164ab02083f3a8c4e8a8b2bf5dc491de, type: 3}
-  - {fileID: 5027634762359815765, guid: 8d6743a63f0124844883d1ea015730cb, type: 3}
+  - {fileID: 6078174702721354088, guid: 93b64d6caba92a842afa8afebdc47be2, type: 3}
   - {fileID: 5834199224475596160, guid: 41e17ed93ecb78b449d13a31ad674448, type: 3}
+  cargoPrefabs:
+  - {fileID: 4485057313656768321, guid: feb209b8b131f8644bbf4041003c9b33, type: 3}
+  - {fileID: 6773133878984370838, guid: 1b93d7575f646b34d8e2fb9da12724bf, type: 3}
   baseCart: {fileID: 5098807932008158715, guid: 32d96c1fb460e2a4a97160be9d4c19fa, type: 3}
 --- !u!1001 &8828049057815456783
 PrefabInstance:

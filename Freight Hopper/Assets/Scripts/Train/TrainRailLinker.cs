@@ -17,6 +17,13 @@ public class TrainRailLinker : MonoBehaviour
 
     private PathCreator pathCreator;
 
+    private void Reset()
+    {
+        followDistance = 10;
+        offset = Vector3.up * 5;
+        derailThreshold = 25;
+    }
+
     [System.Serializable]
     private class TrainData
     {

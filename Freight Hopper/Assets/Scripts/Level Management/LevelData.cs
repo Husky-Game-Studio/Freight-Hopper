@@ -25,4 +25,10 @@ public class LevelData
             PlayerAbilities.Name.WallRunBehavior,
             PlayerAbilities.Name.GroundPoundBehavior
         };
+
+    public void SetSpawnTransform(Transform transform)
+    {
+        spawnPosition = transform.position;
+        rotationAngle = Vector3.SignedAngle(Vector3.forward, transform.forward, Vector3.up);
+    }
 }
