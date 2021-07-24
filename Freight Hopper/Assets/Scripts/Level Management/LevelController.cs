@@ -8,6 +8,7 @@ public class LevelController : MonoBehaviour
     public LevelName CurrentLevelName => levelName;
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
+    [SerializeField] private Transform playerSpawnTransform;
     [SerializeField] private LevelData levelData;
 
     private const int highHeight = 999999;
@@ -28,6 +29,25 @@ public class LevelController : MonoBehaviour
     }
 
 #endif
+
+    private void OnValidate()
+    {
+        if (playerSpawnTransform != null)
+        {
+            levelData.SetSpawnTransform(playerSpawnTransform);
+        }
+    }
+
+    [ContextMenu("UpdateSpawnTransform")]
+    public void UpdateSpawn()
+    {
+        if (playerSpawnTransform == null)
+        {
+            Debug.LogWarning("Please set a transform in the inspector first for playerSpawnTransform");
+            return;
+        }
+        levelData.SetSpawnTransform(playerSpawnTransform);
+    }
 
     public string GetNextLevel()
     {
