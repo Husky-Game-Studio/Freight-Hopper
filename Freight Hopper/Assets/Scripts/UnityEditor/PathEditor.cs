@@ -57,6 +57,7 @@ public class PathEditor : Editor
             return;
 
         HotKeys();
+
         windowRect = GUILayout.Window(0, windowRect, Window, "Path Editor");
         sceneViewCameraPos = scene.camera.transform.position;
         InteractableHandles();
@@ -83,6 +84,8 @@ public class PathEditor : Editor
             ActionSwitchOperation();
         else if (KeyDown(guiEvent, KeyCode.Keypad6))
             ActionIncreaseFocusIndex();
+        else if (KeyDown(guiEvent, KeyCode.Keypad7))
+            ActionReversePath();
 
         if (KeyDown(guiEvent, KeyCode.Keypad8) && MouseRaycast(guiEvent, out lastMouseRaycastHit))
             newRaycastHit = true;
@@ -93,9 +96,11 @@ public class PathEditor : Editor
     private void Window(int windowID)
     {
         Color defaultColor = GUI.color;
-        GUI.color = Color.red;
+
         GUILayout.BeginHorizontal();
-        GUILayout.Button(new GUIContent(" ", "[Numpad 7]"), GUILayout.Width(120.0f)); //Just displaying numpad layout
+        if (GUILayout.Button(new GUIContent("Reverse Path", "[Numpad 7]"), GUILayout.Width(120.0f)))
+            ActionReversePath();
+        GUI.color = Color.red;
         GUILayout.Button(new GUIContent("Match Pos/Rot", "[Numpad 8] (Keybind Only)"), GUILayout.Width(120.0f)); //Keybind only
         GUILayout.Button(new GUIContent(" ", "[Numpad 9]"), GUILayout.Width(120.0f)); //Just displaying numpad layout
         GUILayout.EndHorizontal();
@@ -128,6 +133,15 @@ public class PathEditor : Editor
         {
             Undo.RecordObject(creator, "Change Path Focus");
             creator.focusIndex -= 1;
+        }
+    }
+
+    private void ActionReversePath()
+    {
+        if (path.NumSegments > 0)
+        {
+            Undo.RecordObject(creator, "Reverse Path Order");
+            creator.ReversePathOrder();
         }
     }
 

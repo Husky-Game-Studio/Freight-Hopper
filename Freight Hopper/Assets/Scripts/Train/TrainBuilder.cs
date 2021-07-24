@@ -66,16 +66,17 @@ public class TrainBuilder : MonoBehaviour
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCargos
     {
-        Cargo1,
-        Cargo2,
-        None
+        BoxCargo,
+        PillCargo,
+        None,
     }
 
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCarts
     {
-        EmptyCart1,
-        EmptyCart2,
+        EmptyCart,
+        EmptyCartWalls,
+        EmptyCartLasers,
         BillBoardLF,
         BillBoardRF,
         BillBoardB,
@@ -86,8 +87,8 @@ public class TrainBuilder : MonoBehaviour
     private class Cart
     {
         public CartProperties cartProperties;
-        public TrainCarts cartID;
-        public List<TrainCargos> cargoIDs = new List<TrainCargos>();
+        public int cartID;
+        public List<int> cargoIDs = new List<int>();
         public GameObject gameObject;
         public ConfigurableJoint joint;
     }
@@ -148,7 +149,7 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    public void AddCart(TrainCarts cartID, TrainCargos cargoID)
+    public void AddCart(int cartID, int cargoID)
     {
         for (int i = 0; i < repeatActionCount; i++)
         {
@@ -169,16 +170,16 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    public void AddCargo(TrainCargos cargoID)
+    public void AddCargo(int cargoID)
     {
-        if (cargoID == TrainCargos.None)
+        if ((TrainCargos)cargoID == TrainCargos.None)
         {
             return;
         }
         Cart cart = cartsList[this.ActionIndex];
         for (int i = 0; i < repeatActionCount; i++)
         {
-            if (cart.cargoIDs.Count > 0 && cart.cargoIDs[cart.cargoIDs.Count - 1] == TrainCargos.None)
+            if (cart.cargoIDs.Count > 0 && (TrainCargos)cart.cargoIDs[cart.cargoIDs.Count - 1] == TrainCargos.None)
             {
                 cart.cargoIDs.RemoveAt(cart.cargoIDs.Count - 1);
             }
@@ -206,7 +207,7 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    public void ReplaceCart(TrainCarts cartID, TrainCargos cargoID)
+    public void ReplaceCart(int cartID, int cargoID)
     {
         Cart cart = cartsList[this.ActionIndex];
         cart.cartID = cartID;
@@ -258,6 +259,14 @@ public class TrainBuilder : MonoBehaviour
             DestroyImmediate(cart.gameObject);
         }
         cartsList.Clear();
+        foreach (Transform child in this.transform)
+        {
+            CartProperties cartProperties = child.GetComponent<CartProperties>();
+            if (cartProperties != null && child.gameObject != locomotive)
+            {
+                DestroyImmediate(child.gameObject);
+            }
+        }
     }
 
     private void SetCart(int index, Cart cart)
@@ -267,10 +276,9 @@ public class TrainBuilder : MonoBehaviour
         {
             DestroyImmediate(cart.gameObject);
         }
-        cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart) as GameObject;
+        cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart, this.transform) as GameObject;
         cart.gameObject.transform.position = position;
         cart.gameObject.transform.rotation = this.transform.rotation;
-        cart.gameObject.transform.parent = this.transform;
         cart.gameObject.name = cart.gameObject.name + " " + index;
         cart.cartProperties = cart.gameObject.GetComponent<CartProperties>();
         cart.cartProperties.SetCartIndex(index);
@@ -319,9 +327,9 @@ public class TrainBuilder : MonoBehaviour
 
     private void CreateCargoGameObject(Cart cart, int index)
     {
-        if (cart.cargoIDs.Count > 0 && cart.cargoIDs[index] != TrainCargos.None)
+        if (cart.cargoIDs.Count > 0 && (TrainCargos)cart.cargoIDs[index] != TrainCargos.None)
         {
-            GameObject cargoModelPrefab = cargoPrefabs[(int)cart.cargoIDs[index]];
+            GameObject cargoModelPrefab = cargoPrefabs[cart.cargoIDs[index]];
             GameObject go = PrefabUtility.InstantiatePrefab(cargoModelPrefab) as GameObject;
 
             go.transform.rotation = this.transform.rotation;
@@ -331,7 +339,7 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    private Cart CreateNewCart(TrainCarts cartID, TrainCargos cargoID)
+    private Cart CreateNewCart(int cartID, int cargoID)
     {
         Cart cart = new Cart
         {

@@ -21,7 +21,6 @@ public class PathCreator : MonoBehaviour
         return path.NumSegments;
     }
 
-    [ContextMenu("Reverse Path")]
     public void ReversePathOrder()
     {
         path.ReversePoints();

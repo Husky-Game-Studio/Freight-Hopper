@@ -33,7 +33,7 @@ public class TrainBuilderInspector : Editor
 
         if (GUILayout.Button("Add"))
         {
-            trainBuilder.AddCart((TrainBuilder.TrainCarts)cartIndex, (TrainBuilder.TrainCargos)cargoIndex);
+            trainBuilder.AddCart(cartIndex, cargoIndex);
             trainBuilder.OnValidate();
         }
 
@@ -47,7 +47,7 @@ public class TrainBuilderInspector : Editor
         }
         if (GUILayout.Button("Replace"))
         {
-            trainBuilder.ReplaceCart((TrainBuilder.TrainCarts)cartIndex, (TrainBuilder.TrainCargos)cargoIndex);
+            trainBuilder.ReplaceCart(cartIndex, cargoIndex);
             trainBuilder.OnValidate();
         }
         if (GUILayout.Button("Clear"))
@@ -63,7 +63,7 @@ public class TrainBuilderInspector : Editor
         }
         if (GUILayout.Button("Add Cargo"))
         {
-            trainBuilder.AddCargo((TrainBuilder.TrainCargos)cargoIndex);
+            trainBuilder.AddCargo(cargoIndex);
             trainBuilder.OnValidate();
         }
         GUI.enabled = isGUIenabled;
