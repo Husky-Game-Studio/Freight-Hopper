@@ -52,7 +52,7 @@ public class TrainBuilderInspector : Editor
         }
         EditorGUILayout.Space(10);
 
-        if (cargoIndex != (int)TrainBuilder.TrainCargos.None)
+        if (cargoIndex == (int)TrainBuilder.TrainCargos.None)
         {
             GUI.enabled = false;
         }
@@ -63,7 +63,7 @@ public class TrainBuilderInspector : Editor
         }
         GUI.enabled = isGUIenabled;
 
-        if (trainBuilder.SelectedCartHasCargo)
+        if (!trainBuilder.SelectedCartHasCargo)
         {
             GUI.enabled = false;
         }

@@ -257,6 +257,7 @@ public class TrainBuilder : MonoBehaviour
         cart.gameObject.transform.position = position;
         cart.gameObject.transform.rotation = this.transform.rotation;
         cart.gameObject.transform.parent = this.transform;
+        cart.gameObject.name = cart.gameObject.name + " " + index;
         cart.cartProperties = cart.gameObject.GetComponent<CartProperties>();
         cart.cartProperties.SetCartIndex(index);
         cart.joint = cart.gameObject.GetComponent<ConfigurableJoint>();
@@ -312,6 +313,7 @@ public class TrainBuilder : MonoBehaviour
             go.transform.rotation = this.transform.rotation;
             go.transform.parent = cart.gameObject.transform;
             go.transform.localPosition = Vector3.zero + (Vector3.up * index * cargoHeight);
+            go.name = go.name + " " + index;
         }
     }
 
