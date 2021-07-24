@@ -14,10 +14,15 @@ public class TrainBuilderInspector : Editor
     public void OnEnable()
     {
         trainBuilder = (TrainBuilder)this.target;
+        (int, int) settings = trainBuilder.LoadModelSettings();
+        cartIndex = settings.Item1;
+        cargoIndex = settings.Item2;
     }
 
     public override void OnInspectorGUI()
     {
+        trainBuilder.SaveModelSettings(cartIndex, cargoIndex);
+
         EditorGUILayout.LabelField("Model Settings");
         string[] cartNames = System.Enum.GetNames(typeof(TrainBuilder.TrainCarts));
         string[] cargoNames = System.Enum.GetNames(typeof(TrainBuilder.TrainCargos));

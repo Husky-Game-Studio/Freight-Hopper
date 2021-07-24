@@ -24,6 +24,8 @@ public class TrainBuilder : MonoBehaviour
     [SerializeField] private GameObject baseCart;
 
     private GameObject locomotive;
+    [SerializeField, ReadOnly] private int cartIndexSelection = 0;
+    [SerializeField, ReadOnly] private int cargoIndexSelection = 0;
 
     public int ActionIndex
     {
@@ -116,6 +118,17 @@ public class TrainBuilder : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+
+    public void SaveModelSettings(int cartID, int cargoID)
+    {
+        cartIndexSelection = cartID;
+        cargoIndexSelection = cargoID;
+    }
+
+    public (int, int) LoadModelSettings()
+    {
+        return (cartIndexSelection, cargoIndexSelection);
+    }
 
     public void UpdateAllTrains()
     {
