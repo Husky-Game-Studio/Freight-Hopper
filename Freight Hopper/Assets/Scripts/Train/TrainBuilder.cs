@@ -18,14 +18,14 @@ public class TrainBuilder : MonoBehaviour
     [SerializeField] private float breakTorque = 3000;
 
     [Header("Lists and prefabs")]
-    [SerializeField] private List<Cart> cartsList;
+    [SerializeField] private List<Cart> cartsList = new List<Cart>();
     [SerializeField] private List<GameObject> cartPrefabs;
     [SerializeField] private List<GameObject> cargoPrefabs;
     [SerializeField] private GameObject baseCart;
 
     private GameObject locomotive;
-    [SerializeField, ReadOnly] private int cartIndexSelection = 0;
-    [SerializeField, ReadOnly] private int cargoIndexSelection = 0;
+    private int cartIndexSelection = 0;
+    private int cargoIndexSelection = 0;
 
     public int ActionIndex
     {
@@ -115,6 +115,7 @@ public class TrainBuilder : MonoBehaviour
         {
             actionIndex = cartsList.Count - 1;
         }
+        EditorUtility.SetDirty(this);
     }
 
 #if UNITY_EDITOR

@@ -80,15 +80,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3672f7032824de4cb5c0767ddf61e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cartsList: []
-  insertCart: 3
-  insertedCargo: 2
   repeatActionCount: 8
+  actionIndex: -1
   locomotiveLength: 42.243
+  cargoHeight: 5
   cartLength: 40
   gapLength: 4
   jointSnappingLength: -3
   breakTorque: Infinity
+  cartsList: []
   cartPrefabs:
   - {fileID: 3777815452056588140, guid: add97f5c0767b594ea362e604622db6b, type: 3}
   - {fileID: 5027634762359815765, guid: 9df1f55f4274a354484af233d653d57d, type: 3}
