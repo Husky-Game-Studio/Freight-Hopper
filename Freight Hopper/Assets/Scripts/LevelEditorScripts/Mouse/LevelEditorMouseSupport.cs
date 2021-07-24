@@ -12,8 +12,6 @@ namespace HGSLevelEditor
         public GameObject targetCube;
         public UIManager transformSliders = null;
         GameObject selectedObject = null;
-        private Color selectedColor = Color.green;
-        private Color objColor = Color.white; //Stores original color 
 
         void Update()
         {
@@ -65,19 +63,20 @@ namespace HGSLevelEditor
 
         private void SetColor(GameObject selected)
         {
-
-            if (selectedObject != null)
+           
+            if (selected != null)
             {
-                selectedObject.GetComponent<Renderer>().material.color = objColor;
+                selectedObject = selected;
+                selectedObject.GetComponent<Outline>().OutlineWidth = 10.0f;
+                selectedObject.GetComponent<Outline>().OutlineColor = Color.green;
+                Debug.Log("Done!");
+
             }
 
-            selectedObject = selected;
+            if (selected == null) {
 
-            if (selectedObject != null)
-            {
-                objColor = selected.GetComponent<Renderer>().material.color;
-                selectedObject.GetComponent<Renderer>().material.color = selectedColor;
-
+                selectedObject.GetComponent<Outline>().OutlineWidth = 0.0f;
+                selectedObject = selected;
             }
         }
     }

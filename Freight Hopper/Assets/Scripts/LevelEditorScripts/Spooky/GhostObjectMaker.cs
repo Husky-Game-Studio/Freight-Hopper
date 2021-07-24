@@ -36,6 +36,7 @@ namespace HGSLevelEditor
                     child.transform.localPosition = Vector3.zero;
                     child.AddComponent<MeshFilter>().mesh = objectSpawn.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
                     child.AddComponent<MeshRenderer>().material = objectSpawn.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
+                    child.AddComponent<Outline>();
                 }
 
                 // Check children of parent for mesh filters, copy them if applicable, save locations, and move to new locations while keeping it as parent
@@ -68,7 +69,9 @@ namespace HGSLevelEditor
                     child.AddComponent<MeshFilter>().mesh = oldChild.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
                     child.AddComponent<MeshRenderer>().material = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
                     child.AddComponent<BoxCollider>();
-                    
+                    child.AddComponent<Outline>();
+                    child.GetComponent<Outline>().OutlineWidth = 0.0f;
+
                 }
 
                 CopyMeshes(oldChild, ghost);
