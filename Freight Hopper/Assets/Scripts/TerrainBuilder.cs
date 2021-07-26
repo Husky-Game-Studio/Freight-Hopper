@@ -5,6 +5,7 @@ using UnityEditor;
 
 public class TerrainBuilder : MonoBehaviour
 {
+#if UNITY_EDITOR
     [SerializeField] private GameObject terrain;
     private List<GameObject> builtTerrain = new List<GameObject>();
     [SerializeField] private string terrainName = "Terrain";
@@ -31,4 +32,6 @@ public class TerrainBuilder : MonoBehaviour
             }
         }
     }
+
+#endif
 }
