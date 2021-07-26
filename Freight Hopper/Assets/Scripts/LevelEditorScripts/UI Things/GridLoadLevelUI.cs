@@ -13,6 +13,8 @@ namespace HGSLevelEditor
         public Transform LoadLevelButtons;
         public GameObject loadLevelButtonPrefab;
 
+        [SerializeField] private GameObject menu;
+
         //Helps access all level names within the 'Streaming Assets' folder -- in order to create a button for each of the levels.  
         SaveLoadLevel level;
        
@@ -52,11 +54,13 @@ namespace HGSLevelEditor
             {
 
                 CloseLoadLevelButtons();
+                menu.SetActive(false);
 
             }
             else
             {
                 OpenLoadLevelButtons();
+                menu.SetActive(true);
             }
 
         }
