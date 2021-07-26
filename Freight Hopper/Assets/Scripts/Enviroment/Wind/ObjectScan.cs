@@ -35,22 +35,18 @@ public class ObjectScan
             return false;
         }
 
-        RaycastHit[] hits = new RaycastHit[targetColliders.Length];
+        bool hitCollider = false;
         for (int j = 0; j < targetColliders.Length; j++)
         {
-            targetColliders[j].Raycast(ray, out hits[j], depth);
-        }
-
-        bool hitCollider = false;
-        for (int j = 0; j < hits.Length; j++)
-        {
+            RaycastHit hit;
+            targetColliders[j].Raycast(ray, out hit, depth);
             foreach (Collider collider in targetColliders)
             {
                 if (collider == null)
                 {
                     continue;
                 }
-                if (hits[j].collider == collider)
+                if (hit.collider == collider)
                 {
                     hitCollider = true;
                     break;

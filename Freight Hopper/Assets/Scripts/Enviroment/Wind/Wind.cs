@@ -12,6 +12,7 @@ public class Wind : MonoBehaviour
 
     // How many times per second wind status of rigidbodies are updated. Default 20, can cause performance issues at high numbers
     private readonly int updatesPerSecond = 20;
+    private Timer updateDuration = new Timer(0.1f);
 
     [SerializeField] private Vector3 size;
     [SerializeField] private Vector3 offset;
@@ -74,7 +75,10 @@ public class Wind : MonoBehaviour
         }
         for (int i = 0; i < rigidbodies.Length; i++)
         {
-            windPossibleTargets.Add(rigidbodies[i].transform);
+            if (rigidbodies[i].gameObject.CompareTag("Player"))
+            {
+                windPossibleTargets.Add(rigidbodies[i].transform);
+            }
         }
         Player.PlayerLoadedIn += AddPlayerRigidbody;
     }
@@ -99,7 +103,7 @@ public class Wind : MonoBehaviour
         if (active && !activated)
         {
             activated = true;
-            StartCoroutine(WindLoop(updatesPerSecond));
+
             windParticleController.SpawnParticleSystem(offset, size, this.transform.forward, this.transform);
         }
     }
@@ -110,17 +114,8 @@ public class Wind : MonoBehaviour
         {
             activated = false;
             active = false;
-            StopCoroutine(WindLoop(updatesPerSecond));
-            windParticleController.DisableParticles();
-        }
-    }
 
-    private IEnumerator WindLoop(float frequency)
-    {
-        while (active)
-        {
-            yield return new WaitForSecondsRealtime(1 / (float)frequency);
-            UpdateWind();
+            windParticleController.DisableParticles();
         }
     }
 
@@ -292,5 +287,11 @@ public class Wind : MonoBehaviour
         {
             ApplyWind();
         }
+        if (!updateDuration.TimerActive())
+        {
+            updateDuration.ResetTimer();
+            UpdateWind();
+        }
+        updateDuration.CountDownFixed();
     }
 }

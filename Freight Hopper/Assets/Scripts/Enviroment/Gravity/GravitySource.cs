@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class GravitySource : MonoBehaviour
 {
-    [SerializeField] protected float gravity = 25f;
+    [SerializeField] protected float gravity = 35f;
 
     // It is assumed priority is only changed before runtime. If priority is changed at runtime, CustomGravity needs to reinitialize
     [SerializeField] protected int priority = 0;
