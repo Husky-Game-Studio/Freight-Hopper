@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.9647059, g: 1, b: 0.9490196, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.003
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 1fd6bd0d6a237b84a8128ebe92f8ef6e, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 38a0c2e255048324abb0f6b8d41034c6, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -34,11 +34,11 @@ RenderSettings:
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
-  m_ReflectionBounces: 1
+  m_ReflectionBounces: 5
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 1.6520829, g: 1.7351056, b: 1.1136475, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000004, guid: f062185f536cc6945bc0b1e14be3a34e, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: bebd5ae2dd3c7dd4d990cea380a66582, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: c6b007963a7fd5c4fba6dadf6cea65fc, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -38106,7 +38106,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1778174912658570953, guid: 8a36844151ee961489a0277d10667b9a, type: 3}
       propertyPath: m_Name
-      value: Lighting & Music Prefab
+      value: Lighting Prefab
       objectReference: {fileID: 0}
     - target: {fileID: 2381540150197504614, guid: 8a36844151ee961489a0277d10667b9a, type: 3}
       propertyPath: m_RootOrder
