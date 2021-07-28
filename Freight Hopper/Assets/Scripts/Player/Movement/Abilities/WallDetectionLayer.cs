@@ -83,7 +83,7 @@ public class WallDetectionLayer
     private (bool, Vector3) CheckDirection(Ray ray, PhysicsManager physicsManager, float distance, LayerMask layers)
     {
         Ray relativeRay = new Ray(physicsManager.transform.TransformPoint(ray.origin), physicsManager.transform.TransformDirection(ray.direction));
-        Debug.DrawRay(relativeRay.origin, relativeRay.direction * distance, Color.yellow);
+        //Debug.DrawRay(relativeRay.origin, relativeRay.direction * distance, Color.yellow);
         if (Physics.Raycast(relativeRay, out RaycastHit hit, distance, layers))
         {
             if (!hit.transform.CompareTag("landable"))

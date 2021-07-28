@@ -10,8 +10,7 @@ public class Wind : MonoBehaviour
     [SerializeField] private float forcePerParticle = 1;
     private float rayWidth;
 
-    // How many times per second wind status of rigidbodies are updated. Default 20, can cause performance issues at high numbers
-    private readonly int updatesPerSecond = 20;
+    // How often we update the wind info
     private Timer updateDuration = new Timer(0.1f);
 
     [SerializeField] private Vector3 size;
@@ -75,10 +74,10 @@ public class Wind : MonoBehaviour
         }
         for (int i = 0; i < rigidbodies.Length; i++)
         {
-            if (rigidbodies[i].gameObject.CompareTag("Player"))
-            {
-                windPossibleTargets.Add(rigidbodies[i].transform);
-            }
+            /*if (rigidbodies[i].gameObject.CompareTag("Player"))
+            {*/
+            windPossibleTargets.Add(rigidbodies[i].transform);
+            //}
         }
         Player.PlayerLoadedIn += AddPlayerRigidbody;
     }
@@ -202,7 +201,7 @@ public class Wind : MonoBehaviour
         Portal portal = hit.collider.gameObject.GetComponent<Portal>();
         if (portal != null)
         {
-            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
             float distanceLeft = distance - Vector3.Distance(hit.point, ray.origin);
             portal.TeleportRay(ref ray, hit.point);
             Vector3 portalSize = portal.OtherPortal().GetComponent<BoxCollider>().size;
@@ -218,7 +217,7 @@ public class Wind : MonoBehaviour
         }
         else
         {
-            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
         }
     }
 
@@ -233,11 +232,11 @@ public class Wind : MonoBehaviour
             }
             affectedBodies[colliderRb].Add(new Ray(hit.point, ray.direction));
 
-            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
         }
         else
         {
-            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
         }
     }
 
