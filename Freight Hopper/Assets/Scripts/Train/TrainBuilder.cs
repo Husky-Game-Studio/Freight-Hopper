@@ -40,29 +40,6 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    public void IncrementActionIndex()
-    {
-        actionIndex++;
-        if (actionIndex >= cartsList.Count)
-        {
-            actionIndex = cartsList.Count - 1;
-        }
-        SceneView.RepaintAll();
-    }
-
-    public void DecrementActionIndex()
-    {
-        actionIndex--;
-        if (actionIndex < -1)
-        {
-            actionIndex = -1;
-        }
-        SceneView.RepaintAll();
-    }
-
-    public bool CanRemoveOrClear => cartsList.Count > 0;
-    public bool SelectedCartHasCargo => this.ActionIndex != -1 && cartsList[this.ActionIndex].cargoIDs.Count > 0;
-
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCargos
     {
@@ -93,6 +70,31 @@ public class TrainBuilder : MonoBehaviour
         public ConfigurableJoint joint;
     }
 
+#if UNITY_EDITOR
+
+    public void IncrementActionIndex()
+    {
+        actionIndex++;
+        if (actionIndex >= cartsList.Count)
+        {
+            actionIndex = cartsList.Count - 1;
+        }
+        SceneView.RepaintAll();
+    }
+
+    public void DecrementActionIndex()
+    {
+        actionIndex--;
+        if (actionIndex < -1)
+        {
+            actionIndex = -1;
+        }
+        SceneView.RepaintAll();
+    }
+
+    public bool CanRemoveOrClear => cartsList.Count > 0;
+    public bool SelectedCartHasCargo => this.ActionIndex != -1 && cartsList[this.ActionIndex].cargoIDs.Count > 0;
+
     // Draws a sphere where the action index is
     public void OnDrawGizmosSelected()
     {
@@ -118,8 +120,6 @@ public class TrainBuilder : MonoBehaviour
         }
         EditorUtility.SetDirty(this);
     }
-
-#if UNITY_EDITOR
 
     public void SaveModelSettings(int cartID, int cargoID)
     {

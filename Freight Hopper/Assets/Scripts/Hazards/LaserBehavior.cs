@@ -13,6 +13,6 @@ public class LaserBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Physics.IgnoreLayerCollision(11, 14);
+        //Physics.IgnoreLayerCollision(11, 14);
     }
 }

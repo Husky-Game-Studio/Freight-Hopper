@@ -1191,7 +1191,7 @@ MonoBehaviour:
   preventConsumption: 0
   storedVelocity: {x: 0, y: 0, z: 0}
   initialUpwardsForce: 30
-  consistentForce: 3
+  consistentForce: 10
   duration:
     duration: 0.3
     current: 0
@@ -1949,7 +1949,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: ba1cc8458e9e7c945ad5c68265562543, type: 2}
+  sharedProfile: {fileID: 0}
 --- !u!136 &6851446874579196112
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2099,10 +2099,10 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 5
+  m_Time: 2
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 1
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -2153,7 +2153,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 1
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!1 &6851446874732734529
@@ -2172,7 +2172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &6851446874874222866
 GameObject:
   m_ObjectHideFlags: 0
