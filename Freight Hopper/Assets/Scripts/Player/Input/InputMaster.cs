@@ -28,7 +28,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Jump"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""b4929b82-6898-469c-974c-73a2454924b0"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
