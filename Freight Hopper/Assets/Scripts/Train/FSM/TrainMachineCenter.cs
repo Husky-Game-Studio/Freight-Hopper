@@ -16,6 +16,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private Optional<float> startWhenDistanceFromPlayer;
     [SerializeField] private bool derailToWait = false;
     [SerializeField] private bool loop = false;
+    [SerializeField] private bool instantlyAccelerate = false;
     [SerializeField] private List<RoadCreator> pathObjects;
     [SerializeField] private float targetVelocity;
 
@@ -23,15 +24,34 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     // Destroy Train After Derail Fields
     [SerializeField] private bool deleteOnDerail = false;
+
     [SerializeField] private float timeBeforeDelete = 10;
     public Timer timerToDelete;
     public bool trainDerailed;
+    private bool startedAlready = false;
 
     // Accessors
     public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
+    public bool Starting
+    {
+        get
+        {
+            if (startedAlready)
+            {
+                return false;
+            }
+            if (currentPath == 0)
+            {
+                startedAlready = true;
+            }
+
+            return currentPath == 0;
+        }
+    }
     public bool DerailToWait => derailToWait;
+    public bool InstantlyAccelerate => instantlyAccelerate;
     public bool Loop => loop;
-    public float TargetVelocity => targetVelocity;
+    public float TargetSpeed => targetVelocity;
 
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
@@ -87,6 +107,14 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             return null;
         }
         return pathObjects[currentPath];
+    }
+
+    public void SetToMaxSpeed()
+    {
+        foreach (Cart cart in carts)
+        {
+            cart.rb.AddForce(cart.rb.transform.forward * targetVelocity, ForceMode.VelocityChange);
+        }
     }
 
     // Updates the current path to be the next one if it does exist
@@ -190,7 +218,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         Vector3 currentAngVel = carts.First.Value.rb.angularVelocity;
 
         //Target (Rotate, Move Forward)
-        Vector3 targetVel = rot * Vector3.forward * this.TargetVelocity;
+        Vector3 targetVel = rot * Vector3.forward * this.TargetSpeed;
         Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
 
         //Target Change
