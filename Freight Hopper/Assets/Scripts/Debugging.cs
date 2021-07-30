@@ -12,10 +12,12 @@ public class Debugging : MonoBehaviour
     [SerializeField] private MovementBehavior movementBehavior;
     [SerializeField] private Timer refreshSpeed;
 
+    private static bool F3Status;
+
     private void OnEnable()
     {
         UserInput.Instance.UserInputMaster.Player.Debug.performed += ToggleDebugging;
-        debugGameobject.SetActive(false);
+        debugGameobject.SetActive(F3Status);
         refreshSpeed.ResetTimer();
     }
 
@@ -44,5 +46,6 @@ public class Debugging : MonoBehaviour
     private void ToggleDebugging(InputAction.CallbackContext context)
     {
         debugGameobject.SetActive(!debugGameobject.activeSelf);
+        F3Status = debugGameobject.activeSelf;
     }
 }
