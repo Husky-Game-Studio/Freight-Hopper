@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 // Source: https://www.youtube.com/watch?v=x-C95TuQtf0
 public class LevelTimer : MonoBehaviour
 {
-    public Text textTimer;
+    private TextMeshProUGUI textTimer;
     private float startTime;
 
-    // Start is called before the first frame update
     private void Start()
     {
         startTime = Time.time;
+        textTimer = GetComponent<TextMeshProUGUI>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         float actualTime = Time.time - startTime;

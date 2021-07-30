@@ -7,7 +7,9 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] private Speedometer speedometer;
     [SerializeField] private VelocityController groundController;
     [SerializeField] private VelocityController airController;
-    [SerializeField] private UnityEngine.UI.Text velocity;
+
+    public float HorizontalSpeed => speedometer.AbsoluteHorzSpeed;
+    public float Speed => physicsManager.rb.velocity.magnitude;
 
     private Transform cameraTransform;
 
@@ -64,7 +66,6 @@ public class MovementBehavior : AbilityBehavior
     public void UpdateMovement()
     {
         speedometer.UpdateSpeedometer();
-        velocity.text = speedometer.AbsoluteHorzSpeed.ToString("0.00") + " m/s";
     }
 
     public override void Action()
