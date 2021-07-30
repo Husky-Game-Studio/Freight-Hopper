@@ -16,6 +16,10 @@ public class FindNextPathState : BasicState
     {
         trainFSM.ChangePath();
         targetPosition = trainFSM.GetClosestPointOnCurrentPath();
+        if (trainFSM.InstantlyAccelerate && trainFSM.Starting)
+        {
+            trainFSM.SetToMaxSpeed();
+        }
     }
 
     public override void ExitState()

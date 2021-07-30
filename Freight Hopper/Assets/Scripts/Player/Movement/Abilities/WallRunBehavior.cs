@@ -13,7 +13,6 @@ public partial class WallRunBehavior : AbilityBehavior
     [Space, Header("Wall Running")]
     [SerializeField] private float upwardsForce = 10;
     [SerializeField] private float rightForce = 5;
-    //[SerializeField] private float forwardForce = 5;
 
     [Space, Header("Wall Climbing")]
     [SerializeField] private float initialClimbForce = 5;
@@ -36,11 +35,10 @@ public partial class WallRunBehavior : AbilityBehavior
     private FirstPersonCamera cameraController;
     private JumpBehavior jumpBehavior;
 
-    // left, front, right
+    // Left, Front, Right
     [SerializeField, ReadOnly] private bool[] wallStatus = new bool[3];
     [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[3];
 
-    // Left, Front, Right
     public bool[] WallStatus() => wallStatus.Clone() as bool[];
 
     private WallDetectionLayer[] detectionlayers;
@@ -58,6 +56,11 @@ public partial class WallRunBehavior : AbilityBehavior
     }
 
     private void FixedUpdate()
+    {
+        UpdateWallStatus();
+    }
+
+    private void UpdateWallStatus()
     {
         wallStatus = new bool[] { false, false, false };
         wallNormals = new Vector3[] { Vector3.zero, Vector3.zero, Vector3.zero };
@@ -137,14 +140,6 @@ public partial class WallRunBehavior : AbilityBehavior
         wallJumpWallDirection = sumNormals.normalized;
         Vector3 cameraFaceDirection = Camera.main.transform.forward;
 
-        /*if (Vector3.Dot(wallJumpWallDirection, cameraFaceDirection) < 0)
-        {
-            jumpDirection = Vector3.ProjectOnPlane(cameraFaceDirection, wallJumpWallDirection).normalized;
-        }
-        else
-        {
-            jumpDirection = cameraFaceDirection;
-        }*/
         jumpDirection = Vector3.Project(cameraFaceDirection, wallJumpWallDirection);
         StopPlayerFalling(physicsManager);
 
@@ -180,8 +175,6 @@ public partial class WallRunBehavior : AbilityBehavior
         soundManager.Play("WallSkid");
         Vector3 forward = Vector3.Cross(right, up);
         cameraController.TiltUpAxis(forward * wallrunCameraTilt);
-        //Vector3 cameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, -right);
-        //physicsManager.rb.AddForce(cameraForward * forwardForce, ForceMode.Acceleration);
         physicsManager.rb.AddForce(right * rightForce, ForceMode.Acceleration);
         physicsManager.rb.AddForce(up * upwardsForce, ForceMode.Acceleration);
     }

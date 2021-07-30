@@ -38,11 +38,10 @@ public class GravityZone : GravitySource
         return gravity * (gravityDirection * -this.transform.up).normalized;
     }
 
-    /// <summary>
     /// Source: https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
     /// Function for checking if a point is in a box region, true if point is inside the region. Transform is for converting world position to local
     /// probably shouldn't be in gravityzone, but idk where else to put it
-    /// </summary>
+    /// I didn't figure out this math, if you want to understand it refer to the link because I don't understand it
     public static bool IsPointInBoxRegion(Transform transform, Vector3 center, Vector3 bounds, Vector3 point)
     {
         Vector3 p1 = transform.TransformPoint(center - bounds);
@@ -54,10 +53,10 @@ public class GravityZone : GravitySource
         Vector3 V = p1 - p3;
         Vector3 W = p1 - p4;
 
-        bool caseOne = Vector3.Dot(U, p2) < Vector3.Dot(U, point) && Vector3.Dot(U, point) < Vector3.Dot(U, p1);
-        bool caseTwo = Vector3.Dot(V, p3) < Vector3.Dot(V, point) && Vector3.Dot(V, point) < Vector3.Dot(V, p1);
-        bool caseThree = Vector3.Dot(W, p4) < Vector3.Dot(W, point) && Vector3.Dot(W, point) < Vector3.Dot(W, p1);
+        bool sideOne = Vector3.Dot(U, p2) < Vector3.Dot(U, point) && Vector3.Dot(U, point) < Vector3.Dot(U, p1);
+        bool sideTwo = Vector3.Dot(V, p3) < Vector3.Dot(V, point) && Vector3.Dot(V, point) < Vector3.Dot(V, p1);
+        bool sideThree = Vector3.Dot(W, p4) < Vector3.Dot(W, point) && Vector3.Dot(W, point) < Vector3.Dot(W, p1);
 
-        return caseOne && caseTwo && caseThree;
+        return sideOne && sideTwo && sideThree;
     }
 }

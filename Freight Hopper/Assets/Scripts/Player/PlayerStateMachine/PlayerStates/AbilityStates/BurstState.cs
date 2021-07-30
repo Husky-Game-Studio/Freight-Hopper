@@ -24,7 +24,7 @@ public class BurstState : PlayerState
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.abilities.movementBehavior.PlayerMove();
+        playerMachineCenter.abilities.movementBehavior.MoveAction();
         playerMachineCenter.abilities.burstBehavior.Action();
     }
 }

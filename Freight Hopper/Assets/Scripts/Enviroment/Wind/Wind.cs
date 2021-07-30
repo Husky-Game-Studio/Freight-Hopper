@@ -5,8 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(WindParticleController))]
 public class Wind : MonoBehaviour
 {
-    [SerializeField] private bool active = true;
-    private bool activated = false;
+    [SerializeField] private bool toggled = true;
+    private bool running = false;
     [SerializeField] private float forcePerParticle = 1;
     private float rayWidth;
 
@@ -20,7 +20,7 @@ public class Wind : MonoBehaviour
     [SerializeField, Range(1.1f, 2.5f)] private float density = 1.65f;
 
     private List<Transform> windPossibleTargets = new List<Transform>();
-    private Dictionary<Transform, ObjectScan> windTargets = new Dictionary<Transform, ObjectScan>();
+    private Dictionary<Transform, ObjectScanner> windTargets = new Dictionary<Transform, ObjectScanner>();
     private Dictionary<Rigidbody, List<Ray>> affectedBodies = new Dictionary<Rigidbody, List<Ray>>();
     private Dictionary<Vector3Int, Ray> viableRays = new Dictionary<Vector3Int, Ray>();
     [SerializeField] private LayerMask affectedLayers;
@@ -33,15 +33,16 @@ public class Wind : MonoBehaviour
     // Draws lines for wind direction
     private void OnDrawGizmosSelected()
     {
+        if (!toggled)
+        {
+            return;
+        }
+
         rayWidth = 1 / density;
         Gizmos.color = Color.yellow;
 
         GizmosExtensions.DrawGizmosArrow(this.transform.position + offset, this.transform.forward);
 
-        if (!active)
-        {
-            return;
-        }
         for (float x = -1; x <= 1; x += rayWidth)
         {
             for (float y = -1; y <= 1; y += rayWidth)
@@ -97,25 +98,19 @@ public class Wind : MonoBehaviour
         Player.PlayerLoadedIn -= AddPlayerRigidbody;
     }
 
-    public void Activate()
+    public void Enable()
     {
-        if (active && !activated)
-        {
-            activated = true;
+        running = true;
 
-            windParticleController.SpawnParticleSystem(offset, size, this.transform.forward, this.transform);
-        }
+        windParticleController.SpawnParticleSystem(offset, size, this.transform.forward, this.transform);
     }
 
-    public void Deactivate()
+    public void Disable()
     {
-        if (activated)
-        {
-            activated = false;
-            active = false;
+        running = false;
+        toggled = false;
 
-            windParticleController.DisableParticles();
-        }
+        windParticleController.DisableParticles();
     }
 
     private void UpdateWind()
@@ -173,7 +168,7 @@ public class Wind : MonoBehaviour
         if (PositionInsideWind(transform.position) && !windTargets.ContainsKey(transform))
         {
             windTargets.Add(transform,
-                new ObjectScan(GetColliderInformation(transform), rayWidth, viableRays,
+                new ObjectScanner(GetColliderInformation(transform), rayWidth, viableRays,
                 this.transform, size.z, PositionInsideWind));
         }
         else if (!PositionInsideWind(transform.position) && windTargets.ContainsKey(transform))
@@ -201,7 +196,7 @@ public class Wind : MonoBehaviour
         Portal portal = hit.collider.gameObject.GetComponent<Portal>();
         if (portal != null)
         {
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
             float distanceLeft = distance - Vector3.Distance(hit.point, ray.origin);
             portal.TeleportRay(ref ray, hit.point);
             Vector3 portalSize = portal.OtherPortal().GetComponent<BoxCollider>().size;
@@ -217,7 +212,7 @@ public class Wind : MonoBehaviour
         }
         else
         {
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
         }
     }
 
@@ -232,11 +227,11 @@ public class Wind : MonoBehaviour
             }
             affectedBodies[colliderRb].Add(new Ray(hit.point, ray.direction));
 
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
         }
         else
         {
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
         }
     }
 
@@ -269,20 +264,20 @@ public class Wind : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (active && !activated)
+        if (toggled && !running)
         {
-            Activate();
+            Enable();
         }
-        if (active && activated)
+        if (toggled && running)
         {
             windParticleController.UpdateSettings(size, this.transform.forward);
             windParticleController.EnableParticles();
         }
-        if (!active && activated)
+        if (!toggled && running)
         {
-            Deactivate();
+            Disable();
         }
-        if (activated)
+        if (running)
         {
             ApplyWind();
         }

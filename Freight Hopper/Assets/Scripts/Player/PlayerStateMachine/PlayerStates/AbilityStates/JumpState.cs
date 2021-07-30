@@ -38,7 +38,7 @@ public class JumpState : PlayerState
         {
             playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
         }
-        playerMachineCenter.abilities.movementBehavior.PlayerMove();
+        playerMachineCenter.abilities.movementBehavior.MoveAction();
         playerMachineCenter.abilities.jumpBehavior.Action();
     }
 }

@@ -28,6 +28,11 @@ public class FollowPathState : BasicState
             railLinker.Link(cart.rb, t);
         }
         endOfPath = false;
+        if (trainFSM.InstantlyAccelerate && trainFSM.Starting)
+        {
+            trainFSM.SetToMaxSpeed();
+        }
+
         // Sparks fly
     }
 

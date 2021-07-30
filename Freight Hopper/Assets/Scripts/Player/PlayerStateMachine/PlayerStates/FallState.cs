@@ -24,6 +24,6 @@ public class FallState : PlayerState
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.abilities.movementBehavior.PlayerMove();
+        playerMachineCenter.abilities.movementBehavior.MoveAction();
     }
 }
