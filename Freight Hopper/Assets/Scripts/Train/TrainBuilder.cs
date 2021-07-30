@@ -276,12 +276,15 @@ public class TrainBuilder : MonoBehaviour
         {
             DestroyImmediate(cart.gameObject);
         }
+
         cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart, this.transform) as GameObject;
         cart.gameObject.transform.position = position;
         cart.gameObject.transform.rotation = this.transform.rotation;
         cart.gameObject.name = cart.gameObject.name + " " + index;
+
         cart.cartProperties = cart.gameObject.GetComponent<CartProperties>();
         cart.cartProperties.SetCartIndex(index);
+
         cart.joint = cart.gameObject.GetComponent<ConfigurableJoint>();
         SetJoint(index);
         SoftJointLimit temp = new SoftJointLimit

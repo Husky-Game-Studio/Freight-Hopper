@@ -73,12 +73,7 @@ public class Portal : MonoBehaviour
             otherPortal.AddTeleportingRigidbody(rb);
             Teleport(rb);
             RotateVelocity(rb);
-            Rotate(rb);
         }
-    }
-
-    private void Rotate(Rigidbody other)
-    {
     }
 
     private void Teleport(Rigidbody other)

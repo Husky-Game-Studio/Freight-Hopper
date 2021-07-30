@@ -3,7 +3,7 @@
 public class WallDetectionLayer
 {
     private float priority = 0;
-
+    private readonly (bool, Vector3) FAIL = (false, Vector3.zero);
     public float Priority => priority;
 
     private struct WallDetections<T>
@@ -107,8 +107,6 @@ public class WallDetectionLayer
         }
         return FAIL;
     }
-
-    private readonly (bool, Vector3) FAIL = (false, Vector3.zero);
 
     public (bool, Vector3) FrontDetected()
     {

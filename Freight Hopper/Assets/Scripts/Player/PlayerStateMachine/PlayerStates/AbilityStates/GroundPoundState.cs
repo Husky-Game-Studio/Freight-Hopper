@@ -31,7 +31,7 @@ public class GroundPoundState : PlayerState
     public override void PerformBehavior()
     {
         playerMachineCenter.physicsManager.friction.ReduceFriction(playerMachineCenter.abilities.groundPoundBehavior.FrictionReduction);
-        playerMachineCenter.abilities.movementBehavior.PlayerMove();
+        playerMachineCenter.abilities.movementBehavior.MoveAction();
         playerMachineCenter.abilities.groundPoundBehavior.Action();
     }
 }

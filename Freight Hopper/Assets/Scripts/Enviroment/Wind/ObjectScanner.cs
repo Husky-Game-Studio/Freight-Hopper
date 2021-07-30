@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectScan
+public class ObjectScanner
 {
     private Collider[] targetColliders;
     private Func<Vector3, bool> checkInsideWindFunction;
@@ -12,7 +12,7 @@ public class ObjectScan
     private Transform windTransform;
     private Dictionary<Vector3Int, Ray> viableRays;
 
-    public ObjectScan(Collider[] colliders, float rayWidth, Dictionary<Vector3Int, Ray> viableRays,
+    public ObjectScanner(Collider[] colliders, float rayWidth, Dictionary<Vector3Int, Ray> viableRays,
         Transform transform, float depth, Func<Vector3, bool> checkInsideWind)
     {
         this.viableRays = viableRays;

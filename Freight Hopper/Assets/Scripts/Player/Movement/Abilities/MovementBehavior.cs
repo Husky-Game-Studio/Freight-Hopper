@@ -20,7 +20,7 @@ public class MovementBehavior : AbilityBehavior
         airController.Initialize(pm, speedometer, oppositeInputAngle);
     }
 
-    private Vector3 RelativeMove(Vector3 forward, Vector3 right)
+    private Vector3 ConvertInputToCameraSpace(Vector3 forward, Vector3 right)
     {
         forward = forward.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
         right = right.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
@@ -33,27 +33,28 @@ public class MovementBehavior : AbilityBehavior
 
     public void Move(Vector3 direction)
     {
-        Vector3 relativeDirection = direction.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).normalized;
+        // If the player is in the air, the default direction is upwards. So this calculation does nothing in the air.
+        Vector3 surfaceMoveDirection = direction.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).normalized;
         if (direction.IsZero())
         {
             return;
         }
         if (!physicsManager.collisionManager.IsGrounded.current)
         {
-            airController.Move(relativeDirection);
+            airController.Move(surfaceMoveDirection);
         }
         else
         {
             physicsManager.friction.ReduceFriction(1);
-            groundController.Move(relativeDirection);
+            groundController.Move(surfaceMoveDirection);
         }
     }
 
-    public void PlayerMove()
+    public void MoveAction()
     {
-        Vector3 relativeMove = RelativeMove(cameraTransform.forward, cameraTransform.right);
+        Vector3 relativeInput = ConvertInputToCameraSpace(cameraTransform.forward, cameraTransform.right);
 
-        Move(relativeMove);
+        Move(relativeInput);
     }
 
     public override void EntryAction()
@@ -68,7 +69,7 @@ public class MovementBehavior : AbilityBehavior
 
     public override void Action()
     {
-        PlayerMove();
+        MoveAction();
         if (physicsManager.collisionManager.IsGrounded.current)
         {
             soundManager.PlayRandom("Move", 7);
