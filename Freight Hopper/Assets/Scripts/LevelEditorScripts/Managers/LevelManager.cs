@@ -9,10 +9,17 @@ namespace HGSLevelEditor
     {
 
         public List<LevelObjects> o = new List<LevelObjects>();
+
+        // public List<ObjectManager.LevelObject> objectList;// = new List<ObjectManager.LevelObject>();
+        
         public int index;
         public Text levelText;
-        public Material sky; 
+        public Material sky;
+        //  public LevelEditorObjects objects;
 
+        // private ObjectManager obj; 
+
+      
         //This variable is what allows the level to be played within the 'Play' scene 
         //and also allows the level to reload when the user exits the 'Play' scene 
         public static string levelNameLoad = null;
@@ -34,6 +41,11 @@ namespace HGSLevelEditor
 
             instance = this;
 
+            //obj = ObjectManager.GetInstance();
+            //obj.LevelObjects = ObjectManager.GetInstance().getObjectList();
+//
+            //ObjectUISpawning();
+
             //Will reload the level if the user is coming back from the 'Play' scene 
             if (levelNameLoad != null)
             {
@@ -54,7 +66,32 @@ namespace HGSLevelEditor
                 levelText.text = "New Level Opened";
             }
         }
-     
+
+        //public void ObjectUISpawning() {
+
+        //    Debug.Log("We in it maybe");
+        //    LevelEditorObjects[] editObjects = Resources.FindObjectsOfTypeAll<LevelEditorObjects>();
+        //    bool found = false;
+
+        //    foreach (LevelEditorObjects eObj in editObjects) {
+        //        Debug.Log("We in it");
+        //        //Search through ObjectManager and see if object ID exists -- use a boolean? 
+        //        for (int i = 0; i < objectList.Count; i++) {
+        //            if (eObj.objectID == objectList[i].objID) {
+
+        //                found = true;
+        //            }
+        //        }
+
+        //        if (found == false) {
+
+        //            obj.AddToList(eObj.objectID, eObj.objectPrefab);
+        //        }
+        //    }
+
+        //    //Create buttons for all levelEditorObjects 
+
+        //}
         public void ClearLevel()
         {
             foreach (LevelObjects obj in o)
@@ -83,8 +120,6 @@ namespace HGSLevelEditor
                                                                                                                                                         
             public GameObject obj;
             public List<GameObject> inSceneObjects = new List<GameObject>();
-
-
         }
     }
 }

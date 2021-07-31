@@ -20,6 +20,7 @@ public class LoadLevelUI : MonoBehaviour
         GridLoadLevelUI.GetInstance().ReloadLevels();
         SetMenu();
     }
+
     public void LoadLevel() {
 
         //Need this for when I'm going back to the first iteration of the level editor 
@@ -29,6 +30,7 @@ public class LoadLevelUI : MonoBehaviour
         GridLoadLevelUI.GetInstance().CloseLoadLevelButtons();
         //LevelManager.levelNameLoad = levelName;
     }
+
     public void SetText(string newText) {
         txt.text = newText; 
     }
@@ -38,6 +40,7 @@ public class LoadLevelUI : MonoBehaviour
         LevelManager.levelNameLoad = levelName;
         Debug.Log ("levelName selected: " + LevelManager.levelNameLoad);
     }
+
     public void SetMenu() {
 
         if (validatingMenu.activeInHierarchy == false) {
@@ -48,9 +51,5 @@ public class LoadLevelUI : MonoBehaviour
 
             validatingMenu.SetActive(false);
         }
-       
-
     }
-
-
 }

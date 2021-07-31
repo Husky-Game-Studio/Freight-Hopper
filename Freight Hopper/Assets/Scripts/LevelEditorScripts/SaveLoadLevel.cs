@@ -213,8 +213,6 @@ public class SaveLoadLevel : MonoBehaviour
         }
     }
 
-
-   
     //Gives allLevels all the file names within the 'Levels' folder 
     public void LoadAllLevels() { 
     

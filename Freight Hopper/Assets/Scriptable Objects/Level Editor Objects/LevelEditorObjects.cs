@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptable Objects/Level Editor Objects")]
+[CreateAssetMenu(menuName = "EditorObject", fileName = "EditorObject")]
 public class LevelEditorObjects : ScriptableObject
 {
-    [SerializeField] private Sprite buttonPhoto;
-    [SerializeField] private string objectID;
-    [SerializeField] private GameObject objectPrefab; 
+    public Sprite buttonPhoto;
+    public string objectID;
+    public GameObject objectPrefab; 
 
 }
