@@ -25,18 +25,23 @@ namespace HGSLevelEditor
         {
 
             GameObject ghost = new GameObject("Ghost " + objectSpawn.name);
-            string id = objectSpawn.GetComponent<LevelObjectInfo>().data.objectID;
+
 
             ghost.transform.position = objectSpawn.transform.position;
             // Check parent for mesh filter, copy it, save its location and move the new parent to location
             if (objectSpawn.GetComponent<MeshFilter>() != null)
                 {
-                    GameObject child = new GameObject(objectSpawn.name);
+                    Debug.Log("This is being accessed eek!");
+                //GameObject child = new GameObject(objectSpawn.name);
 
-                    child.transform.localPosition = Vector3.zero;
-                    child.AddComponent<MeshFilter>().mesh = objectSpawn.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
-                    child.AddComponent<MeshRenderer>().material = objectSpawn.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
-                    child.AddComponent<Outline>();
+                    ghost.transform.localPosition = objectSpawn.transform.position;
+                    ghost.AddComponent<MeshFilter>().mesh = objectSpawn.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
+                    ghost.AddComponent<MeshRenderer>().material = objectSpawn.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
+                    ghost.AddComponent<BoxCollider>();
+                    ghost.AddComponent<Outline>();
+                    ghost.GetComponent<Outline>().OutlineWidth = 0.0f;
+                    
+
                 }
 
                 // Check children of parent for mesh filters, copy them if applicable, save locations, and move to new locations while keeping it as parent
@@ -45,11 +50,13 @@ namespace HGSLevelEditor
 
                 ghost.AddComponent<LevelObjectInfo>();
 
-                Debug.Log("Object ID for debug: " + objectSpawn.GetComponent<LevelObjectInfo>().data.objectID);
+                Debug.Log("Object ID for debug: " + objectSpawn.GetComponent<LevelObjectInfo>().objID);
+            
 
-                ghost.GetComponent<LevelObjectInfo>().data = objectSpawn.GetComponent<LevelObjectInfo>().GetObject();
+            ghost.GetComponent<LevelObjectInfo>().data = objectSpawn.GetComponent<LevelObjectInfo>().GetObject();
+            ghost.GetComponent<LevelObjectInfo>().SetID(objectSpawn.GetComponent<LevelObjectInfo>().objID);
 
-                return ghost;
+            return ghost;
             
         }
 

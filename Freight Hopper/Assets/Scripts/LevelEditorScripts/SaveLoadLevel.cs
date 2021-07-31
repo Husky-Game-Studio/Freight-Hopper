@@ -186,6 +186,7 @@ public class SaveLoadLevel : MonoBehaviour
             Debug.Log("Rotation: " + s_obj_data.rotX + s_obj_data.rotY + s_obj_data.rotZ);
 
             GameObject loadingObject = HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab;
+            Debug.Log("Object Name: " + s_obj_data.objectID);
 
             Debug.Log("EditorOn: " + editorOn);
       
@@ -206,7 +207,7 @@ public class SaveLoadLevel : MonoBehaviour
 
             }
             else if (editorOn == false){
-
+                
                 Instantiate(loadingObject, pos,
                 Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
             }

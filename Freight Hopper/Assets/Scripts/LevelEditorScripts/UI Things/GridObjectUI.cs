@@ -5,17 +5,28 @@ using UnityEngine;
 public class GridObjectUI : MonoBehaviour
 {
     public Transform objectButtons;
-    public GameObject objectButtonPrefab; 
+    public GameObject objectButtonPrefab;
+
+    public ObjectCollection eObj; 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        CreateObjectButtons();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void CreateObjectButtons() {
+
+        foreach (LevelEditorObjects obj in eObj.objects) {
+
+            GameObject button = Instantiate(objectButtonPrefab);
+            button.transform.SetParent(objectButtons);
+
+            ButtonLoad newButton = button.GetComponent<ButtonLoad>();
+            newButton.spawnObject = obj.objectPrefab;
+            newButton.objectPhoto = obj.buttonPhoto;
+            newButton.objectID = obj.objectID;
+            
+        }
     }
 }

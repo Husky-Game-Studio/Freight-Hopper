@@ -118,11 +118,18 @@ namespace HGSLevelEditor
         {
             Vector3 p;
 
-            if (mSelectedObject != null && transformDropdown.value == (int)Transform.Position)
+            if (mSelectedObject != null && mSelectedObject.transform.parent != null && transformDropdown.value == (int)Transform.Position)
             {
                 p = mSelectedObject.transform.parent.localPosition;
+
             }
-            else if (mSelectedObject != null && transformDropdown.value == (int)Transform.Rotation) {
+            else if (mSelectedObject != null && transformDropdown.value == (int)Transform.Position) {
+
+                p = mSelectedObject.transform.position;
+
+            }
+            else if (mSelectedObject != null && transformDropdown.value == (int)Transform.Rotation)
+            {
 
                 p = mSelectedObject.transform.parent.localRotation.eulerAngles;
             }
@@ -139,14 +146,18 @@ namespace HGSLevelEditor
             if (mSelectedObject == null)
                 return;
 
-            if (transformDropdown.value == (int)Transform.Position)
+            if (transformDropdown.value == (int)Transform.Position && mSelectedObject.transform.parent != null)
             {
                 mSelectedObject.transform.parent.localPosition = p;
+            }
+            else if (transformDropdown.value == (int)Transform.Position) {
+
+                mSelectedObject.transform.position = p;
             }
             else if (transformDropdown.value == (int)Transform.Rotation) {
 
                 Quaternion objectRot = new Quaternion();
-                objectRot.eulerAngles = p; 
+                objectRot.eulerAngles = p;
                 mSelectedObject.transform.parent.localRotation = objectRot;
 
             }
@@ -158,7 +169,6 @@ namespace HGSLevelEditor
         {
             Vector3 p = ReadObjectXfrom();
             p.x = SliderSnap(v);
-            Debug.Log("p.x: " + p.x);
             UISetObjectXform(ref p);
         }
 
