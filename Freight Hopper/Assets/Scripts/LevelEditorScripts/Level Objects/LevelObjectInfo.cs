@@ -23,6 +23,7 @@ namespace HGSLevelEditor
         public LevelObjectData GetObject()
         {
             LevelObjectData savedObj = data;
+            savedObj.objectID = objID;
 
             return savedObj;
 
@@ -56,7 +57,7 @@ namespace HGSLevelEditor
             data.rotY = worldRotation.y;
             data.rotZ = worldRotation.z;
 
-            data.objectID = objID;
+            data.SetID(objID);
             Debug.Log("ID: " + data.objectID);
 
         }

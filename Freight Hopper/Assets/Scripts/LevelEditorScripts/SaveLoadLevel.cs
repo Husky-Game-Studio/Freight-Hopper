@@ -116,8 +116,6 @@ public class SaveLoadLevel : MonoBehaviour
         Stream stream = new FileStream(saveLocation, FileMode.Create, FileAccess.Write, FileShare.None);
         formatter.Serialize(stream, levelSave);
         stream.Close();
-
-        Debug.Log(saveLocation + "works");
     }
 
     //Loads file + saves files info within 'SaveLevel save'
@@ -185,12 +183,14 @@ public class SaveLoadLevel : MonoBehaviour
             Debug.Log("POS: " + pos.x + pos.y + pos.z);
             Debug.Log("Rotation: " + s_obj_data.rotX + s_obj_data.rotY + s_obj_data.rotZ);
 
+            
+
             GameObject loadingObject = HGSLevelEditor.ObjectManager.GetInstance().GetObject(s_obj_data.objectID).objPrefab;
             Debug.Log("Object Name: " + s_obj_data.objectID);
 
             Debug.Log("EditorOn: " + editorOn);
       
-            if (editorOn == true)
+            if (editorOn == true && loadingObject != null)
             {
                 
                 ghost = GhostObjectMaker.GetInstance();
@@ -206,7 +206,7 @@ public class SaveLoadLevel : MonoBehaviour
 
 
             }
-            else if (editorOn == false){
+            else if (editorOn == false && loadingObject != null){
                 
                 Instantiate(loadingObject, pos,
                 Quaternion.Euler(s_obj_data.rotX, s_obj_data.rotY, s_obj_data.rotZ));
@@ -223,7 +223,6 @@ public class SaveLoadLevel : MonoBehaviour
         foreach (FileInfo file in fileInfo) {
       
             allLevels.Add(file.Name);
-            Debug.Log(file.Name);
         }
     }
 }

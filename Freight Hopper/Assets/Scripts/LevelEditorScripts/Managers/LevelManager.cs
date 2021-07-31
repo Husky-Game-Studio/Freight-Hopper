@@ -67,31 +67,6 @@ namespace HGSLevelEditor
             }
         }
 
-        //public void ObjectUISpawning() {
-
-        //    Debug.Log("We in it maybe");
-        //    LevelEditorObjects[] editObjects = Resources.FindObjectsOfTypeAll<LevelEditorObjects>();
-        //    bool found = false;
-
-        //    foreach (LevelEditorObjects eObj in editObjects) {
-        //        Debug.Log("We in it");
-        //        //Search through ObjectManager and see if object ID exists -- use a boolean? 
-        //        for (int i = 0; i < objectList.Count; i++) {
-        //            if (eObj.objectID == objectList[i].objID) {
-
-        //                found = true;
-        //            }
-        //        }
-
-        //        if (found == false) {
-
-        //            obj.AddToList(eObj.objectID, eObj.objectPrefab);
-        //        }
-        //    }
-
-        //    //Create buttons for all levelEditorObjects 
-
-        //}
         public void ClearLevel()
         {
             foreach (LevelObjects obj in o)

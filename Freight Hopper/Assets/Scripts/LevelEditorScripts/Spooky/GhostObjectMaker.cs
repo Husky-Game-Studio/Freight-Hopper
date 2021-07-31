@@ -26,7 +26,6 @@ namespace HGSLevelEditor
 
             GameObject ghost = new GameObject("Ghost " + objectSpawn.name);
 
-
             ghost.transform.position = objectSpawn.transform.position;
             // Check parent for mesh filter, copy it, save its location and move the new parent to location
             if (objectSpawn.GetComponent<MeshFilter>() != null)
@@ -48,13 +47,13 @@ namespace HGSLevelEditor
                 CopyMeshes(objectSpawn, ghost);
 
 
-                ghost.AddComponent<LevelObjectInfo>();
-
-                Debug.Log("Object ID for debug: " + objectSpawn.GetComponent<LevelObjectInfo>().objID);
-            
+            ghost.AddComponent<LevelObjectInfo>();
 
             ghost.GetComponent<LevelObjectInfo>().data = objectSpawn.GetComponent<LevelObjectInfo>().GetObject();
             ghost.GetComponent<LevelObjectInfo>().SetID(objectSpawn.GetComponent<LevelObjectInfo>().objID);
+
+
+            Debug.Log("Object ID for debug: " + ghost.GetComponent<LevelObjectInfo>().objID);
 
             return ghost;
             
