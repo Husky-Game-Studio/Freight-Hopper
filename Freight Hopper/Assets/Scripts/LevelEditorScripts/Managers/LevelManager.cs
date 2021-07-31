@@ -10,7 +10,8 @@ namespace HGSLevelEditor
 
         public List<LevelObjects> o = new List<LevelObjects>();
         public int index;
-        public Text levelText; 
+        public Text levelText;
+        public Material sky; 
 
         //This variable is what allows the level to be played within the 'Play' scene 
         //and also allows the level to reload when the user exits the 'Play' scene 
@@ -24,6 +25,8 @@ namespace HGSLevelEditor
 
         void Awake()
         {
+
+            RenderSettings.skybox = sky;
             //Needed to do this because I believe the cursor.visible was set to false when the user hits 'Play',
             //So the cursor would be gone when the user returned to the editor.
             Cursor.lockState = CursorLockMode.None;
