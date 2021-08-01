@@ -22,11 +22,13 @@ public class FollowPathState : BasicState
     {
         pathCreator = trainFSM.GetCurrentPathObject().pathCreator;
         railLinker = pathCreator.GetComponent<TrainRailLinker>();
-        t = trainFSM.GetClosestTValueOnCurrentPath();
+
         foreach (Cart cart in trainFSM.carts)
         {
-            railLinker.Link(cart.rb, t);
+            float tValueForCart = trainFSM.GetClosestTValueOnCurrentPath(cart.rb.position);
+            railLinker.Link(cart.rb, tValueForCart);
         }
+        t = trainFSM.GetClosestTValueOnCurrentPath(trainFSM.carts.First.Value.rb.position);
         endOfPath = false;
         if (trainFSM.InstantlyAccelerate && trainFSM.Starting)
         {

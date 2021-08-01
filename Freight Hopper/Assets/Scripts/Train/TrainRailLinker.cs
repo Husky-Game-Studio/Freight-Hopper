@@ -55,7 +55,7 @@ public class TrainRailLinker : MonoBehaviour
 
     private void AdjustT(TrainData trainObject)
     {
-        //Debug.DrawLine(trainObject.rb.position, TargetPos(trainObject.t));
+        Debug.DrawLine(trainObject.rb.position, TargetPos(trainObject.t));
         while ((TargetPos(trainObject.t) - trainObject.rb.transform.position).magnitude < followDistance)
         {
             trainObject.t += 0.01f;
