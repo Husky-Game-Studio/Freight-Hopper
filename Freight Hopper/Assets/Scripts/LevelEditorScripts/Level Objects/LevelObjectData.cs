@@ -15,6 +15,11 @@ namespace HGSLevelEditor
         public float rotX;
         public float rotY;
         public float rotZ;
+
+        public void SetID(string name)
+        {
+            objectID = name;
+        }
     }
 }
 

@@ -9,9 +9,17 @@ namespace HGSLevelEditor
     {
 
         public List<LevelObjects> o = new List<LevelObjects>();
-        public int index;
-        public Text levelText; 
 
+        // public List<ObjectManager.LevelObject> objectList;// = new List<ObjectManager.LevelObject>();
+        
+        public int index;
+        public Text levelText;
+        public Material sky;
+        //  public LevelEditorObjects objects;
+
+        // private ObjectManager obj; 
+
+      
         //This variable is what allows the level to be played within the 'Play' scene 
         //and also allows the level to reload when the user exits the 'Play' scene 
         public static string levelNameLoad = null;
@@ -24,12 +32,19 @@ namespace HGSLevelEditor
 
         void Awake()
         {
+
+            RenderSettings.skybox = sky;
             //Needed to do this because I believe the cursor.visible was set to false when the user hits 'Play',
             //So the cursor would be gone when the user returned to the editor.
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
             instance = this;
+
+            //obj = ObjectManager.GetInstance();
+            //obj.LevelObjects = ObjectManager.GetInstance().getObjectList();
+//
+            //ObjectUISpawning();
 
             //Will reload the level if the user is coming back from the 'Play' scene 
             if (levelNameLoad != null)
@@ -51,7 +66,7 @@ namespace HGSLevelEditor
                 levelText.text = "New Level Opened";
             }
         }
-     
+
         public void ClearLevel()
         {
             foreach (LevelObjects obj in o)
@@ -80,8 +95,6 @@ namespace HGSLevelEditor
                                                                                                                                                         
             public GameObject obj;
             public List<GameObject> inSceneObjects = new List<GameObject>();
-
-
         }
     }
 }

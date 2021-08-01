@@ -8,8 +8,11 @@ namespace HGSLevelEditor
 {
     public class PlayManager : MonoBehaviour
     {
+        public Material sky; 
+
         void Start()
         {
+            RenderSettings.skybox = sky;
             SaveLoadLevel.GetInstance().LoadButton(LevelManager.levelNameLoad, false);
             AudioListener.volume = 1; 
         }

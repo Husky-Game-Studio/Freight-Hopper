@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3376033112551355086}
   - component: {fileID: 5545337806903874819}
   - component: {fileID: 98317723388589944}
+  - component: {fileID: -7758142423066140396}
   m_Layer: 11
   m_Name: BoxCargo
   m_TagString: landable
@@ -96,3 +97,25 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 939547014813929993, guid: b5e7d6c01e60a6b4c9a3a3669207c47a, type: 3}
+--- !u!114 &-7758142423066140396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6773133878984370838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3d3ea3b8d05304facafa5105be1e76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldRotation: {x: 0, y: 0, z: 0}
+  data:
+    objectID: 
+    posX: 0
+    posY: 0
+    posZ: 0
+    rotX: 0
+    rotY: 0
+    rotZ: 0
+  objID: cargo

@@ -266,6 +266,7 @@ MonoBehaviour:
     worldSeriesName: 
     worldID: 1
     levelID: 1
+  playerSpawnTransform: {fileID: 0}
   levelData:
     nextLevelStatus: 2
     spawnPosition: {x: 0, y: 66.5, z: -1}
@@ -364,11 +365,11 @@ RectTransform:
   m_Father: {fileID: 1277680914}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -880, y: -356}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 31, y: 194}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &1023512532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e398c3709ee9ebe47be49434d7300e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sky: {fileID: 2100000, guid: 38a0c2e255048324abb0f6b8d41034c6, type: 2}
 --- !u!4 &1087390267
 Transform:
   m_ObjectHideFlags: 0
@@ -592,6 +594,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9202951311870247275, guid: 7c61f5b5dca269e47a69729a63a75437, type: 3}
+      propertyPath: objID
+      value: floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202951311870247275, guid: 7c61f5b5dca269e47a69729a63a75437, type: 3}
+      propertyPath: data.objectID
+      value: floor
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c61f5b5dca269e47a69729a63a75437, type: 3}
 --- !u!1 &1277680910
@@ -741,7 +751,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: ba1cc8458e9e7c945ad5c68265562543, type: 2}
+  sharedProfile: {fileID: 0}
 --- !u!1 &1399747393
 GameObject:
   m_ObjectHideFlags: 0

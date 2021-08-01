@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 2786220255080547963}
   - component: {fileID: 9103727080628682009}
   - component: {fileID: 8007451877953267211}
+  - component: {fileID: -8321105422209597799}
   m_Layer: 11
   m_Name: BillBoardB
   m_TagString: landable
@@ -307,6 +308,28 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1062125384027826175, guid: 0c177f6a5d1eeaa4e94b05876c50cd7a, type: 3}
+--- !u!114 &-8321105422209597799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078174702721354088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3d3ea3b8d05304facafa5105be1e76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldRotation: {x: 0, y: 0, z: 0}
+  data:
+    objectID: 
+    posX: 0
+    posY: 0
+    posZ: 0
+    rotX: 0
+    rotY: 0
+    rotZ: 0
+  objID: billboard
 --- !u!1 &7228188530146469468
 GameObject:
   m_ObjectHideFlags: 0
