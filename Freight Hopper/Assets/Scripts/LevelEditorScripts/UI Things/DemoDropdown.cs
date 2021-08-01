@@ -36,22 +36,22 @@ public class DemoDropdown : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        // Cube 
-        if (gameDropdown.value == (int)Meshes.TrainHead)
-        {
-            gameDropdown.value = 0;
-            ghost.SpawnGhost(trainHead);
-        }
-        else if (gameDropdown.value == (int)Meshes.Turret)
-        {
-            gameDropdown.value = 0;
-            ghost.SpawnGhost(turret);
-        }
-        else if (gameDropdown.value == (int)Meshes.FlatRock) {
+        //// Cube 
+        //if (gameDropdown.value == (int)Meshes.TrainHead)
+        //{
+        //    gameDropdown.value = 0;
+        //    ghost.SpawnGhost(trainHead);
+        //}
+        //else if (gameDropdown.value == (int)Meshes.Turret)
+        //{
+        //    gameDropdown.value = 0;
+        //    ghost.SpawnGhost(turret);
+        //}
+        //else if (gameDropdown.value == (int)Meshes.FlatRock) {
             
-            gameDropdown.value = 0;
-            ghost.SpawnGhost(flatRock);
-        }
+        //    gameDropdown.value = 0;
+        //    ghost.SpawnGhost(flatRock);
+        //}
 
     }
 }

@@ -13,6 +13,8 @@ namespace HGSLevelEditor
         public Transform LoadLevelButtons;
         public GameObject loadLevelButtonPrefab;
 
+        [SerializeField] private GameObject menu;
+
         //Helps access all level names within the 'Streaming Assets' folder -- in order to create a button for each of the levels.  
         SaveLoadLevel level;
        
@@ -26,13 +28,26 @@ namespace HGSLevelEditor
             CreateUIButtonsForLevels();
         }
 
+        //Creates a button for each level
         void CreateUIButtonsForLevels()
         {
-            //Creates a button for each level
+            //Prevents function from making a button for the .meta file
+            //Searching for .meta code referenced from: https://forum.unity.com/threads/searching-a-string-for-a-string.25878/ 
             foreach (string name in level.allLevels)
             {
-               if (name != "temp") {
+                int found;
+                int check = 0;
+                for (int i = 0; i < name.Length; i++) {
 
+                    found = name.IndexOf("meta", i);
+                    if (found > 0)
+                    {
+                        check++;
+                        i = found;
+                    }
+                }
+                if (name != "temp" && check == 0)
+                {
                     GameObject buttons = Instantiate(loadLevelButtonPrefab) as GameObject;
                     buttons.transform.SetParent(LoadLevelButtons);
 
@@ -41,6 +56,9 @@ namespace HGSLevelEditor
                     Debug.Log(name + "Checking");
                     levelButton.SetText(name);
 
+                }
+                else {
+                    Debug.Log("welp");
                 }
             }
         }
@@ -52,11 +70,13 @@ namespace HGSLevelEditor
             {
 
                 CloseLoadLevelButtons();
+                menu.SetActive(false);
 
             }
             else
             {
                 OpenLoadLevelButtons();
+                menu.SetActive(true);
             }
 
         }

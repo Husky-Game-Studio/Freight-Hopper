@@ -41,5 +41,6 @@ public class ExitIteration3 : MonoBehaviour
     public void SetInactive() {
 
         validatingMenu.SetActive(false);
+        LoadLevelUI.levelSelect = null;
     }
 }
