@@ -8,8 +8,10 @@ using System.IO;
 
 public class LoadLevelUI : MonoBehaviour
 {
+    
     [SerializeField] private Text txt;
     public string levelName;
+    public static string levelSelect;  
 
     [SerializeField] private GameObject validatingMenu;
 
@@ -18,6 +20,7 @@ public class LoadLevelUI : MonoBehaviour
 
         File.Delete(Application.streamingAssetsPath + "/Levels" + "/" + LevelManager.levelNameLoad);
         GridLoadLevelUI.GetInstance().ReloadLevels();
+        levelSelect = null; 
         SetMenu();
     }
 
@@ -28,6 +31,7 @@ public class LoadLevelUI : MonoBehaviour
         SceneManager.LoadScene("LevelEditorIteration3");
         SaveLoadLevel.GetInstance().LoadButton(LevelManager.levelNameLoad, true);
         GridLoadLevelUI.GetInstance().CloseLoadLevelButtons();
+        levelSelect = null; 
         //LevelManager.levelNameLoad = levelName;
     }
 
@@ -38,6 +42,7 @@ public class LoadLevelUI : MonoBehaviour
     public void SetLevelName() {
 
         LevelManager.levelNameLoad = levelName;
+        levelSelect = levelName;
         Debug.Log ("levelName selected: " + LevelManager.levelNameLoad);
     }
 
@@ -50,6 +55,7 @@ public class LoadLevelUI : MonoBehaviour
         else {
 
             validatingMenu.SetActive(false);
+            levelSelect = null; 
         }
     }
 }
