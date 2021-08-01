@@ -188,9 +188,14 @@ namespace HGSLevelEditor
 
         public void DeleteObject() {
 
-            if (mSelectedObject != null) {
+            if (mSelectedObject != null && mSelectedObject.transform.parent != null)
+            {
 
                 Destroy(mSelectedObject.transform.parent.gameObject);
+            }
+            else if (mSelectedObject != null) {
+
+                Destroy(mSelectedObject.gameObject);
             }
         
         }
