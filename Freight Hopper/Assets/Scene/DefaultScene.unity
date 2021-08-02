@@ -1503,11 +1503,15 @@ MonoBehaviour:
     relativeHorizontalVelocity: {x: 0, y: 0, z: 0}
     relativeHorizontalSpeed: 0
   groundController:
-    speedLimit: 25
+    speedLimit:
+      value: 25
+    speedLimitIncreaseValue: 1
     deltaAngle: 0.02
     acceleration: 80
   airController:
-    speedLimit: 7
+    speedLimit:
+      value: 7
+    speedLimitIncreaseValue: 0.5
     deltaAngle: 0.015
     acceleration: 20
 --- !u!114 &1798020245
