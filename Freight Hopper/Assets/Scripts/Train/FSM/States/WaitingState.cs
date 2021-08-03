@@ -29,6 +29,10 @@ public class WaitingState : BasicState
             return !waitTime.TimerActive() ||
                 Vector3.Distance(playerTransform.position, locomotive.position) <= trainFSM.StartWhenDistanceFromPlayer.value;
         }
+        if (trainFSM.StartOnTriggerEnter.Enabled && trainFSM.StartOnTriggerEnter.value != null)
+        {
+            return trainFSM.IsTriggerEntered;
+        }
         return true;
     }
 
@@ -43,6 +47,18 @@ public class WaitingState : BasicState
         {
             playerTransform = Player.Instance.transform;
             locomotive = trainFSM.transform;
+        }
+        if (trainFSM.StartOnTriggerEnter.Enabled && trainFSM.StartOnTriggerEnter.value != null)
+        {
+            trainFSM.StartOnTriggerEnter.value.triggered += trainFSM.EnteredTrigger;
+        }
+    }
+
+    public override void ExitState()
+    {
+        if (trainFSM.StartOnTriggerEnter.Enabled && trainFSM.StartOnTriggerEnter.value != null)
+        {
+            trainFSM.StartOnTriggerEnter.value.triggered -= trainFSM.EnteredTrigger;
         }
     }
 
