@@ -1563,7 +1563,7 @@ MonoBehaviour:
   preventConsumption: 0
   wallCheckDistance: 2
   detectionLayerSpacing: 0.75
-  wallrunCameraTilt: 4
+  wallrunCameraTilt: 3
   validWalls:
     serializedVersion: 2
     m_Bits: 2049
@@ -1584,6 +1584,12 @@ MonoBehaviour:
     duration: 0.5
     current: 0
   inAirCooldown:
+    duration: 0.15
+    current: 0
+  entryEffectsCooldown:
+    duration: 0.1
+    current: 0
+  exitEffectsCooldown:
     duration: 0.1
     current: 0
   wallStatus: 000000

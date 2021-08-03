@@ -30,6 +30,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     [SerializeField] private GameObject defaultCrosshair;
     [SerializeField] private GameObject grappleCrosshair;
+    private FirstPersonCamera cameraController;
     public Timer initialGroundPoundBurstCoolDown;
 
     // Input Components
@@ -40,6 +41,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
+        cameraController = Camera.main.GetComponent<FirstPersonCamera>();
         transitionHandler = new PlayerStatesTransitions(this);
 
         // Default
@@ -223,6 +225,17 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         {
             abilities.jumpBehavior.coyoteeTimer.CountDownFixed();
             abilities.wallRunBehavior.inAirCooldown.CountDownFixed();
+        }
+
+        abilities.wallRunBehavior.entryEffectsCooldown.CountDownFixed();
+
+        if (currentState != wallRunState)
+        {
+            abilities.wallRunBehavior.exitEffectsCooldown.CountDownFixed();
+            if (!abilities.wallRunBehavior.exitEffectsCooldown.TimerActive())
+            {
+                cameraController.ResetUpAxis();
+            }
         }
 
         if (UserInput.Instance.Move().IsZero() && (currentState != groundPoundState || currentState != grapplePoleGroundPoundState))

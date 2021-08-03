@@ -28,6 +28,8 @@ public partial class WallRunBehavior : AbilityBehavior
     public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
     public Timer inAirCooldown = new Timer(0.1f);
+    public Timer entryEffectsCooldown = new Timer(0.1f);
+    public Timer exitEffectsCooldown = new Timer(0.1f);
 
     private Vector3 jumpDirection;
     private Vector3 wallJumpWallDirection;
@@ -51,7 +53,9 @@ public partial class WallRunBehavior : AbilityBehavior
         {
             new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 0, 0),
             new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, -detectionLayerSpacing, 0),
-            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, detectionLayerSpacing, 0)
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, -detectionLayerSpacing/2, 0),
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, detectionLayerSpacing, 0),
+            new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, detectionLayerSpacing/2, 0)
         };
     }
 
@@ -113,7 +117,10 @@ public partial class WallRunBehavior : AbilityBehavior
     public override void EntryAction()
     {
         base.EntryAction();
-        StopPlayerFalling(physicsManager);
+        if (!entryEffectsCooldown.TimerActive())
+        {
+            StopPlayerFalling(physicsManager);
+        }
     }
 
     public void WallClimb()
@@ -128,7 +135,6 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public void WallJumpInitial()
     {
-        cameraController.ResetUpAxis();
         soundManager.Play("WallJump");
 
         Vector3 sumNormals = Vector3.zero;
@@ -174,7 +180,11 @@ public partial class WallRunBehavior : AbilityBehavior
     {
         soundManager.Play("WallSkid");
         Vector3 forward = Vector3.Cross(right, up);
-        cameraController.TiltUpAxis(forward * wallrunCameraTilt);
+        if (!entryEffectsCooldown.TimerActive())
+        {
+            cameraController.TiltUpAxis(forward * wallrunCameraTilt);
+        }
+
         physicsManager.rb.AddForce(right * rightForce, ForceMode.Acceleration);
         physicsManager.rb.AddForce(up * upwardsForce, ForceMode.Acceleration);
     }
@@ -188,6 +198,7 @@ public partial class WallRunBehavior : AbilityBehavior
     public override void ExitAction()
     {
         soundManager.Stop("WallSkid");
-        cameraController.ResetUpAxis();
+        exitEffectsCooldown.ResetTimer();
+        entryEffectsCooldown.ResetTimer();
     }
 }
