@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Space
   m_EditorClassIdentifier: 
   groupingName: 
-  filename: Sky
+  filename: Space
   clip: {fileID: 8300000, guid: afd85b89ffda9db4ab59c5cf8f029989, type: 3}
   volume: 1
+  fadeInTime: 0
+  fadeOutTime: 0
   volumeVarience: 0
   pitch: 1
   pitchVarience: 0
   isLoop: 1
   hasCooldown: 0
+  spatialBlend: 0
   delay: 0
   priority: 0
-  source: {fileID: 0}
+  componentAudioSource: {fileID: 0}
