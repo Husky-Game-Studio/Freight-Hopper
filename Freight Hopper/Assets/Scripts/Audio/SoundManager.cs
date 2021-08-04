@@ -9,6 +9,7 @@ using System.Collections;
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] protected AudioMixerGroup mixerGroup;
+    public AudioMixerGroup MixerGroup => mixerGroup;
     [SerializeField] protected SoundCollection[] sounds;
     protected Dictionary<string, float> soundTimerDictionary = new Dictionary<string, float>();
 

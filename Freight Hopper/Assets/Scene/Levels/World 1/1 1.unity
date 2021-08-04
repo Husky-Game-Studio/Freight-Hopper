@@ -5990,7 +5990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0334666c12df1840acf986fc95f46ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mixerGroup: {fileID: 24300002, guid: b2d2e8b2ecfedfb47a1a12058ce7f03f, type: 2}
+  mixerGroup: {fileID: 24300002, guid: 5eef3eb77482a3344b993dfaac526615, type: 2}
   sounds:
   - {fileID: 11400000, guid: fe9588bcb251e864f9d91a7b3306d3f5, type: 2}
   currentSongName: 1
@@ -8095,6 +8095,7 @@ GameObject:
   - component: {fileID: 1782250787}
   - component: {fileID: 1782250786}
   - component: {fileID: 1782250785}
+  - component: {fileID: 1782250790}
   m_Layer: 0
   m_Name: Player Enter Trigger
   m_TagString: Untagged
@@ -8116,7 +8117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerOnPlayerEnter: 1
   triggerOnGameObjectEnter:
-    enabled: 1
+    enabled: 0
     value: {fileID: 0}
 --- !u!65 &1782250786
 BoxCollider:
@@ -8129,7 +8130,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1, z: 0.09}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1782250787
 MeshRenderer:
@@ -8188,12 +8189,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1782250784}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -6.520001, y: 62, z: -0.78000116}
+  m_LocalPosition: {x: -4.84, y: 61.4, z: -0.78}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 563024089}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782250790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782250784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dc2f9779d179ba48a6648b2673c3cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mixerToFadeInto: {fileID: 24300002, guid: b2d2e8b2ecfedfb47a1a12058ce7f03f, type: 2}
 --- !u!1001 &1784622720
 PrefabInstance:
   m_ObjectHideFlags: 0
