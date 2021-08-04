@@ -25,7 +25,8 @@ public class TurretTransitionsHandler
     {
         if (Physics.Raycast(turretFSM.GetRay(), out RaycastHit hit, Mathf.Infinity, turretFSM.targetedLayers))
         {
-            if (hit.rigidbody != null && hit.rigidbody.CompareTag("Player")) {
+            // the target must have a collision
+            if (hit.transform.gameObject.Equals(turretFSM.getTarget())) {
                 return turretFSM.targetState;
             }
         }
@@ -36,7 +37,7 @@ public class TurretTransitionsHandler
     {
         if (Physics.Raycast(turretFSM.GetRay(), out RaycastHit hit, Mathf.Infinity, turretFSM.targetedLayers))
         {
-            if ((hit.rigidbody != null && !hit.rigidbody.CompareTag("Player")) || (hit.rigidbody == null))
+            if (!(hit.transform.gameObject.Equals(turretFSM.getTarget())))
             {
                 return turretFSM.searchState;
             }
