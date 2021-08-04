@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 [ExecuteInEditMode]
 public class TerrainBuilder : MonoBehaviour
@@ -16,6 +17,7 @@ public class TerrainBuilder : MonoBehaviour
     [ContextMenu("Generate")]
     public void Generate()
     {
+        Undo.RegisterCompleteObjectUndo(this, "Generate Terrain");
         Clear();
 
         for (int x = 0; x < size.x; x++)
@@ -34,8 +36,10 @@ public class TerrainBuilder : MonoBehaviour
     [ContextMenu("Clear")]
     public void Clear()
     {
-        foreach (GameObject go in builtTerrain)
+        Undo.RegisterCompleteObjectUndo(this, "Clear Terrain");
+        for (int i = 0; i < builtTerrain.Count; i++)
         {
+            GameObject go = builtTerrain[i];
             if (go != null)
             {
                 Undo.DestroyObjectImmediate(go);
@@ -43,6 +47,7 @@ public class TerrainBuilder : MonoBehaviour
         }
 
         builtTerrain.Clear();
+        this.transform.DestroyImmediateChildren();
     }
 
 #endif
