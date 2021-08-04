@@ -43,9 +43,9 @@ public class TrainBuilder : MonoBehaviour
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCargos
     {
+        None,
         BoxCargo,
         PillCargo,
-        None,
     }
 
     // This order matters, if this is different from the model order for the list this WON'T work
@@ -367,7 +367,7 @@ public class TrainBuilder : MonoBehaviour
     {
         if (cart.cargoIDs.Count > 0 && (TrainCargos)cart.cargoIDs[index] != TrainCargos.None)
         {
-            GameObject cargoModelPrefab = cargoPrefabs[cart.cargoIDs[index]];
+            GameObject cargoModelPrefab = cargoPrefabs[cart.cargoIDs[index] - 1];
             GameObject cargoModel = PrefabUtility.InstantiatePrefab(cargoModelPrefab) as GameObject;
 
             cargoModel.transform.rotation = this.transform.rotation;
