@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4613969863532683886}
   - component: {fileID: 5348583671179059749}
   - component: {fileID: 1885079889544794213}
+  - component: {fileID: 1169336029470056017}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -111,6 +112,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1169336029470056017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295446575559753134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &1118725268560973002
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +139,7 @@ GameObject:
   - component: {fileID: 4972229590071469504}
   - component: {fileID: 4292851931722716406}
   - component: {fileID: 5730513167704024910}
+  - component: {fileID: 8898144106300282820}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -222,6 +238,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &8898144106300282820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118725268560973002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &1598451536138985450
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,6 +265,7 @@ GameObject:
   - component: {fileID: 6778664836895335768}
   - component: {fileID: 119973424012120838}
   - component: {fileID: 2336154311867080605}
+  - component: {fileID: 1199339478003796692}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -333,6 +364,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1199339478003796692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598451536138985450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &2103053639115747620
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,6 +424,7 @@ GameObject:
   - component: {fileID: 8438934623351992723}
   - component: {fileID: 1658408518176667543}
   - component: {fileID: 7058347998874064348}
+  - component: {fileID: 7214077784497556815}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -477,6 +523,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &7214077784497556815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2148472851453433567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &2295554641324844465
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +700,7 @@ GameObject:
   - component: {fileID: 6830424731346132739}
   - component: {fileID: 8420336168810404156}
   - component: {fileID: 4492665391291699097}
+  - component: {fileID: 2250548277183187264}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -738,6 +799,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2250548277183187264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196053472271388093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &5455848893664732037
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +859,7 @@ GameObject:
   - component: {fileID: 2592367503219564518}
   - component: {fileID: 8848564023684417683}
   - component: {fileID: 5096954821576466772}
+  - component: {fileID: 2812073219304495754}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -882,6 +958,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2812073219304495754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6040841346631693745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &6958998697363583914
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,6 +1018,7 @@ GameObject:
   - component: {fileID: 5094921431621649769}
   - component: {fileID: 6251070269076038781}
   - component: {fileID: 3344663229772989474}
+  - component: {fileID: 8568910743329867651}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -1026,6 +1117,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &8568910743329867651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8114772842256786168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &8451116307725641755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,6 +1177,7 @@ GameObject:
   - component: {fileID: 8989609228795862784}
   - component: {fileID: 6798111087662631623}
   - component: {fileID: 3998233112800682763}
+  - component: {fileID: 4643932483608890662}
   m_Layer: 14
   m_Name: tempLaser
   m_TagString: Untagged
@@ -1170,6 +1276,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4643932483608890662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8477476417968350073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killDuration: 0
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &9063932505107874794
 GameObject:
   m_ObjectHideFlags: 0

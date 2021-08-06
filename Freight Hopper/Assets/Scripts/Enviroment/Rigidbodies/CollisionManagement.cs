@@ -10,7 +10,7 @@ public class CollisionManagement
     [System.NonSerialized] private bool aerial;
 
     [SerializeField] private float maxSlope = 60;
-    [SerializeField] private Timer unlandableSurfaceDuration;
+    [ReadOnly, SerializeField] private AutomaticTimer unlandableSurfaceDuration;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
@@ -49,9 +49,20 @@ public class CollisionManagement
         contactNormal.UpdateOld();
 
         component.StartCoroutine(LateFixedUpdate());
+        unlandableSurfaceDuration.Subscribe(KillPlayer);
+    }
+
+    ~CollisionManagement()
+    {
+        unlandableSurfaceDuration.Unsubscribe(KillPlayer);
     }
 
     private bool touchedUnlandable = false;
+
+    private void KillPlayer()
+    {
+        LevelController.Instance.Respawn();
+    }
 
     private void EvaulateCollisions(Collision collision)
     {
@@ -68,11 +79,15 @@ public class CollisionManagement
 
             if (!collision.gameObject.CompareTag("landable") && rb.gameObject.CompareTag("Player"))
             {
+                SurfaceProperties surfaceProperties = collision.gameObject.GetComponent<SurfaceProperties>();
+                if (surfaceProperties != null && surfaceProperties.KillInstantly)
+                {
+                    KillPlayer();
+                }
                 touchedUnlandable = true;
                 continue;
             }
 
-            // Is Vector3.angle efficient?
             float collisionAngle = Vector3.Angle(normal, upAxis);
             if (collisionAngle <= maxSlope)
             {
@@ -132,11 +147,7 @@ public class CollisionManagement
 
             if (touchedUnlandable && rb.CompareTag("Player"))
             {
-                unlandableSurfaceDuration.CountDown(Time.fixedDeltaTime);
-                if (!unlandableSurfaceDuration.TimerActive())
-                {
-                    LevelController.Instance.Respawn();
-                }
+                unlandableSurfaceDuration.Update(Time.fixedDeltaTime);
             }
             else
             {

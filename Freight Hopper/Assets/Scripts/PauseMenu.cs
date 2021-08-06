@@ -40,8 +40,11 @@ public class PauseMenu : MonoBehaviour
         menu.SetActive(true);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        lastAudioMixer = MusicManager.Instance.MixerGroup;
-        MusicManager.Instance.ChangeMixer(pausedAudioMixer);
+        if (MusicManager.Instance != null)
+        {
+            lastAudioMixer = MusicManager.Instance.MixerGroup;
+            MusicManager.Instance.ChangeMixer(pausedAudioMixer);
+        }
     }
 
     public void ContinueGame()
@@ -51,7 +54,10 @@ public class PauseMenu : MonoBehaviour
         menu.SetActive(false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        MusicManager.Instance.ChangeMixer(lastAudioMixer);
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.ChangeMixer(lastAudioMixer);
+        }
     }
 
     public void ExitToMenu()
