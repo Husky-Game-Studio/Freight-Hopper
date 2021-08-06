@@ -66,7 +66,7 @@ public class WaitingState : BasicState
     {
         if (trainFSM.StartWaitTime.Enabled)
         {
-            waitTime.CountDownFixed();
+            waitTime.CountDown(Time.fixedDeltaTime);
         }
     }
 

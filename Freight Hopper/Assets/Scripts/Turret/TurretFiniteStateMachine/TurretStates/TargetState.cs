@@ -22,7 +22,7 @@ public class TargetState : BasicState
     {
         ContructorHelper(turretMachineCenter);
     }
-    
+
     public TargetState(TurretMachineCenter turretMachineCenter, List<Func<BasicState>> stateTransitions) : base(turretMachineCenter, stateTransitions)
     {
         ContructorHelper(turretMachineCenter);
@@ -65,7 +65,7 @@ public class TargetState : BasicState
     {
         Vector3 direction = theTargetTransform.position - turretTransform.position;
         RotateToTarget(direction);
-        countDownToTimer.CountDownFixed();
+        countDownToTimer.CountDown(Time.fixedDeltaTime);
     }
 
     private void RotateToTarget(Vector3 direction)
@@ -75,7 +75,7 @@ public class TargetState : BasicState
         Quaternion barrelRotation = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z), Vector3.up);
         barrelBaseTransform.rotation = Quaternion.Lerp(barrelBaseTransform.rotation, barrelRotation, speedOfRotation * Time.fixedDeltaTime);
     }
-    
+
     public override void ExitState()
     {
         countDownToTimer.DeactivateTimer();

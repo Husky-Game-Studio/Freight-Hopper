@@ -156,7 +156,7 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public void WallJumpContinous()
     {
-        jumpHoldingTimer.CountDownFixed();
+        jumpHoldingTimer.CountDown(Time.fixedDeltaTime);
         physicsManager.rb.AddForce(jumpContinousPush * jumpDirection, ForceMode.Acceleration);
         physicsManager.rb.AddForce(jumpContinousUpForce * physicsManager.collisionManager.ValidUpAxis, ForceMode.Acceleration);
     }

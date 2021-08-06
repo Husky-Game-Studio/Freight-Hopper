@@ -286,6 +286,6 @@ public class Wind : MonoBehaviour
             updateDuration.ResetTimer();
             UpdateWind();
         }
-        updateDuration.CountDownFixed();
+        updateDuration.CountDown(Time.fixedDeltaTime);
     }
 }

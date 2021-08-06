@@ -1,26 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class Timer
 {
-    public float duration;
-    public float current;
+    [SerializeField] private float duration;
+    public float Duration => duration;
+    [SerializeField, ReadOnly] private float current;
+    public float Current => current;
 
-    /// <summary>
-    /// Initailizes duration and sets current to 0
-    /// </summary>
-    /// <param name="duration">duration timer lasts</param>
+    // Initailizes duration and sets current to 0
     public Timer(float duration)
     {
         this.duration = duration;
         current = 0f;
     }
 
-    /// <summary>
-    /// Sets current to duration
-    /// </summary>
+    // Sets current to duration
     public void ResetTimer()
     {
         if (current != duration)
@@ -29,33 +24,21 @@ public class Timer
         }
     }
 
-    /// <summary>
-    /// Sets current to 0
-    /// </summary>
+    // Sets current to 0
     public void DeactivateTimer()
     {
         current = 0f;
     }
 
-    /// <summary>
-    /// checks if current > 0
-    /// </summary>
+    // Checks if current > 0
     public bool TimerActive()
     {
         return current > 0;
     }
 
-    /// <summary>
-    /// Decrements timer by Time.deltatime
-    /// </summary>
-    public void CountDown()
+    // Decrements timer by amount, usually Time.fixedDeltaTime or Time.deltaTime
+    public void CountDown(float amount)
     {
-        current -= Time.deltaTime;
-    }
-
-    // Count down with Fixed update
-    public void CountDownFixed()
-    {
-        current -= Time.fixedDeltaTime;
+        current -= amount;
     }
 }

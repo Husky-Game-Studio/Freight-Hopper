@@ -31,7 +31,7 @@ public class DoubleJumpState : PlayerState
     public override void PerformBehavior()
     {
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
-        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.CountDownFixed();
+        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.CountDown(UnityEngine.Time.fixedDeltaTime);
         playerMachineCenter.abilities.movementBehavior.MoveAction();
         playerMachineCenter.abilities.doubleJumpBehavior.Action();
     }

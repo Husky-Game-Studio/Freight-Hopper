@@ -271,7 +271,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         if (trainDerailed && deleteOnDerail)
         {
-            timerToDelete.CountDown();
+            timerToDelete.CountDown(Time.deltaTime);
         }
 
         if (!timerToDelete.TimerActive())

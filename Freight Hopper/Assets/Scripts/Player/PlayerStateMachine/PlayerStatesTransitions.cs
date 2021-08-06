@@ -140,7 +140,7 @@ public class PlayerStatesTransitions
                 playerMachine.wallRunState.GetPlayerSubStateMachineCenter().currentState != playerMachine.wallRunState.GetSubStateArray()[1]
                 ) || UserInput.Instance.Move().z != 1)
             {
-                playerMachine.abilities.wallRunBehavior.coyoteTimer.CountDownFixed();
+                playerMachine.abilities.wallRunBehavior.coyoteTimer.CountDown(Time.fixedDeltaTime);
                 if (!playerMachine.abilities.wallRunBehavior.coyoteTimer.TimerActive())
                 {
                     playerMachine.abilities.wallRunBehavior.coyoteTimer.ResetTimer();
