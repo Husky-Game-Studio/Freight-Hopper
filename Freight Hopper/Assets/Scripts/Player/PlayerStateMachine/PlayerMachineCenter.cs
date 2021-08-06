@@ -223,15 +223,15 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         }
         else
         {
-            abilities.jumpBehavior.coyoteeTimer.CountDownFixed();
-            abilities.wallRunBehavior.inAirCooldown.CountDownFixed();
+            abilities.jumpBehavior.coyoteeTimer.CountDown(Time.fixedDeltaTime);
+            abilities.wallRunBehavior.inAirCooldown.CountDown(Time.fixedDeltaTime);
         }
 
-        abilities.wallRunBehavior.entryEffectsCooldown.CountDownFixed();
+        abilities.wallRunBehavior.entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
 
         if (currentState != wallRunState)
         {
-            abilities.wallRunBehavior.exitEffectsCooldown.CountDownFixed();
+            abilities.wallRunBehavior.exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
             if (!abilities.wallRunBehavior.exitEffectsCooldown.TimerActive())
             {
                 cameraController.ResetUpAxis();
@@ -249,7 +249,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         }
 
         GrappleFiring();
-        initialGroundPoundBurstCoolDown.CountDownFixed();
+        initialGroundPoundBurstCoolDown.CountDown(Time.fixedDeltaTime);
         if (abilities.grapplePoleBehavior.UnlockedAndReady)
         {
             SetCrosshair(abilities.grapplePoleBehavior.CanReachSurface());
@@ -274,7 +274,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         }
         if (abilities.jumpBehavior.jumpBufferTimer.TimerActive())
         {
-            abilities.jumpBehavior.jumpBufferTimer.CountDownFixed();
+            abilities.jumpBehavior.jumpBufferTimer.CountDown(Time.fixedDeltaTime);
         }
     }
 

@@ -39,7 +39,7 @@ public class Debugging : MonoBehaviour
                 horizontalSpeedText.text = "HSpeed: " + movementBehavior.HorizontalSpeed.ToString("0.00") + " m/s";
             }
 
-            refreshSpeed.CountDown();
+            refreshSpeed.CountDown(Time.deltaTime);
         }
     }
 

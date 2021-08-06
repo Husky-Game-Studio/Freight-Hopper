@@ -132,7 +132,7 @@ public class CollisionManagement
 
             if (touchedUnlandable && rb.CompareTag("Player"))
             {
-                unlandableSurfaceDuration.CountDownFixed();
+                unlandableSurfaceDuration.CountDown(Time.fixedDeltaTime);
                 if (!unlandableSurfaceDuration.TimerActive())
                 {
                     LevelController.Instance.Respawn();
