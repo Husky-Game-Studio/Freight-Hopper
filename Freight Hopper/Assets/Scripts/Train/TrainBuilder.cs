@@ -57,7 +57,8 @@ public class TrainBuilder : MonoBehaviour
         BillBoardLF,
         BillBoardRF,
         BillBoardB,
-        BillBoardF
+        BillBoardF,
+        TurretCart
     }
 
     [System.Serializable]
