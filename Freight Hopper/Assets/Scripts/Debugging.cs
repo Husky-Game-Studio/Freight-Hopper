@@ -32,7 +32,7 @@ public class Debugging : MonoBehaviour
     {
         if (debugGameobject.activeSelf)
         {
-            refreshSpeed.CountDown(Time.deltaTime);
+            refreshSpeed.Update(Time.deltaTime);
         }
     }
 
