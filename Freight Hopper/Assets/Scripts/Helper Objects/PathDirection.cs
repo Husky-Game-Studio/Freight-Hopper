@@ -39,17 +39,6 @@ public class PathDirection
         int precision = 10;
         for (int i = precision; i > 0; i--)
         {
-            /*
-            Vector3 currentPoint = pathObject.GetPositionOnPath(t);
-            float speed = pathObject.GetDeltaPositionOnPath(t).magnitude;
-            float increase = x / speed / i; // x/speed estimates how far x units is in terms of the t variable, i makes the steps towards the prediction smaller (for higher precision values) to minimize error between true arclength and linear distance
-            ChangeT(ref t, increase, out bool enteredNewSegment);
-            //Update variables to assist in next iteration
-            Vector3 nextPoint = pathObject.GetPositionOnPath(t);
-            x -= Mathf.Sign(x) * (nextPoint - currentPoint).magnitude; //Adjust next target distance by how much closer the estimate has come along the path
-            if (enteredNewSegment && x < 0)
-                t -= 0.001f; //Ensure the next iteration of refining the prediction is on the correct segment
-            */
             Iteration(ref t, ref x, i);
         }
         return t;
