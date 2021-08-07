@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 public class BulletBehavior : MonoBehaviour
 {
     private Rigidbody myRB;
-    public float projectileForce;
+    public float projectileForce = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,11 +14,9 @@ public class BulletBehavior : MonoBehaviour
         myRB = this.gameObject.GetComponent<Rigidbody>();
         myRB.AddForce(this.gameObject.transform.forward.normalized * projectileForce, ForceMode.Impulse);
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private void OnCollisionEnter(Collision other)
     {
-        //myRB.AddForce(0, 0, 100f);
-        
+        Destroy(this.gameObject, 0.1f);
     }
 }
