@@ -132,7 +132,7 @@ public class BezierPath
         if (t < 0 || this.NumSegments < t)
         {
             t = Mathf.Clamp(t, 0, this.NumSegments);
-            Debug.LogWarning("For GetPathPoint(t), argument passed into t is outside of the proper index and has been clamped");
+            Debug.LogWarning("For GetPathDeltaPoint(t), argument passed into t is outside of the proper index and has been clamped");
         }
         if (t == this.NumSegments)
         {
