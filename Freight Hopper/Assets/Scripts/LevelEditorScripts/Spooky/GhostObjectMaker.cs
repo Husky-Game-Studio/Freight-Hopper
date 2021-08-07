@@ -69,11 +69,10 @@ namespace HGSLevelEditor
                 {
                     Vector3 globalLocation = oldChild.transform.position;
                     GameObject child = new GameObject(oldChild.name);
-
                     child.transform.position = globalLocation;
                     child.transform.parent = ghost.transform;
                     child.AddComponent<MeshFilter>().mesh = oldChild.transform.gameObject.GetComponent<MeshFilter>().sharedMesh;
-                    child.AddComponent<MeshRenderer>().material = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
+                    child.AddComponent<MeshRenderer>().materials = oldChild.transform.gameObject.GetComponent<MeshRenderer>().sharedMaterials;
                     child.AddComponent<BoxCollider>();
                     child.AddComponent<Outline>();
                     child.GetComponent<Outline>().OutlineWidth = 0.0f;

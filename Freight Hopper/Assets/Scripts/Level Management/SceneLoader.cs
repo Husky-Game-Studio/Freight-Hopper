@@ -22,7 +22,7 @@ public class SceneLoader : MonoBehaviour
     // Loads default scene as an additive scene
     public static void LoadPlayerScene()
     {
-        SceneManager.LoadScene("DefaultScene", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("DefaultScene", LoadSceneMode.Additive);
     }
 
     public static void LoadMenu()

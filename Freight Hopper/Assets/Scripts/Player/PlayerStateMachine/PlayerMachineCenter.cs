@@ -30,6 +30,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     [SerializeField] private GameObject defaultCrosshair;
     [SerializeField] private GameObject grappleCrosshair;
+    private FirstPersonCamera cameraController;
     public Timer initialGroundPoundBurstCoolDown;
 
     // Input Components
@@ -40,6 +41,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
+        cameraController = Camera.main.GetComponent<FirstPersonCamera>();
         transitionHandler = new PlayerStatesTransitions(this);
 
         // Default
@@ -221,8 +223,19 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         }
         else
         {
-            abilities.jumpBehavior.coyoteeTimer.CountDownFixed();
-            abilities.wallRunBehavior.inAirCooldown.CountDownFixed();
+            abilities.jumpBehavior.coyoteeTimer.CountDown(Time.fixedDeltaTime);
+            abilities.wallRunBehavior.inAirCooldown.CountDown(Time.fixedDeltaTime);
+        }
+
+        abilities.wallRunBehavior.entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
+
+        if (currentState != wallRunState)
+        {
+            abilities.wallRunBehavior.exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
+            if (!abilities.wallRunBehavior.exitEffectsCooldown.TimerActive())
+            {
+                cameraController.ResetUpAxis();
+            }
         }
 
         if (UserInput.Instance.Move().IsZero() && (currentState != groundPoundState || currentState != grapplePoleGroundPoundState))
@@ -236,7 +249,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         }
 
         GrappleFiring();
-        initialGroundPoundBurstCoolDown.CountDownFixed();
+        initialGroundPoundBurstCoolDown.CountDown(Time.fixedDeltaTime);
         if (abilities.grapplePoleBehavior.UnlockedAndReady)
         {
             SetCrosshair(abilities.grapplePoleBehavior.CanReachSurface());
@@ -261,7 +274,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         }
         if (abilities.jumpBehavior.jumpBufferTimer.TimerActive())
         {
-            abilities.jumpBehavior.jumpBufferTimer.CountDownFixed();
+            abilities.jumpBehavior.jumpBufferTimer.CountDown(Time.fixedDeltaTime);
         }
     }
 

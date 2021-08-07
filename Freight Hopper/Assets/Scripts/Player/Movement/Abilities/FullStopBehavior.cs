@@ -8,9 +8,9 @@ public class FullStopBehavior : AbilityBehavior
 
     public override void Action()
     {
-        fullstopDuration.CountDownFixed();
+        fullstopDuration.CountDown(Time.fixedDeltaTime);
 
-        float ratio = fullstopDuration.current / fullstopDuration.duration;
+        float ratio = fullstopDuration.Current / fullstopDuration.Duration;
         fullstopEffect.weight = Mathf.Sin(Mathf.PI * ratio);
         physicsManager.rb.velocity = Vector3.zero;
     }

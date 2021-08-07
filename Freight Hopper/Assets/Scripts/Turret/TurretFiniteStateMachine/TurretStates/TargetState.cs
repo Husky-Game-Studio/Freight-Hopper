@@ -11,7 +11,7 @@ using Vector3 = UnityEngine.Vector3;
 public class TargetState : BasicState
 {
     protected TurretMachineCenter turretMachineCenter;
-    private Transform thePlayerTransform;
+    private Transform theTargetTransform;
     private Transform turretTransform;
     private Transform barrelBaseTransform;
     private float speedOfRotation = 5f;
@@ -22,7 +22,7 @@ public class TargetState : BasicState
     {
         ContructorHelper(turretMachineCenter);
     }
-    
+
     public TargetState(TurretMachineCenter turretMachineCenter, List<Func<BasicState>> stateTransitions) : base(turretMachineCenter, stateTransitions)
     {
         ContructorHelper(turretMachineCenter);
@@ -56,16 +56,16 @@ public class TargetState : BasicState
 
     public override void EntryState()
     {
-        thePlayerTransform = turretMachineCenter.thePlayer.transform;
+        theTargetTransform = turretMachineCenter.getTarget().transform;
         countDownToTimer.ResetTimer();
     }
 
     // Rotate Turret to aim at player
     public override void PerformBehavior()
     {
-        Vector3 direction = thePlayerTransform.position - turretTransform.position;
+        Vector3 direction = theTargetTransform.position - turretTransform.position;
         RotateToTarget(direction);
-        countDownToTimer.CountDownFixed();
+        countDownToTimer.CountDown(Time.fixedDeltaTime);
     }
 
     private void RotateToTarget(Vector3 direction)
@@ -75,7 +75,7 @@ public class TargetState : BasicState
         Quaternion barrelRotation = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z), Vector3.up);
         barrelBaseTransform.rotation = Quaternion.Lerp(barrelBaseTransform.rotation, barrelRotation, speedOfRotation * Time.fixedDeltaTime);
     }
-    
+
     public override void ExitState()
     {
         countDownToTimer.DeactivateTimer();

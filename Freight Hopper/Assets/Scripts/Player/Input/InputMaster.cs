@@ -96,7 +96,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""id"": ""80946741-8662-445a-be86-07b62f08ee5b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
+                    ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""Debug"",
@@ -255,7 +255,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""1dd3bb63-6b8b-4020-9b4b-a7c103d99c4f"",
                     ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",

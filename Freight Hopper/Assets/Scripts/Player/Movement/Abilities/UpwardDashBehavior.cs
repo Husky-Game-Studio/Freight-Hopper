@@ -20,7 +20,7 @@ public class UpwardDashBehavior : AbilityBehavior
     public override void Action()
     {
         soundManager.Play("UpwardDashTick");
-        duration.CountDownFixed();
+        duration.CountDown(Time.fixedDeltaTime);
         physicsManager.rb.AddForce(physicsManager.collisionManager.ValidUpAxis * consistentForce, ForceMode.VelocityChange);
         physicsManager.rb.velocity = Vector3.Project(physicsManager.rb.velocity, physicsManager.collisionManager.ValidUpAxis);
     }

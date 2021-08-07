@@ -3,7 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class VelocityController
 {
-    [SerializeField] private float speedLimit;
+    [SerializeField] private Current<float> speedLimit;
+    [SerializeField] private float speedLimitIncreaseValue;
     [SerializeField] private float deltaAngle;
     [SerializeField] private float acceleration;
 
@@ -16,6 +17,7 @@ public class VelocityController
         this.physicsManager = pm;
         this.speedometer = speedometer;
         this.oppositeAngle = oppositeAngle;
+        speedLimit = new Current<float>(speedLimit.value);
     }
 
     public void RotateVelocity(Vector3 input)
@@ -30,13 +32,18 @@ public class VelocityController
         float nextSpeed = ((acceleration * Time.fixedDeltaTime * input) +
             speedometer.HorzVelocity).magnitude;
 
-        if (nextSpeed < speedLimit || nextSpeed < speedometer.HorzSpeed)
+        if (nextSpeed < speedLimit.value || nextSpeed < speedometer.HorzSpeed)
         {
             physicsManager.rb.AddForce(input * acceleration, ForceMode.Acceleration);
+            if (nextSpeed < speedLimit.Stored)
+            {
+                speedLimit.Reset();
+            }
         }
         else
         {
             RotateVelocity(input);
+            speedLimit.value += Time.fixedDeltaTime * speedLimitIncreaseValue;
         }
         if (OppositeInput(input))
         {

@@ -18,8 +18,10 @@ public class TrainStateTransitions
             trainFSM.trainDerailed = true;
             return trainFSM.wander;
         }
-        if (trainFSM.OnFinalPath || trainFSM.StartWaitTime.Enabled ||
-            trainFSM.StartWhenDistanceFromPlayer.Enabled)
+        if (trainFSM.OnFinalPath ||
+            trainFSM.StartWaitTime.Enabled ||
+            trainFSM.StartWhenDistanceFromPlayer.Enabled ||
+            (trainFSM.StartOnTriggerEnter.Enabled && trainFSM.StartOnTriggerEnter.value != null))
         {
             return trainFSM.waiting;
         }

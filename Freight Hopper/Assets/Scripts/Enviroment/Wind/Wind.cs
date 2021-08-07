@@ -11,7 +11,7 @@ public class Wind : MonoBehaviour
     private float rayWidth;
 
     // How often we update the wind info
-    private Timer updateDuration = new Timer(0.1f);
+    private AutomaticTimer updateDuration = new AutomaticTimer(0.1f);
 
     [SerializeField] private Vector3 size;
     [SerializeField] private Vector3 offset;
@@ -91,11 +91,13 @@ public class Wind : MonoBehaviour
     private void OnEnable()
     {
         AddWindPossibleTargets();
+        updateDuration.Subscribe(UpdateWind);
     }
 
     private void OnDisable()
     {
         Player.PlayerLoadedIn -= AddPlayerRigidbody;
+        updateDuration.Unsubscribe(UpdateWind);
     }
 
     public void Enable()
@@ -281,11 +283,7 @@ public class Wind : MonoBehaviour
         {
             ApplyWind();
         }
-        if (!updateDuration.TimerActive())
-        {
-            updateDuration.ResetTimer();
-            UpdateWind();
-        }
-        updateDuration.CountDownFixed();
+
+        updateDuration.Update(Time.fixedDeltaTime);
     }
 }

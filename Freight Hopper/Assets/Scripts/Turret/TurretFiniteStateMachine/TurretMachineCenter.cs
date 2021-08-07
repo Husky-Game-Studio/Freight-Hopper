@@ -2,18 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TurretMachineCenter : FiniteStateMachineCenter
 {
     public InputMaster UserInputMaster => master;
     private InputMaster master;
 
-    // The Player Character and Information
-    public GameObject thePlayer;
+    // The Target and Information
+    [FormerlySerializedAs("targetPlayer")] [SerializeField]private bool targetingPlayer = false;
+    [FormerlySerializedAs("thePlayer")] [SerializeField]private GameObject theTarget;
     private Ray ray;
-    public RaycastHit toPlayerRaycast;
+    //public RaycastHit toPlayerRaycast;
     public LayerMask targetedLayers;
-    public GameObject bullet;
+    [SerializeField]private GameObject bullet;
+    [SerializeField]private float projectileForce = 20;
     public GameObject bulletSpawner;
 
     private TurretTransitionsHandler turretTransitionsHandler;
@@ -60,14 +63,17 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         //targetState = new TargetState(this);
         fireState = new FireState(this);
 
-        if (Player.loadedIn)
+        if (targetingPlayer)
         {
-            SetPlayerReference();
-        }
-        else
-        {
-            Player.PlayerLoadedIn += SetPlayerReference;
-            LevelController.PlayerRespawned += SetPlayerReference;
+            if (Player.loadedIn)
+            {
+                SetPlayerReference();
+            }
+            else
+            {
+                Player.PlayerLoadedIn += SetPlayerReference;
+                LevelController.PlayerRespawned += SetPlayerReference;
+            }
         }
     }
 
@@ -80,10 +86,13 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     // Unsubscribe from any assigned event listeners
     public void OnDisable()
     {
-        thePlayer = null;
-        currentState = defaultState; 
-        Player.PlayerLoadedIn -= SetPlayerReference;
-        LevelController.PlayerRespawned -= SetPlayerReference;
+        theTarget = null;
+        currentState = defaultState;
+        if (targetingPlayer)
+        {
+            Player.PlayerLoadedIn -= SetPlayerReference;
+            LevelController.PlayerRespawned -= SetPlayerReference;
+        }
     }
 
     public void FixedUpdate()
@@ -93,51 +102,66 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     public override void PerformStateIndependentBehaviors()
     {
-        if (thePlayer == null)
+        if (theTarget == null)
         {
-            SetPlayerReference();
+            if (targetingPlayer)
+            {
+                SetPlayerReference();
+            }
         }
         else
         {
             //this.currentState = searchState;
             //this.previousState = searchState;
         }
-        RayCastToPlayer();
+        RayCastToTarget();
     }
 
-    private void RayCastToPlayer()
+    private void RayCastToTarget()
     {
         Vector3 transformOrigin = this.gameObject.transform.position;
-        Vector3 transformPlayerOrigin = this.thePlayer.transform.position - transformOrigin;
-        ray = new Ray(transformOrigin, transformPlayerOrigin);
+        Vector3 transformTargetOrigin = this.theTarget.transform.position - transformOrigin;
+        ray = new Ray(transformOrigin, transformTargetOrigin);
         
         //Debugging
         if (currentState == searchState)
         {
-            Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.blue);
+            Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.blue);
         } else if (currentState == targetState)
         {
-            Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.yellow);
+            Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.yellow);
         }
         else if (currentState == fireState)
         {
-            Debug.DrawRay(ray.origin, ray.direction * transformPlayerOrigin.magnitude, Color.red);
+            Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.red);
         }
     }
 
     private void SetPlayerReference()
     {
-        thePlayer = Player.Instance.transform.gameObject;
+        theTarget = Player.Instance.transform.gameObject;
     }
 
     public void ShootBullet(GameObject spawner)
     {
         GameObject spawnedBullet = Instantiate(bullet, spawner.transform.position, Quaternion.identity);
-        spawnedBullet.transform.LookAt(thePlayer.transform);
+        spawnedBullet.transform.LookAt(theTarget.transform);
+        spawnedBullet.GetComponent<BulletBehavior>().projectileForce = projectileForce;
     }
 
     public Ray GetRay()
     {
         return this.ray;
+    }
+
+
+    public GameObject getTarget()
+    {
+        return theTarget;
+    }
+    
+    public bool isTargetingPlayer()
+    {
+        return targetingPlayer;
     }
 }

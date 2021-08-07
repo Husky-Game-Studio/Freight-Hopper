@@ -13,12 +13,15 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private Transform playerHead;
 
     // y min, y max
-    [SerializeField] private Vector2 yRotationLock = new Vector2(-89.999f, 89.999f);
+    [SerializeField] private float yRotationLock = 90;
 
     [SerializeField] private Vector2 mouseSensitivity;
 
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
+
+    // This is to stop the input while the level is loading. At least if it was implemented
+    private bool cameraEnabled = false;
 
     private CollisionManagement playerCM;
 
@@ -30,6 +33,9 @@ public class FirstPersonCamera : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         localRotation = player.rotation;
         playerCM = player.GetComponent<PhysicsManager>().collisionManager;
+
+        // Need to make this false until level loaded in the future :(
+        cameraEnabled = true;
     }
 
     private void Update()
@@ -39,7 +45,10 @@ public class FirstPersonCamera : MonoBehaviour
 
     private void FixedUpdate()
     {
-        RotatePlayer();
+        if (cameraEnabled)
+        {
+            RotatePlayer();
+        }
     }
 
     private void FollowPlayer()
@@ -49,29 +58,42 @@ public class FirstPersonCamera : MonoBehaviour
 
     private void RotatePlayer()
     {
-        CalculateSmoothedUpAxis();
+        Vector3 validUpAxis = playerCM.ValidUpAxis;
+
+        CalculateSmoothedUpAxis(validUpAxis);
 
         // convert input to rotation
         Vector2 mouse = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
         Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
         Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
 
+        float sign = 1;
+        if (Vector3.Angle(validUpAxis, camTransform.up) > 90)
+        {
+            sign = -1;
+        }
+
         // Just prevents issues with camera glitching at the poles
-        float verticalAngle = (localRotation * mouseRotationVertical).eulerAngles.x;
-        if ((localRotation * mouseRotationVertical).eulerAngles.y != 180 && (verticalAngle < yRotationLock.x || verticalAngle > yRotationLock.y))
+        float verticalAngle = Vector3.Angle(player.up * sign,
+            Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation * mouseRotationVertical *
+            player.up * sign);
+
+        if (verticalAngle < yRotationLock)
         {
             localRotation *= mouseRotationVertical;
         }
         // Apply camera and player rotation
-        camTransform.rotation = Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation;
+
+        camTransform.rotation = Quaternion.LookRotation(player.forward * sign, smoothedUpAxis) * localRotation;
         Vector3 forward = camTransform.forward.ProjectOnContactPlane(smoothedUpAxis).normalized;
-        player.LookAt(player.position + forward, playerCM.ValidUpAxis);
+        player.LookAt(player.position + forward, validUpAxis);
+
         player.rotation *= mouseRotationHorizontal;
     }
 
-    private void CalculateSmoothedUpAxis()
+    private void CalculateSmoothedUpAxis(Vector3 upAxisCamera)
     {
-        upAxis.current = Quaternion.Euler(upAxisAngleRotation) * playerCM.ValidUpAxis;
+        upAxis.current = Quaternion.Euler(upAxisAngleRotation) * upAxisCamera;
 
         if (upAxis.current != upAxis.old)
         {

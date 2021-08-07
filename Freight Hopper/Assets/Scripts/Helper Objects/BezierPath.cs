@@ -84,6 +84,26 @@ public class BezierPath
         return CubicBezier(p.a, p.b, p.c, p.d, t);
     }
 
+    public static Vector3 CubicBezierDerivative(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
+    {
+        float m1t = 1 - t;
+        float tSq = t * t;
+        float m1tSq = m1t * m1t;
+        float t3 = 3 * t;
+        float coeff2 = m1t * (1 - t3);
+        float coeff3 = t * (2 - t3);
+
+        return 3 * new Vector3(
+            (-a.x * m1tSq) + (b.x * coeff2) + (c.x * coeff3) + (d.x * tSq),
+            (-a.y * m1tSq) + (b.y * coeff2) + (c.y * coeff3) + (d.y * tSq),
+            (-a.z * m1tSq) + (b.z * coeff2) + (c.z * coeff3) + (d.z * tSq));
+    }
+
+    private Vector3 CubicBezierDerivative(BezierSegment p, float t)
+    {
+        return CubicBezierDerivative(p.a, p.b, p.c, p.d, t);
+    }
+
     /// <summary>
     /// Returns the position of a point on the path when given t, the progress along the path.
     /// </summary>
@@ -104,6 +124,24 @@ public class BezierPath
         {
             int seg = (int)Mathf.Floor(t);
             return CubicBezier(GetSegment(seg), t - Mathf.Floor(t));
+        }
+    }
+
+    public Vector3 GetPathDeltaPoint(float t)
+    {
+        if (t < 0 || this.NumSegments < t)
+        {
+            t = Mathf.Clamp(t, 0, this.NumSegments);
+            Debug.LogWarning("For GetPathDeltaPoint(t), argument passed into t is outside of the proper index and has been clamped");
+        }
+        if (t == this.NumSegments)
+        {
+            return CubicBezierDerivative(GetSegment(this.NumSegments - 1), 1.0f);
+        }
+        else
+        {
+            int seg = (int)Mathf.Floor(t);
+            return CubicBezierDerivative(GetSegment(seg), t - Mathf.Floor(t));
         }
     }
 
