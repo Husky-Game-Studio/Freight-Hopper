@@ -15,7 +15,8 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     private Ray ray;
     //public RaycastHit toPlayerRaycast;
     public LayerMask targetedLayers;
-    public GameObject bullet;
+    [SerializeField]private GameObject bullet;
+    [SerializeField]private float projectileForce = 20;
     public GameObject bulletSpawner;
 
     private TurretTransitionsHandler turretTransitionsHandler;
@@ -145,6 +146,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     {
         GameObject spawnedBullet = Instantiate(bullet, spawner.transform.position, Quaternion.identity);
         spawnedBullet.transform.LookAt(theTarget.transform);
+        spawnedBullet.GetComponent<BulletBehavior>().projectileForce = projectileForce;
     }
 
     public Ray GetRay()
