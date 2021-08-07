@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TrainBuilder : MonoBehaviour
 {
+    [SerializeField] private Optional<RoadCreator> linkedPath;
     [SerializeField, Min(1)] private int repeatActionCount = 1;
     [SerializeField, Min(-1),
         Tooltip("Index starts from 0 at the head of the train, -1 gives end of train")]
@@ -26,7 +27,7 @@ public class TrainBuilder : MonoBehaviour
     private GameObject locomotive;
     private int cartIndexSelection = 0;
     private int cargoIndexSelection = 0;
-
+    private PathDirection pathDirectionHelper = new PathDirection();
     public int ActionIndex
     {
         get
@@ -118,6 +119,14 @@ public class TrainBuilder : MonoBehaviour
         if (actionIndex >= cartsList.Count)
         {
             actionIndex = cartsList.Count - 1;
+        }
+        if (linkedPath.Enabled && linkedPath.value != null)
+        {
+            pathDirectionHelper.pathObject = linkedPath.value.pathCreator;
+            float t = linkedPath.value.FindClosestT(locomotive.transform.position);
+            Vector3 position = linkedPath.value.GetPositionOnPath(t);
+            locomotive.transform.position = position;
+            locomotive.transform.rotation = pathDirectionHelper.Rotation(t);
         }
     }
 

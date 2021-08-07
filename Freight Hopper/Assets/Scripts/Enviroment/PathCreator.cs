@@ -18,7 +18,7 @@ public class PathCreator : MonoBehaviour
 
     public Vector3 GetDeltaPositionOnPath(float t)
     {
-        return this.transform.TransformPoint(path.GetPathDeltaPoint(t));
+        return this.transform.TransformVector(path.GetPathDeltaPoint(t));
     }
 
     public float GetPathSegmentCount()

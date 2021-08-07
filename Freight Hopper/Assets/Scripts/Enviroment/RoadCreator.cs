@@ -37,6 +37,7 @@ public class RoadCreator : MonoBehaviour
     {
         return pathCreator.GetPositionOnPath(t);
     }
+
     public float FindClosestT(Vector3 currentPosition)
     {
         float test_t = 0.5f * pathCreator.GetPathSegmentCount();
@@ -49,6 +50,11 @@ public class RoadCreator : MonoBehaviour
             dt /= 2;
         }
         return test_t;
+    }
+
+    public Vector3 FindClosestPositionOnPath(Vector3 currentPosition)
+    {
+        return GetPositionOnPath(FindClosestT(currentPosition));
     }
 
     public void UpdateMesh()

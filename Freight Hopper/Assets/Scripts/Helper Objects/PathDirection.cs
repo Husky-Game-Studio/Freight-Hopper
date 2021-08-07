@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathDirection : MonoBehaviour
+public class PathDirection
 {
-    [SerializeField]
-    PathCreator pathObject;
-    Vector3 pathUp = Vector3.up; //Paths & roads currently generate with their surface facing Vector3.up
+    public PathCreator pathObject;
+    private Vector3 pathUp = Vector3.up; //Paths & roads currently generate with their surface facing Vector3.up
 
     public Vector3 Forward(float t)
     {
@@ -38,7 +37,7 @@ public class PathDirection : MonoBehaviour
     {
         //Approach: Use the instantaneous cubic bezier velocity to predict the t value worth x physical units away. Repeat from new t value to improve accuracy
         int precision = 10;
-        for(int i = precision; i > 0; i--)
+        for (int i = precision; i > 0; i--)
         {
             Vector3 currentPoint = pathObject.GetPositionOnPath(t);
             float speed = pathObject.GetDeltaPositionOnPath(t).magnitude;
