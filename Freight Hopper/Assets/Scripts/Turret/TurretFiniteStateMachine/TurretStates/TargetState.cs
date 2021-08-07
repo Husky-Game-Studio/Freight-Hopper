@@ -37,25 +37,35 @@ public class TargetState : BasicState
 
     public override BasicState TransitionState()
     {
-        // Transition to Search State
-        /*if (Physics.Raycast(turretMachineCenter.GetRay(), out RaycastHit hit, Mathf.Infinity, turretMachineCenter.targetedLayers))
-        {
-            if ((hit.rigidbody != null && !hit.rigidbody.CompareTag("Player")) || (hit.rigidbody == null))
-            {
-                return turretMachineCenter.searchState;
-            }
-        }*/
         // Transition to Fire State
-        if (!countDownToTimer.TimerActive())
+        if (turretMachineCenter.StartOnTriggerEnter.Enabled)
         {
-            return turretMachineCenter.fireState;
+            /*//Debug.Log("fire on trigger event");
+            if ()
+            {
+                Debug.Log("Fire");
+                turretMachineCenter.setFireTick(false);
+                return turretMachineCenter.fireState;
+            }*/
         }
+        else
+        {
+            if (!countDownToTimer.TimerActive())
+            {
+                return turretMachineCenter.fireState;
+            }
+        }
+
         BasicState state = CheckTransitions();
         return state;
     }
 
     public override void EntryState()
     {
+        if (turretMachineCenter.StartOnTriggerEnter.Enabled)
+        {
+            turretMachineCenter.StartOnTriggerEnter.value.triggered += turretMachineCenter.ShootBullet;
+        }
         theTargetTransform = turretMachineCenter.getTarget().transform;
         countDownToTimer.ResetTimer();
     }
@@ -78,6 +88,10 @@ public class TargetState : BasicState
 
     public override void ExitState()
     {
+        if (turretMachineCenter.StartOnTriggerEnter.Enabled)
+        {
+            turretMachineCenter.StartOnTriggerEnter.value.triggered -= turretMachineCenter.ShootBullet;
+        }
         countDownToTimer.DeactivateTimer();
     }
 }

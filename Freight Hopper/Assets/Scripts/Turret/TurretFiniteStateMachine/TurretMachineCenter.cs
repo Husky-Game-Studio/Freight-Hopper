@@ -19,6 +19,11 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     [SerializeField]private float projectileForce = 20;
     public GameObject bulletSpawner;
 
+    [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
+    public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
+    public bool IsTriggerEntered => isTriggerEntered;
+    private bool isTriggerEntered;
+
     private TurretTransitionsHandler turretTransitionsHandler;
     //private bool playerNotSpawned = true;
 
@@ -55,6 +60,8 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         //RestartFSM();
         currentState = defaultState;
         previousState = defaultState;
+
+        //OnTriggerEvent += OnTriggerEvent;
     }
 
     private void CreateStatesAndFindPlayer()
@@ -148,6 +155,10 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         spawnedBullet.transform.LookAt(theTarget.transform);
         spawnedBullet.GetComponent<BulletBehavior>().projectileForce = projectileForce;
     }
+    public void ShootBullet()
+    {
+        ShootBullet(bulletSpawner);
+    }
 
     public Ray GetRay()
     {
@@ -164,4 +175,27 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     {
         return targetingPlayer;
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("OnCollisionEnter");
+        if (other.gameObject.GetComponent<OnTriggerEvent>() != null)
+        {
+            setFireTick(true);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("OnTriggerEnter");
+        if (other.gameObject.GetComponent<OnTriggerEvent>() != null)
+        {
+            setFireTick(true);
+        }
+    }
+
+
+    private bool fireTick = false;
+    public void setFireTick(bool fireBool) { fireTick = fireBool; }
+    public bool getFireTick() { return fireTick; }
 }
