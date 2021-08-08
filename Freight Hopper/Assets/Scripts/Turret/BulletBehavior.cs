@@ -17,6 +17,10 @@ public class BulletBehavior : MonoBehaviour
     
     private void OnCollisionEnter(Collision other)
     {
-        Destroy(this.gameObject, 0.1f);
+        if (other.gameObject.GetComponent<OnTriggerEvent>() == null)
+        {
+            Debug.Log("DestroyBullet");
+            Destroy(this.gameObject, 0.05f);
+        }
     }
 }

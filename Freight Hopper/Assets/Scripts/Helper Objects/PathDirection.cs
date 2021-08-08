@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathDirection : MonoBehaviour
+public class PathDirection
 {
-    [SerializeField]
-    PathCreator pathObject;
-    Vector3 pathUp = Vector3.up; //Paths & roads currently generate with their surface facing Vector3.up
+    public PathCreator pathObject;
+    private Vector3 pathUp = Vector3.up; //Paths & roads currently generate with their surface facing Vector3.up
 
     public Vector3 Forward(float t)
     {
@@ -38,19 +37,30 @@ public class PathDirection : MonoBehaviour
     {
         //Approach: Use the instantaneous cubic bezier velocity to predict the t value worth x physical units away. Repeat from new t value to improve accuracy
         int precision = 10;
-        for(int i = precision; i > 0; i--)
+        for (int i = precision; i > 0; i--)
         {
-            Vector3 currentPoint = pathObject.GetPositionOnPath(t);
-            float speed = pathObject.GetDeltaPositionOnPath(t).magnitude;
-            float increase = x / speed / i; // x/speed estimates how far x units is in terms of the t variable, i makes the steps towards the prediction smaller (for higher precision values) to minimize error between true arclength and linear distance
-            ChangeT(ref t, increase, out bool enteredNewSegment);
-            //Update variables to assist in next iteration
-            Vector3 nextPoint = pathObject.GetPositionOnPath(t);
-            x -= Mathf.Sign(x) * (nextPoint - currentPoint).magnitude; //Adjust next target distance by how much closer the estimate has come along the path
-            if (enteredNewSegment && x < 0)
-                t -= 0.001f; //Ensure the next iteration of refining the prediction is on the correct segment
+            Iteration(ref t, ref x, i);
         }
         return t;
+    }
+
+    private void Iteration(ref float t, ref float x, int i, bool secondChance = false)
+    {
+        Vector3 currentPoint = pathObject.GetPositionOnPath(t);
+        float speed = pathObject.GetDeltaPositionOnPath(t).magnitude;
+        float increase = x / speed / i; // x/speed estimates how far x units is in terms of the t variable, i makes the steps towards the prediction smaller (for higher precision values) to minimize error between true arclength and linear distance
+        ChangeT(ref t, increase, out bool enteredNewSegment);
+        //Update variables to assist in next iteration
+        Vector3 nextPoint = pathObject.GetPositionOnPath(t);
+        x -= Mathf.Sign(x) * (nextPoint - currentPoint).magnitude; //Adjust next target distance by how much closer the estimate has come along the path
+        if (enteredNewSegment) 
+        {
+            if (x < 0)
+                t -= 0.001f; //Ensure the next iteration of refining the prediction is on the correct segment
+            if (!secondChance)
+                Iteration(ref t, ref x, i, true);
+        }
+            
     }
 
     private void ChangeT(ref float t, float deltaT, out bool enteredNewSegment)

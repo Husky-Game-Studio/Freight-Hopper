@@ -37,11 +37,12 @@ public class RoadCreator : MonoBehaviour
     {
         return pathCreator.GetPositionOnPath(t);
     }
+
     public float FindClosestT(Vector3 currentPosition)
     {
         float test_t = 0.5f * pathCreator.GetPathSegmentCount();
         float dt = 0.25f * pathCreator.GetPathSegmentCount();
-        for (int i = 0; i < 8; i++) //2^8 possible points to select on the path
+        for (int i = 0; i < 12; i++) //2^8 possible points to select on the path
         {
             float d1 = (GetPositionOnPath(test_t + dt) - currentPosition).sqrMagnitude;
             float d2 = (GetPositionOnPath(test_t - dt) - currentPosition).sqrMagnitude;
@@ -49,6 +50,11 @@ public class RoadCreator : MonoBehaviour
             dt /= 2;
         }
         return test_t;
+    }
+
+    public Vector3 FindClosestPositionOnPath(Vector3 currentPosition)
+    {
+        return GetPositionOnPath(FindClosestT(currentPosition));
     }
 
     public void UpdateMesh()
