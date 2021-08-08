@@ -18,6 +18,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     [SerializeField]private GameObject bullet;
     [SerializeField]private float projectileForce = 20;
     public GameObject bulletSpawner;
+    private GameObject barrelBase;
 
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
@@ -61,7 +62,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         currentState = defaultState;
         previousState = defaultState;
 
-        //OnTriggerEvent += OnTriggerEvent;
+        barrelBase = this.gameObject.transform.GetChild(1).gameObject;
     }
 
     private void CreateStatesAndFindPlayer()
@@ -126,7 +127,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     private void RayCastToTarget()
     {
-        Vector3 transformOrigin = this.gameObject.transform.position;
+        Vector3 transformOrigin = barrelBase.transform.position;//this.gameObject.transform.position;
         Vector3 transformTargetOrigin = this.theTarget.transform.position - transformOrigin;
         ray = new Ray(transformOrigin, transformTargetOrigin);
         

@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187608613486311808}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.15, z: 0}
+  m_LocalPosition: {x: 0, y: -3.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2476535552608928001}
@@ -109,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 3672927658055239323}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -49.649803, y: -5.8, z: -6.737174}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_Children:
   - {fileID: 915383289195917734}
   - {fileID: 8196994881485767918}
@@ -140,6 +140,9 @@ MonoBehaviour:
   bullet: {fileID: 6118396219264821415, guid: 7bccc103caf98434e8684c0e33053cdd, type: 3}
   projectileForce: 100
   bulletSpawner: {fileID: 1716389824928568584}
+  startOnTriggerEnter:
+    enabled: 0
+    value: {fileID: 0}
 --- !u!114 &5181359248319560049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +273,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6336803146544037863}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.15, z: 0}
+  m_LocalPosition: {x: 0, y: 3.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1275224076936102610}
