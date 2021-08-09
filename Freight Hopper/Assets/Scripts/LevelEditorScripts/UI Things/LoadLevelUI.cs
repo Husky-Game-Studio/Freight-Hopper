@@ -58,4 +58,17 @@ public class LoadLevelUI : MonoBehaviour
             levelSelect = null; 
         }
     }
+
+    public void SetDeleteMenu() {
+
+        if (LevelManager.levelNameLoad != null) {
+            SetMenu();
+        }
+    
+    }
+    public void SetBackButton() {
+
+        LevelManager.levelNameLoad = null;
+        SetMenu();
+    }
 }
