@@ -40,7 +40,14 @@ public class ExitIteration3 : MonoBehaviour
 
     public void SetInactive() {
 
-        validatingMenu.SetActive(false);
+        if (validatingMenu.activeInHierarchy == false)
+        {
+            validatingMenu.SetActive(true);
+        }
+        else {
+            validatingMenu.SetActive(false);
+        }
+     
         LoadLevelUI.levelSelect = null;
     }
 }
