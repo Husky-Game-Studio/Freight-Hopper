@@ -84,13 +84,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3672f7032824de4cb5c0767ddf61e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkedPath:
+    enabled: 0
+    value:
+      path: {fileID: 0}
+      railLinker: {fileID: 0}
   repeatActionCount: 1
   actionIndex: -1
-  locomotiveLength: 42.243
-  cargoHeight: 5
-  cartLength: 40
+  locomotiveLength: 21.1215
+  cargoHeight: 3.5
+  cartLength: 20
   gapLength: 4
-  jointSnappingLength: -3
+  jointSnappingLength: -0.75
   breakTorque: Infinity
   cartsList: []
   cartPrefabs:
