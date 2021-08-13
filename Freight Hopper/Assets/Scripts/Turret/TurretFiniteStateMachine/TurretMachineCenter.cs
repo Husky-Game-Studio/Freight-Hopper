@@ -123,6 +123,10 @@ public class TurretMachineCenter : FiniteStateMachineCenter
             //this.previousState = searchState;
         }
         RayCastToTarget();
+        if (debugPath || true)
+        {
+            DrawPath();
+        }
     }
 
     private void RayCastToTarget()
@@ -154,7 +158,10 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     {
         GameObject spawnedBullet = Instantiate(bullet, spawner.transform.position, Quaternion.identity);
         spawnedBullet.transform.LookAt(theTarget.transform);
-        spawnedBullet.GetComponent<BulletBehavior>().projectileForce = projectileForce;
+        SetProjectileForce(projectileForce);
+        SetTargetPosition(theTarget.transform.position);
+        LaunchSequence(spawnedBullet);
+        
     }
     public void ShootBullet()
     {
@@ -199,4 +206,115 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     private bool fireTick = false;
     public void setFireTick(bool fireBool) { fireTick = fireBool; }
     public bool getFireTick() { return fireTick; }
+    
+    
+    
+    /*
+     * Bullet Path Calculating
+     */
+    
+    
+    
+    private Rigidbody projectileRB;
+    private Rigidbody turretRB;
+    private float projForce = 0f;
+    private Vector3 targetPosition;
+    
+    // maximumVerticleDisplacement must be less than the gravity to work
+    [SerializeField]private float maximumVerticleDisplacement = 25f;
+    private float gravity;
+
+    [SerializeField]private bool debugPath = true;
+    
+    private void LaunchSequence(GameObject spawnedProjectile)
+    {
+        turretRB = this.gameObject.GetComponent<Rigidbody>();
+        //Destroy(spawnedProjectile, 4f);
+        projectileRB = spawnedProjectile.GetComponent<Rigidbody>();
+        targetPosition = theTarget.transform.position;
+        //myRB.AddForce(this.gameObject.transform.forward.normalized * projectileForce, ForceMode.Impulse);
+        gravity = Physics.gravity.y;
+        Launch();
+    }
+
+    private void Update()
+    {
+        DrawPath();
+    }
+
+    
+
+    private void Launch()
+    {
+        projectileRB.velocity = CalculateLaunchData().initialVeloctiy;
+    }
+    
+    private LaunchData CalculateLaunchData()
+    {
+        float displacementY = targetPosition.y - bulletSpawner.transform.position.y;
+        Vector3 displacementXZ =
+            new Vector3(targetPosition.x - bulletSpawner.transform.position.x, 0, targetPosition.z - bulletSpawner.transform.position.z);
+        float time =
+            Mathf.Sqrt(-2 * maximumVerticleDisplacement / gravity) + Mathf.Sqrt(2 * (displacementY - maximumVerticleDisplacement) / gravity);
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * maximumVerticleDisplacement);
+        Vector3 velocityXZ = displacementXZ / time;
+        
+        
+        return new LaunchData(velocityXZ + velocityY * -Mathf.Sign(gravity), time);
+    }
+
+    private void DrawPath()
+    {
+        SetTargetPosition(theTarget.transform.position);
+        LaunchData launchData = CalculateLaunchData();
+        Vector3 previousDrawPoint = bulletSpawner.transform.position;
+
+        int resolution = 70;
+        for (int i = 0; i < resolution; i++)
+        {
+            float simulationTime = i / (float)resolution * launchData.timeToTarget;
+            Vector3 displacement = launchData.initialVeloctiy * simulationTime + Vector3.up *
+                                   gravity * simulationTime * simulationTime / 2f;
+            Vector3 drawPoint = bulletSpawner.transform.position + displacement;
+            Debug.DrawLine(previousDrawPoint, drawPoint, Color.green);
+            previousDrawPoint = drawPoint;
+        }
+    }
+
+    struct LaunchData
+    {
+        public readonly Vector3 initialVeloctiy;
+        public readonly float timeToTarget;
+
+        public LaunchData(Vector3 initialVeloctiy, float timeToTarget)
+        {
+            this.initialVeloctiy = initialVeloctiy;
+            this.timeToTarget = timeToTarget;
+        }
+        
+    }
+    
+     public void SetTargetPosition(Vector3 position)
+     {
+         targetPosition = position;
+     }
+
+     public void SetProjectileForce(float force)
+     {
+         projForce = force;
+     }
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class OnTriggerEvent : MonoBehaviour
 {
@@ -8,15 +9,20 @@ public class OnTriggerEvent : MonoBehaviour
 
     [SerializeField] private bool triggerOnPlayerEnter;
     // GameObject MUST have a collider component
-    [SerializeField] private Optional<GameObject> triggerOnGameObjectEnter;
+    [SerializeField] private Optional<List<GameObject>> triggerOnGameObjectEnter = new Optional<List<GameObject>>();
 
     private void OnTriggerEnter(Collider other)
     {
-        if (triggerOnGameObjectEnter.Enabled && triggerOnGameObjectEnter.value != null && other.gameObject == triggerOnGameObjectEnter.value)
+        for (int i = 0; i < triggerOnGameObjectEnter.value.Count; i++)
         {
-            triggered?.Invoke();
-            staticTriggered = true;
+            if (triggerOnGameObjectEnter.Enabled && triggerOnGameObjectEnter.value
+                != null && other.gameObject == triggerOnGameObjectEnter.value[i])
+            {
+                triggered?.Invoke();
+                staticTriggered = true;
+            }
         }
+        
         if (triggerOnPlayerEnter && other.CompareTag("Player"))
         {
             triggered?.Invoke();
