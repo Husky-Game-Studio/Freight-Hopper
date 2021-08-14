@@ -19,6 +19,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     [SerializeField]private float projectileForce = 20;
     public GameObject bulletSpawner;
     private GameObject barrelBase;
+    private float speedOfRotation = 5f;
 
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
@@ -123,7 +124,11 @@ public class TurretMachineCenter : FiniteStateMachineCenter
             //this.previousState = searchState;
         }
         RayCastToTarget();
-        if (debugPath || true)
+        if (currentState == targetState)
+        {
+            SetBarrelAngle(CalculateLaunchData());
+        }
+        if (debugPath)
         {
             DrawPath();
         }
@@ -136,16 +141,20 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         ray = new Ray(transformOrigin, transformTargetOrigin);
         
         //Debugging
-        if (currentState == searchState)
+        if (debugPath)
         {
-            Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.blue);
-        } else if (currentState == targetState)
-        {
-            Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.yellow);
-        }
-        else if (currentState == fireState)
-        {
-            Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.red);
+            if (currentState == searchState)
+            {
+                Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.blue);
+            }
+            else if (currentState == targetState)
+            {
+                Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.yellow);
+            }
+            else if (currentState == fireState)
+            {
+                Debug.DrawRay(ray.origin, ray.direction * transformTargetOrigin.magnitude, Color.red);
+            }
         }
     }
 
@@ -263,8 +272,16 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * maximumVerticleDisplacement);
         Vector3 velocityXZ = displacementXZ / time;
         
-        
         return new LaunchData(velocityXZ + velocityY * -Mathf.Sign(gravity), time);
+    }
+
+    private void SetBarrelAngle(LaunchData myLD)
+    {
+        Vector3 direction = myLD.initialVeloctiy;
+        Quaternion turretRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z), Vector3.up);
+        gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation, turretRotation, speedOfRotation * Time.fixedDeltaTime);
+        Quaternion barrelRotation = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z), Vector3.up);
+        barrelBase.transform.rotation = Quaternion.Lerp(barrelBase.transform.rotation, barrelRotation, speedOfRotation * Time.fixedDeltaTime);
     }
 
     private void DrawPath()

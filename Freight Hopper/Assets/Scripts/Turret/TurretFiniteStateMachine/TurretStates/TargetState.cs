@@ -74,7 +74,7 @@ public class TargetState : BasicState
     public override void PerformBehavior()
     {
         Vector3 direction = theTargetTransform.position - turretTransform.position;
-        RotateToTarget(direction);
+        //RotateToTarget(direction);
         countDownToTimer.CountDown(Time.fixedDeltaTime);
     }
 
