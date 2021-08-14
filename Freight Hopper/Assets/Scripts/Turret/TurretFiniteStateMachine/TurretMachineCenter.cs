@@ -20,6 +20,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     public GameObject bulletSpawner;
     private GameObject barrelBase;
     private float speedOfRotation = 5f;
+    [SerializeField]private GameObject landingIndicator;
 
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
@@ -165,12 +166,12 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     public void ShootBullet(GameObject spawner)
     {
+        //Vector3 spawnAngle = barrelBase.transform.forward;
         GameObject spawnedBullet = Instantiate(bullet, spawner.transform.position, Quaternion.identity);
         spawnedBullet.transform.LookAt(theTarget.transform);
         SetProjectileForce(projectileForce);
         SetTargetPosition(theTarget.transform.position);
         LaunchSequence(spawnedBullet);
-        
     }
     public void ShootBullet()
     {
@@ -247,10 +248,17 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         Launch();
     }
 
-
+    private void SetLandingIndicator(LaunchData myLD)
+    {
+        GameObject landingIndicator = Instantiate(this.landingIndicator, theTarget.transform.position + (theTarget.transform.localScale/2), new Quaternion(0, 1, 0, 1));
+        Destroy(landingIndicator, myLD.timeToTarget);
+    }
+    
     private void Launch()
     {
-        projectileRB.velocity = CalculateLaunchData().initialVeloctiy;
+        LaunchData myLD = CalculateLaunchData();
+        projectileRB.velocity = myLD.initialVeloctiy;
+        SetLandingIndicator(myLD);
     }
     
     private LaunchData CalculateLaunchData()
