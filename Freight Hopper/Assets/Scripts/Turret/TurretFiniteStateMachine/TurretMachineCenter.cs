@@ -221,7 +221,8 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     private Vector3 targetPosition;
     
     // maximumVerticleDisplacement must be less than the gravity to work
-    [SerializeField]private float maximumVerticleDisplacement = 25f;
+    private float maximumVerticleDisplacement = 25f;
+    [SerializeField]private float arcIntensity = 5f;
     private float gravity;
 
     [SerializeField]private bool debugPath = true;
@@ -237,12 +238,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         Launch();
     }
 
-    private void Update()
-    {
-        DrawPath();
-    }
-
-    
 
     private void Launch()
     {
@@ -251,6 +246,15 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     
     private LaunchData CalculateLaunchData()
     {
+        if (this.gameObject.transform.position.y < targetPosition.y)
+        {
+            maximumVerticleDisplacement = targetPosition.y + arcIntensity;
+        }
+        else
+        {
+            maximumVerticleDisplacement = 0.1f;
+        }
+
         float displacementY = targetPosition.y - bulletSpawner.transform.position.y;
         Vector3 displacementXZ =
             new Vector3(targetPosition.x - bulletSpawner.transform.position.x, 0, targetPosition.z - bulletSpawner.transform.position.z);

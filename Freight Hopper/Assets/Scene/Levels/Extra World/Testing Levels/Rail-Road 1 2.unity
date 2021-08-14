@@ -1492,7 +1492,7 @@ PrefabInstance:
     - target: {fileID: 3359945031586369430, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
       propertyPath: theTarget
       value: 
-      objectReference: {fileID: 1821058399}
+      objectReference: {fileID: 35697403}
     - target: {fileID: 3359945031586369430, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
       propertyPath: startOnTriggerEnter.value
       value: 
@@ -1735,7 +1735,7 @@ PrefabInstance:
     - target: {fileID: 3359945031586369430, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
       propertyPath: theTarget
       value: 
-      objectReference: {fileID: 1821058399}
+      objectReference: {fileID: 35697403}
     - target: {fileID: 3359945031586369430, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
       propertyPath: startOnTriggerEnter.value
       value: 
@@ -2001,7 +2001,10 @@ MonoBehaviour:
   triggerOnPlayerEnter: 0
   triggerOnGameObjectEnter:
     enabled: 1
-    value: {fileID: 0}
+    value:
+    - {fileID: 1829778155}
+    - {fileID: 2069477226}
+    - {fileID: 1862757004}
 --- !u!65 &1821058402
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2080,6 +2083,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1829778155 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6373571730388919793, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
+  m_PrefabInstance: {fileID: 1531394146}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1862757004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6373571730388919793, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
+  m_PrefabInstance: {fileID: 1504915313}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1890650662
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,3 +2209,8 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &2069477226 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6373571730388919793, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
+  m_PrefabInstance: {fileID: 358007066}
+  m_PrefabAsset: {fileID: 0}
