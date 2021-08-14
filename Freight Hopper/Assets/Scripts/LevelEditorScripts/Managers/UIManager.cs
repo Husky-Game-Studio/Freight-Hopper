@@ -22,7 +22,7 @@ namespace HGSLevelEditor
         public Slider ySlider = null;
         public Slider zSlider = null;
         float sliderValue;
-        float snapInterval = 10.0f;
+        float snapInterval = 5.0f;
 
 
         //Dropdown 
