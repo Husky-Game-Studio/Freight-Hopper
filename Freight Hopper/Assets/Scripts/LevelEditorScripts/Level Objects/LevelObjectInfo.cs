@@ -12,44 +12,45 @@ namespace HGSLevelEditor
         public LevelObjectData data;
         public string objID;
 
-        GameObject movingObject; 
+        private GameObject movingObject;
 
-        void Update()
+        private void Update()
         {
             SetData();
         }
 
-        //For Serialization 
+        //For Serialization
         public LevelObjectData GetObject()
         {
             LevelObjectData savedObj = data;
             savedObj.objectID = objID;
 
             return savedObj;
-
         }
-        public string GetID() {
 
+        public string GetID()
+        {
             LevelObjectData savedObj = data;
             return savedObj.objectID;
         }
-        public void SetObject(GameObject set) {
 
-            movingObject = set; 
+        public void SetObject(GameObject set)
+        {
+            movingObject = set;
         }
 
-        public void SetID(string name) {
+        public void SetID(string name)
+        {
             LevelObjectData savedObj = data;
             objID = name;
             savedObj.SetID(name);
-
         }
-        public void SetData() {
 
+        public void SetData()
+        {
             data.posX = Mathf.RoundToInt(this.transform.position.x);
             data.posY = Mathf.RoundToInt(this.transform.position.y);
             data.posZ = Mathf.RoundToInt(this.transform.position.z);
-
 
             worldRotation = transform.localEulerAngles;
 
@@ -58,8 +59,7 @@ namespace HGSLevelEditor
             data.rotZ = worldRotation.z;
 
             data.SetID(objID);
-            Debug.Log("ID: " + data.objectID);
-
+            //Debug.Log("ID: " + data.objectID);
         }
     }
 }

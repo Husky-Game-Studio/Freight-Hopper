@@ -55,7 +55,6 @@ public class UserInput : MonoBehaviour
         master.Player.Burst.performed += BurstPressed;
         master.Player.GrapplePole.performed += GrapplePressed;
         master.Player.GrapplePole.performed += GrappleReleased;
-        master.Player.Pause.performed += ExitToMenu;
 
         if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
         {
@@ -65,11 +64,6 @@ public class UserInput : MonoBehaviour
         {
             Player.PlayerLoadedIn += RespawnLinked;
         }
-    }
-
-    private void ExitToMenu(InputAction.CallbackContext context)
-    {
-        SceneLoader.LoadMenu();
     }
 
     private void RespawnLinked()

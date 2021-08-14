@@ -12,6 +12,7 @@ namespace HGSLevelEditor {
 
         private static ObjectManager instance = null;
 
+        //Allows us to make buttons for the object UI 
         public ObjectCollection eObj;
 
 
@@ -24,21 +25,17 @@ namespace HGSLevelEditor {
 
         public static ObjectManager GetInstance()
         {
-
             return instance;
         }
 
         public void ScanForNew() {
 
-            Debug.Log("We in it maybe");
-
-            Debug.Log("Numba:" + eObj.objects.Length);
+            //Checks if object is already in the objectManager List
             bool found = false;
 
             foreach (LevelEditorObjects eObj in eObj.objects)
             {
-                Debug.Log("We in it");
-                //Search through ObjectManager and see if object ID exists -- use a boolean? 
+                //Search through ObjectManager and see if object ID exists 
                 for (int i = 0; i < LevelObjects.Count; i++)
                 {
                     if (eObj.objectID == LevelObjects[i].objID)
@@ -46,7 +43,7 @@ namespace HGSLevelEditor {
                         found = true;
                     }
                 }
-
+                //If not, add it 
                 if (found == false)
                 {
                     AddToList(eObj.objectID, eObj.objectPrefab);
@@ -76,7 +73,7 @@ namespace HGSLevelEditor {
             return retrieve;
         }
 
-        public List<LevelObject> getObjectList() {
+        public List<LevelObject> GetObjectList() {
 
             return LevelObjects; 
         }

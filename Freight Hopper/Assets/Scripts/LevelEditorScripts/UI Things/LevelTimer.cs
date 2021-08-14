@@ -17,11 +17,20 @@ public class LevelTimer : MonoBehaviour
 
     private void Update()
     {
-        float actualTime = Time.time - startTime;
+        textTimer.text = GetTimeString();
+    }
+
+    public float GetTime()
+    {
+        return Time.time - startTime;
+    }
+
+    public string GetTimeString()
+    {
+        float actualTime = GetTime();
 
         string minutes = ((int)actualTime / 60).ToString();
         string seconds = (actualTime % 60).ToString("f3");
-
-        textTimer.text = minutes + ":" + seconds;
+        return minutes + ":" + seconds;
     }
 }

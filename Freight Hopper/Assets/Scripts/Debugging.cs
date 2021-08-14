@@ -10,7 +10,8 @@ public class Debugging : MonoBehaviour
     [SerializeField] private TextMeshProUGUI horizontalSpeedText;
 
     [SerializeField] private MovementBehavior movementBehavior;
-    [SerializeField] private Timer refreshSpeed;
+
+    [SerializeField] private AutomaticTimer refreshSpeed = new AutomaticTimer(0.2f);
 
     private static bool F3Status;
 
@@ -18,29 +19,28 @@ public class Debugging : MonoBehaviour
     {
         UserInput.Instance.UserInputMaster.Player.Debug.performed += ToggleDebugging;
         debugGameobject.SetActive(F3Status);
-        refreshSpeed.ResetTimer();
+        refreshSpeed.Subscribe(UpdateText);
     }
 
     private void OnDisable()
     {
         UserInput.Instance.UserInputMaster.Player.Debug.performed -= ToggleDebugging;
+        refreshSpeed.Unsubscribe(UpdateText);
     }
 
     private void Update()
     {
         if (debugGameobject.activeSelf)
         {
-            if (!refreshSpeed.TimerActive())
-            {
-                refreshSpeed.ResetTimer();
-
-                framesPerSecondText.text = "FPS: " + ((int)(1f / Time.unscaledDeltaTime)).ToString();
-                speedText.text = "Speed: " + movementBehavior.Speed.ToString("0.00") + " m/s";
-                horizontalSpeedText.text = "HSpeed: " + movementBehavior.HorizontalSpeed.ToString("0.00") + " m/s";
-            }
-
-            refreshSpeed.CountDown();
+            refreshSpeed.Update(Time.deltaTime);
         }
+    }
+
+    private void UpdateText()
+    {
+        framesPerSecondText.text = "FPS: " + ((int)(1f / Time.unscaledDeltaTime)).ToString();
+        speedText.text = "Speed: " + movementBehavior.Speed.ToString("0.00") + " m/s";
+        horizontalSpeedText.text = "HSpeed: " + movementBehavior.HorizontalSpeed.ToString("0.00") + " m/s";
     }
 
     private void ToggleDebugging(InputAction.CallbackContext context)

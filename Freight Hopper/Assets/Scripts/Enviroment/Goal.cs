@@ -1,29 +1,37 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System;
 
 public class Goal : MonoBehaviour
 {
-    private string nextLevelName = "0 0";
+    private static Goal instance = null;
+    public static Goal Instance => instance;
+
+    private Action levelComplete;
+
+    public void SetLevelCompleteScreen(Action levelComplete)
+    {
+        this.levelComplete = levelComplete;
+    }
 
     private void Awake()
     {
-        nextLevelName = LevelController.Instance.GetNextLevel();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("Only one goal is allowed, please write a goal manager script for more");
+            Destroy(this.gameObject);
+        }
     }
 
     private void OnTriggerEnter(UnityEngine.Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
-            if (nextLevelName != "MainMenu")
-            {
-                SceneLoader.LoadLevel(nextLevelName);
-            }
-            else
-            {
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                SceneManager.LoadScene(nextLevelName);
-            }
+            levelComplete.Invoke();
         }
     }
 }

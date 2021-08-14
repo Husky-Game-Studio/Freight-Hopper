@@ -10,9 +10,11 @@ public class LevelData
         NextWorld,
         Menu,
         Credits,
+        Custom
     }
 
     public NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
+    public string customNextLevelName;
     public Vector3 spawnPosition = Vector3.zero;
     public float rotationAngle = 0;
     public Quaternion velocityDirection;

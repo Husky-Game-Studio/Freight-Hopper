@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1275224076936102610}
   - component: {fileID: 1185777763334839585}
   - component: {fileID: 1238203251482989703}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Turret_Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187608613486311808}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.15, z: 0}
+  m_LocalPosition: {x: 0, y: -3.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2476535552608928001}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 4157680702779251745}
   - component: {fileID: 2005691536877925193}
   - component: {fileID: 5181359248319560049}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Turret 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 3672927658055239323}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -49.649803, y: -5.8, z: -6.737174}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_Children:
   - {fileID: 915383289195917734}
   - {fileID: 8196994881485767918}
@@ -132,12 +132,20 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  thePlayer: {fileID: 0}
+  targetingPlayer: 0
+  theTarget: {fileID: 0}
   targetedLayers:
     serializedVersion: 2
-    m_Bits: 128
-  bullet: {fileID: 6118396219264821415, guid: 7bccc103caf98434e8684c0e33053cdd, type: 3}
+    m_Bits: 129
+  bullet: {fileID: 6583866134886056689, guid: 037536cdf1bb5774c9b51f1459e8c063, type: 3}
+  projectileForce: 100
   bulletSpawner: {fileID: 1716389824928568584}
+  landingIndicator: {fileID: 6135144781568239460, guid: f72e68b1c18d6e9468671bd2f1e0ebb0, type: 3}
+  startOnTriggerEnter:
+    enabled: 0
+    value: {fileID: 0}
+  arcIntensity: 5
+  debugPath: 1
 --- !u!114 &5181359248319560049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +179,7 @@ GameObject:
   - component: {fileID: 915383289195917734}
   - component: {fileID: 4298607374626331461}
   - component: {fileID: 3087955831419421598}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Turret_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -253,7 +261,7 @@ GameObject:
   - component: {fileID: 1855899597731746945}
   - component: {fileID: 1743123516972377734}
   - component: {fileID: 9133597415523053168}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Barrel_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +276,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6336803146544037863}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.15, z: 0}
+  m_LocalPosition: {x: 0, y: 3.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1275224076936102610}
@@ -347,6 +355,10 @@ PrefabInstance:
     - target: {fileID: 6671331329752647479, guid: 04bdb67b9d293e4418f8cbbbe091a10b, type: 3}
       propertyPath: m_Name
       value: Bullet_Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 6671331329752647479, guid: 04bdb67b9d293e4418f8cbbbe091a10b, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7573621886043591486, guid: 04bdb67b9d293e4418f8cbbbe091a10b, type: 3}
       propertyPath: m_RootOrder

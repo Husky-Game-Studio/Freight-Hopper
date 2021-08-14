@@ -14,6 +14,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     // Independent Data
     [SerializeField] private Optional<float> startWaitTime;
     [SerializeField] private Optional<float> startWhenDistanceFromPlayer;
+    [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
     [SerializeField] private bool derailToWait = false;
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = false;
@@ -55,6 +56,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
+    public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
+    public bool IsTriggerEntered => isTriggerEntered;
+    private bool isTriggerEntered;
 
     // Dependecies
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
@@ -92,6 +96,11 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     public float GetClosestTValueOnCurrentPath(Vector3 currentPosition)
     {
         return GetCurrentPathObject().FindClosestT(currentPosition);
+    }
+
+    public void EnteredTrigger()
+    {
+        isTriggerEntered = true;
     }
 
     public Vector3 GetClosestPointOnCurrentPath()
@@ -151,6 +160,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     private void Awake()
     {
+        isTriggerEntered = false;
         PhysicsManager[] physics = GetComponentsInChildren<PhysicsManager>();
 
         for (int i = 0; i < physics.Length; i++)
@@ -261,7 +271,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         if (trainDerailed && deleteOnDerail)
         {
-            timerToDelete.CountDown();
+            timerToDelete.CountDown(Time.deltaTime);
         }
 
         if (!timerToDelete.TimerActive())

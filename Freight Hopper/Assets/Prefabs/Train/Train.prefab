@@ -55,6 +55,9 @@ MonoBehaviour:
   startWhenDistanceFromPlayer:
     enabled: 0
     value: 0
+  startOnTriggerEnter:
+    enabled: 0
+    value: {fileID: 0}
   derailToWait: 0
   loop: 0
   instantlyAccelerate: 0
@@ -81,13 +84,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3672f7032824de4cb5c0767ddf61e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkedPath:
+    enabled: 0
+    value:
+      path: {fileID: 0}
+      railLinker: {fileID: 0}
   repeatActionCount: 1
   actionIndex: -1
-  locomotiveLength: 42.243
-  cargoHeight: 5
-  cartLength: 40
+  locomotiveLength: 21.1215
+  cargoHeight: 3.5
+  cartLength: 20
   gapLength: 4
-  jointSnappingLength: -3
+  jointSnappingLength: -0.75
   breakTorque: Infinity
   cartsList: []
   cartPrefabs:
@@ -98,6 +106,7 @@ MonoBehaviour:
   - {fileID: 4143848478288295322, guid: c119482f3e90a3d428f5bae02972a909, type: 3}
   - {fileID: 6078174702721354088, guid: 93b64d6caba92a842afa8afebdc47be2, type: 3}
   - {fileID: 5834199224475596160, guid: 41e17ed93ecb78b449d13a31ad674448, type: 3}
+  - {fileID: 6373571730388919793, guid: b8165ac80dc7afc4ca68cd9ddddfc84c, type: 3}
   cargoPrefabs:
   - {fileID: 6773133878984370838, guid: 1b93d7575f646b34d8e2fb9da12724bf, type: 3}
   - {fileID: 4485057313656768321, guid: feb209b8b131f8644bbf4041003c9b33, type: 3}
