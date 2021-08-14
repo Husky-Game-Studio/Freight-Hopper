@@ -9,9 +9,15 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private AudioMixerGroup pausedAudioMixer;
     private bool paused = false;
     private AudioMixerGroup lastAudioMixer;
+    private static PauseMenu instance;
+    public static PauseMenu Instance => instance;
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
         menu.SetActive(false);
         UserInput.Instance.UserInputMaster.Player.Pause.performed += Pause;
     }
@@ -20,11 +26,11 @@ public class PauseMenu : MonoBehaviour
     {
         if (paused)
         {
-            ContinueGame();
+            PauseMenuDisable();
         }
         else
         {
-            PauseGame();
+            PauseMenuEnable();
         }
     }
 
@@ -33,11 +39,23 @@ public class PauseMenu : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Pause.performed -= Pause;
     }
 
-    public void PauseGame()
+    public void PauseMenuEnable()
     {
         paused = true;
-        Time.timeScale = 0;
+        PauseGame();
         menu.SetActive(true);
+    }
+
+    public void PauseMenuDisable()
+    {
+        paused = false;
+        ContinueGame();
+        menu.SetActive(false);
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         if (MusicManager.Instance != null)
@@ -49,9 +67,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ContinueGame()
     {
-        paused = false;
         Time.timeScale = 1;
-        menu.SetActive(false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         if (MusicManager.Instance != null)
@@ -62,7 +78,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ExitToMenu()
     {
-        ContinueGame();
+        PauseMenuDisable();
         SceneLoader.LoadMenu();
     }
 }

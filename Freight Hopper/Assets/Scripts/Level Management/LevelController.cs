@@ -38,6 +38,23 @@ public class LevelController : MonoBehaviour
         }
     }
 
+    public void LoadNextLevel()
+    {
+        string nextLevelName = GetNextLevel();
+        if (nextLevelName != "MainMenu")
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            SceneLoader.LoadLevel(nextLevelName);
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene(nextLevelName);
+        }
+    }
+
     [ContextMenu("UpdateSpawnTransform")]
     public void UpdateSpawn()
     {
@@ -62,6 +79,10 @@ public class LevelController : MonoBehaviour
         if (levelData.nextLevelStatus == LevelData.NextLevelStatus.Menu)
         {
             return "MainMenu";
+        }
+        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.Custom)
+        {
+            return levelData.customNextLevelName;
         }
         return levelName.CurrentLevel();
     }

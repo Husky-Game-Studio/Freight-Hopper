@@ -2071,7 +2071,8 @@ MonoBehaviour:
     levelID: 1
   playerSpawnTransform: {fileID: 0}
   levelData:
-    nextLevelStatus: 2
+    nextLevelStatus: 4
+    customNextLevelName: 1 4
     spawnPosition: {x: 0, y: 60, z: -1}
     rotationAngle: 0
     velocityDirection: {x: 0, y: 0, z: 0, w: 0}
@@ -8118,7 +8119,8 @@ MonoBehaviour:
   triggerOnPlayerEnter: 1
   triggerOnGameObjectEnter:
     enabled: 0
-    value: {fileID: 0}
+    value:
+    - {fileID: 0}
 --- !u!65 &1782250786
 BoxCollider:
   m_ObjectHideFlags: 0
