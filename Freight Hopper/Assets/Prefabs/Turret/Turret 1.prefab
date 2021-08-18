@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4157680702779251745}
   - component: {fileID: 2005691536877925193}
-  - component: {fileID: 5181359248319560049}
+  - component: {fileID: -3208329315909513585}
   m_Layer: 11
   m_Name: Turret 1
   m_TagString: Untagged
@@ -132,7 +132,7 @@ MonoBehaviour:
   currentStateName: 
   currentSubStateName: 
   previousStateName: 
-  targetingPlayer: 0
+  targetingPlayer: 1
   theTarget: {fileID: 0}
   targetedLayers:
     serializedVersion: 2
@@ -160,14 +160,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldRotation: {x: 0, y: 0, z: 0}
   data:
-    objectID: turret
+    objectID: 
     posX: 0
     posY: 0
     posZ: 0
     rotX: 0
     rotY: 0
     rotZ: 0
-  objID: turret
+  objID: 'turret '
 --- !u!1 &4548686242231408271
 GameObject:
   m_ObjectHideFlags: 0

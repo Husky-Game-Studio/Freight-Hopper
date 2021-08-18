@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &1118725268560973002
 GameObject:
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &1598451536138985450
 GameObject:
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &2103053639115747620
 GameObject:
@@ -535,7 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &2295554641324844465
 GameObject:
@@ -580,6 +580,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2325380483340445215}
   - component: {fileID: 7484530172171009784}
+  - component: {fileID: 5146855606954229715}
   m_Layer: 14
   m_Name: LaserGrid
   m_TagString: Untagged
@@ -621,6 +622,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44c9094b990c254781b20108cc17797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5146855606954229715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3555199343200622880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3d3ea3b8d05304facafa5105be1e76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldRotation: {x: 0, y: 0, z: 0}
+  data:
+    objectID: 'laser '
+    posX: 0
+    posY: 0
+    posZ: 0
+    rotX: 0
+    rotY: 0
+    rotZ: 0
+  objID: 'laser '
 --- !u!1 &3792873827834583983
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &5455848893664732037
 GameObject:
@@ -970,7 +993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &6958998697363583914
 GameObject:
@@ -1129,7 +1152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &8451116307725641755
 GameObject:
@@ -1288,7 +1311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killDuration: 0
+  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &9063932505107874794
 GameObject:

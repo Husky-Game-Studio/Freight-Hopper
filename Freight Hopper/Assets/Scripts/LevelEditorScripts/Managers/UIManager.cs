@@ -22,7 +22,7 @@ namespace HGSLevelEditor
         public Slider ySlider = null;
         public Slider zSlider = null;
         float sliderValue;
-        float snapInterval = 10.0f;
+        float snapInterval = 5.0f;
 
 
         //Dropdown 
@@ -46,7 +46,7 @@ namespace HGSLevelEditor
             xSlider.minValue = -360;
             xSlider.maxValue = 360;
 
-            ySlider.minValue = -360;
+            ySlider.minValue = 0;
             ySlider.maxValue = 360;
 
             zSlider.minValue = -360;
@@ -148,14 +148,15 @@ namespace HGSLevelEditor
 
             if (transformDropdown.value == (int)Transform.Position && mSelectedObject.transform.parent != null)
             {
+                ySlider.minValue = 0;
                 mSelectedObject.transform.parent.localPosition = p;
             }
             else if (transformDropdown.value == (int)Transform.Position) {
-
+                ySlider.minValue = 0;
                 mSelectedObject.transform.position = p;
             }
             else if (transformDropdown.value == (int)Transform.Rotation) {
-
+                ySlider.minValue = -360;
                 Quaternion objectRot = new Quaternion();
                 objectRot.eulerAngles = p;
                 mSelectedObject.transform.parent.localRotation = objectRot;

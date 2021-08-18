@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1945719951023404205}
   - component: {fileID: 1945719951023404206}
   - component: {fileID: 1945719951023404207}
+  - component: {fileID: -1685644937098221370}
   m_Layer: 0
   m_Name: Goal
   m_TagString: Untagged
@@ -108,3 +109,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3e799818ef2b104ab13526a224dc395, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1685644937098221370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945719951023404201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3d3ea3b8d05304facafa5105be1e76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldRotation: {x: 0, y: 0, z: 0}
+  data:
+    objectID: goal
+    posX: 0
+    posY: 0
+    posZ: 0
+    rotX: 0
+    rotY: 0
+    rotZ: 0
+  objID: goal
