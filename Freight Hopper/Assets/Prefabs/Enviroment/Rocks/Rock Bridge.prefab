@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 5709832756450661996}
   - component: {fileID: 7248898537671387646}
   - component: {fileID: 6995072954746419631}
+  - component: {fileID: 2801688143051233614}
   m_Layer: 0
   m_Name: Rock_Bridge
   m_TagString: Untagged
@@ -112,3 +113,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2801688143051233614
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7831952336602968619}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3898900257392341354, guid: 1cdec3927c5d2b244ac3e3835562830f, type: 3}
