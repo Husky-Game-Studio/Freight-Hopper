@@ -10,6 +10,7 @@ public class RoadCreator : MonoBehaviour
     public Road road;
     private MeshFilter meshFilter;
     public RoadSlice slice;
+    //public RoadSlice colliderSlice;
 
     [Range(1, 100)]
     public int roadDetail = 20;
