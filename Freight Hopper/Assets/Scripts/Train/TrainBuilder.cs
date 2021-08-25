@@ -138,6 +138,7 @@ public class TrainBuilder : MonoBehaviour
             locomotive.transform.position += pathDirectionHelper.Up(t) * offsetDistance;
             locomotive.transform.rotation = pathDirectionHelper.Rotation(t);
         }
+        EditorUtility.SetDirty(this);
     }
 
     public void SaveModelSettings(int cartID, int cargoID)
@@ -162,8 +163,6 @@ public class TrainBuilder : MonoBehaviour
 
     public void UpdateTrain()
     {
-        EditorUtility.SetDirty(this);
-        Undo.RegisterCompleteObjectUndo(this, "Update Train");
         List<GameObject> deleteExceptions = new List<GameObject>
         {
             locomotive
@@ -202,6 +201,7 @@ public class TrainBuilder : MonoBehaviour
                 UpdateJoint(index + 1);
             }
         }
+        UpdateTrain();
     }
 
     public void AddCargo(int cargoID)
@@ -221,6 +221,7 @@ public class TrainBuilder : MonoBehaviour
             cart.cargoIDs.Add(cargoID);
             CreateCargoGameObject(cart, cart.cargoIDs.Count - 1);
         }
+        UpdateTrain();
     }
 
     public void RemoveCargo()
@@ -241,6 +242,7 @@ public class TrainBuilder : MonoBehaviour
                 UpdateJoint(this.ActionIndex + 1);
             }
         }
+        UpdateTrain();
     }
 
     public void ReplaceCart(int cartID, int cargoID)
@@ -255,6 +257,7 @@ public class TrainBuilder : MonoBehaviour
         {
             UpdateJoint(this.ActionIndex + 1);
         }
+        UpdateTrain();
     }
 
     public void RemoveCart()
@@ -287,6 +290,7 @@ public class TrainBuilder : MonoBehaviour
             Undo.DestroyObjectImmediate(cartsList[cartsList.Count - 1].gameObject);
             cartsList.RemoveAt(cartsList.Count - 1);
         }
+        UpdateTrain();
     }
 
     public void Clear()
@@ -340,6 +344,17 @@ public class TrainBuilder : MonoBehaviour
         cart.cartProperties = cart.gameObject.GetComponent<CartProperties>();
         cart.cartProperties.SetCartIndex(index);
 
+        SetJoint(index, cart);
+
+        CreateCartGameObjectModel(cart, position);
+        for (int i = 0; i < cart.cargoIDs.Count; i++)
+        {
+            CreateCargoGameObject(cart, i);
+        }
+    }
+
+    private void SetJoint(int index, Cart cart)
+    {
         cart.joint = cart.gameObject.GetComponent<ConfigurableJoint>();
         UpdateJoint(index);
         SoftJointLimit temp = new SoftJointLimit
@@ -347,13 +362,13 @@ public class TrainBuilder : MonoBehaviour
             limit = gapLength
         };
         cart.joint.linearLimit = temp;
-        cart.joint.breakTorque = breakTorque;
+        SetJointBreakTorque(index, cart);
+    }
 
-        CreateCartGameObjectModel(cart, position);
-        for (int i = 0; i < cart.cargoIDs.Count; i++)
-        {
-            CreateCargoGameObject(cart, i);
-        }
+    private void SetJointBreakTorque(int index, Cart cart)
+    {
+        float cartMass = cart.gameObject.GetComponent<Rigidbody>().mass;
+        cart.joint.breakTorque = cartMass * (cartsList.Count - index) * breakTorque;
     }
 
     private void UpdateJoint(int index)
@@ -366,6 +381,7 @@ public class TrainBuilder : MonoBehaviour
         else
         {
             cart.joint.connectedBody = cartsList[index - 1].gameObject.GetComponent<Rigidbody>();
+            SetJointBreakTorque(index, cart);
         }
     }
 
