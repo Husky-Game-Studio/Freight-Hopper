@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &171841794534091835
+--- !u!1 &1875034070428752839
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8995006004808335104}
-  - component: {fileID: 6053824236785043018}
-  - component: {fileID: 7288578126581998302}
-  - component: {fileID: 4928269454226988822}
+  - component: {fileID: 7013087133395160530}
+  - component: {fileID: 6501160741871918985}
+  - component: {fileID: 1149227144312679968}
+  - component: {fileID: 3801796869903688243}
   m_Layer: 0
-  m_Name: default
+  m_Name: Pillar_Rock_G_2_Pillar_Rock_2.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8995006004808335104
+--- !u!4 &7013087133395160530
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171841794534091835}
+  m_GameObject: {fileID: 1875034070428752839}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8405012676770926168}
+  m_Father: {fileID: 9049957253941968430}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6053824236785043018
+--- !u!33 &6501160741871918985
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171841794534091835}
-  m_Mesh: {fileID: -2432090755550338912, guid: 370f240ff58dd4543a93f1aaf0a4be1a, type: 3}
---- !u!23 &7288578126581998302
+  m_GameObject: {fileID: 1875034070428752839}
+  m_Mesh: {fileID: 4643481078829662833, guid: d1280dfce9692cf43a6f377d96fbfd50, type: 3}
+--- !u!23 &1149227144312679968
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171841794534091835}
+  m_GameObject: {fileID: 1875034070428752839}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -82,21 +82,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4928269454226988822
+--- !u!64 &3801796869903688243
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171841794534091835}
+  m_GameObject: {fileID: 1875034070428752839}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -2432090755550338912, guid: 370f240ff58dd4543a93f1aaf0a4be1a, type: 3}
---- !u!1 &9218669236260852962
+  m_Mesh: {fileID: 4643481078829662833, guid: d1280dfce9692cf43a6f377d96fbfd50, type: 3}
+--- !u!1 &8564782717569229972
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,26 +104,26 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8405012676770926168}
+  - component: {fileID: 9049957253941968430}
   m_Layer: 0
-  m_Name: Rock 4
+  m_Name: Pillar Rock G 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8405012676770926168
+--- !u!4 &9049957253941968430
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9218669236260852962}
+  m_GameObject: {fileID: 8564782717569229972}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 303.8866, y: -0.8109571, z: 513.4952}
+  m_LocalPosition: {x: 724.9523, y: 0.48208696, z: 785.36066}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8995006004808335104}
+  - {fileID: 7013087133395160530}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
