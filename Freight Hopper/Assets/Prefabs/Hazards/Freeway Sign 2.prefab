@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4490067213549782508}
   - component: {fileID: 5332346077903007507}
   - component: {fileID: 1527791417193791168}
+  - component: {fileID: 1624551430978431080}
   m_Layer: 0
   m_Name: Post
   m_TagString: Untagged
@@ -96,6 +97,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5012481649793662638, guid: 7bc9037cdffe8784a9e52e05481abd2a, type: 3}
+--- !u!114 &1624551430978431080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5113668123649772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killInstantly: 1
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &5439519174914632069
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,6 +204,7 @@ GameObject:
   - component: {fileID: 2880587066847131194}
   - component: {fileID: 6156510364095092511}
   - component: {fileID: 2825722680133103434}
+  - component: {fileID: 367355705686505640}
   m_Layer: 0
   m_Name: BackboardRight
   m_TagString: Untagged
@@ -273,6 +289,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4509581613990025461, guid: 7bc9037cdffe8784a9e52e05481abd2a, type: 3}
+--- !u!114 &367355705686505640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7238913996852058671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killInstantly: 1
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &7433938515738415603
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +396,7 @@ GameObject:
   - component: {fileID: 6081939070690748927}
   - component: {fileID: 5346958681603526402}
   - component: {fileID: 2652723684313877754}
+  - component: {fileID: 6779926263372540557}
   m_Layer: 0
   m_Name: BackboardLeft
   m_TagString: Untagged
@@ -450,6 +481,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1930066367771247420, guid: 7bc9037cdffe8784a9e52e05481abd2a, type: 3}
+--- !u!114 &6779926263372540557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8688190685769290960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killInstantly: 1
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &9060545988388181666
 GameObject:
   m_ObjectHideFlags: 0

@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 6774874815788322973}
   - component: {fileID: 4317780525066170418}
   - component: {fileID: 4369837828118795334}
+  - component: {fileID: 3305307670890437362}
   m_Layer: 0
   m_Name: SignBackboard
   m_TagString: Untagged
@@ -210,6 +211,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -522143043876607360, guid: f8dbafb20ccc6494889cd4096054f8c8, type: 3}
+--- !u!114 &3305307670890437362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5134595589676901226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killInstantly: 1
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &9174826397146101179
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,6 +237,7 @@ GameObject:
   - component: {fileID: 9192699809445902777}
   - component: {fileID: 7003255516577194444}
   - component: {fileID: 312504497433585259}
+  - component: {fileID: 1038349998997755583}
   m_Layer: 0
   m_Name: Post
   m_TagString: Untagged
@@ -306,3 +322,17 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6707354210623482347, guid: f8dbafb20ccc6494889cd4096054f8c8, type: 3}
+--- !u!114 &1038349998997755583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9174826397146101179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killInstantly: 1
+  friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
