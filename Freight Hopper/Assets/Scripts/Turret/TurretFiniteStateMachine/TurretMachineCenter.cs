@@ -25,7 +25,8 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
     public bool IsTriggerEntered => isTriggerEntered;
-    private bool isTriggerEntered;
+    private bool isTriggerEntered; 
+    public bool triggerToTimer = false;
 
     private TurretTransitionsHandler turretTransitionsHandler;
     //private bool playerNotSpawned = true;
@@ -259,6 +260,10 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         LaunchData myLD = CalculateLaunchData();
         projectileRB.velocity = myLD.initialVeloctiy;
         SetLandingIndicator(myLD);
+        if (triggerToTimer)
+        {
+            startOnTriggerEnter.Unenable();
+        }
     }
     
     private LaunchData CalculateLaunchData()

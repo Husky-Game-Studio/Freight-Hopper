@@ -18,4 +18,9 @@ public struct Optional<T>
         enabled = true;
         value = initialValue;
     }
+
+    public void Unenable()
+    {
+        enabled = false;
+    }
 }
