@@ -18,7 +18,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool derailToWait = false;
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = false;
-    [SerializeField] private List<RoadCreator> pathObjects;
+    [SerializeField] private List<PathCreation.PathCreator> pathObjects;
     [SerializeField] private float targetVelocity;
 
     [SerializeField, ReadOnly] private int currentPath = -1;
@@ -77,25 +77,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         }
     }
 
-    // Returns current BezierPath
-    public BezierPath GetCurrentPath()
-    {
-        if (currentPath >= pathObjects.Count)
-        {
-            return null;
-        }
-        return pathObjects[currentPath].pathCreator.path;
-    }
-
-    // Returns the start of the current path the train is trying to reach
-    public Vector3 GetStartOfCurrentPath()
-    {
-        return GetCurrentPathObject().GetPositionOnPath(0) + currentRailLinker.Offset;
-    }
-
     public float GetClosestTValueOnCurrentPath(Vector3 currentPosition)
     {
-        return GetCurrentPathObject().FindClosestT(currentPosition);
+        return GetCurrentPathObject().path.GetClosestTimeOnPath(currentPosition);
     }
 
     public void EnteredTrigger()
@@ -105,11 +89,13 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public Vector3 GetClosestPointOnCurrentPath()
     {
-        return GetCurrentPathObject().GetPositionOnPath(GetClosestTValueOnCurrentPath(carts.First.Value.rb.position)) + currentRailLinker.Offset;
+        Vector3 position = carts.First.Value.rb.position;
+        float closestT = GetCurrentPathObject().path.GetClosestTimeOnPath(position);
+        return GetCurrentPathObject().path.GetPointAtTime(closestT) + (currentRailLinker.Height * GetCurrentPathObject().path.GetNormal(closestT));
     }
 
     // Returns the RoadCreator object which contains the current path. Good for getting the object the path is likely on
-    public RoadCreator GetCurrentPathObject()
+    public PathCreation.PathCreator GetCurrentPathObject()
     {
         if (currentPath >= pathObjects.Count)
         {
@@ -132,7 +118,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         currentPath++;
         if (currentPath < pathObjects.Count)
         {
-            currentRailLinker = GetCurrentPathObject().pathCreator.GetComponent<TrainRailLinker>();
+            currentRailLinker = GetCurrentPathObject().gameObject.GetComponent<TrainRailLinker>();
         }
         else if (loop && pathObjects.Count > 0)
         {

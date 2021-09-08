@@ -135,7 +135,7 @@ public class TrainBuilder : MonoBehaviour
             float t = linkedPath.value.path.path.GetClosestTimeOnPath(locomotive.transform.position);
             Vector3 position = linkedPath.value.path.path.GetPointAtTime(t);
             locomotive.transform.position = position;
-            float offsetDistance = linkedPath.value.railLinker.Offset.y;
+            float offsetDistance = linkedPath.value.railLinker.Height;
             locomotive.transform.position += linkedPath.value.path.path.GetNormal(t) * offsetDistance;
             locomotive.transform.rotation = linkedPath.value.path.path.GetRotation(t);
         }
@@ -399,7 +399,7 @@ public class TrainBuilder : MonoBehaviour
 
             float newT = linkedPath.value.path.path.GetTAfterXUnitsFromT(t, -arcDistance);
             Vector3 position = linkedPath.value.path.path.GetPointAtTime(newT);
-            position += linkedPath.value.railLinker.Offset.y * linkedPath.value.path.path.GetNormal(newT);
+            position += linkedPath.value.railLinker.Height * linkedPath.value.path.path.GetNormal(newT);
             Debug.DrawLine(startPosition, position);
             return position;
         }

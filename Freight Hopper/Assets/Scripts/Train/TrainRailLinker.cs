@@ -2,25 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PathCreation.PathCreator))]
 public class TrainRailLinker : MonoBehaviour
 {
     [SerializeField] private PIDSettings horizontalControllerSettings;
     [SerializeField] private float followDistance;
-    [SerializeField] private Vector3 offset;
+    [SerializeField] private float height;
     [SerializeField] private float derailThreshold;
     public float FollowDistance => followDistance;
-    public Vector3 Offset => offset;
+    public float Height => height;
     public float DerailThreshold => derailThreshold;
 
     private List<int> indexesToRemove = new List<int>();
     private List<TrainData> linkedTrainObjects = new List<TrainData>();
 
-    private PathCreator pathCreator;
+    private PathCreation.PathCreator pathCreator;
 
     private void Reset()
     {
         followDistance = 10;
-        offset = Vector3.up * 5;
+        height = 5;
         derailThreshold = 25;
     }
 
@@ -35,7 +36,7 @@ public class TrainRailLinker : MonoBehaviour
 
     private void Start()
     {
-        pathCreator = GetComponent<PathCreator>();
+        pathCreator = GetComponent<PathCreation.PathCreator>();
     }
 
     // Links rigidbody to the rail, assuming its a cart
@@ -53,29 +54,24 @@ public class TrainRailLinker : MonoBehaviour
         linkedTrainObjects.Add(trainObject);
     }
 
-    private void AdjustT(TrainData trainObject)
-    {
-        Debug.DrawLine(trainObject.rb.position, TargetPos(trainObject.t));
-        while ((TargetPos(trainObject.t) - trainObject.rb.transform.position).magnitude < followDistance)
-        {
-            trainObject.t += 0.01f;
-            if (trainObject.t >= pathCreator.path.NumSegments)
-            {
-                trainObject.t = pathCreator.path.NumSegments - 0.01f;
-                return;
-            }
-        }
-    }
+    /*   private void AdjustT(TrainData trainObject)
+       {
+           Debug.DrawLine(trainObject.rb.position, TargetPos(trainObject.t));
+           while ((TargetPos(trainObject.t) - trainObject.rb.transform.position).magnitude < followDistance)
+           {
+               trainObject.t += 0.01f;
+               if (trainObject.t >= pathCreator.bezierPath.NumSegments)
+               {
+                   trainObject.t = pathCreator.bezierPath.NumSegments - 0.01f;
+                   return;
+               }
+           }
+       }*/
 
     // Gets position on path given t, but with the offset considered
     public Vector3 TargetPos(float t)
     {
-        return pathCreator.GetPositionOnPath(t) + offset;
-    }
-
-    private Vector3 ForwardDirection(TrainData trainObject)
-    {
-        return (TargetPos(trainObject.t + 0.01f) - TargetPos(trainObject.t)).normalized;
+        return pathCreator.path.GetPointAtTime(t) + (height * pathCreator.path.GetNormal(t));
     }
 
     // Gets error for PID, the error is the horizontal distance from the rail
@@ -93,18 +89,18 @@ public class TrainRailLinker : MonoBehaviour
     {
         for (int i = 0; i < linkedTrainObjects.Count; i++)
         {
-            AdjustT(linkedTrainObjects[i]);
+            linkedTrainObjects[i].t = pathCreator.path.GetClosestTimeOnPath(linkedTrainObjects[i].rb.position);
             if (linkedTrainObjects[i].t == linkedTrainObjects[i].startingT)
             {
                 continue;
             }
-            if (linkedTrainObjects[i].t + 0.01f > pathCreator.path.NumSegments)
+            if (linkedTrainObjects[i].t < linkedTrainObjects[i].startingT)
             {
                 indexesToRemove.Add(i);
                 continue;
             }
-
-            Vector3 right = Vector3.Cross(CustomGravity.GetUpAxis(linkedTrainObjects[i].rb.position), ForwardDirection(linkedTrainObjects[i]));
+            Vector3 up = pathCreator.path.GetNormal(linkedTrainObjects[i].t);
+            Vector3 right = Vector3.Cross(up, pathCreator.path.GetTangent(linkedTrainObjects[i].t));
             float error = GetError(linkedTrainObjects[i], right);
             Vector3 force = linkedTrainObjects[i].controller.GetOutput(error, Time.fixedDeltaTime) * right;
             linkedTrainObjects[i].rb.AddForce(force, ForceMode.Force);

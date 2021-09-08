@@ -5,7 +5,7 @@ using UnityEngine;
 public class FollowPathState : BasicState
 {
     private TrainMachineCenter trainFSM;
-    private PathCreator pathCreator;
+    private PathCreation.PathCreator pathCreator;
     private TrainRailLinker railLinker;
     private Vector3 targetPos;
     private bool endOfPath;
@@ -20,7 +20,7 @@ public class FollowPathState : BasicState
 
     public override void EntryState()
     {
-        pathCreator = trainFSM.GetCurrentPathObject().pathCreator;
+        pathCreator = trainFSM.GetCurrentPathObject();
         railLinker = pathCreator.GetComponent<TrainRailLinker>();
 
         foreach (Cart cart in trainFSM.carts)
@@ -48,9 +48,9 @@ public class FollowPathState : BasicState
         while ((trainFSM.currentRailLinker.TargetPos(t) - trainFSM.carts.First.Value.rb.transform.position).magnitude < trainFSM.currentRailLinker.FollowDistance)
         {
             t += 0.01f;
-            if (t >= pathCreator.path.NumSegments)
+            if (t >= pathCreator.bezierPath.NumSegments)
             {
-                t = pathCreator.path.NumSegments;
+                t = pathCreator.bezierPath.NumSegments;
                 endOfPath = true;
                 return;
             }
