@@ -11,7 +11,7 @@ namespace PathCreation
         public event System.Action pathUpdated;
 
         [SerializeField, HideInInspector]
-        public PathCreatorData editorData;
+        private PathCreatorData editorData;
         [SerializeField, HideInInspector]
         private bool initialized;
 

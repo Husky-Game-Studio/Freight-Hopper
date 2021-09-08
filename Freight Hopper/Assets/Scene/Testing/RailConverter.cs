@@ -6,6 +6,7 @@ public class RailConverter : MonoBehaviour
 {
     public PathCreator[] oldPathCreators;
     public RoadCreator[] allRoadCreators;
+    public Material railMaterial;
 
     [ContextMenu("Find all path creators")]
     public void FindAll()
@@ -21,23 +22,6 @@ public class RailConverter : MonoBehaviour
         {
             Convert(oldPathCreators[i]);
         }
-    }
-
-    public void Convert(PathCreator creator)
-    {
-        PathCreation.PathCreator newNewPathCreator =
-        creator.gameObject.AddComponent<PathCreation.PathCreator>();
-        creator.gameObject.AddComponent<PathCreation.Examples.CylinderMeshCreator>();
-        newNewPathCreator.InitializeEditorData(false);
-        Debug.Log("is newpath creator null? " + newNewPathCreator == null);
-        for (int i = 0; i < creator.path.NumSegments; i++)
-        {
-            newNewPathCreator.editorData._bezierPath.AddSegmentToEnd(creator.path.GetSegment(i).a);
-        }
-        for (int i = 0; i < creator.path.points.Count; i++)
-        {
-            newNewPathCreator.editorData._bezierPath.SetPoint(i, creator.path.points[i], true);
-        }
 
         for (int i = 0; i < allRoadCreators.Length; i++)
         {
@@ -47,5 +31,24 @@ public class RailConverter : MonoBehaviour
         {
             DestroyImmediate(oldPathCreators[i]);
         }
+    }
+
+    public void Convert(PathCreator creator)
+    {
+        PathCreation.PathCreator newNewPathCreator =
+        creator.gameObject.AddComponent<PathCreation.PathCreator>();
+        PathCreation.Examples.CylinderMeshCreator cylinderSettings = creator.gameObject.AddComponent<PathCreation.Examples.CylinderMeshCreator>();
+        cylinderSettings.resolutionU = 7;
+        cylinderSettings.resolutionV = 5;
+        cylinderSettings.thickness = 0.3f;
+        cylinderSettings.autoUpdate = false;
+        cylinderSettings.meshHolder = new GameObject("Mesh Holder");
+        cylinderSettings.meshHolder.transform.SetParent(creator.gameObject.transform);
+        if (railMaterial != null)
+        {
+            cylinderSettings.material = railMaterial;
+        }
+        newNewPathCreator.bezierPath = new PathCreation.BezierPath(creator.path.points);
+        cylinderSettings.TriggerUpdate();
     }
 }

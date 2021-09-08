@@ -13,7 +13,7 @@ namespace PathCreation
         public event System.Action bezierCreated;
 
         [SerializeField]
-        public BezierPath _bezierPath;
+        private BezierPath _bezierPath;
         private VertexPath _vertexPath;
 
         [SerializeField]
