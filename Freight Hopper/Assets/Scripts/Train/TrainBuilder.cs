@@ -19,11 +19,11 @@ public class TrainBuilder : MonoBehaviour
     private int actionIndex = 1;
 
     [Header("Joint Settings")]
-    [SerializeField] private float locomotiveLength = 42.243f;
-    [SerializeField] private float cargoHeight = 5;
-    [SerializeField] private float cartLength = 40;
-    [SerializeField] private float gapLength = 4;
-    [SerializeField] private float jointSnappingLength = 0.0f;
+    [SerializeField] private FloatConst locomotiveLength;
+    [SerializeField] private FloatConst cargoHeight;
+    [SerializeField] private FloatConst cartLength;
+    [SerializeField] private FloatConst gapLength;
+    [SerializeField] private FloatConst jointSnappingLength;
     [SerializeField] private float breakTorque = 3000;
 
     [Header("Lists and prefabs")]
@@ -361,7 +361,7 @@ public class TrainBuilder : MonoBehaviour
         UpdateJoint(index);
         SoftJointLimit temp = new SoftJointLimit
         {
-            limit = gapLength
+            limit = gapLength.Value
         };
         cart.joint.linearLimit = temp;
         SetJointBreakTorque(index, cart);
@@ -389,9 +389,9 @@ public class TrainBuilder : MonoBehaviour
 
     private Vector3 GetPosition(int index)
     {
-        Vector3 startPosition = locomotive.transform.position - (locomotive.transform.forward.normalized * locomotiveLength / 2);
+        Vector3 startPosition = locomotive.transform.position - (locomotive.transform.forward.normalized * locomotiveLength.Value / 2);
 
-        Vector3 endPosition = startPosition - (locomotive.transform.forward * ((cartLength / 2) + (index * cartLength) + ((index + 1) * (gapLength + jointSnappingLength))));
+        Vector3 endPosition = startPosition - (locomotive.transform.forward * ((cartLength.Value / 2) + (index * cartLength.Value) + ((index + 1) * (gapLength.Value + jointSnappingLength.Value))));
 
         if (linkedPath.Enabled && linkedPath.value.railLinker != null && linkedPath.value.path != null)
         {
@@ -439,7 +439,7 @@ public class TrainBuilder : MonoBehaviour
 
             cargoModel.transform.rotation = cart.gameObject.transform.rotation;
             cargoModel.transform.parent = cart.gameObject.transform;
-            cargoModel.transform.localPosition = Vector3.zero + (Vector3.up * index * cargoHeight);
+            cargoModel.transform.localPosition = Vector3.zero + (Vector3.up * index * cargoHeight.Value);
             cargoModel.name = cargoModel.name + " " + index;
             Undo.RegisterCreatedObjectUndo(cargoModel, "Created cargo model");
         }
