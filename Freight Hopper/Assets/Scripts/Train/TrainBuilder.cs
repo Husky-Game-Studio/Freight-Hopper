@@ -164,6 +164,7 @@ public class TrainBuilder : MonoBehaviour
 
     public void UpdateTrain()
     {
+        OnValidate();
         List<GameObject> deleteExceptions = new List<GameObject>
         {
             locomotive
