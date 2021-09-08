@@ -35,12 +35,13 @@ public class RailConverter : MonoBehaviour
 
     public void Convert(PathCreator creator)
     {
-        PathCreation.PathCreator newNewPathCreator =
+        PathCreation.PathCreator newPathCreator =
         creator.gameObject.AddComponent<PathCreation.PathCreator>();
         PathCreation.Examples.CylinderMeshCreator cylinderSettings = creator.gameObject.AddComponent<PathCreation.Examples.CylinderMeshCreator>();
         cylinderSettings.resolutionU = 7;
         cylinderSettings.resolutionV = 5;
         cylinderSettings.thickness = 0.3f;
+        cylinderSettings.pathCreator = newPathCreator;
         cylinderSettings.autoUpdate = false;
         cylinderSettings.meshHolder = new GameObject("Mesh Holder");
         cylinderSettings.meshHolder.transform.SetParent(creator.gameObject.transform);
@@ -48,7 +49,7 @@ public class RailConverter : MonoBehaviour
         {
             cylinderSettings.material = railMaterial;
         }
-        newNewPathCreator.bezierPath = new PathCreation.BezierPath(creator.path.points);
+        newPathCreator.bezierPath = new PathCreation.BezierPath(creator.path.points);
         cylinderSettings.TriggerUpdate();
     }
 }

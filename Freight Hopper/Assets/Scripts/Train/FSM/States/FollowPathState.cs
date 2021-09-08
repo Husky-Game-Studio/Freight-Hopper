@@ -5,8 +5,7 @@ using UnityEngine;
 public class FollowPathState : BasicState
 {
     private TrainMachineCenter trainFSM;
-    private PathCreation.PathCreator pathCreator;
-    private TrainRailLinker railLinker;
+
     private Vector3 targetDirection;
     private bool endOfPath;
     public bool EndOfPath => endOfPath;
@@ -19,14 +18,7 @@ public class FollowPathState : BasicState
 
     public override void EntryState()
     {
-        pathCreator = trainFSM.GetCurrentPathObject();
-        railLinker = pathCreator.GetComponent<TrainRailLinker>();
-
-        foreach (Cart cart in trainFSM.carts)
-        {
-            float tValueForCart = trainFSM.GetClosestTValueOnCurrentPath(cart.rb.position);
-            railLinker.Link(cart.rb, tValueForCart);
-        }
+        trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
 
         endOfPath = false;
         if (trainFSM.InstantlyAccelerate && trainFSM.Starting)
@@ -44,7 +36,7 @@ public class FollowPathState : BasicState
 
     public override void PerformBehavior()
     {
-        targetDirection = pathCreator.path.GetDirection(pathCreator.path.GetClosestTimeOnPath(trainFSM.Locomotive.rb.transform.position));
+        targetDirection = trainFSM.GetCurrentPath().path.GetDirection(trainFSM.GetCurrentPath().path.GetClosestTimeOnPath(trainFSM.Locomotive.rb.transform.position));
         trainFSM.Follow(targetDirection.normalized);
     }
 

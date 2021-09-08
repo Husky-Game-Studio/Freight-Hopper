@@ -32,6 +32,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     private bool startedAlready = false;
 
     // Accessors
+    public int CurrentPath => currentPath;
     public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
     public bool Starting
     {
@@ -80,7 +81,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public float GetClosestTValueOnCurrentPath(Vector3 currentPosition)
     {
-        return GetCurrentPathObject().path.GetClosestTimeOnPath(currentPosition);
+        return GetCurrentPath().path.GetClosestTimeOnPath(currentPosition);
     }
 
     public void EnteredTrigger()
@@ -91,12 +92,12 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     public Vector3 GetClosestPointOnCurrentPath()
     {
         Vector3 position = this.Locomotive.rb.position;
-        float closestT = GetCurrentPathObject().path.GetClosestTimeOnPath(position);
-        return GetCurrentPathObject().path.GetPointAtTime(closestT) + (currentRailLinker.Height * GetCurrentPathObject().path.GetNormal(closestT));
+        float closestT = GetCurrentPath().path.GetClosestTimeOnPath(position);
+        return GetCurrentPath().path.GetPointAtTime(closestT) + (currentRailLinker.Height * GetCurrentPath().path.GetNormal(closestT));
     }
 
     // Returns the RoadCreator object which contains the current path. Good for getting the object the path is likely on
-    public PathCreation.PathCreator GetCurrentPathObject()
+    public PathCreation.PathCreator GetCurrentPath()
     {
         if (currentPath >= pathObjects.Count)
         {
@@ -119,7 +120,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         currentPath++;
         if (currentPath < pathObjects.Count)
         {
-            currentRailLinker = GetCurrentPathObject().gameObject.GetComponent<TrainRailLinker>();
+            currentRailLinker = GetCurrentPath().gameObject.GetComponent<TrainRailLinker>();
         }
         else if (loop && pathObjects.Count > 0)
         {
@@ -158,7 +159,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             carts.AddLast(cart);
         }
 
-        hoverController = carts.First.Value.rb.GetComponentInChildren<HoverController>();
+        hoverController = this.Locomotive.rb.GetComponentInChildren<HoverController>();
 
         transitionHandler = new TrainStateTransitions(this);
 
@@ -194,6 +195,33 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         // Wander
         List<Func<BasicState>> wanderTransitionsList = new List<Func<BasicState>>();
         wander = new WanderState(this, wanderTransitionsList);
+
+        // Check if linked to path
+        TrainBuilder trainBuilder = GetComponent<TrainBuilder>();
+        if (trainBuilder != null)
+        {
+            if (trainBuilder.LinkedPathSet)
+            {
+                LinkTrainToPath(0);
+            }
+        }
+    }
+
+    public void LinkTrainToPath(int pathIndex)
+    {
+        TrainRailLinker railLinker = pathObjects[pathIndex].GetComponent<TrainRailLinker>();
+
+        foreach (Cart cart in carts)
+        {
+            if (cart.rb == null)
+            {
+                Debug.Log("Why? How?");
+            }
+            else
+            {
+                railLinker.Link(cart.rb);
+            }
+        }
     }
 
     // Given a position, the train will try to rotate and move towards that position

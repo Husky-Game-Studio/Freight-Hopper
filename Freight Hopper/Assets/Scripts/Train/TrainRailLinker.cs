@@ -15,6 +15,7 @@ public class TrainRailLinker : MonoBehaviour
 
     private List<int> indexesToRemove = new List<int>();
     private List<TrainData> linkedTrainObjects = new List<TrainData>();
+    private Dictionary<Rigidbody, bool> isRigidbodyLinked = new Dictionary<Rigidbody, bool>();
 
     private PathCreation.PathCreator pathCreator;
 
@@ -36,22 +37,43 @@ public class TrainRailLinker : MonoBehaviour
 
     private void Start()
     {
-        pathCreator = GetComponent<PathCreation.PathCreator>();
+        InitializePathCreator();
     }
 
-    // Links rigidbody to the rail, assuming its a cart
-    public void Link(Rigidbody rb, float startingT)
+    private void InitializePathCreator()
     {
+        if (pathCreator == null)
+        {
+            pathCreator = GetComponent<PathCreation.PathCreator>();
+        }
+    }
+
+    // Links rigidbody to the rail, assuming its a train cart. Returns if successful
+    public bool Link(Rigidbody rb)
+    {
+        InitializePathCreator();
+        if (IsRigidbodyLinked(rb))
+        {
+            return false;
+        }
+
         TrainData trainObject = new TrainData
         {
             rb = rb,
-            startingT = startingT,
-            t = startingT
+            startingT = pathCreator.path.GetClosestTimeOnPath(rb.position),
         };
+        trainObject.t = trainObject.startingT;
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
+        isRigidbodyLinked[rb] = true;
         trainObject.controller = new PID();
         trainObject.controller.Initialize(controllerData * rb.mass);
         linkedTrainObjects.Add(trainObject);
+        return true;
+    }
+
+    public bool IsRigidbodyLinked(Rigidbody rb)
+    {
+        return isRigidbodyLinked.ContainsKey(rb) && isRigidbodyLinked[rb];
     }
 
     // Gets position on path given t, but with the offset considered
@@ -100,7 +122,9 @@ public class TrainRailLinker : MonoBehaviour
 
         for (int i = 0; i < indexesToRemove.Count; i++)
         {
+            isRigidbodyLinked[linkedTrainObjects[indexesToRemove[0]].rb] = false;
             linkedTrainObjects.RemoveAt(indexesToRemove[0]);
+
             indexesToRemove.RemoveAt(0);
         }
     }

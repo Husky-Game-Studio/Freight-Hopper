@@ -12,7 +12,7 @@ public class TrainBuilder : MonoBehaviour
     }
 
     [SerializeField] private Optional<RailInfo> linkedPath;
-
+    public bool LinkedPathSet => linkedPath.Enabled && linkedPath.value.railLinker != null;
     [SerializeField, Min(1)] private int repeatActionCount = 1;
     [SerializeField, Min(-1),
         Tooltip("Index starts from 0 at the head of the train, -1 gives end of train")]
