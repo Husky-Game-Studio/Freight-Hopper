@@ -54,20 +54,6 @@ public class TrainRailLinker : MonoBehaviour
         linkedTrainObjects.Add(trainObject);
     }
 
-    /*   private void AdjustT(TrainData trainObject)
-       {
-           Debug.DrawLine(trainObject.rb.position, TargetPos(trainObject.t));
-           while ((TargetPos(trainObject.t) - trainObject.rb.transform.position).magnitude < followDistance)
-           {
-               trainObject.t += 0.01f;
-               if (trainObject.t >= pathCreator.bezierPath.NumSegments)
-               {
-                   trainObject.t = pathCreator.bezierPath.NumSegments - 0.01f;
-                   return;
-               }
-           }
-       }*/
-
     // Gets position on path given t, but with the offset considered
     public Vector3 TargetPos(float t)
     {
@@ -94,13 +80,15 @@ public class TrainRailLinker : MonoBehaviour
             {
                 continue;
             }
-            if (linkedTrainObjects[i].t < linkedTrainObjects[i].startingT)
+            if (Mathf.Abs(pathCreator.path.length - pathCreator.path.GetClosestDistanceAlongPath(linkedTrainObjects[i].rb.position)) < followDistance)
             {
                 indexesToRemove.Add(i);
+
                 continue;
             }
             Vector3 up = pathCreator.path.GetNormal(linkedTrainObjects[i].t);
-            Vector3 right = Vector3.Cross(up, pathCreator.path.GetTangent(linkedTrainObjects[i].t));
+            Vector3 right = Vector3.Cross(up, pathCreator.path.GetDirection(linkedTrainObjects[i].t));
+            Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
             float error = GetError(linkedTrainObjects[i], right);
             Vector3 force = linkedTrainObjects[i].controller.GetOutput(error, Time.fixedDeltaTime) * right;
             linkedTrainObjects[i].rb.AddForce(force, ForceMode.Force);

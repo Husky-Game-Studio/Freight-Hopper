@@ -7,11 +7,10 @@ public class FollowPathState : BasicState
     private TrainMachineCenter trainFSM;
     private PathCreation.PathCreator pathCreator;
     private TrainRailLinker railLinker;
-    private Vector3 targetPos;
+    private Vector3 targetDirection;
     private bool endOfPath;
     public bool EndOfPath => endOfPath;
-    public Vector3 TargetPos => targetPos;
-    private float t = 0.0f;
+    public Vector3 TargetDirection => targetDirection;
 
     public FollowPathState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions) : base(machineCenter, stateTransitions)
     {
@@ -28,7 +27,7 @@ public class FollowPathState : BasicState
             float tValueForCart = trainFSM.GetClosestTValueOnCurrentPath(cart.rb.position);
             railLinker.Link(cart.rb, tValueForCart);
         }
-        t = trainFSM.GetClosestTValueOnCurrentPath(trainFSM.carts.First.Value.rb.position);
+
         endOfPath = false;
         if (trainFSM.InstantlyAccelerate && trainFSM.Starting)
         {
@@ -43,27 +42,10 @@ public class FollowPathState : BasicState
         // Sparks fly
     }
 
-    private void AdjustTarget()
-    {
-        while ((trainFSM.currentRailLinker.TargetPos(t) - trainFSM.carts.First.Value.rb.transform.position).magnitude < trainFSM.currentRailLinker.FollowDistance)
-        {
-            t += 0.01f;
-            if (t >= pathCreator.bezierPath.NumSegments)
-            {
-                t = pathCreator.bezierPath.NumSegments;
-                endOfPath = true;
-                return;
-            }
-        }
-
-        targetPos = trainFSM.currentRailLinker.TargetPos(t);
-    }
-
     public override void PerformBehavior()
     {
-        AdjustTarget();
-        //Debug.DrawLine(trainFSM.carts.First.Value.rb.position, targetPos);
-        trainFSM.Follow(targetPos);
+        targetDirection = pathCreator.path.GetDirection(pathCreator.path.GetClosestTimeOnPath(trainFSM.Locomotive.rb.transform.position));
+        trainFSM.Follow(targetDirection.normalized);
     }
 
     public override BasicState TransitionState()

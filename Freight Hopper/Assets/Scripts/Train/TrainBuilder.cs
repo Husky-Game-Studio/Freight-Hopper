@@ -400,7 +400,7 @@ public class TrainBuilder : MonoBehaviour
             float newT = linkedPath.value.path.path.GetTAfterXUnitsFromT(t, -arcDistance);
             Vector3 position = linkedPath.value.path.path.GetPointAtTime(newT);
             position += linkedPath.value.railLinker.Height * linkedPath.value.path.path.GetNormal(newT);
-            Debug.DrawLine(startPosition, position);
+            //Debug.DrawLine(startPosition, position);
             return position;
         }
         return endPosition;

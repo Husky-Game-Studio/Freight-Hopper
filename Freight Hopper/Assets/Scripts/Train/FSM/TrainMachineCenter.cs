@@ -62,6 +62,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     // Dependecies
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
+    public Cart Locomotive => carts.First.Value;
     [HideInInspector] public HoverController hoverController;
     [HideInInspector] public TrainRailLinker currentRailLinker;
     private TrainStateTransitions transitionHandler;
@@ -89,7 +90,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public Vector3 GetClosestPointOnCurrentPath()
     {
-        Vector3 position = carts.First.Value.rb.position;
+        Vector3 position = this.Locomotive.rb.position;
         float closestT = GetCurrentPathObject().path.GetClosestTimeOnPath(position);
         return GetCurrentPathObject().path.GetPointAtTime(closestT) + (currentRailLinker.Height * GetCurrentPathObject().path.GetNormal(closestT));
     }
@@ -196,26 +197,25 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     }
 
     // Given a position, the train will try to rotate and move towards that position
-    public void Follow(Vector3 targetPosition)
+    public void Follow(Vector3 direction)
     {
         if (!hoverController.EnginesFiring)
         {
             return;
         }
 
-        Vector3 target = targetPosition - carts.First.Value.rb.position;
-        Quaternion rot = carts.First.Value.rb.transform.rotation;
+        Quaternion rot = this.Locomotive.rb.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
-        Vector3 currentVelDir = (carts.First.Value.rb.velocity.magnitude != 0) ? carts.First.Value.rb.velocity.normalized : Vector3.forward;
-        Debug.DrawLine(carts.First.Value.rb.position, carts.First.Value.rb.position + (currentVelDir * 20.0f), Color.magenta);
+        Vector3 currentVelDir = (this.Locomotive.rb.velocity.magnitude != 0) ? this.Locomotive.rb.velocity.normalized : Vector3.forward;
+        Debug.DrawLine(this.Locomotive.rb.position, this.Locomotive.rb.position + (currentVelDir * 20.0f), Color.magenta);
 
         //Current
-        Vector3 currentVel = carts.First.Value.rb.velocity;
-        Vector3 currentAngVel = carts.First.Value.rb.angularVelocity;
+        Vector3 currentVel = this.Locomotive.rb.velocity;
+        Vector3 currentAngVel = this.Locomotive.rb.angularVelocity;
 
         //Target (Rotate, Move Forward)
         Vector3 targetVel = rot * Vector3.forward * this.TargetSpeed;
-        Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
+        Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * direction)); //Rotate based on rotation heading
 
         //Target Change
         Vector3 deltaVel = targetVel - currentVel;
@@ -230,8 +230,8 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         angAcc = rot * Vector3.Project(rotInv * angAcc, Vector3.up);
 
         //Forces
-        carts.First.Value.rb.AddForce(acc, ForceMode.Acceleration);
-        carts.First.Value.rb.AddTorque(angAcc, ForceMode.Acceleration);
+        this.Locomotive.rb.AddForce(acc, ForceMode.Acceleration);
+        this.Locomotive.rb.AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
         foreach (Cart cart in carts)
