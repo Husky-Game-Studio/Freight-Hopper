@@ -10,7 +10,6 @@ public class FollowPathState : BasicState
     private bool endOfPath;
     public bool EndOfPath => endOfPath;
     public Vector3 TargetDirection => targetDirection;
-    private TrainRailLinker currentLinker;
 
     public FollowPathState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions) : base(machineCenter, stateTransitions)
     {
@@ -19,7 +18,7 @@ public class FollowPathState : BasicState
 
     public override void EntryState()
     {
-        currentLinker = trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
+        trainFSM.currentRailLinker = trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
 
         endOfPath = false;
         if (trainFSM.InstantlyAccelerate && trainFSM.Starting)
@@ -37,9 +36,12 @@ public class FollowPathState : BasicState
 
     public override void PerformBehavior()
     {
-        int index = currentLinker.linkedRigidbodyObjects[trainFSM.Locomotive.rb].followIndex;
+        if (trainFSM.currentRailLinker.IsRigidbodyLinked(trainFSM.Locomotive.rb))
+        {
+            int index = trainFSM.currentRailLinker.linkedRigidbodyObjects[trainFSM.Locomotive.rb].followIndex;
 
-        trainFSM.Follow(trainFSM.GetCurrentPath().path.GetTangent(index));
+            trainFSM.Follow(trainFSM.GetCurrentPath().path.GetTangent(index));
+        }
     }
 
     public override BasicState TransitionState()

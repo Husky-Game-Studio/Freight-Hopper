@@ -45,8 +45,19 @@ public class HoverEngine : MonoBehaviour
     public void UpdateCurrentLinker(TrainRailLinker newLinker)
     {
         currentLinker = newLinker;
+        currentLinker.removedRigidbody += CheckIfCanHover;
         followIndex = newLinker.pathCreator.path.GetClosestVertexTimeIndex(position.current);
         followDistance = newLinker.FollowDistance;
+    }
+
+    private void CheckIfCanHover(Rigidbody unlinkedRigidbody)
+    {
+        if (unlinkedRigidbody.Equals(rb))
+        {
+            // Memory leaks?????
+            //currentLinker.removedRigidbody -= CheckIfCanHover;
+            currentLinker = null;
+        }
     }
 
     public void Hover(float height)
@@ -77,7 +88,7 @@ public class HoverEngine : MonoBehaviour
 
     public void Hover(float height, TrainRailLinker path)
     {
-        if (path == null || !path.IsRigidbodyLinked(rb))
+        if (path == null)
         {
             firing = false;
             return;

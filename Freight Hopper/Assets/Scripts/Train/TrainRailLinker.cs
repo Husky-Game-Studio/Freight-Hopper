@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(PathCreation.PathCreator))]
 public class TrainRailLinker : MonoBehaviour
@@ -16,6 +17,7 @@ public class TrainRailLinker : MonoBehaviour
     private List<int> indexesToRemove = new List<int>();
     private List<TrainData> linkedTrainObjects = new List<TrainData>();
     private HashSet<Rigidbody> isRigidbodyLinked = new HashSet<Rigidbody>();
+    public Action<Rigidbody> removedRigidbody;
     public Dictionary<Rigidbody, TrainData> linkedRigidbodyObjects = new Dictionary<Rigidbody, TrainData>();
 
     [HideInInspector] public PathCreation.PathCreator pathCreator;
@@ -142,6 +144,7 @@ public class TrainRailLinker : MonoBehaviour
         {
             isRigidbodyLinked.Remove(linkedTrainObjects[indexesToRemove[0]].rb);
             linkedRigidbodyObjects[linkedTrainObjects[indexesToRemove[0]].rb] = null;
+            removedRigidbody?.Invoke(linkedTrainObjects[indexesToRemove[0]].rb);
             linkedTrainObjects.RemoveAt(indexesToRemove[0]);
 
             indexesToRemove.RemoveAt(0);
