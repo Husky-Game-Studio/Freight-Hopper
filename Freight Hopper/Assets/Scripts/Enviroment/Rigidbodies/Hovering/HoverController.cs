@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+// WARNING, ASSUMES THAT THE PARENT PARENT IS THE TRAIN MACHINE CENTER OR TRAIN
 public class HoverController : MonoBehaviour
 {
     [SerializeField, ReadOnly] private Rigidbody rb;
@@ -36,6 +37,13 @@ public class HoverController : MonoBehaviour
     private void Awake()
     {
         InitializeEngines();
+        this.transform.parent.parent.GetComponent<TrainMachineCenter>().LinkedToPath += LinkEngines;
+    }
+
+    private void OnDisable()
+    {
+        // May be memory leak without
+        //this.transform.parent.parent.GetComponent<TrainMachineCenter>().LinkedToPath -= LinkEngines;
     }
 
     private void OnValidate()
@@ -87,7 +95,14 @@ public class HoverController : MonoBehaviour
         }
     }
 
-    //  arrigato
+    public void LinkEngines(TrainRailLinker linker)
+    {
+        foreach (HoverEngine eng in hoverEnginePivots)
+        {
+            eng.UpdateCurrentLinker(linker);
+        }
+    }
+
     private void FixedUpdate()
     {
         enginesFiring = false;

@@ -29,12 +29,12 @@ public class FindNextPathState : BasicState
     // Returns true if the locomotive has reached the target position, which is the start of current path
     public bool ReachedTarget()
     {
-        return Vector3.Distance(trainFSM.carts.First.Value.rb.position, targetPosition) <= trainFSM.currentRailLinker.FollowDistance;
+        return Vector3.Distance(trainFSM.Locomotive.rb.position, targetPosition) <= trainFSM.currentRailLinker.FollowDistance;
     }
 
     public override void PerformBehavior()
     {
-        trainFSM.Follow(targetPosition);
+        trainFSM.Follow((targetPosition - trainFSM.Locomotive.rb.position).normalized);
     }
 
     public override BasicState TransitionState()

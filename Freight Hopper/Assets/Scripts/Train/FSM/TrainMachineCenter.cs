@@ -18,7 +18,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool derailToWait = false;
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = false;
-    [SerializeField] private List<RoadCreator> pathObjects;
+    [SerializeField] private List<PathCreation.PathCreator> pathObjects;
     [SerializeField] private float targetVelocity;
 
     [SerializeField, ReadOnly] private int currentPath = -1;
@@ -32,6 +32,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     private bool startedAlready = false;
 
     // Accessors
+    public int CurrentPath => currentPath;
     public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
     public bool Starting
     {
@@ -59,9 +60,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
     public bool IsTriggerEntered => isTriggerEntered;
     private bool isTriggerEntered;
-
+    public Action<TrainRailLinker> LinkedToPath;
     // Dependecies
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
+    public Cart Locomotive => carts.First.Value;
     [HideInInspector] public HoverController hoverController;
     [HideInInspector] public TrainRailLinker currentRailLinker;
     private TrainStateTransitions transitionHandler;
@@ -77,27 +79,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         }
     }
 
-    // Returns current BezierPath
-    public BezierPath GetCurrentPath()
-    {
-        if (currentPath >= pathObjects.Count)
-        {
-            return null;
-        }
-        return pathObjects[currentPath].pathCreator.path;
-    }
-
-    // Returns the start of the current path the train is trying to reach
-    public Vector3 GetStartOfCurrentPath()
-    {
-        return GetCurrentPathObject().GetPositionOnPath(0) + currentRailLinker.Offset;
-    }
-
-    public float GetClosestTValueOnCurrentPath(Vector3 currentPosition)
-    {
-        return GetCurrentPathObject().FindClosestT(currentPosition);
-    }
-
     public void EnteredTrigger()
     {
         isTriggerEntered = true;
@@ -105,11 +86,13 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public Vector3 GetClosestPointOnCurrentPath()
     {
-        return GetCurrentPathObject().GetPositionOnPath(GetClosestTValueOnCurrentPath(carts.First.Value.rb.position)) + currentRailLinker.Offset;
+        Vector3 position = this.Locomotive.rb.position;
+        float closestT = GetCurrentPath().path.GetClosestTimeOnPath(position);
+        return GetCurrentPath().path.GetPointAtTime(closestT) + (currentRailLinker.Height * GetCurrentPath().path.GetNormal(closestT));
     }
 
     // Returns the RoadCreator object which contains the current path. Good for getting the object the path is likely on
-    public RoadCreator GetCurrentPathObject()
+    public PathCreation.PathCreator GetCurrentPath()
     {
         if (currentPath >= pathObjects.Count)
         {
@@ -132,7 +115,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         currentPath++;
         if (currentPath < pathObjects.Count)
         {
-            currentRailLinker = GetCurrentPathObject().pathCreator.GetComponent<TrainRailLinker>();
+            currentRailLinker = GetCurrentPath().gameObject.GetComponent<TrainRailLinker>();
         }
         else if (loop && pathObjects.Count > 0)
         {
@@ -171,7 +154,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             carts.AddLast(cart);
         }
 
-        hoverController = carts.First.Value.rb.GetComponentInChildren<HoverController>();
+        hoverController = this.Locomotive.rb.GetComponentInChildren<HoverController>();
 
         transitionHandler = new TrainStateTransitions(this);
 
@@ -207,29 +190,50 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         // Wander
         List<Func<BasicState>> wanderTransitionsList = new List<Func<BasicState>>();
         wander = new WanderState(this, wanderTransitionsList);
+
+        // Check if linked to path
+        TrainBuilder trainBuilder = GetComponent<TrainBuilder>();
+        if (trainBuilder != null)
+        {
+            if (trainBuilder.LinkedPathSet)
+            {
+                LinkTrainToPath(0);
+            }
+        }
+    }
+
+    public TrainRailLinker LinkTrainToPath(int pathIndex)
+    {
+        TrainRailLinker railLinker = pathObjects[pathIndex].GetComponent<TrainRailLinker>();
+
+        foreach (Cart cart in carts)
+        {
+            LinkedToPath?.Invoke(railLinker);
+            railLinker.Link(cart.rb);
+        }
+        return railLinker;
     }
 
     // Given a position, the train will try to rotate and move towards that position
-    public void Follow(Vector3 targetPosition)
+    public void Follow(Vector3 direction)
     {
         if (!hoverController.EnginesFiring)
         {
             return;
         }
 
-        Vector3 target = targetPosition - carts.First.Value.rb.position;
-        Quaternion rot = carts.First.Value.rb.transform.rotation;
+        Quaternion rot = this.Locomotive.rb.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
-        Vector3 currentVelDir = (carts.First.Value.rb.velocity.magnitude != 0) ? carts.First.Value.rb.velocity.normalized : Vector3.forward;
-        Debug.DrawLine(carts.First.Value.rb.position, carts.First.Value.rb.position + (currentVelDir * 20.0f), Color.magenta);
+        Vector3 currentVelDir = (this.Locomotive.rb.velocity.magnitude != 0) ? this.Locomotive.rb.velocity.normalized : Vector3.forward;
+        Debug.DrawLine(this.Locomotive.rb.position, this.Locomotive.rb.position + (currentVelDir * 20.0f), Color.magenta);
 
         //Current
-        Vector3 currentVel = carts.First.Value.rb.velocity;
-        Vector3 currentAngVel = carts.First.Value.rb.angularVelocity;
+        Vector3 currentVel = this.Locomotive.rb.velocity;
+        Vector3 currentAngVel = this.Locomotive.rb.angularVelocity;
 
         //Target (Rotate, Move Forward)
         Vector3 targetVel = rot * Vector3.forward * this.TargetSpeed;
-        Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * target)); //Rotate based on rotation heading
+        Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * direction)); //Rotate based on rotation heading
 
         //Target Change
         Vector3 deltaVel = targetVel - currentVel;
@@ -244,8 +248,8 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         angAcc = rot * Vector3.Project(rotInv * angAcc, Vector3.up);
 
         //Forces
-        carts.First.Value.rb.AddForce(acc, ForceMode.Acceleration);
-        carts.First.Value.rb.AddTorque(angAcc, ForceMode.Acceleration);
+        this.Locomotive.rb.AddForce(acc, ForceMode.Acceleration);
+        this.Locomotive.rb.AddTorque(angAcc, ForceMode.Acceleration);
 
         //Rolling Correction
         foreach (Cart cart in carts)

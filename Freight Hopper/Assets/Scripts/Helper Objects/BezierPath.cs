@@ -9,7 +9,7 @@ using UnityEngine;
 public class BezierPath
 {
     [SerializeField]
-    private List<Vector3> points;
+    public List<Vector3> points;
 
     public void ReversePoints()
     {
