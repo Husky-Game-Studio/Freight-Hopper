@@ -63,7 +63,8 @@ public class TrainStateTransitions
         // Follow Path
         if ((trainFSM.currentState == trainFSM.followPath &&
             trainFSM.followPath.EndOfPath && trainFSM.OnFinalPath) ||
-            ((trainFSM.Locomotive.rb.position - trainFSM.GetClosestPointOnCurrentPath()).magnitude > trainFSM.currentRailLinker.DerailThreshold))
+            (!trainFSM.currentRailLinker.IsRigidbodyLinked(trainFSM.Locomotive.rb)))
+
         {
             if (trainFSM.DerailToWait)
             {

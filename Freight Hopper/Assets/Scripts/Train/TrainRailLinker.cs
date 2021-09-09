@@ -17,7 +17,7 @@ public class TrainRailLinker : MonoBehaviour
     private List<TrainData> linkedTrainObjects = new List<TrainData>();
     private Dictionary<Rigidbody, bool> isRigidbodyLinked = new Dictionary<Rigidbody, bool>();
 
-    private PathCreation.PathCreator pathCreator;
+    [HideInInspector] public PathCreation.PathCreator pathCreator;
 
     private void Reset()
     {
@@ -27,11 +27,10 @@ public class TrainRailLinker : MonoBehaviour
     }
 
     [System.Serializable]
-    private class TrainData
+    public class TrainData
     {
         public Rigidbody rb;
-        public float startingT;
-        public float t;
+        public int followIndex;
         public PID controller;
     }
 
@@ -60,9 +59,8 @@ public class TrainRailLinker : MonoBehaviour
         TrainData trainObject = new TrainData
         {
             rb = rb,
-            startingT = pathCreator.path.GetClosestTimeOnPath(rb.position),
+            followIndex = pathCreator.path.GetClosestVertexTimeIndex(rb.position),
         };
-        trainObject.t = trainObject.startingT;
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
         isRigidbodyLinked[rb] = true;
         trainObject.controller = new PID();
@@ -77,16 +75,17 @@ public class TrainRailLinker : MonoBehaviour
     }
 
     // Gets position on path given t, but with the offset considered
-    public Vector3 TargetPos(float t)
+    private Vector3 TargetPos(Vector3 positionOnRail, Vector3 normal)
     {
-        return pathCreator.path.GetPointAtTime(t) + (height * pathCreator.path.GetNormal(t));
+        return positionOnRail + (height * normal);
     }
 
     // Gets error for PID, the error is the horizontal distance from the rail
-    private float GetError(TrainData trainObject, Vector3 right)
+    private float GetError(Vector3 positionOnRail, Vector3 normal, Vector3 trainPosition, Vector3 right)
     {
-        Vector3 displacement = TargetPos(trainObject.t) - trainObject.rb.position;
+        Vector3 displacement = TargetPos(positionOnRail, normal) - trainPosition;
         Vector3 rightDisplacement = Vector3.Project(displacement, right);
+        Debug.DrawLine(positionOnRail, positionOnRail + rightDisplacement, Color.yellow);
 
         float direction = Mathf.Sign(Vector3.Dot(right, rightDisplacement));
 
@@ -97,26 +96,45 @@ public class TrainRailLinker : MonoBehaviour
     {
         for (int i = 0; i < linkedTrainObjects.Count; i++)
         {
-            linkedTrainObjects[i].t = pathCreator.path.GetClosestTimeOnPath(linkedTrainObjects[i].rb.position);
-            if (linkedTrainObjects[i].t == linkedTrainObjects[i].startingT)
-            {
-                continue;
-            }
-            if (Mathf.Abs(pathCreator.path.length - pathCreator.path.GetClosestDistanceAlongPath(linkedTrainObjects[i].rb.position)) < followDistance)
+            if (linkedTrainObjects[i].rb == null)
             {
                 indexesToRemove.Add(i);
-
+                Debug.Log("Removed destroyed train");
                 continue;
             }
-            Vector3 up = pathCreator.path.GetNormal(linkedTrainObjects[i].t);
-            Vector3 right = Vector3.Cross(up, pathCreator.path.GetDirection(linkedTrainObjects[i].t));
+            if (pathCreator.path.cumulativeLengthAtEachVertex[linkedTrainObjects[i].followIndex] >= pathCreator.path.length - followDistance
+                && Vector3.Distance(linkedTrainObjects[i].rb.position, pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex)) <= followDistance)
+            {
+                indexesToRemove.Add(i);
+                Debug.Log("Removed " + linkedTrainObjects[i].rb.name + " because of it reached the end");
+                continue;
+            }
+
+            float time = pathCreator.path.GetTimeByIndexAndNextIndex(linkedTrainObjects[i].followIndex);
+            Vector3 positionOnPath = pathCreator.path.GetPointAtTime(time);
+            Vector3 normal;
+            float distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
+            while (distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1)
+            {
+                //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
+                linkedTrainObjects[i].followIndex = pathCreator.path.GetNextIndex(linkedTrainObjects[i].followIndex);
+                time = pathCreator.path.GetTimeByIndexAndNextIndex(linkedTrainObjects[i].followIndex);
+                positionOnPath = pathCreator.path.GetPointAtTime(time);
+                distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
+            }
+
+            normal = pathCreator.path.GetNormal(time);
+
+            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetDirection(pathCreator.path.times[linkedTrainObjects[i].followIndex]));
             //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
-            float error = GetError(linkedTrainObjects[i], right);
+            float error = GetError(positionOnPath, normal, linkedTrainObjects[i].rb.position, right);
             Vector3 force = linkedTrainObjects[i].controller.GetOutput(error, Time.fixedDeltaTime) * right;
             linkedTrainObjects[i].rb.AddForce(force, ForceMode.Force);
-            if ((linkedTrainObjects[i].rb.position - TargetPos(linkedTrainObjects[i].t)).magnitude > derailThreshold)
+            float derailDistance = (linkedTrainObjects[i].rb.position - TargetPos(positionOnPath, normal)).magnitude;
+            if (error > derailThreshold)
             {
                 indexesToRemove.Add(i);
+                Debug.Log("Removed " + linkedTrainObjects[i].rb.name + " because of error of " + derailDistance);
             }
         }
 

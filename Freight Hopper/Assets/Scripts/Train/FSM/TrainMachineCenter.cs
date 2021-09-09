@@ -60,7 +60,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
     public bool IsTriggerEntered => isTriggerEntered;
     private bool isTriggerEntered;
-
+    public Action<TrainRailLinker> LinkedToPath;
     // Dependecies
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
     public Cart Locomotive => carts.First.Value;
@@ -77,11 +77,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(position, startWhenDistanceFromPlayer.value);
         }
-    }
-
-    public float GetClosestTValueOnCurrentPath(Vector3 currentPosition)
-    {
-        return GetCurrentPath().path.GetClosestTimeOnPath(currentPosition);
     }
 
     public void EnteredTrigger()
@@ -213,14 +208,8 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
         foreach (Cart cart in carts)
         {
-            if (cart.rb == null)
-            {
-                Debug.Log("Why? How?");
-            }
-            else
-            {
-                railLinker.Link(cart.rb);
-            }
+            LinkedToPath?.Invoke(railLinker);
+            railLinker.Link(cart.rb);
         }
     }
 

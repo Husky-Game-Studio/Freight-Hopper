@@ -281,7 +281,7 @@ namespace PathCreation
             return MathUtility.TransformPoint(localResult, transform, space);
         }
 
-        public float GetTAfterXUnitsFromT(float t, float units, EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop)
+        public float GetTAfterXUnitsFromT(float t, float units, EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Stop)
         {
             TimeOnPathData data = CalculatePercentOnPathData(t, endOfPathInstruction);
             float arcDistanceOfSegment = Mathf.Abs(cumulativeLengthAtEachVertex[data.nextIndex] - cumulativeLengthAtEachVertex[data.previousIndex]);
@@ -295,6 +295,24 @@ namespace PathCreation
             Vector3 localPoint = MathUtility.InverseTransformPoint(worldPoint, transform, space);
             TimeOnPathData data = CalculateClosestPointOnPathData(localPoint);
             return Mathf.Lerp(times[data.previousIndex], times[data.nextIndex], data.percentBetweenIndices);
+        }
+
+        public int GetClosestVertexTimeIndex(Vector3 worldPoint)
+        {
+            Vector3 localPoint = MathUtility.InverseTransformPoint(worldPoint, transform, space);
+
+            TimeOnPathData data = CalculateClosestPointOnPathData(localPoint);
+            return data.nextIndex;
+        }
+
+        public float GetTimeByIndexAndNextIndex(int index)
+        {
+            return times[index];
+        }
+
+        public int GetNextIndex(int index)
+        {
+            return Mathf.Clamp(index + 1, 0, times.Length - 1);
         }
 
         /// Finds the distance along the path that is closest to the given point
