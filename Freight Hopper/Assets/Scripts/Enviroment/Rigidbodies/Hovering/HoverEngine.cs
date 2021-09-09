@@ -113,7 +113,6 @@ public class HoverEngine : MonoBehaviour
 
     public void SetDirection(Vector3 direction)
     {
-        direction.Normalize();
         this.direction = direction;
     }
 

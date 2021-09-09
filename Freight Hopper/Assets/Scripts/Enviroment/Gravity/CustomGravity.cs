@@ -4,12 +4,20 @@ using UnityEngine;
 public static class CustomGravity
 {
     private static HashSet<GravitySource> sources = new HashSet<GravitySource>();
+    private static Vector3 gravityCache;
+    private static bool gravityCachesFilled = false;
+    private static Vector3 upAxisCache;
 
     /// <summary>
     /// O(N), cycles through gravity sources to get gravity of position
     /// </summary>
     public static Vector3 GetGravity(Vector3 position)
     {
+        if (gravityCachesFilled)
+        {
+            return gravityCache;
+        }
+
         Vector3 gravity = Vector3.zero;
         int highestPriority = int.MinValue;
         foreach (GravitySource source in sources)
@@ -39,7 +47,15 @@ public static class CustomGravity
     public static Vector3 GetGravity(Vector3 position, out Vector3 upAxis)
     {
         Vector3 gravity = GetGravity(position);
-        upAxis = -gravity.normalized;
+        if (gravityCachesFilled)
+        {
+            upAxis = upAxisCache;
+        }
+        else
+        {
+            upAxis = -gravity.normalized;
+        }
+
         return gravity;
     }
 
@@ -48,6 +64,10 @@ public static class CustomGravity
     /// </summary>
     public static Vector3 GetUpAxis(Vector3 position)
     {
+        if (gravityCachesFilled)
+        {
+            return upAxisCache;
+        }
         return -GetGravity(position).normalized;
     }
 
@@ -58,6 +78,23 @@ public static class CustomGravity
     {
         Debug.Assert(!sources.Contains(source), "Duplicate registeration of gravity source", source);
         sources.Add(source);
+        if (sources.Count == 1)
+        {
+            if (source is GravityUniversal)
+            {
+                gravityCache = source.GetGravity(Vector3.zero);
+                upAxisCache = -gravityCache.normalized;
+                gravityCachesFilled = true;
+            }
+            else
+            {
+                gravityCachesFilled = false;
+            }
+        }
+        else
+        {
+            gravityCachesFilled = false;
+        }
     }
 
     /// <summary>
@@ -67,5 +104,6 @@ public static class CustomGravity
     {
         Debug.Assert(sources.Contains(source), "Unknown unregisteration of gravity source", source);
         sources.Remove(source);
+        gravityCachesFilled = false;
     }
 }
