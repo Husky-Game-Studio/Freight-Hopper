@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2737155112348486779}
   - component: {fileID: 3376033112551355086}
   - component: {fileID: 5545337806903874819}
-  - component: {fileID: 98317723388589944}
   - component: {fileID: -7758142423066140396}
+  - component: {fileID: 8161885187688393944}
   m_Layer: 11
   m_Name: BoxCargo
   m_TagString: landable
@@ -83,20 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &98317723388589944
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6773133878984370838}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5637138399463267684, guid: b5e7d6c01e60a6b4c9a3a3669207c47a, type: 3}
 --- !u!114 &-7758142423066140396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,3 +105,16 @@ MonoBehaviour:
     rotY: 0
     rotZ: 0
   objID: cargo
+--- !u!65 &8161885187688393944
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6773133878984370838}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.649388, y: 4.3746424, z: 18.788628}
+  m_Center: {x: 0, y: 2.789329, z: 0.5999999}

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 9039722370899420035}
   - component: {fileID: 9133276392061485804}
   - component: {fileID: 5078796442647519204}
-  - component: {fileID: -1548414129183563963}
+  - component: {fileID: 124631016856804714}
   m_Layer: 11
-  m_Name: Carrier
+  m_Name: EmptyCart
   m_TagString: landable
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -82,8 +82,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-1548414129183563963
-MeshCollider:
+--- !u!65 &124631016856804714
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,7 +92,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6351209056547598273, guid: 00f792bddb3d5bb4dba03d0fdf6ca70d, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 6, y: 1.5000069, z: 20}
+  m_Center: {x: 0, y: -0.1394405, z: 0.6159096}
