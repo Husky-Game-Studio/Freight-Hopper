@@ -84,19 +84,17 @@ public class HoverEngine : MonoBehaviour
         }
         firing = true;
 
-        float time = path.pathCreator.path.GetTimeByIndexAndNextIndex(followIndex);
-        Vector3 positionOnPath = path.pathCreator.path.GetPointAtTime(time);
+        Vector3 positionOnPath = path.pathCreator.path.GetPoint(followIndex);
         Vector3 normal;
         float distance = Vector3.Distance(positionOnPath, position.current);
         while (distance <= followDistance && followIndex < path.pathCreator.path.times.Length - 1)
         {
             //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
             followIndex = path.pathCreator.path.GetNextIndex(followIndex);
-            time = path.pathCreator.path.GetTimeByIndexAndNextIndex(followIndex);
-            positionOnPath = path.pathCreator.path.GetPointAtTime(time);
+            positionOnPath = path.pathCreator.path.GetPoint(followIndex);
             distance = Vector3.Distance(positionOnPath, position.current);
         }
-        normal = path.pathCreator.path.GetNormal(time);
+        normal = path.pathCreator.path.GetNormal(followIndex);
         //Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
 
         AddForce(height - Vector3.Project(positionOnPath - position.current, normal).magnitude);

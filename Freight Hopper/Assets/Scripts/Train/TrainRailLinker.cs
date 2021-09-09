@@ -15,7 +15,8 @@ public class TrainRailLinker : MonoBehaviour
 
     private List<int> indexesToRemove = new List<int>();
     private List<TrainData> linkedTrainObjects = new List<TrainData>();
-    private Dictionary<Rigidbody, bool> isRigidbodyLinked = new Dictionary<Rigidbody, bool>();
+    private HashSet<Rigidbody> isRigidbodyLinked = new HashSet<Rigidbody>();
+    public Dictionary<Rigidbody, TrainData> linkedRigidbodyObjects = new Dictionary<Rigidbody, TrainData>();
 
     [HideInInspector] public PathCreation.PathCreator pathCreator;
 
@@ -62,16 +63,17 @@ public class TrainRailLinker : MonoBehaviour
             followIndex = pathCreator.path.GetClosestVertexTimeIndex(rb.position),
         };
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
-        isRigidbodyLinked[rb] = true;
+        isRigidbodyLinked.Add(rb);
         trainObject.controller = new PID();
         trainObject.controller.Initialize(controllerData * rb.mass);
         linkedTrainObjects.Add(trainObject);
+        linkedRigidbodyObjects[rb] = trainObject;
         return true;
     }
 
     public bool IsRigidbodyLinked(Rigidbody rb)
     {
-        return isRigidbodyLinked.ContainsKey(rb) && isRigidbodyLinked[rb];
+        return isRigidbodyLinked.Contains(rb);
     }
 
     // Gets position on path given t, but with the offset considered
@@ -110,20 +112,18 @@ public class TrainRailLinker : MonoBehaviour
                 continue;
             }
 
-            float time = pathCreator.path.GetTimeByIndexAndNextIndex(linkedTrainObjects[i].followIndex);
-            Vector3 positionOnPath = pathCreator.path.GetPointAtTime(time);
+            Vector3 positionOnPath = pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex);
             Vector3 normal;
             float distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
             while (distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1)
             {
                 //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
                 linkedTrainObjects[i].followIndex = pathCreator.path.GetNextIndex(linkedTrainObjects[i].followIndex);
-                time = pathCreator.path.GetTimeByIndexAndNextIndex(linkedTrainObjects[i].followIndex);
-                positionOnPath = pathCreator.path.GetPointAtTime(time);
+                positionOnPath = pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex);
                 distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
             }
 
-            normal = pathCreator.path.GetNormal(time);
+            normal = pathCreator.path.GetNormal(linkedTrainObjects[i].followIndex);
             Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
             Vector3 right = Vector3.Cross(normal, pathCreator.path.GetDirection(pathCreator.path.times[linkedTrainObjects[i].followIndex]));
             //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
@@ -140,7 +140,8 @@ public class TrainRailLinker : MonoBehaviour
 
         for (int i = 0; i < indexesToRemove.Count; i++)
         {
-            isRigidbodyLinked[linkedTrainObjects[indexesToRemove[0]].rb] = false;
+            isRigidbodyLinked.Remove(linkedTrainObjects[indexesToRemove[0]].rb);
+            linkedRigidbodyObjects[linkedTrainObjects[indexesToRemove[0]].rb] = null;
             linkedTrainObjects.RemoveAt(indexesToRemove[0]);
 
             indexesToRemove.RemoveAt(0);

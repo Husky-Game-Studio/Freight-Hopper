@@ -202,7 +202,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         }
     }
 
-    public void LinkTrainToPath(int pathIndex)
+    public TrainRailLinker LinkTrainToPath(int pathIndex)
     {
         TrainRailLinker railLinker = pathObjects[pathIndex].GetComponent<TrainRailLinker>();
 
@@ -211,6 +211,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             LinkedToPath?.Invoke(railLinker);
             railLinker.Link(cart.rb);
         }
+        return railLinker;
     }
 
     // Given a position, the train will try to rotate and move towards that position
