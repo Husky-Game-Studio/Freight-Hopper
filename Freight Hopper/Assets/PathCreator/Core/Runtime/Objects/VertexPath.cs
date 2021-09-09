@@ -22,6 +22,10 @@ namespace PathCreation
         public readonly Vector3[] localTangents;
         public readonly Vector3[] localNormals;
 
+        public readonly Vector3[] globalPoints;
+        public readonly Vector3[] globalTangents;
+        public readonly Vector3[] globalNormals;
+
         /// Percentage along the path at each vertex (0 being start of path, and 1 being the end)
         public readonly float[] times;
         /// Total distance between the vertices of the polyline
@@ -70,6 +74,10 @@ namespace PathCreation
             localPoints = new Vector3[numVerts];
             localNormals = new Vector3[numVerts];
             localTangents = new Vector3[numVerts];
+            globalPoints = new Vector3[numVerts];
+            globalNormals = new Vector3[numVerts];
+            globalTangents = new Vector3[numVerts];
+
             cumulativeLengthAtEachVertex = new float[numVerts];
             times = new float[numVerts];
             bounds = new Bounds((pathSplitData.minMax.Min + pathSplitData.minMax.Max) / 2, pathSplitData.minMax.Max - pathSplitData.minMax.Min);
@@ -83,6 +91,10 @@ namespace PathCreation
             {
                 localPoints[i] = pathSplitData.vertices[i];
                 localTangents[i] = pathSplitData.tangents[i];
+
+                globalPoints[i] = MathUtility.TransformPoint(localPoints[i], transform, space);
+                globalTangents[i] = MathUtility.TransformDirection(localTangents[i], transform, space);
+
                 cumulativeLengthAtEachVertex[i] = pathSplitData.cumulativeLength[i];
                 times[i] = cumulativeLengthAtEachVertex[i] / length;
 
@@ -164,6 +176,11 @@ namespace PathCreation
                     }
                 }
             }
+
+            for (int i = 0; i < localNormals.Length; i++)
+            {
+                globalNormals[i] = MathUtility.TransformDirection(localNormals[i], transform, space);
+            }
         }
 
         #endregion Constructors
@@ -185,17 +202,17 @@ namespace PathCreation
 
         public Vector3 GetTangent(int index)
         {
-            return MathUtility.TransformDirection(localTangents[index], transform, space);
+            return globalTangents[index];
         }
 
         public Vector3 GetNormal(int index)
         {
-            return MathUtility.TransformDirection(localNormals[index], transform, space);
+            return globalNormals[index];
         }
 
         public Vector3 GetPoint(int index)
         {
-            return MathUtility.TransformPoint(localPoints[index], transform, space);
+            return globalPoints[index];
         }
 
         /// Gets point on path based on distance travelled.
