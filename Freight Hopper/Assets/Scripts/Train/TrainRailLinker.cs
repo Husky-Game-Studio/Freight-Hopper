@@ -124,7 +124,7 @@ public class TrainRailLinker : MonoBehaviour
             }
 
             normal = pathCreator.path.GetNormal(time);
-
+            Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
             Vector3 right = Vector3.Cross(normal, pathCreator.path.GetDirection(pathCreator.path.times[linkedTrainObjects[i].followIndex]));
             //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
             float error = GetError(positionOnPath, normal, linkedTrainObjects[i].rb.position, right);
