@@ -110,7 +110,7 @@ public class TrainRailLinker : MonoBehaviour
             }
             Vector3 up = pathCreator.path.GetNormal(linkedTrainObjects[i].t);
             Vector3 right = Vector3.Cross(up, pathCreator.path.GetDirection(linkedTrainObjects[i].t));
-            Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
+            //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
             float error = GetError(linkedTrainObjects[i], right);
             Vector3 force = linkedTrainObjects[i].controller.GetOutput(error, Time.fixedDeltaTime) * right;
             linkedTrainObjects[i].rb.AddForce(force, ForceMode.Force);
