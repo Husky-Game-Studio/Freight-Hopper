@@ -46,7 +46,7 @@ public class FollowPathState : BasicState
         }
         else
         {
-            Debug.Log("train unlinked while following!");
+            //Debug.Log("train unlinked while following!");
         }
     }
 

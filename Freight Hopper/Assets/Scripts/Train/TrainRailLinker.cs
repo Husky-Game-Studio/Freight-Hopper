@@ -116,6 +116,7 @@ public class TrainRailLinker : MonoBehaviour
             Vector3 positionOnPath = pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex);
             Vector3 normal;
             float distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
+
             while (distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1)
             {
                 linkedTrainObjects[i].followIndex = pathCreator.path.GetNextIndex(linkedTrainObjects[i].followIndex);

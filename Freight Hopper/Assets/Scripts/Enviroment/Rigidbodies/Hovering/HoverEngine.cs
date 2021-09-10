@@ -85,7 +85,7 @@ public class HoverEngine : MonoBehaviour
         Vector3 normal;
         float distance = Vector3.Distance(positionOnPath, position);
         // distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1
-        while (distance <= followDistance && followIndex <= path.pathCreator.path.times.Length - 1)
+        while (distance <= followDistance && followIndex < path.pathCreator.path.times.Length - 1)
         {
             //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
             followIndex = path.pathCreator.path.GetNextIndex(followIndex);
