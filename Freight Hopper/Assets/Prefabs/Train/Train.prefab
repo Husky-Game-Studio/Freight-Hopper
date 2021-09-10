@@ -97,7 +97,7 @@ MonoBehaviour:
   breakTorque: Infinity
   cartsList: []
   cartPrefabs:
-  - {fileID: 3777815452056588140, guid: 7b8758f44d353854eb2fa700aafd1410, type: 3}
+  - {fileID: 5254839247968979945, guid: 9df1f55f4274a354484af233d653d57d, type: 3}
   - {fileID: 3777815452056588140, guid: add97f5c0767b594ea362e604622db6b, type: 3}
   - {fileID: 5254839247968979945, guid: 9df1f55f4274a354484af233d653d57d, type: 3}
   - {fileID: 7109759690113313865, guid: 3e687bc0a35adf3409011184693dd184, type: 3}
@@ -116,6 +116,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8828049057225272883}
     m_Modifications:
+    - target: {fileID: 111867324825330463, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 559350940287049006, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
