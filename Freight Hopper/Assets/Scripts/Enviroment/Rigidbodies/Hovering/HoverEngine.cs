@@ -14,7 +14,6 @@ public class HoverEngine : MonoBehaviour
     [SerializeField, ReadOnly] private bool automatic;
     [SerializeField, ReadOnly] private bool firing;
     [SerializeField, ReadOnly] private TrainRailLinker currentLinker;
-    private Vector3 position;
     public bool Firing => firing;
     private int followIndex = 0;
     private float followDistance = 0;
@@ -44,7 +43,7 @@ public class HoverEngine : MonoBehaviour
     {
         currentLinker = newLinker;
         currentLinker.removedRigidbody += CheckIfCanHover;
-        followIndex = newLinker.pathCreator.path.GetClosestVertexTimeIndex(position);
+        followIndex = newLinker.pathCreator.path.GetClosestVertexTimeIndex(this.transform.position);
         followDistance = newLinker.FollowDistance;
     }
 
@@ -62,13 +61,13 @@ public class HoverEngine : MonoBehaviour
     private void AddForce(float heightDifference)
     {
         float error = heightDifference;
-        Debug.DrawLine(position, position + (-direction * error), Color.white);
+        Debug.DrawLine(this.transform.position, this.transform.position + (-direction * error), Color.white);
         // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
         if (error > -0.1f)
         {
             Vector3 force = -direction * this.controller.GetOutput(error, Time.fixedDeltaTime);
 
-            rb.AddForceAtPosition(force, position, ForceMode.Force);
+            rb.AddForceAtPosition(force, this.transform.position, ForceMode.Force);
         }
     }
 
@@ -83,19 +82,19 @@ public class HoverEngine : MonoBehaviour
 
         Vector3 positionOnPath = path.pathCreator.path.GetPoint(followIndex);
         Vector3 normal;
-        float distance = Vector3.Distance(positionOnPath, position);
+        float distance = Vector3.Distance(positionOnPath, this.transform.position);
         // distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1
         while (distance <= followDistance && followIndex < path.pathCreator.path.times.Length - 1)
         {
             //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
             followIndex = path.pathCreator.path.GetNextIndex(followIndex);
             positionOnPath = path.pathCreator.path.GetPoint(followIndex);
-            distance = Vector3.Distance(positionOnPath, position);
+            distance = Vector3.Distance(positionOnPath, this.transform.position);
         }
         normal = path.pathCreator.path.GetNormal(followIndex);
         Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
-
-        AddForce(height - Vector3.Project(positionOnPath - position, normal).magnitude);
+        Debug.DrawLine(positionOnPath, this.transform.position, Color.red);
+        AddForce(height - Vector3.Project(positionOnPath - this.transform.position, normal).magnitude);
     }
 
     public void SetDirection(Vector3 direction)
@@ -105,15 +104,14 @@ public class HoverEngine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        position = this.transform.position;
         if (automatic)
         {
-            SetDirection(-CustomGravity.GetUpAxis(position));
+            SetDirection(-CustomGravity.GetUpAxis(this.transform.position));
             Hover(targetDistance, currentLinker);
         }
         if (firing)
         {
-            effect.SetVector3("spawn", position);
+            effect.SetVector3("spawn", this.transform.position);
             if (!is_effect_playing)
             {
                 effect.Play();
