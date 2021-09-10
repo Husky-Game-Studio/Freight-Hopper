@@ -9,7 +9,7 @@ public class LevelController : MonoBehaviour
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
     [SerializeField] private Transform playerSpawnTransform;
-    [SerializeField] private LevelData levelData;
+    public LevelData levelData;
 
     private const int highHeight = 999999;
 
@@ -169,6 +169,10 @@ public class LevelController : MonoBehaviour
 
     public void Respawn(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (PauseMenu.Instance.Paused)
+        {
+            return;
+        }
         Respawn();
     }
 }

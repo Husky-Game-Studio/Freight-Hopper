@@ -27,10 +27,13 @@ public class LevelTimer : MonoBehaviour
 
     public string GetTimeString()
     {
-        float actualTime = GetTime();
+        return GetTimeString(GetTime());
+    }
 
-        string minutes = ((int)actualTime / 60).ToString();
-        string seconds = (actualTime % 60).ToString("f3");
+    public string GetTimeString(float time)
+    {
+        string minutes = ((int)time / 60).ToString();
+        string seconds = (time % 60).ToString("f3");
         return minutes + ":" + seconds;
     }
 }

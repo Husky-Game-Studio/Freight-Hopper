@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     private AudioMixerGroup lastAudioMixer;
     private static PauseMenu instance;
     public static PauseMenu Instance => instance;
+    public bool Paused => paused;
 
     private void Awake()
     {
@@ -41,20 +42,19 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseMenuEnable()
     {
-        paused = true;
         PauseGame();
         menu.SetActive(true);
     }
 
     public void PauseMenuDisable()
     {
-        paused = false;
         ContinueGame();
         menu.SetActive(false);
     }
 
     public void PauseGame()
     {
+        paused = true;
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -67,6 +67,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ContinueGame()
     {
+        paused = false;
         Time.timeScale = 1;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

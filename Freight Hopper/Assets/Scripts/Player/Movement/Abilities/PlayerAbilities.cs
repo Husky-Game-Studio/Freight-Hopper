@@ -15,6 +15,7 @@ public class PlayerAbilities : MonoBehaviour
     public BurstBehavior burstBehavior;
     public FullStopBehavior fullstopBehavior;
 
+    [System.Serializable]
     public enum Name
     {
         MovementBehavior,
