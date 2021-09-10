@@ -17,7 +17,7 @@ public class TrainRailLinker : MonoBehaviour
     private List<int> indexesToRemove = new List<int>();
     private List<TrainData> linkedTrainObjects = new List<TrainData>();
     private HashSet<Rigidbody> isRigidbodyLinked = new HashSet<Rigidbody>();
-    public Action<Rigidbody> removedRigidbody;
+    public event Action<Rigidbody> removedRigidbody;
     public Dictionary<Rigidbody, TrainData> linkedRigidbodyObjects = new Dictionary<Rigidbody, TrainData>();
 
     [HideInInspector] public PathCreation.PathCreator pathCreator;
@@ -118,7 +118,6 @@ public class TrainRailLinker : MonoBehaviour
             float distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
             while (distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1)
             {
-                //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
                 linkedTrainObjects[i].followIndex = pathCreator.path.GetNextIndex(linkedTrainObjects[i].followIndex);
                 positionOnPath = pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex);
                 distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);

@@ -18,7 +18,7 @@ public class FollowPathState : BasicState
 
     public override void EntryState()
     {
-        trainFSM.currentRailLinker = trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
+        trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
 
         endOfPath = false;
         if (trainFSM.InstantlyAccelerate && trainFSM.Starting)
@@ -39,8 +39,14 @@ public class FollowPathState : BasicState
         if (trainFSM.currentRailLinker.IsRigidbodyLinked(trainFSM.Locomotive.rb))
         {
             int index = trainFSM.currentRailLinker.linkedRigidbodyObjects[trainFSM.Locomotive.rb].followIndex;
+            //Debug.Log("follow index " + index);
 
+            //Debug.Log("forward direction: " + trainFSM.GetCurrentPath().path.GetTangent(index));
             trainFSM.Follow(trainFSM.GetCurrentPath().path.GetTangent(index));
+        }
+        else
+        {
+            Debug.Log("train unlinked while following!");
         }
     }
 

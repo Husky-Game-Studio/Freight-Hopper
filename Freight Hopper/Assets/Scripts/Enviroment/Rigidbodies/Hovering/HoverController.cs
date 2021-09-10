@@ -9,12 +9,11 @@ public class HoverController : MonoBehaviour
 
     [SerializeField, ReadOnly, Tooltip("Automatically grabs hover engine that are children to this object")] private List<HoverEngine> hoverEnginePivots;
     [SerializeField] private HoverPresets hoverSetting;
-    [SerializeField] private LayerMask layerMask;
     [SerializeField] private float targetDistance;
     [SerializeField] private bool automatic = true;
     [SerializeField] private GameObject hoverEnginePrefab;
     [SerializeField, ReadOnly] private bool enginesFiring;
-
+    private TrainRailLinker currentRailLinker;
     public bool EnginesFiring => enginesFiring;
 
 #if UNITY_EDITOR
@@ -57,7 +56,6 @@ public class HoverController : MonoBehaviour
 
     private void Reset()
     {
-        layerMask = LayerMask.GetMask("Default");
         InitializeRigidBody();
 
         targetDistance = 3;
@@ -97,6 +95,7 @@ public class HoverController : MonoBehaviour
 
     public void LinkEngines(TrainRailLinker linker)
     {
+        currentRailLinker = linker;
         foreach (HoverEngine eng in hoverEnginePivots)
         {
             eng.UpdateCurrentLinker(linker);

@@ -115,7 +115,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         currentPath++;
         if (currentPath < pathObjects.Count)
         {
-            currentRailLinker = GetCurrentPath().gameObject.GetComponent<TrainRailLinker>();
+            LinkTrainToPath(currentPath);
         }
         else if (loop && pathObjects.Count > 0)
         {
@@ -192,26 +192,29 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         wander = new WanderState(this, wanderTransitionsList);
 
         // Check if linked to path
-        TrainBuilder trainBuilder = GetComponent<TrainBuilder>();
+        /*TrainBuilder trainBuilder = GetComponent<TrainBuilder>();
         if (trainBuilder != null)
         {
             if (trainBuilder.LinkedPathSet)
             {
                 LinkTrainToPath(0);
             }
-        }
+        }*/
     }
 
-    public TrainRailLinker LinkTrainToPath(int pathIndex)
+    public void LinkTrainToPath(int pathIndex)
     {
         TrainRailLinker railLinker = pathObjects[pathIndex].GetComponent<TrainRailLinker>();
-
+        if (currentRailLinker == railLinker)
+        {
+            return;
+        }
+        currentRailLinker = railLinker;
         foreach (Cart cart in carts)
         {
-            LinkedToPath?.Invoke(railLinker);
             railLinker.Link(cart.rb);
         }
-        return railLinker;
+        LinkedToPath?.Invoke(railLinker);
     }
 
     // Given a position, the train will try to rotate and move towards that position
@@ -219,6 +222,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         if (!hoverController.EnginesFiring)
         {
+            Debug.Log("hover engines not firing");
             return;
         }
 
