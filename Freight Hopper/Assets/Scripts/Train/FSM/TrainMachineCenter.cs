@@ -222,7 +222,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         if (!hoverController.EnginesFiring)
         {
-            Debug.Log("hover engines not firing");
+            Debug.Log("hover engines not firing", hoverController.gameObject);
             return;
         }
 
