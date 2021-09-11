@@ -43,7 +43,7 @@ public class HoverEngine : MonoBehaviour
     {
         currentLinker = newLinker;
         currentLinker.removedRigidbody += CheckIfCanHover;
-        followIndex = newLinker.pathCreator.path.GetClosestVertexTimeIndex(this.transform.position);
+        followIndex = (int)Mathf.Min(newLinker.pathCreator.path.CalculateClosestVertexIndex(this.transform.position) + 1, newLinker.pathCreator.path.length - 1);
         followDistance = newLinker.FollowDistance;
     }
 

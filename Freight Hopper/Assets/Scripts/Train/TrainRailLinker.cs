@@ -17,7 +17,9 @@ public class TrainRailLinker : MonoBehaviour
     private List<int> indexesToRemove = new List<int>();
     private List<TrainData> linkedTrainObjects = new List<TrainData>();
     private HashSet<Rigidbody> isRigidbodyLinked = new HashSet<Rigidbody>();
+
     public event Action<Rigidbody> removedRigidbody;
+
     public Dictionary<Rigidbody, TrainData> linkedRigidbodyObjects = new Dictionary<Rigidbody, TrainData>();
 
     [HideInInspector] public PathCreation.PathCreator pathCreator;
@@ -62,7 +64,7 @@ public class TrainRailLinker : MonoBehaviour
         TrainData trainObject = new TrainData
         {
             rb = rb,
-            followIndex = pathCreator.path.GetClosestVertexTimeIndex(rb.position),
+            followIndex = (int)Mathf.Min(pathCreator.path.CalculateClosestVertexIndex(rb.position) + 1, pathCreator.path.length - 1),
         };
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
         isRigidbodyLinked.Add(rb);
@@ -126,7 +128,7 @@ public class TrainRailLinker : MonoBehaviour
 
             normal = pathCreator.path.GetNormal(linkedTrainObjects[i].followIndex);
             Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
-            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetDirection(pathCreator.path.times[linkedTrainObjects[i].followIndex]));
+            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetTangent(linkedTrainObjects[i].followIndex));
             //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
             float error = GetError(positionOnPath, normal, linkedTrainObjects[i].rb.position, right);
             Vector3 force = linkedTrainObjects[i].controller.GetOutput(error, Time.fixedDeltaTime) * right;

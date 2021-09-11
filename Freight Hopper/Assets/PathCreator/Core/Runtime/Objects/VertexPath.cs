@@ -322,6 +322,22 @@ namespace PathCreation
             return data.nextIndex;
         }
 
+        public int CalculateClosestVertexIndex(Vector3 globalPoint)
+        {
+            int index = 0;
+            float currentMinDist = float.PositiveInfinity;
+            for (int i = 0; i < globalPoints.Length; i++)
+            {
+                float sqDist = (globalPoints[i] - globalPoint).sqrMagnitude;
+                if (sqDist < currentMinDist)
+                {
+                    currentMinDist = sqDist;
+                    index = i;
+                }
+            }
+            return index;
+        }
+
         public float GetTimeByIndexAndNextIndex(int index)
         {
             return times[index];
