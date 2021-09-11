@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2762042465945720773}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0.99, z: 7.56}
+  m_LocalPosition: {x: 0, y: 0.96, z: 7.56}
   m_LocalScale: {x: 2.9499998, y: 3.9, z: 1.75}
   m_Children: []
   m_Father: {fileID: 1974601308939043298}
@@ -524,7 +524,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6396438048694383599}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.59, z: -0.18}
+  m_LocalPosition: {x: 0, y: -1.62, z: -0.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1974601308939043298}
@@ -541,7 +541,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 2, z: 22}
+  m_Size: {x: 6, y: 2, z: 21.8}
   m_Center: {x: 0, y: -0.1394405, z: 0.6159096}
 --- !u!1 &7252442789551240906
 GameObject:
@@ -672,9 +672,6 @@ MonoBehaviour:
       Kp: 3.5
       Ki: 0.2
       Kd: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4097
   targetDistance: 4.5
   automatic: 1
   hoverEnginePrefab: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
