@@ -17,6 +17,17 @@ namespace PathCreation
 
         private GlobalDisplaySettings globalEditorDisplaySettings;
 
+        private void OnValidate()
+        {
+            if (!(this.transform.rotation.eulerAngles.x % 360 == 0
+                && this.transform.rotation.eulerAngles.y % 360 == 0
+                && this.transform.rotation.eulerAngles.z % 360 == 0))
+            {
+                Debug.LogError("CRITICAL ERROR: PATH GLOBAL ROTATION NOT 0,0,0 " +
+                    "THIS WILL RESULT IN PATHS SLOWLY GETTING DESTROYED. NEVER ROTATE PATHS", this);
+            }
+        }
+
         // Vertex path created from the current bezier path
         public VertexPath path
         {

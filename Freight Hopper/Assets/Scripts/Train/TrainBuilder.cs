@@ -120,11 +120,8 @@ public class TrainBuilder : MonoBehaviour
         {
             actionIndex = cartsList.Count - 1;
         }
-        if (linkedPath.Enabled && linkedPath.value.path != null)
+        if (linkedPath.value != null && linkedPath.Enabled && linkedPath.value.path != null)
         {
-            //pathDirectionHelper.pathObject = linkedPath.value.path.gameObject;
-            //float t = linkedPath.value.path.FindClosestT(locomotive.transform.position);
-
             float t = linkedPath.value.path.GetClosestTimeOnPath(locomotive.transform.position);
             Vector3 position = linkedPath.value.path.GetPointAtTime(t);
             locomotive.transform.position = position;
