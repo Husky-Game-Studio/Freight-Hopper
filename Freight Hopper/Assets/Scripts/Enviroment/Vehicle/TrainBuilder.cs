@@ -69,6 +69,7 @@ public class TrainBuilder : MonoBehaviour
         public int cartID;
         public List<int> cargoIDs = new List<int>();
         public GameObject gameObject;
+        public GameObject model;
         public ConfigurableJoint joint;
     }
 
@@ -155,18 +156,7 @@ public class TrainBuilder : MonoBehaviour
     public void UpdateTrain()
     {
         OnValidate();
-        List<GameObject> deleteExceptions = new List<GameObject>
-        {
-            locomotive
-        };
-        for (int i = 0; i < cartsList.Count; i++)
-        {
-            if (cartsList[i].gameObject != null)
-            {
-                deleteExceptions.Add(cartsList[i].gameObject);
-            }
-        }
-        this.transform.DestroyImmediateChildren(deleteExceptions);
+
         for (int i = 0; i < cartsList.Count; i++)
         {
             UpdateCart(i, cartsList[i]);
@@ -318,19 +308,43 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
-    private void UpdateCart(int index, Cart cart)
+    // This will clear the cart, and then rebuild it deleting everything
+    [ContextMenu("Complete Update")]
+    public void CompleteUpdate()
+    {
+        for (int i = 0; i < cartsList.Count; i++)
+        {
+            UpdateCart(i, cartsList[i], true);
+        }
+    }
+
+    [ContextMenu("Complete Update All")]
+    public void CompleteUpdateAll()
+    {
+        TrainBuilder[] trainBuilders = FindObjectsOfType<TrainBuilder>();
+        foreach (TrainBuilder builder in trainBuilders)
+        {
+            builder.CompleteUpdate();
+        }
+    }
+
+    private void UpdateCart(int index, Cart cart, bool completeUpdate = false)
     {
         Vector3 position = GetPosition(index);
         Quaternion rotation = GetRotation(index);
-        if (cart.gameObject != null)
+        if (cart.gameObject == null)
         {
-            Undo.DestroyObjectImmediate(cart.gameObject);
+            cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart, this.transform) as GameObject;
+        }
+        else if (completeUpdate)
+        {
+            DestroyImmediate(cart.gameObject);
+            cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart, this.transform) as GameObject;
         }
 
-        cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart, this.transform) as GameObject;
         cart.gameObject.transform.position = position;
         cart.gameObject.transform.rotation = rotation;
-        cart.gameObject.name = cart.gameObject.name + " " + index;
+        cart.gameObject.name = "Cart " + index;
         Undo.RegisterCreatedObjectUndo(cart.gameObject, "Created cart model");
 
         cart.cartProperties = cart.gameObject.GetComponent<CartProperties>();
@@ -412,11 +426,17 @@ public class TrainBuilder : MonoBehaviour
 
     private void CreateCartGameObjectModel(Cart cart, Vector3 position)
     {
+        if (cart.model != null)
+        {
+            Undo.DestroyObjectImmediate(cart.model);
+        }
         GameObject cartModelPrefab = cartPrefabs[cart.cartID];
         GameObject cartModel = PrefabUtility.InstantiatePrefab(cartModelPrefab) as GameObject;
         cartModel.transform.position = position;
         cartModel.transform.rotation = cart.gameObject.transform.rotation;
         cartModel.transform.parent = cart.gameObject.transform;
+
+        cart.model = cartModel;
         Undo.RegisterCreatedObjectUndo(cartModel, "Created cart model");
     }
 
@@ -428,7 +448,7 @@ public class TrainBuilder : MonoBehaviour
             GameObject cargoModel = PrefabUtility.InstantiatePrefab(cargoModelPrefab) as GameObject;
 
             cargoModel.transform.rotation = cart.gameObject.transform.rotation;
-            cargoModel.transform.parent = cart.gameObject.transform;
+            cargoModel.transform.parent = cart.model.transform;
             cargoModel.transform.localPosition = Vector3.zero + (Vector3.up * index * cargoHeight.Value);
             cargoModel.name = cargoModel.name + " " + index;
             Undo.RegisterCreatedObjectUndo(cargoModel, "Created cargo model");

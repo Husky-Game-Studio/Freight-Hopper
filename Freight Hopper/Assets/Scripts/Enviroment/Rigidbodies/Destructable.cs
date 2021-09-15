@@ -9,7 +9,6 @@ public class Destructable : MonoBehaviour
     [SerializeField] private bool explosion;
     [SerializeField] private float explosionTime;
     public float ExplosionTime => explosionTime;
-    [SerializeField] private float maximumForce;
     [SerializeField] private float scale;
     private static GameObject explosionPrefab;
 
@@ -24,26 +23,9 @@ public class Destructable : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        float collisionMass = 1;
-        if (collision.rigidbody != null)
-        {
-            collisionMass = collision.rigidbody.mass;
-        }
-        for (int i = 0; i < collision.contactCount; i++)
-        {
-            float strength = Vector3.Dot(collision.GetContact(i).normal, collision.relativeVelocity) * collisionMass;
-            if (strength > maximumForce)
-            {
-                DestroyObject();
-                break;
-            }
-        }
-    }
-
     public void DestroyObject()
     {
+        GetComponent<CartProperties>().SnapJoint();
         RigidbodyDestroyed?.Invoke();
         GameObject go = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
         go.transform.localScale = Vector3.one * scale;
