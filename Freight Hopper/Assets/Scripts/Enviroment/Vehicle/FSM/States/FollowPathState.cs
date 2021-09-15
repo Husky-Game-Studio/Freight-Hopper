@@ -18,6 +18,7 @@ public class FollowPathState : BasicState
     public override void EntryState()
     {
         trainFSM.ChangePath();
+
         trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
 
         if (trainFSM.InstantlyAccelerate && trainFSM.Starting)

@@ -17,9 +17,13 @@ public class Gravity
         collisionManagement.CollisionDataCollected += GravityLoop;
     }
 
-    ~Gravity()
+    public void Enable()
     {
-        collisionManagement.CollisionDataCollected -= GravityLoop;
+    }
+
+    public void Disable()
+    {
+        //collisionManagement.CollisionDataCollected -= GravityLoop;
     }
 
     public void DisableGravity()

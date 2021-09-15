@@ -130,14 +130,6 @@ public class TrainRailLinker : MonoBehaviour
                 continue;
             }
 
-            /*if (pathCreator.path.cumulativeLengthAtEachVertex[data.followIndex] >= pathCreator.path.length - followDistance
-                && Vector3.Distance(data.rb.position, pathCreator.path.GetPoint(data.followIndex)) <= followDistance)
-            {
-                dataToRemove.Add(data);
-                Debug.Log("Removed " + data.rb.name + " because of it reached the end");
-                continue;
-            }*/
-
             Vector3 positionOnPath = pathCreator.path.GetPoint(data.followIndex);
             Vector3 normal;
             float distance = Vector3.Distance(positionOnPath, data.rb.position);

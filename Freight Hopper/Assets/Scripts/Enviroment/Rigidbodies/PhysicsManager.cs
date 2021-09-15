@@ -18,10 +18,20 @@ public class PhysicsManager : MonoBehaviour
 
     private void Awake()
     {
+    }
+
+    private void OnEnable()
+    {
+        gravity.Enable();
         rb = GetComponent<Rigidbody>();
         collisionManager.Initialize(rb, this, rigidbodyLinker, friction, aerial);
         gravity.Initialize(rb, collisionManager, aerial);
         friction.Initialize(rb, collisionManager);
+    }
+
+    private void OnDisable()
+    {
+        gravity.Disable();
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -26,6 +26,8 @@ namespace PathCreation
         public readonly Vector3[] globalTangents;
         public readonly Vector3[] globalNormals;
 
+        public int LastVertexIndex => localPoints.Length - 1;
+
         /// Percentage along the path at each vertex (0 being start of path, and 1 being the end)
         public readonly float[] times;
         /// Total distance between the vertices of the polyline

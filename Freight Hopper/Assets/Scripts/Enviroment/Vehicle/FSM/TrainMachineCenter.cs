@@ -15,6 +15,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = true;
+    [SerializeField] private bool spawnIn = false;
 
     [SerializeField] private List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
@@ -65,8 +66,11 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             return currentPath == 0;
         }
     }
-    public bool CompletedPaths => this.OnFinalPath && linked && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.localPoints.Length - 1, this.Locomotive.rb.position);
+    public bool CompletedPaths => this.OnFinalPath
+        && linked
+        && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.LastVertexIndex, this.Locomotive.rb.position);
     public bool InstantlyAccelerate => instantlyAccelerate;
+    public bool SpawnIn => spawnIn;
     public bool Loop => loop;
     public float TargetSpeed => targetVelocity;
     public Optional<float> StartWaitTime => startWaitTime;
@@ -110,13 +114,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         isTriggerEntered = true;
     }
 
-    public Vector3 GetClosestPointOnCurrentPath()
-    {
-        Vector3 position = this.Locomotive.rb.position;
-        float closestT = GetCurrentPath().path.GetClosestTimeOnPath(position);
-        return GetCurrentPath().path.GetPointAtTime(closestT) + (this.CurrentRailLinker.Height * GetCurrentPath().path.GetNormal(closestT));
-    }
-
     // Returns the RoadCreator object which contains the current path. Good for getting the object the path is likely on
     public PathCreation.PathCreator GetCurrentPath()
     {
@@ -131,7 +128,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         foreach (Cart cart in carts)
         {
-            cart.rb.AddForce(cart.rb.transform.forward * targetVelocity, ForceMode.VelocityChange);
+            cart.rb.AddForce(cart.rb.transform.forward * targetVelocity * 0.7f, ForceMode.VelocityChange);
         }
     }
 
@@ -325,7 +322,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             //RemoveCartsUntilIndex(0);
         }
-        KeepUpright();
+        if (!spawnIn || currentState == followPath)
+        {
+            KeepUpright();
+        }
     }
 
     public override void RestartFSM()

@@ -63,12 +63,10 @@ public class HoverEngine : MonoBehaviour
         float error = heightDifference;
         Debug.DrawLine(this.transform.position, this.transform.position + (-direction * error), Color.white);
         // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
-        if (error > -0.1f)
-        {
-            Vector3 force = -direction * this.controller.GetOutput(error, Time.fixedDeltaTime);
 
-            rb.AddForceAtPosition(force, this.transform.position, ForceMode.Force);
-        }
+        Vector3 force = -direction * this.controller.GetOutput(error, Time.fixedDeltaTime);
+
+        rb.AddForceAtPosition(force, this.transform.position, ForceMode.Force);
     }
 
     public void Hover(float height, TrainRailLinker path)

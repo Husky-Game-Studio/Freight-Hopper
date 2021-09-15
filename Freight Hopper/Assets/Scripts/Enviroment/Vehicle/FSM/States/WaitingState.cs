@@ -41,7 +41,11 @@ public class WaitingState : BasicState
 
     public override void EntryState()
     {
-        trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
+        if (!trainFSM.SpawnIn)
+        {
+            trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
+        }
+
         if (trainFSM.StartWaitTime.Enabled)
         {
             waitTime = new Timer(trainFSM.StartWaitTime.value);
@@ -56,10 +60,24 @@ public class WaitingState : BasicState
         {
             trainFSM.StartOnTriggerEnter.value.triggered += trainFSM.EnteredTrigger;
         }
+        if (trainFSM.SpawnIn)
+        {
+            foreach (Transform transform in trainFSM.transform)
+            {
+                transform.gameObject.SetActive(false);
+            }
+        }
     }
 
     public override void ExitState()
     {
+        if (trainFSM.SpawnIn && trainFSM.previousState == trainFSM.waiting)
+        {
+            foreach (Transform transform in trainFSM.transform)
+            {
+                transform.gameObject.SetActive(true);
+            }
+        }
         if (trainFSM.StartOnTriggerEnter.Enabled && trainFSM.StartOnTriggerEnter.value != null)
         {
             trainFSM.StartOnTriggerEnter.value.triggered -= trainFSM.EnteredTrigger;
