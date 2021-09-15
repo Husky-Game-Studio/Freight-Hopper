@@ -36,7 +36,6 @@ public class HoverController : MonoBehaviour
     private void Awake()
     {
         InitializeEngines();
-        this.transform.parent.parent.GetComponent<TrainMachineCenter>().LinkedToPath += LinkEngines;
     }
 
     private void OnDisable()

@@ -8,6 +8,8 @@ public class WaitingState : BasicState
     private TrainMachineCenter trainFSM;
     private Transform playerTransform;
     private Transform locomotive;
+    private bool waitedAtStart = false;
+    public bool WaitedAtStart => waitedAtStart;
 
     public WaitingState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions) : base(machineCenter, stateTransitions)
     {
@@ -33,11 +35,13 @@ public class WaitingState : BasicState
         {
             return trainFSM.IsTriggerEntered;
         }
+
         return true;
     }
 
     public override void EntryState()
     {
+        trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
         if (trainFSM.StartWaitTime.Enabled)
         {
             waitTime = new Timer(trainFSM.StartWaitTime.value);
@@ -60,6 +64,7 @@ public class WaitingState : BasicState
         {
             trainFSM.StartOnTriggerEnter.value.triggered -= trainFSM.EnteredTrigger;
         }
+        waitedAtStart = true;
     }
 
     public override void PerformBehavior()

@@ -11,6 +11,11 @@ public class PhysicsManager : MonoBehaviour
 
     [HideInInspector] public Rigidbody rb;
 
+    private void OnValidate()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();

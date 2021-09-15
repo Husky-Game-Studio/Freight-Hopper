@@ -14,15 +14,20 @@ public class TrainRailLinker : MonoBehaviour
     public float Height => height;
     public float DerailThreshold => derailThreshold;
 
-    private List<int> indexesToRemove = new List<int>();
-    private List<TrainData> linkedTrainObjects = new List<TrainData>();
+    private HashSet<TrainData> dataToRemove = new HashSet<TrainData>();
+    private HashSet<TrainData> linkedTrainObjects = new HashSet<TrainData>();
     private HashSet<Rigidbody> isRigidbodyLinked = new HashSet<Rigidbody>();
 
-    public event Action<Rigidbody> removedRigidbody;
+    public event Action<Rigidbody> RemovedRigidbody;
 
     public Dictionary<Rigidbody, TrainData> linkedRigidbodyObjects = new Dictionary<Rigidbody, TrainData>();
 
     [HideInInspector] public PathCreation.PathCreator pathCreator;
+
+    public bool WithinFollowDistance(int pointIndex, Vector3 position)
+    {
+        return (position - pathCreator.path.GetPoint(pointIndex)).sqrMagnitude < (this.FollowDistance * this.FollowDistance);
+    }
 
     private void Reset()
     {
@@ -35,6 +40,7 @@ public class TrainRailLinker : MonoBehaviour
     public class TrainData
     {
         public Rigidbody rb;
+        public HoverController hoverController;
         public int followIndex;
         public PID controller;
     }
@@ -53,12 +59,12 @@ public class TrainRailLinker : MonoBehaviour
     }
 
     // Links rigidbody to the rail, assuming its a train cart. Returns if successful
-    public bool Link(Rigidbody rb)
+    public void Link(Rigidbody rb)
     {
         InitializePathCreator();
         if (IsRigidbodyLinked(rb))
         {
-            return false;
+            return;
         }
 
         TrainData trainObject = new TrainData
@@ -66,13 +72,29 @@ public class TrainRailLinker : MonoBehaviour
             rb = rb,
             followIndex = (int)Mathf.Min(pathCreator.path.CalculateClosestVertexIndex(rb.position) + 1, pathCreator.path.length - 1),
         };
+        // Could be bad for performance !!
+        trainObject.hoverController = trainObject.rb.GetComponentInChildren<HoverController>();
+        trainObject.hoverController.LinkEngines(this);
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
         isRigidbodyLinked.Add(rb);
         trainObject.controller = new PID();
         trainObject.controller.Initialize(controllerData * rb.mass);
         linkedTrainObjects.Add(trainObject);
         linkedRigidbodyObjects[rb] = trainObject;
-        return true;
+        return;
+    }
+
+    public void RemoveLink(Rigidbody rb)
+    {
+        if (!IsRigidbodyLinked(rb))
+        {
+            return;
+        }
+        TrainData data = linkedRigidbodyObjects[rb];
+        linkedTrainObjects.Remove(data);
+        linkedRigidbodyObjects.Remove(rb);
+        isRigidbodyLinked.Remove(rb);
+        RemovedRigidbody?.Invoke(rb);
     }
 
     public bool IsRigidbodyLinked(Rigidbody rb)
@@ -99,56 +121,57 @@ public class TrainRailLinker : MonoBehaviour
 
     private void FixedUpdate()
     {
-        for (int i = 0; i < linkedTrainObjects.Count; i++)
+        foreach (TrainData data in linkedTrainObjects)
         {
-            if (linkedTrainObjects[i].rb == null)
+            if (data.rb == null)
             {
-                indexesToRemove.Add(i);
+                dataToRemove.Add(data);
                 Debug.Log("Removed destroyed train");
                 continue;
             }
-            if (pathCreator.path.cumulativeLengthAtEachVertex[linkedTrainObjects[i].followIndex] >= pathCreator.path.length - followDistance
-                && Vector3.Distance(linkedTrainObjects[i].rb.position, pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex)) <= followDistance)
+
+            /*if (pathCreator.path.cumulativeLengthAtEachVertex[data.followIndex] >= pathCreator.path.length - followDistance
+                && Vector3.Distance(data.rb.position, pathCreator.path.GetPoint(data.followIndex)) <= followDistance)
             {
-                indexesToRemove.Add(i);
-                Debug.Log("Removed " + linkedTrainObjects[i].rb.name + " because of it reached the end");
+                dataToRemove.Add(data);
+                Debug.Log("Removed " + data.rb.name + " because of it reached the end");
                 continue;
-            }
+            }*/
 
-            Vector3 positionOnPath = pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex);
+            Vector3 positionOnPath = pathCreator.path.GetPoint(data.followIndex);
             Vector3 normal;
-            float distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
+            float distance = Vector3.Distance(positionOnPath, data.rb.position);
 
-            while (distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1)
+            while (distance <= followDistance && data.followIndex < pathCreator.path.times.Length - 1)
             {
-                linkedTrainObjects[i].followIndex = pathCreator.path.GetNextIndex(linkedTrainObjects[i].followIndex);
-                positionOnPath = pathCreator.path.GetPoint(linkedTrainObjects[i].followIndex);
-                distance = Vector3.Distance(positionOnPath, linkedTrainObjects[i].rb.position);
+                data.followIndex = pathCreator.path.GetNextIndex(data.followIndex);
+                positionOnPath = pathCreator.path.GetPoint(data.followIndex);
+                distance = Vector3.Distance(positionOnPath, data.rb.position);
             }
 
-            normal = pathCreator.path.GetNormal(linkedTrainObjects[i].followIndex);
+            normal = pathCreator.path.GetNormal(data.followIndex);
+            //Debug.Log("linked to path " + pathCreator.name);
             Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
-            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetTangent(linkedTrainObjects[i].followIndex));
+            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetTangent(data.followIndex));
             //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
-            float error = GetError(positionOnPath, normal, linkedTrainObjects[i].rb.position, right);
-            Vector3 force = linkedTrainObjects[i].controller.GetOutput(error, Time.fixedDeltaTime) * right;
-            linkedTrainObjects[i].rb.AddForce(force, ForceMode.Force);
-            float derailDistance = (linkedTrainObjects[i].rb.position - TargetPos(positionOnPath, normal)).magnitude;
+            float error = GetError(positionOnPath, normal, data.rb.position, right);
+            Vector3 force = data.controller.GetOutput(error, Time.fixedDeltaTime) * right;
+            data.rb.AddForce(force, ForceMode.Force);
+            float derailDistance = (data.rb.position - TargetPos(positionOnPath, normal)).magnitude;
             if (error > derailThreshold)
             {
-                indexesToRemove.Add(i);
-                Debug.Log("Removed " + linkedTrainObjects[i].rb.name + " because of error of " + derailDistance);
+                dataToRemove.Add(data);
+                Debug.Log("Removed " + data.rb.name + " because of error of " + derailDistance);
             }
         }
 
-        for (int i = 0; i < indexesToRemove.Count; i++)
+        foreach (TrainData data in dataToRemove)
         {
-            isRigidbodyLinked.Remove(linkedTrainObjects[indexesToRemove[0]].rb);
-            linkedRigidbodyObjects[linkedTrainObjects[indexesToRemove[0]].rb] = null;
-            removedRigidbody?.Invoke(linkedTrainObjects[indexesToRemove[0]].rb);
-            linkedTrainObjects.RemoveAt(indexesToRemove[0]);
-
-            indexesToRemove.RemoveAt(0);
+            isRigidbodyLinked.Remove(data.rb);
+            linkedRigidbodyObjects.Remove(data.rb);
+            RemovedRigidbody?.Invoke(data.rb);
+            linkedTrainObjects.Remove(data);
         }
+        dataToRemove.Clear();
     }
 }

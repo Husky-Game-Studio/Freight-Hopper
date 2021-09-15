@@ -6,35 +6,49 @@ using System;
 public partial class TrainMachineCenter : FiniteStateMachineCenter
 {
     // States
-    public FindNextPathState findNextPath;
     public FollowPathState followPath;
     public WaitingState waiting;
-    public WanderState wander;
     [Space]
     // Independent Data
     [SerializeField] private Optional<float> startWaitTime;
     [SerializeField] private Optional<float> startWhenDistanceFromPlayer;
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
-    [SerializeField] private bool derailToWait = false;
     [SerializeField] private bool loop = false;
-    [SerializeField] private bool instantlyAccelerate = false;
-    [SerializeField] private bool snapCenterToPath = false;
-    [SerializeField] private List<PathCreation.PathCreator> pathObjects;
-    [SerializeField] private float targetVelocity;
+    [SerializeField] private bool instantlyAccelerate = true;
 
+    [SerializeField] private List<PathCreation.PathCreator> pathObjects;
+    [ReadOnly] public List<TrainRailLinker> railLinkers;
+    [SerializeField] private float targetVelocity;
+    [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
+    [SerializeField, ReadOnly] private bool linked = false;
     [SerializeField, ReadOnly] private int currentPath = -1;
 
     // Destroy Train After Derail Fields
     [SerializeField] private bool deleteOnDerail = false;
-
     [SerializeField] private float timeBeforeDelete = 10;
+
+    public Action<TrainRailLinker> LinkedToPath;
+
     public Timer timerToDelete;
     public bool trainDerailed;
+    private bool isTriggerEntered;
     private bool startedAlready = false;
 
     // Accessors
     public int CurrentPath => currentPath;
     public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
+    public TrainRailLinker GetNextRailLinker
+    {
+        get
+        {
+            if (currentPath + 1 >= railLinkers.Count)
+            {
+                return railLinkers[railLinkers.Count - 1];
+            }
+
+            return railLinkers[currentPath + 1];
+        }
+    }
     public bool Starting
     {
         get
@@ -51,22 +65,33 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             return currentPath == 0;
         }
     }
-    public bool DerailToWait => derailToWait;
+    public bool CompletedPaths => this.OnFinalPath && linked && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.localPoints.Length - 1, this.Locomotive.rb.position);
     public bool InstantlyAccelerate => instantlyAccelerate;
     public bool Loop => loop;
     public float TargetSpeed => targetVelocity;
-
     public Optional<float> StartWaitTime => startWaitTime;
     public Optional<float> StartWhenDistanceFromPlayer => startWhenDistanceFromPlayer;
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
     public bool IsTriggerEntered => isTriggerEntered;
-    private bool isTriggerEntered;
-    public Action<TrainRailLinker> LinkedToPath;
-    // Dependecies
-    [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
     public Cart Locomotive => carts.First.Value;
+
+    // Dependecies
     [HideInInspector] public HoverController hoverController;
-    [HideInInspector] public TrainRailLinker currentRailLinker;
+    public TrainRailLinker CurrentRailLinker
+    {
+        get
+        {
+            if (currentPath >= railLinkers.Count)
+            {
+                return railLinkers[railLinkers.Count - 1];
+            }
+            if (currentPath < 0)
+            {
+                return railLinkers[0];
+            }
+            return railLinkers[currentPath];
+        }
+    }
     private TrainStateTransitions transitionHandler;
 
     private void OnDrawGizmosSelected()
@@ -89,7 +114,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         Vector3 position = this.Locomotive.rb.position;
         float closestT = GetCurrentPath().path.GetClosestTimeOnPath(position);
-        return GetCurrentPath().path.GetPointAtTime(closestT) + (currentRailLinker.Height * GetCurrentPath().path.GetNormal(closestT));
+        return GetCurrentPath().path.GetPointAtTime(closestT) + (this.CurrentRailLinker.Height * GetCurrentPath().path.GetNormal(closestT));
     }
 
     // Returns the RoadCreator object which contains the current path. Good for getting the object the path is likely on
@@ -97,7 +122,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         if (currentPath >= pathObjects.Count)
         {
-            return null;
+            return pathObjects[pathObjects.Count - 1];
         }
         return pathObjects[currentPath];
     }
@@ -114,11 +139,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     public void ChangePath()
     {
         currentPath++;
-        if (currentPath < pathObjects.Count)
-        {
-            LinkTrainToPath(currentPath);
-        }
-        else if (loop && pathObjects.Count > 0)
+        if (loop && pathObjects.Count > 0)
         {
             currentPath = 0;
         }
@@ -142,9 +163,8 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         }
     }
 
-    private void Awake()
+    private void InitiliazeCarts()
     {
-        isTriggerEntered = false;
         PhysicsManager[] physics = GetComponentsInChildren<PhysicsManager>();
 
         for (int i = 0; i < physics.Length; i++)
@@ -154,8 +174,13 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             cart.DestoryCart += RemoveCartsUntilIndex;
             carts.AddLast(cart);
         }
-
         hoverController = this.Locomotive.rb.GetComponentInChildren<HoverController>();
+    }
+
+    private void Awake()
+    {
+        isTriggerEntered = false;
+        InitiliazeCarts();
 
         transitionHandler = new TrainStateTransitions(this);
 
@@ -166,69 +191,66 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         };
         defaultState = new DefaultState(this, defaultTransitionsList);
 
-        // Find Next Path
-        List<Func<BasicState>> findNextPathTransitionsList = new List<Func<BasicState>>
-        {
-            transitionHandler.CheckFollowPath
-        };
-        findNextPath = new FindNextPathState(this, findNextPathTransitionsList);
-
         // Follow Path
         List<Func<BasicState>> followPathTransitionsList = new List<Func<BasicState>>
         {
-            transitionHandler.CheckFindNextPath,
-            transitionHandler.CheckWander
+            transitionHandler.CheckWaiting
         };
         followPath = new FollowPathState(this, followPathTransitionsList);
 
         // Waiting
         List<Func<BasicState>> waitingTransitionsList = new List<Func<BasicState>>
         {
-            transitionHandler.CheckFindNextPath
+            transitionHandler.CheckFollowPath
         };
         waiting = new WaitingState(this, waitingTransitionsList);
 
-        // Wander
-        List<Func<BasicState>> wanderTransitionsList = new List<Func<BasicState>>();
-        wander = new WanderState(this, wanderTransitionsList);
-
-        // Check if linked to path
-        /*TrainBuilder trainBuilder = GetComponent<TrainBuilder>();
-        if (trainBuilder != null)
+        foreach (PathCreation.PathCreator path in pathObjects)
         {
-            if (trainBuilder.LinkedPathSet)
-            {
-                LinkTrainToPath(0);
-            }
-        }*/
+            railLinkers.Add(path.GetComponent<TrainRailLinker>());
+        }
     }
 
     private void OnValidate()
     {
-        if (pathObjects.Count > 0 && pathObjects[0] != null && snapCenterToPath)
+        InitiliazeCarts();
+        if (pathObjects.Count > 0 && pathObjects[0] != null)
         {
-            float t = pathObjects[0].path.GetClosestTimeOnPath(this.transform.position);
+            float t = pathObjects[0].path.GetClosestTimeOnPath(this.Locomotive.rb.position);
             Vector3 position = pathObjects[0].path.GetPointAtTime(t);
-            this.transform.position = position;
+            this.Locomotive.rb.transform.position = position;
             float offsetDistance = pathObjects[0].GetComponent<TrainRailLinker>().Height;
-            this.transform.position += pathObjects[0].path.GetNormal(t) * offsetDistance;
-            this.transform.rotation = pathObjects[0].path.GetRotation(t);
+            this.Locomotive.rb.transform.position += pathObjects[0].path.GetNormal(t) * offsetDistance;
+            this.Locomotive.rb.transform.rotation = pathObjects[0].path.GetRotation(t);
         }
     }
 
+    // Only use for train starting on path
     public void LinkTrainToPath(int pathIndex)
     {
-        TrainRailLinker railLinker = pathObjects[pathIndex].GetComponent<TrainRailLinker>();
-        if (currentRailLinker == railLinker)
+        if (this.CurrentRailLinker.IsRigidbodyLinked(this.Locomotive.rb))
         {
             return;
         }
-        currentRailLinker = railLinker;
         foreach (Cart cart in carts)
         {
-            railLinker.Link(cart.rb);
+            this.CurrentRailLinker.Link(cart.rb);
+            if (this.Locomotive == cart)
+            {
+                linked = true;
+                this.CurrentRailLinker.RemovedRigidbody += RemovedLocomitve;
+            }
         }
-        LinkedToPath?.Invoke(railLinker);
+
+        LinkedToPath?.Invoke(this.CurrentRailLinker);
+    }
+
+    public void RemovedLocomitve(Rigidbody cartRb)
+    {
+        if (this.Locomotive.rb == cartRb)
+        {
+            linked = false;
+        }
     }
 
     // Given a position, the train will try to rotate and move towards that position
@@ -268,7 +290,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         //Forces
         this.Locomotive.rb.AddForce(acc, ForceMode.Acceleration);
         this.Locomotive.rb.AddTorque(angAcc, ForceMode.Acceleration);
+    }
 
+    private void KeepUpright()
+    {
         //Rolling Correction
         foreach (Cart cart in carts)
         {
@@ -300,6 +325,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             //RemoveCartsUntilIndex(0);
         }
+        KeepUpright();
     }
 
     public override void RestartFSM()

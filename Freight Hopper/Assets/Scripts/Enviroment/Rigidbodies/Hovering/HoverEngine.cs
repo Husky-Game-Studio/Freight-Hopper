@@ -42,7 +42,7 @@ public class HoverEngine : MonoBehaviour
     public void UpdateCurrentLinker(TrainRailLinker newLinker)
     {
         currentLinker = newLinker;
-        currentLinker.removedRigidbody += CheckIfCanHover;
+        currentLinker.RemovedRigidbody += CheckIfCanHover;
         followIndex = (int)Mathf.Min(newLinker.pathCreator.path.CalculateClosestVertexIndex(this.transform.position) + 1, newLinker.pathCreator.path.length - 1);
         followDistance = newLinker.FollowDistance;
     }
@@ -53,7 +53,7 @@ public class HoverEngine : MonoBehaviour
         {
             // Memory leaks?????
             //currentLinker.removedRigidbody -= CheckIfCanHover;
-            Debug.Log("Removed " + unlinkedRigidbody.name, this.gameObject);
+            //Debug.Log("Removed " + unlinkedRigidbody.name, this.gameObject);
             currentLinker = null;
         }
     }

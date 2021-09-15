@@ -58,12 +58,12 @@ MonoBehaviour:
   startOnTriggerEnter:
     enabled: 0
     value: {fileID: 0}
-  derailToWait: 0
   loop: 0
   instantlyAccelerate: 0
-  snapCenterToPath: 0
   pathObjects: []
+  railLinkers: []
   targetVelocity: 35
+  linked: 0
   currentPath: -1
   deleteOnDerail: 0
   timeBeforeDelete: 10
@@ -71,8 +71,7 @@ MonoBehaviour:
     duration: 0
     current: 0
   trainDerailed: 0
-  hoverController: {fileID: 0}
-  currentRailLinker: {fileID: 0}
+  hoverController: {fileID: 924277779522981793}
 --- !u!114 &8828049057225272882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,3 +188,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4735605026481358126, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
   m_PrefabInstance: {fileID: 8828049057815456783}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &924277779522981793 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8525373906403386286, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+  m_PrefabInstance: {fileID: 8828049057815456783}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05852190c9073be4395f46a6aa214239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
