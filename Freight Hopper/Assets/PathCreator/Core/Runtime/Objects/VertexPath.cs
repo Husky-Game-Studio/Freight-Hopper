@@ -347,7 +347,7 @@ namespace PathCreation
 
         public int GetNextIndex(int index)
         {
-            return Mathf.Clamp(index + 1, 0, times.Length - 1);
+            return Mathf.Min(index + 1, this.LastVertexIndex);
         }
 
         /// Finds the distance along the path that is closest to the given point

@@ -30,6 +30,6 @@ public class Destructable : MonoBehaviour
         GameObject go = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
         go.transform.localScale = Vector3.one * scale;
         Destroy(go, explosionTime);
-        Destroy(this.gameObject);
+        Destroy(this.gameObject, explosionTime);
     }
 }

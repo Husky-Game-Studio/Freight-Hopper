@@ -27,12 +27,10 @@ public class TrainStateTransitions
     {
         if (!trainFSM.waiting.WaitingFinished() && !trainFSM.waiting.WaitedAtStart)
         {
-            Debug.Log("waiting start");
             return trainFSM.waiting;
         }
         if (trainFSM.CompletedPaths)
         {
-            Debug.Log("completed paths");
             return trainFSM.waiting;
         }
         return null;

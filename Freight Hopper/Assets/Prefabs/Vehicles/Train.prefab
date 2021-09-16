@@ -64,14 +64,10 @@ MonoBehaviour:
   pathObjects: []
   railLinkers: []
   targetVelocity: 35
-  linked: 0
   currentPath: -1
-  deleteOnDerail: 0
-  timeBeforeDelete: 10
-  timerToDelete:
+  inactivityDeletionTimer:
     duration: 0
     current: 0
-  trainDerailed: 0
   hoverController: {fileID: 924277779522981793}
 --- !u!114 &8828049057225272882
 MonoBehaviour:

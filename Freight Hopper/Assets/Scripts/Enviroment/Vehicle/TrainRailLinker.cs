@@ -99,6 +99,10 @@ public class TrainRailLinker : MonoBehaviour
 
     public bool IsRigidbodyLinked(Rigidbody rb)
     {
+        if (rb == null)
+        {
+            return false;
+        }
         return isRigidbodyLinked.Contains(rb);
     }
 
@@ -126,11 +130,11 @@ public class TrainRailLinker : MonoBehaviour
             if (data.rb == null)
             {
                 dataToRemove.Add(data);
-                Debug.Log("Removed destroyed train");
+                //Debug.Log("Removed destroyed train");
                 continue;
             }
-
-            Vector3 positionOnPath = pathCreator.path.GetPoint(data.followIndex);
+            int dataFollowIndex = Mathf.Min(data.followIndex, pathCreator.path.LastVertexIndex);
+            Vector3 positionOnPath = pathCreator.path.GetPoint(dataFollowIndex);
             Vector3 normal;
             float distance = Vector3.Distance(positionOnPath, data.rb.position);
 
@@ -141,10 +145,10 @@ public class TrainRailLinker : MonoBehaviour
                 distance = Vector3.Distance(positionOnPath, data.rb.position);
             }
 
-            normal = pathCreator.path.GetNormal(data.followIndex);
+            normal = pathCreator.path.GetNormal(dataFollowIndex);
             //Debug.Log("linked to path " + pathCreator.name);
             Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
-            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetTangent(data.followIndex));
+            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetTangent(dataFollowIndex));
             //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
             float error = GetError(positionOnPath, normal, data.rb.position, right);
             Vector3 force = data.controller.GetOutput(error, Time.fixedDeltaTime) * right;
@@ -153,7 +157,7 @@ public class TrainRailLinker : MonoBehaviour
             if (error > derailThreshold)
             {
                 dataToRemove.Add(data);
-                Debug.Log("Removed " + data.rb.name + " because of error of " + derailDistance);
+                //Debug.Log("Removed " + data.rb.name + " because of error of " + derailDistance);
             }
         }
 

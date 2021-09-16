@@ -41,6 +41,11 @@ public class TrainBuilder : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        Destroy(this);
+    }
+
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCargos
     {

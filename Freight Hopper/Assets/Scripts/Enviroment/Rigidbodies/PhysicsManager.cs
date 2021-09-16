@@ -9,7 +9,7 @@ public class PhysicsManager : MonoBehaviour
     public CollisionManagement collisionManager;
     public RigidbodyLinker rigidbodyLinker;
 
-    [HideInInspector] public Rigidbody rb;
+    [ReadOnly] public Rigidbody rb;
 
     private void OnValidate()
     {

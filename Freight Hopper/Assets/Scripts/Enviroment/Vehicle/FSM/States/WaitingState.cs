@@ -41,7 +41,7 @@ public class WaitingState : BasicState
 
     public override void EntryState()
     {
-        if (!trainFSM.SpawnIn)
+        if (!trainFSM.SpawnIn && !waitedAtStart)
         {
             trainFSM.LinkTrainToPath(trainFSM.CurrentPath);
         }

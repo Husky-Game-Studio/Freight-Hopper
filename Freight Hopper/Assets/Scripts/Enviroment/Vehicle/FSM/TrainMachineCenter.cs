@@ -16,28 +16,25 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = true;
     [SerializeField] private bool spawnIn = false;
-
+    private bool completedPaths;
     [SerializeField] private List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
     [SerializeField] private float targetVelocity;
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
-    [SerializeField, ReadOnly] private bool linked = false;
     [SerializeField, ReadOnly] private int currentPath = -1;
 
     // Destroy Train After Derail Fields
-    [SerializeField] private bool deleteOnDerail = false;
-    [SerializeField] private float timeBeforeDelete = 10;
+    //[SerializeField] private bool deleteOnDerail = false;
 
     public Action<TrainRailLinker> LinkedToPath;
 
-    public Timer timerToDelete;
-    public bool trainDerailed;
+    public Timer inactivityDeletionTimer;
     private bool isTriggerEntered;
     private bool startedAlready = false;
 
     // Accessors
     public int CurrentPath => currentPath;
-    public bool OnFinalPath => currentPath == pathObjects.Count - 1 && !loop;
+    public bool OnFinalPath => currentPath == pathObjects.Count && !loop;
     public TrainRailLinker GetNextRailLinker
     {
         get
@@ -67,7 +64,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         }
     }
     public bool CompletedPaths => this.OnFinalPath
-        && linked
         && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.LastVertexIndex, this.Locomotive.rb.position);
     public bool InstantlyAccelerate => instantlyAccelerate;
     public bool SpawnIn => spawnIn;
@@ -146,29 +142,35 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         if (index == 0)
         {
-            currentState?.ExitState();
-            previousState = null;
-            currentState = null;
-            Destroy(this, carts.First.Value.destructable.ExplosionTime);
+            Destroy(this.Locomotive.rb.gameObject, this.Locomotive.destructable.ExplosionTime);
         }
-        for (int i = carts.Count; i > index; i--)
+        int cartsCount = carts.Count;
+        for (int i = 0; i < cartsCount - index; i++)
         {
             Cart cart = carts.Last.Value;
-            cart.destructable.RigidbodyDestroyed -= cart.DestroyCartFunc;
-            cart.DestoryCart -= RemoveCartsUntilIndex;
+            //cart.destructable.RigidbodyDestroyed -= cart.DestroyCartFunc;
+            //cart.DestoryCart -= RemoveCartsUntilIndex;
+            cart.destructable.DestroyObject();
             carts.RemoveLast();
+        }
+
+        if (carts.Count < 1)
+        {
+            Destroy(this.gameObject);
         }
     }
 
     private void InitiliazeCarts()
     {
+        carts.Clear();
         PhysicsManager[] physics = GetComponentsInChildren<PhysicsManager>();
 
         for (int i = 0; i < physics.Length; i++)
         {
             Cart cart = new Cart(physics[i]);
-            cart.destructable.RigidbodyDestroyed += cart.DestroyCartFunc;
-            cart.DestoryCart += RemoveCartsUntilIndex;
+            //Debug.Log("added " + cart.rb.name);
+            //cart.destructable.RigidbodyDestroyed += cart.DestroyCartFunc;
+            //cart.DestoryCart += RemoveCartsUntilIndex;
             carts.AddLast(cart);
         }
         hoverController = this.Locomotive.rb.GetComponentInChildren<HoverController>();
@@ -225,6 +227,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     // Only use for train starting on path
     public void LinkTrainToPath(int pathIndex)
     {
+        if (carts.Count < 1)
+        {
+            return;
+        }
         if (this.CurrentRailLinker.IsRigidbodyLinked(this.Locomotive.rb))
         {
             return;
@@ -232,22 +238,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         foreach (Cart cart in carts)
         {
             this.CurrentRailLinker.Link(cart.rb);
-            if (this.Locomotive == cart)
-            {
-                linked = true;
-                this.CurrentRailLinker.RemovedRigidbody += RemovedLocomitve;
-            }
         }
 
         LinkedToPath?.Invoke(this.CurrentRailLinker);
-    }
-
-    public void RemovedLocomitve(Rigidbody cartRb)
-    {
-        if (this.Locomotive.rb == cartRb)
-        {
-            linked = false;
-        }
     }
 
     // Given a position, the train will try to rotate and move towards that position
@@ -313,18 +306,33 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public override void PerformStateIndependentBehaviors()
     {
-        if (trainDerailed && deleteOnDerail)
+        if (this.CompletedPaths || completedPaths)
         {
-            timerToDelete.CountDown(Time.deltaTime);
+            completedPaths = true;
+            inactivityDeletionTimer.CountDown(Time.fixedDeltaTime);
         }
 
-        if (!timerToDelete.TimerActive())
+        if (currentState == waiting && !inactivityDeletionTimer.TimerActive() && waiting.WaitedAtStart && carts.Count > 1)
         {
-            //RemoveCartsUntilIndex(0);
+            RemoveCartsUntilIndex(0);
         }
         if (!spawnIn || currentState == followPath)
         {
             KeepUpright();
+        }
+        var current = carts.First;
+        bool deleting = false;
+        for (int i = 0; i < carts.Count - 1; i++)
+        {
+            current = current.Next;
+            if (current.Value.properties.HadJoint && current.Value.properties.JointSnapped)
+            {
+                deleting = true;
+            }
+            if (deleting)
+            {
+                carts.RemoveLast();
+            }
         }
     }
 
@@ -337,7 +345,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         RestartFSM();
         LevelController.PlayerRespawned += RestartFSM;
-        timerToDelete = new Timer(timeBeforeDelete);
+        inactivityDeletionTimer.ResetTimer();
     }
 
     public void OnDisable()
