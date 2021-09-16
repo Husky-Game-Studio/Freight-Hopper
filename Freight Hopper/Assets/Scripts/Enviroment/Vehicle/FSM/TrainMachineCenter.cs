@@ -16,7 +16,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = true;
     [SerializeField] private bool spawnIn = false;
-    private bool completedPaths;
+    private bool completedPathsToggle;
     [SerializeField] private List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
     [SerializeField] private float targetVelocity;
@@ -63,8 +63,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             return currentPath == 0;
         }
     }
-    public bool CompletedPaths => this.OnFinalPath
-        && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.LastVertexIndex, this.Locomotive.rb.position);
+    public bool CompletedPaths => (this.OnFinalPath
+        && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.LastVertexIndex, this.Locomotive.rb.position))
+        || completedPathsToggle;
     public bool InstantlyAccelerate => instantlyAccelerate;
     public bool SpawnIn => spawnIn;
     public bool Loop => loop;
@@ -282,9 +283,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         this.Locomotive.rb.AddTorque(angAcc, ForceMode.Acceleration);
     }
 
+    //Rolling Correction
     private void KeepUpright()
     {
-        //Rolling Correction
         foreach (Cart cart in carts)
         {
             Vector3 upAxis = CustomGravity.GetUpAxis(cart.rb.position);
@@ -306,13 +307,13 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public override void PerformStateIndependentBehaviors()
     {
-        if (this.CompletedPaths || completedPaths)
+        if (this.CompletedPaths)
         {
-            completedPaths = true;
+            completedPathsToggle = true;
             inactivityDeletionTimer.CountDown(Time.fixedDeltaTime);
         }
 
-        if (currentState == waiting && !inactivityDeletionTimer.TimerActive() && waiting.WaitedAtStart && carts.Count > 1)
+        if (currentState == waiting && !inactivityDeletionTimer.TimerActive() && waiting.WaitedAtStart)
         {
             RemoveCartsUntilIndex(0);
         }
