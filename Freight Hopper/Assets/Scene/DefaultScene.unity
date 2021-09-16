@@ -3115,14 +3115,14 @@ MonoBehaviour:
   againstWallPush: 5
   jumpContinousUpForce: 10
   jumpContinousPush: 5
-  coyoteTimer:
-    duration: 0.5
-    current: 0
   jumpHoldingTimer:
     duration: 0.5
     current: 0
   inAirCooldown:
     duration: 0.15
+    current: 0
+  coyoteTimer:
+    duration: 0.75
     current: 0
   entryEffectsCooldown:
     duration: 0.1
@@ -3252,7 +3252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868862592521811796, guid: 9dc1cace6873eb5488fe87cd8a5d96bc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -62.92
+      value: -62.920044
       objectReference: {fileID: 0}
     - target: {fileID: 6868862592521811796, guid: 9dc1cace6873eb5488fe87cd8a5d96bc, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3966,7 +3966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8156a7bd37866a741a0859a84fef0022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugging: 0
+  debugging: 1
   currentStateName: 
   currentSubStateName: 
   previousStateName: 

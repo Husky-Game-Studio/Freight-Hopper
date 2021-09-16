@@ -25,9 +25,9 @@ public partial class WallRunBehavior : AbilityBehavior
     [SerializeField] private float jumpContinousPush = 10;
 
     [Space, Header("Timers")]
-    public Timer coyoteTimer = new Timer(0.5f);
     public Timer jumpHoldingTimer = new Timer(0.5f);
     public Timer inAirCooldown = new Timer(0.1f);
+    public Timer coyoteTimer = new Timer(0.75f);
     public Timer entryEffectsCooldown = new Timer(0.1f);
     public Timer exitEffectsCooldown = new Timer(0.1f);
 
@@ -117,6 +117,7 @@ public partial class WallRunBehavior : AbilityBehavior
     public override void EntryAction()
     {
         base.EntryAction();
+        coyoteTimer.ResetTimer();
         if (!entryEffectsCooldown.TimerActive())
         {
             StopPlayerFalling(physicsManager);

@@ -232,6 +232,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         if (currentState != wallRunState)
         {
             abilities.wallRunBehavior.exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
+            abilities.wallRunBehavior.coyoteTimer.CountDown(Time.fixedDeltaTime);
             if (!abilities.wallRunBehavior.exitEffectsCooldown.TimerActive())
             {
                 cameraController.ResetUpAxis();
