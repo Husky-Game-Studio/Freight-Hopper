@@ -106,6 +106,10 @@ public class TrainBuilder : MonoBehaviour
     // Draws a sphere where the action index is
     public void OnDrawGizmosSelected()
     {
+        if (cartsList.Count < 1)
+        {
+            return;
+        }
         Vector3 position = GetPosition(this.ActionIndex);
         if (actionIndex != -1)
         {
@@ -179,6 +183,7 @@ public class TrainBuilder : MonoBehaviour
             cartsList.Add(cart);
 
             UpdateCart(cartsList.Count - 1, cart);
+            Undo.RegisterCreatedObjectUndo(cart.gameObject, "Created cargo gameobject");
             if (actionIndex != -1)
             {
                 for (int j = cartsList.Count - 1; j > index; j--)
@@ -206,9 +211,9 @@ public class TrainBuilder : MonoBehaviour
                 cart.cargoIDs.RemoveAt(cart.cargoIDs.Count - 1);
             }
             cart.cargoIDs.Add(cargoID);
-            CreateCargoGameObject(cart, cart.cargoIDs.Count - 1);
+
+            Undo.RegisterCreatedObjectUndo(CreateCargoGameObject(cart, cart.cargoIDs.Count - 1), "Created cargo model");
         }
-        UpdateTrain();
     }
 
     public void RemoveCargo()
@@ -239,12 +244,13 @@ public class TrainBuilder : MonoBehaviour
         cart.cartID = cartID;
         cart.cargoIDs.Clear();
         cart.cargoIDs.Add(cargoID);
+
         UpdateCart(this.ActionIndex, cart);
+        Undo.RegisterCreatedObjectUndo(cart.model, "Created cargo gameobject");
         if (this.ActionIndex + 1 < cartsList.Count)
         {
             UpdateJoint(this.ActionIndex + 1);
         }
-        UpdateTrain();
     }
 
     public void RemoveCart()
@@ -343,14 +349,14 @@ public class TrainBuilder : MonoBehaviour
         }
         else if (completeUpdate)
         {
-            DestroyImmediate(cart.gameObject);
+            Undo.DestroyObjectImmediate(cart.gameObject);
+
             cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart, this.transform) as GameObject;
         }
 
         cart.gameObject.transform.position = position;
         cart.gameObject.transform.rotation = rotation;
         cart.gameObject.name = "Cart " + index;
-        Undo.RegisterCreatedObjectUndo(cart.gameObject, "Created cart model");
 
         cart.cartProperties = cart.gameObject.GetComponent<CartProperties>();
         cart.cartProperties.SetCartIndex(index);
@@ -442,10 +448,9 @@ public class TrainBuilder : MonoBehaviour
         cartModel.transform.parent = cart.gameObject.transform;
 
         cart.model = cartModel;
-        Undo.RegisterCreatedObjectUndo(cartModel, "Created cart model");
     }
 
-    private void CreateCargoGameObject(Cart cart, int index)
+    private GameObject CreateCargoGameObject(Cart cart, int index)
     {
         if (cart.cargoIDs.Count > 0 && (TrainCargos)cart.cargoIDs[index] != TrainCargos.None)
         {
@@ -456,8 +461,9 @@ public class TrainBuilder : MonoBehaviour
             cargoModel.transform.parent = cart.model.transform;
             cargoModel.transform.localPosition = Vector3.zero + (Vector3.up * index * cargoHeight.Value);
             cargoModel.name = cargoModel.name + " " + index;
-            Undo.RegisterCreatedObjectUndo(cargoModel, "Created cargo model");
+            return cargoModel;
         }
+        return null;
     }
 
     private Cart CreateNewCart(int cartID, int cargoID)
@@ -490,6 +496,10 @@ public class TrainBuilder : MonoBehaviour
         Quaternion bRotation = b.gameObject.transform.rotation;
         a.gameObject.transform.rotation = bRotation;
         b.gameObject.transform.rotation = aRotation;
+
+        GameObject tempModel = a.model;
+        a.model = b.model;
+        b.model = tempModel;
     }
 
 #endif
