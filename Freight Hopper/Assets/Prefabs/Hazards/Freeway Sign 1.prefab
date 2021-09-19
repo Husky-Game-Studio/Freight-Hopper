@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 7106460235288973720}
   - component: {fileID: 1355649229714355595}
   - component: {fileID: 2519031372523634896}
+  - component: {fileID: 4528468700235823045}
   m_Layer: 0
   m_Name: ProgrammablePlane
   m_TagString: Untagged
@@ -114,6 +115,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4528468700235823045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650504233482469214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce28ea7f786ac8479524d6fdf41d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billboards:
+  - {fileID: 2100000, guid: cb2c78deca5d0d542bd5a8968a42d06b, type: 2}
+  - {fileID: 2100000, guid: 71986aaa6cef9c148a4be38294f71710, type: 2}
+  - {fileID: 2100000, guid: 1b7f5c03e2319c1469fe67cab7df7e54, type: 2}
+  - {fileID: 2100000, guid: 28d70610f2b90404c835c0a6681dcae5, type: 2}
 --- !u!1 &5134595589676901226
 GameObject:
   m_ObjectHideFlags: 0

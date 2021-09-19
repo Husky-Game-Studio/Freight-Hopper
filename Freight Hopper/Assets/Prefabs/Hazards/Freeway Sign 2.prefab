@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 6428001057975034513}
   - component: {fileID: 24308252523590883}
   - component: {fileID: 3136405820143418863}
+  - component: {fileID: 8793437778503588092}
   m_Layer: 0
   m_Name: ProgramableSignRight
   m_TagString: Untagged
@@ -192,6 +193,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8793437778503588092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5439519174914632069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce28ea7f786ac8479524d6fdf41d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billboards:
+  - {fileID: 2100000, guid: cb2c78deca5d0d542bd5a8968a42d06b, type: 2}
+  - {fileID: 2100000, guid: 71986aaa6cef9c148a4be38294f71710, type: 2}
+  - {fileID: 2100000, guid: 1b7f5c03e2319c1469fe67cab7df7e54, type: 2}
+  - {fileID: 2100000, guid: 28d70610f2b90404c835c0a6681dcae5, type: 2}
 --- !u!1 &7238913996852058671
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +332,7 @@ GameObject:
   - component: {fileID: 5303634431944494403}
   - component: {fileID: 7944364372449529843}
   - component: {fileID: 1090334054559989408}
+  - component: {fileID: 3940650333640879099}
   m_Layer: 0
   m_Name: ProgramableSignLeft
   m_TagString: Untagged
@@ -384,6 +403,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3940650333640879099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7433938515738415603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce28ea7f786ac8479524d6fdf41d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billboards:
+  - {fileID: 2100000, guid: cb2c78deca5d0d542bd5a8968a42d06b, type: 2}
+  - {fileID: 2100000, guid: 71986aaa6cef9c148a4be38294f71710, type: 2}
+  - {fileID: 2100000, guid: 1b7f5c03e2319c1469fe67cab7df7e54, type: 2}
+  - {fileID: 2100000, guid: 28d70610f2b90404c835c0a6681dcae5, type: 2}
 --- !u!1 &8688190685769290960
 GameObject:
   m_ObjectHideFlags: 0
