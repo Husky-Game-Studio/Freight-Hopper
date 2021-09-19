@@ -19,8 +19,13 @@ public struct Optional<T>
         value = initialValue;
     }
 
-    public void Unenable()
+    public void Disable()
     {
         enabled = false;
+    }
+
+    public void Enable()
+    {
+        enabled = true;
     }
 }

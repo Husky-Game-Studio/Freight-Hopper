@@ -37,6 +37,10 @@ public class FollowPathState : BasicState
     public override void PerformBehavior()
     {
         TrainRailLinker.TrainData trainData;
+        if (trainFSM.CurrentRailLinker == null)
+        {
+            return;
+        }
         trainFSM.CurrentRailLinker.linkedRigidbodyObjects.TryGetValue(trainFSM.Locomotive.rb, out trainData);
         int index;
         if (trainData == null)

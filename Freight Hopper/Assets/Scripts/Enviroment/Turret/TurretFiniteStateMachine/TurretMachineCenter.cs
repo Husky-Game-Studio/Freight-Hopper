@@ -10,22 +10,24 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     private InputMaster master;
 
     // The Target and Information
-    [FormerlySerializedAs("targetPlayer")] [SerializeField]private bool targetingPlayer = false;
-    [FormerlySerializedAs("thePlayer")] [SerializeField]private GameObject theTarget;
+    [FormerlySerializedAs("targetPlayer")] [SerializeField] private bool targetingPlayer = false;
+    [FormerlySerializedAs("thePlayer")] [SerializeField] private GameObject theTarget;
+    [SerializeField] private Rigidbody targetRigidbody;
+    [SerializeField] private Rigidbody turretRigidbody;
     private Ray ray;
     //public RaycastHit toPlayerRaycast;
     public LayerMask targetedLayers;
-    [SerializeField]private GameObject bullet;
-    [SerializeField]private float projectileForce = 20;
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private float projectileForce = 20;
     public GameObject bulletSpawner;
     private GameObject barrelBase;
     private float speedOfRotation = 5f;
-    [SerializeField]private GameObject landingIndicator;
+    [SerializeField] private GameObject landingIndicator;
 
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
     public Optional<OnTriggerEvent> StartOnTriggerEnter => startOnTriggerEnter;
     public bool IsTriggerEntered => isTriggerEntered;
-    private bool isTriggerEntered; 
+    private bool isTriggerEntered;
     public bool triggerToTimer = false;
 
     private TurretTransitionsHandler turretTransitionsHandler;
@@ -39,28 +41,28 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     private void Awake()
     {
         turretTransitionsHandler = new TurretTransitionsHandler(this);
-        
+
         // Default
         List<Func<BasicState>> defaultTransitionsList = new List<Func<BasicState>>
         {
             turretTransitionsHandler.CheckStartState
         };
         defaultState = new DefaultState(this, defaultTransitionsList);
-        
+
         List<Func<BasicState>> searchTransitionsList = new List<Func<BasicState>>
         {
             turretTransitionsHandler.CheckTargetState
         };
         searchState = new SearchState(this, searchTransitionsList);
-        
+
         List<Func<BasicState>> targetTransitionsList = new List<Func<BasicState>>
         {
             turretTransitionsHandler.CheckSearchState
         };
         targetState = new TargetState(this, targetTransitionsList);
-        
+
         CreateStatesAndFindPlayer();
-        
+
         //RestartFSM();
         currentState = defaultState;
         previousState = defaultState;
@@ -91,7 +93,6 @@ public class TurretMachineCenter : FiniteStateMachineCenter
     // Assign initial state and subscribe to any event listeners
     public void OnEnable()
     {
-
     }
 
     // Unsubscribe from any assigned event listeners
@@ -141,7 +142,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         Vector3 transformOrigin = barrelBase.transform.position;//this.gameObject.transform.position;
         Vector3 transformTargetOrigin = this.theTarget.transform.position - transformOrigin;
         ray = new Ray(transformOrigin, transformTargetOrigin);
-        
+
         //Debugging
         if (debugPath)
         {
@@ -174,6 +175,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         SetTargetPosition(theTarget.transform.position);
         LaunchSequence(spawnedBullet);
     }
+
     public void ShootBullet()
     {
         ShootBullet(bulletSpawner);
@@ -184,12 +186,11 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         return this.ray;
     }
 
-
     public GameObject getTarget()
     {
         return theTarget;
     }
-    
+
     public bool isTargetingPlayer()
     {
         return targetingPlayer;
@@ -213,31 +214,34 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         }
     }
 
-
     private bool fireTick = false;
-    public void setFireTick(bool fireBool) { fireTick = fireBool; }
-    public bool getFireTick() { return fireTick; }
-    
-    
-    
+
+    public void setFireTick(bool fireBool)
+    {
+        fireTick = fireBool;
+    }
+
+    public bool getFireTick()
+    {
+        return fireTick;
+    }
+
     /*
      * Bullet Path Calculating
      */
-    
-    
-    
+
     private Rigidbody projectileRB;
     private Rigidbody turretRB;
     private float projForce = 0f;
     private Vector3 targetPosition;
-    
+
     // maximumVerticleDisplacement must be less than the gravity to work
     private float maximumVerticleDisplacement = 25f;
-    [SerializeField]private float arcIntensity = 5f;
+    [SerializeField] private float arcIntensity = 5f;
     private float gravity;
 
-    [SerializeField]private bool debugPath = true;
-    
+    [SerializeField] private bool debugPath = true;
+
     private void LaunchSequence(GameObject spawnedProjectile)
     {
         turretRB = this.gameObject.GetComponent<Rigidbody>();
@@ -251,10 +255,10 @@ public class TurretMachineCenter : FiniteStateMachineCenter
 
     private void SetLandingIndicator(LaunchData myLD)
     {
-        GameObject landingIndicator = Instantiate(this.landingIndicator, theTarget.transform.position + (theTarget.transform.localScale/2), new Quaternion(0, 1, 0, 1));
+        GameObject landingIndicator = Instantiate(this.landingIndicator, theTarget.transform.position + (theTarget.transform.localScale / 2), new Quaternion(0, 1, 0, 1));
         Destroy(landingIndicator, myLD.timeToTarget);
     }
-    
+
     private void Launch()
     {
         LaunchData myLD = CalculateLaunchData();
@@ -262,10 +266,10 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         SetLandingIndicator(myLD);
         if (triggerToTimer)
         {
-            startOnTriggerEnter.Unenable();
+            startOnTriggerEnter.Disable();
         }
     }
-    
+
     private LaunchData CalculateLaunchData()
     {
         if (this.gameObject.transform.position.y < targetPosition.y)
@@ -284,7 +288,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
             Mathf.Sqrt(-2 * maximumVerticleDisplacement / gravity) + Mathf.Sqrt(2 * (displacementY - maximumVerticleDisplacement) / gravity);
         Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * maximumVerticleDisplacement);
         Vector3 velocityXZ = displacementXZ / time;
-        
+
         return new LaunchData(velocityXZ + velocityY * -Mathf.Sign(gravity), time);
     }
 
@@ -315,7 +319,7 @@ public class TurretMachineCenter : FiniteStateMachineCenter
         }
     }
 
-    struct LaunchData
+    private struct LaunchData
     {
         public readonly Vector3 initialVeloctiy;
         public readonly float timeToTarget;
@@ -325,30 +329,15 @@ public class TurretMachineCenter : FiniteStateMachineCenter
             this.initialVeloctiy = initialVeloctiy;
             this.timeToTarget = timeToTarget;
         }
-        
     }
-    
-     public void SetTargetPosition(Vector3 position)
-     {
-         targetPosition = position;
-     }
 
-     public void SetProjectileForce(float force)
-     {
-         projForce = force;
-     }
-     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public void SetTargetPosition(Vector3 position)
+    {
+        targetPosition = position;
+    }
+
+    public void SetProjectileForce(float force)
+    {
+        projForce = force;
+    }
 }

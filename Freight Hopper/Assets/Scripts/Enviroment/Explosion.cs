@@ -28,7 +28,7 @@ public class Explosion : MonoBehaviour
         foreach (Collider hitObject in hitColliders)
         {
             Rigidbody rb = hitObject.GetComponent<Rigidbody>();
-            Debug.Log(rb.name);
+            //Debug.Log(rb.name);
             if (rb != null)
             {
                 Vector3 position = hitObject.transform.position;

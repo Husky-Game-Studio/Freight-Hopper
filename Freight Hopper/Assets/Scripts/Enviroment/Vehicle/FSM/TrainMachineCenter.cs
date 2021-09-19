@@ -63,7 +63,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             return currentPath == 0;
         }
     }
-    public bool CompletedPaths => (this.OnFinalPath
+    public bool CompletedPaths => (this.CurrentRailLinker != null && this.OnFinalPath
         && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.LastVertexIndex, this.Locomotive.rb.position))
         || completedPathsToggle;
     public bool InstantlyAccelerate => instantlyAccelerate;
@@ -82,6 +82,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         get
         {
+            if (railLinkers.Count < 1)
+            {
+                return null;
+            }
             if (currentPath >= railLinkers.Count)
             {
                 return railLinkers[railLinkers.Count - 1];
@@ -232,7 +236,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             return;
         }
-        if (this.CurrentRailLinker.IsRigidbodyLinked(this.Locomotive.rb))
+        if (this.CurrentRailLinker == null || this.CurrentRailLinker.IsRigidbodyLinked(this.Locomotive.rb))
         {
             return;
         }
