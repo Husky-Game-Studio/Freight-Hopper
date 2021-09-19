@@ -89,4 +89,21 @@ public class PhysicalButton : MonoBehaviour
             Press();
         }
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (pressed)
+        {
+            return;
+        }
+        if (!collision.transform.CompareTag("Player"))
+        {
+            return;
+        }
+
+        if (Player.Instance.GetComponent<PlayerMachineCenter>().currentState is GroundPoundState)
+        {
+            Press();
+        }
+    }
 }
