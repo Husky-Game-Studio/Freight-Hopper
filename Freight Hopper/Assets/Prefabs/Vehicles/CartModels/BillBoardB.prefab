@@ -382,8 +382,9 @@ GameObject:
   - component: {fileID: 3063350491821300405}
   - component: {fileID: 1293083077410316533}
   - component: {fileID: 361458235177044286}
+  - component: {fileID: 7240324447556773720}
   m_Layer: 11
-  m_Name: BillboardCar2Screen_Billboard_car_v7.003
+  m_Name: Screen
   m_TagString: landable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -397,7 +398,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7014884258186222642}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.01, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9132139304530429590}
@@ -452,6 +453,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7240324447556773720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7014884258186222642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce28ea7f786ac8479524d6fdf41d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billboards:
+  - {fileID: 2100000, guid: cb2c78deca5d0d542bd5a8968a42d06b, type: 2}
+  - {fileID: 2100000, guid: 71986aaa6cef9c148a4be38294f71710, type: 2}
+  - {fileID: 2100000, guid: 1b7f5c03e2319c1469fe67cab7df7e54, type: 2}
+  - {fileID: 2100000, guid: 28d70610f2b90404c835c0a6681dcae5, type: 2}
 --- !u!1 &7228188530146469468
 GameObject:
   m_ObjectHideFlags: 0
