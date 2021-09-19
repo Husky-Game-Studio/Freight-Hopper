@@ -3046,12 +3046,14 @@ MonoBehaviour:
     speedLimitIncreaseValue: 4
     deltaAngle: 0.02
     acceleration: 80
+    sideInputPenaltyMultiplier: 0.4
   airController:
     speedLimit:
       value: 7
     speedLimitIncreaseValue: 0.5
     deltaAngle: 0.015
     acceleration: 20
+    sideInputPenaltyMultiplier: 0.4
 --- !u!114 &1798020245
 MonoBehaviour:
   m_ObjectHideFlags: 0

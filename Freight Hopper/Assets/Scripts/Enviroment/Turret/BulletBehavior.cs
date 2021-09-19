@@ -8,7 +8,7 @@ using Vector3 = UnityEngine.Vector3;
 // Help from: https://www.youtube.com/watch?v=IvT8hjy6q4o
 public class BulletBehavior : MonoBehaviour
 {
-    public Rigidbody rb;
+    [HideInInspector] public Rigidbody rb;
     public float despawnDuration = 4;
 
     private void Start()

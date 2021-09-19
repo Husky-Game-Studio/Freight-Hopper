@@ -7,6 +7,7 @@ public class VelocityController
     [SerializeField] private float speedLimitIncreaseValue;
     [SerializeField] private float deltaAngle;
     [SerializeField] private float acceleration;
+    [SerializeField] private float sideInputPenaltyMultiplier;
 
     private float oppositeAngle;
     private PhysicsManager physicsManager;
@@ -22,8 +23,13 @@ public class VelocityController
 
     public void RotateVelocity(Vector3 input)
     {
+        float deltaAngleMultipier = 1;
         physicsManager.rb.AddForce(-speedometer.HorzVelocity, ForceMode.VelocityChange);
-        Vector3 rotatedVector = Vector3.RotateTowards(speedometer.HorzVelocity.normalized, input, deltaAngle, 0);
+        if (Mathf.Abs(UserInput.Instance.Move().x) > 0.2f)
+        {
+            deltaAngleMultipier = sideInputPenaltyMultiplier;
+        }
+        Vector3 rotatedVector = Vector3.RotateTowards(speedometer.HorzVelocity.normalized, input, deltaAngle * deltaAngleMultipier, 0);
         physicsManager.rb.AddForce(rotatedVector * speedometer.HorzSpeed, ForceMode.VelocityChange);
     }
 

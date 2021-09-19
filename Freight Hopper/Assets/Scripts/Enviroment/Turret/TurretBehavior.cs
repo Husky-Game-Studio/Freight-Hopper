@@ -22,7 +22,7 @@ public class TurretBehavior : MonoBehaviour
     [SerializeField, ReadOnly] private Timer rangeCheckTime = new Timer(1);
     [SerializeField, ReadOnly] private int currentTarget;
     [SerializeField, ReadOnly] private bool firing = true;
-    private const float rotationSpeed = 400;
+    private const float rotationSpeed = 1000;
     private Vector3 targetPrediction;
 
     private void OnValidate()
@@ -87,7 +87,7 @@ public class TurretBehavior : MonoBehaviour
             if (Vector3.Distance(targetPrediction, body.position) < fireRange)
             {
                 targetPrediction = CalculateTarget();
-                Debug.DrawLine(barrelEnd.position, targetPrediction, Color.red);
+                Debug.DrawLine(barrelEnd.position, barrelEnd.position + targetPrediction, Color.red);
             }
 
             RotateBarrel(targetPrediction);
@@ -167,7 +167,7 @@ public class TurretBehavior : MonoBehaviour
         Quaternion qTurret = Quaternion.LookRotation((planePoint - barrel.position), up);
         //qTurret = Quaternion.LookRotation(Quaternion.Euler(theta, 0, 0), up);
         //barrel.rotation = qTurret;
-        barrel.rotation = Quaternion.LookRotation(target, up);
+        barrel.rotation = Quaternion.LookRotation(targetPos, up);
         //barrel.rotation = Quaternion.RotateTowards(barrel.rotation, Quaternion.Euler(target), rotationSpeed * Time.fixedDeltaTime);
     }
 }
