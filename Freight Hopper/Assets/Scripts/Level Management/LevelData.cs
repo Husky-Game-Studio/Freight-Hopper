@@ -19,6 +19,7 @@ public class LevelData
     public float rotationAngle = 0;
     public Quaternion velocityDirection;
     public float speed;
+    public float[] medalTimes = new float[4];
 
     [SerializeField]
     public PlayerAbilities.Name[] activeAbilities = {

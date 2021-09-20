@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class LevelComplete : MonoBehaviour
@@ -10,6 +11,9 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI bestTimeText;
     [SerializeField] private TextMeshProUGUI levelNameText;
+    [SerializeField] private Image medalImage;
+    [SerializeField] private Sprite[] medalImages = new Sprite[4];
+    [SerializeField] private TextMeshProUGUI nextMedalTimeText;
 
     private void Awake()
     {
@@ -43,6 +47,7 @@ public class LevelComplete : MonoBehaviour
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
         levelNameText.text = levelName;
+        float bestTime;
         LevelTimeSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         if (levelTimeData == null)
         {
@@ -55,16 +60,47 @@ public class LevelComplete : MonoBehaviour
             levelTimeData = new LevelTimeSaveData(times);
             LevelTimeSaveLoader.Save(levelName, levelTimeData);
             Debug.Log("no save data found, saving new best of " + timer.GetTime());
+            bestTime = timer.GetTime();
         }
         else
         {
-            float bestTime = levelTimeData.SetNewBestTime(LevelController.Instance.levelData.activeAbilities, timer.GetTime());
-            bestTimeText.text = "Best Time: " + timer.GetTimeString(bestTime);
-            if (bestTime == timer.GetTime())
+            float newBestTime = levelTimeData.SetNewBestTime(LevelController.Instance.levelData.activeAbilities, timer.GetTime());
+            bestTimeText.text = "Best Time: " + timer.GetTimeString(newBestTime);
+            if (newBestTime == timer.GetTime())
             {
                 LevelTimeSaveLoader.Save(levelName, levelTimeData);
-                Debug.Log("saving new best time of " + bestTime);
+                Debug.Log("saving new best time of " + newBestTime);
             }
+            bestTime = newBestTime;
+        }
+
+        int index = 0;
+        while (bestTime < LevelController.Instance.levelData.medalTimes[index])
+        {
+            index++;
+        }
+        if (levelTimeData.MedalIndex != index - 1)
+        {
+            levelTimeData.SetNewMedalIndex(index - 1);
+            LevelTimeSaveLoader.Save(levelName, levelTimeData);
+        }
+        if (levelTimeData.MedalIndex < 0)
+        {
+            medalImage.gameObject.SetActive(false);
+        }
+        else
+        {
+            medalImage.gameObject.SetActive(true);
+            medalImage.sprite = medalImages[levelTimeData.MedalIndex];
+        }
+        if (levelTimeData.MedalIndex < 2)
+        {
+            nextMedalTimeText.gameObject.SetActive(true);
+            nextMedalTimeText.text = "Next: " + timer.GetTimeString(LevelController.Instance.levelData.medalTimes[levelTimeData.MedalIndex + 1]);
+        }
+        else
+        {
+            nextMedalTimeText.gameObject.SetActive(false);
         }
     }
 

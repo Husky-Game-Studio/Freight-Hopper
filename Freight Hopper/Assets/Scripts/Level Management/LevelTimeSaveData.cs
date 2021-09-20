@@ -6,6 +6,13 @@ public class LevelTimeSaveData
 {
     // This is all temp really, this isn't really that fast as we want
     [SerializeField] private List<AbilityTimes> bestTimes;
+    [SerializeField] private int medalIndex = -1;
+    public int MedalIndex => medalIndex;
+
+    public void SetNewMedalIndex(int value)
+    {
+        medalIndex = value;
+    }
 
     public LevelTimeSaveData(List<AbilityTimes> bestTimes)
     {
