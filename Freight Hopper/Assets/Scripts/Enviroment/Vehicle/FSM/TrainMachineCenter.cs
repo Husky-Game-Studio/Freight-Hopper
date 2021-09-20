@@ -292,6 +292,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         foreach (Cart cart in carts)
         {
+            if (cart.rb == null)
+            {
+                continue;
+            }
             Vector3 upAxis = CustomGravity.GetUpAxis(cart.rb.position);
             Vector3 gravityForward = Vector3.Cross(upAxis, cart.rb.transform.right);
 
@@ -319,7 +323,16 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
         if (currentState == waiting && !inactivityDeletionTimer.TimerActive() && waiting.WaitedAtStart)
         {
-            RemoveCartsUntilIndex(0);
+            if (this.Locomotive.rb != null)
+            {
+                this.Locomotive.destructable.DestroyObject();
+            }
+            if (this.transform.childCount < 1)
+            {
+                Destroy(this.gameObject);
+            }
+            inactivityDeletionTimer.ResetTimer();
+            //RemoveCartsUntilIndex(0);
         }
         if (!spawnIn || currentState == followPath)
         {

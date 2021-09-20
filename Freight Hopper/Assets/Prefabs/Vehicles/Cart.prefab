@@ -221,7 +221,7 @@ MonoBehaviour:
     connectionAcceleration:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
-  rb: {fileID: 0}
+  rb: {fileID: 6888594939690183911}
 --- !u!114 &3491304789254103795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,8 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: 1
-  explosionTime: 1
-  maximumForce: 10000
+  explosionTime: 2
   scale: 4
 --- !u!1 &8661514545871677199
 GameObject:
@@ -293,9 +292,6 @@ MonoBehaviour:
       Kp: 3.5
       Ki: 0.2
       Kd: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4097
   targetDistance: 4.5
   automatic: 1
   hoverEnginePrefab: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}

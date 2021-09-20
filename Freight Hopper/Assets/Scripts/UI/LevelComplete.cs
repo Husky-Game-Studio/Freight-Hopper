@@ -75,7 +75,7 @@ public class LevelComplete : MonoBehaviour
         }
 
         int index = 0;
-        while (bestTime < LevelController.Instance.levelData.medalTimes[index])
+        while (index < 4 && bestTime < LevelController.Instance.levelData.medalTimes[index])
         {
             index++;
         }
