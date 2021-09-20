@@ -14,7 +14,7 @@ namespace PathCreation.Examples
 
         public Material material;
 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         public GameObject meshHolder;
 
         private MeshFilter meshFilter;

@@ -17,7 +17,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool instantlyAccelerate = true;
     [SerializeField] private bool spawnIn = false;
     private bool completedPathsToggle;
-    [SerializeField] private List<PathCreation.PathCreator> pathObjects;
+    public List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
     [SerializeField] private float targetVelocity;
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();

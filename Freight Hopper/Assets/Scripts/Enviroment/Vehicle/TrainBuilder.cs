@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TrainBuilder : MonoBehaviour
 {
-    [SerializeField] private Optional<PathCreation.PathCreator> linkedPath;
-    public bool LinkedPathSet => linkedPath.Enabled && linkedPath.value.path != null;
+    [SerializeField] private bool linkToPath = true;
+    PathCreation.PathCreator LinkedPath => trainFSM.pathObjects[0];
+
     [SerializeField, Min(1)] private int repeatActionCount = 1;
     [SerializeField, Min(-1),
         Tooltip("Index starts from 0 at the head of the train, -1 gives end of train")]
@@ -25,6 +26,7 @@ public class TrainBuilder : MonoBehaviour
     [SerializeField] private List<GameObject> cargoPrefabs;
     [SerializeField] private GameObject baseCart;
 
+    private TrainMachineCenter trainFSM;
     private GameObject locomotive;
     private int cartIndexSelection = 0;
     private int cargoIndexSelection = 0;
@@ -125,19 +127,24 @@ public class TrainBuilder : MonoBehaviour
 
     public void OnValidate()
     {
+        trainFSM = GetComponent<TrainMachineCenter>();
         locomotive = this.transform.GetChild(0).gameObject;
+        if (trainFSM == null || trainFSM.pathObjects.Count < 1 || trainFSM.pathObjects[0] == null)
+        {
+            return;
+        }
         if (actionIndex >= cartsList.Count)
         {
             actionIndex = cartsList.Count - 1;
         }
-        if (linkedPath.value != null && linkedPath.Enabled && linkedPath.value.path != null)
+        if (this.LinkedPath != null && linkToPath && this.LinkedPath.path != null)
         {
-            float t = linkedPath.value.path.GetClosestTimeOnPath(locomotive.transform.position);
-            Vector3 position = linkedPath.value.path.GetPointAtTime(t);
+            float t = this.LinkedPath.path.GetClosestTimeOnPath(locomotive.transform.position);
+            Vector3 position = this.LinkedPath.path.GetPointAtTime(t);
             locomotive.transform.position = position;
-            float offsetDistance = linkedPath.value.GetComponent<TrainRailLinker>().Height;
-            locomotive.transform.position += linkedPath.value.path.GetNormal(t) * offsetDistance;
-            locomotive.transform.rotation = linkedPath.value.path.GetRotation(t);
+            float offsetDistance = this.LinkedPath.GetComponent<TrainRailLinker>().Height;
+            locomotive.transform.position += this.LinkedPath.path.GetNormal(t) * offsetDistance;
+            locomotive.transform.rotation = this.LinkedPath.path.GetRotation(t);
         }
         EditorUtility.SetDirty(this);
     }
@@ -408,14 +415,14 @@ public class TrainBuilder : MonoBehaviour
 
         Vector3 endPosition = startPosition - (locomotive.transform.forward * ((cartLength.Value / 2) + (index * cartLength.Value) + ((index + 1) * (gapLength.Value + jointSnappingLength.Value))));
 
-        if (linkedPath.Enabled && linkedPath.value.path != null)
+        if (linkToPath && this.LinkedPath.path != null)
         {
             float arcDistance = (startPosition - endPosition).magnitude;
-            float t = linkedPath.value.path.GetClosestTimeOnPath(startPosition);
+            float t = this.LinkedPath.path.GetClosestTimeOnPath(startPosition);
 
-            float newT = linkedPath.value.path.GetTAfterXUnitsFromT(t, -arcDistance);
-            Vector3 position = linkedPath.value.path.GetPointAtTime(newT);
-            position += linkedPath.value.GetComponent<TrainRailLinker>().Height * linkedPath.value.path.GetNormal(newT);
+            float newT = this.LinkedPath.path.GetTAfterXUnitsFromT(t, -arcDistance);
+            Vector3 position = this.LinkedPath.path.GetPointAtTime(newT);
+            position += this.LinkedPath.GetComponent<TrainRailLinker>().Height * this.LinkedPath.path.GetNormal(newT);
             //Debug.DrawLine(startPosition, position);
             return position;
         }
@@ -425,12 +432,12 @@ public class TrainBuilder : MonoBehaviour
 
     private Quaternion GetRotation(int index)
     {
-        if (linkedPath.Enabled && linkedPath.value.path != null)
+        if (linkToPath && this.LinkedPath.path != null)
         {
             Vector3 position = GetPosition(index);
-            float t = linkedPath.value.path.GetClosestTimeOnPath(position);
-            Debug.DrawLine(linkedPath.value.path.GetPointAtTime(t), position, Color.blue);
-            return linkedPath.value.path.GetRotation(t);
+            float t = this.LinkedPath.path.GetClosestTimeOnPath(position);
+            Debug.DrawLine(this.LinkedPath.path.GetPointAtTime(t), position, Color.blue);
+            return this.LinkedPath.path.GetRotation(t);
         }
         return locomotive.transform.rotation;
     }
