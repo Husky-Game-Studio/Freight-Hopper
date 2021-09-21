@@ -61,7 +61,6 @@ public class FollowPathState : BasicState
             || trainFSM.CurrentRailLinker.WithinFollowDistance(trainFSM.CurrentRailLinker.pathCreator.path.localPoints.Length - 1, trainFSM.Locomotive.rb.position))
         {
             RailChangeMarker newMarker = new RailChangeMarker(trainFSM.carts, trainFSM.CurrentRailLinker, trainFSM.GetNextRailLinker);
-            //Debug.Log("new rail change marker made");
             railChangeMarkers.AddLast(newMarker);
             trainFSM.ChangePath();
         }

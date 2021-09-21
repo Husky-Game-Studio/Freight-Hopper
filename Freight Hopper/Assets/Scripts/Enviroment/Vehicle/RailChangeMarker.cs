@@ -29,12 +29,18 @@ public class RailChangeMarker
 
     private void CheckIfEnteringNextLinker()
     {
+        if (carts.Count < 1)
+        {
+            return;
+        }
         Cart cart = carts.Peek();
         //Debug.Log("running rail change marker");
-        if (cart.rb == null)
+        if (cart == null || cart.rb == null)
         {
             carts.Dequeue();
+            return;
         }
+
         if (previousLinker.WithinFollowDistance(previousLinker.pathCreator.path.localPoints.Length - 1, cart.rb.position)
             || nextLinker.WithinFollowDistance(0, cart.rb.position))
         {

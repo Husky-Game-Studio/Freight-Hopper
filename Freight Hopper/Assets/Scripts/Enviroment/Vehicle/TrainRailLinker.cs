@@ -26,7 +26,7 @@ public class TrainRailLinker : MonoBehaviour
 
     public bool WithinFollowDistance(int pointIndex, Vector3 position)
     {
-        return (position - pathCreator.path.GetPoint(pointIndex)).sqrMagnitude < (this.FollowDistance * this.FollowDistance);
+        return (position - (height * pathCreator.path.GetNormal(pointIndex)) - pathCreator.path.GetPoint(pointIndex)).sqrMagnitude < (this.FollowDistance * this.FollowDistance);
     }
 
     private void Reset()
