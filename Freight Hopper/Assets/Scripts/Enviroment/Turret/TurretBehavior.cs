@@ -14,15 +14,17 @@ public class TurretBehavior : MonoBehaviour
     [SerializeField] private Transform body;
     [SerializeField] private Transform barrel;
     [SerializeField] private Transform barrelEnd;
-    [SerializeField] private Rigidbody turretRb;
+    [SerializeField] private OnTriggerEvent[] fireTriggers;
+    [SerializeField] private OnTriggerEvent[] switchTargetTriggers;
     [SerializeField] private OnTriggerEvent[] enableTriggers;
     [SerializeField] private OnTriggerEvent[] disableTriggers;
-    [SerializeField, Tooltip("timers alternate from disabling/enabling the turret")] private Timer[] enableDisableTimers;
+    [SerializeField] private Timer[] fireTimers;
     [SerializeField, ReadOnly] private float fireRange = 250;
     [SerializeField, ReadOnly] private Timer rangeCheckTime = new Timer(1);
     [SerializeField, ReadOnly] private int currentTarget;
-    [SerializeField, ReadOnly] private bool firing = true;
+    [SerializeField, ReadOnly] private Toggle firing;
     private const float rotationSpeed = 1000;
+    private int fireTimerCurrentIndex;
     private Vector3 targetPrediction;
 
     private void OnValidate()
@@ -31,7 +33,7 @@ public class TurretBehavior : MonoBehaviour
 
     private void Awake()
     {
-        firing = true;
+        firing.Trigger();
         if (targetPlayer)
         {
             if (Player.loadedIn)
@@ -42,6 +44,45 @@ public class TurretBehavior : MonoBehaviour
             {
                 Player.PlayerLoadedIn += SetPlayerReference;
                 LevelController.PlayerRespawned += SetPlayerReference;
+            }
+        }
+
+        InitializeTriggers();
+
+        if (fireTimers.Length > 0 || fireTriggers.Length > 0)
+        {
+            firing.Reset();
+        }
+    }
+
+    private void InitializeTriggers()
+    {
+        if (fireTriggers.Length > 0)
+        {
+            for (int i = 0; i < fireTriggers.Length; i++)
+            {
+                fireTriggers[i].triggered += firing.Trigger;
+            }
+        }
+        if (enableTriggers.Length > 0)
+        {
+            for (int i = 0; i < enableTriggers.Length; i++)
+            {
+                enableTriggers[i].triggered += firing.Trigger;
+            }
+        }
+        if (disableTriggers.Length > 0)
+        {
+            for (int i = 0; i < disableTriggers.Length; i++)
+            {
+                disableTriggers[i].triggered += firing.Reset;
+            }
+        }
+        if (switchTargetTriggers.Length > 0)
+        {
+            for (int i = 0; i < switchTargetTriggers.Length; i++)
+            {
+                switchTargetTriggers[i].triggered += SwitchTarget;
             }
         }
     }
@@ -74,37 +115,88 @@ public class TurretBehavior : MonoBehaviour
             }
         }
 
-        if (firing)
+        if (currentTarget > targets.Length - 1)
         {
-            if (!rangeCheckTime.TimerActive())
+            return;
+        }
+        if (targets[currentTarget] == null)
+        {
+            currentTarget++;
+            if (currentTarget > targets.Length - 1)
             {
-                float height = Vector3.Project(body.position - targets[currentTarget].position, CustomGravity.GetUpAxis(body.position)).magnitude;
-                fireRange = Ballistics.ballistic_range(weapon.ProjectileSpeed, CustomGravity.GetGravity(body.position).magnitude, height);
-                rangeCheckTime.ResetTimer();
+                return;
             }
-            rangeCheckTime.CountDown(Time.fixedDeltaTime);
+        }
 
-            if (Vector3.Distance(targetPrediction, body.position) < fireRange)
+        if (fireTimers.Length > 0)
+        {
+            if (!fireTimers[fireTimerCurrentIndex].TimerActive())
             {
-                targetPrediction = CalculateTarget();
-                Debug.DrawLine(barrelEnd.position, barrelEnd.position + targetPrediction, Color.red);
+                fireTimers[fireTimerCurrentIndex].ResetTimer();
+                firing.Trigger();
+                fireTimerCurrentIndex = (fireTimerCurrentIndex + 1) % fireTimers.Length;
             }
+            fireTimers[fireTimerCurrentIndex].CountDown(Time.fixedDeltaTime);
+        }
 
-            RotateBarrel(targetPrediction);
+        TryFire();
+    }
 
-            RotateBody();
-            if (weapon.CanFire)
+    private void SwitchTarget()
+    {
+        currentTarget++;
+    }
+
+    private void TryFire()
+    {
+        if (!rangeCheckTime.TimerActive())
+        {
+            float height = Vector3.Project(body.position - targets[currentTarget].position, CustomGravity.GetUpAxis(body.position)).magnitude;
+            fireRange = Ballistics.ballistic_range(weapon.ProjectileSpeed, CustomGravity.GetGravity(body.position).magnitude, height);
+            rangeCheckTime.ResetTimer();
+        }
+        rangeCheckTime.CountDown(Time.fixedDeltaTime);
+
+        if (Vector3.Distance(targetPrediction, body.position) < fireRange)
+        {
+            targetPrediction = CalculateTarget();
+            Debug.DrawLine(barrelEnd.position, barrelEnd.position + targetPrediction, Color.red);
+        }
+
+        RotateBarrel(targetPrediction);
+
+        RotateBody();
+        if (weapon.CanFire && firing.value)
+        {
+            /*
+             if (Physics.Raycast(barrelEnd.position, (targets[currentTarget].position - barrelEnd.position).normalized, out RaycastHit hit, targetLayers))
+             {
+                 if (hit.collider.gameObject.transform != targets[currentTarget])
+                 {
+                     return;
+                 }
+             }*/
+            Debug.DrawRay(barrelEnd.position, (targets[currentTarget].position - barrelEnd.position).normalized * 100, Color.green);
+            Debug.DrawLine(barrelEnd.position, barrelEnd.position + barrelEnd.up * 1.5f, Color.green);
+            if (Physics.SphereCast(barrelEnd.position, 1.5f, barrelEnd.forward, out RaycastHit hit, 5, targetLayers))
             {
-                Debug.DrawRay(barrelEnd.position, (targets[currentTarget].position - barrelEnd.position).normalized * 100, Color.green);
-                if (Physics.Raycast(barrelEnd.position, (targets[currentTarget].position - barrelEnd.position).normalized, out RaycastHit hit, targetLayers))
+                if (hit.collider.gameObject.transform != targets[currentTarget])
                 {
-                    if (hit.collider.gameObject.transform != targets[currentTarget])
-                    {
-                        return;
-                    }
+                    return;
                 }
-                weapon.Fire(barrelEnd.position, barrelEnd.forward, targetPrediction);
             }
+            if (Physics.SphereCast(barrelEnd.position, 1.5f, (targets[currentTarget].position - barrelEnd.position).normalized, out RaycastHit hitCapsule, targetLayers))
+            {
+                if (Vector3.Distance(hitCapsule.collider.gameObject.transform.position, targets[currentTarget].position) > 5)
+                {
+                    return;
+                }
+            }
+            if (fireTimers.Length > 0 || fireTriggers.Length > 0)
+            {
+                firing.Reset();
+            }
+            weapon.Fire(barrelEnd.position, barrelEnd.forward, targetPrediction);
         }
     }
 

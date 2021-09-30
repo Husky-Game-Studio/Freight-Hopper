@@ -13,21 +13,29 @@ public class OnTriggerEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        for (int i = 0; i < triggerOnGameObjectEnter.value.Count; i++)
+        if (triggerOnGameObjectEnter.Enabled)
         {
-            if (triggerOnGameObjectEnter.Enabled && triggerOnGameObjectEnter.value
-                != null && other.gameObject == triggerOnGameObjectEnter.value[i])
+            for (int i = 0; i < triggerOnGameObjectEnter.value.Count; i++)
             {
-                triggered?.Invoke();
-                staticTriggered = true;
+                if (triggerOnGameObjectEnter.value
+                    != null && other.gameObject == triggerOnGameObjectEnter.value[i])
+                {
+                    triggered?.Invoke();
+                    staticTriggered = true;
+                }
             }
+            return;
         }
-        
+
         if (triggerOnPlayerEnter && other.CompareTag("Player"))
         {
             triggered?.Invoke();
             staticTriggered = true;
+            return;
         }
+
+        triggered?.Invoke();
+        staticTriggered = true;
     }
 
     private void OnTriggerExit(Collider other)
