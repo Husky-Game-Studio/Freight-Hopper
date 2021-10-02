@@ -10,7 +10,6 @@ public class CollisionManagement
     [System.NonSerialized] private bool aerial;
 
     [SerializeField] private float maxSlope = 60;
-    [ReadOnly, SerializeField] private AutomaticTimer unlandableSurfaceDuration;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
@@ -49,12 +48,6 @@ public class CollisionManagement
         contactNormal.UpdateOld();
 
         component.StartCoroutine(LateFixedUpdate());
-        unlandableSurfaceDuration.Subscribe(KillPlayer);
-    }
-
-    ~CollisionManagement()
-    {
-        unlandableSurfaceDuration.Unsubscribe(KillPlayer);
     }
 
     private bool touchedUnlandable = false;
@@ -79,11 +72,7 @@ public class CollisionManagement
 
             if (!collision.gameObject.CompareTag("landable") && rb.gameObject.CompareTag("Player"))
             {
-                SurfaceProperties surfaceProperties = collision.gameObject.GetComponent<SurfaceProperties>();
-                if (surfaceProperties != null && surfaceProperties.KillInstantly)
-                {
-                    KillPlayer();
-                }
+                KillPlayer();
                 touchedUnlandable = true;
                 continue;
             }
@@ -145,14 +134,6 @@ public class CollisionManagement
             rigidbodyLinker.UpdateConnectionState(rb);
             CollisionDataCollected?.Invoke();
 
-            if (touchedUnlandable && rb.CompareTag("Player"))
-            {
-                unlandableSurfaceDuration.Update(Time.fixedDeltaTime);
-            }
-            else
-            {
-                unlandableSurfaceDuration.ResetTimer();
-            }
             touchedUnlandable = false;
             UpdateOldValues();
             ClearValues();
