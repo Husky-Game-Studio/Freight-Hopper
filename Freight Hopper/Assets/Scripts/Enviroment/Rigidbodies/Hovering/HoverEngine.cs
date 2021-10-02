@@ -43,7 +43,15 @@ public class HoverEngine : MonoBehaviour
     {
         currentLinker = newLinker;
         currentLinker.RemovedRigidbody += CheckIfCanHover;
-        followIndex = Mathf.Min(newLinker.pathCreator.path.CalculateClosestVertexIndex(this.transform.position) + 1, newLinker.pathCreator.path.LastVertexIndex);
+        if (newLinker.pathCreator.path.isClosedLoop)
+        {
+            followIndex = (int)((newLinker.pathCreator.path.CalculateClosestVertexIndex(rb.position) + 1) % newLinker.pathCreator.path.length);
+        }
+        else
+        {
+            followIndex = Mathf.Min(newLinker.pathCreator.path.CalculateClosestVertexIndex(this.transform.position) + 1, newLinker.pathCreator.path.LastVertexIndex);
+        }
+
         followDistance = newLinker.FollowDistance;
     }
 
@@ -53,7 +61,7 @@ public class HoverEngine : MonoBehaviour
         {
             // Memory leaks?????
             //currentLinker.removedRigidbody -= CheckIfCanHover;
-            //Debug.Log("Removed " + unlinkedRigidbody.name, this.gameObject);
+            //Debug.Log("Removed ");
             currentLinker = null;
         }
     }
@@ -85,7 +93,7 @@ public class HoverEngine : MonoBehaviour
         while (distance <= followDistance && followIndex < path.pathCreator.path.times.Length - 1)
         {
             //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
-            followIndex = path.pathCreator.path.GetNextIndex(followIndex);
+            followIndex = path.pathCreator.path.GetNextIndex(followIndex, path.pathCreator.path.isClosedLoop);
             positionOnPath = path.pathCreator.path.GetPoint(followIndex);
             distance = Vector3.Distance(positionOnPath, this.transform.position);
         }

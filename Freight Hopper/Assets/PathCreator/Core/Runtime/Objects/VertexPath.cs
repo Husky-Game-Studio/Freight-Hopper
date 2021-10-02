@@ -345,8 +345,12 @@ namespace PathCreation
             return times[index];
         }
 
-        public int GetNextIndex(int index)
+        public int GetNextIndex(int index, bool loop = false)
         {
+            if (loop)
+            {
+                return (index + 1) % (this.LastVertexIndex);
+            }
             return Mathf.Min(index + 1, this.LastVertexIndex);
         }
 
