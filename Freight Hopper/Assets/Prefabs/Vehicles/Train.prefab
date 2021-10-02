@@ -65,6 +65,7 @@ MonoBehaviour:
   railLinkers: []
   targetVelocity: 35
   currentPath: -1
+  completedPathsToggle: 0
   inactivityDeletionTimer:
     duration: 3
     current: 0
@@ -81,9 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3672f7032824de4cb5c0767ddf61e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedPath:
-    enabled: 0
-    value: {fileID: 0}
+  linkToPath: 1
   repeatActionCount: 1
   actionIndex: -1
   locomotiveLength: {fileID: 11400000, guid: f9cc0082aa380534eacfef8188227218, type: 2}
@@ -113,6 +112,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8828049057225272883}
     m_Modifications:
+    - target: {fileID: 85755468220564777, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+      propertyPath: controller.data.Kd
+      value: 450
+      objectReference: {fileID: 0}
+    - target: {fileID: 85755468220564777, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+      propertyPath: controller.data.Ki
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 111867324825330463, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -128,6 +135,14 @@ PrefabInstance:
     - target: {fileID: 1886316016507558034, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1914116658506137252, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+      propertyPath: controller.data.Kd
+      value: 450
+      objectReference: {fileID: 0}
+    - target: {fileID: 1914116658506137252, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+      propertyPath: controller.data.Ki
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4735605026481358126, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_RootOrder
@@ -177,6 +192,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Locomotive
       objectReference: {fileID: 0}
+    - target: {fileID: 8525373906403386286, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
+      propertyPath: hoverSetting
+      value: 
+      objectReference: {fileID: 11400000, guid: 8642c08fd866f764e900a1f5a1a96b7c, type: 2}
     m_RemovedComponents:
     - {fileID: 7077515528789938321, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}

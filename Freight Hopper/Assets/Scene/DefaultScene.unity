@@ -2664,7 +2664,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1891988400}
         m_TargetAssemblyTypeName: LevelComplete, Assembly-CSharp
-        m_MethodName: NextLevel
+        m_MethodName: RestartLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2766,7 +2766,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1891988400}
         m_TargetAssemblyTypeName: LevelComplete, Assembly-CSharp
-        m_MethodName: NextLevel
+        m_MethodName: Menu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3123,11 +3123,11 @@ MonoBehaviour:
   preventConsumption: 0
   increasingForce:
     value: 1
-  deltaIncreaseForce: 0.01
-  angleToBeConsideredFlat: 7
-  initialBurstForce: 25
-  downwardsForce: 15
-  slopeDownForce: 65
+  deltaIncreaseForce: 0.02
+  angleToBeConsideredFlat: 3
+  initialBurstForce: 32
+  downwardsForce: 20
+  slopeDownForce: 100
   groundFrictionReductionPercent: 1
 --- !u!114 &1798020243
 MonoBehaviour:

@@ -49,9 +49,9 @@ MonoBehaviour:
   direction: {x: 0, y: -1, z: 0}
   controller:
     data:
-      Kp: 105
-      Ki: 6
-      Kd: 30
+      Kp: 420
+      Ki: 36
+      Kd: 180
   targetDistance: 4.5
   automatic: 1
   firing: 0
@@ -185,9 +185,9 @@ MonoBehaviour:
   direction: {x: 0, y: -1, z: 0}
   controller:
     data:
-      Kp: 105
-      Ki: 6
-      Kd: 30
+      Kp: 420
+      Ki: 36
+      Kd: 180
   targetDistance: 4.5
   automatic: 1
   firing: 0
@@ -321,12 +321,7 @@ MonoBehaviour:
   hoverEnginePivots:
   - {fileID: 1309176499994924360}
   - {fileID: 1309176499428435766}
-  hoverSetting:
-    currentPreset: 0
-    currentData:
-      Kp: 3.5
-      Ki: 0.2
-      Kd: 1
+  hoverSetting: {fileID: 11400000, guid: 8642c08fd866f764e900a1f5a1a96b7c, type: 2}
   targetDistance: 4.5
   automatic: 1
   hoverEnginePrefab: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
@@ -442,7 +437,7 @@ MonoBehaviour:
     connectionAcceleration:
       old: {x: 0, y: 0, z: 0}
       current: {x: 0, y: 0, z: 0}
-  rb: {fileID: 0}
+  rb: {fileID: 2559445759028541432}
 --- !u!114 &2559445759028541435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,7 +452,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion: 0
   explosionTime: 0
-  maximumForce: 1000
   scale: 1
 --- !u!1 &6120648580133090719
 GameObject:
@@ -517,22 +511,19 @@ MonoBehaviour:
   startOnTriggerEnter:
     enabled: 0
     value: {fileID: 0}
-  derailToWait: 0
   loop: 0
   instantlyAccelerate: 1
-  snapCenterToPath: 1
+  spawnIn: 0
   pathObjects:
   - {fileID: 0}
+  railLinkers: []
   targetVelocity: 30
   currentPath: -1
-  deleteOnDerail: 0
-  timeBeforeDelete: 10
-  timerToDelete:
+  completedPathsToggle: 0
+  inactivityDeletionTimer:
     duration: 0
     current: 0
-  trainDerailed: 0
-  hoverController: {fileID: 0}
-  currentRailLinker: {fileID: 0}
+  hoverController: {fileID: 1359349685320633353}
 --- !u!114 &6120648580133090718
 MonoBehaviour:
   m_ObjectHideFlags: 0

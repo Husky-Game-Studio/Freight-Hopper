@@ -8,7 +8,7 @@ public class HoverController : MonoBehaviour
     [SerializeField, ReadOnly] private Rigidbody rb;
 
     [SerializeField, ReadOnly, Tooltip("Automatically grabs hover engine that are children to this object")] private List<HoverEngine> hoverEnginePivots;
-    [SerializeField] private HoverPresets hoverSetting;
+    [SerializeField] private PIDSettings hoverSetting;
     [SerializeField] private float targetDistance;
     [SerializeField] private bool automatic = true;
     [SerializeField] private GameObject hoverEnginePrefab;
@@ -49,7 +49,7 @@ public class HoverController : MonoBehaviour
         InitializeRigidBody();
         if (this.gameObject != null)
         {
-            InitializeEngines();
+            //InitializeEngines();
         }
     }
 
@@ -88,7 +88,8 @@ public class HoverController : MonoBehaviour
                 Debug.LogWarning("Hover engine not found");
                 continue;
             }
-            hoverEngine.Initialize(rb, hoverSetting.CurrentPreset() * ((float)6 / hoverEnginePivots.Count), targetDistance, automatic);
+            PID.Data data = new PID.Data(hoverSetting);
+            hoverEngine.Initialize(rb, data * ((float)6 / hoverEnginePivots.Count), targetDistance, automatic);
         }
     }
 

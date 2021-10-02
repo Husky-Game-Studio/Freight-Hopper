@@ -74,10 +74,10 @@ ConfigurableJoint:
   m_GameObject: {fileID: 5098807932008158715}
   m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 10}
+  m_Anchor: {x: 0, y: 1, z: 10}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: 0, y: 0, z: -9}
+  m_ConnectedAnchor: {x: 0, y: 1, z: -10}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -286,12 +286,7 @@ MonoBehaviour:
   hoverEnginePivots:
   - {fileID: 2440289689643165763}
   - {fileID: 4562610941157119880}
-  hoverSetting:
-    currentPreset: 0
-    currentData:
-      Kp: 3.5
-      Ki: 0.2
-      Kd: 1
+  hoverSetting: {fileID: 11400000, guid: 8642c08fd866f764e900a1f5a1a96b7c, type: 2}
   targetDistance: 4.5
   automatic: 1
   hoverEnginePrefab: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
@@ -377,11 +372,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 30
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
-      value: 6
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kp
@@ -502,11 +497,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 30
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
-      value: 6
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kp
