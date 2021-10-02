@@ -49,7 +49,8 @@ public class FollowPathState : BasicState
         }
         else
         {
-            index = Mathf.Min(trainData.followIndex, trainFSM.GetCurrentPath().path.localPoints.Length - 1);
+            index = trainData.followIndex;
+            //index = Mathf.Min(trainData.followIndex, trainFSM.GetCurrentPath().path.localTangents.Length - 1);
         }
 
         //Debug.Log("follow index " + index);
@@ -57,8 +58,9 @@ public class FollowPathState : BasicState
         //Debug.Log("forward direction: " + trainFSM.GetCurrentPath().path.GetTangent(index));
         trainFSM.Follow(trainFSM.GetCurrentPath().path.GetTangent(index));
 
-        if (trainFSM.GetNextRailLinker.WithinFollowDistance(0, trainFSM.Locomotive.rb.position)
+        if ((trainFSM.GetNextRailLinker.WithinFollowDistance(0, trainFSM.Locomotive.rb.position)
             || trainFSM.CurrentRailLinker.WithinFollowDistance(trainFSM.CurrentRailLinker.pathCreator.path.localPoints.Length - 1, trainFSM.Locomotive.rb.position))
+            && !trainFSM.CurrentRailLinker.pathCreator.path.isClosedLoop)
         {
             RailChangeMarker newMarker = new RailChangeMarker(trainFSM.carts, trainFSM.CurrentRailLinker, trainFSM.GetNextRailLinker);
             railChangeMarkers.AddLast(newMarker);

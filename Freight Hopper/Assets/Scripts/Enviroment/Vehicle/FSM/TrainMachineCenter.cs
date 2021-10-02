@@ -16,12 +16,13 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = true;
     [SerializeField] private bool spawnIn = false;
-    private bool completedPathsToggle;
+
     public List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
     [SerializeField] private float targetVelocity;
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
     [SerializeField, ReadOnly] private int currentPath = -1;
+    [SerializeField, ReadOnly] private bool completedPathsToggle;
 
     // Destroy Train After Derail Fields
     //[SerializeField] private bool deleteOnDerail = false;
@@ -41,6 +42,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             if (currentPath + 1 >= railLinkers.Count)
             {
+                if (loop)
+                {
+                    return railLinkers[0];
+                }
                 return railLinkers[railLinkers.Count - 1];
             }
 

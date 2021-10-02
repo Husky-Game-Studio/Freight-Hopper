@@ -70,8 +70,16 @@ public class TrainRailLinker : MonoBehaviour
         TrainData trainObject = new TrainData
         {
             rb = rb,
-            followIndex = (int)Mathf.Min(pathCreator.path.CalculateClosestVertexIndex(rb.position) + 1, pathCreator.path.length - 1),
         };
+        if (pathCreator.path.isClosedLoop)
+        {
+            trainObject.followIndex = (int)((pathCreator.path.CalculateClosestVertexIndex(rb.position) + 1) % pathCreator.path.length);
+        }
+        else
+        {
+            trainObject.followIndex = (int)Mathf.Min(pathCreator.path.CalculateClosestVertexIndex(rb.position) + 1, pathCreator.path.LastVertexIndex);
+            //Debug.Log("Path is open");
+        }
         // Could be bad for performance !!
         trainObject.hoverController = trainObject.rb.GetComponentInChildren<HoverController>();
         trainObject.hoverController.LinkEngines(this);
@@ -140,7 +148,7 @@ public class TrainRailLinker : MonoBehaviour
 
             while (distance <= followDistance && data.followIndex < pathCreator.path.times.Length - 1)
             {
-                data.followIndex = pathCreator.path.GetNextIndex(data.followIndex);
+                data.followIndex = pathCreator.path.GetNextIndex(data.followIndex, pathCreator.path.isClosedLoop);
                 positionOnPath = pathCreator.path.GetPoint(data.followIndex);
                 distance = Vector3.Distance(positionOnPath, data.rb.position);
             }
@@ -163,10 +171,11 @@ public class TrainRailLinker : MonoBehaviour
 
         foreach (TrainData data in dataToRemove)
         {
-            isRigidbodyLinked.Remove(data.rb);
-            linkedRigidbodyObjects.Remove(data.rb);
-            RemovedRigidbody?.Invoke(data.rb);
-            linkedTrainObjects.Remove(data);
+            RemoveLink(data.rb);
+            //isRigidbodyLinked.Remove(data.rb);
+            //linkedRigidbodyObjects.Remove(data.rb);
+            //RemovedRigidbody?.Invoke(data.rb);
+            //linkedTrainObjects.Remove(data);
         }
         dataToRemove.Clear();
     }
