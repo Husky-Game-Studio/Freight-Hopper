@@ -236,7 +236,6 @@ public class TurretBehavior : MonoBehaviour
 
         Quaternion qTurret = Quaternion.LookRotation(planePoint - body.position, up);
         body.rotation = Quaternion.RotateTowards(body.rotation, qTurret, rotationSpeed * Time.fixedDeltaTime);
-        //body.rotation = Quaternion.LookRotation(target, up);
     }
 
     private void RotateBarrel(Vector3 target)
@@ -246,20 +245,8 @@ public class TurretBehavior : MonoBehaviour
         {
             return;
         }
-        //float distance = Vector3.Distance(barrelEnd.position, target);
-        //float gravity = CustomGravity.GetGravity(body.position).magnitude;
-        //float degrees = Mathf.Rad2Deg * 1f / 2f * Mathf.Asin((gravity * distance) / (weapon.ProjectileSpeed * weapon.ProjectileSpeed));
-        //
-        //Debug.Log("we need to shoot a theta of " + degrees);
-        Vector3 targetPos = target;
 
-        float distanceToPlane = Vector3.Dot(up, targetPos - barrel.position);
-        Vector3 planePoint = targetPos - (up * distanceToPlane);
-        //Quaternion.Euler(degrees, 0, 0) *
-        Quaternion qTurret = Quaternion.LookRotation((planePoint - barrel.position), up);
-        //qTurret = Quaternion.LookRotation(Quaternion.Euler(theta, 0, 0), up);
-        //barrel.rotation = qTurret;
+        Vector3 targetPos = target;
         barrel.rotation = Quaternion.LookRotation(targetPos, up);
-        //barrel.rotation = Quaternion.RotateTowards(barrel.rotation, Quaternion.Euler(target), rotationSpeed * Time.fixedDeltaTime);
     }
 }
