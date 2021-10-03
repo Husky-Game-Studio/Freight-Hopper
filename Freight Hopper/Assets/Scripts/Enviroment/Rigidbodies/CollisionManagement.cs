@@ -50,8 +50,6 @@ public class CollisionManagement
         component.StartCoroutine(LateFixedUpdate());
     }
 
-    private bool touchedUnlandable = false;
-
     private void KillPlayer()
     {
         LevelController.Instance.Respawn();
@@ -73,7 +71,6 @@ public class CollisionManagement
             if (!collision.gameObject.CompareTag("landable") && rb.gameObject.CompareTag("Player"))
             {
                 KillPlayer();
-                touchedUnlandable = true;
                 continue;
             }
 
@@ -134,7 +131,6 @@ public class CollisionManagement
             rigidbodyLinker.UpdateConnectionState(rb);
             CollisionDataCollected?.Invoke();
 
-            touchedUnlandable = false;
             UpdateOldValues();
             ClearValues();
         }
