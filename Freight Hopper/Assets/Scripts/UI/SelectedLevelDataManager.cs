@@ -42,6 +42,13 @@ public class SelectedLevelDataManager : MonoBehaviour
                 medal.gameObject.SetActive(false);
             }
             levelImage.texture = currentData.Image;
+
+            Button button = levelImage.GetComponent<Button>();
+            if (button.onClick.GetPersistentEventCount() > 0)
+            {
+                button.onClick.RemoveAllListeners();
+            }
+            button.onClick.AddListener(delegate { SceneLoader.LoadLevel(currentData.name); });
         }
         lastIndex = LevelSelectLevelButton.currentID;
     }
