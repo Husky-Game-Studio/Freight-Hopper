@@ -27,11 +27,18 @@ public class LevelData : ScriptableObject
     [SerializeField] private float[] medalTimes = new float[4];
 
     [SerializeField]
-    private PlayerAbilities.Name[] activeAbilities = {
+    private PlayerAbilities.Name[] defaultAbilities = {
             PlayerAbilities.Name.MovementBehavior,
             PlayerAbilities.Name.JumpBehavior,
             PlayerAbilities.Name.WallRunBehavior,
             PlayerAbilities.Name.GroundPoundBehavior
+        };
+    [SerializeField, ReadOnly]
+    private List<PlayerAbilities.Name> activeAbilities = new List<PlayerAbilities.Name>{
+            PlayerAbilities.Name.MovementBehavior,
+            PlayerAbilities.Name.JumpBehavior,
+            PlayerAbilities.Name.WallRunBehavior,
+            PlayerAbilities.Name.GroundPoundBehavior,
         };
 
     public NextLevelStatus NLevelStatus => nextLevelStatus;
@@ -46,7 +53,40 @@ public class LevelData : ScriptableObject
 
     public float[] MedalTimes => medalTimes.Clone() as float[];
 
-    public PlayerAbilities.Name[] ActiveAbilities => activeAbilities.Clone() as PlayerAbilities.Name[];
+    public PlayerAbilities.Name[] ActiveAbilities => activeAbilities.ToArray();
+    public PlayerAbilities.Name[] DefaultAbilites => defaultAbilities.Clone() as PlayerAbilities.Name[];
+
+    public void RestartActiveAbilities()
+    {
+        activeAbilities.Clear();
+        for (int i = 0; i < defaultAbilities.Length; i++)
+        {
+            activeAbilities.Add(defaultAbilities[i]);
+        }
+    }
+
+    public void AddActiveAbility(PlayerAbilities.Name ability)
+    {
+        if (activeAbilities.Contains(ability))
+        {
+            return;
+        }
+        activeAbilities.Add(ability);
+    }
+
+    public void RemoveActiveAbility(PlayerAbilities.Name ability)
+    {
+        if (!activeAbilities.Contains(ability))
+        {
+            return;
+        }
+        activeAbilities.Remove(ability);
+    }
+
+    public bool ContainsAbility(PlayerAbilities.Name ability)
+    {
+        return activeAbilities.Contains(ability);
+    }
 
     public void SetSpawnTransform(Transform transform)
     {

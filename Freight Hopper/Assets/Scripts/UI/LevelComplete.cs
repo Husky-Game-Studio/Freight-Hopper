@@ -74,33 +74,61 @@ public class LevelComplete : MonoBehaviour
             bestTime = newBestTime;
         }
 
-        int index = 0;
-        while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
+        // Overriding == would be better than this
+        PlayerAbilities.Name[] abilities = LevelController.Instance.levelData.ActiveAbilities;
+        PlayerAbilities.Name[] defaultAbilities = LevelController.Instance.levelData.DefaultAbilites;
+        bool activeDefault = true;
+        if (abilities.Length != defaultAbilities.Length)
         {
-            index++;
+            activeDefault = false;
         }
-        if (levelTimeData.MedalIndex != index - 1)
+        else
         {
-            levelTimeData.SetNewMedalIndex(index - 1);
-            LevelTimeSaveLoader.Save(levelName, levelTimeData);
+            for (int i = 0; i < abilities.Length; i++)
+            {
+                if (abilities[i] != defaultAbilities[i])
+                {
+                    activeDefault = false;
+                    break;
+                }
+            }
         }
-        if (levelTimeData.MedalIndex < 0)
+
+        if (activeDefault)
+        {
+            int index = 0;
+            while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
+            {
+                index++;
+            }
+            if (levelTimeData.MedalIndex != index - 1)
+            {
+                levelTimeData.SetNewMedalIndex(index - 1);
+                LevelTimeSaveLoader.Save(levelName, levelTimeData);
+            }
+            if (levelTimeData.MedalIndex < 0)
+            {
+                medalImage.gameObject.SetActive(false);
+            }
+            else
+            {
+                medalImage.gameObject.SetActive(true);
+                Sprite[] sprites = medalImages.Sprites;
+                medalImage.sprite = sprites[levelTimeData.MedalIndex];
+            }
+            if (levelTimeData.MedalIndex < 2)
+            {
+                nextMedalTimeText.gameObject.SetActive(true);
+                nextMedalTimeText.text = "Next: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
+            }
+            else
+            {
+                nextMedalTimeText.gameObject.SetActive(false);
+            }
+        }
+        else
         {
             medalImage.gameObject.SetActive(false);
-        }
-        else
-        {
-            medalImage.gameObject.SetActive(true);
-            Sprite[] sprites = medalImages.Sprites;
-            medalImage.sprite = sprites[levelTimeData.MedalIndex];
-        }
-        if (levelTimeData.MedalIndex < 2)
-        {
-            nextMedalTimeText.gameObject.SetActive(true);
-            nextMedalTimeText.text = "Next: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
-        }
-        else
-        {
             nextMedalTimeText.gameObject.SetActive(false);
         }
     }

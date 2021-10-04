@@ -72,7 +72,15 @@ public class LevelTimeSaveData
         {
             return currentBest.Item1;
         }
-        bestTimes[currentBest.Item2] = new AbilityTimes(abilitesUsed, time);
+        if (currentBest.Item2 == -1)
+        {
+            bestTimes.Add(new AbilityTimes(abilitesUsed, time));
+        }
+        else
+        {
+            bestTimes[currentBest.Item2] = new AbilityTimes(abilitesUsed, time);
+        }
+
         return time;
     }
 }

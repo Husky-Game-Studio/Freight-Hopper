@@ -15,11 +15,13 @@ public class SelectedLevelDataManager : MonoBehaviour
     [SerializeField] private SpriteList medalSprites;
     private int lastIndex = 0;
 
+    public LevelData CurrentLevelData => currentWorld.Levels[LevelSelectLevelButton.currentID - 1];
+
     private void Update()
     {
         if (LevelSelectLevelButton.currentID != lastIndex)
         {
-            LevelData currentData = currentWorld.Levels[LevelSelectLevelButton.currentID - 1];
+            LevelData currentData = this.CurrentLevelData;
             worldtitle.text = currentWorld.name;
             title.text = currentData.Title;
             LevelTimeSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
