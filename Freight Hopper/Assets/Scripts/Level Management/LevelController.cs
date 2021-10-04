@@ -25,7 +25,7 @@ public class LevelController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(levelData.spawnPosition, 2);
+        Gizmos.DrawWireSphere(levelData.SpawnPosition, 2);
     }
 
 #endif
@@ -68,21 +68,21 @@ public class LevelController : MonoBehaviour
 
     public string GetNextLevel()
     {
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextLevel)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.NextLevel)
         {
             return levelName.NextLevel();
         }
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextWorld)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.NextWorld)
         {
             return levelName.NextWorld();
         }
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.Menu)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.Menu)
         {
             return "MainMenu";
         }
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.Custom)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.Custom)
         {
-            return levelData.customNextLevelName;
+            return levelData.CustomNextLevelName;
         }
         return levelName.CurrentLevel();
     }
@@ -128,7 +128,7 @@ public class LevelController : MonoBehaviour
 
     public void UnlockAbilities()
     {
-        Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.activeAbilities);
+        Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.ActiveAbilities);
     }
 
     private void ResetPlayerPosition()
@@ -140,16 +140,16 @@ public class LevelController : MonoBehaviour
         }
         if (spawnPlayerHigh)
         {
-            player.transform.position = levelData.spawnPosition + (this.transform.up * highHeight);
+            player.transform.position = levelData.SpawnPosition + (this.transform.up * highHeight);
         }
         else
         {
-            player.transform.position = levelData.spawnPosition;
+            player.transform.position = levelData.SpawnPosition;
         }
         player.transform.rotation = Quaternion.LookRotation(Vector3.forward, CustomGravity.GetUpAxis(player.transform.position)) *
-            Quaternion.AngleAxis(levelData.rotationAngle, Vector3.up);
+            Quaternion.AngleAxis(levelData.RotationAngle, Vector3.up);
 
-        player.GetComponent<Rigidbody>().velocity = levelData.velocityDirection * Vector3.forward * levelData.speed;
+        player.GetComponent<Rigidbody>().velocity = levelData.VelocityDirection * Vector3.forward * levelData.Speed;
     }
 
     // Respawns player. Reloads scene for now. Respawning var is used to prevent spamming of respawn button

@@ -38,6 +38,7 @@ public class LevelTimeSaveData
         }
     }
 
+    // First returns best time, next returns index to get the best time
     public (float, int) GetTime(PlayerAbilities.Name[] abilitesUsed)
     {
         for (int i = 0; i < bestTimes.Count; i++)

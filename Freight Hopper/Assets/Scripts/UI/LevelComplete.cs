@@ -12,7 +12,7 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bestTimeText;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private Image medalImage;
-    [SerializeField] private Sprite[] medalImages = new Sprite[4];
+    [SerializeField] private SpriteList medalImages;
     [SerializeField] private TextMeshProUGUI nextMedalTimeText;
 
     private void Awake()
@@ -52,7 +52,7 @@ public class LevelComplete : MonoBehaviour
         if (levelTimeData == null)
         {
             bestTimeText.text = "Best Time: " + timer.GetTimeString();
-            LevelTimeSaveData.AbilityTimes time = new LevelTimeSaveData.AbilityTimes(LevelController.Instance.levelData.activeAbilities, timer.GetTime());
+            LevelTimeSaveData.AbilityTimes time = new LevelTimeSaveData.AbilityTimes(LevelController.Instance.levelData.ActiveAbilities, timer.GetTime());
             List<LevelTimeSaveData.AbilityTimes> times = new List<LevelTimeSaveData.AbilityTimes>
             {
                 time
@@ -64,8 +64,8 @@ public class LevelComplete : MonoBehaviour
         }
         else
         {
-            float newBestTime = levelTimeData.SetNewBestTime(LevelController.Instance.levelData.activeAbilities, timer.GetTime());
-            bestTimeText.text = "Best Time: " + timer.GetTimeString(newBestTime);
+            float newBestTime = levelTimeData.SetNewBestTime(LevelController.Instance.levelData.ActiveAbilities, timer.GetTime());
+            bestTimeText.text = "Best Time: " + LevelTimer.GetTimeString(newBestTime);
             if (newBestTime == timer.GetTime())
             {
                 LevelTimeSaveLoader.Save(levelName, levelTimeData);
@@ -75,7 +75,7 @@ public class LevelComplete : MonoBehaviour
         }
 
         int index = 0;
-        while (index < 4 && bestTime < LevelController.Instance.levelData.medalTimes[index])
+        while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
         {
             index++;
         }
@@ -91,12 +91,13 @@ public class LevelComplete : MonoBehaviour
         else
         {
             medalImage.gameObject.SetActive(true);
-            medalImage.sprite = medalImages[levelTimeData.MedalIndex];
+            Sprite[] sprites = medalImages.Sprites;
+            medalImage.sprite = sprites[levelTimeData.MedalIndex];
         }
         if (levelTimeData.MedalIndex < 2)
         {
             nextMedalTimeText.gameObject.SetActive(true);
-            nextMedalTimeText.text = "Next: " + timer.GetTimeString(LevelController.Instance.levelData.medalTimes[levelTimeData.MedalIndex + 1]);
+            nextMedalTimeText.text = "Next: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
         }
         else
         {
