@@ -62,7 +62,7 @@ public class TrainRailLinker : MonoBehaviour
     public void Link(Rigidbody rb)
     {
         InitializePathCreator();
-        if (IsRigidbodyLinked(rb))
+        if (IsRigidbodyLinked(rb) || rb == null)
         {
             return;
         }
