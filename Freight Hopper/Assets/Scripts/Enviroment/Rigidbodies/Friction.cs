@@ -21,7 +21,7 @@ public class Friction
 
     ~Friction()
     {
-        playerCollision.CollisionDataCollected -= ApplyFriction;
+        //playerCollision.CollisionDataCollected -= ApplyFriction;
     }
 
     // Expects numbers like "5% friction reduction" or 0.05f. Will only apply when grounded

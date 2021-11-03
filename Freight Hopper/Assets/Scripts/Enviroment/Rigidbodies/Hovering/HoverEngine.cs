@@ -77,30 +77,31 @@ public class HoverEngine : MonoBehaviour
         rb.AddForceAtPosition(force, this.transform.position, ForceMode.Force);
     }
 
-    public void Hover(float height, TrainRailLinker path)
+    public void Hover(float height, TrainRailLinker railLinker)
     {
-        if (path == null)
+        if (railLinker == null)
         {
             firing = false;
             return;
         }
         firing = true;
-
-        Vector3 positionOnPath = path.pathCreator.path.GetPoint(followIndex);
+        Vector3 position = this.transform.position;
+        PathCreation.VertexPath path = railLinker.pathCreator.path;
+        Vector3 positionOnPath = path.GetPoint(followIndex);
         Vector3 normal;
-        float distance = Vector3.Distance(positionOnPath, this.transform.position);
+        float distance = Vector3.Distance(positionOnPath, position);
         // distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1
-        while (distance <= followDistance && followIndex < path.pathCreator.path.times.Length - 1)
+        while (distance <= followDistance && followIndex < path.times.Length - 1)
         {
             //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
-            followIndex = path.pathCreator.path.GetNextIndex(followIndex, path.pathCreator.path.isClosedLoop);
-            positionOnPath = path.pathCreator.path.GetPoint(followIndex);
-            distance = Vector3.Distance(positionOnPath, this.transform.position);
+            followIndex = path.GetNextIndex(followIndex, path.isClosedLoop);
+            positionOnPath = path.GetPoint(followIndex);
+            distance = Vector3.Distance(positionOnPath, position);
         }
-        normal = path.pathCreator.path.GetNormal(followIndex);
-        Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
-        Debug.DrawLine(positionOnPath, this.transform.position, Color.red);
-        AddForce(height - Vector3.Project(positionOnPath - this.transform.position, normal).magnitude);
+        normal = path.GetNormal(followIndex);
+        //Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
+        //Debug.DrawLine(positionOnPath, position, Color.red);
+        AddForce(height - Vector3.Project(positionOnPath - position, normal).magnitude);
     }
 
     public void SetDirection(Vector3 direction)

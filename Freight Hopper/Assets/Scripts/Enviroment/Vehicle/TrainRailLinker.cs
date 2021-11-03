@@ -141,27 +141,28 @@ public class TrainRailLinker : MonoBehaviour
                 //Debug.Log("Removed destroyed train");
                 continue;
             }
-            int dataFollowIndex = Mathf.Min(data.followIndex, pathCreator.path.LastVertexIndex);
-            Vector3 positionOnPath = pathCreator.path.GetPoint(dataFollowIndex);
+            PathCreation.VertexPath path = pathCreator.path;
+            int dataFollowIndex = Mathf.Min(data.followIndex, path.LastVertexIndex);
+            Vector3 positionOnPath = path.GetPoint(dataFollowIndex);
             Vector3 normal;
             float distance = Vector3.Distance(positionOnPath, data.rb.position);
 
-            while (distance <= followDistance && data.followIndex < pathCreator.path.times.Length - 1)
+            while (distance <= followDistance && data.followIndex < path.times.Length - 1)
             {
-                data.followIndex = pathCreator.path.GetNextIndex(data.followIndex, pathCreator.path.isClosedLoop);
-                positionOnPath = pathCreator.path.GetPoint(data.followIndex);
+                data.followIndex = path.GetNextIndex(data.followIndex, path.isClosedLoop);
+                positionOnPath = path.GetPoint(data.followIndex);
                 distance = Vector3.Distance(positionOnPath, data.rb.position);
             }
 
-            normal = pathCreator.path.GetNormal(dataFollowIndex);
+            normal = path.GetNormal(dataFollowIndex);
             //Debug.Log("linked to path " + pathCreator.name);
             Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
-            Vector3 right = Vector3.Cross(normal, pathCreator.path.GetTangent(dataFollowIndex));
+            Vector3 right = Vector3.Cross(normal, path.GetTangent(dataFollowIndex));
             //Debug.DrawLine(linkedTrainObjects[i].rb.position, linkedTrainObjects[i].rb.position + right * 20, Color.red);
             float error = GetError(positionOnPath, normal, data.rb.position, right);
             Vector3 force = data.controller.GetOutput(error, Time.fixedDeltaTime) * right;
             data.rb.AddForce(force, ForceMode.Force);
-            float derailDistance = (data.rb.position - TargetPos(positionOnPath, normal)).magnitude;
+            //float derailDistance = (data.rb.position - TargetPos(positionOnPath, normal)).magnitude;
             if (error > derailThreshold)
             {
                 dataToRemove.Add(data);

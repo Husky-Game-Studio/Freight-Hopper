@@ -72,8 +72,10 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
             }
             else
             {
+#if UNITY_EDITOR
                 currentSubState = currentState.GetCurrentSubState();
                 currentSubStateName = currentSubState.ToString();
+#endif
             }
         }
     }
