@@ -302,14 +302,14 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
                 continue;
             }
             Vector3 upAxis = CustomGravity.GetUpAxis(cart.rb.position);
-            Vector3 gravityForward = Vector3.Cross(upAxis, cart.rb.transform.right);
+            Vector3 gravityRight = Vector3.Cross(upAxis, cart.rb.transform.forward);
+            Vector3 gravityForward = Vector3.Cross(upAxis, gravityRight);
 
-            Vector3 gravityUp = Vector3.ProjectOnPlane(upAxis, gravityForward);
             Vector3 cartUp = Vector3.ProjectOnPlane(cart.rb.transform.up, gravityForward);
 
-            float angleWrong = Vector3.SignedAngle(gravityUp, cartUp, cart.rb.transform.forward);
-
-            cart.rb.AddRelativeTorque(Vector3.forward * -0.05f * angleWrong, ForceMode.VelocityChange);
+            float angleWrong = Vector3.SignedAngle(upAxis, cartUp, gravityForward);
+            float force = cart.uprightPID.GetOutput(angleWrong, Time.fixedDeltaTime);
+            cart.rb.AddRelativeTorque(Vector3.forward * force, ForceMode.Acceleration);
         }
     }
 
