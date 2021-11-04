@@ -31,7 +31,7 @@ public class FirstPersonCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         camTransform = Camera.main.transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        localRotation = player.rotation;
+        localRotation = camTransform.rotation;
         playerCM = player.GetComponent<PhysicsManager>().collisionManager;
 
         // Need to make this false until level loaded in the future :(
@@ -64,27 +64,21 @@ public class FirstPersonCamera : MonoBehaviour
 
         // convert input to rotation
         Vector2 mouse = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
-        Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
-        Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
 
-        float sign = 1;
-        if (Vector3.Angle(validUpAxis, camTransform.up) > 90)
-        {
-            sign = -1;
-        }
+        Quaternion mouseRotationHorizontal = Quaternion.AngleAxis(mouse.x, Vector3.up);
+        Quaternion mouseRotationVertical = Quaternion.AngleAxis(mouse.y, -Vector3.right);
 
-        // Just prevents issues with camera glitching at the poles
-        float verticalAngle = Vector3.Angle(player.up * sign,
-            Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation * mouseRotationVertical *
-            player.up * sign);
+        Quaternion axisChange = Quaternion.LookRotation(player.forward, smoothedUpAxis);
 
-        if (verticalAngle < yRotationLock)
+        Quaternion nextRotation = Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation * mouseRotationVertical;
+
+        if (Quaternion.Angle(nextRotation, axisChange) < yRotationLock)
         {
             localRotation *= mouseRotationVertical;
         }
-        // Apply camera and player rotation
 
-        camTransform.rotation = Quaternion.LookRotation(player.forward * sign, smoothedUpAxis) * localRotation;
+        camTransform.rotation = Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation;
+
         Vector3 forward = camTransform.forward.ProjectOnContactPlane(smoothedUpAxis).normalized;
         player.LookAt(player.position + forward, validUpAxis);
 
