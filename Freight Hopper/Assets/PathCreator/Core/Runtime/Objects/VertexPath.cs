@@ -347,11 +347,12 @@ namespace PathCreation
 
         public int GetNextIndex(int index, bool loop = false)
         {
+            int length = localPoints.Length - 1;
             if (loop)
             {
-                return (index + 1) % (this.LastVertexIndex);
+                return (index + 1) % length;
             }
-            return Mathf.Min(index + 1, this.LastVertexIndex);
+            return index + 1 > length ? length : index + 1;
         }
 
         /// Finds the distance along the path that is closest to the given point

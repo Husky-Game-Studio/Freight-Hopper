@@ -4,16 +4,16 @@ using UnityEngine.VFX;
 [System.Serializable]
 public class HoverEngine : MonoBehaviour
 {
-    private VisualEffect effect;
+    [System.NonSerialized] private VisualEffect effect;
     private bool is_effect_playing = false;
 
-    [SerializeField, ReadOnly] private Rigidbody rb;
-    [SerializeField, ReadOnly] private Vector3 direction = Vector3.down;
+    [System.NonSerialized] private Rigidbody rb;
+    [SerializeField, ReadOnly] private Vector3 direction = Vector3.up;
     [SerializeField, ReadOnly] private PID controller = new PID();
     [SerializeField, ReadOnly] private float targetDistance;
     [SerializeField, ReadOnly] private bool automatic;
     [SerializeField, ReadOnly] private bool firing;
-    [SerializeField, ReadOnly] private TrainRailLinker currentLinker;
+    [System.NonSerialized] private TrainRailLinker currentLinker;
     public bool Firing => firing;
     private int followIndex = 0;
     private float followDistance = 0;
@@ -36,7 +36,7 @@ public class HoverEngine : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + (direction * targetDistance));
+        Gizmos.DrawLine(this.transform.position, this.transform.position + (-direction * targetDistance));
     }
 
     public void UpdateCurrentLinker(TrainRailLinker newLinker)
@@ -66,42 +66,31 @@ public class HoverEngine : MonoBehaviour
         }
     }
 
-    private void AddForce(float heightDifference)
+    public void Hover(float height, TrainRailLinker railLinker, ref Vector3 position)
     {
-        float error = heightDifference;
-        Debug.DrawLine(this.transform.position, this.transform.position + (-direction * error), Color.white);
-        // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
-
-        Vector3 force = -direction * this.controller.GetOutput(error, Time.fixedDeltaTime);
-
-        rb.AddForceAtPosition(force, this.transform.position, ForceMode.Force);
-    }
-
-    public void Hover(float height, TrainRailLinker railLinker)
-    {
-        if (railLinker == null)
+        if ((object)railLinker == null)
         {
             firing = false;
             return;
         }
         firing = true;
-        Vector3 position = this.transform.position;
         PathCreation.VertexPath path = railLinker.pathCreator.path;
+
         Vector3 positionOnPath = path.GetPoint(followIndex);
-        Vector3 normal;
         float distance = Vector3.Distance(positionOnPath, position);
-        // distance <= followDistance && linkedTrainObjects[i].followIndex < pathCreator.path.times.Length - 1
         while (distance <= followDistance && followIndex < path.times.Length - 1)
         {
-            //Debug.Log("distance between position on path and current is " + distance + " and follow distance is " + followDistance);
             followIndex = path.GetNextIndex(followIndex, path.isClosedLoop);
             positionOnPath = path.GetPoint(followIndex);
             distance = Vector3.Distance(positionOnPath, position);
         }
-        normal = path.GetNormal(followIndex);
-        //Debug.DrawLine(positionOnPath, positionOnPath + (normal * 20), Color.green);
-        //Debug.DrawLine(positionOnPath, position, Color.red);
-        AddForce(height - Vector3.Project(positionOnPath - position, normal).magnitude);
+
+        Vector3 up = path.GetNormal(followIndex);
+        float currentHeight = Vector3.Project(positionOnPath - position, up).magnitude;
+        float heightDif = height - currentHeight;
+
+        Vector3 force = direction * this.controller.GetOutput(heightDif, Time.fixedDeltaTime);
+        rb.AddForceAtPosition(force, position, ForceMode.Force);
     }
 
     public void SetDirection(Vector3 direction)
@@ -113,8 +102,9 @@ public class HoverEngine : MonoBehaviour
     {
         if (automatic)
         {
-            SetDirection(-CustomGravity.GetUpAxis(this.transform.position));
-            Hover(targetDistance, currentLinker);
+            Vector3 position = this.transform.position;
+            SetDirection(CustomGravity.GetUpAxis(position));
+            Hover(targetDistance, currentLinker, ref position);
         }
         if (firing)
         {

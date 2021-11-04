@@ -24,9 +24,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField, ReadOnly] private int currentPath = -1;
     [SerializeField, ReadOnly] private bool completedPathsToggle;
 
-    // Destroy Train After Derail Fields
-    //[SerializeField] private bool deleteOnDerail = false;
-
     public Action<TrainRailLinker> LinkedToPath;
 
     public Timer inactivityDeletionTimer;
@@ -132,9 +129,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public void SetToMaxSpeed()
     {
+        float vel = 0.7f * targetVelocity;
         foreach (Cart cart in carts)
         {
-            cart.rb.AddForce(cart.rb.transform.forward * targetVelocity * 0.7f, ForceMode.VelocityChange);
+            cart.rb.AddForce(vel * cart.rb.transform.forward, ForceMode.VelocityChange);
         }
     }
 
@@ -148,28 +146,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         }
     }
 
-    public void RemoveCartsUntilIndex(int index)
-    {
-        if (index == 0)
-        {
-            Destroy(this.Locomotive.rb.gameObject, this.Locomotive.destructable.ExplosionTime);
-        }
-        int cartsCount = carts.Count;
-        for (int i = 0; i < cartsCount - index; i++)
-        {
-            Cart cart = carts.Last.Value;
-            //cart.destructable.RigidbodyDestroyed -= cart.DestroyCartFunc;
-            //cart.DestoryCart -= RemoveCartsUntilIndex;
-            cart.destructable.DestroyObject();
-            carts.RemoveLast();
-        }
-
-        if (carts.Count < 1)
-        {
-            Destroy(this.gameObject);
-        }
-    }
-
     private void InitiliazeCarts()
     {
         carts.Clear();
@@ -178,9 +154,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         for (int i = 0; i < physics.Length; i++)
         {
             Cart cart = new Cart(physics[i]);
-            //Debug.Log("added " + cart.rb.name);
-            //cart.destructable.RigidbodyDestroyed += cart.DestroyCartFunc;
-            //cart.DestoryCart += RemoveCartsUntilIndex;
             carts.AddLast(cart);
         }
         hoverController = this.Locomotive.rb.GetComponentInChildren<HoverController>();
@@ -258,14 +231,11 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     {
         if (!hoverController.EnginesFiring)
         {
-            //Debug.Log("hover engines not firing", hoverController.gameObject);
             return;
         }
 
         Quaternion rot = this.Locomotive.rb.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
-        Vector3 currentVelDir = (this.Locomotive.rb.velocity.magnitude != 0) ? this.Locomotive.rb.velocity.normalized : Vector3.forward;
-        Debug.DrawLine(this.Locomotive.rb.position, this.Locomotive.rb.position + (currentVelDir * 20.0f), Color.magenta);
 
         //Current
         Vector3 currentVel = this.Locomotive.rb.velocity;
@@ -337,7 +307,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
                 Destroy(this.gameObject);
             }
             inactivityDeletionTimer.ResetTimer();
-            //RemoveCartsUntilIndex(0);
         }
         if (!spawnIn || currentState == followPath)
         {
