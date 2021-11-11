@@ -69,17 +69,24 @@ public class FirstPersonCamera : MonoBehaviour
         Quaternion mouseRotationHorizontal = Quaternion.AngleAxis(mouse.x, Vector3.up);
         Quaternion mouseRotationVertical = Quaternion.AngleAxis(mouse.y, -Vector3.right);
 
-        Quaternion axisChange = Quaternion.LookRotation(player.forward, smoothedUpAxis);
+        float sign = 1;
+        if (Vector3.Angle(validUpAxis, camTransform.up) > 90)
+        {
+            sign = -1;
+        }
 
-        Quaternion nextRotation = Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation * mouseRotationVertical;
+        // Just prevents issues with camera glitching at the poles
+        float verticalAngle = Vector3.Angle(player.up * sign,
+            Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation * mouseRotationVertical *
+            player.up * sign);
 
-        if (Quaternion.Angle(nextRotation, axisChange) < yRotationLock)
+        if (verticalAngle < yRotationLock)
         {
             localRotation *= mouseRotationVertical;
         }
+        // Apply camera and player rotation
 
-        camTransform.rotation = Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation;
-
+        camTransform.rotation = Quaternion.LookRotation(player.forward * sign, smoothedUpAxis) * localRotation;
         Vector3 forward = camTransform.forward.ProjectOnContactPlane(smoothedUpAxis).normalized;
         player.LookAt(player.position + forward, validUpAxis);
 
