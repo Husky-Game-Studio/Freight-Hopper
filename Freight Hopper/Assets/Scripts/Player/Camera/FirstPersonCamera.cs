@@ -11,11 +11,11 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;
     [SerializeField] private Transform playerHead;
-
+    public static int fov;
     // y min, y max
     [SerializeField] private float yRotationLock = 90;
 
-    [SerializeField] private Vector2 mouseSensitivity;
+    public static Vector2 mouseSensitivity;
 
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
@@ -29,6 +29,7 @@ public class FirstPersonCamera : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Camera.main.fieldOfView = fov;
         camTransform = Camera.main.transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         localRotation = camTransform.rotation;

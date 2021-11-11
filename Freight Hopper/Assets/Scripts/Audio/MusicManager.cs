@@ -10,6 +10,13 @@ public class MusicManager : SoundManager
     public static MusicManager Instance => instance;
     private static Songs lastSongName;
 
+    [SerializeField] private AudioMixerSnapshot normal;
+    [SerializeField] private AudioMixerSnapshot paused;
+    [SerializeField] private AudioMixerSnapshot alternate;
+
+    public enum SnapshotMode
+    { Normal, Paused, Alternate }
+
     public enum Songs
     {
         Menu,
@@ -25,39 +32,33 @@ public class MusicManager : SoundManager
     }
 
     [SerializeField] private Songs currentSongName;
+    [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
     [SerializeField] private bool playMusicOnAwake = true;
-    private bool subscribedToLevelLoading = false;
-    private static bool changeMixer = false;
 
     private void Awake()
     {
-        if (instance != null && instance.mixerGroup != this.mixerGroup)
+        if (instance == null)
         {
-            instance.mixerGroup = this.mixerGroup;
-            changeMixer = true;
-        }
-        if (instance == null || currentSongName != lastSongName)
-        {
+            DontDestroyOnLoad(this);
+            instance = this;
             if (currentSongName != Songs.Menu)
             {
-                DontDestroyOnLoad(this);
-                instance = this;
                 lastSongName = currentSongName;
-                SceneManager.sceneLoaded += LevelLoaded;
-                subscribedToLevelLoading = true;
             }
         }
         else
         {
+            if (instance == this)
+            {
+                return;
+            }
+            if (currentSongName != lastSongName && currentSongName != Songs.Menu)
+            {
+                instance.SwitchSong(currentSongName);
+                lastSongName = currentSongName;
+            }
+            instance.TransitionToSnapshot(musicMode);
             Destroy(this);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (subscribedToLevelLoading)
-        {
-            SceneManager.sceneLoaded -= LevelLoaded;
         }
     }
 
@@ -69,27 +70,22 @@ public class MusicManager : SoundManager
         }
     }
 
-    private void Update()
+    public void TransitionToSnapshot(SnapshotMode mode)
     {
-        if (lastSongName != currentSongName)
+        switch (mode)
         {
-            Destroy(this.gameObject);
-        }
-    }
+            case SnapshotMode.Normal:
+                normal.TransitionTo(0.5f);
+                break;
 
-    private void LevelLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (changeMixer && this == instance && mode == LoadSceneMode.Single && SceneManager.GetActiveScene() == scene)
-        {
-            changeMixer = false;
-            instance.ChangeMixer(mixerGroup);
-        }
-    }
+            case SnapshotMode.Paused:
+                paused.TransitionTo(0.5f);
+                break;
 
-    public void ChangeMixer(AudioMixerGroup newMixer)
-    {
-        Sound sound = FindSound(currentSongName.ToString());
-        sound.componentAudioSource.outputAudioMixerGroup = newMixer;
+            case SnapshotMode.Alternate:
+                alternate.TransitionTo(0.5f);
+                break;
+        }
     }
 
     public void SwitchSong(Songs songName)

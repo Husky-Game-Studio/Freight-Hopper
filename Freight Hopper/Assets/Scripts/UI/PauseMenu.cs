@@ -61,7 +61,7 @@ public class PauseMenu : MonoBehaviour
         if (MusicManager.Instance != null)
         {
             lastAudioMixer = MusicManager.Instance.MixerGroup;
-            MusicManager.Instance.ChangeMixer(pausedAudioMixer);
+            MusicManager.Instance.TransitionToSnapshot(MusicManager.SnapshotMode.Paused);
         }
     }
 
@@ -73,7 +73,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         if (MusicManager.Instance != null)
         {
-            MusicManager.Instance.ChangeMixer(lastAudioMixer);
+            MusicManager.Instance.TransitionToSnapshot(MusicManager.SnapshotMode.Normal);
         }
     }
 
