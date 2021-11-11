@@ -11,11 +11,11 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;
     [SerializeField] private Transform playerHead;
-
+    public static int fov;
     // y min, y max
     [SerializeField] private float yRotationLock = 90;
 
-    [SerializeField] private Vector2 mouseSensitivity;
+    public static Vector2 mouseSensitivity;
 
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
@@ -29,9 +29,10 @@ public class FirstPersonCamera : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Camera.main.fieldOfView = fov;
         camTransform = Camera.main.transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        localRotation = player.rotation;
+        localRotation = camTransform.rotation;
         playerCM = player.GetComponent<PhysicsManager>().collisionManager;
 
         // Need to make this false until level loaded in the future :(
@@ -64,8 +65,9 @@ public class FirstPersonCamera : MonoBehaviour
 
         // convert input to rotation
         Vector2 mouse = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
-        Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
-        Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
+
+        Quaternion mouseRotationHorizontal = Quaternion.AngleAxis(mouse.x, Vector3.up);
+        Quaternion mouseRotationVertical = Quaternion.AngleAxis(mouse.y, -Vector3.right);
 
         float sign = 1;
         if (Vector3.Angle(validUpAxis, camTransform.up) > 90)

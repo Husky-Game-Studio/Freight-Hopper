@@ -5,15 +5,8 @@ using UnityEngine.Audio;
 
 public class ChangeMixerOnTrigger : MonoBehaviour
 {
-    [SerializeField] private AudioMixerGroup mixerToFadeInto;
-    private bool switched = false;
-    private AudioMixerGroup originalMixer;
-
-    private void Awake()
-    {
-        originalMixer = MusicManager.Instance.MixerGroup;
-        switched = false;
-    }
+    [SerializeField] private MusicManager.SnapshotMode mixerToFadeInto = MusicManager.SnapshotMode.Alternate;
+    [SerializeField] private bool switched = false;
 
     private void OnTriggerExit(Collider other)
     {
@@ -24,12 +17,12 @@ public class ChangeMixerOnTrigger : MonoBehaviour
         if (!switched)
         {
             switched = true;
-            MusicManager.Instance.ChangeMixer(mixerToFadeInto);
+            MusicManager.Instance.TransitionToSnapshot(mixerToFadeInto);
         }
         else
         {
             switched = false;
-            MusicManager.Instance.ChangeMixer(originalMixer);
+            MusicManager.Instance.TransitionToSnapshot(MusicManager.SnapshotMode.Normal);
         }
     }
 }
