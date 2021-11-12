@@ -20,7 +20,7 @@ public class Cart
         this.hoverController = rb.GetComponentInChildren<HoverController>();
         this.destructable = rb.GetComponent<Destructable>();
         this.uprightPID = new PID();
-        uprightPID.Initialize(new PID.Data(2f, 0.2f, 1f)); // This needs to be done somewhere where it can be tweaked by game designers
+        uprightPID.Initialize(new PID.Data(1f, 0.1f, 0.2f)); // This needs to be done somewhere where it can be tweaked by game designers
     }
 
     public void DestroyCartFunc()
