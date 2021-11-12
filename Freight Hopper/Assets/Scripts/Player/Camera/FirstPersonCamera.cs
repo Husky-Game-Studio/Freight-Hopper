@@ -11,11 +11,11 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;
     [SerializeField] private Transform playerHead;
-    public static int fov;
+    public static int fov = 90;
     // y min, y max
     [SerializeField] private float yRotationLock = 90;
 
-    public static Vector2 mouseSensitivity;
+    public static Vector2 mouseSensitivity = new Vector2(12, 10);
 
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
