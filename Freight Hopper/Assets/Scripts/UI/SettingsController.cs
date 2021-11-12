@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SettingsController : MonoBehaviour
 {
-    [SerializeField] private UnityEngine.UI.Toggle ssao;
     [SerializeField] private UnityEngine.UI.Toggle vsync;
     [SerializeField] private UnityEngine.UI.Toggle antialiasing;
     [SerializeField] private EchoSlider shadowDistance;
@@ -18,7 +17,6 @@ public class SettingsController : MonoBehaviour
 
     public void BindUI()
     {
-        ssao.isOn = settings.SSAO;
         vsync.isOn = settings.Vsync;
         antialiasing.isOn = settings.Antialiasing;
         shadowDistance.SetSliderValue(settings.ShadowDistance);
@@ -28,7 +26,6 @@ public class SettingsController : MonoBehaviour
         soundsVolume.SetSliderValue(settings.SoundEffectsVolume);
         musicVolume.SetSliderValue(settings.MusicVolume);
 
-        ssao.onValueChanged.AddListener(settings.SetSSAO);
         vsync.onValueChanged.AddListener(settings.SetVsync);
         antialiasing.onValueChanged.AddListener(settings.SetAntialiasing);
         shadowDistance.SetListener(settings.SetShadowDistance);

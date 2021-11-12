@@ -5,7 +5,6 @@ using UnityEngine.Audio;
 
 public class Settings : MonoBehaviour
 {
-    private bool ssao;
     private bool vsync;
     private bool antialiasing;
     private int shadowDistance;
@@ -14,7 +13,6 @@ public class Settings : MonoBehaviour
     private float soundEffectsVolume;
     private float musicVolume;
 
-    public bool SSAO => ssao;
     public bool Vsync => vsync;
     public bool Antialiasing => antialiasing;
     public int ShadowDistance => shadowDistance;
@@ -23,8 +21,6 @@ public class Settings : MonoBehaviour
     public float SoundEffectsVolume => soundEffectsVolume;
     public float MusicVolume => musicVolume;
 
-    private static bool loadedOnce = false;
-    [SerializeField] private ScriptableRendererFeature ssaoSetting;
     [SerializeField] private UniversalRenderPipelineAsset pipelineAsset;
     [SerializeField] private AudioMixer musicVolumeMixer;
     [SerializeField] private AudioMixer soundEffectsVolumeMixer;
@@ -37,7 +33,6 @@ public class Settings : MonoBehaviour
 
     public void LoadSettings()
     {
-        ssao = Convert.ToBoolean(PlayerPrefs.GetInt("SSAO", 1));
         vsync = Convert.ToBoolean(PlayerPrefs.GetInt("Vsync", 1));
         antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt("Antialiasing", 1));
         shadowDistance = PlayerPrefs.GetInt("ShadowDistance", 2000);
@@ -50,7 +45,6 @@ public class Settings : MonoBehaviour
 
     public void SetSettings()
     {
-        ssaoSetting.SetActive(ssao);
         QualitySettings.vSyncCount = vsync ? 1 : 0;
         pipelineAsset.msaaSampleCount = antialiasing ? 4 : 0;
         pipelineAsset.shadowDistance = shadowDistance;
@@ -62,7 +56,6 @@ public class Settings : MonoBehaviour
 
     public void SaveSettings()
     {
-        PlayerPrefs.SetInt("SSAO", Convert.ToInt32(ssao));
         PlayerPrefs.SetInt("Vsync", Convert.ToInt32(vsync));
         PlayerPrefs.SetInt("Antialiasing", Convert.ToInt32(antialiasing));
         PlayerPrefs.SetInt("ShadowDistance", shadowDistance);
@@ -83,11 +76,6 @@ public class Settings : MonoBehaviour
         {
             mixer.SetFloat("volume", Mathf.Log10(vol) * 20);
         }
-    }
-
-    public void SetSSAO(bool val)
-    {
-        ssao = val;
     }
 
     public void SetVsync(bool val)
