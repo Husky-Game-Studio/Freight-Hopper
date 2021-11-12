@@ -21,8 +21,6 @@ public class BezierLineCreator : PathCreation.Examples.PathSceneTool
 
     private void CreateMesh()
     {
-        var pathInstruction = PathCreation.EndOfPathInstruction.Stop;
-
         lineRenderer.positionCount = this.path.LastVertexIndex + 1;
         for (int i = 0; i <= this.path.LastVertexIndex; i++)
         {
