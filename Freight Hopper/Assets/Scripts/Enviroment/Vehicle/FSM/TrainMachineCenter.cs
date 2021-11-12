@@ -65,7 +65,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             return currentPath == 0;
         }
     }
-    public bool CompletedPaths => (this.CurrentRailLinker != null && this.OnFinalPath
+    public bool CompletedPaths => this.Locomotive.rb == null || (this.CurrentRailLinker != null && this.OnFinalPath
         && this.CurrentRailLinker.WithinFollowDistance(this.CurrentRailLinker.pathCreator.path.LastVertexIndex, this.Locomotive.rb.position))
         || completedPathsToggle;
     public bool InstantlyAccelerate => instantlyAccelerate;
