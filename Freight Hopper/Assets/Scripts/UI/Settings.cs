@@ -35,7 +35,7 @@ public class Settings : MonoBehaviour
     {
         vsync = Convert.ToBoolean(PlayerPrefs.GetInt("Vsync", 1));
         antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt("Antialiasing", 1));
-        shadowDistance = PlayerPrefs.GetInt("ShadowDistance", 2000);
+        shadowDistance = PlayerPrefs.GetInt("ShadowDistance", 1000);
         fov = PlayerPrefs.GetInt("Fov", 100);
         mouseSensitivity.x = PlayerPrefs.GetFloat("MouseXSensitivity", 14);
         mouseSensitivity.y = PlayerPrefs.GetFloat("MouseYSensitivity", 10);
