@@ -4531,7 +4531,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc0edd9ffc7295540a46743399231764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localRotation: {x: 0, y: 0, z: 0, w: 0}
   upAxisAngleRotation: {x: 0, y: 0, z: 0}
   upAxis:
     old: {x: 0, y: 0, z: 0}
@@ -4540,7 +4539,8 @@ MonoBehaviour:
   oldUpAxis: {x: 0, y: 0, z: 0}
   timeStep: 0
   playerHead: {fileID: 6851446874874222867}
-  yRotationLock: 90
+  yRotationLock: 89.99
+  mouseY: 0
   smoothingDelta: 0.1
 --- !u!136 &6851446874579196112
 CapsuleCollider:

@@ -17,7 +17,7 @@ public class CollisionManagement
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
     [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
-    [ReadOnly, SerializeField] private Vector3 validUpAxis;
+    [ReadOnly, SerializeField] private Vector3 validUpAxis = Vector3.up;
 
     public Vector3 ValidUpAxis => validUpAxis;
     public Memory<Vector3> ContactNormal => contactNormal;
@@ -153,7 +153,7 @@ public class CollisionManagement
         velocity.current = rb.velocity;
         position.current = rb.position;
 
-        if (upAxis != Vector3.zero)
+        if (upAxis.magnitude > float.Epsilon)
         {
             validUpAxis = upAxis;
         }

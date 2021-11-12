@@ -2,28 +2,25 @@ using UnityEngine;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-    private Transform camTransform;
-    [SerializeField, ReadOnly] private Quaternion localRotation;
-    private Transform player;
-    [SerializeField, ReadOnly] private Vector3 upAxisAngleRotation;
+    [SerializeField, ReadOnly] private Vector3 upAxisAngleRotation = Vector3.zero;
     [SerializeField, ReadOnly] private Memory<Vector3> upAxis;
     [SerializeField, ReadOnly] private Vector3 smoothedUpAxis;
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;
     [SerializeField] private Transform playerHead;
-    public static int fov = 90;
-    // y min, y max
-    [SerializeField] private float yRotationLock = 90;
-
-    public static Vector2 mouseSensitivity = new Vector2(12, 10);
-
+    // y max
+    [SerializeField] private float yRotationLock = 89.99f;
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
 
-    // This is to stop the input while the level is loading. At least if it was implemented
-    private bool cameraEnabled = false;
+    public static int fov = 90;
+    public static Vector2 mouseSensitivity = new Vector2(12, 10);
 
     private CollisionManagement playerCM;
+    private Transform camTransform;
+    private Transform player;
+    private float mouseY;
+    private int frameCount = 0;
 
     private void Awake()
     {
@@ -32,24 +29,20 @@ public class FirstPersonCamera : MonoBehaviour
         Camera.main.fieldOfView = fov;
         camTransform = Camera.main.transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        localRotation = camTransform.rotation;
-        playerCM = player.GetComponent<PhysicsManager>().collisionManager;
 
-        // Need to make this false until level loaded in the future :(
-        cameraEnabled = true;
+        playerCM = player.GetComponent<PhysicsManager>().collisionManager;
     }
 
     private void Update()
     {
         FollowPlayer();
+
+        frameCount++;
     }
 
     private void FixedUpdate()
     {
-        if (cameraEnabled)
-        {
-            RotatePlayer();
-        }
+        RotatePlayer();
     }
 
     private void FollowPlayer()
@@ -60,37 +53,21 @@ public class FirstPersonCamera : MonoBehaviour
     private void RotatePlayer()
     {
         Vector3 validUpAxis = playerCM.ValidUpAxis;
-
         CalculateSmoothedUpAxis(validUpAxis);
 
         // convert input to rotation
-        Vector2 mouse = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
-
-        Quaternion mouseRotationHorizontal = Quaternion.AngleAxis(mouse.x, Vector3.up);
-        Quaternion mouseRotationVertical = Quaternion.AngleAxis(mouse.y, -Vector3.right);
-
-        float sign = 1;
-        if (Vector3.Angle(validUpAxis, camTransform.up) > 90)
+        Vector2 delta = UserInput.Instance.Look() * mouseSensitivity * Time.fixedDeltaTime;
+        if (frameCount < 3)
         {
-            sign = -1;
+            delta = Vector2.zero;
         }
+        mouseY += delta.y;
+        mouseY = Mathf.Clamp(mouseY, -yRotationLock, yRotationLock);
+        Quaternion mouseRotationHorizontal = Quaternion.AngleAxis(delta.x, Vector3.up);
+        Quaternion mouseRotationVertical = Quaternion.AngleAxis(mouseY, -Vector3.right);
 
-        // Just prevents issues with camera glitching at the poles
-        float verticalAngle = Vector3.Angle(player.up * sign,
-            Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation * mouseRotationVertical *
-            player.up * sign);
-
-        if (verticalAngle < yRotationLock)
-        {
-            localRotation *= mouseRotationVertical;
-        }
-        // Apply camera and player rotation
-
-        camTransform.rotation = Quaternion.LookRotation(player.forward * sign, smoothedUpAxis) * localRotation;
-        Vector3 forward = camTransform.forward.ProjectOnContactPlane(smoothedUpAxis).normalized;
-        player.LookAt(player.position + forward, validUpAxis);
-
-        player.rotation *= mouseRotationHorizontal;
+        camTransform.rotation = Quaternion.LookRotation(player.forward, smoothedUpAxis) * mouseRotationVertical;
+        player.rotation = Quaternion.LookRotation(player.forward, validUpAxis) * mouseRotationHorizontal;
     }
 
     private void CalculateSmoothedUpAxis(Vector3 upAxisCamera)
@@ -101,7 +78,6 @@ public class FirstPersonCamera : MonoBehaviour
         {
             timeStep = 0;
             oldUpAxis = upAxis.old;
-            smoothedUpAxis = upAxis.old;
         }
         upAxis.UpdateOld();
         timeStep = Mathf.Min(timeStep + smoothingDelta, 1);
