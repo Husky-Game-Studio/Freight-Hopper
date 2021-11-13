@@ -15,7 +15,7 @@ public class FirstPersonCamera : MonoBehaviour
 
     public static int fov = 90;
     public static Vector2 mouseSensitivity = new Vector2(12, 10);
-
+    private Vector2 delta = Vector3.zero;
     private CollisionManagement playerCM;
     private Transform camTransform;
     private Transform player;
@@ -37,6 +37,14 @@ public class FirstPersonCamera : MonoBehaviour
     {
         FollowPlayer();
 
+        delta = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
+        if (frameCount < 3)
+        {
+            delta = Vector2.zero;
+        }
+        mouseY += delta.y;
+        mouseY = Mathf.Clamp(mouseY, -yRotationLock, yRotationLock);
+
         frameCount++;
     }
 
@@ -56,13 +64,7 @@ public class FirstPersonCamera : MonoBehaviour
         CalculateSmoothedUpAxis(validUpAxis);
 
         // convert input to rotation
-        Vector2 delta = UserInput.Instance.Look() * mouseSensitivity * Time.fixedDeltaTime;
-        if (frameCount < 3)
-        {
-            delta = Vector2.zero;
-        }
-        mouseY += delta.y;
-        mouseY = Mathf.Clamp(mouseY, -yRotationLock, yRotationLock);
+
         Quaternion mouseRotationHorizontal = Quaternion.AngleAxis(delta.x, Vector3.up);
         Quaternion mouseRotationVertical = Quaternion.AngleAxis(mouseY, -Vector3.right);
 
