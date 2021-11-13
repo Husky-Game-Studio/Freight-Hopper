@@ -70,7 +70,7 @@ public class Settings : MonoBehaviour
     {
         if (Mathf.Abs(vol) < float.Epsilon)
         {
-            mixer.SetFloat("volume", -1000);
+            mixer.SetFloat("volume", -100f);
         }
         else
         {
