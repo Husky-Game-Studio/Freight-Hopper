@@ -20,6 +20,7 @@ public class PlayerStatesTransitions
     public Toggle fullStopPressed = new Toggle();
     public Toggle burstPressed = new Toggle();
     public Toggle releasedUpwardDash = new Toggle();
+    private bool lastStateGroundPound = false;
 
     public void ResetInputs()
     {
@@ -81,6 +82,10 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToDefaultState()
     {
+        if (playerMachine.currentState != playerMachine.jumpState)
+        {
+            lastStateGroundPound = false;
+        }
         if (playerMachine.currentState == playerMachine.moveState && UserInput.Instance.Move() == Vector3.zero)
         {
             return playerMachine.defaultState;
@@ -169,6 +174,7 @@ public class PlayerStatesTransitions
             (playerMachine.abilities.jumpBehavior.coyoteeTimer.TimerActive() || playerMachine.collisionManagement.IsGrounded.current) &&
             playerMachine.currentState == playerMachine.groundPoundState)
         {
+            lastStateGroundPound = true;
             return playerMachine.jumpState;
         }
 
@@ -226,7 +232,7 @@ public class PlayerStatesTransitions
     {
         if (UserInput.Instance.GroundPoundHeld &&
             !playerMachine.abilities.groundPoundBehavior.FlatSurface &&
-            playerMachine.abilities.groundPoundBehavior.Unlocked)
+            playerMachine.abilities.groundPoundBehavior.Unlocked && !lastStateGroundPound)
         {
             return playerMachine.groundPoundState;
         }
