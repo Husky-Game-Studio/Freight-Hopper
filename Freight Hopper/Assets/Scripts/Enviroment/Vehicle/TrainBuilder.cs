@@ -5,7 +5,7 @@ using UnityEngine;
 public class TrainBuilder : MonoBehaviour
 {
     [SerializeField] private bool linkToPath = true;
-    PathCreation.PathCreator LinkedPath => trainFSM.pathObjects[0];
+    private PathCreation.PathCreator LinkedPath => trainFSM.pathObjects[0];
 
     [SerializeField, Min(1)] private int repeatActionCount = 1;
     [SerializeField, Min(-1),
@@ -22,8 +22,8 @@ public class TrainBuilder : MonoBehaviour
 
     [Header("Lists and prefabs")]
     [SerializeField] private List<Cart> cartsList = new List<Cart>();
-    [SerializeField] private List<GameObject> cartPrefabs;
-    [SerializeField] private List<GameObject> cargoPrefabs;
+    [SerializeField] private PrefabsList cartPrefabs;
+    [SerializeField] private PrefabsList cargoPrefabs;
     [SerializeField] private GameObject baseCart;
 
     private TrainMachineCenter trainFSM;
@@ -54,6 +54,10 @@ public class TrainBuilder : MonoBehaviour
         None,
         BoxCargo,
         PillCargo,
+        BillBoardUp,
+        BillBoardDown,
+        BillBoardRF,
+        BillBoardLF
     }
 
     // This order matters, if this is different from the model order for the list this WON'T work
@@ -448,7 +452,7 @@ public class TrainBuilder : MonoBehaviour
         {
             Undo.DestroyObjectImmediate(cart.model);
         }
-        GameObject cartModelPrefab = cartPrefabs[cart.cartID];
+        GameObject cartModelPrefab = cartPrefabs.Prefabs[cart.cartID];
         GameObject cartModel = PrefabUtility.InstantiatePrefab(cartModelPrefab) as GameObject;
         cartModel.transform.position = position;
         cartModel.transform.rotation = cart.gameObject.transform.rotation;
@@ -461,7 +465,7 @@ public class TrainBuilder : MonoBehaviour
     {
         if (cart.cargoIDs.Count > 0 && (TrainCargos)cart.cargoIDs[index] != TrainCargos.None)
         {
-            GameObject cargoModelPrefab = cargoPrefabs[cart.cargoIDs[index] - 1];
+            GameObject cargoModelPrefab = cargoPrefabs.Prefabs[cart.cargoIDs[index] - 1];
             GameObject cargoModel = PrefabUtility.InstantiatePrefab(cargoModelPrefab) as GameObject;
 
             cargoModel.transform.rotation = cart.gameObject.transform.rotation;
