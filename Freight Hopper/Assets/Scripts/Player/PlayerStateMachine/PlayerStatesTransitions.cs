@@ -82,7 +82,7 @@ public class PlayerStatesTransitions
 
     public BasicState CheckToDefaultState()
     {
-        if (playerMachine.currentState != playerMachine.jumpState)
+        if (!UserInput.Instance.GroundPoundHeld || playerMachine.currentState != playerMachine.jumpState)
         {
             lastStateGroundPound = false;
         }
