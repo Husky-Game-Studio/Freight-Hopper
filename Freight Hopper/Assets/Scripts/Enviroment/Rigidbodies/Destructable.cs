@@ -32,6 +32,11 @@ public class Destructable : MonoBehaviour
         rb.drag = 0;
         rb.angularDrag = 0;
         GetComponentInChildren<HoverController>().DisableHovering();
+        ConfigurableJoint joint = GetComponent<ConfigurableJoint>();
+        if (joint != null)
+        {
+            joint.enableCollision = true;
+        }
         Destroy(go, explosionTime);
         Destroy(this.gameObject, explosionTime);
     }
