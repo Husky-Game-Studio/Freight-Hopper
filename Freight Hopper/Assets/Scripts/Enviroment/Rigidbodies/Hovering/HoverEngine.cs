@@ -25,6 +25,11 @@ public class HoverEngine : MonoBehaviour
         effect.SetFloat("power", 4.0f);
     }
 
+    public void DisableEngine()
+    {
+        automatic = false;
+    }
+
     public void Initialize(Rigidbody rb, PID.Data data, float targetDistance, bool automatic)
     {
         this.rb = rb;

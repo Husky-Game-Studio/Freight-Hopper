@@ -29,6 +29,9 @@ public class Destructable : MonoBehaviour
         RigidbodyDestroyed?.Invoke();
         GameObject go = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
         go.transform.localScale = Vector3.one * scale;
+        rb.drag = 0;
+        rb.angularDrag = 0;
+        GetComponentInChildren<HoverController>().DisableHovering();
         Destroy(go, explosionTime);
         Destroy(this.gameObject, explosionTime);
     }

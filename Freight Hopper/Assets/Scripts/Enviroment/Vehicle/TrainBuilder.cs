@@ -66,10 +66,10 @@ public class TrainBuilder : MonoBehaviour
         EmptyCart,
         EmptyCartWalls,
         EmptyCartLasers,
-        BillBoardLF,
-        BillBoardRF,
-        BillBoardB,
-        BillBoardF,
+        NULL,
+        NULL2,
+        NULL3,
+        NULL4,
         TurretCart
     }
 

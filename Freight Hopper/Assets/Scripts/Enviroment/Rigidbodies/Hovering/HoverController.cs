@@ -102,6 +102,14 @@ public class HoverController : MonoBehaviour
         }
     }
 
+    public void DisableHovering()
+    {
+        foreach (HoverEngine eng in hoverEnginePivots)
+        {
+            eng.DisableEngine();
+        }
+    }
+
     private void FixedUpdate()
     {
         enginesFiring = false;
