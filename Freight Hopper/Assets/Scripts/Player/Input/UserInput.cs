@@ -163,7 +163,7 @@ public class UserInput : MonoBehaviour
     public Vector3 Move()
     {
         Vector2 rawInput = master.Player.Movement.ReadValue<Vector2>();
-        return new Vector3(rawInput.x, 0, rawInput.y);
+        return new Vector3(/*rawInput.x*/0, 0, rawInput.y);
     }
 
     public Vector2 Look()
