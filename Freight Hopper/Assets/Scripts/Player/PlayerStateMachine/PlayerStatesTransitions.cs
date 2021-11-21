@@ -243,7 +243,7 @@ public class PlayerStatesTransitions
     public BasicState CheckToGrappleGroundPoundState()
     {
         if ((groundPoundPressed.value && playerMachine.currentState == playerMachine.grapplePoleAnchoredState) ||
-            (grapplePressed.value && playerMachine.currentState == playerMachine.groundPoundState))
+            (playerMachine.currentState == playerMachine.groundPoundState && playerMachine.abilities.grapplePoleBehavior.IsAnchored()))
         {
             if ((playerMachine.collisionManagement.ContactNormal.current != playerMachine.collisionManagement.ValidUpAxis ||
                 playerMachine.collisionManagement.IsGrounded.current == false) && playerMachine.abilities.groundPoundBehavior.Unlocked)
