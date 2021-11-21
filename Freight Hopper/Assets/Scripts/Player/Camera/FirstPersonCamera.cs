@@ -35,14 +35,14 @@ public class FirstPersonCamera : MonoBehaviour
 
     private void Update()
     {
-        FollowPlayer();
-
         frameCount++;
+        delta = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         RotatePlayer();
+        FollowPlayer();
     }
 
     private void FollowPlayer()
@@ -56,8 +56,8 @@ public class FirstPersonCamera : MonoBehaviour
         CalculateSmoothedUpAxis(validUpAxis);
 
         // convert input to rotation
-        delta = UserInput.Instance.Look() * mouseSensitivity * Time.fixedDeltaTime;
-        if (frameCount < 3)
+
+        if (frameCount < 4)
         {
             delta = Vector2.zero;
         }
@@ -67,7 +67,7 @@ public class FirstPersonCamera : MonoBehaviour
         Quaternion mouseRotationVertical = Quaternion.AngleAxis(mouseY, -Vector3.right);
 
         camTransform.rotation = Quaternion.LookRotation(player.forward, smoothedUpAxis) * mouseRotationVertical;
-        player.rotation = Quaternion.LookRotation(player.forward, validUpAxis) * mouseRotationHorizontal;
+        player.GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(player.forward, validUpAxis) * mouseRotationHorizontal);
     }
 
     private void CalculateSmoothedUpAxis(Vector3 upAxisCamera)
