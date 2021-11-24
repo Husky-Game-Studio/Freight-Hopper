@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1842607187481576254}
   - component: {fileID: 28558037788855405}
   - component: {fileID: 7258431188621737537}
+  - component: {fileID: 2827374215264869471}
   m_Layer: 0
   m_Name: Canyon_M1
   m_TagString: Untagged
@@ -81,6 +82,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2827374215264869471
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3332077331381333402}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 180, y: 100, z: 28.06607}
+  m_Center: {x: 0.03504181, y: 49.981567, z: 4.0444183}
 --- !u!1 &8825637296139040756
 GameObject:
   m_ObjectHideFlags: 0
