@@ -35,7 +35,7 @@ public class LevelData : ScriptableObject
             PlayerAbilities.Name.WallRunBehavior,
             PlayerAbilities.Name.GroundPoundBehavior
         };
-    [SerializeField, ReadOnly]
+    [SerializeField]
     private List<PlayerAbilities.Name> activeAbilities = new List<PlayerAbilities.Name>{
             PlayerAbilities.Name.MovementBehavior,
             PlayerAbilities.Name.JumpBehavior,

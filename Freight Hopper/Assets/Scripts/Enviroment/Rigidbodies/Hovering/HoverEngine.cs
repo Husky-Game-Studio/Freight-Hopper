@@ -41,7 +41,7 @@ public class HoverEngine : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + (-direction * targetDistance));
+        Gizmos.DrawLine(this.transform.position, this.transform.position + (direction * targetDistance));
     }
 
     public void UpdateCurrentLinker(TrainRailLinker newLinker)
