@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using System;
+using System.Collections.Generic;
 public partial class WallRunBehavior : AbilityBehavior
 {
     [Header("Wall detection")]
@@ -41,7 +42,7 @@ public partial class WallRunBehavior : AbilityBehavior
     [SerializeField, ReadOnly] private bool[] wallStatus = new bool[3];
     [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[3];
 
-    public bool[] WallStatus() => wallStatus.Clone() as bool[];
+    public IList<bool> WallStatus => Array.AsReadOnly(wallStatus);
 
     private WallDetectionLayer[] detectionlayers;
 

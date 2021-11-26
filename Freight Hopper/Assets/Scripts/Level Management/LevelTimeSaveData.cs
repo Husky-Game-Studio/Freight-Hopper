@@ -22,10 +22,10 @@ public class LevelTimeSaveData
     [System.Serializable]
     public struct AbilityTimes
     {
-        [SerializeField] public List<PlayerAbilities.Name> abilitiesUsed;
+        [SerializeField] public IList<PlayerAbilities.Name> abilitiesUsed;
         [SerializeField] public float time;
 
-        public AbilityTimes(List<PlayerAbilities.Name> names, float time)
+        public AbilityTimes(IList<PlayerAbilities.Name> names, float time)
         {
             abilitiesUsed = names;
             this.time = time;
@@ -39,16 +39,16 @@ public class LevelTimeSaveData
     }
 
     // First returns best time, next returns index to get the best time
-    public (float, int) GetTime(PlayerAbilities.Name[] abilitesUsed)
+    public (float, int) GetTime(IList<PlayerAbilities.Name> abilitesUsed)
     {
         for (int i = 0; i < bestTimes.Count; i++)
         {
-            if (bestTimes[i].abilitiesUsed.Count != abilitesUsed.Length)
+            if (bestTimes[i].abilitiesUsed.Count != abilitesUsed.Count)
             {
                 continue;
             }
             bool equals = true;
-            for (int j = 0; j < abilitesUsed.Length; j++)
+            for (int j = 0; j < abilitesUsed.Count; j++)
             {
                 if (bestTimes[i].abilitiesUsed[j] != abilitesUsed[j])
                 {
@@ -65,7 +65,7 @@ public class LevelTimeSaveData
     }
 
     // returns the best time too, checks if time provided is the new best time first
-    public float SetNewBestTime(PlayerAbilities.Name[] abilitesUsed, float time)
+    public float SetNewBestTime(IList<PlayerAbilities.Name> abilitesUsed, float time)
     {
         (float, int) currentBest = GetTime(abilitesUsed);
         if (currentBest.Item1 < time)

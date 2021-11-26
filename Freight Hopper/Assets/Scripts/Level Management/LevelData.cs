@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using System;
 
 [CreateAssetMenu(menuName = "Scriptable Objects/Level/Data"), System.Serializable]
 public class LevelData : ScriptableObject
@@ -51,10 +53,11 @@ public class LevelData : ScriptableObject
     public Texture2D Image => image;
     public Optional<string> TutorialSceneName => tutorialSceneName;
 
-    public float[] MedalTimes => medalTimes.Clone() as float[];
+    
+    public IList<float> MedalTimes => Array.AsReadOnly(medalTimes);
 
-    public PlayerAbilities.Name[] ActiveAbilities => activeAbilities.ToArray();
-    public PlayerAbilities.Name[] DefaultAbilites => defaultAbilities.Clone() as PlayerAbilities.Name[];
+    public IList<PlayerAbilities.Name> ActiveAbilities => activeAbilities.AsReadOnly();
+    public IList<PlayerAbilities.Name> DefaultAbilites => Array.AsReadOnly(defaultAbilities);
 
     public void RestartActiveAbilities()
     {
@@ -74,6 +77,95 @@ public class LevelData : ScriptableObject
         activeAbilities.Add(ability);
     }
 
+    public void UpdateToLastLevelsAbilities(IList<PlayerAbilities.Name> oldDefaultAbilities, IList<PlayerAbilities.Name> oldActiveAbilities)
+    {
+        if (EqualAbilitiesList(oldDefaultAbilities, oldActiveAbilities))
+        {
+            PlayerAbilities.Name[] defaultAbilitiesTemp = new PlayerAbilities.Name[this.DefaultAbilites.Count];
+            this.DefaultAbilites.CopyTo(defaultAbilitiesTemp, 0);
+            activeAbilities = new List<PlayerAbilities.Name>(defaultAbilitiesTemp);
+            return;
+        }
+        if(EqualAbilitiesList(oldActiveAbilities, this.ActiveAbilities))
+        {
+            return;
+        }
+
+        List<PlayerAbilities.Name> posDif = PosDif(oldDefaultAbilities, defaultAbilities);
+        PlayerAbilities.Name[] lastLevelsAbilities = new PlayerAbilities.Name[oldActiveAbilities.Count];
+        oldActiveAbilities.CopyTo(lastLevelsAbilities, 0);
+        activeAbilities = new List<PlayerAbilities.Name>(lastLevelsAbilities);
+        for(int i = 0; i < posDif.Count; i++)
+        {
+            activeAbilities.Add(posDif[i]);
+        }
+    }
+    
+    public bool EqualAbilitiesList(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
+    {
+        bool equal = true;
+        if (a.Count != b.Count)
+        {
+            equal = false;
+        }
+        else
+        {
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (a[i] != b[i])
+                {
+                    equal = false;
+                    break;
+                }
+            }
+        }
+        return equal;
+    }
+
+    // Difference between a and b, but only positive differences (e.g. new ability is added when switching to b)
+    public List<PlayerAbilities.Name> PosDif(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
+    {
+        List<PlayerAbilities.Name> result = new List<PlayerAbilities.Name>();
+        for(int i= 0; i < b.Count; i++)
+        {
+            result.Add(b[i]);
+        }
+        for(int i = 0; i < a.Count; i++)
+        {
+            if (result.Contains(a[i]))
+            {
+                result.Remove(a[i]);
+            }
+        }
+
+        return result;
+    }
+
+    // Difference between a and b, but only negative differences (e.g. ability is removed when switching to b)
+    public List<PlayerAbilities.Name> NegDif(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
+    {
+        return PosDif(b, a);
+    }
+
+    // List of common abilities
+    public List<PlayerAbilities.Name> SameDif(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
+    {
+        List<PlayerAbilities.Name> result = new List<PlayerAbilities.Name>();
+        for(int i = 0; i < a.Count; i++)
+        {
+            if (b.Contains(a[i]))
+            {
+                result.Add(a[i]);
+            }
+        }
+
+        return result;
+    }
+
+    public  bool UsingDefaultAbilities()
+    {
+        return EqualAbilitiesList(this.ActiveAbilities, this.DefaultAbilites);
+    }
     public void RemoveActiveAbility(PlayerAbilities.Name ability)
     {
         if (!activeAbilities.Contains(ability))

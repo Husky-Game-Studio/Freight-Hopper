@@ -30,7 +30,6 @@ public class CurrentAbilityManager : MonoBehaviour
         currentLevel = selectedLevelDataManager.CurrentLevelData;
         lockButton.gameObject.SetActive(false);
         unlockButton.gameObject.SetActive(true);
-        currentLevel.RestartActiveAbilities();
         CreateToggles();
         SetTogglesActive(false);
 
@@ -44,6 +43,10 @@ public class CurrentAbilityManager : MonoBehaviour
             SetTogglesActive(true);
             lockButton.gameObject.SetActive(true);
             unlockButton.gameObject.SetActive(false);
+            for (int i = 0; i < toggles.Count; i++)
+            {
+                UpdateToggle(i);
+            }
         });
 
         if (lockButton.onClick.GetPersistentEventCount() > 0)
@@ -57,6 +60,20 @@ public class CurrentAbilityManager : MonoBehaviour
             lockButton.gameObject.SetActive(false);
             unlockButton.gameObject.SetActive(true);
         });
+
+        UpdateLocks();
+    }
+
+    void UpdateLocks()
+    {
+        if (currentLevel.UsingDefaultAbilities())
+        {
+            lockButton.onClick.Invoke();
+        }
+        else
+        {
+            unlockButton.onClick.Invoke();
+        }
     }
 
     private void SetTogglesActive(bool activeState)
@@ -79,14 +96,14 @@ public class CurrentAbilityManager : MonoBehaviour
             }
         }
         toggles.Clear();
-        Sprite[] sprites = abilityIcons.Sprites;
-        for (int i = 0; i < sprites.Length; i++)
+
+        for (int i = 0; i < abilityIcons.Sprites.Count; i++)
         {
             GameObject go = Instantiate(backgroundAbilityPrefab, this.transform);
             UnityEngine.UI.Toggle toggle = go.GetComponent<UnityEngine.UI.Toggle>();
             toggles.Add(toggle);
             Image image = go.transform.GetChild(0).GetComponent<Image>();
-            image.sprite = sprites[i];
+            image.sprite = abilityIcons.Sprites[i];
             UpdateToggle(i);
             if (toggle.onValueChanged.GetPersistentEventCount() > 0)
             {
@@ -96,11 +113,16 @@ public class CurrentAbilityManager : MonoBehaviour
             toggle.onValueChanged.AddListener(delegate { ToggleToggle(number); });
         }
     }
-
+    private void Update()
+    {
+        if(selectedLevelDataManager.CurrentLevelData != currentLevel && selectedLevelDataManager.CurrentLevelData != null)
+        {
+            currentLevel = selectedLevelDataManager.CurrentLevelData;
+            UpdateLocks();
+        }
+    }
     private void ToggleToggle(int i)
     {
-        currentLevel = selectedLevelDataManager.CurrentLevelData;
-        //Debug.Log("toggle toggle for " + i + " and length is " + toggles.Count);
         UnityEngine.UI.Toggle toggle = toggles[i];
         Image background = toggle.GetComponent<Image>();
         PlayerAbilities.Name ability = nameToIndex[i];
@@ -120,7 +142,6 @@ public class CurrentAbilityManager : MonoBehaviour
 
     private void RestartToggles()
     {
-        currentLevel = selectedLevelDataManager.CurrentLevelData;
         currentLevel.RestartActiveAbilities();
         for (int i = 0; i < toggles.Count; i++)
         {
@@ -130,7 +151,6 @@ public class CurrentAbilityManager : MonoBehaviour
 
     private void UpdateToggle(int i)
     {
-        currentLevel = selectedLevelDataManager.CurrentLevelData;
         UnityEngine.UI.Toggle toggle = toggles[i];
         Image background = toggle.GetComponent<Image>();
         PlayerAbilities.Name ability = nameToIndex[i];

@@ -11,17 +11,21 @@ public class SelectedLevelDataManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private TextMeshProUGUI worldtitle;
     [SerializeField] private TextMeshProUGUI bestTime;
-    [SerializeField] private WorldMetaData currentWorld;
+    [SerializeField] private LevelListManager levelListManager;
     [SerializeField] private SpriteList medalSprites;
     private int lastIndex = 0;
 
-    public LevelData CurrentLevelData => currentWorld.Levels[LevelSelectLevelButton.currentID - 1];
+    public LevelData CurrentLevelData => levelListManager.CurrentWorld.Levels[LevelSelectLevelButton.currentID - 1];
 
     public void UpdateUI()
     {
         LevelData currentData = this.CurrentLevelData;
-        //Debug.Log(LevelSelectLevelButton.currentID - 1);
-        worldtitle.text = currentWorld.name;
+        if(currentData == null)
+        {
+            return;
+        }
+
+        worldtitle.text = levelListManager.CurrentWorld.name;
         title.text = currentData.Title;
         LevelTimeSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
         if (levelSaveData != null)

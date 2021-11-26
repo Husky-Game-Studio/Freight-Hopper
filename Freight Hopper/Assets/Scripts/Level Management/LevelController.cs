@@ -12,7 +12,7 @@ public class LevelController : MonoBehaviour
     public LevelData levelData;
 
     private const int highHeight = 999999;
-
+    private static LevelData lastLeveData;
     public static event Action PlayerRespawned;
 
     public static event Action LevelLoadedIn;
@@ -124,10 +124,17 @@ public class LevelController : MonoBehaviour
     private void OnDestroy()
     {
         Player.PlayerLoadedIn -= UnlockAbilities;
+        lastLeveData = levelData;
     }
+    
 
     public void UnlockAbilities()
     {
+        if(lastLeveData != null)
+        {
+            levelData.UpdateToLastLevelsAbilities(lastLeveData.DefaultAbilites, lastLeveData.ActiveAbilities);
+        }
+        
         Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.ActiveAbilities);
     }
 

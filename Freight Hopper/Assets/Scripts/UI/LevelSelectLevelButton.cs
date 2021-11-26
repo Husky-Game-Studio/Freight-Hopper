@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 using TMPro;
 
 public class LevelSelectLevelButton : MonoBehaviour, IPointerClickHandler
@@ -11,29 +12,34 @@ public class LevelSelectLevelButton : MonoBehaviour, IPointerClickHandler
     public static HashSet<LevelSelectLevelButton> allButtons = new HashSet<LevelSelectLevelButton>();
     private bool unlocked = true;
     private int personalID;
-    public static int currentID;
+    public static int currentID = 1;
     private RectTransform selector;
-
-    private void OnEnable()
-    {
-        button = GetComponent<Button>();
-        button.interactable = false;
-        allButtons.Add(this);
-        MoveSelector();
-    }
+    public bool Unlocked => unlocked;
+    private bool nextWorldButton = false;
 
     private void OnDisable()
     {
         allButtons.Clear();
     }
 
-    public void Initialize(string sceneName, RectTransform selector, int id, bool unlockedStatus)
+    public void Initialize(string sceneName, RectTransform selector, int id, bool unlockedStatus, Action buttonAction = null)
     {
+        button = GetComponent<Button>();
+        button.interactable = false;
+        allButtons.Add(this);
         if (button.onClick.GetPersistentEventCount() > 0)
         {
             button.onClick.RemoveAllListeners();
         }
-        button.onClick.AddListener(delegate { SceneLoader.LoadLevel(sceneName); });
+        if(buttonAction == null)
+        {
+            button.onClick.AddListener(delegate { SceneLoader.LoadLevel(sceneName); });
+        }
+        else
+        {
+            button.onClick.AddListener(delegate { buttonAction(); });
+            nextWorldButton = true;
+        }
         this.selector = selector;
 
         string name = id.ToString();
@@ -47,14 +53,14 @@ public class LevelSelectLevelButton : MonoBehaviour, IPointerClickHandler
             colors.disabledColor = Color.black;
             button.colors = colors;
         }
+        
     }
+
 
     private void MoveSelector()
     {
-        if (button.interactable)
-        {
-            selector.transform.position = this.transform.position - (Vector3.up * 25);
-        }
+        selector.SetParent(button.transform);
+        selector.transform.localPosition = Vector3.up * -20;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -64,17 +70,27 @@ public class LevelSelectLevelButton : MonoBehaviour, IPointerClickHandler
 
     public void EnableButton()
     {
-        if (!unlocked)
-        {
-            return;
-        }
+
         foreach (LevelSelectLevelButton button in allButtons)
         {
             button.DisableButton();
         }
-        button.interactable = true;
         currentID = personalID;
-        MoveSelector();
+        if (unlocked)
+        {
+            button.interactable = true;
+            if (nextWorldButton)
+            {
+                button.onClick.Invoke();
+            }
+        }
+        
+        
+        if (!nextWorldButton)
+        {
+            MoveSelector();
+        }
+        
     }
 
     public void DisableButton()

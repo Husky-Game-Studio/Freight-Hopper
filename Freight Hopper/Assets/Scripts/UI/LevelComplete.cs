@@ -74,26 +74,8 @@ public class LevelComplete : MonoBehaviour
             bestTime = newBestTime;
         }
 
-        // Overriding == would be better than this
-        PlayerAbilities.Name[] abilities = LevelController.Instance.levelData.ActiveAbilities;
-        PlayerAbilities.Name[] defaultAbilities = LevelController.Instance.levelData.DefaultAbilites;
-        bool activeDefault = true;
-        if (abilities.Length != defaultAbilities.Length)
-        {
-            activeDefault = false;
-        }
-        else
-        {
-            for (int i = 0; i < abilities.Length; i++)
-            {
-                if (abilities[i] != defaultAbilities[i])
-                {
-                    activeDefault = false;
-                    break;
-                }
-            }
-        }
 
+        bool activeDefault = LevelController.Instance.levelData.UsingDefaultAbilities();
         if (activeDefault)
         {
             int index = 0;
@@ -113,8 +95,7 @@ public class LevelComplete : MonoBehaviour
             else
             {
                 medalImage.gameObject.SetActive(true);
-                Sprite[] sprites = medalImages.Sprites;
-                medalImage.sprite = sprites[levelTimeData.MedalIndex];
+                medalImage.sprite = medalImages.Sprites[levelTimeData.MedalIndex];
             }
             if (levelTimeData.MedalIndex < 2)
             {
@@ -132,6 +113,8 @@ public class LevelComplete : MonoBehaviour
             nextMedalTimeText.gameObject.SetActive(false);
         }
     }
+
+    
 
     public void RestartLevel()
     {

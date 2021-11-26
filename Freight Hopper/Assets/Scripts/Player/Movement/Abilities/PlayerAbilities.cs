@@ -80,7 +80,7 @@ public class PlayerAbilities : MonoBehaviour
     }
 
     // Unlocks/locks abilities according to current level settings. Bad optimization
-    public void SetActiveAbilities(Name[] abilitiesNames)
+    public void SetActiveAbilities(IList<Name> abilitiesNames)
     {
         abilities.Clear();
         abilities.Add(movementBehavior);
