@@ -8,7 +8,7 @@ public class MusicManager : SoundManager
 {
     private static MusicManager instance;
     public static MusicManager Instance => instance;
-    private static Songs lastSongName;
+    private static Songs lastSongName = Songs.Menu;
 
     [SerializeField] private AudioMixerSnapshot normal;
     [SerializeField] private AudioMixerSnapshot paused;
@@ -21,54 +21,45 @@ public class MusicManager : SoundManager
     {
         Menu,
         Desert,
-        Factory,
         CityDay,
         CityNight,
         Ice,
+        Factory,
         Sky,
         Space,
         Escape,
         Unknown
     }
 
-    [SerializeField] private Songs currentSongName;
+    [SerializeField] private Songs currentSongName = Songs.Menu;
     [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
-    [SerializeField] private bool playMusicOnAwake = true;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            DontDestroyOnLoad(this);
-            instance = this;
-            if (currentSongName != Songs.Menu)
-            {
-                lastSongName = currentSongName;
-            }
-        }
-        else
-        {
-            if (instance == this)
-            {
-                return;
-            }
-            if (currentSongName != lastSongName && currentSongName != Songs.Menu)
-            {
-                instance.SwitchSong(currentSongName);
-                lastSongName = currentSongName;
-            }
-            instance.TransitionToSnapshot(musicMode);
-            Destroy(this);
-        }
-    }
 
     private void Start()
     {
-        if (playMusicOnAwake)
+        if (instance == null)
         {
+            DontDestroyOnLoad(this.gameObject);
+            instance = this;
             Play(currentSongName.ToString());
         }
+        else
+        {
+            if(instance.gameObject == this.gameObject)
+            {
+                return;
+            }
+            instance.TransitionToSnapshot(musicMode);
+            if (currentSongName != lastSongName && currentSongName != Songs.Menu)
+            {
+                lastSongName = currentSongName;
+                instance.SwitchSong(currentSongName);
+                
+            }
+            Destroy(this.gameObject);
+        }
+
     }
+
 
     public void TransitionToSnapshot(SnapshotMode mode)
     {
@@ -90,7 +81,9 @@ public class MusicManager : SoundManager
 
     public void SwitchSong(Songs songName)
     {
+        
         Stop(currentSongName.ToString());
         Play(songName.ToString());
+        currentSongName = songName;
     }
 }

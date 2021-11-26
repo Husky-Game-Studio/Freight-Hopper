@@ -27,7 +27,7 @@ public class SoundManager : MonoBehaviour
 
     protected void CreateAudioSource(Sound sound, Vector3 location)
     {
-        string spawnedObjectName = (location + " sound " + sound.name);
+        string spawnedObjectName = location + " sound " + sound.name;
         GameObject spawnedObject = new GameObject(spawnedObjectName);
         Instantiate(spawnedObject, location, Quaternion.identity, this.transform);
         sound.audioSources[location] = spawnedObject.AddComponent<AudioSource>();
@@ -125,6 +125,7 @@ public class SoundManager : MonoBehaviour
         }
         sound.componentAudioSource.Play();
         sound.componentAudioSource.pitch = sound.pitch;
+        sound.componentAudioSource.playOnAwake = false;
         sound.componentAudioSource.volume = 0;
         StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
     }
@@ -160,6 +161,7 @@ public class SoundManager : MonoBehaviour
         }
         sound.audioSources[location].Play();
         sound.audioSources[location].pitch = sound.pitch;
+        sound.audioSources[location].playOnAwake = false;
         sound.audioSources[location].volume = 0;
         StartCoroutine(Fade(sound.audioSources[location], sound.fadeInTime, sound.volume));
     }
