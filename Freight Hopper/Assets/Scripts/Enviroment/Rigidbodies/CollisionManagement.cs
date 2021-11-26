@@ -50,11 +50,6 @@ public class CollisionManagement
         component.StartCoroutine(LateFixedUpdate());
     }
 
-    private void KillPlayer()
-    {
-        LevelController.Instance.Respawn();
-    }
-
     private void EvaulateCollisions(Collision collision)
     {
         if (aerial)
@@ -67,12 +62,6 @@ public class CollisionManagement
         for (int i = 0; i < collision.contactCount; i++)
         {
             Vector3 normal = collision.GetContact(i).normal;
-
-            if (!collision.gameObject.CompareTag("landable") && rb.gameObject.CompareTag("Player"))
-            {
-                KillPlayer();
-                continue;
-            }
 
             float collisionAngle = Vector3.Angle(normal, upAxis);
             if (collisionAngle <= maxSlope)
