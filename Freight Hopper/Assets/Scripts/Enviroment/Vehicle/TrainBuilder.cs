@@ -66,7 +66,7 @@ public class TrainBuilder : MonoBehaviour
         EmptyCart,
         EmptyCartWalls,
         EmptyCartLasers,
-        NULL,
+        VoidCart,
         NULL2,
         NULL3,
         NULL4,
@@ -415,7 +415,7 @@ public class TrainBuilder : MonoBehaviour
 
     private Vector3 GetPosition(int index)
     {
-        Vector3 startPosition = locomotive.transform.position - (locomotive.transform.forward.normalized * locomotiveLength.Value / 2);
+        Vector3 startPosition = locomotive.transform.position - (locomotive.transform.forward * cartLength.Value/2);
 
         Vector3 endPosition = startPosition - (locomotive.transform.forward * ((cartLength.Value / 2) + (index * cartLength.Value) + ((index + 1) * (gapLength.Value + jointSnappingLength.Value))));
 
