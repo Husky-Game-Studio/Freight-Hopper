@@ -13,7 +13,6 @@ public class HoverController : MonoBehaviour
     [SerializeField] private bool automatic = true;
     [SerializeField] private GameObject hoverEnginePrefab;
     [SerializeField, ReadOnly] private bool enginesFiring;
-    private TrainRailLinker currentRailLinker;
     public bool EnginesFiring => enginesFiring;
 
 #if UNITY_EDITOR
@@ -49,7 +48,7 @@ public class HoverController : MonoBehaviour
         InitializeRigidBody();
         if (this.gameObject != null)
         {
-            //InitializeEngines();
+            InitializeEngines();
         }
     }
 
@@ -95,7 +94,6 @@ public class HoverController : MonoBehaviour
 
     public void LinkEngines(TrainRailLinker linker)
     {
-        currentRailLinker = linker;
         foreach (HoverEngine eng in hoverEnginePivots)
         {
             eng.UpdateCurrentLinker(linker);

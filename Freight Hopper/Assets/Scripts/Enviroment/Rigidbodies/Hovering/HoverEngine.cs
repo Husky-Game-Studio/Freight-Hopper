@@ -67,6 +67,7 @@ public class HoverEngine : MonoBehaviour
             // Memory leaks?????
             //currentLinker.removedRigidbody -= CheckIfCanHover;
             //Debug.Log("Removed ");
+            //Debug.Log("removed " + rb.name);
             currentLinker = null;
         }
     }
@@ -76,6 +77,7 @@ public class HoverEngine : MonoBehaviour
         if ((object)railLinker == null)
         {
             firing = false;
+            //Debug.Log("no rail linker");
             return;
         }
         firing = true;

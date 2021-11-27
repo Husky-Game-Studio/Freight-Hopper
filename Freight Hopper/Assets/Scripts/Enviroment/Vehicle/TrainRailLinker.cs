@@ -82,6 +82,7 @@ public class TrainRailLinker : MonoBehaviour
         }
         // Could be bad for performance !!
         trainObject.hoverController = trainObject.rb.GetComponentInChildren<HoverController>();
+        //Debug.Log("linked to path: " + rb.name);
         trainObject.hoverController.LinkEngines(this);
         PID.Data controllerData = new PID.Data(horizontalControllerSettings);
         isRigidbodyLinked.Add(rb);
@@ -138,6 +139,7 @@ public class TrainRailLinker : MonoBehaviour
             if (data.rb == null)
             {
                 dataToRemove.Add(data);
+                Debug.Log("Removing due to null rb");
                 continue;
             }
             PathCreation.VertexPath path = pathCreator.path;
@@ -163,6 +165,7 @@ public class TrainRailLinker : MonoBehaviour
             if (error > derailThreshold)
             {
                 dataToRemove.Add(data);
+                Debug.Log("removing due to derail");
             }
         }
 

@@ -5,27 +5,31 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 
-[ExecuteInEditMode]
 public class PrefabSwapper : MonoBehaviour
 {
     public Transform sourceGameobject;
     public List<GameObject> prefabs;
-    public Memory<int> currentIndex;
+    public int currentIndex;
 
-    private void Update()
+
+    [ContextMenu("Switch")]
+    void Switch()
     {
-        if (currentIndex.current == currentIndex.old)
+
+        if (prefabs.Count < 1 || currentIndex >= prefabs.Count || currentIndex < 0 || prefabs[currentIndex] == null)
         {
             return;
         }
-        if (prefabs.Count < 1 || currentIndex.current >= prefabs.Count || currentIndex.current < 0 || prefabs[currentIndex.current] == null)
+        CreateSelected();
+    }
+    private void CreateSelected()
+    {
+        GameObject go = PrefabUtility.InstantiatePrefab(prefabs[currentIndex], this.transform.GetChild(0)) as GameObject;
+        if(sourceGameobject != null)
         {
-            return;
+            DestroyImmediate(sourceGameobject.gameObject);
         }
-        GameObject go = PrefabUtility.InstantiatePrefab(prefabs[currentIndex.current], sourceGameobject.parent) as GameObject;
-        DestroyImmediate(sourceGameobject.gameObject);
         sourceGameobject = go.transform;
-        currentIndex.UpdateOld();
     }
 }
 
