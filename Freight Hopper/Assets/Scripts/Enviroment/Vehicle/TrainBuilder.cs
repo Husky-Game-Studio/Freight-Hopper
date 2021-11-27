@@ -57,7 +57,8 @@ public class TrainBuilder : MonoBehaviour
         BillBoardUp,
         BillBoardDown,
         BillBoardRF,
-        BillBoardLF
+        BillBoardLF,
+        VoidCargo
     }
 
     // This order matters, if this is different from the model order for the list this WON'T work
