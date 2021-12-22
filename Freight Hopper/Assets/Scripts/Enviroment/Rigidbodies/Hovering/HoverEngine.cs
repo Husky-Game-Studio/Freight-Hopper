@@ -4,9 +4,6 @@ using UnityEngine.VFX;
 [System.Serializable]
 public class HoverEngine : MonoBehaviour
 {
-    [System.NonSerialized] private VisualEffect effect;
-    private bool is_effect_playing = false;
-
     [System.NonSerialized] private Rigidbody rb;
     [SerializeField, ReadOnly] private Vector3 direction = Vector3.up;
     [SerializeField, ReadOnly] private PID controller = new PID();
@@ -17,13 +14,6 @@ public class HoverEngine : MonoBehaviour
     public bool Firing => firing;
     private int followIndex = 0;
     private float followDistance = 0;
-
-    private void Awake()
-    {
-        effect = GetComponent<VisualEffect>();
-        effect.SetFloat("Downward", -5.0f);
-        effect.SetFloat("power", 4.0f);
-    }
 
     public void DisableEngine()
     {
@@ -112,20 +102,6 @@ public class HoverEngine : MonoBehaviour
             Vector3 position = this.transform.position;
             SetDirection(CustomGravity.GetUpAxis(position));
             Hover(targetDistance, currentLinker, ref position);
-        }
-        if (firing)
-        {
-            effect.SetVector3("spawn", this.transform.position);
-            if (!is_effect_playing)
-            {
-                effect.Play();
-                is_effect_playing = true;
-            }
-        }
-        else if (!firing && is_effect_playing)
-        {
-            effect.Stop();
-            is_effect_playing = false;
         }
     }
 }
