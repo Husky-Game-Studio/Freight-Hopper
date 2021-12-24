@@ -113,10 +113,11 @@ public class CollisionManagement
 
     private IEnumerator LateFixedUpdate()
     {
+        var waitFixedUpdate = new WaitForFixedUpdate();
         while (true)
         {
             upAxis = CustomGravity.GetUpAxis(rb.position);
-            yield return new WaitForFixedUpdate();
+            yield return waitFixedUpdate;
             rigidbodyLinker.UpdateConnectionState(rb);
             CollisionDataCollected?.Invoke();
 
