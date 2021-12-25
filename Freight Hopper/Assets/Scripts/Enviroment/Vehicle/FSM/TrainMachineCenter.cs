@@ -129,10 +129,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public void SetToMaxSpeed()
     {
-        float vel = 0.7f * targetVelocity;
         foreach (Cart cart in carts)
         {
-            cart.rb.AddForce(vel * cart.rb.transform.forward, ForceMode.VelocityChange);
+            cart.rb.velocity = targetVelocity * cart.rb.transform.forward;
         }
     }
 
@@ -271,17 +270,19 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             {
                 continue;
             }
-            Vector3 upAxis = CustomGravity.GetUpAxis(cart.rb.position);
-            Vector3 gravityRight = Vector3.Cross(upAxis, cart.rb.transform.forward);
+            Transform rbTransform = cart.rb.transform;
+            Vector3 upAxis = CustomGravity.GetUpAxis(rbTransform.position);
+            Vector3 gravityRight = Vector3.Cross(upAxis, rbTransform.forward);
             Vector3 gravityForward = Vector3.Cross(upAxis, gravityRight);
 
-            Vector3 cartUp = Vector3.ProjectOnPlane(cart.rb.transform.up, gravityForward);
+            Vector3 cartUp = Vector3.ProjectOnPlane(rbTransform.up, gravityForward);
 
             float angleWrong = Vector3.SignedAngle(upAxis, cartUp, gravityForward);
             float force = cart.uprightPID.GetOutput(angleWrong, Time.fixedDeltaTime);
             cart.rb.AddRelativeTorque(Vector3.forward * force, ForceMode.Acceleration);
         }
     }
+
 
     private Vector3 TargetAngVel(Vector3 target)
     {
