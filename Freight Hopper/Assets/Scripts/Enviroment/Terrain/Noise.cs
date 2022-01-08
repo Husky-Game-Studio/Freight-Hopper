@@ -5,6 +5,9 @@ using Unity.Mathematics;
 
 public static class Noise
 {
+    public enum NormalizeMode
+    { Local, Global };
+
     public enum NoiseType
     {
         cnoise,
@@ -12,24 +15,26 @@ public static class Noise
         srnoise
     }
 
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, NoiseType noiseType, Vector2 offset)
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, NoiseSettings settings, Vector2 sampleCenter)
     {
-        if (scale <= 0)
-        {
-            scale = 0.0001f;
-        }
+        float maxPossibleHeight = 0;
+        float amplitude = 1;
+        float frequency = 1;
 
-        System.Random prng = new System.Random(seed);
-        Vector2[] octaveOffsets = new Vector2[octaves];
-        for (int i = 0; i < octaves; i++)
+        System.Random prng = new System.Random(settings.Seed);
+        Vector2[] octaveOffsets = new Vector2[settings.Octaves];
+        for (int i = 0; i < settings.Octaves; i++)
         {
-            float offsetX = prng.Next(-100000, 100000) + offset.x;
-            float offsetY = prng.Next(-100000, 100000) + offset.y;
+            float offsetX = prng.Next(-100000, 100000) + settings.Offset.x + sampleCenter.x;
+            float offsetY = prng.Next(-100000, 100000) - settings.Offset.y - sampleCenter.y;
             octaveOffsets[i] = new Vector2(offsetX, offsetY);
+
+            maxPossibleHeight += amplitude;
+            amplitude *= settings.Persistance;
         }
 
-        float maxNoiseHeight = float.MinValue;
-        float minNoiseHeight = float.MaxValue;
+        float maxLocalNoiseHeight = float.MinValue;
+        float minLocalNoiseHeight = float.MaxValue;
 
         float halfWidth = mapWidth / 2f;
         float halfHeight = mapHeight / 2f;
@@ -39,21 +44,21 @@ public static class Noise
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                float amplitude = 1;
-                float frequency = 1;
+                amplitude = 1;
+                frequency = 1;
                 float noiseHeight = 0;
 
-                for (int i = 0; i < octaves; i++)
+                for (int i = 0; i < settings.Octaves; i++)
                 {
-                    float sampleX = ((x - halfWidth) / scale * frequency) + octaveOffsets[i].x;
-                    float sampleY = ((y - halfHeight) / scale * frequency) + octaveOffsets[i].y;
+                    float sampleX = (x - halfWidth + octaveOffsets[i].x) / settings.Scale * frequency;
+                    float sampleY = (y - halfHeight + octaveOffsets[i].y) / settings.Scale * frequency;
 
                     float noiseValue;
-                    if (noiseType == NoiseType.cnoise)
+                    if (settings.Type == NoiseType.cnoise)
                     {
                         noiseValue = (noise.cnoise(new float2(sampleX, sampleY)) * 2) - 1;
                     }
-                    else if (noiseType == NoiseType.snoise)
+                    else if (settings.Type == NoiseType.snoise)
                     {
                         noiseValue = (noise.snoise(new float2(sampleX, sampleY)) * 2) - 1;
                     }
@@ -63,27 +68,38 @@ public static class Noise
                     }
                     noiseHeight += noiseValue * amplitude;
 
-                    amplitude *= persistance;
-                    frequency *= lacunarity;
+                    amplitude *= settings.Persistance;
+                    frequency *= settings.Lacunarity;
                 }
 
-                if (noiseHeight > maxNoiseHeight)
+                if (noiseHeight > maxLocalNoiseHeight)
                 {
-                    maxNoiseHeight = noiseHeight;
+                    maxLocalNoiseHeight = noiseHeight;
                 }
-                else if (noiseHeight < minNoiseHeight)
+                if (noiseHeight < minLocalNoiseHeight)
                 {
-                    minNoiseHeight = noiseHeight;
+                    minLocalNoiseHeight = noiseHeight;
                 }
                 noiseMap[x, y] = noiseHeight;
             }
         }
 
+        maxLocalNoiseHeight = 1 / (1 - Mathf.Pow(settings.Persistance, 1.5f) / 2);
+        minLocalNoiseHeight = -maxLocalNoiseHeight;
+
         for (int y = 0; y < mapHeight; y++)
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+                if (settings.NormalizeMode == NormalizeMode.Local)
+                {
+                    noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
+                }
+                else
+                {
+                    float normalizedHeight = (noiseMap[x, y] + 1) / maxPossibleHeight;
+                    noiseMap[x, y] = Mathf.Clamp(normalizedHeight, 0, int.MaxValue);
+                }
             }
         }
 
@@ -92,9 +108,26 @@ public static class Noise
 }
 
 [System.Serializable]
-public struct TerrainType
+public class NoiseSettings
 {
-    public string name;
-    public float height;
-    public Color color;
+    [SerializeField, Min(0.01f)] private float scale = 50;
+
+    [SerializeField, Min(1)] private int octaves = 6;
+    [SerializeField, Range(0, 1)] private float persistance = 0.6f;
+    [SerializeField, Min(1)] private float lacunarity = 2;
+
+    [SerializeField] private int seed;
+    [SerializeField] private Vector2 offset;
+
+    [SerializeField] private Noise.NoiseType type;
+    [SerializeField] private Noise.NormalizeMode normalizeMode;
+
+    public float Scale => scale;
+    public int Octaves => octaves;
+    public float Persistance => persistance;
+    public float Lacunarity => lacunarity;
+    public int Seed => seed;
+    public Vector2 Offset => offset;
+    public Noise.NoiseType Type => type;
+    public Noise.NormalizeMode NormalizeMode => normalizeMode;
 }

@@ -15,6 +15,14 @@ Shader "Custom/Terrain"
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
 
+		const static int maxColorCount = 8;
+		const static float epsilon = 1E-4;
+
+		int baseColorCount;
+		float3 baseColors[maxColorCount];
+		float baseStartHeights[maxColorCount];
+		float baseBlends[maxColorCount];
+
 		float minHeight;
 		float maxHeight;
 
@@ -30,15 +38,17 @@ Shader "Custom/Terrain"
 			// put more per-instance properties here
 		UNITY_INSTANCING_BUFFER_END(Props)
 
+		float inverseLerp(float a, float b, float value) {
+			return saturate((value - a) / (b - a));
+		}
+
 		void surf(Input IN, inout SurfaceOutputStandard o)
 		{
-			// Albedo comes from a texture tinted by color
-			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = c.rgb;
-			// Metallic and smoothness come from slider variables
-			o.Metallic = _Metallic;
-			o.Smoothness = _Glossiness;
-			o.Alpha = c.a;
+			float heightPercent = inverseLerp(minHeight, maxHeight, IN.worldPos.y);
+			for (int i = 0; i < baseColorCount; i++) {
+				float drawStrength = inverseLerp(-baseBlends[i] / 2 - epsilon, baseBlends[i] / 2, heightPercent - baseStartHeights[i]);
+				o.Albedo = o.Albedo * (1 - drawStrength) + baseColors[i] * drawStrength;
+			}
 		}
 		ENDCG
 	}
