@@ -26,7 +26,7 @@ public class MapPreview : MonoBehaviour
 
     public void DrawTexture(Texture2D texture)
     {
-        if (texture == null)
+        if (texture == null || textureRender == null)
         {
             return;
         }
