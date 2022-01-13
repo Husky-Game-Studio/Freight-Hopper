@@ -2925,7 +2925,10 @@ VFXRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
-  m_Materials: []
+  m_Materials:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4209,6 +4212,7 @@ MonoBehaviour:
     frictionReductionPercent: 1
   collisionManager:
     maxSlope: 60
+    maxDepenetrationVelocity: 500
     isGrounded:
       old: 0
       current: 0
@@ -4295,6 +4299,7 @@ MonoBehaviour:
   physicsManager: {fileID: 0}
   collisionManagement:
     maxSlope: 60
+    maxDepenetrationVelocity: 10
     isGrounded:
       old: 0
       current: 0
@@ -4672,7 +4677,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &6851446874579196117
 MonoBehaviour:
   m_ObjectHideFlags: 0

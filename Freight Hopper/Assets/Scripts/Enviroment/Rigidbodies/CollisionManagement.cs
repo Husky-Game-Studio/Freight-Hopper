@@ -10,6 +10,7 @@ public class CollisionManagement
     [System.NonSerialized] private bool aerial;
 
     [SerializeField] private float maxSlope = 60;
+    [SerializeField] private float maxDepenetrationVelocity = 500;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
@@ -26,6 +27,8 @@ public class CollisionManagement
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
     public float MaxSlope => maxSlope;
+    
+    public float MaxDepenetrationVelocity => maxDepenetrationVelocity;
 
     public delegate void CollisionEventHandler();
 
@@ -46,7 +49,7 @@ public class CollisionManagement
         upAxis = CustomGravity.GetUpAxis(rb.position);
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
-
+        Physics.defaultMaxDepenetrationVelocity = MaxDepenetrationVelocity;
         component.StartCoroutine(LateFixedUpdate());
     }
 
