@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ public class LaserGridBuilder : MonoBehaviour
 {
     [SerializeField] private GameObject poleObject;
     [SerializeField] private GameObject laserObject;
-    [SerializeField] private int layers = 8;
+    [SerializeField, Min(1)] private int layers = 8;
     [SerializeField] private List<int> activeLayers;
     [SerializeField] private float width = 10f;
     [SerializeField] private bool allLayersActive = false;
@@ -15,7 +16,15 @@ public class LaserGridBuilder : MonoBehaviour
 
     private bool firstLaserInGroup = true;
     private int laserGroupCounter = 0;
-    
+
+    public void OnValidate()
+    {
+        bool validArguments = CheckArguments();
+        if (!validArguments)
+        {
+            return;
+        }
+    }
 
     private bool CheckArguments()
     {
@@ -48,7 +57,8 @@ public class LaserGridBuilder : MonoBehaviour
         Instantiate(poleObject, new Vector3(width / 2, layer, 0), Quaternion.identity, this.gameObject.transform);
         if (activeLayer)
         {
-            Instantiate(laserObject, new Vector3(0, layer, 0), Quaternion.identity, this.gameObject.transform);
+            Quaternion currentQuaternion = this.gameObject.transform.rotation;
+            Instantiate(laserObject, new Vector3(0, layer, 0), new Quaternion(currentQuaternion.x, currentQuaternion.y, currentQuaternion.z, currentQuaternion.w), this.gameObject.transform);
             if (firstLaserInGroup)
             {
                 firstLaserInGroup = false;
@@ -75,9 +85,19 @@ public class LaserGridBuilder : MonoBehaviour
         }
     }
     
-    private void BuildLaserGrid()
+    public void BuildLaserGrid()
     {
-        if (allLayersActive|| activeLayers == null)
+        List<GameObject> children = new List<GameObject>();
+        foreach (Transform child in this.gameObject.transform)
+        {
+            children.Add(child.gameObject);
+        }
+        foreach (GameObject child in children)
+        {
+            DestroyImmediate(child);
+        }
+        
+        if (allLayersActive || activeLayers == null)
         {
             activeLayers = new List<int>();
             for (int i = 0; i < layers; i++)

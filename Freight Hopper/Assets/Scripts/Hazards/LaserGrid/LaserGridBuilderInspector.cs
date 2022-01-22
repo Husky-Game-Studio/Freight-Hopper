@@ -10,16 +10,26 @@ public class LaserGridBuilderInspector : Editor
 {
     private LaserGridBuilder laserGridBuilder;
     
-    // Start is called before the first frame update
-    void Start()
+    public void OnEnable()
     {
+        laserGridBuilder = (LaserGridBuilder)this.target;
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnInspectorGUI()
     {
+        EditorGUILayout.LabelField("LaserGrid Settings");
+       
+        //string[] cargoNames = System.Enum.GetNames(typeof(TrainBuilder.TrainCargos));
         
+        //EditorGUILayout.Popup("Carts", cartIndex, laserGridSettings);
+        
+        
+        if (GUILayout.Button("Generate"))
+        {
+            laserGridBuilder.BuildLaserGrid();
+        }
+        base.OnInspectorGUI();
     }
 }
 
