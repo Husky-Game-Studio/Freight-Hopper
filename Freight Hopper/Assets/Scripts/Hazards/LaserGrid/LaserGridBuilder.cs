@@ -51,14 +51,35 @@ public class LaserGridBuilder : MonoBehaviour
         return true;
     }
 
+    private void SetBoxCollider(int layer, Vector3 currentPostition)
+    {
+        /*BoxCollider laserGroupCollider = this.gameObject.AddComponent<BoxCollider>();
+        Debug.Log("box collider exists: " + laserGroupCollider);
+        float cumulativeYValue = 0;
+        for (int i = 0; i < laserGroupCounter; i++)
+        {
+            cumulativeYValue += layer - i;
+        }
+        cumulativeYValue /= laserGroupCounter;
+        laserGroupCollider.center = new Vector3(currentPostition.x, currentPostition.y + cumulativeYValue, currentPostition.z);*/
+    }
+    
     private void BuildLaserLayer(int layer, bool activeLayer)
     {
-        Instantiate(poleObject, new Vector3(width / -2, layer, 0), Quaternion.identity, this.gameObject.transform);
-        Instantiate(poleObject, new Vector3(width / 2, layer, 0), Quaternion.identity, this.gameObject.transform);
+        Vector3 currentPostition = this.gameObject.transform.position;
+        Quaternion currentQuaternion = this.gameObject.transform.rotation;
+        
+        Vector3 polePosition = currentPostition + this.gameObject.transform.right * width / 2;
+        polePosition += transform.up * layer;
+        
+        Instantiate(poleObject, polePosition, currentQuaternion, this.gameObject.transform);
+        Instantiate(poleObject, polePosition - transform.right * width, Quaternion.LookRotation(-transform.forward, transform.up), this.gameObject.transform);
+        
         if (activeLayer)
         {
-            Quaternion currentQuaternion = this.gameObject.transform.rotation;
-            Instantiate(laserObject, new Vector3(0, layer, 0), new Quaternion(currentQuaternion.x, currentQuaternion.y, currentQuaternion.z, currentQuaternion.w), this.gameObject.transform);
+            Vector3 laserPosition = currentPostition;
+            laserPosition += transform.up * layer;
+            Instantiate(laserObject, laserPosition, currentQuaternion, this.gameObject.transform);
             if (firstLaserInGroup)
             {
                 firstLaserInGroup = false;
@@ -72,14 +93,16 @@ public class LaserGridBuilder : MonoBehaviour
             firstLaserInGroup = true;
             if (laserGroupCounter > 0)
             {
-                BoxCollider laserGroupCollider = this.gameObject.AddComponent<BoxCollider>();
+                SetBoxCollider(layer, currentPostition);
+                /*BoxCollider laserGroupCollider = this.gameObject.AddComponent<BoxCollider>();
+                Debug.Log("box collider exists: " + laserGroupCollider);
                 float cumulativeYValue = 0;
                 for (int i = 0; i < laserGroupCounter; i++)
                 {
                     cumulativeYValue += layer - i;
                 }
                 cumulativeYValue /= laserGroupCounter;
-                laserGroupCollider.transform.position = new Vector3(0, cumulativeYValue, 0);
+                laserGroupCollider.center = new Vector3(currentPostition.x, currentPostition.y + cumulativeYValue, currentPostition.z);*/
             }
             laserGroupCounter = 0;
         }
@@ -109,6 +132,12 @@ public class LaserGridBuilder : MonoBehaviour
         for (int i = 0; i < layers; i++)
         {
             BuildLaserLayer(i, activeLayers.Contains(i));
+            /*if (layers == i - 1 && laserGroupCounter > 0 && !firstLaserInGroup)
+            {
+                firstLaserInGroup = true;
+                SetBoxCollider(i, this.gameObject.transform.position);
+                laserGroupCounter = 0;
+            }*/
         }
     }
 }

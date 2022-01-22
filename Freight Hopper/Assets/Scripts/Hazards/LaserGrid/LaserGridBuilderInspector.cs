@@ -18,17 +18,12 @@ public class LaserGridBuilderInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        EditorGUILayout.LabelField("LaserGrid Settings");
-       
-        //string[] cargoNames = System.Enum.GetNames(typeof(TrainBuilder.TrainCargos));
-        
-        //EditorGUILayout.Popup("Carts", cartIndex, laserGridSettings);
-        
-        
         if (GUILayout.Button("Generate"))
         {
             laserGridBuilder.BuildLaserGrid();
         }
+        
+        EditorGUILayout.LabelField("LaserGrid Settings");
         base.OnInspectorGUI();
     }
 }
