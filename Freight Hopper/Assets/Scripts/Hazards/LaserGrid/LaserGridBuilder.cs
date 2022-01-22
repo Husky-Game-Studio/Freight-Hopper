@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ModularLaserGridBehavior : MonoBehaviour
+public class LaserGridBuilder : MonoBehaviour
 {
     [SerializeField] private GameObject poleObject;
     [SerializeField] private GameObject laserObject;
