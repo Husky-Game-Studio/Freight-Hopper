@@ -9,10 +9,13 @@ public class LaserGridBuilder : MonoBehaviour
     [SerializeField] private GameObject poleObject;
     [SerializeField] private GameObject laserObject;
     [SerializeField, Min(1)] private int layers = 8;
-    [SerializeField] private List<int> activeLayers;
-    [SerializeField] private float width = 10f;
+    [SerializeField, Min(4)] private float width = 10f;
     [SerializeField] private bool allLayersActive = false;
-    [SerializeField] private const int MIN_WIDTH = 4;
+    [SerializeField] private List<int> activeLayers;
+    [SerializeField] private float laserThickness = 0.2f;
+    
+    private const float GRID_SCALAR = 2.25f;
+    private const float LASER_SHIFTER = 1.86f;
 
     private bool firstLaserInGroup = true;
     private int laserGroupCounter = 0;
@@ -36,11 +39,6 @@ public class LaserGridBuilder : MonoBehaviour
         if (layers < 1)
         {
             Debug.Log("layers must be greater than 0");
-            return false;
-        }
-        if (width < MIN_WIDTH)
-        {
-            Debug.Log("width must be >= to " + MIN_WIDTH);
             return false;
         }
         if (activeLayers != null && activeLayers.Count > layers)
@@ -70,7 +68,7 @@ public class LaserGridBuilder : MonoBehaviour
         Quaternion currentQuaternion = this.gameObject.transform.rotation;
         
         Vector3 polePosition = currentPostition + this.gameObject.transform.right * width / 2;
-        polePosition += transform.up * layer;
+        polePosition += (transform.up * layer * GRID_SCALAR);
         
         Instantiate(poleObject, polePosition, currentQuaternion, this.gameObject.transform);
         Instantiate(poleObject, polePosition - transform.right * width, Quaternion.LookRotation(-transform.forward, transform.up), this.gameObject.transform);
@@ -78,12 +76,13 @@ public class LaserGridBuilder : MonoBehaviour
         if (activeLayer)
         {
             Vector3 laserPosition = currentPostition;
-            laserPosition += transform.up * layer;
-            Instantiate(laserObject, laserPosition, currentQuaternion, this.gameObject.transform);
+            laserPosition += transform.up * layer * GRID_SCALAR;
+            laserPosition += transform.up * LASER_SHIFTER;
+            GameObject currentLaser = Instantiate(laserObject, laserPosition, currentQuaternion, this.gameObject.transform);
+            currentLaser.transform.localScale = new Vector3(width, laserThickness, laserThickness);
             if (firstLaserInGroup)
             {
                 firstLaserInGroup = false;
-                
             }
 
             laserGroupCounter++;
