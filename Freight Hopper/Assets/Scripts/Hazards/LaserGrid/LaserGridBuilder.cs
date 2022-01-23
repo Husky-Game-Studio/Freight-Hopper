@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class LaserGridBuilder : MonoBehaviour
 {
@@ -23,6 +26,8 @@ public class LaserGridBuilder : MonoBehaviour
 
     public void OnValidate()
     {
+        laserGroupOpen = false;
+        laserGroupCounter = 0;
         bool validArguments = CheckArguments();
     }
 
@@ -48,21 +53,26 @@ public class LaserGridBuilder : MonoBehaviour
 
     private void SetBoxCollider(int layer)
     {
-        Debug.Log("In SetBoxCollider("+ layer + ")");
+        Debug.Log("In SetBoxCollider("+ layer + ") with counter: " + laserGroupCounter);
         BoxCollider laserGroupCollider = this.gameObject.AddComponent<BoxCollider>();
-
-        Vector3 currentPosition = Vector3.zero;
-        Vector3 boxPosition = currentPosition;
-        boxPosition += transform.up * layer * GRID_SCALAR;
-        boxPosition += transform.up * LASER_SHIFTER;
 
         float cumulativeYValue = 0;
         for (int i = 0; i < laserGroupCounter; i++)
         {
             cumulativeYValue += layer - i;
         }
+        Debug.Log(cumulativeYValue);
         cumulativeYValue /= laserGroupCounter;
+        
+        Vector3 boxPosition = Vector3.zero;
+        boxPosition += transform.up * cumulativeYValue * GRID_SCALAR;
+        boxPosition += transform.up * LASER_SHIFTER;
+        //boxPosition += transform.forward * width / 2;
         laserGroupCollider.center = boxPosition;
+
+        Vector3 currentSize = new Vector3(width, (laserGroupCounter * GRID_SCALAR) - GRID_SCALAR, laserThickness * 1.5f);
+        laserGroupCollider.size = currentSize;
+
     }
     
     private void BuildLaserLayer(int layer, bool activeLayer)
@@ -96,8 +106,14 @@ public class LaserGridBuilder : MonoBehaviour
             laserGroupOpen = false;
             laserGroupCounter = 0;
         }
-        
-        
+
+        if (laserGroupOpen && layer == layers -1)
+        {
+            Debug.Log("Last Layer: in builder");
+            SetBoxCollider(layer);
+            laserGroupOpen = false;
+            laserGroupCounter = 0;
+        }
     }
     
     public void BuildLaserGrid()
@@ -130,6 +146,7 @@ public class LaserGridBuilder : MonoBehaviour
         
         for (int i = 0; i < layers; i++)
         {
+            Debug.Log("current layer: " + i);
             BuildLaserLayer(i, activeLayers.Contains(i));
             if (i - 1 == layers && laserGroupOpen)
             {
