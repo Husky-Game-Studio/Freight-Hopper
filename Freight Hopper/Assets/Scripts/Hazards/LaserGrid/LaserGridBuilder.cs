@@ -134,7 +134,7 @@ public class LaserGridBuilder : MonoBehaviour
 
         if (laserGroupOpen && layer == layers -1)
         {
-            Debug.Log("Last Layer: in builder");
+            //Debug.Log("Last Layer: in builder");
             SetBoxCollider(layer);
             laserGroupOpen = false;
             laserGroupCounter = 0;
