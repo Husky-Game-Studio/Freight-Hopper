@@ -706,6 +706,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 362878367}
+  deathCollider: {fileID: 257889664}
+  deathMask:
+    serializedVersion: 2
+    m_Bits: 147457
 --- !u!135 &257889664
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2925,10 +2929,7 @@ VFXRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
