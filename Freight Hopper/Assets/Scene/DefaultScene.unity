@@ -669,9 +669,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 257889662}
-  - component: {fileID: 257889664}
   - component: {fileID: 257889663}
-  - component: {fileID: 257889665}
   m_Layer: 18
   m_Name: DeathCollision
   m_TagString: Untagged
@@ -687,10 +685,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 257889661}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 8542586348039995703}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &257889663
@@ -706,39 +704,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 362878367}
-  deathCollider: {fileID: 257889664}
+  playerMeshRenderer: {fileID: 6851446875239732598}
+  radius: 0.5
   deathMask:
     serializedVersion: 2
     m_Bits: 147457
---- !u!135 &257889664
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 257889661}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &257889665
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 257889661}
-  serializedVersion: 2
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 2
 --- !u!1 &308967563
 GameObject:
   m_ObjectHideFlags: 0
@@ -4755,7 +4725,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &6851446874732734527
 TrailRenderer:
@@ -4901,7 +4871,7 @@ Transform:
   m_Children:
   - {fileID: 362878367}
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &6851446875239732598
 MeshRenderer:
@@ -4998,6 +4968,7 @@ Transform:
   - {fileID: 1798020240}
   - {fileID: 840649354}
   - {fileID: 6851446875239732601}
+  - {fileID: 257889662}
   - {fileID: 6851446874874222867}
   - {fileID: 6851446874732734526}
   m_Father: {fileID: 0}
