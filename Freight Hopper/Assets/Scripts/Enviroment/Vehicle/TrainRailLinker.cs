@@ -139,7 +139,7 @@ public class TrainRailLinker : MonoBehaviour
             if (data.rb == null)
             {
                 dataToRemove.Add(data);
-                Debug.Log("Removing due to null rb");
+                //Debug.Log("Removing due to null rb");
                 continue;
             }
             PathCreation.VertexPath path = pathCreator.path;
@@ -165,7 +165,7 @@ public class TrainRailLinker : MonoBehaviour
             if (error > derailThreshold)
             {
                 dataToRemove.Add(data);
-                Debug.Log("removing due to derail");
+                //Debug.Log("removing due to derail");
             }
         }
 

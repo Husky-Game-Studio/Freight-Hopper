@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[RequireComponent(typeof(PhysicsManager), typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerAbilities : MonoBehaviour
 {
     public MovementBehavior movementBehavior;
@@ -42,7 +42,7 @@ public class PlayerAbilities : MonoBehaviour
     };
 
     [SerializeField, HideInInspector] private List<AbilityBehavior> abilities = new List<AbilityBehavior>();
-    [SerializeField, HideInInspector] private PhysicsManager playerPM;
+    [SerializeField, HideInInspector] private Rigidbody playerRb;
     [SerializeField, HideInInspector] private SoundManager playerSM;
 
     private void Awake()
@@ -57,7 +57,7 @@ public class PlayerAbilities : MonoBehaviour
         burstBehavior = GetComponentInChildren<BurstBehavior>();
         fullstopBehavior = GetComponentInChildren<FullStopBehavior>();
 
-        playerPM = GetComponent<PhysicsManager>();
+        playerRb = GetComponent<Rigidbody>();
         playerSM = GetComponentInChildren<SoundManager>();
         foreach (AbilityBehavior ability in abilities)
         {
@@ -65,7 +65,7 @@ public class PlayerAbilities : MonoBehaviour
             {
                 Debug.LogError("Ability script links not found");
             }
-            ability.Initialize(playerPM, playerSM, this);
+            ability.Initialize();
         }
         doubleJumpBehavior.GetJumpBehavior(jumpBehavior);
     }

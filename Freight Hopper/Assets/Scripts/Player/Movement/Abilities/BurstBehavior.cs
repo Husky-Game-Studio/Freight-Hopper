@@ -43,21 +43,21 @@ public class BurstBehavior : AbilityBehavior
         }
 
         // Only velocity that is causing the player to go slower will be added to the burst force speed
-        Vector3 velocityFromDirection = Vector3.Project(physicsManager.rb.velocity, cameraTransform.forward);
+        Vector3 velocityFromDirection = Vector3.Project(rb.velocity, cameraTransform.forward);
         if (Mathf.Sign(Vector3.Dot(velocityFromDirection, cameraTransform.forward)) == 1)
         {
             Vector3 forceV = -cameraTransform.forward * velocityFromDirection.magnitude * velocityGainMultiplier;
-            physicsManager.rb.AddForce(forceV, ForceMode.VelocityChange);
+            rb.AddForce(forceV, ForceMode.VelocityChange);
             if (hitRigidbody != null)
             {
-                hitRigidbody.AddForce(-forceV * physicsManager.rb.mass, ForceMode.Impulse);
+                hitRigidbody.AddForce(-forceV * rb.mass, ForceMode.Impulse);
             }
         }
         Vector3 force = -cameraTransform.forward * forceMultiplier / distanceFromExplosion;
-        physicsManager.rb.AddForce(force, ForceMode.VelocityChange);
+        rb.AddForce(force, ForceMode.VelocityChange);
         if (hitRigidbody != null)
         {
-            hitRigidbody.AddForce(-force * physicsManager.rb.mass, ForceMode.Impulse);
+            hitRigidbody.AddForce(-force * rb.mass, ForceMode.Impulse);
         }
 
         Vector3 burstPosition = cameraTransform.position + cameraTransform.forward * distanceFromExplosion;

@@ -9,23 +9,27 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] private VelocityController airController;
 
     public float HorizontalSpeed => speedometer.AbsoluteHorzSpeed;
-    public float Speed => physicsManager.rb.velocity.magnitude;
+    public float Speed => rb.velocity.magnitude;
 
     private Transform cameraTransform;
+    private CollisionManagement collisionManager;
+    private Friction friction;
 
-    public override void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
+    public override void Initialize()
     {
-        base.Initialize(pm, sm, pa);
+        base.Initialize();
+        this.collisionManager = Player.Instance.modules.collisionManagement;
+        this.friction = Player.Instance.modules.friction;
         cameraTransform = Camera.main.transform;
-        speedometer.Initialize(pm);
-        groundController.Initialize(pm, speedometer, oppositeInputAngle);
-        airController.Initialize(pm, speedometer, oppositeInputAngle);
+        speedometer.Initialize();
+        groundController.Initialize(speedometer, oppositeInputAngle);
+        airController.Initialize(speedometer, oppositeInputAngle);
     }
 
     private Vector3 ConvertInputToCameraSpace(Vector3 forward, Vector3 right)
     {
-        forward = forward.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
-        right = right.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
+        forward = forward.ProjectOnContactPlane(collisionManager.ValidUpAxis);
+        right = right.ProjectOnContactPlane(collisionManager.ValidUpAxis);
 
         // Moves relative to the camera
         Vector3 input = UserInput.Instance.Move();
@@ -35,19 +39,20 @@ public class MovementBehavior : AbilityBehavior
 
     public void Move(Vector3 direction)
     {
-        // If the player is in the air, the default direction is upwards. So this calculation does nothing in the air.
-        Vector3 surfaceMoveDirection = direction.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).normalized;
+        // If the player is in the air, the default direction is upwards. So this calculation does
+        // nothing in the air.
+        Vector3 surfaceMoveDirection = direction.ProjectOnContactPlane(collisionManager.ContactNormal.current).normalized;
         if (direction.IsZero())
         {
             return;
         }
-        if (!physicsManager.collisionManager.IsGrounded.current)
+        if (!collisionManager.IsGrounded.current)
         {
             airController.Move(surfaceMoveDirection);
         }
         else
         {
-            physicsManager.friction.ReduceFriction(1);
+            friction.ReduceFriction(1);
             groundController.Move(surfaceMoveDirection);
         }
     }
@@ -71,7 +76,7 @@ public class MovementBehavior : AbilityBehavior
     public override void Action()
     {
         MoveAction();
-        if (physicsManager.collisionManager.IsGrounded.current)
+        if (collisionManager.IsGrounded.current)
         {
             soundManager.PlayRandom("Move", 7);
             soundManager.PlayRandom("Stone", 5);

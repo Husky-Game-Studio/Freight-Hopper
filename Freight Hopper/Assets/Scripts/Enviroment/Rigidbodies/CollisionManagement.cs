@@ -2,12 +2,12 @@ using System.Collections;
 using UnityEngine;
 
 [System.Serializable]
-public class CollisionManagement
+public class CollisionManagement : MonoBehaviour
 {
-    [System.NonSerialized] private MonoBehaviour component;
-    [System.NonSerialized] private Rigidbody rb;
-    [System.NonSerialized] private Friction frictionManager;
-    [System.NonSerialized] private bool aerial;
+    private Rigidbody rb;
+    private Friction frictionManager;
+    private RigidbodyLinker rigidbodyLinker;
+    private Gravity gravity;
 
     [SerializeField] private float maxSlope = 60;
     [SerializeField] private float maxDepenetrationVelocity = 500;
@@ -17,7 +17,7 @@ public class CollisionManagement
     [ReadOnly, SerializeField] private Memory<Vector3> position;
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
-    [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
+
     [ReadOnly, SerializeField] private Vector3 validUpAxis = Vector3.up;
 
     public Vector3 ValidUpAxis => validUpAxis;
@@ -27,7 +27,7 @@ public class CollisionManagement
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
     public float MaxSlope => maxSlope;
-    
+
     public float MaxDepenetrationVelocity => maxDepenetrationVelocity;
 
     public delegate void CollisionEventHandler();
@@ -38,28 +38,22 @@ public class CollisionManagement
 
     private Vector3 upAxis;
 
-    public void Initialize(Rigidbody rb, MonoBehaviour component, RigidbodyLinker linker, Friction frictionManager, bool aerial)
+    private void Awake()
     {
-        this.rb = rb;
-        this.component = component;
-        this.frictionManager = frictionManager;
-        this.aerial = aerial;
-        this.rigidbodyLinker = linker;
+        rb = Player.Instance.modules.rigidbody;
+        frictionManager = Player.Instance.modules.friction;
+        rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
+        gravity = Player.Instance.modules.gravity;
 
         upAxis = CustomGravity.GetUpAxis(rb.position);
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
-        Physics.defaultMaxDepenetrationVelocity = MaxDepenetrationVelocity;
-        component.StartCoroutine(LateFixedUpdate());
+        Physics.defaultMaxDepenetrationVelocity = this.MaxDepenetrationVelocity;
+        this.StartCoroutine(LateFixedUpdate());
     }
 
     private void EvaulateCollisions(Collision collision)
     {
-        if (aerial)
-        {
-            return;
-        }
-
         contactNormal.current = Vector3.zero;
 
         for (int i = 0; i < collision.contactCount; i++)
@@ -95,7 +89,7 @@ public class CollisionManagement
     }
 
     // Call using OnCollisionEnter from a monobehavior
-    public void CollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         EvaulateCollisions(collision);
         if (isGrounded.current)
@@ -105,7 +99,7 @@ public class CollisionManagement
     }
 
     // Call using OnCollisionStay from a monobehavior
-    public void CollisionStay(Collision collision)
+    public void OnCollisionStay(Collision collision)
     {
         EvaulateCollisions(collision);
         if (isGrounded.current && !isGrounded.old)
@@ -120,8 +114,14 @@ public class CollisionManagement
         while (true)
         {
             upAxis = CustomGravity.GetUpAxis(rb.position);
+
             yield return waitFixedUpdate;
+            if (!isGrounded.current)
+            {
+                gravity.GravityLoop();
+            }
             rigidbodyLinker.UpdateConnectionState(rb);
+
             CollisionDataCollected?.Invoke();
 
             UpdateOldValues();

@@ -30,7 +30,7 @@ public class FirstPersonCamera : MonoBehaviour
         camTransform = Camera.main.transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        playerCM = player.GetComponent<PhysicsManager>().collisionManager;
+        playerCM = Player.Instance.modules.collisionManagement;
     }
 
     private void Update()

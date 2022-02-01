@@ -12,15 +12,15 @@ public class AbilityBehavior : MonoBehaviour
     // Ready meaning not consumed
     public bool UnlockedAndReady => this.Unlocked && !this.Consumed;
 
-    protected PhysicsManager physicsManager;
+    protected Rigidbody rb;
     protected SoundManager soundManager;
     protected PlayerAbilities abilitiesManager;
 
-    public virtual void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
+    public virtual void Initialize()
     {
-        this.physicsManager = pm;
-        this.soundManager = sm;
-        this.abilitiesManager = pa;
+        this.rb = Player.Instance.modules.rigidbody;
+        this.soundManager = Player.Instance.modules.soundManager;
+        this.abilitiesManager = Player.Instance.modules.playerAbilities;
     }
 
     public SoundManager PlayerSoundManager() => soundManager;
@@ -42,7 +42,8 @@ public class AbilityBehavior : MonoBehaviour
     }
 
     // Action played while in Ability state
-    public virtual void Action() { }
+    public virtual void Action()
+    { }
 
     public virtual void Recharge()
     {

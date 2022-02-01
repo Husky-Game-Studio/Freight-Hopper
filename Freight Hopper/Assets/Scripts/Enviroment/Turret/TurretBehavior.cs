@@ -92,7 +92,7 @@ public class TurretBehavior : MonoBehaviour
         targets[0] = Player.Instance.transform;
         if (targets[0] != null)
         {
-            targetRbs[0] = targets[0].GetComponent<PhysicsManager>().rb;
+            targetRbs[0] = targets[0].GetComponentInParent<Rigidbody>(); // may need to just be get component
         }
     }
 

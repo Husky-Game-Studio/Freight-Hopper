@@ -30,8 +30,8 @@ public class Portal : MonoBehaviour
     }
 
     /// <summary>
-    /// Takes in a ray and teleports it to the other portal.
-    /// Needs point the portal gets hit on by the raw to teleport
+    /// Takes in a ray and teleports it to the other portal. Needs point the portal gets hit on by
+    /// the raw to teleport
     /// </summary>
     public void TeleportRay(ref Ray ray, Vector3 hitPoint)
     {
@@ -40,7 +40,8 @@ public class Portal : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds rigidbody to teleporting objects set. This set is to indicate to the portal to not reteleport the object instantly
+    /// Adds rigidbody to teleporting objects set. This set is to indicate to the portal to not
+    /// reteleport the object instantly
     /// </summary>
     public void AddTeleportingRigidbody(Rigidbody rb)
     {
@@ -61,7 +62,7 @@ public class Portal : MonoBehaviour
         if (other.attachedRigidbody != null || rbReference != null)
         {
             Rigidbody rb = other.attachedRigidbody == null ? rbReference.reference : other.attachedRigidbody;
-            if (rb.GetComponent<PhysicsManager>() == null)
+            if (rb == null)
             {
                 return;
             }
@@ -93,8 +94,9 @@ public class Portal : MonoBehaviour
         Vector3 velocity = Vector3.zero;
         if (velocity == Vector3.zero)
         {
-            velocity = other.GetComponent<PhysicsManager>().collisionManager.Velocity.old;
+            //velocity = other.GetComponent<PhysicsManager>().collisionManager.Velocity.old;
         }
+        // WARNING: THIS DOESN'T WORK ANYMORE AS ALL OBJECTS DON'T KEEP TRACK OF VELOCITY OLD
 
         Vector3 reflectionNormal = (this.transform.forward + otherPortal.transform.forward).normalized;
         Vector3 newVelocity = Vector3.Reflect(velocity, reflectionNormal);
