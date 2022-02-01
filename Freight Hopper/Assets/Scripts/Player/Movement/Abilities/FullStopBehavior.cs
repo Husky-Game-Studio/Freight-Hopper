@@ -5,14 +5,14 @@ public class FullStopBehavior : AbilityBehavior
 {
     [SerializeField] private Timer fullstopDuration = new Timer(1);
     [SerializeField] private Volume fullstopEffect;
-
+    [SerializeField] private Gravity playerGravity;
     public override void Action()
     {
         fullstopDuration.CountDown(Time.fixedDeltaTime);
 
         float ratio = fullstopDuration.Current / fullstopDuration.Duration;
         fullstopEffect.weight = Mathf.Sin(Mathf.PI * ratio);
-        physicsManager.rb.velocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
     }
 
     public bool FullStopFinished()
@@ -23,13 +23,13 @@ public class FullStopBehavior : AbilityBehavior
     public override void ExitAction()
     {
         base.ExitAction();
-        Player.Instance.GetComponent<PhysicsManager>().gravity.EnableGravity();
+        playerGravity.EnableGravity();
     }
 
     public override void EntryAction()
     {
         fullstopDuration.ResetTimer();
         soundManager.Play("Fullstop");
-        Player.Instance.GetComponent<PhysicsManager>().gravity.DisableGravity();
+        playerGravity.DisableGravity();
     }
 }

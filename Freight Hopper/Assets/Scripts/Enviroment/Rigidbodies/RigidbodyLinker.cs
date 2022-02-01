@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class RigidbodyLinker
+public class RigidbodyLinker : MonoBehaviour
 {
     [ReadOnly, SerializeField] private Memory<Rigidbody> connectedRb = new Memory<Rigidbody>(null, null);
     [ReadOnly, SerializeField] private Memory<Vector3> connectionVelocity;

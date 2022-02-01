@@ -12,13 +12,13 @@ public class AbilityBehavior : MonoBehaviour
     // Ready meaning not consumed
     public bool UnlockedAndReady => this.Unlocked && !this.Consumed;
 
-    protected PhysicsManager physicsManager;
+    protected Rigidbody rb;
     protected SoundManager soundManager;
     protected PlayerAbilities abilitiesManager;
 
-    public virtual void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
+    public virtual void Initialize(Rigidbody rb, SoundManager sm, PlayerAbilities pa)
     {
-        this.physicsManager = pm;
+        this.rb = rb;
         this.soundManager = sm;
         this.abilitiesManager = pa;
     }

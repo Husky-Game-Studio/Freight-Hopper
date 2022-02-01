@@ -1,10 +1,11 @@
 using UnityEngine;
 
 [System.Serializable]
-public class Friction
+public class Friction : MonoBehaviour
 {
-    [System.NonSerialized] private CollisionManagement playerCollision;
-    [System.NonSerialized] private Rigidbody rb;
+    [SerializeField] private CollisionManagement playerCollision;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private RigidbodyLinker rigidbodyLinker;
 
     [SerializeField] private FrictionData defaultFriction;
     private FrictionData currentFriction;
@@ -19,10 +20,6 @@ public class Friction
         currentFriction = defaultFriction;
     }
 
-    ~Friction()
-    {
-        //playerCollision.CollisionDataCollected -= ApplyFriction;
-    }
 
     // Expects numbers like "5% friction reduction" or 0.05f. Will only apply when grounded
     public void ReduceFriction(float percent)
@@ -35,7 +32,10 @@ public class Friction
     {
         frictionReductionPercent = 1;
     }
-
+    private void FixedUpdate()
+    {
+        ApplyFriction();
+    }
     private void ApplyFriction()
     {
         float amount;
@@ -48,7 +48,7 @@ public class Friction
             amount = currentFriction.air.Value;
         }
 
-        Vector3 force = (rb.velocity - playerCollision.rigidbodyLinker.ConnectionVelocity.current) * amount;
+        Vector3 force = (rb.velocity - rigidbodyLinker.ConnectionVelocity.current) * amount;
 
         if (playerCollision.IsGrounded.current)
         {

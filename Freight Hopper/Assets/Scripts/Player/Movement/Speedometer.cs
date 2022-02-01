@@ -13,20 +13,24 @@ public class Speedometer
     public float HorzSpeed => relativeHorizontalSpeed;
     public float AbsoluteHorzSpeed => horizontalSpeed;
 
-    private PhysicsManager physicsManager;
+    private CollisionManagement collisionManager;
+    private Rigidbody rb;
+    private RigidbodyLinker rigidbodyLinker;
 
-    public void Initialize(PhysicsManager pm)
+    public void Initialize(Rigidbody rb, CollisionManagement cm, RigidbodyLinker rl)
     {
-        this.physicsManager = pm;
+        this.rb = rb;
+        this.collisionManager = cm;
+        this.rigidbodyLinker = rl;
     }
 
     public void UpdateSpeedometer()
     {
-        Vector3 velocity = physicsManager.rb.velocity;
+        Vector3 velocity = rb.velocity;
         speed = velocity.magnitude;
-        horizontalSpeed = velocity.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).magnitude;
-        relativeHorizontalVelocity = velocity.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current)
-            - physicsManager.rigidbodyLinker.ConnectionVelocity.current;
+        horizontalSpeed = velocity.ProjectOnContactPlane(collisionManager.ContactNormal.current).magnitude;
+        relativeHorizontalVelocity = velocity.ProjectOnContactPlane(collisionManager.ContactNormal.current)
+            - rigidbodyLinker.ConnectionVelocity.current;
         relativeHorizontalSpeed = relativeHorizontalVelocity.magnitude;
     }
 }

@@ -9,17 +9,17 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] private VelocityController airController;
 
     public float HorizontalSpeed => speedometer.AbsoluteHorzSpeed;
-    public float Speed => physicsManager.rb.velocity.magnitude;
+    public float Speed => rb.velocity.magnitude;
 
     private Transform cameraTransform;
 
-    public override void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
+    public override void Initialize(Rigidbody rb, SoundManager sm, PlayerAbilities pa)
     {
-        base.Initialize(pm, sm, pa);
+        base.Initialize(rb, sm, pa);
         cameraTransform = Camera.main.transform;
-        speedometer.Initialize(pm);
-        groundController.Initialize(pm, speedometer, oppositeInputAngle);
-        airController.Initialize(pm, speedometer, oppositeInputAngle);
+        speedometer.Initialize(rb);
+        groundController.Initialize(rb, speedometer, oppositeInputAngle);
+        airController.Initialize(rb, speedometer, oppositeInputAngle);
     }
 
     private Vector3 ConvertInputToCameraSpace(Vector3 forward, Vector3 right)

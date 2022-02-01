@@ -1,13 +1,20 @@
 using UnityEngine;
 
 [System.Serializable]
-public class Gravity
+public class Gravity : MonoBehaviour
 {
     [SerializeField] private bool useGravity = true;
-    [System.NonSerialized] private bool aerial;
-    [System.NonSerialized] private Rigidbody rb;
-    [System.NonSerialized] private CollisionManagement collisionManagement;
-
+    [SerializeField] private bool aerial;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private CollisionManagement collisionManagement;
+    private void Awake()
+    {
+        rb.useGravity = false;
+        if(collisionManagement != null)
+        {
+            collisionManagement.CollisionDataCollected += GravityLoop;
+        }
+    }
     public void Initialize(Rigidbody rb, CollisionManagement collisionManagement, bool aerial)
     {
         this.rb = rb;
@@ -16,14 +23,12 @@ public class Gravity
         rb.useGravity = false;
         collisionManagement.CollisionDataCollected += GravityLoop;
     }
-
-    public void Enable()
+    private void FixedUpdate()
     {
-    }
-
-    public void Disable()
-    {
-        //collisionManagement.CollisionDataCollected -= GravityLoop;
+        if(collisionManagement == null)
+        {
+            GravityLoop();
+        }
     }
 
     public void DisableGravity()
@@ -38,7 +43,7 @@ public class Gravity
 
     private void GravityLoop()
     {
-        if (!useGravity || (collisionManagement.IsGrounded.current && !aerial))
+        if (!useGravity || (collisionManagement != null && collisionManagement.IsGrounded.current && !aerial))
         {
             return;
         }

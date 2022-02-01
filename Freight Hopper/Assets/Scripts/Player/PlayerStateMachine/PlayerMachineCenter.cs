@@ -35,8 +35,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     // Input Components
     [HideInInspector] public PlayerAbilities abilities;
-
-    [HideInInspector] public PhysicsManager physicsManager;
     [HideInInspector] public CollisionManagement collisionManagement;
 
     private void Awake()
@@ -191,7 +189,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public void OnEnable()
     {
         abilities = GetComponent<PlayerAbilities>();
-        physicsManager = GetComponent<PhysicsManager>();
         collisionManagement = physicsManager.collisionManager;
         RestartFSM();
         collisionManagement.CollisionDataCollected += UpdateLoop;

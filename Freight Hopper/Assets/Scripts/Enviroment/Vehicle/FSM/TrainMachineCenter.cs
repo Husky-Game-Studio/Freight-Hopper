@@ -148,11 +148,11 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     private void InitiliazeCarts()
     {
         carts.Clear();
-        PhysicsManager[] physics = GetComponentsInChildren<PhysicsManager>();
+        Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();
 
-        for (int i = 0; i < physics.Length; i++)
+        for (int i = 0; i < rbs.Length; i++)
         {
-            Cart cart = new Cart(physics[i]);
+            Cart cart = new Cart(rbs[i]);
             carts.AddLast(cart);
         }
         hoverController = this.Locomotive.rb.GetComponentInChildren<HoverController>();

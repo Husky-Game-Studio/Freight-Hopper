@@ -3,7 +3,6 @@ using System;
 
 public class Cart
 {
-    public PhysicsManager physicsManager;
     public Rigidbody rb;
     public CartProperties properties;
     public HoverController hoverController;
@@ -12,10 +11,9 @@ public class Cart
 
     public event Action<int> DestoryCart;
 
-    public Cart(PhysicsManager physicsManager)
+    public Cart(Rigidbody rb)
     {
-        this.physicsManager = physicsManager;
-        this.rb = physicsManager.rb;
+        this.rb = rb;
         this.properties = rb.GetComponent<CartProperties>();
         this.hoverController = rb.GetComponentInChildren<HoverController>();
         this.destructable = rb.GetComponent<Destructable>();

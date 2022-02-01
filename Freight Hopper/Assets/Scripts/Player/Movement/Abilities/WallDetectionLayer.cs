@@ -48,41 +48,41 @@ public class WallDetectionLayer
         return this.Priority < otherLayer.Priority;
     }
 
-    public void CheckWalls(PhysicsManager physicsManager, float distance, LayerMask layers)
+    public void CheckWalls(Rigidbody rb, float distance, LayerMask layers)
     {
         (bool, Vector3) temp;
-        temp = CheckDirection(rays.leftBack, physicsManager, distance, layers);
+        temp = CheckDirection(rays.leftBack, rb, distance, layers);
         status.leftBack = temp.Item1;
         normals.leftBack = temp.Item2;
 
-        temp = CheckDirection(rays.left, physicsManager, distance, layers);
+        temp = CheckDirection(rays.left, rb, distance, layers);
         status.left = temp.Item1;
         normals.left = temp.Item2;
 
-        temp = CheckDirection(rays.leftFront, physicsManager, distance, layers);
+        temp = CheckDirection(rays.leftFront, rb, distance, layers);
         status.leftFront = temp.Item1;
         normals.leftFront = temp.Item2;
 
-        temp = CheckDirection(rays.front, physicsManager, distance, layers);
+        temp = CheckDirection(rays.front, rb, distance, layers);
         status.front = temp.Item1;
         normals.front = temp.Item2;
 
-        temp = CheckDirection(rays.rightFront, physicsManager, distance, layers);
+        temp = CheckDirection(rays.rightFront, rb, distance, layers);
         status.rightFront = temp.Item1;
         normals.rightFront = temp.Item2;
 
-        temp = CheckDirection(rays.right, physicsManager, distance, layers);
+        temp = CheckDirection(rays.right, rb, distance, layers);
         status.right = temp.Item1;
         normals.right = temp.Item2;
 
-        temp = CheckDirection(rays.rightBack, physicsManager, distance, layers);
+        temp = CheckDirection(rays.rightBack, rb, distance, layers);
         status.rightBack = temp.Item1;
         normals.rightBack = temp.Item2;
     }
 
-    private (bool, Vector3) CheckDirection(Ray ray, PhysicsManager physicsManager, float distance, LayerMask layers)
+    private (bool, Vector3) CheckDirection(Ray ray, Rigidbody rb, float distance, LayerMask layers)
     {
-        Ray relativeRay = new Ray(physicsManager.transform.TransformPoint(ray.origin), physicsManager.transform.TransformDirection(ray.direction));
+        Ray relativeRay = new Ray(rb.transform.TransformPoint(ray.origin), rb.transform.TransformDirection(ray.direction));
         //Debug.DrawRay(relativeRay.origin, relativeRay.direction * distance, Color.yellow);
         if (Physics.Raycast(relativeRay, out RaycastHit hit, distance, layers))
         {
