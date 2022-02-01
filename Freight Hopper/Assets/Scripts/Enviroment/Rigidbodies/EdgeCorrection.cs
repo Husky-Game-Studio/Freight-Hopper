@@ -20,7 +20,7 @@ public class EdgeCorrection : MonoBehaviour
         rigibodyLinker = Player.Instance.modules.rigidbodyLinker;
         collisionManagent = Player.Instance.modules.collisionManagement;
 
-        stepRayUpper.position = new Vector3(stepRayUpper.position.x, stepHeight, stepRayUpper.position.z);
+        stepRayUpper.position = new Vector3(stepRayUpper.position.x, stepHeight + stepRayLower.position.y, stepRayUpper.position.z);
     }
 
     private void OnDrawGizmosSelected()
@@ -34,19 +34,39 @@ public class EdgeCorrection : MonoBehaviour
 
     private void StepUp()
     {
-        float dist = rb.velocity.magnitude * Time.fixedDeltaTime * 1.3f;
+        float dist = rb.velocity.magnitude * Time.fixedDeltaTime * 1.1f;
         //Debug.DrawLine(stepRayLower.position, stepRayLower.position + Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized * dist);
         //Debug.DrawLine(stepRayUpper.transform.position + rb.transform.up * stepHeight, stepRayUpper.position + rb.transform.up * stepHeight + Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized * (dist + 0.1f));
-        if (Physics.Raycast(stepRayLower.position, Vector3.ProjectOnPlane(rb.velocity, rb.transform.up), out RaycastHit hitLow, dist, layerMask))
+        Vector3 velDir = Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized;
+        Vector3[] direction =
         {
-            if (Vector3.Angle(hitLow.normal, rb.transform.up) < 60)
+            velDir/*,
+            Quaternion.AngleAxis(-15, rb.transform.up) * velDir,
+            Quaternion.AngleAxis(15, rb.transform.up) * velDir*/
+        };
+
+        for (int i = 0; i < direction.Length; i++)
+        {
+            Debug.DrawLine(stepRayLower.position, stepRayLower.position + direction[i] * dist);
+            Debug.DrawLine(stepRayUpper.position, stepRayUpper.position + direction[i] * (dist + 0.2f));
+
+            if (Physics.Raycast(stepRayLower.position, direction[i], out RaycastHit hitLow, dist, layerMask))
             {
-                return;
-            }
-            if (!Physics.Raycast(stepRayUpper.transform.position + rb.transform.up * stepHeight, Vector3.ProjectOnPlane(rb.velocity, rb.transform.up), out _, dist + 0.5f, layerMask))
-            {
-                rb.position -= new Vector3(0, -stepSmooth * Time.fixedDeltaTime, 0);
-                //Debug.Log("I stepped up!");
+                if (Vector3.Angle(hitLow.normal, rb.transform.up) < 60)
+                {
+                    continue;
+                }
+                Vector3 tempDir = -rb.transform.up;
+                Vector3 tempPos = hitLow.point + (tempDir * 0.1f) + rb.transform.up * stepHeight;
+                Debug.DrawLine(tempPos, tempPos + tempDir * (dist + 0.2f), Color.red);
+                if (Physics.Raycast(tempPos, tempDir, out RaycastHit hitDown, stepHeight, layerMask))
+                {
+                    rb.MovePosition(rb.position + hitDown.point - hitLow.point + 0.1f * rb.transform.up);
+                }
+                /*if (!Physics.Raycast(stepRayUpper.transform.position + rb.transform.up * stepHeight, direction[i], out _, dist + 0.2f, layerMask))
+                {
+                    rb.position -= new Vector3(0, -stepSmooth * Time.fixedDeltaTime, 0);
+                }*/
             }
         }
     }
