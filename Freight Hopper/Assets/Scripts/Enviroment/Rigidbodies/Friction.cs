@@ -3,23 +3,23 @@ using UnityEngine;
 [System.Serializable]
 public class Friction : MonoBehaviour
 {
-    [SerializeField] private CollisionManagement playerCollision;
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private RigidbodyLinker rigidbodyLinker;
+    private CollisionManagement playerCollision;
+    private Rigidbody rb;
+    private RigidbodyLinker rigidbodyLinker;
 
     [SerializeField] private FrictionData defaultFriction;
     private FrictionData currentFriction;
     [SerializeField, ReadOnly] private float frictionReductionPercent = 1;
 
-    public void Initialize(Rigidbody rb, CollisionManagement collisionManagement)
+    private void Awake()
     {
-        playerCollision = collisionManagement;
-        this.rb = rb;
+        playerCollision = Player.Instance.modules.collisionManagement;
+        this.rb = Player.Instance.modules.rigidbody;
+        this.rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
 
         playerCollision.CollisionDataCollected += ApplyFriction;
         currentFriction = defaultFriction;
     }
-
 
     // Expects numbers like "5% friction reduction" or 0.05f. Will only apply when grounded
     public void ReduceFriction(float percent)
@@ -32,10 +32,12 @@ public class Friction : MonoBehaviour
     {
         frictionReductionPercent = 1;
     }
+
     private void FixedUpdate()
     {
         ApplyFriction();
     }
+
     private void ApplyFriction()
     {
         float amount;

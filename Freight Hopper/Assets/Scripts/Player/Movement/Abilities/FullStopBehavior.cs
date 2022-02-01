@@ -5,7 +5,14 @@ public class FullStopBehavior : AbilityBehavior
 {
     [SerializeField] private Timer fullstopDuration = new Timer(1);
     [SerializeField] private Volume fullstopEffect;
-    [SerializeField] private Gravity playerGravity;
+    private Gravity playerGravity;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        playerGravity = Player.Instance.modules.gravity;
+    }
+
     public override void Action()
     {
         fullstopDuration.CountDown(Time.fixedDeltaTime);
@@ -30,6 +37,6 @@ public class FullStopBehavior : AbilityBehavior
     {
         fullstopDuration.ResetTimer();
         soundManager.Play("Fullstop");
-        playerGravity.DisableGravity();
+        playerGravity.EnableGravity(false);
     }
 }

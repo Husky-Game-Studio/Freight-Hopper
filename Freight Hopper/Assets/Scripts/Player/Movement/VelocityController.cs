@@ -14,10 +14,10 @@ public class VelocityController
     private Friction friction;
     private Speedometer speedometer;
 
-    public void Initialize(Rigidbody rb, Friction friction, Speedometer speedometer, float oppositeAngle)
+    public void Initialize(Speedometer speedometer, float oppositeAngle)
     {
-        this.rb = rb;
-        this.friction = friction;
+        this.rb = Player.Instance.modules.rigidbody;
+        this.friction = Player.Instance.modules.friction;
         this.speedometer = speedometer;
         this.oppositeAngle = oppositeAngle;
         speedLimit = new Current<float>(speedLimit.value);

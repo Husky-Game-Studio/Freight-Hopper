@@ -3,6 +3,21 @@ using System;
 
 public class Player : MonoBehaviour
 {
+    [System.Serializable]
+    public struct Modules
+    {
+        public PlayerMachineCenter playerMachineCenter;
+        public PlayerAbilities playerAbilities;
+        public Gravity gravity;
+        public Friction friction;
+        public Rigidbody rigidbody;
+        public CollisionManagement collisionManagement;
+        public RigidbodyLinker rigidbodyLinker;
+        public SoundManager soundManager;
+    }
+
+    public Modules modules;
+
     public static event Action PlayerLoadedIn;
 
     private static Player instance;

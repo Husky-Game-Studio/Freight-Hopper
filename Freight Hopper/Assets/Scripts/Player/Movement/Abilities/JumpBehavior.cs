@@ -4,13 +4,20 @@ public class JumpBehavior : AbilityBehavior
 {
     [SerializeField] private float minJumpHeight = 2f;
     [SerializeField] private float holdingJumpForceMultiplier = 5f;
-    [SerializeField] private RigidbodyLinker rigidbodyLinker;
-    [SerializeField] private CollisionManagement collisionManager;
+    private RigidbodyLinker rigidbodyLinker;
+    private CollisionManagement collisionManager;
 
     public Timer jumpHoldingTimer = new Timer(0.5f);
     public Timer coyoteeTimer = new Timer(0.5f);
     public Timer jumpBufferTimer = new Timer(0.3f);
     public float JumpHeight => minJumpHeight;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
+        collisionManager = Player.Instance.modules.collisionManagement;
+    }
 
     /// <summary>
     /// Same as jump but inputs the users current jump height
@@ -32,8 +39,8 @@ public class JumpBehavior : AbilityBehavior
             rb.velocity = rb.velocity.ProjectOnContactPlane(upAxis);
         }
 
-        // Basic physics, except the force required to reach this height may not work if we consider holding space
-        // That and considering that physics works in timesteps.
+        // Basic physics, except the force required to reach this height may not work if we consider
+        // holding space That and considering that physics works in timesteps.
         float jumpForce = Mathf.Sqrt(2f * gravity.magnitude * height);
 
         // Upward bias for sloped jumping

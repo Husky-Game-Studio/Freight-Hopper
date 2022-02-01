@@ -4,46 +4,31 @@ using UnityEngine;
 public class Gravity : MonoBehaviour
 {
     [SerializeField] private bool useGravity = true;
-    [SerializeField] private bool aerial;
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private CollisionManagement collisionManagement;
+    [SerializeField] private bool automatic = true;
+    [SerializeField, ReadOnly] private Rigidbody rb;
+
     private void Awake()
     {
+        this.rb = GetComponentInParent<Rigidbody>();
         rb.useGravity = false;
-        if(collisionManagement != null)
-        {
-            collisionManagement.CollisionDataCollected += GravityLoop;
-        }
     }
-    public void Initialize(Rigidbody rb, CollisionManagement collisionManagement, bool aerial)
-    {
-        this.rb = rb;
-        this.collisionManagement = collisionManagement;
-        this.aerial = aerial;
-        rb.useGravity = false;
-        collisionManagement.CollisionDataCollected += GravityLoop;
-    }
+
     private void FixedUpdate()
     {
-        if(collisionManagement == null)
+        if (automatic)
         {
             GravityLoop();
         }
     }
 
-    public void DisableGravity()
+    public void EnableGravity(bool enable = true)
     {
-        useGravity = false;
+        useGravity = enable;
     }
 
-    public void EnableGravity()
+    public void GravityLoop()
     {
-        useGravity = true;
-    }
-
-    private void GravityLoop()
-    {
-        if (!useGravity || (collisionManagement != null && collisionManagement.IsGrounded.current && !aerial))
+        if (!useGravity)
         {
             return;
         }

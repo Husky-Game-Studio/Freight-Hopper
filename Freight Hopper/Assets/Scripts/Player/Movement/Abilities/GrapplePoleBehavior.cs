@@ -24,9 +24,9 @@ public class GrapplePoleBehavior : AbilityBehavior
 
     private Transform cameraTransform;
 
-    public override void Initialize(Rigidbody rb, SoundManager sm, PlayerAbilities pa)
+    public override void Initialize()
     {
-        base.Initialize(rb, sm, pa);
+        base.Initialize();
         cameraTransform = Camera.main.transform;
     }
 
@@ -63,7 +63,6 @@ public class GrapplePoleBehavior : AbilityBehavior
         Debug.DrawLine(playerAnchor.origin, playerAnchor.origin + right, Color.red, Time.fixedDeltaTime);
 
         Vector3 move = right + forward;
-        
 
         rb.AddForce(move * grappleMoveSpeed, ForceMode.Acceleration);
         if (rb.velocity.magnitude > 5)

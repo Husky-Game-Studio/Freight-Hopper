@@ -198,6 +198,91 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 27818065}
   m_CullTransparentMesh: 1
+--- !u!1 &91327622
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 91327623}
+  - component: {fileID: 91327624}
+  - component: {fileID: 91327626}
+  - component: {fileID: 91327625}
+  m_Layer: 7
+  m_Name: Physics
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &91327623
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91327622}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8542586348039995703}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &91327624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91327622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 422c0ba80ffa2f6458d7473389de1fa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectedRb:
+    old: {fileID: 0}
+    current: {fileID: 0}
+  connectionVelocity:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+  connectionAcceleration:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+--- !u!114 &91327625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91327622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useGravity: 1
+  automatic: 0
+  rb: {fileID: 0}
+--- !u!114 &91327626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91327622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f837b1f1de82a48aba93d23de70d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultFriction:
+    air: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
+    ground: {fileID: 11400000, guid: 4b438a26d56c340408c86e43cf1c0583, type: 2}
+  frictionReductionPercent: 1
 --- !u!1 &96370241
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,7 +774,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &257889663
 MonoBehaviour:
@@ -1547,7 +1632,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &904353223
 GameObject:
@@ -3164,7 +3249,7 @@ Transform:
   - {fileID: 754600861}
   - {fileID: 308967564}
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1798020241
 MonoBehaviour:
@@ -4152,8 +4237,8 @@ GameObject:
   - component: {fileID: 6851446874579196117}
   - component: {fileID: 4493642203787552938}
   - component: {fileID: 4493642203787552936}
-  - component: {fileID: 4493642203787552935}
   - component: {fileID: 4493642203787552939}
+  - component: {fileID: 4493642203787552935}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -4170,56 +4255,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 4493642203787552934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
+  m_Script: {fileID: 11500000, guid: fa6fe17683d2efe4abea007baae20b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aerial: 0
-  gravity:
-    useGravity: 1
-  friction:
-    defaultFriction:
-      air: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
-      ground: {fileID: 11400000, guid: 4b438a26d56c340408c86e43cf1c0583, type: 2}
-    frictionReductionPercent: 1
-  collisionManager:
-    maxSlope: 60
-    maxDepenetrationVelocity: 500
-    isGrounded:
-      old: 0
-      current: 0
-    contactNormal:
-      old: {x: -0, y: -0, z: -0}
-      current: {x: -0, y: -0, z: -0}
-    velocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    position:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    contactCount: 0
-    steepCount: 0
-    rigidbodyLinker:
-      connectedRb:
-        old: {fileID: 0}
-        current: {fileID: 0}
-      connectionVelocity:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-      connectionAcceleration:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-    validUpAxis: {x: 0, y: 0, z: 0}
-  rigidbodyLinker:
-    connectedRb:
-      old: {fileID: 0}
-      current: {fileID: 0}
-    connectionVelocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    connectionAcceleration:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-  rb: {fileID: 6851446874579196113}
+  maxSlope: 60
+  maxDepenetrationVelocity: 100
+  isGrounded:
+    old: 0
+    current: 0
+  contactNormal:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+  velocity:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+  position:
+    old: {x: 0, y: 0, z: 0}
+    current: {x: 0, y: 0, z: 0}
+  contactCount: 0
+  steepCount: 0
+  validUpAxis: {x: 0, y: 1, z: 0}
 --- !u!114 &4493642203787552936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4242,7 +4297,7 @@ MonoBehaviour:
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
   abilities: []
-  playerPM: {fileID: 0}
+  playerRb: {fileID: 0}
   playerSM: {fileID: 0}
 --- !u!114 &4493642203787552938
 MonoBehaviour:
@@ -4267,35 +4322,8 @@ MonoBehaviour:
     duration: 1
     current: 0
   abilities: {fileID: 4493642203787552936}
-  physicsManager: {fileID: 0}
-  collisionManagement:
-    maxSlope: 60
-    maxDepenetrationVelocity: 10
-    isGrounded:
-      old: 0
-      current: 0
-    contactNormal:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    velocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    position:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    contactCount: 0
-    steepCount: 0
-    rigidbodyLinker:
-      connectedRb:
-        old: {fileID: 0}
-        current: {fileID: 0}
-      connectionVelocity:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-      connectionAcceleration:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-    validUpAxis: {x: 0, y: 0, z: 0}
+  collisionManagement: {fileID: 0}
+  friction: {fileID: 0}
 --- !u!114 &4493642203787552939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4308,6 +4336,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5f4d43103d85845830e2fc2a5d3716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modules:
+    playerMachineCenter: {fileID: 4493642203787552938}
+    playerAbilities: {fileID: 4493642203787552936}
+    gravity: {fileID: 91327625}
+    friction: {fileID: 91327626}
+    rigidbody: {fileID: 6851446874579196113}
+    collisionManagement: {fileID: 4493642203787552935}
+    rigidbodyLinker: {fileID: 91327624}
+    soundManager: {fileID: 2129630602}
 --- !u!114 &6851446874351635507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4725,7 +4762,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &6851446874732734527
 TrailRenderer:
@@ -4871,7 +4908,7 @@ Transform:
   m_Children:
   - {fileID: 362878367}
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &6851446875239732598
 MeshRenderer:
@@ -4952,7 +4989,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8542586348039995703}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &8542586348039995703
 Transform:
@@ -4965,6 +5002,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
+  - {fileID: 91327623}
   - {fileID: 1798020240}
   - {fileID: 840649354}
   - {fileID: 6851446875239732601}

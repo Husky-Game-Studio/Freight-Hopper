@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-// State Machine help from these url:
-// https://www.youtube.com/watch?v=nnrOhb5UdRc
+// State Machine help from these url: https://www.youtube.com/watch?v=nnrOhb5UdRc
 
 public class PlayerMachineCenter : FiniteStateMachineCenter
 {
@@ -36,6 +35,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     // Input Components
     [HideInInspector] public PlayerAbilities abilities;
     [HideInInspector] public CollisionManagement collisionManagement;
+    [HideInInspector] public Friction friction;
 
     private void Awake()
     {
@@ -189,7 +189,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public void OnEnable()
     {
         abilities = GetComponent<PlayerAbilities>();
-        collisionManagement = physicsManager.collisionManager;
+        collisionManagement = Player.Instance.modules.collisionManagement;
+        friction = Player.Instance.modules.friction;
         RestartFSM();
         collisionManagement.CollisionDataCollected += UpdateLoop;
         collisionManagement.Landed += abilities.Recharge;
@@ -238,7 +239,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
         if (UserInput.Instance.Move().IsZero() && (currentState != groundPoundState || currentState != grapplePoleGroundPoundState))
         {
-            physicsManager.friction.ResetFrictionReduction();
+            friction.ResetFrictionReduction();
         }
 
         if (collisionManagement.IsGrounded.current && !collisionManagement.IsGrounded.old)

@@ -17,11 +17,11 @@ public class Speedometer
     private Rigidbody rb;
     private RigidbodyLinker rigidbodyLinker;
 
-    public void Initialize(Rigidbody rb, CollisionManagement cm, RigidbodyLinker rl)
+    public void Initialize()
     {
-        this.rb = rb;
-        this.collisionManager = cm;
-        this.rigidbodyLinker = rl;
+        this.rb = Player.Instance.modules.rigidbody;
+        this.collisionManager = Player.Instance.modules.collisionManagement;
+        this.rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
     }
 
     public void UpdateSpeedometer()

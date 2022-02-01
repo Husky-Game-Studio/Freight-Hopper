@@ -7,22 +7,29 @@ public class UpwardDashBehavior : AbilityBehavior
     [SerializeField] private float initialUpwardsForce;
     [SerializeField] private float consistentForce;
     public Timer duration = new Timer(1);
+    private CollisionManagement collisionManager;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        collisionManager = Player.Instance.modules.collisionManagement;
+    }
 
     public override void EntryAction()
     {
-        storedVelocity = physicsManager.rb.velocity;
+        storedVelocity = rb.velocity;
         duration.ResetTimer();
         soundManager.Play("UpwardDashEntry");
-        physicsManager.rb.velocity = Vector3.zero;
-        physicsManager.rb.AddForce(physicsManager.collisionManager.ValidUpAxis * initialUpwardsForce, ForceMode.VelocityChange);
+        rb.velocity = Vector3.zero;
+        rb.AddForce(collisionManager.ValidUpAxis * initialUpwardsForce, ForceMode.VelocityChange);
     }
 
     public override void Action()
     {
         soundManager.Play("UpwardDashTick");
         duration.CountDown(Time.fixedDeltaTime);
-        physicsManager.rb.AddForce(physicsManager.collisionManager.ValidUpAxis * consistentForce, ForceMode.VelocityChange);
-        physicsManager.rb.velocity = Vector3.Project(physicsManager.rb.velocity, physicsManager.collisionManager.ValidUpAxis);
+        rb.AddForce(collisionManager.ValidUpAxis * consistentForce, ForceMode.VelocityChange);
+        rb.velocity = Vector3.Project(rb.velocity, collisionManager.ValidUpAxis);
     }
 
     public override void ExitAction()
@@ -30,7 +37,7 @@ public class UpwardDashBehavior : AbilityBehavior
         base.ExitAction();
         soundManager.Stop("UpwardDashTick");
         soundManager.Play("UpwardDashExit");
-        physicsManager.rb.velocity = storedVelocity;
+        rb.velocity = storedVelocity;
         storedVelocity = Vector3.zero;
     }
 }

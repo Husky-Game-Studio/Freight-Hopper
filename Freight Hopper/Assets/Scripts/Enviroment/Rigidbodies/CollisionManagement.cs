@@ -4,9 +4,10 @@ using UnityEngine;
 [System.Serializable]
 public class CollisionManagement : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private Friction frictionManager;
-    [SerializeField] private RigidbodyLinker rigidbodyLinker;
+    private Rigidbody rb;
+    private Friction frictionManager;
+    private RigidbodyLinker rigidbodyLinker;
+    private Gravity gravity;
 
     [SerializeField] private float maxSlope = 60;
     [SerializeField] private float maxDepenetrationVelocity = 500;
@@ -16,7 +17,7 @@ public class CollisionManagement : MonoBehaviour
     [ReadOnly, SerializeField] private Memory<Vector3> position;
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
-    
+
     [ReadOnly, SerializeField] private Vector3 validUpAxis = Vector3.up;
 
     public Vector3 ValidUpAxis => validUpAxis;
@@ -26,7 +27,7 @@ public class CollisionManagement : MonoBehaviour
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
     public float MaxSlope => maxSlope;
-    
+
     public float MaxDepenetrationVelocity => maxDepenetrationVelocity;
 
     public delegate void CollisionEventHandler();
@@ -36,8 +37,14 @@ public class CollisionManagement : MonoBehaviour
     public event CollisionEventHandler CollisionDataCollected;
 
     private Vector3 upAxis;
+
     private void Awake()
     {
+        rb = Player.Instance.modules.rigidbody;
+        frictionManager = Player.Instance.modules.friction;
+        rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
+        gravity = Player.Instance.modules.gravity;
+
         upAxis = CustomGravity.GetUpAxis(rb.position);
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
@@ -107,8 +114,14 @@ public class CollisionManagement : MonoBehaviour
         while (true)
         {
             upAxis = CustomGravity.GetUpAxis(rb.position);
+
             yield return waitFixedUpdate;
+            if (!isGrounded.current)
+            {
+                gravity.GravityLoop();
+            }
             rigidbodyLinker.UpdateConnectionState(rb);
+
             CollisionDataCollected?.Invoke();
 
             UpdateOldValues();

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5544347924774698219}
   - component: {fileID: 6888594939690183911}
   - component: {fileID: 5946936164422260423}
-  - component: {fileID: 5438151779416220552}
   - component: {fileID: 3491304789254103795}
+  - component: {fileID: 358080932042886713}
   m_Layer: 11
   m_Name: Cart
   m_TagString: landable
@@ -58,7 +58,7 @@ Rigidbody:
   m_GameObject: {fileID: 5098807932008158715}
   serializedVersion: 2
   m_Mass: 10
-  m_Drag: 0
+  m_Drag: 1.5
   m_AngularDrag: 1.5
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -161,67 +161,6 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &5438151779416220552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5098807932008158715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24858e3f77bbe0a4ab9aa004cadc9182, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aerial: 1
-  gravity:
-    useGravity: 1
-  friction:
-    defaultFriction:
-      air: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
-      ground: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
-    frictionReductionPercent: 1
-  collisionManager:
-    maxSlope: 60
-    unlandableSurfaceDuration:
-      duration: 0
-      current: 0
-    isGrounded:
-      old: 0
-      current: 0
-    contactNormal:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    velocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    position:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    contactCount: 0
-    steepCount: 0
-    rigidbodyLinker:
-      connectedRb:
-        old: {fileID: 0}
-        current: {fileID: 0}
-      connectionVelocity:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-      connectionAcceleration:
-        old: {x: 0, y: 0, z: 0}
-        current: {x: 0, y: 0, z: 0}
-    validUpAxis: {x: 0, y: 0, z: 0}
-  rigidbodyLinker:
-    connectedRb:
-      old: {fileID: 0}
-      current: {fileID: 0}
-    connectionVelocity:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-    connectionAcceleration:
-      old: {x: 0, y: 0, z: 0}
-      current: {x: 0, y: 0, z: 0}
-  rb: {fileID: 6888594939690183911}
 --- !u!114 &3491304789254103795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +176,21 @@ MonoBehaviour:
   explosion: 1
   explosionTime: 2
   scale: 4
+--- !u!114 &358080932042886713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5098807932008158715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useGravity: 1
+  automatic: 1
+  rb: {fileID: 0}
 --- !u!1 &8661514545871677199
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,15 +326,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 45
+      value: 202.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
-      value: 9
+      value: 40.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kp
-      value: 105
+      value: 472.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name
@@ -392,7 +346,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -497,15 +451,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 45
+      value: 202.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
-      value: 9
+      value: 40.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kp
-      value: 105
+      value: 472.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Name
@@ -517,7 +471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.data[0]

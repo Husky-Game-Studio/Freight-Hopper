@@ -16,11 +16,11 @@ public class AbilityBehavior : MonoBehaviour
     protected SoundManager soundManager;
     protected PlayerAbilities abilitiesManager;
 
-    public virtual void Initialize(Rigidbody rb, SoundManager sm, PlayerAbilities pa)
+    public virtual void Initialize()
     {
-        this.rb = rb;
-        this.soundManager = sm;
-        this.abilitiesManager = pa;
+        this.rb = Player.Instance.modules.rigidbody;
+        this.soundManager = Player.Instance.modules.soundManager;
+        this.abilitiesManager = Player.Instance.modules.playerAbilities;
     }
 
     public SoundManager PlayerSoundManager() => soundManager;
@@ -42,7 +42,8 @@ public class AbilityBehavior : MonoBehaviour
     }
 
     // Action played while in Ability state
-    public virtual void Action() { }
+    public virtual void Action()
+    { }
 
     public virtual void Recharge()
     {
