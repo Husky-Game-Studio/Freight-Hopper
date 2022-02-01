@@ -13,6 +13,7 @@ public class LevelController : MonoBehaviour
 
     private const int highHeight = 999999;
     private static LevelData lastLeveData;
+
     public static event Action PlayerRespawned;
 
     public static event Action LevelLoadedIn;
@@ -126,15 +127,14 @@ public class LevelController : MonoBehaviour
         Player.PlayerLoadedIn -= UnlockAbilities;
         lastLeveData = levelData;
     }
-    
 
     public void UnlockAbilities()
     {
-        if(lastLeveData != null)
+        if (lastLeveData != null)
         {
             levelData.UpdateToLastLevelsAbilities(lastLeveData.DefaultAbilites, lastLeveData.ActiveAbilities);
         }
-        
+
         Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.ActiveAbilities);
     }
 
@@ -153,8 +153,19 @@ public class LevelController : MonoBehaviour
         {
             player.transform.position = levelData.SpawnPosition;
         }
-        player.transform.rotation = Quaternion.LookRotation(Vector3.forward, CustomGravity.GetUpAxis(player.transform.position)) *
+        Vector3 gravityDirection = CustomGravity.GetUpAxis(player.transform.position);
+        player.transform.rotation = Quaternion.LookRotation(Vector3.forward, gravityDirection) *
             Quaternion.AngleAxis(levelData.RotationAngle, Vector3.up);
+
+        if (levelData.SnapDownAtStart)
+        {
+            Ray ray = new Ray(player.transform.position - player.transform.up * 2, -player.transform.up);
+            if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
+            {
+                float dist = hit.distance;
+                player.transform.position += ray.direction * dist;
+            }
+        }
 
         player.GetComponent<Rigidbody>().velocity = levelData.VelocityDirection * Vector3.forward * levelData.Speed;
     }

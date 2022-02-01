@@ -12,7 +12,7 @@ public class AbilityBehavior : MonoBehaviour
     // Ready meaning not consumed
     public bool UnlockedAndReady => this.Unlocked && !this.Consumed;
 
-    protected Rigidbody rb;
+    [SerializeField, ReadOnly] protected Rigidbody rb;
     protected SoundManager soundManager;
     protected PlayerAbilities abilitiesManager;
 

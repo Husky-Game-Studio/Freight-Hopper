@@ -123,6 +123,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &12561281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 12561282}
+  m_Layer: 7
+  m_Name: stepLower
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &12561282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12561281}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 91327623}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &27818065
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,7 +260,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 426829594}
+  - {fileID: 12561282}
   m_Father: {fileID: 8542586348039995703}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -329,17 +361,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91327622}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 316947eabe2dfbc4d989d0c4837b9b9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: -2, z: 0}
-  nextBoxVerticalDif: 1
+  stepRayUpper: {fileID: 426829594}
+  stepRayLower: {fileID: 12561282}
   layerMask:
     serializedVersion: 2
     m_Bits: 2048
-  extents: {x: 1, y: 0.5, z: 0}
+  stepHeight: 0.1
+  stepSmooth: 2
 --- !u!1 &96370241
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,6 +1020,36 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
+--- !u!1 &426829593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 426829594}
+  m_Layer: 7
+  m_Name: stepUpper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &426829594
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426829593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 91327623}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &517036473
 GameObject:
   m_ObjectHideFlags: 0
@@ -3287,6 +3350,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   fullstopDuration:
     duration: 0.5
     current: 0
@@ -3323,6 +3387,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   percentStrengthComparedToNormalJump: 75
 --- !u!114 &1798020242
 MonoBehaviour:
@@ -3339,6 +3404,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   increasingForce:
     value: 1
   deltaIncreaseForce: 0.02
@@ -3362,6 +3428,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   minJumpHeight: 2.3
   holdingJumpForceMultiplier: 22
   jumpHoldingTimer:
@@ -3388,6 +3455,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   oppositeInputAngle: 90
   speedometer:
     velocity: {x: 0, y: 0, z: 0}
@@ -3423,6 +3491,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   pole: {fileID: 840649353}
   breakMaxLengthPercent: 1.25
   maxLength: 50
@@ -3455,6 +3524,7 @@ MonoBehaviour:
   unlocked: 0
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   wallCheckDistance: 2
   detectionLayerSpacing: 0.75
   wallrunCameraTilt: 3
@@ -3486,6 +3556,10 @@ MonoBehaviour:
   exitEffectsCooldown:
     duration: 0.1
     current: 0
+  cameraController: {fileID: 0}
+  collisionManager: {fileID: 0}
+  jumpBehavior: {fileID: 0}
+  rigidbodyLinker: {fileID: 0}
   wallStatus: 000000
   wallNormals:
   - {x: 0, y: 0, z: 0}
@@ -3506,6 +3580,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   storedVelocity: {x: 0, y: 0, z: 0}
   initialUpwardsForce: 30
   consistentForce: 10
@@ -3527,6 +3602,7 @@ MonoBehaviour:
   unlocked: 1
   consumed: 0
   preventConsumption: 0
+  rb: {fileID: 0}
   burstExplosionEffectTransform: {fileID: 1593485738}
   burstExplosionEffect: {fileID: 1593485737}
   burstMaxDistance: 1.5
@@ -4354,8 +4430,6 @@ MonoBehaviour:
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
   abilities: []
-  playerRb: {fileID: 0}
-  playerSM: {fileID: 0}
 --- !u!114 &4493642203787552938
 MonoBehaviour:
   m_ObjectHideFlags: 0

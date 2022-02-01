@@ -21,6 +21,8 @@ public class LevelData : ScriptableObject
     [SerializeField] private float rotationAngle = 0;
     [SerializeField] private Quaternion velocityDirection;
     [SerializeField] private float speed;
+    [SerializeField] private bool snapDownAtStart = true;
+    [SerializeField] private LayerMask layerMask;
 
     [Header("Meta Data")]
     [SerializeField] private string title;
@@ -52,8 +54,8 @@ public class LevelData : ScriptableObject
     public string Title => title;
     public Texture2D Image => image;
     public Optional<string> TutorialSceneName => tutorialSceneName;
-
-    
+    public bool SnapDownAtStart => snapDownAtStart;
+    public LayerMask PlayerLayerMask => layerMask;
     public IList<float> MedalTimes => Array.AsReadOnly(medalTimes);
 
     public IList<PlayerAbilities.Name> ActiveAbilities => activeAbilities.AsReadOnly();
@@ -86,7 +88,7 @@ public class LevelData : ScriptableObject
             activeAbilities = new List<PlayerAbilities.Name>(defaultAbilitiesTemp);
             return;
         }
-        if(EqualAbilitiesList(oldActiveAbilities, this.ActiveAbilities))
+        if (EqualAbilitiesList(oldActiveAbilities, this.ActiveAbilities))
         {
             return;
         }
@@ -95,12 +97,12 @@ public class LevelData : ScriptableObject
         PlayerAbilities.Name[] lastLevelsAbilities = new PlayerAbilities.Name[oldActiveAbilities.Count];
         oldActiveAbilities.CopyTo(lastLevelsAbilities, 0);
         activeAbilities = new List<PlayerAbilities.Name>(lastLevelsAbilities);
-        for(int i = 0; i < posDif.Count; i++)
+        for (int i = 0; i < posDif.Count; i++)
         {
             activeAbilities.Add(posDif[i]);
         }
     }
-    
+
     public bool EqualAbilitiesList(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
     {
         bool equal = true;
@@ -122,15 +124,16 @@ public class LevelData : ScriptableObject
         return equal;
     }
 
-    // Difference between a and b, but only positive differences (e.g. new ability is added when switching to b)
+    // Difference between a and b, but only positive differences (e.g. new ability is added when
+    // switching to b)
     public List<PlayerAbilities.Name> PosDif(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
     {
         List<PlayerAbilities.Name> result = new List<PlayerAbilities.Name>();
-        for(int i= 0; i < b.Count; i++)
+        for (int i = 0; i < b.Count; i++)
         {
             result.Add(b[i]);
         }
-        for(int i = 0; i < a.Count; i++)
+        for (int i = 0; i < a.Count; i++)
         {
             if (result.Contains(a[i]))
             {
@@ -141,7 +144,8 @@ public class LevelData : ScriptableObject
         return result;
     }
 
-    // Difference between a and b, but only negative differences (e.g. ability is removed when switching to b)
+    // Difference between a and b, but only negative differences (e.g. ability is removed when
+    // switching to b)
     public List<PlayerAbilities.Name> NegDif(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
     {
         return PosDif(b, a);
@@ -151,7 +155,7 @@ public class LevelData : ScriptableObject
     public List<PlayerAbilities.Name> SameDif(IList<PlayerAbilities.Name> a, IList<PlayerAbilities.Name> b)
     {
         List<PlayerAbilities.Name> result = new List<PlayerAbilities.Name>();
-        for(int i = 0; i < a.Count; i++)
+        for (int i = 0; i < a.Count; i++)
         {
             if (b.Contains(a[i]))
             {
@@ -162,10 +166,11 @@ public class LevelData : ScriptableObject
         return result;
     }
 
-    public  bool UsingDefaultAbilities()
+    public bool UsingDefaultAbilities()
     {
         return EqualAbilitiesList(this.ActiveAbilities, this.DefaultAbilites);
     }
+
     public void RemoveActiveAbility(PlayerAbilities.Name ability)
     {
         if (!activeAbilities.Contains(ability))

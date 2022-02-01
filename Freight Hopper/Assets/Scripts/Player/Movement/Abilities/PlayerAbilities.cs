@@ -42,8 +42,6 @@ public class PlayerAbilities : MonoBehaviour
     };
 
     [SerializeField, HideInInspector] private List<AbilityBehavior> abilities = new List<AbilityBehavior>();
-    [SerializeField, HideInInspector] private Rigidbody playerRb;
-    [SerializeField, HideInInspector] private SoundManager playerSM;
 
     private void Awake()
     {
@@ -57,8 +55,6 @@ public class PlayerAbilities : MonoBehaviour
         burstBehavior = GetComponentInChildren<BurstBehavior>();
         fullstopBehavior = GetComponentInChildren<FullStopBehavior>();
 
-        playerRb = GetComponent<Rigidbody>();
-        playerSM = GetComponentInChildren<SoundManager>();
         foreach (AbilityBehavior ability in abilities)
         {
             if (ability == null)

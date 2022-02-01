@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class EdgeCorrection : MonoBehaviour
 {
-    [SerializeField] private Vector3 offset;
-    [SerializeField] private float nextBoxVerticalDif;
+    [SerializeField] private Transform stepRayUpper;
+    [SerializeField] private Transform stepRayLower;
     [SerializeField] private LayerMask layerMask;
-    [SerializeField] private Vector3 extents;
+    [SerializeField] private float stepHeight = 0.3f;
+    [SerializeField] private float stepSmooth = 2;
 
     private Rigidbody rb;
     private RigidbodyLinker rigibodyLinker;
@@ -18,40 +19,35 @@ public class EdgeCorrection : MonoBehaviour
         rb = Player.Instance.modules.rigidbody;
         rigibodyLinker = Player.Instance.modules.rigidbodyLinker;
         collisionManagent = Player.Instance.modules.collisionManagement;
+
+        stepRayUpper.position = new Vector3(stepRayUpper.position.x, stepHeight, stepRayUpper.position.z);
     }
 
     private void OnDrawGizmosSelected()
     {
-        Vector3 center = transform.position +
-            (transform.right * offset.x) + (transform.up * offset.y) + (transform.forward * offset.z);
-        Gizmos.DrawWireSphere(center, 1);
     }
 
     private void FixedUpdate()
     {
-        CheckEdge();
+        StepUp();
     }
 
-    private void CheckEdge()
+    private void StepUp()
     {
-        bool bottomDetected;
-        bool topDetected;
-        Vector3 gravityDirection = CustomGravity.GetUpAxis(rb.position);
-        Vector3 velocity = Vector3.ProjectOnPlane(rb.velocity, gravityDirection);
-        Vector3 direction = velocity.normalized;
-        float length = velocity.magnitude * Time.fixedDeltaTime;
-        Vector3 center = rb.position +
-            (rb.transform.right * offset.x) + (rb.transform.up * offset.y) + (rb.transform.forward * offset.z) +
-            (direction * length / 2f);
-        extents.z = length;
-        ExtDebug.DrawBox(center, extents, Quaternion.LookRotation(rb.transform.forward, rb.transform.up), Color.red);
-        ExtDebug.DrawBox(center + rb.transform.up * nextBoxVerticalDif, extents, Quaternion.LookRotation(rb.transform.forward, rb.transform.up), Color.red);
-        bottomDetected = Physics.CheckBox(center, extents, Quaternion.LookRotation(rb.transform.forward, rb.transform.up), layerMask);
-        topDetected = Physics.CheckBox(center + rb.transform.up * nextBoxVerticalDif, extents, Quaternion.LookRotation(rb.transform.forward, rb.transform.up), layerMask);
-
-        if (bottomDetected && !topDetected)
+        float dist = rb.velocity.magnitude * Time.fixedDeltaTime * 1.3f;
+        //Debug.DrawLine(stepRayLower.position, stepRayLower.position + Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized * dist);
+        //Debug.DrawLine(stepRayUpper.transform.position + rb.transform.up * stepHeight, stepRayUpper.position + rb.transform.up * stepHeight + Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized * (dist + 0.1f));
+        if (Physics.Raycast(stepRayLower.position, Vector3.ProjectOnPlane(rb.velocity, rb.transform.up), out RaycastHit hitLow, dist, layerMask))
         {
-            rb.MovePosition(rb.position + rb.transform.up * nextBoxVerticalDif);
+            if (Vector3.Angle(hitLow.normal, rb.transform.up) < 60)
+            {
+                return;
+            }
+            if (!Physics.Raycast(stepRayUpper.transform.position + rb.transform.up * stepHeight, Vector3.ProjectOnPlane(rb.velocity, rb.transform.up), out _, dist + 0.5f, layerMask))
+            {
+                rb.position -= new Vector3(0, -stepSmooth * Time.fixedDeltaTime, 0);
+                //Debug.Log("I stepped up!");
+            }
         }
     }
 }

@@ -36,10 +36,10 @@ public partial class WallRunBehavior : AbilityBehavior
     private Vector3 jumpDirection;
     private Vector3 wallJumpWallDirection;
 
-    private FirstPersonCamera cameraController;
-    private CollisionManagement collisionManager;
-    private JumpBehavior jumpBehavior;
-    private RigidbodyLinker rigidbodyLinker;
+    [SerializeField, ReadOnly] private FirstPersonCamera cameraController;
+    [SerializeField, ReadOnly] private CollisionManagement collisionManager;
+    [SerializeField, ReadOnly] private JumpBehavior jumpBehavior;
+    [SerializeField, ReadOnly] private RigidbodyLinker rigidbodyLinker;
 
     // Left, Front, Right
     [SerializeField, ReadOnly] private bool[] wallStatus = new bool[3];
@@ -52,11 +52,14 @@ public partial class WallRunBehavior : AbilityBehavior
     public override void Initialize()
     {
         base.Initialize();
+    }
+
+    private void Awake()
+    {
         cameraController = Camera.main.GetComponent<FirstPersonCamera>();
         jumpBehavior = this.GetComponent<JumpBehavior>();
         collisionManager = Player.Instance.modules.collisionManagement;
         rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
-
         detectionlayers = new WallDetectionLayer[]
         {
             new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 0, 0),
