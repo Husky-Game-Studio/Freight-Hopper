@@ -30,7 +30,7 @@ public class CameraEffects : MonoBehaviour
 
     private void Awake()
     {
-        playerRB = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Rigidbody>();
+        playerRB = Player.Instance.modules.rigidbody;
 
         cam = Camera.main;
 
@@ -47,7 +47,7 @@ public class CameraEffects : MonoBehaviour
 
     private void Update()
     {
-        Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
+        //Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
         speedLines.SetVector3("Direction", playerRB.velocity.normalized);
         float speed = playerRB.velocity.magnitude;
 

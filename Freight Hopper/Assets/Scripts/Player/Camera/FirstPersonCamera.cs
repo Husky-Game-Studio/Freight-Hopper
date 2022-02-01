@@ -28,7 +28,7 @@ public class FirstPersonCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Camera.main.fieldOfView = fov;
         camTransform = Camera.main.transform;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = Player.Instance.transform;
 
         playerCM = Player.Instance.modules.collisionManagement;
     }
