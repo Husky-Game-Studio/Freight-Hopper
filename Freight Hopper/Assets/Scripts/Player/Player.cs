@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
         public CollisionManagement collisionManagement;
         public RigidbodyLinker rigidbodyLinker;
         public SoundManager soundManager;
+        public EdgeCorrectionCollision edgeCorrectionCollision;
     }
 
     public Modules modules;

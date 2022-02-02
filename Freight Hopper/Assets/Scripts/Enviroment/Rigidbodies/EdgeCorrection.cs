@@ -11,14 +11,10 @@ public class EdgeCorrection : MonoBehaviour
     [SerializeField] private float stepSmooth = 2;
 
     private Rigidbody rb;
-    private RigidbodyLinker rigibodyLinker;
-    private CollisionManagement collisionManagent;
 
     private void Awake()
     {
         rb = Player.Instance.modules.rigidbody;
-        rigibodyLinker = Player.Instance.modules.rigidbodyLinker;
-        collisionManagent = Player.Instance.modules.collisionManagement;
 
         stepRayUpper.position = new Vector3(stepRayUpper.position.x, stepHeight + stepRayLower.position.y, stepRayUpper.position.z);
     }

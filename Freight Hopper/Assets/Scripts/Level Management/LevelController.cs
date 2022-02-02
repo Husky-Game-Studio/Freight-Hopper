@@ -163,7 +163,7 @@ public class LevelController : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
             {
                 float dist = hit.distance;
-                player.transform.position += ray.direction * dist;
+                player.transform.position += ray.direction * dist + player.transform.up * 0.001f;
             }
         }
 

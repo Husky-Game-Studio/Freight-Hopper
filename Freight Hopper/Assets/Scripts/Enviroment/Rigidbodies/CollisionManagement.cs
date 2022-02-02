@@ -96,6 +96,7 @@ public class CollisionManagement : MonoBehaviour
         {
             Landed?.Invoke();
         }
+        Player.Instance.modules.edgeCorrectionCollision.AddContacts(collision);
     }
 
     // Call using OnCollisionStay from a monobehavior
@@ -106,6 +107,7 @@ public class CollisionManagement : MonoBehaviour
         {
             Landed?.Invoke();
         }
+        Player.Instance.modules.edgeCorrectionCollision.AddContacts(collision);
     }
 
     private IEnumerator LateFixedUpdate()
