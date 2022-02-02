@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    public bool camShakeAcive = true; //on or off
+    [SerializeField] private bool camShakeAcive = true;
+    [SerializeField] private bool camSwayActive = true;
 
     [System.Serializable]
     public struct TraumaSettings
@@ -73,13 +74,17 @@ public class CameraShake : MonoBehaviour
 
     public void StartCameraSway(float duration, Vector3 direction, float magnitude = 1)
     {
+        if (!camSwayActive)
+        {
+            return;
+        }
         StartCoroutine(CameraSway(duration, direction, magnitude));
     }
 
     private IEnumerator CameraSway(float duration, Vector3 direction, float magnitude = 1)
     {
         float totalDuration = duration;
-        float t = 0;
+        float t;
         while (duration > 0)
         {
             t = -Mathf.Cos(duration * 2f * Mathf.PI / totalDuration) / 2f + 1f / 2f;
