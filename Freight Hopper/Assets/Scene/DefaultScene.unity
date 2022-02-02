@@ -240,8 +240,6 @@ GameObject:
   - component: {fileID: 91327624}
   - component: {fileID: 91327626}
   - component: {fileID: 91327625}
-  - component: {fileID: 91327627}
-  - component: {fileID: 91327629}
   - component: {fileID: 91327628}
   - component: {fileID: 91327630}
   m_Layer: 7
@@ -319,24 +317,6 @@ MonoBehaviour:
     air: {fileID: 11400000, guid: 280e4fe01234d33428e232c951429637, type: 2}
     ground: {fileID: 11400000, guid: 4b438a26d56c340408c86e43cf1c0583, type: 2}
   frictionReductionPercent: 1
---- !u!114 &91327627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91327622}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2994c04b2582dea41a872f94ea928eb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  verticalOffset: -2
-  rayDistance: 0.2
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 2048
-  snappingAngle: 0
 --- !u!114 &91327628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,25 +332,6 @@ MonoBehaviour:
   stepRayLower: {fileID: 12561282}
   maxStepHeight: 1
   stepSearchOvershoot: 0.01
---- !u!114 &91327629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91327622}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 316947eabe2dfbc4d989d0c4837b9b9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stepRayUpper: {fileID: 426829594}
-  stepRayLower: {fileID: 12561282}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 2052
-  stepHeight: 0.8
-  stepSmooth: 2
 --- !u!114 &91327630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4389,12 +4350,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8542586348039995703}
   - component: {fileID: 6851446874579196113}
-  - component: {fileID: 6851446874579196112}
   - component: {fileID: 6851446874579196117}
   - component: {fileID: 4493642203787552938}
   - component: {fileID: 4493642203787552936}
   - component: {fileID: 4493642203787552939}
   - component: {fileID: 4493642203787552935}
+  - component: {fileID: 4493642203787552937}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -4455,6 +4416,20 @@ MonoBehaviour:
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
   abilities: []
+--- !u!64 &4493642203787552937
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493642203787552934}
+  m_Material: {fileID: 13400000, guid: 6c843397d0e4de24586128a475788fc6, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &4493642203787552938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4828,20 +4803,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camShakeAcive: 1
---- !u!136 &6851446874579196112
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Material: {fileID: 13400000, guid: 6c843397d0e4de24586128a475788fc6, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  camSwayActive: 1
 --- !u!54 &6851446874579196113
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5130,7 +5092,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6851446875239732600}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6851446875239732600
 GameObject:
   m_ObjectHideFlags: 0

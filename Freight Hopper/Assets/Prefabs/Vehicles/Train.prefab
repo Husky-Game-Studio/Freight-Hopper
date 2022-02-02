@@ -59,7 +59,7 @@ MonoBehaviour:
     enabled: 0
     value: {fileID: 0}
   loop: 0
-  instantlyAccelerate: 0
+  instantlyAccelerate: 1
   spawnIn: 0
   pathObjects: []
   railLinkers: []
@@ -104,11 +104,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 85755468220564777, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: controller.data.Kd
-      value: 450
+      value: 675
       objectReference: {fileID: 0}
     - target: {fileID: 85755468220564777, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: controller.data.Ki
-      value: 90
+      value: 405.00003
       objectReference: {fileID: 0}
     - target: {fileID: 111867324825330463, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -120,7 +120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1886316016507558034, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886316016507558034, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -128,11 +128,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1914116658506137252, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: controller.data.Kd
-      value: 450
+      value: 675
       objectReference: {fileID: 0}
     - target: {fileID: 1914116658506137252, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: controller.data.Ki
-      value: 90
+      value: 405.00003
       objectReference: {fileID: 0}
     - target: {fileID: 1914116658506137253, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_LocalRotation.w
