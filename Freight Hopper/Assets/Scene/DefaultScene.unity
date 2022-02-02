@@ -4376,6 +4376,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSlope: 60
+  groundRaycastCheckDistance: 0.5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 2052
   landingSwayMag: 0.1
   landingSwayTime: 0.1
   maxDepenetrationVelocity: 100
@@ -4416,8 +4420,8 @@ MonoBehaviour:
   burstBehavior: {fileID: 1798020248}
   fullstopBehavior: {fileID: 1798020239}
   abilities: []
---- !u!64 &4493642203787552937
-MeshCollider:
+--- !u!136 &4493642203787552937
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4426,10 +4430,10 @@ MeshCollider:
   m_Material: {fileID: 13400000, guid: 6c843397d0e4de24586128a475788fc6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4493642203787552938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5092,7 +5096,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6851446875239732600}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6851446875239732600
 GameObject:
   m_ObjectHideFlags: 0

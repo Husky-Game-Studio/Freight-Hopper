@@ -10,6 +10,8 @@ public class CollisionManagement : MonoBehaviour
     private Gravity gravity;
 
     [SerializeField] private float maxSlope = 60;
+    [SerializeField] private float groundRaycastCheckDistance = 0.5f;
+    [SerializeField] private LayerMask groundMask;
     [SerializeField] private float landingSwayMag = 0.1f;
     [SerializeField] private float landingSwayTime = 0.1f;
 
@@ -122,6 +124,24 @@ public class CollisionManagement : MonoBehaviour
         }
     }
 
+    private void CheckGround()
+    {
+        if (isGrounded.current)
+        {
+            return;
+        }
+        Ray ray = new Ray(rb.position - (rb.transform.up * rb.transform.localScale.y), -rb.transform.up);
+        Debug.DrawRay(ray.origin, ray.direction * groundRaycastCheckDistance, Color.red);
+        if (Physics.Raycast(ray, out RaycastHit hit, groundRaycastCheckDistance, groundMask))
+        {
+            if (Vector3.Angle(hit.normal, this.ValidUpAxis) <= maxSlope)
+            {
+                isGrounded.current = true;
+                rb.AddForce(-ValidUpAxis, ForceMode.Acceleration);
+            }
+        }
+    }
+
     private IEnumerator LateFixedUpdate()
     {
         var waitFixedUpdate = new WaitForFixedUpdate();
@@ -134,6 +154,7 @@ public class CollisionManagement : MonoBehaviour
             {
                 gravity.GravityLoop();
             }
+            CheckGround();
             rigidbodyLinker.UpdateConnectionState(rb);
             ApplyCameraSway();
             CollisionDataCollected?.Invoke();

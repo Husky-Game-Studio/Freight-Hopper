@@ -33,10 +33,10 @@ public class DistantRigidbodyLinker : MonoBehaviour
     private void EmitSkin()
     {
         // We only want to run this script if we are not grounded to anything
-        if (collisionManagent.IsGrounded.old)
+        /*if (collisionManagent.IsGrounded.old)
         {
             return;
-        }
+        }*/
 
         Vector3 gravityDirection = -CustomGravity.GetUpAxis(rb.position);
 

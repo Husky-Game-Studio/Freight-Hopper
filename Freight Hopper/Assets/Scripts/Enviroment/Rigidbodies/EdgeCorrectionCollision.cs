@@ -82,15 +82,17 @@ public class EdgeCorrectionCollision : MonoBehaviour
 
         Collider stepCol = stepTestCP.otherCollider;
         RaycastHit hitInfoSide;
-        Vector3 flattenedVelocity = Vector3.ProjectOnPlane(lastVelocity, rb.transform.up);
+        Vector3 vel = lastVelocity.magnitude > 1 ? lastVelocity : rb.transform.forward;
+        Vector3 flattenedVelocity = Vector3.ProjectOnPlane(vel, rb.transform.up);
 
-        Vector3 originSide = lastRayLowerPosition;
+        Vector3 originSide = lastRayLowerPosition + 0.1f * rb.transform.up;
+        flattenedVelocity = flattenedVelocity == Vector3.zero ? rb.transform.forward : flattenedVelocity;
         Vector3 directionSide = flattenedVelocity.normalized;
-        if (directionSide == Vector3.zero) { directionSide = rb.transform.forward; }
+
         /*Debug.DrawRay(originSide, directionSide * 5, Color.blue, 20f);
         Debug.DrawRay(originSide, -rb.transform.up * 5, Color.blue, 20f);*/
-        /*Debug.DrawRay(stepTestCP.point, stepTestCP.normal * 5, Color.yellow, 20f);
-        Debug.DrawRay(lastRayLowerPosition, rb.transform.up * 5, Color.green, 20f);*/
+        //Debug.DrawRay(stepTestCP.point, stepTestCP.normal * 5, Color.yellow, 20f);
+        //Debug.DrawRay(lastRayLowerPosition, rb.transform.up * 5, Color.green, 20f);
         if (!stepCol.Raycast(new Ray(originSide, directionSide), out hitInfoSide, flattenedVelocity.magnitude * Time.fixedDeltaTime + 1))
         {
             //Debug.DrawRay(originSide, directionSide * 5, Color.red, 20f);
@@ -135,7 +137,8 @@ public class EdgeCorrectionCollision : MonoBehaviour
         //Debug.Log("passed with origin of " + origin);
         //We have enough info to calculate the points
         Vector3 difContactPoint = new Vector3(stepTestCP.point.x, 0, stepTestCP.point.z) - new Vector3(lastRayLowerPosition.x, 0, lastRayLowerPosition.z);
-        Vector3 stepUpPointOffset = new Vector3(0, hitInfo.point.y - lastRayLowerPosition.y, 0) + difContactPoint;
+        Vector3 stepUpPointOffset = new Vector3(0, hitInfo.point.y - lastRayLowerPosition.y + 0.01f, 0) + difContactPoint;
+        /* + difContactPoint*/
         //We passed all the checks! Calculate and return the point!
         stepUpOffset = stepUpPointOffset;
         //Debug.Log("edge correction");
