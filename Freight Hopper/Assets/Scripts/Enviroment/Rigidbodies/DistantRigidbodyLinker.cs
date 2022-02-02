@@ -32,8 +32,8 @@ public class DistantRigidbodyLinker : MonoBehaviour
 
     private void EmitSkin()
     {
-        // We only want to run this script if we are not connected to anything
-        if (rigibodyLinker.ConnectedRb.old || collisionManagent.IsGrounded.old)
+        // We only want to run this script if we are not grounded to anything
+        if (collisionManagent.IsGrounded.old)
         {
             return;
         }
@@ -48,7 +48,7 @@ public class DistantRigidbodyLinker : MonoBehaviour
                 Vector3 dir = (colliders[i].attachedRigidbody.position - rb.position).normalized;
                 //if (Vector3.Dot(dir, gravityDirection) < 0) // Only connect downwards
                 //{
-                Debug.Log("Updating link due to skin");
+                //Debug.Log("Updating link due to skin");
                 rigibodyLinker.UpdateLink(colliders[i].attachedRigidbody);
                 //}
             }

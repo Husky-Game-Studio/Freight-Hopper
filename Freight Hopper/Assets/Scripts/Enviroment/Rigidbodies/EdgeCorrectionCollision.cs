@@ -102,14 +102,14 @@ public class EdgeCorrectionCollision : MonoBehaviour
         //Debug.DrawRay(hitInfoSide.point, hitInfoSide.normal * 100, Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f), 10f);
         if (Vector3.Angle(hitInfoSide.normal, rb.transform.up) < 60)
         {
-            Debug.Log("failed becaue hit slope");
+            //Debug.Log("failed becaue hit slope");
             return false;
         }
 
         //( 2 ) Make sure the contact point is low enough to be a step
         if (!(stepTestCP.point.y - lastRayLowerPosition.y < maxStepHeight))
         {
-            Debug.Log("failed because step not low enough");
+            //Debug.Log("failed because step not low enough");
             return false;
         }
 
@@ -121,15 +121,15 @@ public class EdgeCorrectionCollision : MonoBehaviour
         Vector3 stepOutPoint = Vector3.zero/*stepTestCP.normal * -flattenedVelocity.magnitude * Time.fixedDeltaTime*/;
         Vector3 origin = new Vector3(stepTestCP.point.x, stepHeight, stepTestCP.point.z) + (stepTestInvDir * stepSearchOvershoot) + stepOutPoint;
 
-        Debug.DrawRay(origin, stepTestInvDir * 5, Color.blue, 20f);
-        Debug.DrawRay(origin, -rb.transform.up * 5, Color.blue, 20f);
+        //Debug.DrawRay(origin, stepTestInvDir * 5, Color.blue, 20f);
+        //Debug.DrawRay(origin, -rb.transform.up * 5, Color.blue, 20f);
         Vector3 direction = -rb.transform.up;
         if (!stepCol.Raycast(new Ray(origin, direction), out hitInfo, maxStepHeight + 0.01f))
         {
-            Debug.Log("failed because couldn't find step");
-            Debug.Log("failed with speed: " + lastVelocity.magnitude);
-            Debug.DrawRay(origin, stepTestInvDir, Color.red, 20f);
-            Debug.DrawRay(origin, -rb.transform.up * (maxStepHeight + 0.01f), Color.red, 20f);
+            //Debug.Log("failed because couldn't find step");
+            //Debug.Log("failed with speed: " + lastVelocity.magnitude);
+            //Debug.DrawRay(origin, stepTestInvDir, Color.red, 20f);
+            //Debug.DrawRay(origin, -rb.transform.up * (maxStepHeight + 0.01f), Color.red, 20f);
             return false;
         }
         //Debug.Log("passed with origin of " + origin);
@@ -138,7 +138,7 @@ public class EdgeCorrectionCollision : MonoBehaviour
         Vector3 stepUpPointOffset = new Vector3(0, hitInfo.point.y - lastRayLowerPosition.y, 0) + difContactPoint;
         //We passed all the checks! Calculate and return the point!
         stepUpOffset = stepUpPointOffset;
-        Debug.Log("edge correction");
+        //Debug.Log("edge correction");
         return true;
     }
 }
