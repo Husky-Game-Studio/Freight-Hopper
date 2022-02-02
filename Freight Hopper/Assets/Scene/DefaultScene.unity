@@ -3429,6 +3429,9 @@ MonoBehaviour:
   downwardsForce: 28
   slopeDownForce: 200
   groundFrictionReductionPercent: 1
+  slamSpeedToReachBase: 90
+  shakeDuration: 0.15
+  baseShakeStrength: 10
 --- !u!114 &1798020243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4493,6 +4496,7 @@ MonoBehaviour:
     rigidbodyLinker: {fileID: 91327624}
     soundManager: {fileID: 2129630602}
     edgeCorrectionCollision: {fileID: 91327628}
+    cameraShake: {fileID: 6851446874351635519}
 --- !u!114 &6851446874351635507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4721,6 +4725,7 @@ GameObject:
   - component: {fileID: 6851446874351635507}
   - component: {fileID: 6851446874351635518}
   - component: {fileID: 6851446874351635517}
+  - component: {fileID: 6851446874351635519}
   - component: {fileID: 6851446874351635516}
   m_Layer: 0
   m_Name: Main Camera
@@ -4804,6 +4809,19 @@ MonoBehaviour:
   playerHead: {fileID: 6851446874874222867}
   yRotationLock: 89.99
   smoothingDelta: 0.1
+--- !u!114 &6851446874351635519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6851446874351635515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4a7f2b4c50162c4a89dbf8b479ece49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camShakeAcive: 1
 --- !u!136 &6851446874579196112
 CapsuleCollider:
   m_ObjectHideFlags: 0

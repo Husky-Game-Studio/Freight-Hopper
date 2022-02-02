@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class FirstPersonCamera : MonoBehaviour
@@ -37,12 +38,12 @@ public class FirstPersonCamera : MonoBehaviour
     {
         frameCount++;
         delta = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
+        RotatePlayer();
+        FollowPlayer();
     }
 
     private void LateUpdate()
     {
-        RotatePlayer();
-        FollowPlayer();
     }
 
     private void FollowPlayer()

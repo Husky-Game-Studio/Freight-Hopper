@@ -10,6 +10,11 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float downwardsForce = 10;
     [SerializeField] private float slopeDownForce = 500;
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
+
+    [Header("Camera Shake Settings")]
+    [SerializeField] private float slamSpeedToReachBase = 125f;
+    [SerializeField] private float shakeDuration = 0.2f;
+    [SerializeField] private float baseShakeStrength = 5;
     public float FrictionReduction => groundFrictionReductionPercent;
 
     public bool FlatSurface =>
@@ -66,5 +71,12 @@ public class GroundPoundBehavior : AbilityBehavior
         base.ExitAction();
         soundManager.Play("GroundPoundExit");
         increasingForce.Reset();
+        if (FlatSurface)
+        {
+            float speed = Vector3.Project(collisionManager.Velocity.old, rb.transform.up).magnitude;
+            float slamShakeModified = speed / slamSpeedToReachBase;
+            Player.Instance.modules.cameraShake.StartCameraShake(shakeDuration, new CameraShake.TraumaSettings(baseShakeStrength * slamShakeModified));
+            //Debug.Log("performned a ground pound at a speed of " + speed + " actual old: " + collisionManager.Velocity.old.magnitude);
+        }
     }
 }
