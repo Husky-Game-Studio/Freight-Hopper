@@ -15,6 +15,8 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float slamSpeedToReachBase = 125f;
     [SerializeField] private float shakeDuration = 0.2f;
     [SerializeField] private float baseShakeStrength = 5;
+    [SerializeField] private float cameraSwayTime = 0.1f;
+    [SerializeField] private float cameraSwayMag = 1;
     public float FrictionReduction => groundFrictionReductionPercent;
 
     public bool FlatSurface =>
@@ -77,6 +79,7 @@ public class GroundPoundBehavior : AbilityBehavior
             float slamShakeModified = speed / slamSpeedToReachBase;
             Player.Instance.modules.cameraShake.StartCameraShake(shakeDuration, new CameraShake.TraumaSettings(baseShakeStrength * slamShakeModified));
             //Debug.Log("performned a ground pound at a speed of " + speed + " actual old: " + collisionManager.Velocity.old.magnitude);
+            Player.Instance.modules.cameraShake.StartCameraSway(cameraSwayTime * slamShakeModified, -collisionManager.ContactNormal.old, cameraSwayMag * slamShakeModified);
         }
     }
 }

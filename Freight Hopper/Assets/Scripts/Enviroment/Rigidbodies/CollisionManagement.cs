@@ -10,6 +10,9 @@ public class CollisionManagement : MonoBehaviour
     private Gravity gravity;
 
     [SerializeField] private float maxSlope = 60;
+    [SerializeField] private float landingSwayMag = 0.1f;
+    [SerializeField] private float landingSwayTime = 0.1f;
+
     [SerializeField] private float maxDepenetrationVelocity = 500;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
@@ -110,6 +113,15 @@ public class CollisionManagement : MonoBehaviour
         Player.Instance.modules.edgeCorrectionCollision.AddContacts(collision);
     }
 
+    private void ApplyCameraSway()
+    {
+        // Landing Sway
+        if (isGrounded.current && !isGrounded.old)
+        {
+            Player.Instance.modules.cameraShake.StartCameraSway(landingSwayTime, -contactNormal.current, landingSwayMag);
+        }
+    }
+
     private IEnumerator LateFixedUpdate()
     {
         var waitFixedUpdate = new WaitForFixedUpdate();
@@ -123,7 +135,7 @@ public class CollisionManagement : MonoBehaviour
                 gravity.GravityLoop();
             }
             rigidbodyLinker.UpdateConnectionState(rb);
-
+            ApplyCameraSway();
             CollisionDataCollected?.Invoke();
 
             UpdateOldValues();

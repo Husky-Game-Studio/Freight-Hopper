@@ -70,4 +70,22 @@ public class CameraShake : MonoBehaviour
             yield return null;
         }
     }
+
+    public void StartCameraSway(float duration, Vector3 direction, float magnitude = 1)
+    {
+        StartCoroutine(CameraSway(duration, direction, magnitude));
+    }
+
+    private IEnumerator CameraSway(float duration, Vector3 direction, float magnitude = 1)
+    {
+        float totalDuration = duration;
+        float t = 0;
+        while (duration > 0)
+        {
+            t = -Mathf.Cos(duration * 2f * Mathf.PI / totalDuration) / 2f + 1f / 2f;
+            this.transform.localPosition += Vector3.Lerp(Vector3.zero, direction * magnitude, t);
+            duration -= Time.deltaTime;
+            yield return null;
+        }
+    }
 }

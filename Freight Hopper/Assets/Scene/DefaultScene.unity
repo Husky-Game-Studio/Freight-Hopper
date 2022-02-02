@@ -3432,6 +3432,8 @@ MonoBehaviour:
   slamSpeedToReachBase: 90
   shakeDuration: 0.15
   baseShakeStrength: 10
+  cameraSwayTime: 0.1
+  cameraSwayMag: 1.2
 --- !u!114 &1798020243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3450,6 +3452,8 @@ MonoBehaviour:
   rb: {fileID: 0}
   minJumpHeight: 2.3
   holdingJumpForceMultiplier: 22
+  jumpingSwayTime: 0.17
+  jumpingSwayMag: 0.3
   jumpHoldingTimer:
     duration: 0.5
     current: 0
@@ -4411,6 +4415,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSlope: 60
+  landingSwayMag: 0.1
+  landingSwayTime: 0.1
   maxDepenetrationVelocity: 100
   isGrounded:
     old: 0

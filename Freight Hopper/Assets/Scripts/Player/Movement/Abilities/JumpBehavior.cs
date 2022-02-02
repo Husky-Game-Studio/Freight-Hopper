@@ -4,6 +4,8 @@ public class JumpBehavior : AbilityBehavior
 {
     [SerializeField] private float minJumpHeight = 2f;
     [SerializeField] private float holdingJumpForceMultiplier = 5f;
+    [SerializeField] private float jumpingSwayTime = 0.1f;
+    [SerializeField] private float jumpingSwayMag = 0.1f;
     private RigidbodyLinker rigidbodyLinker;
     private CollisionManagement collisionManager;
 
@@ -61,6 +63,7 @@ public class JumpBehavior : AbilityBehavior
         }
 
         soundManager.Play("Jump");
+        Player.Instance.modules.cameraShake.StartCameraSway(jumpingSwayTime, upAxis, jumpingSwayMag);
     }
 
     public override void EntryAction()
