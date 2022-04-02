@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5400923174265790355}
   - component: {fileID: 1109776650627392963}
   - component: {fileID: -3548527690878655890}
-  - component: {fileID: -6800389675890525430}
   - component: {fileID: 2564180750181826235}
   m_Layer: 11
   m_Name: Locomotive
@@ -82,28 +81,6 @@ MonoBehaviour:
   explosion: 1
   explosionTime: 2
   scale: 4
---- !u!114 &-6800389675890525430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5400923174265790356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f3d3ea3b8d05304facafa5105be1e76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldRotation: {x: 0, y: 0, z: 0}
-  data:
-    objectID: train head
-    posX: 0
-    posY: 0
-    posZ: 0
-    rotX: 0
-    rotY: 0
-    rotZ: 0
-  objID: train head
 --- !u!114 &2564180750181826235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 2025
+      value: 675
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
@@ -384,7 +361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -477,7 +454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 2025
+      value: 675
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
@@ -493,7 +470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2011807253337089226, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: m_Materials.Array.data[0]

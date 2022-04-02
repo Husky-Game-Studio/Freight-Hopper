@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2737155112348486779}
   - component: {fileID: 3376033112551355086}
   - component: {fileID: 5545337806903874819}
-  - component: {fileID: -7758142423066140396}
   - component: {fileID: 8161885187688393944}
   m_Layer: 11
   m_Name: BoxCargo
@@ -83,28 +82,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-7758142423066140396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6773133878984370838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f3d3ea3b8d05304facafa5105be1e76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldRotation: {x: 0, y: 0, z: 0}
-  data:
-    objectID: 
-    posX: 0
-    posY: 0
-    posZ: 0
-    rotX: 0
-    rotY: 0
-    rotZ: 0
-  objID: cargo
 --- !u!65 &8161885187688393944
 BoxCollider:
   m_ObjectHideFlags: 0
