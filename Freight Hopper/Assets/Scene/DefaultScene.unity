@@ -3081,7 +3081,10 @@ VFXRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
-  m_Materials: []
+  m_Materials:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3478,7 +3481,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   pole: {fileID: 840649353}
   breakMaxLengthPercent: 1.25
-  maxLength: 50
+  maxLength: 100
   minLength: 1
   grappleExtensionSpeed: 300
   pullSpeed: 40
@@ -3488,6 +3491,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2049
   length: 0
+  initialBurstForce: 10
   distanceController:
     data:
       Kp: 2

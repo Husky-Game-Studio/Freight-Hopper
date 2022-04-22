@@ -18,6 +18,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     private Rigidbody anchoredRb;
     private Vector3 anchoredRbLocalPosition;
     private bool anchored;
+    [SerializeField] private float initialBurstForce = 20;
 
     [SerializeField]
     private PID distanceController;
@@ -39,6 +40,7 @@ public class GrapplePoleBehavior : AbilityBehavior
     {
         float deltaPull = pullSpeed * Time.fixedDeltaTime;
         length = Mathf.Max(length - deltaPull, minLength);
+        rb.AddForce(initialBurstForce * (anchor.direction * -1).normalized, ForceMode.Acceleration);
     }
 
     // direction is the direction the player wants to move
@@ -129,7 +131,9 @@ public class GrapplePoleBehavior : AbilityBehavior
         float actualLength = (playerAnchor.origin - anchor.origin).magnitude;
         return actualLength > maxLength * breakMaxLengthPercent;
     }
-
+    public void PullTowards(){
+        
+    }
     // returns true if the grapple can reach a surface. False if it can't reach anything
     public bool CanReachSurface()
     {
@@ -143,6 +147,7 @@ public class GrapplePoleBehavior : AbilityBehavior
         reachedMaxLength = false;
         playerAnchor = new Ray(rb.position + pole.GetPosition(0), cameraTransform.transform.forward);
         pole.enabled = true;
+
         pole.SetPosition(1, pole.GetPosition(0));
     }
 
