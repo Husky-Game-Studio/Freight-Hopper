@@ -37,7 +37,7 @@ public class FirstPersonCamera : MonoBehaviour
     private void Update()
     {
         frameCount++;
-        delta = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
+        delta = UserInput.Instance.Look() * mouseSensitivity * Time.unscaledDeltaTime;
         RotatePlayer();
         FollowPlayer();
     }
