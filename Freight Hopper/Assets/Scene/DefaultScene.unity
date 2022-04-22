@@ -3491,7 +3491,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2049
   length: 0
-  initialBurstForce: 10
+  initialBurstForce: 20
   distanceController:
     data:
       Kp: 2
@@ -3571,9 +3571,10 @@ MonoBehaviour:
   rb: {fileID: 0}
   storedVelocity: {x: 0, y: 0, z: 0}
   initialUpwardsForce: 30
-  consistentForce: 10
+  consistentForce: 0
+  newTimeScale: 0.3
   duration:
-    duration: 0.3
+    duration: 4
     current: 0
 --- !u!114 &1798020248
 MonoBehaviour:
