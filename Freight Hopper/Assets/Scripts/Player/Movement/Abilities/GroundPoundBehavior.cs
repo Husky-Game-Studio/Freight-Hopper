@@ -38,6 +38,11 @@ public class GroundPoundBehavior : AbilityBehavior
         {
             rb.velocity = Vector3.ProjectOnPlane(rb.velocity, upAxis);
         }
+    }
+
+    public void GroundPoundInitialBurst()
+    {
+        Vector3 upAxis = collisionManager.ValidUpAxis;
         rb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
     }
 

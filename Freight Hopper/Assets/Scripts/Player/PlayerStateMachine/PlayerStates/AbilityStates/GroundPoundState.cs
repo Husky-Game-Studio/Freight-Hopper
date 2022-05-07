@@ -11,9 +11,10 @@ public class GroundPoundState : PlayerState
     {
         if (!playerMachineCenter.initialGroundPoundBurstCoolDown.TimerActive())
         {
-            playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
+            playerMachineCenter.abilities.groundPoundBehavior.GroundPoundInitialBurst();
             playerMachineCenter.initialGroundPoundBurstCoolDown.ResetTimer();
         }
+        playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
     }
 
     public override void ExitState()
