@@ -6,7 +6,7 @@ public class GroundPoundBehavior : AbilityBehavior
 
     [SerializeField] private float deltaIncreaseForce = 0.01f;
     [SerializeField] private float angleToBeConsideredFlat;
-    [SerializeField] private float initialBurstForce = 20;
+    [SerializeField] private float initialBurstVelocity = 20;
     [SerializeField] private float downwardsForce = 10;
     [SerializeField] private float slopeDownForce = 500;
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
@@ -18,7 +18,6 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float cameraSwayTime = 0.1f;
     [SerializeField] private float cameraSwayMag = 1;
     public float FrictionReduction => groundFrictionReductionPercent;
-
     public bool FlatSurface =>
          collisionManager.IsGrounded.current
             && Vector3.Angle(collisionManager.ValidUpAxis, collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
@@ -41,9 +40,15 @@ public class GroundPoundBehavior : AbilityBehavior
     }
 
     public void GroundPoundInitialBurst()
-    {
+    {   
+        bool underSpeedLimit = initialBurstVelocity > -collisionManager.Velocity.old.y;
+        if (!underSpeedLimit)
+        {
+            return;
+        }
+            
         Vector3 upAxis = collisionManager.ValidUpAxis;
-        rb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
+        rb.AddForce(-upAxis * initialBurstVelocity, ForceMode.VelocityChange);
     }
 
     public override void Action()

@@ -9,11 +9,7 @@ public class GrappleGroundPoundState : PlayerState
 
     public override void EntryState()
     {
-        if (!playerMachineCenter.initialGroundPoundBurstCoolDown.TimerActive())
-        {
-            playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
-            playerMachineCenter.initialGroundPoundBurstCoolDown.ResetTimer();
-        }
+ 
     }
 
     public override void ExitState()

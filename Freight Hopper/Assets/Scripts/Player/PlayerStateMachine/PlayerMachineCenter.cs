@@ -22,7 +22,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public GrapplePoleAnchoredState grapplePoleAnchoredState;
     public GrappleGroundPoundState grapplePoleGroundPoundState;
     public GrappleFullstopState grapplePoleFullStopState;
-    //public GrappleBurstState grapplePoleBurstState;
 
     // State independent fields
     [SerializeField, ReadOnly] private bool grappleFiring;
@@ -30,7 +29,6 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     [SerializeField] private GameObject defaultCrosshair;
     [SerializeField] private GameObject grappleCrosshair;
     private FirstPersonCamera cameraController;
-    public Timer initialGroundPoundBurstCoolDown;
 
     // Input Components
     [HideInInspector] public PlayerAbilities abilities;
@@ -242,13 +240,7 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
             friction.ResetFrictionReduction();
         }
 
-        if (collisionManagement.IsGrounded.current && !collisionManagement.IsGrounded.old)
-        {
-            initialGroundPoundBurstCoolDown.DeactivateTimer();
-        }
-
         GrappleFiring();
-        initialGroundPoundBurstCoolDown.CountDown(Time.fixedDeltaTime);
         if (abilities.grapplePoleBehavior.UnlockedAndReady)
         {
             SetCrosshair(abilities.grapplePoleBehavior.CanReachSurface());
