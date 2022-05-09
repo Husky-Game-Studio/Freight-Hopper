@@ -9,24 +9,23 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField, ReadOnly] private Vector3 smoothedUpAxis;
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;
-    [SerializeField] private Transform playerHead;
     [SerializeField] private Transform upAxisTransform;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
-    // y max
-    [SerializeField] private float yRotationLock = 89.99f;
+
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
 
     public static int fov = 90;
     public static Vector2 mouseSensitivity = new Vector2(12, 10);
+    public float mouseSensitivityConversionValue = 10;
 
     private void Awake()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         cinemachineVirtualCamera.m_Lens.FieldOfView = fov;
-        cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity.x / 10;
-        cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed = mouseSensitivity.y / 10;
+        cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity.x / mouseSensitivityConversionValue;
+        cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed = mouseSensitivity.y / mouseSensitivityConversionValue;
         
     }
 

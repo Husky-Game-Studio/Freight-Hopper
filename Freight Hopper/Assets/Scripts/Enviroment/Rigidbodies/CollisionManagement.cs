@@ -115,15 +115,6 @@ public class CollisionManagement : MonoBehaviour
         Player.Instance.modules.edgeCorrectionCollision.AddContacts(collision);
     }
 
-    private void ApplyCameraSway()
-    {
-        // Landing Sway
-        if (isGrounded.current && !isGrounded.old)
-        {
-            Player.Instance.modules.cameraShake.StartCameraSway(landingSwayTime, -contactNormal.current, landingSwayMag);
-        }
-    }
-
     private void CheckGround()
     {
         if (isGrounded.current)
@@ -156,7 +147,6 @@ public class CollisionManagement : MonoBehaviour
             }
             CheckGround();
             rigidbodyLinker.UpdateConnectionState(rb);
-            ApplyCameraSway();
             CollisionDataCollected?.Invoke();
 
             UpdateOldValues();
