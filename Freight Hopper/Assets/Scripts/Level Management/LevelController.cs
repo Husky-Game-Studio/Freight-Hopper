@@ -105,7 +105,6 @@ public class LevelController : MonoBehaviour
             instance = this;
         }
         Player.PlayerLoadedIn += ResetPlayerPosition;
-        Player.PlayerLoadedIn += UnlockAbilities;
         bool defaultSceneAlreadyLoaded = false;
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
@@ -124,18 +123,7 @@ public class LevelController : MonoBehaviour
 
     private void OnDestroy()
     {
-        Player.PlayerLoadedIn -= UnlockAbilities;
         lastLeveData = levelData;
-    }
-
-    public void UnlockAbilities()
-    {
-        if (lastLeveData != null)
-        {
-            levelData.UpdateToLastLevelsAbilities(lastLeveData.DefaultAbilites, lastLeveData.ActiveAbilities);
-        }
-
-        Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.ActiveAbilities);
     }
 
     private void ResetPlayerPosition()

@@ -9,13 +9,13 @@ public class GroundPoundState : PlayerState
 
     public override void EntryState()
     {
-        playerMachineCenter.abilities.groundPoundBehavior.GroundPoundInitialBurst();
-        playerMachineCenter.abilities.groundPoundBehavior.EntryAction();
+        playerMachineCenter.groundPoundBehavior.GroundPoundInitialBurst();
+        playerMachineCenter.groundPoundBehavior.EntryAction();
     }
 
     public override void ExitState()
     {
-        playerMachineCenter.abilities.groundPoundBehavior.ExitAction();
+        playerMachineCenter.groundPoundBehavior.ExitAction();
     }
 
     public override BasicState TransitionState()
@@ -27,8 +27,8 @@ public class GroundPoundState : PlayerState
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.friction.ReduceFriction(playerMachineCenter.abilities.groundPoundBehavior.FrictionReduction);
-        playerMachineCenter.abilities.movementBehavior.MoveAction();
-        playerMachineCenter.abilities.groundPoundBehavior.Action();
+        playerMachineCenter.friction.ReduceFriction(playerMachineCenter.groundPoundBehavior.FrictionReduction);
+        playerMachineCenter.movementBehavior.MoveAction();
+        playerMachineCenter.groundPoundBehavior.Action();
     }
 }

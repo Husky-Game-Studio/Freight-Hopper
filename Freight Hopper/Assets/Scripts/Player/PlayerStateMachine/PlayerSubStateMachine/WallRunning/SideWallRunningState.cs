@@ -14,14 +14,14 @@ public class SideWallRunningState : PlayerState
 
     public override void PerformBehavior()
     {
-        IList<bool> status = playerMachineCenter.abilities.wallRunBehavior.WallStatus;
+        IList<bool> status = playerMachineCenter.wallRunBehavior.WallStatus;
         if (status[2])
         {
-            playerMachineCenter.abilities.wallRunBehavior.RightWallRun();
+            playerMachineCenter.wallRunBehavior.RightWallRun();
         }
         if (status[0])
         {
-            playerMachineCenter.abilities.wallRunBehavior.LeftWallRun();
+            playerMachineCenter.wallRunBehavior.LeftWallRun();
         }
     }
 }

@@ -9,7 +9,7 @@ public class WallClimbingState : PlayerState
 
     public override void EntryState()
     {
-        playerMachineCenter.abilities.wallRunBehavior.InitialWallClimb();
+        playerMachineCenter.wallRunBehavior.InitialWallClimb();
     }
 
     public override BasicState TransitionState()
@@ -19,6 +19,6 @@ public class WallClimbingState : PlayerState
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.abilities.wallRunBehavior.WallClimb();
+        playerMachineCenter.wallRunBehavior.WallClimb();
     }
 }

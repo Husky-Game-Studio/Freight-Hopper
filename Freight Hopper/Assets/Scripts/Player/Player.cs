@@ -7,7 +7,6 @@ public class Player : MonoBehaviour
     public struct Modules
     {
         public PlayerMachineCenter playerMachineCenter;
-        public PlayerAbilities playerAbilities;
         public Gravity gravity;
         public Friction friction;
         public Rigidbody rigidbody;
@@ -17,7 +16,6 @@ public class Player : MonoBehaviour
         public EdgeCorrectionCollision edgeCorrectionCollision;
         public CameraShake cameraShake;
     }
-
     public Modules modules;
 
     public static event Action PlayerLoadedIn;

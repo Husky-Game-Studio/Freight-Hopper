@@ -10,17 +10,17 @@ public class JumpState : PlayerState
     public override void EntryState()
     {
         // reset jump hold timer
-        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.ResetTimer();
-        playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
-        playerMachineCenter.abilities.jumpBehavior.EntryAction();
+        playerMachineCenter.jumpBehavior.jumpHoldingTimer.ResetTimer();
+        playerMachineCenter.jumpBehavior.coyoteeTimer.DeactivateTimer();
+        playerMachineCenter.jumpBehavior.EntryAction();
     }
 
     public override void ExitState()
     {
         // deactivate jump hold timer
-        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.DeactivateTimer();
+        playerMachineCenter.jumpBehavior.jumpHoldingTimer.DeactivateTimer();
 
-        playerMachineCenter.abilities.jumpBehavior.ExitAction();
+        playerMachineCenter.jumpBehavior.ExitAction();
     }
 
     public override BasicState TransitionState()
@@ -33,12 +33,12 @@ public class JumpState : PlayerState
     public override void PerformBehavior()
     {
         // each fixedupdate the jump button is pressed down, this timer should decrease by that time
-        playerMachineCenter.abilities.jumpBehavior.jumpHoldingTimer.CountDown(UnityEngine.Time.fixedDeltaTime);
+        playerMachineCenter.jumpBehavior.jumpHoldingTimer.CountDown(UnityEngine.Time.fixedDeltaTime);
         if (!playerMachineCenter.collisionManagement.IsGrounded.current)
         {
-            playerMachineCenter.abilities.jumpBehavior.coyoteeTimer.DeactivateTimer();
+            playerMachineCenter.jumpBehavior.coyoteeTimer.DeactivateTimer();
         }
-        playerMachineCenter.abilities.movementBehavior.MoveAction();
-        playerMachineCenter.abilities.jumpBehavior.Action();
+        playerMachineCenter.movementBehavior.MoveAction();
+        playerMachineCenter.jumpBehavior.Action();
     }
 }

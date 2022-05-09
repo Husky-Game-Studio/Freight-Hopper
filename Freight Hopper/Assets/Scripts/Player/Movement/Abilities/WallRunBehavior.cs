@@ -60,6 +60,7 @@ public partial class WallRunBehavior : AbilityBehavior
         jumpBehavior = this.GetComponent<JumpBehavior>();
         collisionManager = Player.Instance.modules.collisionManagement;
         rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
+        rb = Player.Instance.modules.rigidbody;
         detectionlayers = new WallDetectionLayer[]
         {
             new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 0, 0),

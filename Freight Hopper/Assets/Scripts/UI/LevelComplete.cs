@@ -52,19 +52,15 @@ public class LevelComplete : MonoBehaviour
         if (levelTimeData == null)
         {
             bestTimeText.text = "Best Time: " + timer.GetTimeString();
-            LevelTimeSaveData.AbilityTimes time = new LevelTimeSaveData.AbilityTimes(LevelController.Instance.levelData.ActiveAbilities, timer.GetTime());
-            List<LevelTimeSaveData.AbilityTimes> times = new List<LevelTimeSaveData.AbilityTimes>
-            {
-                time
-            };
-            levelTimeData = new LevelTimeSaveData(times);
+            float time = timer.GetTime();
+            levelTimeData = new LevelTimeSaveData(time);
             LevelTimeSaveLoader.Save(levelName, levelTimeData);
-            Debug.Log("no save data found, saving new best of " + timer.GetTime());
-            bestTime = timer.GetTime();
+            Debug.Log("no save data found, saving new best of " + time);
+            bestTime = time;
         }
         else
         {
-            float newBestTime = levelTimeData.SetNewBestTime(LevelController.Instance.levelData.ActiveAbilities, timer.GetTime());
+            float newBestTime = levelTimeData.SetNewBestTime(timer.GetTime());
             bestTimeText.text = "Best Time: " + LevelTimer.GetTimeString(newBestTime);
             if (newBestTime == timer.GetTime())
             {
@@ -75,41 +71,33 @@ public class LevelComplete : MonoBehaviour
         }
 
 
-        bool activeDefault = LevelController.Instance.levelData.UsingDefaultAbilities();
-        if (activeDefault)
+
+        int index = 0;
+        while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
         {
-            int index = 0;
-            while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
-            {
-                index++;
-            }
-            if (levelTimeData.MedalIndex != index - 1)
-            {
-                levelTimeData.SetNewMedalIndex(index - 1);
-                LevelTimeSaveLoader.Save(levelName, levelTimeData);
-            }
-            if (levelTimeData.MedalIndex < 0)
-            {
-                medalImage.gameObject.SetActive(false);
-            }
-            else
-            {
-                medalImage.gameObject.SetActive(true);
-                medalImage.sprite = medalImages.Sprites[levelTimeData.MedalIndex];
-            }
-            if (levelTimeData.MedalIndex < 2)
-            {
-                nextMedalTimeText.gameObject.SetActive(true);
-                nextMedalTimeText.text = "Next: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
-            }
-            else
-            {
-                nextMedalTimeText.gameObject.SetActive(false);
-            }
+            index++;
+        }
+        if (levelTimeData.MedalIndex != index - 1)
+        {
+            levelTimeData.SetNewMedalIndex(index - 1);
+            LevelTimeSaveLoader.Save(levelName, levelTimeData);
+        }
+        if (levelTimeData.MedalIndex < 0)
+        {
+            medalImage.gameObject.SetActive(false);
         }
         else
         {
-            medalImage.gameObject.SetActive(false);
+            medalImage.gameObject.SetActive(true);
+            medalImage.sprite = medalImages.Sprites[levelTimeData.MedalIndex];
+        }
+        if (levelTimeData.MedalIndex < 2)
+        {
+            nextMedalTimeText.gameObject.SetActive(true);
+            nextMedalTimeText.text = "Next: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
+        }
+        else
+        {
             nextMedalTimeText.gameObject.SetActive(false);
         }
     }

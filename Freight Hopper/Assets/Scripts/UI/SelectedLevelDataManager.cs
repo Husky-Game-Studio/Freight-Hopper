@@ -30,13 +30,13 @@ public class SelectedLevelDataManager : MonoBehaviour
         LevelTimeSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
         if (levelSaveData != null)
         {
-            if (levelSaveData.GetTime(currentData.ActiveAbilities).Item2 == -1)
+            if (float.IsNaN(levelSaveData.BestTime))
             {
                 bestTime.text = "Best: None";
             }
             else
             {
-                bestTime.text = "Best: " + LevelTimer.GetTimeString(levelSaveData.GetTime(currentData.ActiveAbilities).Item1);
+                bestTime.text = "Best: " + LevelTimer.GetTimeString(levelSaveData.BestTime);
             }
 
             if (levelSaveData.MedalIndex >= 0)

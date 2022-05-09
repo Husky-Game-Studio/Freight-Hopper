@@ -20,6 +20,6 @@ public class MoveState : PlayerState
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.abilities.movementBehavior.Action();
+        playerMachineCenter.movementBehavior.Action();
     }
 }

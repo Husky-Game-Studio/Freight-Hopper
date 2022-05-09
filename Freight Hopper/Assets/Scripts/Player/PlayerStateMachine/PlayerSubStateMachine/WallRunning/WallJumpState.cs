@@ -9,8 +9,8 @@ public class WallJumpState : PlayerState
 
     public override void EntryState()
     {
-        playerMachineCenter.abilities.wallRunBehavior.jumpHoldingTimer.ResetTimer();
-        playerMachineCenter.abilities.wallRunBehavior.WallJumpInitial();
+        playerMachineCenter.wallRunBehavior.jumpHoldingTimer.ResetTimer();
+        playerMachineCenter.wallRunBehavior.WallJumpInitial();
     }
 
     public override BasicState TransitionState()
@@ -20,6 +20,6 @@ public class WallJumpState : PlayerState
 
     public override void PerformBehavior()
     {
-        playerMachineCenter.abilities.wallRunBehavior.WallJumpContinous();
+        playerMachineCenter.wallRunBehavior.WallJumpContinous();
     }
 }

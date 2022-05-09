@@ -7,7 +7,6 @@ public class Timer
     public float Duration => duration;
     [SerializeField, ReadOnly] protected float current = 0;
     public float Current => current;
-    private bool useUnscaled = false;
 
     // Initailizes duration and sets current to 0
     public Timer(float duration)

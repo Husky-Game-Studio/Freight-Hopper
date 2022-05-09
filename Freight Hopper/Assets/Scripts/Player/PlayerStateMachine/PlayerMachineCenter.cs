@@ -11,27 +11,18 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
 
     // Player States
     public MoveState moveState;
-
     public JumpState jumpState;
-    public DoubleJumpState doubleJumpState;
     public GroundPoundState groundPoundState;
-    public BurstState burstState;
-    public FullStopState fullStopState;
-    public UpwardDashState upwardDashState;
     public WallRunState wallRunState;
-    public GrapplePoleAnchoredState grapplePoleAnchoredState;
-    public GrappleGroundPoundState grapplePoleGroundPoundState;
-    public GrappleFullstopState grapplePoleFullStopState;
 
-    // State independent fields
-    [SerializeField, ReadOnly] private bool grappleFiring;
+    public MovementBehavior movementBehavior;
+    public JumpBehavior jumpBehavior;
+    public GroundPoundBehavior groundPoundBehavior;
+    public WallRunBehavior wallRunBehavior;
 
     [SerializeField] private GameObject defaultCrosshair;
-    [SerializeField] private GameObject grappleCrosshair;
     private FirstPersonCamera cameraController;
 
-    // Input Components
-    [HideInInspector] public PlayerAbilities abilities;
     [HideInInspector] public CollisionManagement collisionManagement;
     [HideInInspector] public Friction friction;
 
@@ -45,14 +36,9 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         {
             transitionHandler.CheckToMoveState,
             transitionHandler.CheckToJumpState,
-            transitionHandler.CheckToDoubleJumpState,
             transitionHandler.CheckToDefaultState,
             transitionHandler.CheckToGroundPoundState,
-            transitionHandler.CheckToFullStopState,
-            transitionHandler.CheckToBurstState,
-            transitionHandler.CheckToUpwardDashState,
             transitionHandler.CheckToWallRunState,
-            transitionHandler.CheckToGrapplePoleAnchoredState
         };
         defaultState = new DefaultState(this, defaultTransitionsList);
 
@@ -61,13 +47,8 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         {
             transitionHandler.CheckToDefaultState,
             transitionHandler.CheckToJumpState,
-            transitionHandler.CheckToDoubleJumpState,
             transitionHandler.CheckToGroundPoundState,
-            transitionHandler.CheckToFullStopState,
-            transitionHandler.CheckToBurstState,
             transitionHandler.CheckToWallRunState,
-            transitionHandler.CheckToUpwardDashState,
-            transitionHandler.CheckToGrapplePoleAnchoredState
         };
         moveState = new MoveState(this, moveTransitionsList);
 
@@ -76,99 +57,23 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         {
             transitionHandler.CheckToDefaultState,
             transitionHandler.CheckToGroundPoundState,
-            transitionHandler.CheckToFullStopState,
-            transitionHandler.CheckToBurstState,
-            transitionHandler.CheckToUpwardDashState,
             transitionHandler.CheckToWallRunState,
-            transitionHandler.CheckToGrapplePoleAnchoredState
         };
         jumpState = new JumpState(this, jumpTransitionsList);
-
-        // Double Jump
-        List<Func<BasicState>> doubleJumpTransitionsList = new List<Func<BasicState>>
-        {
-            transitionHandler.CheckToDefaultState,
-            transitionHandler.CheckToGroundPoundState,
-            transitionHandler.CheckToFullStopState,
-            transitionHandler.CheckToBurstState,
-            transitionHandler.CheckToUpwardDashState,
-            transitionHandler.CheckToWallRunState,
-            transitionHandler.CheckToGrapplePoleAnchoredState,
-            transitionHandler.CheckToWallRunState
-        };
-        doubleJumpState = new DoubleJumpState(this, doubleJumpTransitionsList);
-
-        // Full Stop
-        List<Func<BasicState>> fullStopTransitionsList = new List<Func<BasicState>>
-        {
-            transitionHandler.CheckToDefaultState
-        };
-        fullStopState = new FullStopState(this, fullStopTransitionsList);
-
-        // Grapple Pole Anchor
-        List<Func<BasicState>> grapplePoleAnchorTransitions = new List<Func<BasicState>>
-        {
-            transitionHandler.CheckToDefaultState,
-            transitionHandler.CheckToJumpState,
-            transitionHandler.CheckToGrappleGroundPoundState,
-            transitionHandler.CheckToGrappleFullStopState
-        };
-        grapplePoleAnchoredState = new GrapplePoleAnchoredState(this, grapplePoleAnchorTransitions);
-
-        // Grapple pole fullstop
-        List<Func<BasicState>> grapplePoleFullStopTransitions = new List<Func<BasicState>>
-        {
-            transitionHandler.CheckToGrapplePoleAnchoredState
-        };
-        grapplePoleFullStopState = new GrappleFullstopState(this, grapplePoleFullStopTransitions);
-
-        // Grapple pole ground pound
-        List<Func<BasicState>> grapplePoleGroundPoundTransitions = new List<Func<BasicState>>
-        {
-            transitionHandler.CheckToGrapplePoleAnchoredState,
-            transitionHandler.CheckToGrappleFullStopState,
-            transitionHandler.CheckToDefaultState,
-            transitionHandler.CheckToJumpState,
-        };
-
-        grapplePoleGroundPoundState = new GrappleGroundPoundState(this, grapplePoleGroundPoundTransitions);
-
-        // Grapple pole burst
-        //grapplePoleBurstState = new GrappleBurstState(this, null);
 
         // Ground Pound
         List<Func<BasicState>> groundPoundTransitionsList = new List<Func<BasicState>>
         {
             transitionHandler.CheckToDefaultState,
             transitionHandler.CheckToJumpState,
-            transitionHandler.CheckToFullStopState,
-            transitionHandler.CheckToUpwardDashState,
-            transitionHandler.CheckToDoubleJumpState,
-            transitionHandler.CheckToBurstState,
-            transitionHandler.CheckToGrappleGroundPoundState
         };
         groundPoundState = new GroundPoundState(this, groundPoundTransitionsList);
-
-        // Upward Dash
-        List<Func<BasicState>> upwardDashTransitionsList = new List<Func<BasicState>>
-        {
-            transitionHandler.CheckToDefaultState,
-            transitionHandler.CheckToFullStopState,
-            transitionHandler.CheckToGroundPoundState,
-            transitionHandler.CheckToDoubleJumpState,
-            transitionHandler.CheckToGrapplePoleAnchoredState
-        };
-        upwardDashState = new UpwardDashState(this, upwardDashTransitionsList);
 
         // Wall Run
         List<Func<BasicState>> wallRunTransitionsList = new List<Func<BasicState>>
         {
             transitionHandler.CheckToDefaultState,
-            transitionHandler.CheckToGrapplePoleAnchoredState,
-            transitionHandler.CheckToFullStopState,
             transitionHandler.CheckToGroundPoundState,
-            transitionHandler.CheckToBurstState,
-            transitionHandler.CheckToUpwardDashState
         };
         wallRunState = new WallRunState(this, wallRunTransitionsList);
 
@@ -180,18 +85,20 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
         };
         wallRunState.GetSubStateArray()[0] = new SideWallRunningState(this, wallRunSideWallRunningTransitions);
 
-        // Burst
-        burstState = new BurstState(this, null);
+        wallRunBehavior.Initialize();
+        movementBehavior.Initialize();
+        jumpBehavior.Initialize();
+        groundPoundBehavior.Initialize();
     }
 
     public void OnEnable()
     {
-        abilities = GetComponent<PlayerAbilities>();
         collisionManagement = Player.Instance.modules.collisionManagement;
         friction = Player.Instance.modules.friction;
         RestartFSM();
         collisionManagement.CollisionDataCollected += UpdateLoop;
-        collisionManagement.Landed += abilities.Recharge;
+        collisionManagement.Landed += jumpBehavior.Recharge;
+        collisionManagement.Landed += groundPoundBehavior.Recharge;
         LevelController.PlayerRespawned += RestartFSM;
     }
 
@@ -211,87 +118,46 @@ public class PlayerMachineCenter : FiniteStateMachineCenter
     public override void PerformStateIndependentBehaviors()
     {
         JumpBuffer();
-        abilities.movementBehavior.UpdateMovement();
+        movementBehavior.UpdateMovement();
         if (collisionManagement.IsGrounded.current)
         {
-            abilities.jumpBehavior.coyoteeTimer.ResetTimer();
-            abilities.wallRunBehavior.inAirCooldown.ResetTimer();
+            jumpBehavior.coyoteeTimer.ResetTimer();
+            wallRunBehavior.inAirCooldown.ResetTimer();
         }
         else
         {
-            abilities.jumpBehavior.coyoteeTimer.CountDown(Time.fixedDeltaTime);
-            abilities.wallRunBehavior.inAirCooldown.CountDown(Time.fixedDeltaTime);
+            jumpBehavior.coyoteeTimer.CountDown(Time.fixedDeltaTime);
+            wallRunBehavior.inAirCooldown.CountDown(Time.fixedDeltaTime);
         }
 
-        abilities.wallRunBehavior.entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
+        wallRunBehavior.entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
 
         if (currentState != wallRunState)
         {
-            abilities.wallRunBehavior.exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
-            abilities.wallRunBehavior.coyoteTimer.CountDown(Time.fixedDeltaTime);
-            if (!abilities.wallRunBehavior.exitEffectsCooldown.TimerActive())
+            wallRunBehavior.exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
+            wallRunBehavior.coyoteTimer.CountDown(Time.fixedDeltaTime);
+            if (!wallRunBehavior.exitEffectsCooldown.TimerActive())
             {
                 cameraController.ResetUpAxis();
             }
         }
 
-        if (UserInput.Instance.Move().IsZero() && (currentState != groundPoundState || currentState != grapplePoleGroundPoundState))
+        if (UserInput.Instance.Move().IsZero() && currentState != groundPoundState)
         {
             friction.ResetFrictionReduction();
         }
 
-        GrappleFiring();
-        if (abilities.grapplePoleBehavior.UnlockedAndReady)
-        {
-            SetCrosshair(abilities.grapplePoleBehavior.CanReachSurface());
-        }
-        else
-        {
-            SetCrosshair(false);
-        }
-    }
-
-    private void SetCrosshair(bool status)
-    {
-        defaultCrosshair.SetActive(!status);
-        grappleCrosshair.SetActive(status);
     }
 
     private void JumpBuffer()
     {
         if (transitionHandler.jumpPressed.value)
         {
-            abilities.jumpBehavior.jumpBufferTimer.ResetTimer();
+            jumpBehavior.jumpBufferTimer.ResetTimer();
         }
-        if (abilities.jumpBehavior.jumpBufferTimer.TimerActive())
+        if (jumpBehavior.jumpBufferTimer.TimerActive())
         {
-            abilities.jumpBehavior.jumpBufferTimer.CountDown(Time.fixedDeltaTime);
-        }
-    }
-
-    private void GrappleFiring()
-    {
-        if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.UnlockedAndReady)
-        {
-            abilities.grapplePoleBehavior.EntryAction();
-            grappleFiring = true;
-        }
-        else if (transitionHandler.grapplePressed.value && abilities.grapplePoleBehavior.Unlocked && abilities.grapplePoleBehavior.Consumed)
-        {
-            abilities.grapplePoleBehavior.PlayerSoundManager().Play("GrappleFail");
-        }
-        else if (transitionHandler.jumpPressed.value || transitionHandler.burstPressed.value
-            || currentState == grapplePoleAnchoredState)
-        {
-            if (!abilities.grapplePoleBehavior.IsAnchored())
-            {
-                abilities.grapplePoleBehavior.ResetPole();
-            }
-            grappleFiring = false;
-        }
-        else if (grappleFiring && !abilities.grapplePoleBehavior.IsAnchored())
-        {
-            abilities.grapplePoleBehavior.GrappleTransition();
+            jumpBehavior.jumpBufferTimer.CountDown(Time.fixedDeltaTime);
         }
     }
 }

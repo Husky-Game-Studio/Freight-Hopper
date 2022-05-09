@@ -21,18 +21,18 @@ public class WallRunState : PlayerState
     {
         pSSMC.SetPrevCurrState(miniStateArray[0]);
         pSSMC.GetCurrentSubState().EntryState();
-        playerMachineCenter.abilities.wallRunBehavior.EntryAction();
+        playerMachineCenter.wallRunBehavior.EntryAction();
     }
 
     public override void ExitState()
     {
         if (pSSMC.currentState == miniStateArray[1])
         {
-            playerMachineCenter.abilities.wallRunBehavior.WallClimbExit();
+            playerMachineCenter.wallRunBehavior.WallClimbExit();
         }
 
         pSSMC.GetCurrentSubState().ExitState();
-        playerMachineCenter.abilities.wallRunBehavior.ExitAction();
+        playerMachineCenter.wallRunBehavior.ExitAction();
     }
 
     public override BasicState TransitionState()
@@ -45,8 +45,8 @@ public class WallRunState : PlayerState
     public override void PerformBehavior()
     {
         pSSMC.PerformSubMachineBehavior();
-        playerMachineCenter.abilities.wallRunBehavior.Action();
-        playerMachineCenter.abilities.movementBehavior.MoveAction();
+        playerMachineCenter.wallRunBehavior.Action();
+        playerMachineCenter.movementBehavior.MoveAction();
     }
 
     public override bool HasSubStateMachine()

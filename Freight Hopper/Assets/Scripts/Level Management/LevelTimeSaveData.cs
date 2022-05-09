@@ -5,8 +5,9 @@ using UnityEngine;
 public class LevelTimeSaveData
 {
     // This is all temp really, this isn't really that fast as we want
-    [SerializeField] private List<AbilityTimes> bestTimes;
+    [SerializeField] private float bestTime = float.NaN;
     [SerializeField] private int medalIndex = -1;
+    public float BestTime => bestTime;
     public int MedalIndex => medalIndex;
 
     public void SetNewMedalIndex(int value)
@@ -14,73 +15,15 @@ public class LevelTimeSaveData
         medalIndex = value;
     }
 
-    public LevelTimeSaveData(List<AbilityTimes> bestTimes)
+    public LevelTimeSaveData(float bestTime)
     {
-        this.bestTimes = bestTimes;
-    }
-
-    [System.Serializable]
-    public struct AbilityTimes
-    {
-        [SerializeField] public IList<PlayerAbilities.Name> abilitiesUsed;
-        [SerializeField] public float time;
-
-        public AbilityTimes(IList<PlayerAbilities.Name> names, float time)
-        {
-            abilitiesUsed = names;
-            this.time = time;
-        }
-
-        public AbilityTimes(PlayerAbilities.Name[] names, float time)
-        {
-            abilitiesUsed = new List<PlayerAbilities.Name>(names);
-            this.time = time;
-        }
-    }
-
-    // First returns best time, next returns index to get the best time
-    public (float, int) GetTime(IList<PlayerAbilities.Name> abilitesUsed)
-    {
-        for (int i = 0; i < bestTimes.Count; i++)
-        {
-            if (bestTimes[i].abilitiesUsed.Count != abilitesUsed.Count)
-            {
-                continue;
-            }
-            bool equals = true;
-            for (int j = 0; j < abilitesUsed.Count; j++)
-            {
-                if (bestTimes[i].abilitiesUsed[j] != abilitesUsed[j])
-                {
-                    equals = false;
-                    break;
-                }
-            }
-            if (equals)
-            {
-                return (bestTimes[i].time, i);
-            }
-        }
-        return (float.PositiveInfinity, -1);
+        this.bestTime = bestTime;
     }
 
     // returns the best time too, checks if time provided is the new best time first
-    public float SetNewBestTime(IList<PlayerAbilities.Name> abilitesUsed, float time)
+    public float SetNewBestTime(float time)
     {
-        (float, int) currentBest = GetTime(abilitesUsed);
-        if (currentBest.Item1 < time)
-        {
-            return currentBest.Item1;
-        }
-        if (currentBest.Item2 == -1)
-        {
-            bestTimes.Add(new AbilityTimes(abilitesUsed, time));
-        }
-        else
-        {
-            bestTimes[currentBest.Item2] = new AbilityTimes(abilitesUsed, time);
-        }
-
-        return time;
+        bestTime = Mathf.Min(time, bestTime);
+        return bestTime;
     }
 }
