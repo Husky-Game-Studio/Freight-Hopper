@@ -100,7 +100,7 @@ public class HoverEngine : MonoBehaviour
         if (automatic)
         {
             Vector3 position = this.transform.position;
-            SetDirection(CustomGravity.GetUpAxis(position));
+            SetDirection(CustomGravity.GetUpAxis());
             Hover(targetDistance, currentLinker, ref position);
         }
     }

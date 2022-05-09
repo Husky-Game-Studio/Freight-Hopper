@@ -141,7 +141,7 @@ public class LevelController : MonoBehaviour
         {
             player.transform.position = levelData.SpawnPosition;
         }
-        Vector3 gravityDirection = CustomGravity.GetUpAxis(player.transform.position);
+        Vector3 gravityDirection = CustomGravity.GetUpAxis();
         player.transform.rotation = Quaternion.LookRotation(Vector3.forward, gravityDirection) *
             Quaternion.AngleAxis(levelData.RotationAngle, Vector3.up);
 

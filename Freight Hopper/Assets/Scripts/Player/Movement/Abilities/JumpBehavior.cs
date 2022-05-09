@@ -34,7 +34,7 @@ public class JumpBehavior : AbilityBehavior
     /// </summary>
     public void Jump(float height)
     {
-        Vector3 gravity = CustomGravity.GetGravity(rb.position, out Vector3 upAxis);
+        Vector3 gravity = CustomGravity.GetGravity(out Vector3 upAxis);
 
         if (Vector3.Dot(rb.velocity, upAxis) < 0)
         {
@@ -73,6 +73,6 @@ public class JumpBehavior : AbilityBehavior
 
     public override void Action()
     {
-        rb.AddForce(CustomGravity.GetUpAxis(rb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
+        rb.AddForce(CustomGravity.GetUpAxis() * holdingJumpForceMultiplier, ForceMode.Acceleration);
     }
 }

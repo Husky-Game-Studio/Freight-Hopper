@@ -271,7 +271,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
                 continue;
             }
             Transform rbTransform = cart.rb.transform;
-            Vector3 upAxis = CustomGravity.GetUpAxis(rbTransform.position);
+            Vector3 upAxis = CustomGravity.GetUpAxis();
             Vector3 gravityRight = Vector3.Cross(upAxis, rbTransform.forward);
             Vector3 gravityForward = Vector3.Cross(upAxis, gravityRight);
 

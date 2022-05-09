@@ -50,7 +50,7 @@ public class CollisionManagement : MonoBehaviour
         rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
         gravity = Player.Instance.modules.gravity;
 
-        upAxis = CustomGravity.GetUpAxis(rb.position);
+        upAxis = CustomGravity.GetUpAxis();
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
         Physics.defaultMaxDepenetrationVelocity = this.MaxDepenetrationVelocity;
@@ -147,7 +147,7 @@ public class CollisionManagement : MonoBehaviour
         var waitFixedUpdate = new WaitForFixedUpdate();
         while (true)
         {
-            upAxis = CustomGravity.GetUpAxis(rb.position);
+            upAxis = CustomGravity.GetUpAxis();
 
             yield return waitFixedUpdate;
             if (!isGrounded.current)

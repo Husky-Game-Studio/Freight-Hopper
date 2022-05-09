@@ -32,6 +32,6 @@ public class Gravity : MonoBehaviour
         {
             return;
         }
-        rb.AddForce(CustomGravity.GetGravity(rb.position), ForceMode.Acceleration);
+        rb.AddForce(CustomGravity.GetGravity(), ForceMode.Acceleration);
     }
 }

@@ -38,7 +38,7 @@ public class DistantRigidbodyLinker : MonoBehaviour
             return;
         }*/
 
-        Vector3 gravityDirection = -CustomGravity.GetUpAxis(rb.position);
+        Vector3 gravityDirection = -CustomGravity.GetUpAxis();
 
         Collider[] colliders = Physics.OverlapCapsule(this.transform.TransformPoint(pointOne), this.transform.TransformPoint(pointTwo), radius, layerMask);
         for (int i = 0; i < colliders.Length; i++)

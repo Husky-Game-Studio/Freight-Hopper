@@ -40,7 +40,7 @@ public class GroundSnap : MonoBehaviour
             return;
         }
 
-        Vector3 gravityDirection = -CustomGravity.GetUpAxis(rb.position);
+        Vector3 gravityDirection = -CustomGravity.GetUpAxis();
 
         // player is going up don't check for snap
         //Debug.Log(Mathf.Acos(Vector3.Dot((rb.velocity - rigibodyLinker.ConnectionVelocity.old).normalized, gravityDirection)) * Mathf.Rad2Deg);
