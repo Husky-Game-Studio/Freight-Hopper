@@ -140,12 +140,15 @@ public partial class WallRunBehavior : AbilityBehavior
     {
         soundManager.Play("WallClimb");
         Vector3 upAlongWall = GetUpAlongWall(wallNormals[1]);
+
+        //Vector3.Cross(-wallNormals[1], upAlongWall) * wallrunCameraTilt
+        
         cameraController.TiltUpAxis(Vector3.Cross(-wallNormals[1], upAlongWall) * wallrunCameraTilt);
 
         rb.AddForce(rightForce * -wallNormals[1], ForceMode.Acceleration);
         rb.AddForce(climbForce * upAlongWall, ForceMode.Acceleration);
     }
-
+    
     public void WallJumpInitial()
     {
         soundManager.Play("WallJump");

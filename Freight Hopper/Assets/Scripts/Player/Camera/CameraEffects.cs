@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.Rendering;
@@ -7,7 +8,7 @@ using UnityEngine.Rendering;
 public class CameraEffects : MonoBehaviour
 {
     private Rigidbody playerRB;
-    private Camera cam;
+    [SerializeField] private CinemachineVirtualCamera cam;
 
     private VisualEffect speedLines;
 
@@ -32,9 +33,8 @@ public class CameraEffects : MonoBehaviour
     {
         playerRB = Player.Instance.modules.rigidbody;
 
-        cam = Camera.main;
 
-        fov.baseValue = cam.fieldOfView;
+        fov.baseValue = cam.m_Lens.FieldOfView;
         fov.value = fov.baseValue;
         fov.maxValue += fov.baseValue;
 
@@ -56,7 +56,7 @@ public class CameraEffects : MonoBehaviour
 
         speedLines.SetFloat("Scalar", fov.lerpValue + 1);
 
-        cam.fieldOfView = fov.value;
+        cam.m_Lens.FieldOfView = fov.value;
 
         if (speed > speedEffectsStart)
         {
@@ -73,14 +73,5 @@ public class CameraEffects : MonoBehaviour
             playerSounds.Stop("GoingFast");
             goingSlowAgain = false;
         }
-    }
-
-    private Color BlendGradients(Gradient a, Gradient b, float bias, float t)
-    {
-        Color fromA = a.Evaluate(t);
-        Color fromB = b.Evaluate(t);
-
-        Color final = Color.Lerp(fromA, fromB, bias);
-        return final;
     }
 }
