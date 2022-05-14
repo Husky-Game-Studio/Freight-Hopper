@@ -17,7 +17,7 @@ public class GroundSnap : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawLine(this.transform.position + Vector3.up * verticalOffset, this.transform.position + Vector3.up * verticalOffset + (Vector3.down * rayDistance));
+        Gizmos.DrawLine(this.transform.position + (Vector3.up * verticalOffset), this.transform.position + (Vector3.up * verticalOffset) + (Vector3.down * rayDistance));
     }
 
     private void Awake()
@@ -49,11 +49,11 @@ public class GroundSnap : MonoBehaviour
             return;
         }
 
-        Ray ray = new Ray(rb.position + verticalOffset * this.transform.up, gravityDirection);
+        Ray ray = new Ray(rb.position + (verticalOffset * this.transform.up), gravityDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, rayDistance, layerMask))
         {
             float dist = hit.distance;
-            rb.MovePosition(rb.position + ray.direction * dist);
+            rb.MovePosition(rb.position + (ray.direction * dist));
             //Debug.Log("snapping");
         }
     }

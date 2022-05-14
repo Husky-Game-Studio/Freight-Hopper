@@ -4,8 +4,6 @@ public class JumpBehavior : AbilityBehavior
 {
     [SerializeField] private float minJumpHeight = 2f;
     [SerializeField] private float holdingJumpForceMultiplier = 5f;
-    //[SerializeField] private float jumpingSwayTime = 0.1f;
-    //[SerializeField] private float jumpingSwayMag = 0.1f;
     private RigidbodyLinker rigidbodyLinker;
     private CollisionManagement collisionManager;
 
@@ -13,7 +11,8 @@ public class JumpBehavior : AbilityBehavior
     public Timer coyoteeTimer = new Timer(0.5f);
     public Timer jumpBufferTimer = new Timer(0.3f);
     public float JumpHeight => minJumpHeight;
-
+    private bool active;
+    public bool Active => active;
     public override void Initialize()
     {
         base.Initialize();
@@ -28,7 +27,22 @@ public class JumpBehavior : AbilityBehavior
     {
         Jump(this.JumpHeight);
     }
+    private void FixedUpdate()
+    {
+        if (jumpBufferTimer.TimerActive())
+        {
+            jumpBufferTimer.CountDown(Time.fixedDeltaTime);
+        }
 
+        if (collisionManager.IsGrounded.old)
+        {
+            coyoteeTimer.ResetTimer();
+        }
+        else
+        {
+            coyoteeTimer.CountDown(Time.fixedDeltaTime);
+        }
+    }
     /// <summary>
     /// Physics behavior for the initial press of jump button
     /// </summary>
@@ -63,15 +77,22 @@ public class JumpBehavior : AbilityBehavior
         }
 
         soundManager.Play("Jump");
-        //Player.Instance.modules.cameraShake.StartCameraSway(jumpingSwayTime, upAxis, jumpingSwayMag);
     }
 
-    public override void EntryAction()
+    public void EntryAction()
     {
+        jumpHoldingTimer.ResetTimer();
+        coyoteeTimer.DeactivateTimer();
         Jump();
+        active = true;
+    }
+    public void ExitAction()
+    {
+        jumpHoldingTimer.DeactivateTimer();
+        active = false;
     }
 
-    public override void Action()
+    public void Action()
     {
         rb.AddForce(CustomGravity.GetUpAxis() * holdingJumpForceMultiplier, ForceMode.Acceleration);
     }

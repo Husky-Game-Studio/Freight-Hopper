@@ -147,11 +147,11 @@ public class LevelController : MonoBehaviour
 
         if (levelData.SnapDownAtStart)
         {
-            Ray ray = new Ray(player.transform.position - player.transform.up * 2, -player.transform.up);
+            Ray ray = new Ray(player.transform.position - (player.transform.up * 2), -player.transform.up);
             if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
             {
                 float dist = hit.distance;
-                player.transform.position += ray.direction * dist + player.transform.up * 0.001f;
+                player.transform.position += (ray.direction * dist) + (player.transform.up * 0.001f);
             }
         }
 

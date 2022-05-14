@@ -48,7 +48,12 @@ public partial class WallRunBehavior : AbilityBehavior
     public IList<bool> WallStatus => Array.AsReadOnly(wallStatus);
 
     private WallDetectionLayer[] detectionlayers;
-
+    private bool wallRunActive;
+    private bool wallJumpActive;
+    private bool wallClimbActive;
+    public bool WallRunActive => wallRunActive;
+    public bool WallJumpActive => wallJumpActive;
+    public bool WallClimbActive => wallClimbActive;
     public override void Initialize()
     {
         base.Initialize();
@@ -74,6 +79,24 @@ public partial class WallRunBehavior : AbilityBehavior
     private void FixedUpdate()
     {
         UpdateWallStatus();
+        if (collisionManager.IsGrounded.old)
+        {
+            inAirCooldown.ResetTimer();
+        }
+        else
+        {
+            inAirCooldown.CountDown(Time.fixedDeltaTime);
+        }
+        entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
+        if(!WallRunActive)
+        {
+            exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
+            coyoteTimer.CountDown(Time.fixedDeltaTime);
+            if (!exitEffectsCooldown.TimerActive())
+            {
+                cameraController.ResetUpAxis();
+            }
+        }
     }
 
     private void UpdateWallStatus()
@@ -109,6 +132,8 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public void InitialWallClimb()
     {
+        DisableAllActiveStatus();
+        wallClimbActive = true;
         cameraController.ResetUpAxis();
         StopPlayerFalling(rb, collisionManager);
         Vector3 upAlongWall = Vector3.Cross(rb.transform.right, wallNormals[1]);
@@ -126,14 +151,15 @@ public partial class WallRunBehavior : AbilityBehavior
         }
     }
 
-    public override void EntryAction()
+    public void EntryAction()
     {
-        base.EntryAction();
         coyoteTimer.ResetTimer();
         if (!entryEffectsCooldown.TimerActive())
         {
             StopPlayerFalling(rb, collisionManager);
         }
+        DisableAllActiveStatus();
+        wallRunActive = true;
     }
 
     public void WallClimb()
@@ -151,7 +177,10 @@ public partial class WallRunBehavior : AbilityBehavior
     
     public void WallJumpInitial()
     {
+        DisableAllActiveStatus();
+        wallJumpActive = true;
         soundManager.Play("WallJump");
+        jumpHoldingTimer.ResetTimer();
 
         Vector3 sumNormals = Vector3.zero;
         for (int i = 0; i < wallNormals.Length; i++)
@@ -208,13 +237,21 @@ public partial class WallRunBehavior : AbilityBehavior
     public void WallClimbExit()
     {
         ExitAction();
-        base.ExitAction();
+        PreventConsumptionCheck();
     }
 
-    public override void ExitAction()
+    public void ExitAction()
     {
         soundManager.Stop("WallSkid");
         exitEffectsCooldown.ResetTimer();
         entryEffectsCooldown.ResetTimer();
+        DisableAllActiveStatus();
+    }
+     
+    private void DisableAllActiveStatus()
+    {
+        wallRunActive = false;
+        wallJumpActive = false;
+        wallClimbActive = false;
     }
 }

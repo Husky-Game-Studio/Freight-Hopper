@@ -3282,9 +3282,6 @@ MonoBehaviour:
   downwardsForce: 28
   slopeDownForce: 200
   groundFrictionReductionPercent: 1
-  slamSpeedToReachBase: 90
-  shakeDuration: 0.15
-  baseShakeStrength: 10
 --- !u!114 &1798020243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4277,7 +4274,7 @@ GameObject:
   - component: {fileID: 8542586348039995703}
   - component: {fileID: 6851446874579196113}
   - component: {fileID: 6851446874579196117}
-  - component: {fileID: 4493642203787552938}
+  - component: {fileID: 4493642203787552936}
   - component: {fileID: 4493642203787552939}
   - component: {fileID: 4493642203787552935}
   - component: {fileID: 4493642203787552937}
@@ -4305,8 +4302,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 2052
-  landingSwayMag: 0.1
-  landingSwayTime: 0.1
   maxDepenetrationVelocity: 100
   isGrounded:
     old: 0
@@ -4323,6 +4318,22 @@ MonoBehaviour:
   contactCount: 0
   steepCount: 0
   validUpAxis: {x: 0, y: 1, z: 0}
+--- !u!114 &4493642203787552936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493642203787552934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfea41525ddaf34cb1d4d2803752746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementBehavior: {fileID: 1798020244}
+  jumpBehavior: {fileID: 1798020243}
+  groundPoundBehavior: {fileID: 1798020242}
+  wallRunBehavior: {fileID: 1798020246}
 --- !u!136 &4493642203787552937
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4337,29 +4348,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4493642203787552938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8156a7bd37866a741a0859a84fef0022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugging: 1
-  currentStateName: 
-  currentSubStateName: 
-  previousStateName: 
-  movementBehavior: {fileID: 1798020244}
-  jumpBehavior: {fileID: 1798020243}
-  groundPoundBehavior: {fileID: 1798020242}
-  wallRunBehavior: {fileID: 1798020246}
-  defaultCrosshair: {fileID: 1882243771}
-  collisionManagement: {fileID: 0}
-  friction: {fileID: 0}
 --- !u!114 &4493642203787552939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4373,7 +4361,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modules:
-    playerMachineCenter: {fileID: 4493642203787552938}
     gravity: {fileID: 91327625}
     friction: {fileID: 91327626}
     rigidbody: {fileID: 6851446874579196113}
@@ -4381,6 +4368,7 @@ MonoBehaviour:
     rigidbodyLinker: {fileID: 91327624}
     soundManager: {fileID: 2129630602}
     edgeCorrectionCollision: {fileID: 91327628}
+    groundPoundBehavior: {fileID: 0}
 --- !u!114 &6851446874351635507
 MonoBehaviour:
   m_ObjectHideFlags: 0

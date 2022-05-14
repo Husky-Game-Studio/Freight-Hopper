@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class GroundPoundBehavior : AbilityBehavior
 {
     [ReadOnly, SerializeField] private Current<float> increasingForce = new Current<float>(1);
@@ -11,32 +12,33 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float slopeDownForce = 500;
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
 
-    [Header("Camera Shake Settings")]
-    [SerializeField] private float slamSpeedToReachBase = 125f;
-    [SerializeField] private float shakeDuration = 0.2f;
-    [SerializeField] private float baseShakeStrength = 5;
-    //[SerializeField] private float cameraSwayTime = 0.1f;
-    //[SerializeField] private float cameraSwayMag = 1;
+    private bool active;
+
     public float FrictionReduction => groundFrictionReductionPercent;
+    public bool Active => active;
+
     public bool FlatSurface =>
-         collisionManager.IsGrounded.current
-            && Vector3.Angle(collisionManager.ValidUpAxis, collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
+         collisionManager.IsGrounded.current && Vector3.Angle(collisionManager.ValidUpAxis, collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
     private CollisionManagement collisionManager;
+    private Friction friction;
 
     public override void Initialize()
     {
         base.Initialize();
         collisionManager = Player.Instance.modules.collisionManagement;
+        friction = Player.Instance.modules.friction;
     }
 
-    public override void EntryAction()
+    public void EntryAction()
     {
+        GroundPoundInitialBurst();
         soundManager.Play("GroundPoundBurst");
         Vector3 upAxis = collisionManager.ValidUpAxis;
         if (Vector3.Dot(Vector3.Project(rb.velocity, upAxis), rb.transform.up) > 0)
         {
             rb.velocity = Vector3.ProjectOnPlane(rb.velocity, upAxis);
         }
+        active = true;
     }
 
     public void GroundPoundInitialBurst()
@@ -51,18 +53,20 @@ public class GroundPoundBehavior : AbilityBehavior
         rb.AddForce(-upAxis * initialBurstVelocity, ForceMode.VelocityChange);
     }
 
-    public override void Action()
+    public void Action()
     {
+        friction.ReduceFriction(FrictionReduction);
         soundManager.Play("GroundPoundTick");
         Vector3 upAxis = collisionManager.ValidUpAxis;
         Vector3 direction = -upAxis;
+        //Debug.Log("ground pounding");
         if (collisionManager.IsGrounded.current)
         {
+            //Debug.Log("grounded");
             Vector3 acrossSlope = Vector3.Cross(upAxis, collisionManager.ContactNormal.current);
             Vector3 downSlope = Vector3.Cross(acrossSlope, collisionManager.ContactNormal.current);
             direction = downSlope;
-            if (!collisionManager.IsGrounded.old &&
-                !this.FlatSurface)
+            if (!collisionManager.IsGrounded.old && !this.FlatSurface)
             {
                 Vector3 oldDownForce = Vector3.Project(collisionManager.Velocity.old, upAxis);
                 rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
@@ -78,18 +82,11 @@ public class GroundPoundBehavior : AbilityBehavior
         increasingForce.value += deltaIncreaseForce * Time.fixedDeltaTime;
     }
 
-    public override void ExitAction()
+    public void ExitAction()
     {
-        base.ExitAction();
+        PreventConsumptionCheck();
         soundManager.Play("GroundPoundExit");
         increasingForce.Reset();
-        if (FlatSurface)
-        {
-            float speed = Vector3.Project(collisionManager.Velocity.old, rb.transform.up).magnitude;
-            float slamShakeModified = speed / slamSpeedToReachBase;
-            //Player.Instance.modules.cameraShake.StartCameraShake(shakeDuration, new CameraShake.TraumaSettings(baseShakeStrength * slamShakeModified));
-            //Debug.Log("performned a ground pound at a speed of " + speed + " actual old: " + collisionManager.Velocity.old.magnitude);
-            //Player.Instance.modules.cameraShake.StartCameraSway(cameraSwayTime * slamShakeModified, -collisionManager.ContactNormal.old, cameraSwayMag * slamShakeModified);
-        }
+        active = false;
     }
 }

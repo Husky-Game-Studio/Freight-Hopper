@@ -12,8 +12,6 @@ public class CollisionManagement : MonoBehaviour
     [SerializeField] private float maxSlope = 60;
     [SerializeField] private float groundRaycastCheckDistance = 0.5f;
     [SerializeField] private LayerMask groundMask;
-    [SerializeField] private float landingSwayMag = 0.1f;
-    [SerializeField] private float landingSwayTime = 0.1f;
 
     [SerializeField] private float maxDepenetrationVelocity = 500;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
@@ -128,6 +126,7 @@ public class CollisionManagement : MonoBehaviour
             if (Vector3.Angle(hit.normal, this.ValidUpAxis) <= maxSlope)
             {
                 isGrounded.current = true;
+                contactNormal.current = hit.normal;
                 rb.AddForce(-ValidUpAxis, ForceMode.Acceleration);
             }
         }
