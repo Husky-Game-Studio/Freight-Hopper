@@ -21,11 +21,6 @@ public class UserInput : MonoBehaviour
 
     public event PressEventHandler GroundPoundCanceled;
 
-    //public Toggle jumpPressed = new Toggle();
-    //public Toggle jumpReleased = new Toggle();
-    //public Toggle groundPoundPressed = new Toggle();
-    //public Toggle groundPoundReleased = new Toggle();
-
     public bool GroundPoundHeld => groundPoundHeld;
     public bool JumpHeld => jumpHeld;
 
@@ -136,41 +131,4 @@ public class UserInput : MonoBehaviour
     {
         return master.Player.Restart.triggered;
     }
-
-    /*
-     * public Toggle jumpPressed = new Toggle();
-    public Toggle jumpReleased = new Toggle();
-    public Toggle groundPoundPressed = new Toggle();
-    public Toggle groundPoundReleased = new Toggle();
-    private bool lastStateGroundPound = false;
-
-    public void ResetInputs()
-    {
-        jumpPressed.Reset();
-        jumpReleased.Reset();
-        groundPoundPressed.Reset();
-        groundPoundReleased.Reset();
-    }
-
-    public void OnDisable()
-    {
-        this.UnsubToListeners();
-    }
-
-    private void SubToListeners()
-    {
-        UserInput.Instance.JumpInput += jumpPressed.Trigger;
-        UserInput.Instance.JumpInputCanceled += jumpReleased.Trigger;
-        UserInput.Instance.GroundPoundInput += groundPoundPressed.Trigger;
-        UserInput.Instance.GroundPoundCanceled += groundPoundReleased.Trigger;
-    }
-
-    private void UnsubToListeners()
-    {
-        UserInput.Instance.JumpInput -= jumpPressed.Trigger;
-        UserInput.Instance.JumpInputCanceled -= jumpReleased.Trigger;
-        UserInput.Instance.GroundPoundInput -= groundPoundPressed.Trigger;
-        UserInput.Instance.GroundPoundCanceled -= groundPoundReleased.Trigger;
-    }
-     */
 }
