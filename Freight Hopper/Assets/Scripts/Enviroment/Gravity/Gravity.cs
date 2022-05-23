@@ -28,7 +28,7 @@ public class Gravity : MonoBehaviour
 
     public void GravityLoop()
     {
-        if (!useGravity)
+        if (!useGravity || Time.timeScale == 0)
         {
             return;
         }

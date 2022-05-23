@@ -6,7 +6,6 @@ public class Player : MonoBehaviour
     [System.Serializable]
     public struct Modules
     {
-        public PlayerMachineCenter playerMachineCenter;
         public Gravity gravity;
         public Friction friction;
         public Rigidbody rigidbody;
@@ -14,6 +13,7 @@ public class Player : MonoBehaviour
         public RigidbodyLinker rigidbodyLinker;
         public SoundManager soundManager;
         public EdgeCorrectionCollision edgeCorrectionCollision;
+        public GroundPoundBehavior groundPoundBehavior;
     }
     public Modules modules;
 

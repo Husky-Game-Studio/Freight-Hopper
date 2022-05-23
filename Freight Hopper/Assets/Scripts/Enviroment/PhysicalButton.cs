@@ -84,7 +84,7 @@ public class PhysicalButton : MonoBehaviour
             return;
         }
 
-        if (Player.Instance.GetComponent<PlayerMachineCenter>().currentState is GroundPoundState)
+        if (Player.Instance.modules.groundPoundBehavior.Active)
         {
             Press();
         }
@@ -101,7 +101,7 @@ public class PhysicalButton : MonoBehaviour
             return;
         }
 
-        if (Player.Instance.GetComponent<PlayerMachineCenter>().currentState is GroundPoundState)
+        if (Player.Instance.modules.groundPoundBehavior.Active)
         {
             Press();
         }

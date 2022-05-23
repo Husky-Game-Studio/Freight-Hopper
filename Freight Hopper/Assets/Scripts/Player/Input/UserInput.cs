@@ -95,7 +95,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void JumpPressed(InputAction.CallbackContext context)
+    private void JumpPressed(InputAction.CallbackContext _)
     {
         jumpHeld = !jumpHeld;
         if (jumpHeld)
@@ -104,12 +104,12 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void JumpReleased(InputAction.CallbackContext context)
+    private void JumpReleased(InputAction.CallbackContext _)
     {
         JumpInputCanceled?.Invoke();
     }
 
-    private void GroundPoundReleased(InputAction.CallbackContext context)
+    private void GroundPoundReleased(InputAction.CallbackContext _)
     {
         GroundPoundCanceled?.Invoke();
     }

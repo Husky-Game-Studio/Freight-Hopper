@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [System.Serializable]
 public class AbilityBehavior : MonoBehaviour
@@ -17,12 +18,8 @@ public class AbilityBehavior : MonoBehaviour
     }
 
     public SoundManager PlayerSoundManager() => soundManager;
-
-    public virtual void EntryAction()
-    {
-    }
-
-    public virtual void ExitAction()
+    
+    public void PreventConsumptionCheck()
     {
         if (preventConsumption)
         {
@@ -33,10 +30,6 @@ public class AbilityBehavior : MonoBehaviour
             consumed = true;
         }
     }
-
-    // Action played while in Ability state
-    public virtual void Action()
-    { }
 
     public virtual void Recharge()
     {

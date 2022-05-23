@@ -73,6 +73,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Freecam"",
+                    ""type"": ""Button"",
+                    ""id"": ""da627b80-b40b-4003-b9a4-6afa1ebb1083"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -196,6 +204,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Debug"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0609e75d-eb6e-43c6-bb81-8ddc79129162"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Freecam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -211,6 +230,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_GroundPound = m_Player.FindAction("Ground Pound", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_Debug = m_Player.FindAction("Debug", throwIfNotFound: true);
+        m_Player_Freecam = m_Player.FindAction("Freecam", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -267,6 +287,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_GroundPound;
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_Debug;
+    private readonly InputAction m_Player_Freecam;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -278,6 +299,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @GroundPound => m_Wrapper.m_Player_GroundPound;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @Debug => m_Wrapper.m_Player_Debug;
+        public InputAction @Freecam => m_Wrapper.m_Player_Freecam;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -308,6 +330,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Debug.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
                 @Debug.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
                 @Debug.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
+                @Freecam.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
+                @Freecam.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
+                @Freecam.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -333,6 +358,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Debug.started += instance.OnDebug;
                 @Debug.performed += instance.OnDebug;
                 @Debug.canceled += instance.OnDebug;
+                @Freecam.started += instance.OnFreecam;
+                @Freecam.performed += instance.OnFreecam;
+                @Freecam.canceled += instance.OnFreecam;
             }
         }
     }
@@ -346,5 +374,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnGroundPound(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnDebug(InputAction.CallbackContext context);
+        void OnFreecam(InputAction.CallbackContext context);
     }
 }

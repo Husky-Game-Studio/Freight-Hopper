@@ -25,7 +25,19 @@ public class Settings : MonoBehaviour
     [SerializeField] private AudioMixer musicVolumeMixer;
     [SerializeField] private AudioMixer soundEffectsVolumeMixer;
 
-    private void Start()
+    enum SettingName
+    {
+        VSync,
+        Antialiasing,
+        ShadowDistance,
+        Fov,
+        MouseXSensitivity,
+        MouseYSensitivity,
+        SoundEffectsVolume,
+        MusicVolume
+    }
+
+    private void Awake()
     {
         LoadSettings();
         SetSettings();
@@ -33,14 +45,14 @@ public class Settings : MonoBehaviour
 
     public void LoadSettings()
     {
-        vsync = Convert.ToBoolean(PlayerPrefs.GetInt("Vsync", 1));
-        antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt("Antialiasing", 1));
-        shadowDistance = PlayerPrefs.GetInt("ShadowDistance", 1000);
-        fov = PlayerPrefs.GetInt("Fov", 100);
-        mouseSensitivity.x = PlayerPrefs.GetFloat("MouseXSensitivity", 14);
-        mouseSensitivity.y = PlayerPrefs.GetFloat("MouseYSensitivity", 10);
-        soundEffectsVolume = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.5f);
-        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        vsync = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.VSync.ToString(), 1));
+        antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Antialiasing.ToString(), 1));
+        shadowDistance = PlayerPrefs.GetInt(SettingName.ShadowDistance.ToString(), 1000);
+        fov = PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
+        mouseSensitivity.x = PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 14);
+        mouseSensitivity.y = PlayerPrefs.GetFloat(SettingName.MouseYSensitivity.ToString(), 10);
+        soundEffectsVolume = PlayerPrefs.GetFloat(SettingName.SoundEffectsVolume.ToString(), 0.5f);
+        musicVolume = PlayerPrefs.GetFloat(SettingName.MusicVolume.ToString(), 0.5f);
     }
 
     public void SetSettings()
@@ -48,22 +60,31 @@ public class Settings : MonoBehaviour
         QualitySettings.vSyncCount = vsync ? 1 : 0;
         pipelineAsset.msaaSampleCount = antialiasing ? 4 : 0;
         pipelineAsset.shadowDistance = shadowDistance;
-        FirstPersonCamera.fov = fov;
-        FirstPersonCamera.mouseSensitivity = mouseSensitivity;
         UpdateMixerVolume(musicVolumeMixer, musicVolume);
         UpdateMixerVolume(soundEffectsVolumeMixer, soundEffectsVolume);
     }
 
+    public static int GetFOV()
+    {
+        return PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
+    }
+    public static Vector2 GetMouseSensitivity()
+    {
+        Vector2 mouseSens;
+        mouseSens.x = PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 14);
+        mouseSens.y = PlayerPrefs.GetFloat(SettingName.MouseYSensitivity.ToString(), 10);
+        return mouseSens;
+    }
     public void SaveSettings()
     {
-        PlayerPrefs.SetInt("Vsync", Convert.ToInt32(vsync));
-        PlayerPrefs.SetInt("Antialiasing", Convert.ToInt32(antialiasing));
-        PlayerPrefs.SetInt("ShadowDistance", shadowDistance);
-        PlayerPrefs.SetInt("Fov", fov);
-        PlayerPrefs.SetFloat("MouseXSensitivity", mouseSensitivity.x);
-        PlayerPrefs.SetFloat("MouseYSensitivity", mouseSensitivity.y);
-        PlayerPrefs.SetFloat("SoundEffectsVolume", soundEffectsVolume);
-        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+        PlayerPrefs.SetInt(SettingName.VSync.ToString(), Convert.ToInt32(vsync));
+        PlayerPrefs.SetInt(SettingName.Antialiasing.ToString(), Convert.ToInt32(antialiasing));
+        PlayerPrefs.SetInt(SettingName.ShadowDistance.ToString(), shadowDistance);
+        PlayerPrefs.SetInt(SettingName.Fov.ToString(), fov);
+        PlayerPrefs.SetFloat(SettingName.MouseXSensitivity.ToString(), mouseSensitivity.x);
+        PlayerPrefs.SetFloat(SettingName.MouseYSensitivity.ToString(), mouseSensitivity.y);
+        PlayerPrefs.SetFloat(SettingName.SoundEffectsVolume.ToString(), soundEffectsVolume);
+        PlayerPrefs.SetFloat(SettingName.MusicVolume.ToString(), musicVolume);
     }
 
     private void UpdateMixerVolume(AudioMixer mixer, float vol)

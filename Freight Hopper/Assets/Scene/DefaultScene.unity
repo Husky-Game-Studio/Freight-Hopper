@@ -1335,6 +1335,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 565544775}
   m_CullTransparentMesh: 1
+--- !u!1 &626026931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 626026932}
+  m_Layer: 0
+  m_Name: FreecamTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &626026932
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626026931}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &720449668
 GameObject:
   m_ObjectHideFlags: 0
@@ -2977,117 +3007,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1573329845}
   m_CullTransparentMesh: 1
---- !u!1 &1593485735
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1593485738}
-  - component: {fileID: 1593485737}
-  - component: {fileID: 1593485736}
-  m_Layer: 0
-  m_Name: Burst Explosion
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!73398921 &1593485736
-VFXRenderer:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593485735}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 0
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 257
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!2083052967 &1593485737
-VisualEffect:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593485735}
-  m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 0a7f35f0c66d594419a4bfdbc516773f, type: 3}
-  m_InitialEventName: 
-  m_InitialEventNameOverriden: 1
-  m_StartSeed: 0
-  m_ResetSeedOnPlay: 1
-  m_ResourceVersion: 1
-  m_PropertySheet:
-    m_Float:
-      m_Array: []
-    m_Vector2f:
-      m_Array: []
-    m_Vector3f:
-      m_Array: []
-    m_Vector4f:
-      m_Array: []
-    m_Uint:
-      m_Array: []
-    m_Int:
-      m_Array: []
-    m_Matrix4x4f:
-      m_Array: []
-    m_AnimationCurve:
-      m_Array: []
-    m_Gradient:
-      m_Array: []
-    m_NamedObject:
-      m_Array: []
-    m_Bool:
-      m_Array: []
---- !u!4 &1593485738
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593485735}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6851446874351635510}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1617876441
 GameObject:
   m_ObjectHideFlags: 0
@@ -3279,12 +3198,9 @@ MonoBehaviour:
   deltaIncreaseForce: 0.02
   angleToBeConsideredFlat: 3
   initialBurstVelocity: 20
-  downwardsForce: 28
-  slopeDownForce: 200
+  downwardsForce: 25
+  slopeDownForce: 20
   groundFrictionReductionPercent: 1
-  slamSpeedToReachBase: 90
-  shakeDuration: 0.15
-  baseShakeStrength: 10
 --- !u!114 &1798020243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3300,16 +3216,16 @@ MonoBehaviour:
   consumed: 0
   preventConsumption: 0
   rb: {fileID: 0}
-  minJumpHeight: 2.3
-  holdingJumpForceMultiplier: 22
+  minJumpHeight: 5
+  holdingJumpForceMultiplier: 3
   jumpHoldingTimer:
-    duration: 0.5
+    duration: 1.2
     current: 0
   coyoteeTimer:
     duration: 0.75
     current: 0
   jumpBufferTimer:
-    duration: 0.1
+    duration: 0.15
     current: 0
 --- !u!114 &1798020244
 MonoBehaviour:
@@ -4010,7 +3926,7 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 1
-    m_MaxSpeed: 0.5
+    m_MaxSpeed: 0.1
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
@@ -4034,7 +3950,7 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 1
-    m_MaxSpeed: 0.5
+    m_MaxSpeed: 0.1
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
@@ -4277,7 +4193,7 @@ GameObject:
   - component: {fileID: 8542586348039995703}
   - component: {fileID: 6851446874579196113}
   - component: {fileID: 6851446874579196117}
-  - component: {fileID: 4493642203787552938}
+  - component: {fileID: 4493642203787552936}
   - component: {fileID: 4493642203787552939}
   - component: {fileID: 4493642203787552935}
   - component: {fileID: 4493642203787552937}
@@ -4305,8 +4221,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 2052
-  landingSwayMag: 0.1
-  landingSwayTime: 0.1
   maxDepenetrationVelocity: 100
   isGrounded:
     old: 0
@@ -4323,6 +4237,22 @@ MonoBehaviour:
   contactCount: 0
   steepCount: 0
   validUpAxis: {x: 0, y: 1, z: 0}
+--- !u!114 &4493642203787552936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493642203787552934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfea41525ddaf34cb1d4d2803752746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementBehavior: {fileID: 1798020244}
+  jumpBehavior: {fileID: 1798020243}
+  groundPoundBehavior: {fileID: 1798020242}
+  wallRunBehavior: {fileID: 1798020246}
 --- !u!136 &4493642203787552937
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4337,29 +4267,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4493642203787552938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4493642203787552934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8156a7bd37866a741a0859a84fef0022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugging: 1
-  currentStateName: 
-  currentSubStateName: 
-  previousStateName: 
-  movementBehavior: {fileID: 1798020244}
-  jumpBehavior: {fileID: 1798020243}
-  groundPoundBehavior: {fileID: 1798020242}
-  wallRunBehavior: {fileID: 1798020246}
-  defaultCrosshair: {fileID: 1882243771}
-  collisionManagement: {fileID: 0}
-  friction: {fileID: 0}
 --- !u!114 &4493642203787552939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4373,7 +4280,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modules:
-    playerMachineCenter: {fileID: 4493642203787552938}
     gravity: {fileID: 91327625}
     friction: {fileID: 91327626}
     rigidbody: {fileID: 6851446874579196113}
@@ -4381,6 +4287,7 @@ MonoBehaviour:
     rigidbodyLinker: {fileID: 91327624}
     soundManager: {fileID: 2129630602}
     edgeCorrectionCollision: {fileID: 91327628}
+    groundPoundBehavior: {fileID: 0}
 --- !u!114 &6851446874351635507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4537,8 +4444,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.000000009593377, y: 1.2, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1593485738}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4693,6 +4599,8 @@ MonoBehaviour:
   timeStep: 0
   upAxisTransform: {fileID: 1040203487}
   cinemachineVirtualCamera: {fileID: 535969353}
+  ui: {fileID: 217675790}
+  freecam: 0
   smoothingDelta: 0.1
   mouseSensitivityConversionValue: 10
 --- !u!114 &6851446874351635520
@@ -4974,7 +4882,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6851446875239732600}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5068,5 +4976,5 @@ Transform:
   - {fileID: 6851446874874222867}
   - {fileID: 6851446874732734526}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

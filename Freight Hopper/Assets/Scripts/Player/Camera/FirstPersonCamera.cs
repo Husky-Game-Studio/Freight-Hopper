@@ -12,26 +12,65 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private Transform upAxisTransform;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
 
+    [SerializeField] private GameObject ui;
+    private GameObject otherUIs;
+    [SerializeField, ReadOnly] private bool freecam = false;
+
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
-
-    public static int fov = 90;
-    public static Vector2 mouseSensitivity = new Vector2(12, 10);
-    public float mouseSensitivityConversionValue = 10;
-
-    private void Awake()
+    [SerializeField] private float mouseSensitivityConversionValue = 10;
+    int curFrameCount = 0;
+    const int stopCameraFrameCount = 4;
+    private void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        cinemachineVirtualCamera.m_Lens.FieldOfView = fov;
+        cinemachineVirtualCamera.m_Lens.FieldOfView = Settings.GetFOV();
+        Vector2 mouseSensitivity = Settings.GetMouseSensitivity();
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity.x / mouseSensitivityConversionValue;
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed = mouseSensitivity.y / mouseSensitivityConversionValue;
-        
+
     }
 
     private void Update()
     {
         CalculateSmoothedUpAxis(Vector3.up);
+        if((Time.timeScale == 0 || stopCameraFrameCount > curFrameCount) && !freecam)
+        {
+            cinemachineVirtualCamera.gameObject.SetActive(false);
+        } else {
+            cinemachineVirtualCamera.gameObject.SetActive(true);
+        }
+        curFrameCount++;
+        
+    }
+
+    private void OnEnable()
+    {
+        UserInput.Instance.UserInputMaster.Player.Freecam.performed += ToggleFreecam;
+    }
+    private void OnDisable()
+    {
+        UserInput.Instance.UserInputMaster.Player.Freecam.performed -= ToggleFreecam;
+    }
+
+    void ToggleFreecam(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if(Time.timeScale == 0 && !freecam){
+            return;
+        }
+        freecam = !freecam;
+        if(freecam) {
+            Time.timeScale = 0;
+            ui.gameObject.SetActive(false);
+            otherUIs = GameObject.Find("UniqueUICanvas");
+            otherUIs.gameObject.SetActive(false);
+        }
+        else {
+            Time.timeScale = 1;
+            ui.gameObject.SetActive(true);
+            otherUIs.gameObject.SetActive(true);
+        }
     }
 
     private void CalculateSmoothedUpAxis(Vector3 upAxisCamera)
