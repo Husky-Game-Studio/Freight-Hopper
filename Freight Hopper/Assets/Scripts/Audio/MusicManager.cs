@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class MusicManager : SoundManager
 {
     private static MusicManager instance;
     public static MusicManager Instance => instance;
-    private static Songs lastSongName = Songs.Menu;
 
     [SerializeField] private AudioMixerSnapshot normal;
     [SerializeField] private AudioMixerSnapshot paused;
     [SerializeField] private AudioMixerSnapshot alternate;
+
+    [SerializeField] private float musicChangeChance = 0.1f;
 
     public enum SnapshotMode
     { Normal, Paused, Alternate }
@@ -30,17 +32,16 @@ public class MusicManager : SoundManager
         Escape,
         Unknown
     }
-
-    [SerializeField] private Songs currentSongName = Songs.Menu;
+    Songs currentSong = Songs.Menu;
     [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
-
+    private Scene lastScene;
     private void Start()
     {
         if (instance == null)
         {
             DontDestroyOnLoad(this.gameObject);
             instance = this;
-            Play(currentSongName.ToString());
+            Play(currentSong.ToString());
         }
         else
         {
@@ -48,18 +49,37 @@ public class MusicManager : SoundManager
             {
                 return;
             }
-            instance.TransitionToSnapshot(musicMode);
-            if (currentSongName != lastSongName && currentSongName != Songs.Menu)
-            {
-                lastSongName = currentSongName;
-                instance.SwitchSong(currentSongName);
-                
-            }
+            
+            
             Destroy(this.gameObject);
+            return;
         }
-
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {   
+        if(mode != LoadSceneMode.Single){
+            return;
+        }
+        if(!SceneManager.GetActiveScene().name.Equals("MainMenu") && mode == LoadSceneMode.Single && lastScene != scene)
+        {
+            if (UnityEngine.Random.Range(0f, 1f) < musicChangeChance || instance.currentSong == Songs.Menu)
+            {
+                instance.SwitchSong(PickRandomSong());
+                instance.TransitionToSnapshot(musicMode);
+            }
+        }
+        lastScene = scene;
+    }
+    Songs PickRandomSong(){
+        List<Songs> enums = Enum.GetValues(typeof(Songs)).Cast<Songs>().ToList();
+        System.Random random = new System.Random();
+        return enums[random.Next(1, enums.Count)];
+    }
 
     public void TransitionToSnapshot(SnapshotMode mode)
     {
@@ -81,9 +101,8 @@ public class MusicManager : SoundManager
 
     public void SwitchSong(Songs songName)
     {
-        
-        Stop(currentSongName.ToString());
+        Stop(currentSong.ToString());
         Play(songName.ToString());
-        currentSongName = songName;
+        currentSong = songName;
     }
 }
