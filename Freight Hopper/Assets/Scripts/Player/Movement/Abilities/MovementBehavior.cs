@@ -73,7 +73,7 @@ public class MovementBehavior : AbilityBehavior
     public void Action()
     {
         MoveAction();
-        if (collisionManager.IsGrounded.current)
+        if (collisionManager.IsGrounded.current && !UserInput.Instance.Move().IsZero())
         {
             soundManager.PlayRandom("Move", 7);
             soundManager.PlayRandom("Stone", 5);

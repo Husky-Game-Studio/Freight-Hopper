@@ -45,15 +45,21 @@ public partial class WallRunBehavior : AbilityBehavior
     [SerializeField, ReadOnly] private bool[] wallStatus = new bool[3];
     [SerializeField, ReadOnly] private Vector3[] wallNormals = new Vector3[3];
 
-    public IList<bool> WallStatus => Array.AsReadOnly(wallStatus);
+    //public IList<bool> WallStatus => Array.AsReadOnly(wallStatus);
+
+    public bool ShouldLeftRun => wallStatus[0] && !wallStatus[1];
+    public bool ShouldRightRun => wallStatus[2] && !wallStatus[1];
+    public bool ShouldWallRun => (wallStatus[0] || wallStatus[2]) && !wallStatus[1];
+    public bool ShouldWallClimb => wallStatus[1];
 
     private WallDetectionLayer[] detectionlayers;
-    private bool wallRunActive;
-    private bool wallJumpActive;
-    private bool wallClimbActive;
-    public bool WallRunActive => wallRunActive;
-    public bool WallJumpActive => wallJumpActive;
-    public bool WallClimbActive => wallClimbActive;
+    [SerializeField, ReadOnly] private bool wallRunActive;
+    [SerializeField, ReadOnly] private bool wallJumpActive;
+    [SerializeField, ReadOnly] private bool wallClimbActive;
+    private Transform player;
+    public bool RunActive => wallRunActive;
+    public bool JumpActive => wallJumpActive;
+    public bool ClimbActive => wallClimbActive;
     public override void Initialize()
     {
         base.Initialize();
@@ -66,6 +72,7 @@ public partial class WallRunBehavior : AbilityBehavior
         collisionManager = Player.Instance.modules.collisionManagement;
         rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
         rb = Player.Instance.modules.rigidbody;
+        player = Player.Instance.transform.Find("Mesh");
         detectionlayers = new WallDetectionLayer[]
         {
             new WallDetectionLayer(forwardDetectionTiltAngle, backwardDetectionTiltAngle, 0, 0),
@@ -88,7 +95,7 @@ public partial class WallRunBehavior : AbilityBehavior
             inAirCooldown.CountDown(Time.fixedDeltaTime);
         }
         entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
-        if(!WallRunActive)
+        if(!RunActive)
         {
             exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
             coyoteTimer.CountDown(Time.fixedDeltaTime);
@@ -105,7 +112,7 @@ public partial class WallRunBehavior : AbilityBehavior
         wallNormals = new Vector3[] { Vector3.zero, Vector3.zero, Vector3.zero };
         foreach (WallDetectionLayer layer in detectionlayers)
         {
-            layer.CheckWalls(rb, rigidbodyLinker, collisionManager, wallCheckDistance, validWalls);
+            layer.CheckWalls(player, rigidbodyLinker, collisionManager, wallCheckDistance, validWalls);
             (bool, Vector3) temp;
             temp = layer.LeftDetected();
             wallStatus[0] |= temp.Item1;
@@ -132,7 +139,7 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public void InitialWallClimb()
     {
-        DisableAllActiveStatus();
+        RunExit();
         wallClimbActive = true;
         cameraController.ResetUpAxis();
         StopPlayerFalling(rb, collisionManager);
@@ -151,23 +158,21 @@ public partial class WallRunBehavior : AbilityBehavior
         }
     }
 
-    public void EntryAction()
+    public void RunInitial()
     {
         coyoteTimer.ResetTimer();
         if (!entryEffectsCooldown.TimerActive())
         {
             StopPlayerFalling(rb, collisionManager);
         }
-        DisableAllActiveStatus();
+
         wallRunActive = true;
     }
 
-    public void WallClimb()
+    public void Climb()
     {
         soundManager.Play("WallClimb");
         Vector3 upAlongWall = GetUpAlongWall(wallNormals[1]);
-
-        //Vector3.Cross(-wallNormals[1], upAlongWall) * wallrunCameraTilt
         
         cameraController.TiltUpAxis(Vector3.Cross(-wallNormals[1], upAlongWall) * wallrunCameraTilt);
 
@@ -175,9 +180,9 @@ public partial class WallRunBehavior : AbilityBehavior
         rb.AddForce(climbForce * upAlongWall, ForceMode.Acceleration);
     }
     
-    public void WallJumpInitial()
+    public void JumpInitial()
     {
-        DisableAllActiveStatus();
+        RunExit();
         wallJumpActive = true;
         soundManager.Play("WallJump");
         jumpHoldingTimer.ResetTimer();
@@ -211,12 +216,12 @@ public partial class WallRunBehavior : AbilityBehavior
         return Vector3.Cross(normal, Vector3.Cross(collisionManager.ValidUpAxis, normal));
     }
 
-    public void RightWallRun()
+    public void RightRun()
     {
         WallRun(-wallNormals[2], GetUpAlongWall(wallNormals[2]));
     }
 
-    public void LeftWallRun()
+    public void LeftRun()
     {
         WallRun(-wallNormals[0], GetUpAlongWall(wallNormals[0]));
     }
@@ -236,22 +241,18 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public void WallClimbExit()
     {
-        ExitAction();
-        PreventConsumptionCheck();
+        soundManager.Stop("WallClimb");
+        wallClimbActive = false;
     }
-
-    public void ExitAction()
+    public void RunExit()
     {
         soundManager.Stop("WallSkid");
         exitEffectsCooldown.ResetTimer();
         entryEffectsCooldown.ResetTimer();
-        DisableAllActiveStatus();
-    }
-     
-    private void DisableAllActiveStatus()
-    {
         wallRunActive = false;
+    }
+    public void JumpExit()
+    {
         wallJumpActive = false;
-        wallClimbActive = false;
     }
 }
