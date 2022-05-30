@@ -3317,6 +3317,9 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
+  wallRunActive: 0
+  wallJumpActive: 0
+  wallClimbActive: 0
 --- !u!1001 &1811404345
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3932,8 +3935,8 @@ MonoBehaviour:
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 1
-    m_MinValue: -90
-    m_MaxValue: 90
+    m_MinValue: -89.99
+    m_MaxValue: 89.99
     m_Wrap: 0
     m_Recentering:
       m_enabled: 0
@@ -4252,7 +4255,7 @@ MonoBehaviour:
   movementBehavior: {fileID: 1798020244}
   jumpBehavior: {fileID: 1798020243}
   groundPoundBehavior: {fileID: 1798020242}
-  wallRunBehavior: {fileID: 1798020246}
+  wallBehavior: {fileID: 0}
 --- !u!136 &4493642203787552937
 CapsuleCollider:
   m_ObjectHideFlags: 0
