@@ -37,7 +37,7 @@ public class LevelComplete : MonoBehaviour
             return;
         }
 
-        timerText.text = timer.GetTimeString();
+        timerText.text = "Time: " + timer.GetTimeString();
         BestTime();
         PauseMenu.Instance.PauseGame();
         levelCompleteScreen.SetActive(true);
@@ -94,7 +94,7 @@ public class LevelComplete : MonoBehaviour
         if (levelTimeData.MedalIndex < 2)
         {
             nextMedalTimeText.gameObject.SetActive(true);
-            nextMedalTimeText.text = "Next: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
+            nextMedalTimeText.text = "Time to Next Medal: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
         }
         else
         {
