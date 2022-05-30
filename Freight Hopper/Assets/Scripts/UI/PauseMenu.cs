@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
     private bool paused = false;
     private AudioMixerGroup lastAudioMixer;
     private static PauseMenu instance;
+    private bool levelCompletePause = false;
     public static PauseMenu Instance => instance;
     public bool Paused => paused;
 
@@ -25,6 +26,9 @@ public class PauseMenu : MonoBehaviour
 
     private void Pause(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if(levelCompletePause) {
+            return;
+        }
         if (paused)
         {
             PauseMenuDisable();
@@ -52,7 +56,7 @@ public class PauseMenu : MonoBehaviour
         menu.SetActive(false);
     }
 
-    public void PauseGame()
+    public void PauseGame(bool levelCompletePause = false)
     {
         paused = true;
         Time.timeScale = 0;
@@ -63,6 +67,7 @@ public class PauseMenu : MonoBehaviour
             lastAudioMixer = MusicManager.Instance.MixerGroup;
             MusicManager.Instance.TransitionToSnapshot(MusicManager.SnapshotMode.Paused);
         }
+        this.levelCompletePause = levelCompletePause;
     }
 
     public void ContinueGame()

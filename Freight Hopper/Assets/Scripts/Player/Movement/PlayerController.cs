@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] MovementBehavior movementBehavior;
     [SerializeField] JumpBehavior jumpBehavior;
     [SerializeField] GroundPoundBehavior groundPoundBehavior;
-    [SerializeField] WallRunBehavior wallRunBehavior;
+    [SerializeField] WallRunBehavior wallBehavior;
 
     private FirstPersonCamera cameraController;
     private CollisionManagement collisionManagement;
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
         cameraController = Camera.main.GetComponent<FirstPersonCamera>();
         collisionManagement = Player.Instance.modules.collisionManagement;
         friction = Player.Instance.modules.friction;
-        wallRunBehavior.Initialize();
+        wallBehavior.Initialize();
         movementBehavior.Initialize();
         jumpBehavior.Initialize();
         groundPoundBehavior.Initialize();
@@ -57,19 +57,10 @@ public class PlayerController : MonoBehaviour
         }
         groundPoundBehavior.EntryAction();
     }
-    void GroundPoundExitLogic() 
-    {
-        bool shouldExit = groundPoundBehavior.Active && groundPoundBehavior.FlatSurface;
-        if (!shouldExit) 
-        {
-            return;
-        }
-        groundPoundBehavior.ExitAction();
-    }
 
     void JumpsStartLogic()
     {
-        if(wallRunBehavior.WallRunActive) {
+        if(wallBehavior.RunActive || wallBehavior.ClimbActive) {
             WallJumpLogic();
             return;
         }
@@ -89,14 +80,18 @@ public class PlayerController : MonoBehaviour
     }
     void WallJumpLogic()
     {
-        wallRunBehavior.WallJumpInitial();
+        if (wallBehavior.JumpActive)
+        {
+            return;
+        }
+        wallBehavior.JumpInitial();
     }
 
     void JumpsCanceledLogic()
     {
-        if (wallRunBehavior.WallJumpActive)
+        if (wallBehavior.JumpActive)
         {
-            wallRunBehavior.ExitAction();
+            wallBehavior.JumpExit();
             return;
         }
 
@@ -110,9 +105,9 @@ public class PlayerController : MonoBehaviour
         if(!jumpBehavior.jumpHoldingTimer.TimerActive()){
             jumpBehavior.ExitAction();
         }
-        if (!wallRunBehavior.jumpHoldingTimer.TimerActive() && wallRunBehavior.WallJumpActive)
+        if (!wallBehavior.jumpHoldingTimer.TimerActive() && wallBehavior.JumpActive)
         {
-            wallRunBehavior.ExitAction();
+            wallBehavior.JumpExit();
         }
     }
     void MovingLogic()
@@ -138,7 +133,7 @@ public class PlayerController : MonoBehaviour
         {
             groundPoundBehavior.Action();
         }
-        if (jumpBehavior.Active)
+        if (jumpBehavior.Active && !wallBehavior.JumpActive)
         {
             jumpBehavior.jumpHoldingTimer.CountDown(Time.fixedDeltaTime);
             if (!collisionManagement.IsGrounded.current)
@@ -147,62 +142,98 @@ public class PlayerController : MonoBehaviour
             }
             jumpBehavior.Action();
         }
-        if(wallRunBehavior.WallRunActive)
+        if (wallBehavior.JumpActive)
         {
-            IList<bool> status = wallRunBehavior.WallStatus;
-            if (status[2])
+            wallBehavior.WallJumpContinous();
+        }
+        else if (wallBehavior.RunActive)
+        {
+            if (wallBehavior.ShouldRightRun)
             {
-                wallRunBehavior.RightWallRun();
+                wallBehavior.RightRun();
             }
-            if (status[0])
+            if (wallBehavior.ShouldLeftRun)
             {
-                wallRunBehavior.LeftWallRun();
+                wallBehavior.LeftRun();
             }
         }
-        if(wallRunBehavior.WallClimbActive)
+        else if(wallBehavior.ClimbActive)
         {
-            wallRunBehavior.WallClimb();
+            wallBehavior.Climb();
         }
+        
     }
 
     private void WallRunEntryLogic()
     {
-        if (!wallRunBehavior.WallRunActive && !wallRunBehavior.inAirCooldown.TimerActive())
+        if(wallBehavior.RunActive || wallBehavior.JumpActive) {
+            return;
+        }
+        if (!wallBehavior.RunActive && !wallBehavior.inAirCooldown.TimerActive())
         {
-            IList<bool> walls = wallRunBehavior.WallStatus;
-            if (walls[0] || walls[1] || walls[2])
+            if (wallBehavior.ShouldLeftRun){
+                wallBehavior.RunInitial();
+            }
+            if (wallBehavior.ShouldRightRun)
             {
-                wallRunBehavior.EntryAction();
+                wallBehavior.RunInitial();
             }
         }
     }
     private void WallClimbEntryLogic()
     {
-        IList<bool> status = wallRunBehavior.WallStatus;
-        if (status[1] && !status[0] && !status[2] && UserInput.Instance.Move().z == 1){
-            wallRunBehavior.InitialWallClimb();
+        if (wallBehavior.ShouldWallClimb && UserInput.Instance.Move().z == 1 &&
+            !wallBehavior.ClimbActive)
+        {
+            wallBehavior.InitialWallClimb();
         }
     }
+
     private void WallRunExitLogic(){
-        IList<bool> status = wallRunBehavior.WallStatus;
-        // Fall from wall climb
-        if ((!status[0] && !status[1] && !status[2] &&
-            wallRunBehavior.WallRunActive) || UserInput.Instance.Move().z != 1)
+        if(!wallBehavior.RunActive){
+            return;
+        }
+        if (!wallBehavior.ShouldWallClimb || UserInput.Instance.Move().z != 1)
         {
-            wallRunBehavior.coyoteTimer.CountDown(Time.fixedDeltaTime);
-            if (!wallRunBehavior.coyoteTimer.TimerActive())
+            if (!wallBehavior.coyoteTimer.TimerActive())
             {
-                wallRunBehavior.coyoteTimer.ResetTimer();
-                wallRunBehavior.ExitAction();
+                wallBehavior.coyoteTimer.ResetTimer();
+                wallBehavior.RunExit();
             }
         }
-
-        if (wallRunBehavior.WallClimbActive && !status[1])
-        {
-            wallRunBehavior.ExitAction();
-        }
     }
 
+    private void WallClimbExitLogic(){
+        if (!wallBehavior.ClimbActive) {
+            return;
+        }
+
+        if(!wallBehavior.ShouldWallClimb || UserInput.Instance.Move().z != 1) {
+            wallBehavior.WallClimbExit();
+        }
+    }
+    
+
+    void WallJumpExitLogic(){
+        if (!wallBehavior.JumpActive)
+        {
+            return;
+        }
+
+        if (!wallBehavior.jumpHoldingTimer.TimerActive() || !UserInput.Instance.JumpHeld)
+        {
+            wallBehavior.JumpExit();
+        }
+    }
+    void GroundPoundExitLogic()
+    {
+        bool shouldExit = groundPoundBehavior.Active && groundPoundBehavior.FlatSurface;
+        if (!shouldExit)
+        {
+            return;
+        }
+        groundPoundBehavior.ExitAction();
+    }
     private void UpdateLoop()
     {
         movementBehavior.UpdateStatus();
@@ -217,6 +248,8 @@ public class PlayerController : MonoBehaviour
         JumpsExitLogic();
 
         WallRunExitLogic();
+        WallClimbExitLogic();
+        WallJumpExitLogic();
         EndLoop();
     }
     

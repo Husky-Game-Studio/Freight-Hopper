@@ -10,6 +10,7 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;
     [SerializeField] private Transform upAxisTransform;
+    private Transform player;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
 
     [SerializeField] private GameObject ui;
@@ -27,6 +28,7 @@ public class FirstPersonCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cinemachineVirtualCamera.m_Lens.FieldOfView = Settings.GetFOV();
         Vector2 mouseSensitivity = Settings.GetMouseSensitivity();
+        player = Player.Instance.transform.Find("Mesh");
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity.x / mouseSensitivityConversionValue;
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed = mouseSensitivity.y / mouseSensitivityConversionValue;
 
@@ -43,6 +45,12 @@ public class FirstPersonCamera : MonoBehaviour
         }
         curFrameCount++;
         
+    }
+
+    private void FixedUpdate()
+    {
+        Vector3 forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+        player.rotation = Quaternion.LookRotation(forward, Vector3.up);
     }
 
     private void OnEnable()

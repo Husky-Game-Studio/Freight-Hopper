@@ -48,42 +48,42 @@ public class WallDetectionLayer
         return this.Priority < otherLayer.Priority;
     }
 
-    public void CheckWalls(Rigidbody rb, RigidbodyLinker rl, CollisionManagement cm, float distance, LayerMask layers)
+    public void CheckWalls(Transform player, RigidbodyLinker rl, CollisionManagement cm, float distance, LayerMask layers)
     {
         (bool, Vector3) temp;
-        temp = CheckDirection(rays.leftBack, rb, rl, cm, distance, layers);
+        temp = CheckDirection(rays.leftBack, player, rl, cm, distance, layers);
         status.leftBack = temp.Item1;
         normals.leftBack = temp.Item2;
 
-        temp = CheckDirection(rays.left, rb, rl, cm, distance, layers);
+        temp = CheckDirection(rays.left, player, rl, cm, distance, layers);
         status.left = temp.Item1;
         normals.left = temp.Item2;
 
-        temp = CheckDirection(rays.leftFront, rb, rl, cm, distance, layers);
+        temp = CheckDirection(rays.leftFront, player, rl, cm, distance, layers);
         status.leftFront = temp.Item1;
         normals.leftFront = temp.Item2;
 
-        temp = CheckDirection(rays.front, rb, rl, cm, distance, layers);
+        temp = CheckDirection(rays.front, player, rl, cm, distance, layers);
         status.front = temp.Item1;
         normals.front = temp.Item2;
 
-        temp = CheckDirection(rays.rightFront, rb, rl, cm, distance, layers);
+        temp = CheckDirection(rays.rightFront, player, rl, cm, distance, layers);
         status.rightFront = temp.Item1;
         normals.rightFront = temp.Item2;
 
-        temp = CheckDirection(rays.right, rb, rl, cm, distance, layers);
+        temp = CheckDirection(rays.right, player, rl, cm, distance, layers);
         status.right = temp.Item1;
         normals.right = temp.Item2;
 
-        temp = CheckDirection(rays.rightBack, rb, rl, cm, distance, layers);
+        temp = CheckDirection(rays.rightBack, player, rl, cm, distance, layers);
         status.rightBack = temp.Item1;
         normals.rightBack = temp.Item2;
     }
 
-    private (bool, Vector3) CheckDirection(Ray ray, Rigidbody rb, RigidbodyLinker rigidbodyLinker, CollisionManagement collisionManager, float distance, LayerMask layers)
+    private (bool, Vector3) CheckDirection(Ray ray, Transform player, RigidbodyLinker rigidbodyLinker, CollisionManagement collisionManager, float distance, LayerMask layers)
     {
-        Ray relativeRay = new Ray(rb.transform.TransformPoint(ray.origin), rb.transform.TransformDirection(ray.direction));
-        //Debug.DrawRay(relativeRay.origin, relativeRay.direction * distance, Color.yellow);
+        Ray relativeRay = new Ray(player.TransformPoint(ray.origin), player.TransformDirection(ray.direction));
+        Debug.DrawRay(relativeRay.origin, relativeRay.direction * distance, Color.yellow);
         if (Physics.Raycast(relativeRay, out RaycastHit hit, distance, layers))
         {
             if (!hit.transform.CompareTag("landable"))
