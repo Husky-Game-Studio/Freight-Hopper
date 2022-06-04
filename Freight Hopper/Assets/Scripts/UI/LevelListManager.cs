@@ -9,18 +9,12 @@ public class LevelListManager : MonoBehaviour
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private WorldListMetaData worlds;
     [SerializeField] private int currentWorldIndex;
-    [SerializeField] private RectTransform nextWorld;
-    [SerializeField] private RectTransform prevWorld;
 
     public void SetCurrentWorld(int index)
     {
         currentWorldIndex = index;
         selector.SetParent(this.transform.parent);
         CreateButtons(LevelSelectLevelButton.currentID-1);
-        CheckNextWorld();
-        CheckPrevWorld();
-        
-        
     }
 
     public WorldMetaData CurrentWorld => worlds.Worlds[currentWorldIndex];
@@ -28,57 +22,6 @@ public class LevelListManager : MonoBehaviour
     private void OnEnable()
     {
         SetCurrentWorld(0);
-    }
-
-    private void CheckNextWorld()
-    {
-        int count = nextWorld.childCount;
-        for (int i = 0; i < count; i++)
-        {
-            Destroy(nextWorld.GetChild(i).gameObject);
-        }
-        if (currentWorldIndex + 1 >= worlds.Worlds.Count || worlds.Worlds[currentWorldIndex + 1] == null)
-        { 
-            return; 
-        }
-
-
-        for (int i = 0; i < 3; i++)
-        {
-            GameObject go = Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity, nextWorld);
-
-            go.GetComponent<LevelSelectLevelButton>().Initialize("next", selector, i+1, true, IncrementWorld);
-        }
-    }
-
-    private void CheckPrevWorld()
-    {
-        int count = prevWorld.childCount;
-        for (int i = 0; i < count; i++)
-        {
-            Destroy(prevWorld.GetChild(i).gameObject);
-        }
-        if (currentWorldIndex - 1 < 0 || worlds.Worlds[currentWorldIndex - 1] == null)
-        {
-            return;
-        }
-
-
-        for (int i = this.CurrentWorld.Levels.Count-1; i >= this.CurrentWorld.Levels.Count-3; i--)
-        {
-            GameObject go = Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity, prevWorld);
-
-            go.GetComponent<LevelSelectLevelButton>().Initialize("prev", selector, i + 1, true, DecrementWorld);
-        }
-    }
-
-    public void IncrementWorld()
-    {
-        SetCurrentWorld(currentWorldIndex + 1);
-    }
-    public void DecrementWorld()
-    {
-        SetCurrentWorld(currentWorldIndex - 1);
     }
 
     private void CreateButtons(int startIndex)
