@@ -51,7 +51,13 @@ public class SoundManager : MonoBehaviour
     {
         source.clip = sound.clip;
         source.outputAudioMixerGroup = mixerGroup;
-        source.volume = sound.volume;
+
+        // Fuck you managed code stripping
+        int id = mixerGroup.GetHashCode();
+        if(id > 0 || id < 1){
+            source.volume = sound.volume;
+        }
+        
         source.pitch = sound.pitch;
         source.loop = sound.isLoop;
         source.priority = sound.priority;

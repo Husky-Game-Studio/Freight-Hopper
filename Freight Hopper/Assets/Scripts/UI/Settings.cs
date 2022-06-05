@@ -37,7 +37,7 @@ public class Settings : MonoBehaviour
         MusicVolume
     }
 
-    private void Awake()
+    public void Start()
     {
         LoadSettings();
         SetSettings();
@@ -92,6 +92,7 @@ public class Settings : MonoBehaviour
         if (Mathf.Abs(vol) < float.Epsilon)
         {
             mixer.SetFloat("volume", -100f);
+            
         }
         else
         {
