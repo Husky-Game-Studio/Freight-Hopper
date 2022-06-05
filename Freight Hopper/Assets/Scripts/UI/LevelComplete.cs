@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class LevelComplete : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private Image medalImage;
     [SerializeField] private SpriteList medalImages;
     [SerializeField] private TextMeshProUGUI nextMedalTimeText;
+    private bool levelComplete = false;
 
     private void Awake()
     {
@@ -28,7 +30,18 @@ public class LevelComplete : MonoBehaviour
 
         levelCompleteScreen.SetActive(false);
     }
-
+    private void OnEnable()
+    {
+        UserInput.Instance.UserInputMaster.Player.Menu.performed += Menu;
+        UserInput.Instance.UserInputMaster.Player.Next.performed += NextLevel;
+        UserInput.Instance.UserInputMaster.Player.Restart.performed += RestartLevel;
+    }
+    private void OnDisable()
+    {
+        UserInput.Instance.UserInputMaster.Player.Menu.performed -= Menu;
+        UserInput.Instance.UserInputMaster.Player.Next.performed -= NextLevel;
+        UserInput.Instance.UserInputMaster.Player.Restart.performed -= RestartLevel;
+    }
     private void EnableLevelComplete()
     {
         if (Goal.Instance == null)
@@ -41,6 +54,7 @@ public class LevelComplete : MonoBehaviour
         BestTime();
         PauseMenu.Instance.PauseGame();
         levelCompleteScreen.SetActive(true);
+        levelComplete = true;
     }
 
     private void BestTime()
@@ -104,21 +118,35 @@ public class LevelComplete : MonoBehaviour
 
     
 
-    public void RestartLevel()
+    public void RestartLevel(InputAction.CallbackContext context)
     {
+        if(!levelComplete){
+            return;
+        }
         PauseMenu.Instance.ContinueGame();
         LevelController.Instance.Respawn();
+        levelComplete = false;
     }
 
-    public void NextLevel()
+    public void NextLevel(InputAction.CallbackContext context)
     {
+        if (!levelComplete)
+        {
+            return;
+        }
         PauseMenu.Instance.ContinueGame();
         LevelController.Instance.LoadNextLevel();
+        levelComplete = false;
     }
 
-    public void Menu()
+    public void Menu(InputAction.CallbackContext context)
     {
+        if (!levelComplete)
+        {
+            return;
+        }
         PauseMenu.Instance.ContinueGame();
         SceneLoader.LoadMenu();
+        levelComplete = false;
     }
 }

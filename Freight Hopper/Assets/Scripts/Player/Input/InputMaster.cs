@@ -81,6 +81,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""45d59b99-518a-4382-9f07-7bb322d1d313"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""892097b3-b1ef-4b98-96e4-0d7642f50d8b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -208,11 +224,33 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0609e75d-eb6e-43c6-bb81-8ddc79129162"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Freecam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4bf985c5-47dd-4ca2-ace2-eb73dede12ca"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4e81ca7-1003-4389-8927-5d82990be09c"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -231,6 +269,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_Debug = m_Player.FindAction("Debug", throwIfNotFound: true);
         m_Player_Freecam = m_Player.FindAction("Freecam", throwIfNotFound: true);
+        m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
+        m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -288,6 +328,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_Debug;
     private readonly InputAction m_Player_Freecam;
+    private readonly InputAction m_Player_Menu;
+    private readonly InputAction m_Player_Next;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -300,6 +342,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @Debug => m_Wrapper.m_Player_Debug;
         public InputAction @Freecam => m_Wrapper.m_Player_Freecam;
+        public InputAction @Menu => m_Wrapper.m_Player_Menu;
+        public InputAction @Next => m_Wrapper.m_Player_Next;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -333,6 +377,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Freecam.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
                 @Freecam.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
                 @Freecam.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
+                @Menu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                @Menu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                @Menu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                @Next.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNext;
+                @Next.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNext;
+                @Next.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNext;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -361,6 +411,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Freecam.started += instance.OnFreecam;
                 @Freecam.performed += instance.OnFreecam;
                 @Freecam.canceled += instance.OnFreecam;
+                @Menu.started += instance.OnMenu;
+                @Menu.performed += instance.OnMenu;
+                @Menu.canceled += instance.OnMenu;
+                @Next.started += instance.OnNext;
+                @Next.performed += instance.OnNext;
+                @Next.canceled += instance.OnNext;
             }
         }
     }
@@ -375,5 +431,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnDebug(InputAction.CallbackContext context);
         void OnFreecam(InputAction.CallbackContext context);
+        void OnMenu(InputAction.CallbackContext context);
+        void OnNext(InputAction.CallbackContext context);
     }
 }
