@@ -8,7 +8,7 @@ public class EdgeCorrection : MonoBehaviour
     [SerializeField] private Transform stepRayLower;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private float stepHeight = 0.3f;
-    [SerializeField] private float stepSmooth = 2;
+    //[SerializeField] private float stepSmooth = 2;
 
     private Rigidbody rb;
 
