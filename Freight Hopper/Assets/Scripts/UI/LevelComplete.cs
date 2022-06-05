@@ -117,19 +117,16 @@ public class LevelComplete : MonoBehaviour
     }
 
     
-
-    public void RestartLevel(InputAction.CallbackContext context)
-    {
-        if(!levelComplete){
+    public void RestartLevel(){
+        if (!levelComplete)
+        {
             return;
         }
         PauseMenu.Instance.ContinueGame();
         LevelController.Instance.Respawn();
         levelComplete = false;
     }
-
-    public void NextLevel(InputAction.CallbackContext context)
-    {
+    public void NextLevel(){
         if (!levelComplete)
         {
             return;
@@ -138,9 +135,7 @@ public class LevelComplete : MonoBehaviour
         LevelController.Instance.LoadNextLevel();
         levelComplete = false;
     }
-
-    public void Menu(InputAction.CallbackContext context)
-    {
+    public void Menu(){
         if (!levelComplete)
         {
             return;
@@ -148,5 +143,19 @@ public class LevelComplete : MonoBehaviour
         PauseMenu.Instance.ContinueGame();
         SceneLoader.LoadMenu();
         levelComplete = false;
+    }
+    public void RestartLevel(InputAction.CallbackContext context)
+    {
+        RestartLevel();
+    }
+
+    public void NextLevel(InputAction.CallbackContext context)
+    {
+        NextLevel();
+    }
+
+    public void Menu(InputAction.CallbackContext context)
+    {
+        Menu();
     }
 }

@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private CollisionManagement collisionManagement;
     private Friction friction;
 
+    private bool jumpedPreviously = false;
+
     private void Awake()
     {
         cameraController = Camera.main.GetComponent<FirstPersonCamera>();
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        jumpedPreviously = true;
         jumpBehavior.EntryAction();
     }
     void WallJumpLogic()
@@ -129,6 +132,10 @@ public class PlayerController : MonoBehaviour
     }
     void ApplyAbilities()
     {
+        if(UserInput.Instance.JumpHeld && !jumpedPreviously)
+        {
+            JumpsStartLogic();
+        }
         if(groundPoundBehavior.Active)
         {
             groundPoundBehavior.Action();
@@ -188,7 +195,6 @@ public class PlayerController : MonoBehaviour
             wallBehavior.InitialWallClimb();
         }
     }
-
     private void WallRunExitLogic(){
         if(!wallBehavior.RunActive){
             return;
@@ -212,8 +218,6 @@ public class PlayerController : MonoBehaviour
             wallBehavior.WallClimbExit();
         }
     }
-    
-
     void WallJumpExitLogic(){
         if (!wallBehavior.JumpActive)
         {
@@ -250,15 +254,11 @@ public class PlayerController : MonoBehaviour
         WallRunExitLogic();
         WallClimbExitLogic();
         WallJumpExitLogic();
-        EndLoop();
+        ResetValues();
     }
     
-    private void EndLoop()
+    private void ResetValues()
     {
-        ResetInputs();
-    }
-    private void ResetInputs()
-    {
-
+        jumpedPreviously = false;
     }
 }

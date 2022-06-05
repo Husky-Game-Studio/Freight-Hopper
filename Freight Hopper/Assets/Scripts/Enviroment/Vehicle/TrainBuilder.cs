@@ -326,7 +326,7 @@ public class TrainBuilder : MonoBehaviour
             CartProperties cartProperties = child.GetComponent<CartProperties>();
             if (cartProperties != null && child.gameObject != locomotive)
             {
-                DestroyImmediate(child.gameObject);
+                DestroyImmediate(child);
             }
         }
     }
@@ -366,8 +366,7 @@ public class TrainBuilder : MonoBehaviour
             cart.gameObject = PrefabUtility.InstantiatePrefab(baseCart, this.transform) as GameObject;
         }
 
-        cart.gameObject.transform.position = position;
-        cart.gameObject.transform.rotation = rotation;
+        cart.gameObject.transform.SetPositionAndRotation(position, rotation);
         cart.gameObject.name = "Cart " + index;
 
         cart.cartProperties = cart.gameObject.GetComponent<CartProperties>();
@@ -455,8 +454,7 @@ public class TrainBuilder : MonoBehaviour
         }
         GameObject cartModelPrefab = cartPrefabs.Prefabs[cart.cartID];
         GameObject cartModel = PrefabUtility.InstantiatePrefab(cartModelPrefab) as GameObject;
-        cartModel.transform.position = position;
-        cartModel.transform.rotation = cart.gameObject.transform.rotation;
+        cartModel.transform.SetPositionAndRotation(position, cart.gameObject.transform.rotation);
         cartModel.transform.parent = cart.gameObject.transform;
 
         cart.model = cartModel;
@@ -471,7 +469,7 @@ public class TrainBuilder : MonoBehaviour
 
             cargoModel.transform.rotation = cart.gameObject.transform.rotation;
             cargoModel.transform.parent = cart.model.transform;
-            cargoModel.transform.localPosition = Vector3.zero + (Vector3.up * index * cargoHeight.Value);
+            cargoModel.transform.localPosition = Vector3.zero + (cargoHeight.Value * index * Vector3.up);
             cargoModel.name = cargoModel.name + " " + index;
             return cargoModel;
         }

@@ -182,7 +182,7 @@ public class SoundManager : MonoBehaviour
         Sound sound = FindSound(name);
         if (sound.componentAudioSource.isActiveAndEnabled)
         {
-            StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime);
+            StartCoroutine(StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime));
             StartCoroutine(Fade(sound.componentAudioSource, sound.fadeOutTime, 0));
             ResetTimer(sound);
         }

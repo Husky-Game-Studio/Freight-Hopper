@@ -37,11 +37,11 @@ public class HoverController : MonoBehaviour
         InitializeEngines();
     }
 
-    private void OnDisable()
-    {
+    //private void OnDisable()
+    //{
         // May be memory leak without
         //this.transform.parent.parent.GetComponent<TrainMachineCenter>().LinkedToPath -= LinkEngines;
-    }
+    //}
 
     private void OnValidate()
     {

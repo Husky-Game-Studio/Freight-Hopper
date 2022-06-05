@@ -27,7 +27,7 @@ public class TerrainBuilder : MonoBehaviour
                 GameObject go = PrefabUtility.InstantiatePrefab(terrain, this.transform) as GameObject;
                 Undo.RegisterCreatedObjectUndo(go, "Generate Terrain");
                 go.name = terrainName + " " + x + ", " + y;
-                go.transform.position = this.transform.position + (this.transform.right * x * terrainWidth.Value) + (this.transform.forward * y * terrainWidth.Value);
+                go.transform.position = this.transform.position + (terrainWidth.Value * x * transform.right) + (terrainWidth.Value * y * this.transform.forward);
                 builtTerrain.Add(go);
             }
         }

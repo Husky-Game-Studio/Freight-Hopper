@@ -2,7 +2,7 @@
 
 public class WallDetectionLayer
 {
-    private float priority = 0;
+    private readonly float priority = 0;
     private readonly (bool, Vector3) FAIL = (false, Vector3.zero);
     public float Priority => priority;
 
