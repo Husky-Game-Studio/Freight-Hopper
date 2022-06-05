@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class ControlsInstructions : MonoBehaviour
 {
     [SerializeField] private Image tutorialImage;
+    private const float fadeInTime = 0.8f;
     private TextMeshProUGUI levelNameText;
 
-    // Start is called before the first frame update
     void Start()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
@@ -30,6 +30,25 @@ public class ControlsInstructions : MonoBehaviour
             }
         }
 
-        
+        if(tutorialImage.enabled) 
+        {
+            tutorialImage.color = new Color(tutorialImage.color.r, tutorialImage.color.g, tutorialImage.color.b, 0f);
+            StartCoroutine(FadeIn());
+        }
+    }
+
+    IEnumerator FadeIn()
+    {
+        Color initialColor = tutorialImage.color;   
+        Color targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 1f);
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeInTime)
+        {
+            elapsedTime += Time.deltaTime;
+            tutorialImage.color = Color.Lerp(initialColor, targetColor, elapsedTime / fadeInTime);
+            yield return null;
+        }
     }
 }
