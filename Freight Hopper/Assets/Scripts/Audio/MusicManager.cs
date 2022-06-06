@@ -13,7 +13,7 @@ public class MusicManager : SoundManager
     [SerializeField] private AudioMixerSnapshot normal;
     [SerializeField] private AudioMixerSnapshot paused;
     [SerializeField] private AudioMixerSnapshot alternate;
-
+    [SerializeField] private Timer minSongLengthTimer = new Timer(60);
     [SerializeField] private float musicChangeChance = 0.1f;
 
     public enum SnapshotMode
@@ -34,7 +34,7 @@ public class MusicManager : SoundManager
     }
     Songs currentSong = Songs.Menu;
     [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
-    private Scene lastScene;
+    private string lastScene = "";
     private void Start()
     {
         if (instance == null)
@@ -61,19 +61,28 @@ public class MusicManager : SoundManager
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {   
-        if(mode != LoadSceneMode.Single){
+    {
+        
+        if(mode != LoadSceneMode.Single)
+        {
             return;
         }
-        if(!SceneManager.GetActiveScene().name.Equals("MainMenu") && mode == LoadSceneMode.Single && lastScene != scene)
+        
+        if (!scene.name.Equals(SceneManager.GetActiveScene().name)) 
+        {
+            return;
+        }
+
+        if(!SceneManager.GetActiveScene().name.Equals("MainMenu") && !minSongLengthTimer.TimerActive() && !lastScene.Equals(scene.name))
         {
             if (UnityEngine.Random.Range(0f, 1f) < musicChangeChance || instance.currentSong == Songs.Menu)
             {
                 instance.SwitchSong(PickRandomSong());
                 instance.TransitionToSnapshot(musicMode);
+                minSongLengthTimer.ResetTimer();
             }
         }
-        lastScene = scene;
+        lastScene = scene.name;
     }
     Songs PickRandomSong(){
         List<Songs> enums = Enum.GetValues(typeof(Songs)).Cast<Songs>().ToList();
@@ -81,6 +90,10 @@ public class MusicManager : SoundManager
         return enums[random.Next(1, enums.Count)];
     }
 
+    private void FixedUpdate()
+    {
+        minSongLengthTimer.CountDown(Time.fixedUnscaledDeltaTime);
+    }
     public void TransitionToSnapshot(SnapshotMode mode)
     {
         switch (mode)

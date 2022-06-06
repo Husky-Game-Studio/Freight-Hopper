@@ -10,7 +10,12 @@ public class ChangeMixerOnTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        
         if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+        if (MusicManager.Instance == null)
         {
             return;
         }

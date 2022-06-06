@@ -52,7 +52,7 @@ public class LevelComplete : MonoBehaviour
 
         timerText.text = "Time: " + timer.GetTimeString();
         BestTime();
-        PauseMenu.Instance.PauseGame();
+        PauseMenu.Instance.PauseGame(true);
         levelCompleteScreen.SetActive(true);
         levelComplete = true;
     }

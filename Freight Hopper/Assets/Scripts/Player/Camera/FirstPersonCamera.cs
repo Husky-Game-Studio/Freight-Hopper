@@ -70,14 +70,21 @@ public class FirstPersonCamera : MonoBehaviour
         freecam = !freecam;
         if(freecam) {
             Time.timeScale = 0;
-            ui.gameObject.SetActive(false);
+            ui.SetActive(false);
             otherUIs = GameObject.Find("UniqueUICanvas");
-            otherUIs.gameObject.SetActive(false);
+            if(otherUIs != null){
+                otherUIs.SetActive(false);
+            }
+            
         }
         else {
             Time.timeScale = 1;
-            ui.gameObject.SetActive(true);
-            otherUIs.gameObject.SetActive(true);
+            ui.SetActive(true);
+            if (otherUIs != null)
+            {
+                otherUIs.SetActive(true);
+            }
+            
         }
     }
 

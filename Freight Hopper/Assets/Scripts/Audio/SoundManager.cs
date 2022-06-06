@@ -129,11 +129,16 @@ public class SoundManager : MonoBehaviour
         {
             sound.componentAudioSource.volume += UnityEngine.Random.Range(-sound.volumeVarience, sound.volumeVarience);
         }
-        sound.componentAudioSource.Play();
-        sound.componentAudioSource.pitch = sound.pitch;
-        sound.componentAudioSource.playOnAwake = false;
-        sound.componentAudioSource.volume = 0;
-        StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+        if (sound.componentAudioSource.isActiveAndEnabled)
+        {
+            sound.componentAudioSource.Play();
+            sound.componentAudioSource.pitch = sound.pitch;
+            sound.componentAudioSource.playOnAwake = false;
+            sound.componentAudioSource.volume = 0;
+        
+            StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+        }
+        
     }
 
     private IEnumerator Fade(AudioSource source, float duration, float finalVolume)
