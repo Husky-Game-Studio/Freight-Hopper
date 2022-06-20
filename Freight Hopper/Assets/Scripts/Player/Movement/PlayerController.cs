@@ -105,13 +105,16 @@ public class PlayerController : MonoBehaviour
     }
     void JumpsExitLogic()
     {
-        if(!jumpBehavior.jumpHoldingTimer.TimerActive()){
-            jumpBehavior.ExitAction();
-        }
         if (!wallBehavior.jumpHoldingTimer.TimerActive() && wallBehavior.JumpActive)
         {
             wallBehavior.JumpExit();
+            return;
         }
+        if (!jumpBehavior.jumpHoldingTimer.TimerActive()){
+            jumpBehavior.ExitAction();
+            
+        }
+        
     }
     void MovingLogic()
     {
@@ -143,10 +146,6 @@ public class PlayerController : MonoBehaviour
         if (jumpBehavior.Active && !wallBehavior.JumpActive)
         {
             jumpBehavior.jumpHoldingTimer.CountDown(Time.fixedDeltaTime);
-            if (!collisionManagement.IsGrounded.current)
-            {
-                jumpBehavior.coyoteeTimer.DeactivateTimer();
-            }
             jumpBehavior.Action();
         }
         if (wallBehavior.JumpActive)
