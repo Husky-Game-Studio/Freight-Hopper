@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
         if(!wallBehavior.RunActive){
             return;
         }
-        if (!wallBehavior.ShouldWallClimb || UserInput.Instance.Move().z != 1)
+        if (!wallBehavior.ShouldLeftRun && !wallBehavior.ShouldRightRun)
         {
             if (!wallBehavior.coyoteTimer.TimerActive())
             {

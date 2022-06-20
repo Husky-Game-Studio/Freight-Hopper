@@ -95,10 +95,16 @@ public partial class WallRunBehavior : AbilityBehavior
             inAirCooldown.CountDown(Time.fixedDeltaTime);
         }
         entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
-        if(!RunActive)
+
+        if(RunActive && !ShouldLeftRun && !ShouldRightRun)
+        {
+            coyoteTimer.CountDown(Time.fixedDeltaTime);
+        }
+        
+        if (!RunActive)
         {
             exitEffectsCooldown.CountDown(Time.fixedDeltaTime);
-            coyoteTimer.CountDown(Time.fixedDeltaTime);
+            
             if (!exitEffectsCooldown.TimerActive())
             {
                 cameraController.ResetUpAxis();
