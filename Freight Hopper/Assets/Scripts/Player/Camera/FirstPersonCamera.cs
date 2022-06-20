@@ -12,7 +12,6 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private Transform upAxisTransform;
     private Transform player;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
-
     [SerializeField] private GameObject ui;
     private GameObject otherUIs;
     [SerializeField, ReadOnly] private bool freecam = false;
@@ -26,7 +25,7 @@ public class FirstPersonCamera : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        cinemachineVirtualCamera.m_Lens.FieldOfView = Settings.GetFOV();
+        
         Vector2 mouseSensitivity = Settings.GetMouseSensitivity();
         player = Player.Instance.transform.Find("Mesh");
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity.x / mouseSensitivityConversionValue;

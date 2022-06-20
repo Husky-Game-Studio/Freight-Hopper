@@ -18,6 +18,7 @@ public class CameraEffects : MonoBehaviour
 
     [SerializeField] private SoundManager playerSounds;
     [SerializeField] private CameraEffect<float> fov;
+    [SerializeField] private Camera distanceCamera;
 
     [System.Serializable]
     public struct CameraEffect<T>
@@ -33,7 +34,8 @@ public class CameraEffects : MonoBehaviour
     {
         playerRB = Player.Instance.modules.rigidbody;
 
-
+        cam.m_Lens.FieldOfView = Settings.GetFOV();
+        distanceCamera.fieldOfView = Settings.GetFOV();
         fov.baseValue = cam.m_Lens.FieldOfView;
         fov.value = fov.baseValue;
         fov.maxValue += fov.baseValue;
@@ -57,6 +59,7 @@ public class CameraEffects : MonoBehaviour
         speedLines.SetFloat("Scalar", fov.lerpValue + 1);
 
         cam.m_Lens.FieldOfView = fov.value;
+        distanceCamera.fieldOfView = fov.value;
 
         if (speed > speedEffectsStart)
         {
