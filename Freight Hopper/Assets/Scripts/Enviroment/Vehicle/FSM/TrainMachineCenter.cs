@@ -17,6 +17,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool instantlyAccelerate = true;
     [SerializeField] private bool spawnIn = false;
     [SerializeField] private bool flatSurface = false;
+    [SerializeField] private bool dummyTrain = false;
 
     public List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
@@ -24,12 +25,14 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
     [SerializeField, ReadOnly] private int currentPath = -1;
     [SerializeField, ReadOnly] private bool completedPathsToggle;
+    
 
     public Action<TrainRailLinker> LinkedToPath;
 
     public Timer inactivityDeletionTimer;
     private bool isTriggerEntered;
     private bool startedAlready = false;
+
 
     // Accessors
     public int CurrentPath => currentPath;
@@ -191,8 +194,24 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             railLinkers.Add(path.GetComponent<TrainRailLinker>());
         }
+
+        if(dummyTrain)
+        {
+            MakeDummy();
+        }
     }
 
+    private void MakeDummy()
+    {
+        foreach (Cart cart in carts)
+        {
+            cart.rb.freezeRotation = true;
+            cart.rb.constraints = RigidbodyConstraints.FreezePositionY;
+            cart.rb.constraints = RigidbodyConstraints.FreezeRotation;
+            cart.hoverController.DisableHovering();
+            cart.DisableGravity();
+        }
+    }
     private void OnValidate()
     {
         InitiliazeCarts();
@@ -229,7 +248,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     // Given a position, the train will try to rotate and move towards that position
     public void Follow(Vector3 direction)
     {
-        if (!hoverController.EnginesFiring)
+        if (!hoverController.EnginesFiring && !dummyTrain)
         {
             return;
         }
@@ -262,9 +281,12 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         this.Locomotive.rb.AddTorque(angAcc, ForceMode.Acceleration);
     }
 
-    //Rolling Correction
+    // Rolling Correction
     private void KeepUpright()
     {
+        if(dummyTrain){
+            return;
+        }
         foreach (Cart cart in carts)
         {
             if (cart.rb == null)
@@ -277,7 +299,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             if (flatSurface)
             {
                 angleWrong = Vector3.SignedAngle(Vector3.up, rbTransform.up, -rbTransform.forward);                
-            } else {
+            } 
+            else 
+            {
                 Vector3 gravityRight = Vector3.Cross(Vector3.up, rbTransform.forward);
                 Vector3 gravityForward = Vector3.Cross(Vector3.up, gravityRight);
                 Vector3 cartUp = Vector3.ProjectOnPlane(rbTransform.up, gravityForward);

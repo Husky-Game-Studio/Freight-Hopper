@@ -21,6 +21,10 @@ public class Cart
         uprightPID.Initialize(new PID.Data(3f, 0.1f, 0.2f)); // This needs to be done somewhere where it can be tweaked by game designers
     }
 
+    public void DisableGravity(){
+        rb.GetComponent<Gravity>().EnableGravity(false);
+    }
+
     public void DestroyCartFunc()
     {
         int cartIndex = properties.IndexOfCart;

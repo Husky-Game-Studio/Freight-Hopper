@@ -7,7 +7,7 @@ public class HoverEngine : MonoBehaviour
     [System.NonSerialized] private Rigidbody rb;
     [SerializeField, ReadOnly] private PID controller = new PID();
     [SerializeField, ReadOnly] private float targetDistance;
-    [SerializeField, ReadOnly] private bool automatic;
+    [SerializeField, ReadOnly] private bool automatic = true;
     [SerializeField, ReadOnly] private bool firing;
     [System.NonSerialized] private TrainRailLinker currentLinker;
     public bool Firing => firing;
@@ -19,12 +19,11 @@ public class HoverEngine : MonoBehaviour
         automatic = false;
     }
 
-    public void Initialize(Rigidbody rb, PID.Data data, float targetDistance, bool automatic)
+    public void Initialize(Rigidbody rb, PID.Data data, float targetDistance)
     {
         this.rb = rb;
         controller.Initialize(data * rb.mass);
         this.targetDistance = targetDistance;
-        this.automatic = automatic;
     }
 
     private void OnDrawGizmosSelected()

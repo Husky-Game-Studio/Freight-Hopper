@@ -10,7 +10,6 @@ public class HoverController : MonoBehaviour
     [SerializeField, ReadOnly, Tooltip("Automatically grabs hover engine that are children to this object")] private List<HoverEngine> hoverEnginePivots;
     [SerializeField] private PIDSettings hoverSetting;
     [SerializeField] private float targetDistance;
-    [SerializeField] private bool automatic = true;
     [SerializeField] private GameObject hoverEnginePrefab;
     [SerializeField, ReadOnly] private bool enginesFiring;
     public bool EnginesFiring => enginesFiring;
@@ -88,7 +87,7 @@ public class HoverController : MonoBehaviour
                 continue;
             }
             PID.Data data = new PID.Data(hoverSetting);
-            hoverEngine.Initialize(rb, data * ((float)6 / hoverEnginePivots.Count), targetDistance, automatic);
+            hoverEngine.Initialize(rb, data * ((float)6 / hoverEnginePivots.Count), targetDistance);
         }
     }
 
