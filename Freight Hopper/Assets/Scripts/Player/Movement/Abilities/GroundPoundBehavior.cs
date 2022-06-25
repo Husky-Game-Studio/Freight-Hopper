@@ -11,6 +11,7 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float downwardsForce = 10;
     [SerializeField] private float slopeDownForce = 500;
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
+    [SerializeField] private ParticleSystem particles;
 
     private bool active;
 
@@ -66,10 +67,14 @@ public class GroundPoundBehavior : AbilityBehavior
             Vector3 acrossSlope = Vector3.Cross(upAxis, collisionManager.ContactNormal.current);
             Vector3 downSlope = Vector3.Cross(acrossSlope, collisionManager.ContactNormal.current);
             direction = downSlope;
-            if (!collisionManager.IsGrounded.old && !this.FlatSurface)
+            if (!collisionManager.IsGrounded.old)
             {
-                Vector3 oldDownForce = Vector3.Project(collisionManager.Velocity.old, upAxis);
-                rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
+                particles.Play();
+                if (!this.FlatSurface){
+                    Vector3 oldDownForce = Vector3.Project(collisionManager.Velocity.old, upAxis);
+                    rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
+                }
+                
             }
             direction *= slopeDownForce;
         }
