@@ -11,7 +11,7 @@ public class LevelTimer : MonoBehaviour
 
     private void Start()
     {
-        startTime = Time.time;
+        startTime = Time.realtimeSinceStartup;
         textTimer = GetComponent<TextMeshProUGUI>();
     }
 
@@ -22,7 +22,7 @@ public class LevelTimer : MonoBehaviour
 
     public float GetTime()
     {
-        return Time.time - startTime;
+        return Time.realtimeSinceStartup - startTime;
     }
 
     public string GetTimeString()

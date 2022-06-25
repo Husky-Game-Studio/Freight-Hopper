@@ -15,6 +15,7 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private Image medalImage;
     [SerializeField] private SpriteList medalImages;
     [SerializeField] private TextMeshProUGUI nextMedalTimeText;
+
     private bool levelComplete = false;
 
     private void Awake()
@@ -51,6 +52,7 @@ public class LevelComplete : MonoBehaviour
         }
 
         timerText.text = "Time: " + timer.GetTimeString();
+        timer.gameObject.SetActive(false);
         BestTime();
         PauseMenu.Instance.PauseGame(true);
         levelCompleteScreen.SetActive(true);

@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
     }
     void GroundPoundStartLogic()
     {
+        if(Time.timeScale == 0) 
+        {
+            return;
+        }
         if(groundPoundBehavior.FlatSurface) 
         {
             return;
@@ -62,7 +66,11 @@ public class PlayerController : MonoBehaviour
 
     void JumpsStartLogic()
     {
-        if(wallBehavior.RunActive || wallBehavior.ClimbActive) {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
+        if (wallBehavior.RunActive || wallBehavior.ClimbActive) {
             WallJumpLogic();
             return;
         }
@@ -188,7 +196,7 @@ public class PlayerController : MonoBehaviour
     }
     private void WallClimbEntryLogic()
     {
-        if (wallBehavior.ShouldWallClimb && UserInput.Instance.Move().z == 1 &&
+        if (wallBehavior.ShouldWallClimb && UserInput.Instance.Move().z >= 0.6f &&
             !wallBehavior.ClimbActive)
         {
             wallBehavior.InitialWallClimb();
@@ -213,7 +221,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if(!wallBehavior.ShouldWallClimb || UserInput.Instance.Move().z != 1) {
+        if(!wallBehavior.ShouldWallClimb || UserInput.Instance.Move().z < 0.6f) {
             wallBehavior.WallClimbExit();
         }
     }
