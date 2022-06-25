@@ -16,7 +16,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private bool loop = false;
     [SerializeField] private bool instantlyAccelerate = true;
     [SerializeField] private bool spawnIn = false;
-    [SerializeField] private bool goUpSlope = false;
+    [SerializeField] private bool flatSurface = false;
 
     public List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
@@ -274,14 +274,15 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
             float angleWrong;
             Transform rbTransform = cart.rb.transform;
-            if (goUpSlope){
+            if (flatSurface)
+            {
+                angleWrong = Vector3.SignedAngle(Vector3.up, rbTransform.up, -rbTransform.forward);                
+            } else {
                 Vector3 gravityRight = Vector3.Cross(Vector3.up, rbTransform.forward);
                 Vector3 gravityForward = Vector3.Cross(Vector3.up, gravityRight);
                 Vector3 cartUp = Vector3.ProjectOnPlane(rbTransform.up, gravityForward);
 
                 angleWrong = Vector3.SignedAngle(Vector3.up, cartUp, gravityForward);
-            } else {
-                angleWrong = Vector3.SignedAngle(Vector3.up, rbTransform.up, -rbTransform.forward);
             }
             
             float force = cart.uprightPID.GetOutput(angleWrong, Time.fixedDeltaTime);
