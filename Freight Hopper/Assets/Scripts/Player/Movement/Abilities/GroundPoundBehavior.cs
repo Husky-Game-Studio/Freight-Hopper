@@ -12,6 +12,11 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float slopeDownForce = 500;
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
     [SerializeField] private ParticleSystem particles;
+    [Space]
+    [SerializeField] MovementBehavior movementBehavior;
+    [SerializeField] float lowSpeedMultiplier = 2;
+    [SerializeField, Tooltip("the horizontal speed you have to be below to apply low speed multiplier")] float horizontalSpeedLimit = 90f;
+    
 
     private bool active;
 
@@ -59,6 +64,7 @@ public class GroundPoundBehavior : AbilityBehavior
         friction.ReduceFriction(FrictionReduction);
         soundManager.Play("GroundPoundTick");
         Vector3 upAxis = collisionManager.ValidUpAxis;
+        
         Vector3 direction = -upAxis;
         //Debug.Log("ground pounding");
         if (collisionManager.IsGrounded.current)
@@ -77,11 +83,17 @@ public class GroundPoundBehavior : AbilityBehavior
                 
             }
             direction *= slopeDownForce;
+            if (movementBehavior.HorizontalSpeed < horizontalSpeedLimit)
+            {
+                direction *= lowSpeedMultiplier;
+            }
         }
         else
         {
             direction *= downwardsForce;
         }
+
+        
 
         rb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
         increasingForce.value += deltaIncreaseForce * Time.fixedDeltaTime;
