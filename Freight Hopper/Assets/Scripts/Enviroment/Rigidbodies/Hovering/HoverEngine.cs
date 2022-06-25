@@ -5,7 +5,6 @@ using UnityEngine.VFX;
 public class HoverEngine : MonoBehaviour
 {
     [System.NonSerialized] private Rigidbody rb;
-    [SerializeField, ReadOnly] private Vector3 direction = Vector3.up;
     [SerializeField, ReadOnly] private PID controller = new PID();
     [SerializeField, ReadOnly] private float targetDistance;
     [SerializeField, ReadOnly] private bool automatic;
@@ -31,7 +30,7 @@ public class HoverEngine : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + (direction * targetDistance));
+        Gizmos.DrawLine(this.transform.position, this.transform.position + (Vector3.up * targetDistance));
     }
 
     public void UpdateCurrentLinker(TrainRailLinker newLinker)
@@ -86,21 +85,17 @@ public class HoverEngine : MonoBehaviour
         float currentHeight = Vector3.Project(positionOnPath - position, up).magnitude;
         float heightDif = height - currentHeight;
 
-        Vector3 force = direction * this.controller.GetOutput(heightDif, Time.fixedDeltaTime);
+        Vector3 force = Vector3.up * this.controller.GetOutput(heightDif, Time.fixedDeltaTime);
         rb.AddForceAtPosition(force, position, ForceMode.Force);
     }
 
-    public void SetDirection(Vector3 direction)
-    {
-        this.direction = direction;
-    }
+ 
 
     private void FixedUpdate()
     {
         if (automatic)
         {
             Vector3 position = this.transform.position;
-            SetDirection(CustomGravity.GetUpAxis());
             Hover(targetDistance, currentLinker, ref position);
         }
     }
