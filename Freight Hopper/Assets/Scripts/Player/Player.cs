@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
         public RigidbodyLinker rigidbodyLinker;
         public SoundManager soundManager;
         public EdgeCorrectionCollision edgeCorrectionCollision;
-        public GroundPoundBehavior groundPoundBehavior;
     }
     public Modules modules;
 

@@ -14,6 +14,9 @@ public class Debugging : MonoBehaviour
     [SerializeField] private AutomaticTimer refreshSpeed = new AutomaticTimer(0.2f);
 
     private static bool F3Status;
+    int frameCount = 0;
+    double dt = 0.0;
+    double fps = 0.0;
 
     private void OnEnable()
     {
@@ -32,13 +35,24 @@ public class Debugging : MonoBehaviour
     {
         if (debugGameobject.activeSelf)
         {
+            frameCount++;
+            dt += Time.deltaTime;
+            if (dt > refreshSpeed.Duration)
+            {
+                framesPerSecondText.text = "FPS: " + ((int)(frameCount / dt)).ToString();
+                frameCount = 0;
+                dt -= refreshSpeed.Duration;
+            }
             refreshSpeed.Update(Time.deltaTime);
         }
     }
 
     private void UpdateText()
     {
-        framesPerSecondText.text = "FPS: " + ((int)(1f / Time.unscaledDeltaTime)).ToString();
+
+        
+        
+        
         speedText.text = "Speed: " + movementBehavior.Speed.ToString("0.00") + " m/s";
         horizontalSpeedText.text = "HSpeed: " + movementBehavior.HorizontalSpeed.ToString("0.00") + " m/s";
     }
