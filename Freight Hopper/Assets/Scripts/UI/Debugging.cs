@@ -49,10 +49,6 @@ public class Debugging : MonoBehaviour
 
     private void UpdateText()
     {
-
-        
-        
-        
         speedText.text = "Speed: " + movementBehavior.Speed.ToString("0.00") + " m/s";
         horizontalSpeedText.text = "HSpeed: " + movementBehavior.HorizontalSpeed.ToString("0.00") + " m/s";
     }
