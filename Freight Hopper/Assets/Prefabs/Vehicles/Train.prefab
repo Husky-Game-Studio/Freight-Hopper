@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8828049057225272883
 Transform:
@@ -61,6 +61,8 @@ MonoBehaviour:
   loop: 0
   instantlyAccelerate: 1
   spawnIn: 0
+  flatSurface: 0
+  dummyTrain: 0
   pathObjects: []
   railLinkers: []
   targetVelocity: 35
@@ -120,7 +122,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1886316016507558034, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886316016507558034, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
       propertyPath: m_Materials.Array.data[0]
