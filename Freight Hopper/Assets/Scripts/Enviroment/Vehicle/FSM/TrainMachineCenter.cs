@@ -213,6 +213,8 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             cart.rb.constraints = RigidbodyConstraints.FreezeRotation;
             cart.hoverController.DisableHovering();
             cart.DisableGravity();
+            cart.rb.gameObject.GetComponent<CartProperties>().enabled = false;
+            cart.rb.gameObject.GetComponent<Gravity>().enabled = false;
         }
     }
     private void OnValidate()
@@ -255,9 +257,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             return;
         }
-
-
-
 
         Quaternion rot = this.Locomotive.rb.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
@@ -324,7 +323,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public override void PerformStateIndependentBehaviors()
     {
-        if (this.CompletedPaths)
+        if (!dummyTrain && this.CompletedPaths)
         {
             completedPathsToggle = true;
             inactivityDeletionTimer.CountDown(Time.fixedDeltaTime);

@@ -111,6 +111,7 @@ public class HoverController : MonoBehaviour
     private void FixedUpdate()
     {
         if(disabled){
+            this.gameObject.SetActive(false);
             return;
         }
         enginesFiring = false;
