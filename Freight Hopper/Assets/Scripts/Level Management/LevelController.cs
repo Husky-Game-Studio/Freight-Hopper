@@ -9,6 +9,7 @@ public class LevelController : MonoBehaviour
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
     [SerializeField] private Transform playerSpawnTransform;
+    [SerializeField] private float spawnSnapSmoothing = 0.001f;
     public LevelData levelData;
 
     private const int highHeight = 999999;
@@ -129,7 +130,7 @@ public class LevelController : MonoBehaviour
             Ray ray = new Ray(player.transform.position - Vector3.up, -Vector3.up);
             if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
             {
-                player.transform.position = hit.point + (Vector3.up*2) + (Vector3.up * 0.001f);
+                player.transform.position = hit.point + (Vector3.up*2) + (Vector3.up * spawnSnapSmoothing);
             }
         }
 
