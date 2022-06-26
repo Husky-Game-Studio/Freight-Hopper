@@ -16,7 +16,6 @@ public class Debugging : MonoBehaviour
     private static bool F3Status;
     int frameCount = 0;
     double dt = 0.0;
-    double fps = 0.0;
 
     private void OnEnable()
     {

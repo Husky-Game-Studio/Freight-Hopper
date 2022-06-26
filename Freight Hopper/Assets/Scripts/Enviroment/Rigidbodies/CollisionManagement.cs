@@ -53,7 +53,7 @@ public class CollisionManagement : MonoBehaviour
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
         Physics.defaultMaxDepenetrationVelocity = this.MaxDepenetrationVelocity;
-        rb.solverIterations = solverIterations;
+        //rb.solverIterations = solverIterations;
         this.StartCoroutine(LateFixedUpdate());
     }
 
