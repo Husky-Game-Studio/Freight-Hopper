@@ -189,7 +189,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             transitionHandler.CheckFollowPath
         };
         waiting = new WaitingState(this, waitingTransitionsList);
-
         if (dummyTrain)
         {
             MakeDummy();
@@ -200,7 +199,6 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             railLinkers.Add(path.GetComponent<TrainRailLinker>());
         }
-
         
     }
 

@@ -14,6 +14,7 @@ public class CollisionManagement : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
 
     [SerializeField] private float maxDepenetrationVelocity = 500;
+    [SerializeField] private int solverIterations = 60;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
@@ -52,6 +53,7 @@ public class CollisionManagement : MonoBehaviour
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
         Physics.defaultMaxDepenetrationVelocity = this.MaxDepenetrationVelocity;
+        rb.solverIterations = solverIterations;
         this.StartCoroutine(LateFixedUpdate());
     }
 
