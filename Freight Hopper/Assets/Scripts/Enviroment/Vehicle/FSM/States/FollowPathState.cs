@@ -7,12 +7,13 @@ public class FollowPathState : BasicState
     private TrainMachineCenter trainFSM;
     private LinkedList<RailChangeMarker> railChangeMarkers = new LinkedList<RailChangeMarker>();
     private Vector3 targetDirection;
-
+    bool dummyTrain;
     public Vector3 TargetDirection => targetDirection;
 
-    public FollowPathState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions) : base(machineCenter, stateTransitions)
+    public FollowPathState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions, bool dummyTrain) : base(machineCenter, stateTransitions)
     {
         this.trainFSM = (TrainMachineCenter)machineCenter;
+        this.dummyTrain = dummyTrain;
     }
 
     public override void EntryState()
@@ -36,11 +37,19 @@ public class FollowPathState : BasicState
 
     public override void PerformBehavior()
     {
-        TrainRailLinker.TrainData trainData;
+        if (dummyTrain)
+        {
+            trainFSM.Follow(trainFSM.Locomotive.rb.transform.forward);
+            return;
+        }
         if (trainFSM.CurrentRailLinker == null)
         {
             return;
         }
+
+        
+
+        TrainRailLinker.TrainData trainData;
         trainFSM.CurrentRailLinker.linkedRigidbodyObjects.TryGetValue(trainFSM.Locomotive.rb, out trainData);
         int index;
         if (trainData == null)
@@ -53,9 +62,6 @@ public class FollowPathState : BasicState
             //index = Mathf.Min(trainData.followIndex, trainFSM.GetCurrentPath().path.localTangents.Length - 1);
         }
 
-        //Debug.Log("follow index " + index);
-
-        //Debug.Log("forward direction: " + trainFSM.GetCurrentPath().path.GetTangent(index));
         trainFSM.Follow(trainFSM.GetCurrentPath().path.GetTangent(index));
 
         if ((trainFSM.GetNextRailLinker.WithinFollowDistance(0, trainFSM.Locomotive.rb.position)

@@ -181,7 +181,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             transitionHandler.CheckWaiting
         };
-        followPath = new FollowPathState(this, followPathTransitionsList);
+        followPath = new FollowPathState(this, followPathTransitionsList, dummyTrain);
 
         // Waiting
         List<Func<BasicState>> waitingTransitionsList = new List<Func<BasicState>>
@@ -190,15 +190,18 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         };
         waiting = new WaitingState(this, waitingTransitionsList);
 
+        if (dummyTrain)
+        {
+            MakeDummy();
+            return;
+        }
+
         foreach (PathCreation.PathCreator path in pathObjects)
         {
             railLinkers.Add(path.GetComponent<TrainRailLinker>());
         }
 
-        if(dummyTrain)
-        {
-            MakeDummy();
-        }
+        
     }
 
     private void MakeDummy()
@@ -253,38 +256,37 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
             return;
         }
 
+
+
+
         Quaternion rot = this.Locomotive.rb.transform.rotation;
         Quaternion rotInv = Quaternion.Inverse(rot);
-
-        //Current
         Vector3 currentVel = this.Locomotive.rb.velocity;
-        Vector3 currentAngVel = this.Locomotive.rb.angularVelocity;
-
-        //Target (Rotate, Move Forward)
         Vector3 targetVel = rot * Vector3.forward * this.TargetSpeed;
-        Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * direction)); //Rotate based on rotation heading
-
-        //Target Change
         Vector3 deltaVel = targetVel - currentVel;
-        Vector3 deltaAngVel = targetAngVel - currentAngVel;
-
-        //Target Acceleration
         Vector3 acc = deltaVel / Time.fixedDeltaTime;
-        Vector3 angAcc = deltaAngVel / Time.fixedDeltaTime;
-
         //Limit Change
         acc = rot * Vector3.Project(rotInv * acc, Vector3.forward);
-        angAcc = rot * Vector3.Project(rotInv * angAcc, Vector3.up);
-
-        //Forces
         this.Locomotive.rb.AddForce(acc, ForceMode.Acceleration);
+
+        if(dummyTrain)
+        {
+            return;
+        }
+        
+        Vector3 currentAngVel = this.Locomotive.rb.angularVelocity;
+        Vector3 targetAngVel = currentVel.magnitude * (rot * TargetAngVel(rotInv * direction));
+        Vector3 deltaAngVel = targetAngVel - currentAngVel;
+        Vector3 angAcc = deltaAngVel / Time.fixedDeltaTime;
+        angAcc = rot * Vector3.Project(rotInv * angAcc, Vector3.up);
         this.Locomotive.rb.AddTorque(angAcc, ForceMode.Acceleration);
     }
 
     // Rolling Correction
     private void KeepUpright()
     {
-        if(dummyTrain){
+        if(dummyTrain)
+        {
             return;
         }
         foreach (Cart cart in carts)
@@ -339,6 +341,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
                 Destroy(this.gameObject);
             }
             inactivityDeletionTimer.ResetTimer();
+        }
+        if(dummyTrain){
+            return;
         }
         if (!spawnIn || currentState == followPath)
         {

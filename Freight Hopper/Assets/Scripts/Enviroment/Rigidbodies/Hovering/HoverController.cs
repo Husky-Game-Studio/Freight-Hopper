@@ -98,17 +98,21 @@ public class HoverController : MonoBehaviour
             eng.UpdateCurrentLinker(linker);
         }
     }
-
+    private bool disabled = false;
     public void DisableHovering()
     {
         foreach (HoverEngine eng in hoverEnginePivots)
         {
             eng.DisableEngine();
         }
+        disabled = true;
     }
 
     private void FixedUpdate()
     {
+        if(disabled){
+            return;
+        }
         enginesFiring = false;
         foreach (HoverEngine eng in hoverEnginePivots)
         {
