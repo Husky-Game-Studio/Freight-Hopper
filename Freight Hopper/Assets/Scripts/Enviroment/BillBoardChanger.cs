@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class BillBoardChanger : MonoBehaviour
 {
-    const int billboardCount = 11;
+    const int billboardCount = 8;
     const int height = 2048;
     const int billboardHeight = 132;
     enum Direction {
