@@ -67,16 +67,19 @@ public class LevelComplete : MonoBehaviour
         LevelTimeSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         if (levelTimeData == null)
         {
-            bestTimeText.text = "Best Time: " + timer.GetTimeString();
-            float time = timer.GetTime();
-            levelTimeData = new LevelTimeSaveData(time);
+            float myTime = timer.GetTime();
+            myTime = Mathf.Round(myTime * 1000f) / 1000f;
+            bestTimeText.text = "Best Time: " + myTime;
+            //float time = timer.GetTime();
+            levelTimeData = new LevelTimeSaveData(myTime);
             LevelTimeSaveLoader.Save(levelName, levelTimeData);
-            Debug.Log("no save data found, saving new best of " + time);
-            bestTime = time;
+            Debug.Log("no save data found, saving new best of " + myTime);
+            bestTime = myTime;
         }
         else
         {
             float newBestTime = levelTimeData.SetNewBestTime(timer.GetTime());
+            newBestTime = Mathf.Round(newBestTime * 1000f) / 1000f;
             bestTimeText.text = "Best Time: " + LevelTimer.GetTimeString(newBestTime);
             if (newBestTime == timer.GetTime())
             {
