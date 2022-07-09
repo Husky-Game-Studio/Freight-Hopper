@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -54,14 +55,14 @@ public class CollisionManagement : MonoBehaviour
         Physics.defaultMaxDepenetrationVelocity = this.MaxDepenetrationVelocity;
         this.StartCoroutine(LateFixedUpdate());
     }
-
+    List<ContactPoint> contacts = new List<ContactPoint>();
     private void EvaulateCollisions(Collision collision)
     {
         contactNormal.current = Vector3.zero;
-
-        for (int i = 0; i < collision.contactCount; i++)
+        collision.GetContacts(contacts);
+        foreach (ContactPoint contactPoint in contacts)
         {
-            Vector3 normal = collision.GetContact(i).normal;
+            Vector3 normal = contactPoint.normal;
 
             float collisionAngle = Vector3.Angle(normal, upAxis);
             if (collisionAngle <= maxSlope)

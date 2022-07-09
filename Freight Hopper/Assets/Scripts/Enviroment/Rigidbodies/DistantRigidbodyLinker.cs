@@ -9,6 +9,7 @@ public class DistantRigidbodyLinker : MonoBehaviour
     private Rigidbody rb;
     private RigidbodyLinker rigibodyLinker;
     private CollisionManagement collisionManagent;
+    Collider[] results = new Collider[]{};
 
     private void OnDrawGizmosSelected()
     {
@@ -30,25 +31,12 @@ public class DistantRigidbodyLinker : MonoBehaviour
 
     private void EmitSkin()
     {
-        // We only want to run this script if we are not grounded to anything
-        /*if (collisionManagent.IsGrounded.old)
+        Physics.OverlapCapsuleNonAlloc(this.transform.TransformPoint(pointOne), this.transform.TransformPoint(pointTwo), radius, results, layerMask);
+        foreach (var t in results)
         {
-            return;
-        }*/
-
-        Vector3 gravityDirection = -CustomGravity.GetUpAxis();
-
-        Collider[] colliders = Physics.OverlapCapsule(this.transform.TransformPoint(pointOne), this.transform.TransformPoint(pointTwo), radius, layerMask);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i].attachedRigidbody != null)
+            if (t.attachedRigidbody != null)
             {
-                Vector3 dir = (colliders[i].attachedRigidbody.position - rb.position).normalized;
-                //if (Vector3.Dot(dir, gravityDirection) < 0) // Only connect downwards
-                //{
-                //Debug.Log("Updating link due to skin");
-                rigibodyLinker.UpdateLink(colliders[i].attachedRigidbody);
-                //}
+                rigibodyLinker.UpdateLink(t.attachedRigidbody);
             }
         }
     }

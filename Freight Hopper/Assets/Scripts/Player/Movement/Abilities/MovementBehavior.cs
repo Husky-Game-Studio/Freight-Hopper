@@ -79,4 +79,8 @@ public class MovementBehavior : AbilityBehavior
             soundManager.PlayRandom("Stone", 5);
         }
     }
+    IEnumerator PlayRandomButFaster()
+    {
+        
+    }
 }
