@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
-    private bool respawning = false;
+    private bool respawning;
     public LevelName CurrentLevelName => levelName;
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;

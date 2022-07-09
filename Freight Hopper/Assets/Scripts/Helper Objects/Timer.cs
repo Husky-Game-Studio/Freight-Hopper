@@ -5,7 +5,7 @@ public class Timer
 {
     [SerializeField] protected float duration;
     public float Duration => duration;
-    [SerializeField, ReadOnly] protected float current = 0;
+    [SerializeField, ReadOnly] protected float current;
     public float Current => current;
 
     // Initailizes duration and sets current to 0

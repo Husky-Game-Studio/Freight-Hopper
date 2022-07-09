@@ -5,7 +5,6 @@ using UnityEngine.Audio;
 
 public class Settings : MonoBehaviour
 {
-    private bool vsync;
     private bool antialiasing;
     private int shadowDistance;
     private int fov;
@@ -13,7 +12,8 @@ public class Settings : MonoBehaviour
     private float soundEffectsVolume;
     private float musicVolume;
 
-    public bool Vsync => vsync;
+    public bool Vsync { get; private set; }
+
     public bool Antialiasing => antialiasing;
     public int ShadowDistance => shadowDistance;
     public int FOV => fov;
@@ -25,7 +25,7 @@ public class Settings : MonoBehaviour
     [SerializeField] private AudioMixer musicVolumeMixer;
     [SerializeField] private AudioMixer soundEffectsVolumeMixer;
 
-    enum SettingName
+    private enum SettingName
     {
         VSync,
         Antialiasing,
@@ -45,7 +45,7 @@ public class Settings : MonoBehaviour
 
     public void LoadSettings()
     {
-        vsync = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.VSync.ToString(), 1));
+        Vsync = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.VSync.ToString(), 1));
         antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Antialiasing.ToString(), 1));
         shadowDistance = PlayerPrefs.GetInt(SettingName.ShadowDistance.ToString(), 1000);
         fov = PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
@@ -57,7 +57,7 @@ public class Settings : MonoBehaviour
 
     public void SetSettings()
     {
-        QualitySettings.vSyncCount = vsync ? 1 : 0;
+        QualitySettings.vSyncCount = Vsync ? 1 : 0;
         pipelineAsset.msaaSampleCount = antialiasing ? 4 : 0;
         pipelineAsset.shadowDistance = shadowDistance;
         UpdateMixerVolume(musicVolumeMixer, musicVolume);
@@ -77,7 +77,7 @@ public class Settings : MonoBehaviour
     }
     public void SaveSettings()
     {
-        PlayerPrefs.SetInt(SettingName.VSync.ToString(), Convert.ToInt32(vsync));
+        PlayerPrefs.SetInt(SettingName.VSync.ToString(), Convert.ToInt32(Vsync));
         PlayerPrefs.SetInt(SettingName.Antialiasing.ToString(), Convert.ToInt32(antialiasing));
         PlayerPrefs.SetInt(SettingName.ShadowDistance.ToString(), shadowDistance);
         PlayerPrefs.SetInt(SettingName.Fov.ToString(), fov);
@@ -102,7 +102,7 @@ public class Settings : MonoBehaviour
 
     public void SetVsync(bool val)
     {
-        vsync = val;
+        Vsync = val;
     }
 
     public void SetAntialiasing(bool val)

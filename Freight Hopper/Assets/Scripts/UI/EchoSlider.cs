@@ -5,7 +5,7 @@ using System;
 
 public class EchoSlider : MonoBehaviour
 {
-    [SerializeField] private Slider slider = null;
+    [SerializeField] private Slider slider;
     [SerializeField] private TextMeshProUGUI echoText;
     [SerializeField] private TextMeshProUGUI labelText;
 

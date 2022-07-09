@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -45,7 +43,7 @@ public class CameraEffects : MonoBehaviour
         speedLines.Stop();
     }
 
-    private bool goingSlowAgain = false;
+    private bool goingSlowAgain;
 
     private void Update()
     {

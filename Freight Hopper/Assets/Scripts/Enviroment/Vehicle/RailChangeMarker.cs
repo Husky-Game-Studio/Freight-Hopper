@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 // This is for when a train is switching paths and still needs to keep its carts on the preivous paths
 public class RailChangeMarker
@@ -8,7 +6,6 @@ public class RailChangeMarker
     private Queue<Cart> carts = new Queue<Cart>();
     private TrainRailLinker previousLinker;
     private TrainRailLinker nextLinker;
-    private int nextLinkerIndexEntry;
 
     public bool Completed => carts.Count < 1;
 

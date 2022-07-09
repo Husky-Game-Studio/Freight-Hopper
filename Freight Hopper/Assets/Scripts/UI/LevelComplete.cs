@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -16,7 +14,7 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private SpriteList medalImages;
     [SerializeField] private TextMeshProUGUI nextMedalTimeText;
 
-    private bool levelComplete = false;
+    private bool levelComplete;
 
     private void Awake()
     {

@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class ChangeMixerOnTrigger : MonoBehaviour
 {
     [SerializeField] private MusicManager.SnapshotMode mixerToFadeInto = MusicManager.SnapshotMode.Alternate;
-    [SerializeField] private bool switched = false;
+    [SerializeField] private bool switched;
 
     private void OnTriggerExit(Collider other)
     {

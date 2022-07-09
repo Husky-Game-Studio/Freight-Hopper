@@ -3,7 +3,7 @@ using System;
 
 public class Player : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     public struct Modules
     {
         public Gravity gravity;
@@ -20,10 +20,8 @@ public class Player : MonoBehaviour
 
     private static Player instance;
 
-    public static bool loadedIn = false;
-
     // If there is a null reference error try subscribing to the PlayerLoadedIn event
-    public static Player Instance { get => instance; set => _ = instance; }
+    public static Player Instance => instance;
 
     private void Awake()
     {
@@ -36,11 +34,5 @@ public class Player : MonoBehaviour
             instance = this;
         }
         PlayerLoadedIn?.Invoke();
-        loadedIn = true;
-    }
-
-    private void OnDisable()
-    {
-        loadedIn = false;
     }
 }

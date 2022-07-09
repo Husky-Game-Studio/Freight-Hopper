@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -17,7 +15,7 @@ public class Accelerometer : MonoBehaviour
     [SerializeField] [ReadOnly]
     private Vector3 angAcc;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
@@ -37,17 +35,19 @@ public class Accelerometer : MonoBehaviour
 
     public Vector3 GetAcceleration()
     {
-        velF = rb.velocity;
+        var velocity = rb.velocity;
+        velF = velocity;
         acc = (velF - velI) / Time.fixedDeltaTime;
-        velI = rb.velocity;
+        velI = velocity;
         return acc;
     }
 
     public Vector3 GetAngularAcceleration()
     {
-        angVelF = rb.angularVelocity;
+        var angularVelocity = rb.angularVelocity;
+        angVelF = angularVelocity;
         angAcc = (angVelF - angVelI) / Time.fixedDeltaTime;
-        angVelI = rb.angularVelocity;
+        angVelI = angularVelocity;
         return angAcc;
     }
 }

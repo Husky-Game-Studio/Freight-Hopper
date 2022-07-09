@@ -1,4 +1,3 @@
-using System.Collections;
 using Cinemachine;
 using UnityEngine;
 
@@ -14,13 +13,13 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     [SerializeField] private GameObject ui;
     private GameObject otherUIs;
-    [SerializeField, ReadOnly] private bool freecam = false;
+    [SerializeField, ReadOnly] private bool freecam;
 
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
     [SerializeField] private float mouseSensitivityConversionValue = 10;
-    int curFrameCount = 0;
-    const int stopCameraFrameCount = 4;
+    private int curFrameCount;
+    private const int stopCameraFrameCount = 4;
     private void Start()
     {
         Cursor.visible = false;
@@ -61,7 +60,7 @@ public class FirstPersonCamera : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Freecam.performed -= ToggleFreecam;
     }
 
-    void ToggleFreecam(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    private void ToggleFreecam(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if(Time.timeScale == 0 && !freecam){
             return;

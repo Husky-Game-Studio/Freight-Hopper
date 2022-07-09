@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -13,16 +12,16 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
     [SerializeField] private Optional<float> startWaitTime;
     [SerializeField] private Optional<float> startWhenDistanceFromPlayer;
     [SerializeField] private Optional<OnTriggerEvent> startOnTriggerEnter;
-    [SerializeField] private bool loop = false;
+    [SerializeField] private bool loop;
     [SerializeField] private bool instantlyAccelerate = true;
-    [SerializeField] private bool spawnIn = false;
-    [SerializeField] private bool flatSurface = false;
-    [SerializeField] private bool dummyTrain = false;
+    [SerializeField] private bool spawnIn;
+    [SerializeField] private bool flatSurface;
+    [SerializeField] private bool dummyTrain;
 
     public List<PathCreation.PathCreator> pathObjects;
     [ReadOnly] public List<TrainRailLinker> railLinkers;
     [SerializeField] private float targetVelocity;
-    [HideInInspector, NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
+    [NonSerialized] public LinkedList<Cart> carts = new LinkedList<Cart>();
     [SerializeField, ReadOnly] private int currentPath = -1;
     [SerializeField, ReadOnly] private bool completedPathsToggle;
     
@@ -31,7 +30,7 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
 
     public Timer inactivityDeletionTimer;
     private bool isTriggerEntered;
-    private bool startedAlready = false;
+    private bool startedAlready;
 
 
     // Accessors
@@ -207,8 +206,10 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         foreach (Cart cart in carts)
         {
             cart.rb.freezeRotation = true;
-            cart.rb.constraints = RigidbodyConstraints.FreezePositionY;
-            cart.rb.constraints = RigidbodyConstraints.FreezeRotation;
+            var constraints = cart.rb.constraints;
+            constraints = RigidbodyConstraints.FreezePositionY;
+            constraints = RigidbodyConstraints.FreezeRotation;
+            cart.rb.constraints = constraints;
             cart.hoverController.DisableHovering();
             cart.DisableGravity();
             cart.rb.gameObject.GetComponent<CartProperties>().enabled = false;
@@ -222,9 +223,9 @@ public partial class TrainMachineCenter : FiniteStateMachineCenter
         {
             float t = pathObjects[0].path.GetClosestTimeOnPath(this.Locomotive.rb.position);
             Vector3 position = pathObjects[0].path.GetPointAtTime(t);
-            this.Locomotive.rb.transform.position = position;
             float offsetDistance = pathObjects[0].GetComponent<TrainRailLinker>().Height;
-            this.Locomotive.rb.transform.position += pathObjects[0].path.GetNormal(t) * offsetDistance;
+            position += pathObjects[0].path.GetNormal(t) * offsetDistance;
+            this.Locomotive.rb.transform.position = position;
             this.Locomotive.rb.transform.rotation = pathObjects[0].path.GetRotation(t);
         }
     }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -13,7 +12,7 @@ public class PrefabSwapper : MonoBehaviour
 
 
     [ContextMenu("Switch")]
-    void Switch()
+    private void Switch()
     {
 
         if (prefabs.Count < 1 || currentIndex >= prefabs.Count || currentIndex < 0 || prefabs[currentIndex] == null)

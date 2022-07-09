@@ -45,8 +45,8 @@ public class UserInput : MonoBehaviour
         }
         master.Disable();
     }
-    private int frameCount = 0;
-    bool masterEnabled = false;
+    private int frameCount;
+    private bool masterEnabled;
     private void Update()
     {
         if (frameCount >= 4)

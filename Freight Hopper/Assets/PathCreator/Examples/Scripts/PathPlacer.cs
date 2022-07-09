@@ -1,5 +1,4 @@
-﻿using PathCreation;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PathCreation.Examples {
 
@@ -10,9 +9,9 @@ namespace PathCreation.Examples {
         public GameObject holder;
         public float spacing = 3;
 
-        const float minSpacing = .1f;
+        private const float minSpacing = .1f;
 
-        void Generate () {
+        private void Generate () {
             if (pathCreator != null && prefab != null && holder != null) {
                 DestroyObjects ();
 
@@ -30,7 +29,7 @@ namespace PathCreation.Examples {
             }
         }
 
-        void DestroyObjects () {
+        private void DestroyObjects () {
             int numChildren = holder.transform.childCount;
             for (int i = numChildren - 1; i >= 0; i--) {
                 DestroyImmediate (holder.transform.GetChild (i).gameObject, false);

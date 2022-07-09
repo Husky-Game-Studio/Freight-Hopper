@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +7,8 @@ public class EdgeCorrectionCollision : MonoBehaviour
     [SerializeField] private Transform stepRayLower;
 
     [Header("Steps")]
-    public float maxStepHeight = 1f;              ///< The maximum a player can set upwards in units when they hit a wall that's potentially a step
-    public float stepSearchOvershoot = 0.01f;       ///< How much to overshoot into the direction a potential step in units when testing. High values prevent player from walking up small steps but may cause problems.
+    public float maxStepHeight = 1f;              // The maximum a player can set upwards in units when they hit a wall that's potentially a step
+    public float stepSearchOvershoot = 0.01f;       // How much to overshoot into the direction a potential step in units when testing. High values prevent player from walking up small steps but may cause problems.
 
     private List<ContactPoint> allCPs = new List<ContactPoint>();
     private Vector3 lastVelocity;
@@ -83,9 +82,10 @@ public class EdgeCorrectionCollision : MonoBehaviour
         Collider stepCol = stepTestCP.otherCollider;
         RaycastHit hitInfoSide;
         Vector3 vel = lastVelocity.magnitude > 1 ? lastVelocity : rb.transform.forward;
-        Vector3 flattenedVelocity = Vector3.ProjectOnPlane(vel, rb.transform.up);
+        var up = rb.transform.up;
+        Vector3 flattenedVelocity = Vector3.ProjectOnPlane(vel, up);
 
-        Vector3 originSide = lastRayLowerPosition + 0.1f * rb.transform.up;
+        Vector3 originSide = lastRayLowerPosition + 0.1f * up;
         flattenedVelocity = flattenedVelocity == Vector3.zero ? rb.transform.forward : flattenedVelocity;
         Vector3 directionSide = flattenedVelocity.normalized;
 

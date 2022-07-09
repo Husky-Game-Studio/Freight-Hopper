@@ -28,8 +28,8 @@ public class TrainBuilder : MonoBehaviour
     // Super comments
     private TrainMachineCenter trainFSM;
     private GameObject locomotive;
-    private int cartIndexSelection = 0;
-    private int cargoIndexSelection = 0;
+    private int cartIndexSelection;
+    private int cargoIndexSelection;
     public int ActionIndex
     {
         get
@@ -144,11 +144,13 @@ public class TrainBuilder : MonoBehaviour
         }
         if (this.LinkedPath != null && linkToPath && this.LinkedPath.path != null)
         {
-            float t = this.LinkedPath.path.GetClosestTimeOnPath(locomotive.transform.position);
+            var position1 = locomotive.transform.position;
+            float t = this.LinkedPath.path.GetClosestTimeOnPath(position1);
             Vector3 position = this.LinkedPath.path.GetPointAtTime(t);
-            locomotive.transform.position = position;
+            position1 = position;
             float offsetDistance = this.LinkedPath.GetComponent<TrainRailLinker>().Height;
-            locomotive.transform.position += this.LinkedPath.path.GetNormal(t) * offsetDistance;
+            position1 += this.LinkedPath.path.GetNormal(t) * offsetDistance;
+            locomotive.transform.position = position1;
             locomotive.transform.rotation = this.LinkedPath.path.GetRotation(t);
         }
         EditorUtility.SetDirty(this);
@@ -415,9 +417,10 @@ public class TrainBuilder : MonoBehaviour
 
     private Vector3 GetPosition(int index)
     {
-        Vector3 startPosition = locomotive.transform.position - (locomotive.transform.forward * cartLength.Value/2);
+        var forward = locomotive.transform.forward;
+        Vector3 startPosition = locomotive.transform.position - (forward * cartLength.Value/2);
 
-        Vector3 endPosition = startPosition - (locomotive.transform.forward * ((cartLength.Value / 2) + (index * cartLength.Value) + ((index + 1) * (gapLength.Value + jointSnappingLength.Value))));
+        Vector3 endPosition = startPosition - (forward * ((cartLength.Value / 2) + (index * cartLength.Value) + ((index + 1) * (gapLength.Value + jointSnappingLength.Value))));
 
         if (linkToPath && this.LinkedPath.path != null)
         {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Snaps given rigidbody to the ground. In this case only the player
@@ -17,7 +15,8 @@ public class GroundSnap : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawLine(this.transform.position + (Vector3.up * verticalOffset), this.transform.position + (Vector3.up * verticalOffset) + (Vector3.down * rayDistance));
+        var position = this.transform.position;
+        Gizmos.DrawLine(position + (Vector3.up * verticalOffset), position + (Vector3.up * verticalOffset) + (Vector3.down * rayDistance));
     }
 
     private void Awake()

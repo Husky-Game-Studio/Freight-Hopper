@@ -13,9 +13,11 @@ public class GroundPoundBehavior : AbilityBehavior
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
     [SerializeField] private ParticleSystem particles;
     [Space]
-    [SerializeField] MovementBehavior movementBehavior;
-    [SerializeField] float lowSpeedMultiplier = 2;
-    [SerializeField, Tooltip("the horizontal speed you have to be below to apply low speed multiplier")] float horizontalSpeedLimit = 90f;
+    [SerializeField]
+    private MovementBehavior movementBehavior;
+    [SerializeField] private float lowSpeedMultiplier = 2;
+    [SerializeField, Tooltip("the horizontal speed you have to be below to apply low speed multiplier")]
+    private float horizontalSpeedLimit = 90f;
     
 
     private bool active;

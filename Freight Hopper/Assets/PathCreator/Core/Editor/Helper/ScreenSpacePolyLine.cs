@@ -140,9 +140,11 @@ namespace PathCreationEditor
                     points[i] = HandleUtility.WorldToGUIPoint(verticesWorld[i]);
                 }
 
-                prevCamPos = Camera.current.transform.position;
-                prevCamRot = Camera.current.transform.rotation;
-                premCamIsOrtho = Camera.current.orthographic;
+                var current = Camera.current;
+                var transform1 = current.transform;
+                prevCamPos = transform1.position;
+                prevCamRot = transform1.rotation;
+                premCamIsOrtho = current.orthographic;
             }
         }
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -7,7 +5,7 @@ public class Explosion : MonoBehaviour
 {
     [SerializeField] private float radius = 1;
     [SerializeField] private float centerForce = 5; // Note, this will be cubed and decrease with radius
-    [SerializeField] private LayerMask targetLayer = default;
+    [SerializeField] private LayerMask targetLayer;
     [SerializeField] private float explosionOffsetTime = 0.6f;
     [SerializeField] private float explosionDuration;
     private VisualEffect explosion;

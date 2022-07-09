@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
@@ -14,7 +10,7 @@ public class LaserGridBuilder : MonoBehaviour
     [SerializeField, Min(1)] private int layers = 8;
     [SerializeField, Min(4)] private float width = 10f;
     [SerializeField, Min(0.1f)] private float laserThickness = 0.2f;
-    [SerializeField] private bool allLayersActive = false;
+    [SerializeField] private bool allLayersActive;
     [SerializeField] private List<int> activeLayers;
     private List<Vector3> activeLayersPositions;
     
@@ -22,8 +18,8 @@ public class LaserGridBuilder : MonoBehaviour
     private const float LASER_SHIFTER = 1.86f;
 
     
-    private bool laserGroupOpen = false;
-    private int laserGroupCounter = 0;
+    private bool laserGroupOpen;
+    private int laserGroupCounter;
 
     public void OnValidate()
     {
@@ -99,20 +95,23 @@ public class LaserGridBuilder : MonoBehaviour
     
     private void BuildLaserLayer(int layer, bool activeLayer)
     {
-        Vector3 currentPosition = this.gameObject.transform.position;
-        Quaternion currentQuaternion = this.gameObject.transform.rotation;
+        var o = this.gameObject;
+        Vector3 currentPosition = o.transform.position;
+        Quaternion currentQuaternion = o.transform.rotation;
         
-        Vector3 polePosition = currentPosition + this.gameObject.transform.right * width / 2;
-        polePosition += (transform.up * layer * GRID_SCALAR);
+        Vector3 polePosition = currentPosition + o.transform.right * width / 2;
+        polePosition += (transform.up * (layer * GRID_SCALAR));
         
         Instantiate(poleObject, polePosition, currentQuaternion, this.gameObject.transform);
-        Instantiate(poleObject, polePosition - transform.right * width, Quaternion.LookRotation(-transform.forward, transform.up), this.gameObject.transform);
+        var transform1 = transform;
+        Instantiate(poleObject, polePosition - transform1.right * width, Quaternion.LookRotation(-transform1.forward, transform1.up), this.gameObject.transform);
         
         if (activeLayer)
         {
             Vector3 laserPosition = currentPosition;
-            laserPosition += transform.up * layer * GRID_SCALAR;
-            laserPosition += transform.up * LASER_SHIFTER;
+            var up = transform.up;
+            laserPosition += up * (layer * GRID_SCALAR);
+            laserPosition += up * LASER_SHIFTER;
             //activeLayersPositions.Add(laserPosition);
             
             GameObject currentLaser = Instantiate(laserObject, laserPosition, currentQuaternion, this.gameObject.transform);

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EdgeCorrection : MonoBehaviour
@@ -16,11 +14,9 @@ public class EdgeCorrection : MonoBehaviour
     {
         rb = Player.Instance.modules.rigidbody;
 
-        stepRayUpper.position = new Vector3(stepRayUpper.position.x, stepHeight + stepRayLower.position.y, stepRayUpper.position.z);
-    }
-
-    private void OnDrawGizmosSelected()
-    {
+        var position = stepRayUpper.position;
+        position = new Vector3(position.x, stepHeight + stepRayLower.position.y, position.z);
+        stepRayUpper.position = position;
     }
 
     private void FixedUpdate()
@@ -30,10 +26,11 @@ public class EdgeCorrection : MonoBehaviour
 
     private void StepUp()
     {
-        float dist = rb.velocity.magnitude * Time.fixedDeltaTime * 1.1f;
+        var velocity = rb.velocity;
+        float dist = velocity.magnitude * Time.fixedDeltaTime * 1.1f;
         //Debug.DrawLine(stepRayLower.position, stepRayLower.position + Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized * dist);
         //Debug.DrawLine(stepRayUpper.transform.position + rb.transform.up * stepHeight, stepRayUpper.position + rb.transform.up * stepHeight + Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized * (dist + 0.1f));
-        Vector3 velDir = Vector3.ProjectOnPlane(rb.velocity, rb.transform.up).normalized;
+        Vector3 velDir = Vector3.ProjectOnPlane(velocity, rb.transform.up).normalized;
         Vector3[] direction =
         {
             velDir/*,
@@ -43,8 +40,10 @@ public class EdgeCorrection : MonoBehaviour
 
         for (int i = 0; i < direction.Length; i++)
         {
-            Debug.DrawLine(stepRayLower.position, stepRayLower.position + direction[i] * dist);
-            Debug.DrawLine(stepRayUpper.position, stepRayUpper.position + direction[i] * (dist + 0.2f));
+            var position = stepRayLower.position;
+            Debug.DrawLine(position, position + direction[i] * dist);
+            var position1 = stepRayUpper.position;
+            Debug.DrawLine(position1, position1 + direction[i] * (dist + 0.2f));
 
             if (Physics.Raycast(stepRayLower.position, direction[i], out RaycastHit hitLow, dist, layerMask))
             {
@@ -52,8 +51,10 @@ public class EdgeCorrection : MonoBehaviour
                 {
                     continue;
                 }
-                Vector3 tempDir = -rb.transform.up;
-                Vector3 tempPos = hitLow.point + (tempDir * 0.1f) + rb.transform.up * stepHeight;
+
+                var up = rb.transform.up;
+                Vector3 tempDir = -up;
+                Vector3 tempPos = hitLow.point + (tempDir * 0.1f) + up * stepHeight;
                 Debug.DrawLine(tempPos, tempPos + tempDir * (dist + 0.2f), Color.red);
                 if (Physics.Raycast(tempPos, tempDir, out RaycastHit hitDown, stepHeight, layerMask))
                 {

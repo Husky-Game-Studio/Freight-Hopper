@@ -1,10 +1,9 @@
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
 
 public class Goal : MonoBehaviour
 {
-    private static Goal instance = null;
+    private static Goal instance;
     public static Goal Instance => instance;
 
     private Action levelComplete;

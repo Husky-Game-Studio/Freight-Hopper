@@ -2,7 +2,7 @@
 
 public class WallDetectionLayer
 {
-    private readonly float priority = 0;
+    private readonly float priority;
     private readonly (bool, Vector3) FAIL = (false, Vector3.zero);
     public float Priority => priority;
 
@@ -17,11 +17,11 @@ public class WallDetectionLayer
         public T rightBack;
     }
 
-    private WallDetections<Ray> rays = new WallDetections<Ray>();
+    private WallDetections<Ray> rays;
 
-    private WallDetections<bool> status = new WallDetections<bool>();
+    private WallDetections<bool> status;
 
-    private WallDetections<Vector3> normals = new WallDetections<Vector3>();
+    private WallDetections<Vector3> normals;
 
     public WallDetectionLayer(float frontAngles, float backAngles, float height, float priority)
     {

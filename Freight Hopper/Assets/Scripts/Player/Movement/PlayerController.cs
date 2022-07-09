@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] MovementBehavior movementBehavior;
-    [SerializeField] JumpBehavior jumpBehavior;
-    [SerializeField] GroundPoundBehavior groundPoundBehavior;
-    [SerializeField] WallRunBehavior wallBehavior;
+    [SerializeField] private MovementBehavior movementBehavior;
+    [SerializeField] private JumpBehavior jumpBehavior;
+    [SerializeField] private GroundPoundBehavior groundPoundBehavior;
+    [SerializeField] private WallRunBehavior wallBehavior;
 
     private FirstPersonCamera cameraController;
     private CollisionManagement collisionManagement;
     private Friction friction;
 
-    private bool jumpedPreviously = false;
+    private bool jumpedPreviously;
 
     private void Awake()
     {
@@ -51,7 +49,8 @@ public class PlayerController : MonoBehaviour
         UserInput.Instance.JumpInput -= JumpsStartLogic;
         UserInput.Instance.JumpInputCanceled -= JumpsCanceledLogic;
     }
-    void GroundPoundStartLogic()
+
+    private void GroundPoundStartLogic()
     {
         if(Time.timeScale == 0) 
         {
@@ -64,7 +63,7 @@ public class PlayerController : MonoBehaviour
         groundPoundBehavior.EntryAction();
     }
 
-    void JumpsStartLogic()
+    private void JumpsStartLogic()
     {
         if (Time.timeScale == 0)
         {
@@ -89,7 +88,8 @@ public class PlayerController : MonoBehaviour
         jumpedPreviously = true;
         jumpBehavior.EntryAction();
     }
-    void WallJumpLogic()
+
+    private void WallJumpLogic()
     {
         if (wallBehavior.JumpActive)
         {
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
         wallBehavior.JumpInitial();
     }
 
-    void JumpsCanceledLogic()
+    private void JumpsCanceledLogic()
     {
         if (wallBehavior.JumpActive)
         {
@@ -111,7 +111,8 @@ public class PlayerController : MonoBehaviour
             jumpBehavior.ExitAction();
         }
     }
-    void JumpsExitLogic()
+
+    private void JumpsExitLogic()
     {
         if (!wallBehavior.jumpHoldingTimer.TimerActive() && wallBehavior.JumpActive)
         {
@@ -124,7 +125,8 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    void MovingLogic()
+
+    private void MovingLogic()
     {
         bool cantMove = false;
         if(cantMove)
@@ -134,14 +136,16 @@ public class PlayerController : MonoBehaviour
 
         movementBehavior.Action();
     }
-    void ResetFrictionOnInactivity()
+
+    private void ResetFrictionOnInactivity()
     {
         if (UserInput.Instance.Move().IsZero() && !groundPoundBehavior.Active)
         {
             friction.ResetFrictionReduction();
         }
     }
-    void ApplyAbilities()
+
+    private void ApplyAbilities()
     {
         if(UserInput.Instance.JumpHeld && !jumpedPreviously)
         {
@@ -225,7 +229,8 @@ public class PlayerController : MonoBehaviour
             wallBehavior.WallClimbExit();
         }
     }
-    void WallJumpExitLogic(){
+
+    private void WallJumpExitLogic(){
         if (!wallBehavior.JumpActive)
         {
             return;
@@ -236,7 +241,8 @@ public class PlayerController : MonoBehaviour
             wallBehavior.JumpExit();
         }
     }
-    void GroundPoundExitLogic()
+
+    private void GroundPoundExitLogic()
     {
         bool shouldExit = groundPoundBehavior.Active && groundPoundBehavior.FlatSurface;
         if (!shouldExit)

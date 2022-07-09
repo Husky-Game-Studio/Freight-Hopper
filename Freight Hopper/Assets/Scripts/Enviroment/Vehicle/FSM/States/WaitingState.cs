@@ -8,7 +8,7 @@ public class WaitingState : BasicState
     private TrainMachineCenter trainFSM;
     private Transform playerTransform;
     private Transform locomotive;
-    private bool waitedAtStart = false;
+    private bool waitedAtStart;
     public bool WaitedAtStart => waitedAtStart;
 
     public WaitingState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions) : base(machineCenter, stateTransitions)

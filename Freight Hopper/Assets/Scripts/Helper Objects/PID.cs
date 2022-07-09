@@ -1,10 +1,9 @@
 using UnityEngine;
 
 [System.Serializable]
-/// <summary>
-/// PID controller, if you don't know what that is just google it. Going to be used for hovering, following a line, and more.
-/// Heavily references: https://unitylist.com/p/103l/Unity-pid-with-rigidbodies
-/// </summary>
+
+// PID controller, if you don't know what that is just google it. Going to be used for hovering, following a line, and more.
+// Heavily references: https://unitylist.com/p/103l/Unity-pid-with-rigidbodies
 public class PID
 {
     [System.Serializable]

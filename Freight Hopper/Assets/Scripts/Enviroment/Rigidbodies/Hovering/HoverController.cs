@@ -98,7 +98,7 @@ public class HoverController : MonoBehaviour
             eng.UpdateCurrentLinker(linker);
         }
     }
-    private bool disabled = false;
+    private bool disabled;
     public void DisableHovering()
     {
         foreach (HoverEngine eng in hoverEnginePivots)

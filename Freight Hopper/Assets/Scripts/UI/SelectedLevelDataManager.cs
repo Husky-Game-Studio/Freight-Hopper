@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -13,7 +11,7 @@ public class SelectedLevelDataManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bestTime;
     [SerializeField] private LevelListManager levelListManager;
     [SerializeField] private SpriteList medalSprites;
-    private int lastIndex = 0;
+    private int lastIndex;
 
     public LevelData CurrentLevelData => levelListManager.CurrentWorld.Levels[LevelSelectLevelButton.currentID - 1];
 

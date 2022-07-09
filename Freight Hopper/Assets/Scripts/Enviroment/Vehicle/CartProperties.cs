@@ -4,8 +4,8 @@ public class CartProperties : MonoBehaviour
 {
     [SerializeField] private int indexOfCart;
     private ConfigurableJoint joint;
-    private bool destroying = false;
-    private bool hadJoint = false;
+    private bool destroying;
+    private bool hadJoint;
 
     public bool HadJoint => hadJoint;
     public bool JointSnapped => joint == null || joint.connectedBody == null;

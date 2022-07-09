@@ -119,7 +119,10 @@ public class CollisionManagement : MonoBehaviour
         {
             return;
         }
-        Ray ray = new Ray(rb.position - (rb.transform.up * rb.transform.localScale.y), -rb.transform.up);
+
+        var transform1 = rb.transform;
+        var up = transform1.up;
+        Ray ray = new Ray(rb.position - (up * transform1.localScale.y), -up);
         Debug.DrawRay(ray.origin, ray.direction * groundRaycastCheckDistance, Color.red);
         if (Physics.Raycast(ray, out RaycastHit hit, groundRaycastCheckDistance, groundMask))
         {

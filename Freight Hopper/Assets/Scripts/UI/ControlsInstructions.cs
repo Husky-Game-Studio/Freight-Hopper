@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +6,8 @@ public class ControlsInstructions : MonoBehaviour
 {
     [SerializeField] private Image tutorialImage;
     private const float fadeInTime = 0.8f;
-    private TextMeshProUGUI levelNameText;
 
-    void Start()
+    private void Start()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
         LevelTimeSaveData levelTimeSaveData = LevelTimeSaveLoader.Load(levelName);
@@ -37,7 +34,7 @@ public class ControlsInstructions : MonoBehaviour
         }
     }
 
-    IEnumerator FadeIn()
+    private IEnumerator FadeIn()
     {
         Color initialColor = tutorialImage.color;   
         Color targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 1f);

@@ -14,8 +14,8 @@ public class Debugging : MonoBehaviour
     [SerializeField] private AutomaticTimer refreshSpeed = new AutomaticTimer(0.2f);
 
     private static bool F3Status;
-    int frameCount = 0;
-    double dt = 0.0;
+    private int frameCount;
+    private double dt;
 
     private void OnEnable()
     {

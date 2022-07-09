@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.VFX;
 
 [System.Serializable]
 public class HoverEngine : MonoBehaviour
@@ -11,8 +10,8 @@ public class HoverEngine : MonoBehaviour
     [SerializeField, ReadOnly] private bool firing;
     [System.NonSerialized] private TrainRailLinker currentLinker;
     public bool Firing => firing;
-    private int followIndex = 0;
-    private float followDistance = 0;
+    private int followIndex;
+    private float followDistance;
 
     public void DisableEngine()
     {
@@ -29,7 +28,8 @@ public class HoverEngine : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + (Vector3.up * targetDistance));
+        var position = this.transform.position;
+        Gizmos.DrawLine(position, position + (Vector3.up * targetDistance));
     }
 
     public void UpdateCurrentLinker(TrainRailLinker newLinker)

@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 using System;
 
 [CreateAssetMenu(menuName = "Scriptable Objects/Level/Data"), System.Serializable]

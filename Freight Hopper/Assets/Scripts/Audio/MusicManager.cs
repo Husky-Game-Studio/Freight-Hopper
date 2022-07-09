@@ -32,7 +32,8 @@ public class MusicManager : SoundManager
         Escape,
         Unknown
     }
-    Songs currentSong = Songs.Menu;
+
+    private Songs currentSong = Songs.Menu;
     [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
     private string lastScene = "";
     private void Start()
@@ -60,7 +61,8 @@ public class MusicManager : SoundManager
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         
         if(mode != LoadSceneMode.Single)
@@ -84,7 +86,8 @@ public class MusicManager : SoundManager
         }
         lastScene = scene.name;
     }
-    Songs PickRandomSong(){
+
+    private Songs PickRandomSong(){
         List<Songs> enums = Enum.GetValues(typeof(Songs)).Cast<Songs>().ToList();
         System.Random random = new System.Random();
         return enums[random.Next(1, enums.Count)];

@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class FollowPathState : BasicState
 {
     private TrainMachineCenter trainFSM;
     private LinkedList<RailChangeMarker> railChangeMarkers = new LinkedList<RailChangeMarker>();
-    private Vector3 targetDirection;
-    bool dummyTrain;
-    public Vector3 TargetDirection => targetDirection;
+    private bool dummyTrain;
 
     public FollowPathState(FiniteStateMachineCenter machineCenter, List<Func<BasicState>> stateTransitions, bool dummyTrain) : base(machineCenter, stateTransitions)
     {

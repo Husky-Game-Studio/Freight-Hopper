@@ -1,20 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class TargetSphereDrive
 {
-    static float Radius(float x, float y)
+    private static float Radius(float x, float y)
     {
         return (x * x + y * y) / (2 * x);
     }
 
-    static float Theta(float x, float y)
+    private static float Theta(float x, float y)
     {
         return Mathf.Atan2(2 * x * y , y * y - x * x);
     }
 
-    static float ArcLength(float x, float y)
+    private static float ArcLength(float x, float y)
     {
         return (x == 0) ? y : Radius(x, y) * Theta(x, y);
     }

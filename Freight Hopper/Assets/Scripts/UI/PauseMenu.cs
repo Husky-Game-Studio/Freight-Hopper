@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -7,10 +5,10 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject menu;
     [SerializeField] private AudioMixerGroup pausedAudioMixer;
-    private bool paused = false;
+    private bool paused;
     private AudioMixerGroup lastAudioMixer;
     private static PauseMenu instance;
-    private bool levelCompletePause = false;
+    private bool levelCompletePause;
     public static PauseMenu Instance => instance;
     public bool Paused => paused;
 

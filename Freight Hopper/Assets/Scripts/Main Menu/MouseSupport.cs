@@ -1,26 +1,24 @@
-using System; // for assert
-using System.Collections;
-using System.Collections.Generic;
+// for assert
 using UnityEngine;
-using UnityEngine.UI; // for GUI elements: Button, Toggle
+// for GUI elements: Button, Toggle
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class MouseSupport : MonoBehaviour
 {
-    public Camera MainCamera = null;
-    public GameObject LevelSelector = null;
-    public GameObject MainMenu = null;
+    public Camera MainCamera;
+    public GameObject LevelSelector;
+    public GameObject MainMenu;
     private UnityEngine.InputSystem.Mouse mouse;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         mouse = UnityEngine.InputSystem.Mouse.current;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (mouse.leftButton.isPressed)
         {

@@ -14,26 +14,26 @@ public class Sound : ScriptableObject
     [Range(0f, 1f)]
     public float volume = 1f;
 
-    public float fadeInTime = 0;
-    public float fadeOutTime = 0;
+    public float fadeInTime;
+    public float fadeOutTime;
 
     [Range(0f, 0.5f)]
-    public float volumeVarience = 0f;
+    public float volumeVarience;
 
     [Range(0.1f, 3f)]
     public float pitch = 1f;
 
     [Range(0f, 1f)]
-    public float pitchVarience = 0f;
+    public float pitchVarience;
 
     public bool isLoop;
     public bool hasCooldown;
 
     [Range(0f, 1f)]
-    public float spatialBlend = 0;
+    public float spatialBlend;
 
     [Min(0)]
-    public float delay = 0f;
+    public float delay;
 
     [Range(0, 256), Tooltip("Lower is higher priority")]
     public int priority = 128;

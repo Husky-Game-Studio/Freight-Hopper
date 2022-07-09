@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
 public class BillBoardChanger : MonoBehaviour
 {
-    const int billboardCount = 8;
-    const int height = 2048;
-    const int billboardHeight = 132;
-    enum Direction {
+    private const int billboardCount = 8;
+    private const int height = 2048;
+    private const int billboardHeight = 132;
+
+    private enum Direction {
         Up,
         Down,
         Left,
@@ -19,7 +18,7 @@ public class BillBoardChanger : MonoBehaviour
         RevRight,
     }
     private Mesh mesh;
-    [SerializeField] Direction rotation;
+    [SerializeField] private Direction rotation;
     private void Awake()
     {
         mesh = GetComponent<MeshFilter>().mesh;

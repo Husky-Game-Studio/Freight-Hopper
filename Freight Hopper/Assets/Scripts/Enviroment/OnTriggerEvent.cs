@@ -9,7 +9,7 @@ public class OnTriggerEvent : MonoBehaviour
 
     [SerializeField] private bool triggerOnPlayerEnter;
     // GameObject MUST have a collider component
-    [SerializeField] private Optional<List<GameObject>> triggerOnGameObjectEnter = new Optional<List<GameObject>>();
+    [SerializeField] private Optional<List<GameObject>> triggerOnGameObjectEnter;
 
     private void OnTriggerEnter(Collider other)
     {

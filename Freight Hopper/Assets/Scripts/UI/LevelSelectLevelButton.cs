@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +14,7 @@ public class LevelSelectLevelButton : MonoBehaviour, IPointerClickHandler
     public static int currentID = 1;
     private RectTransform selector;
     public bool Unlocked => unlocked;
-    private bool nextWorldButton = false;
+    private bool nextWorldButton;
 
     private void OnDisable()
     {
