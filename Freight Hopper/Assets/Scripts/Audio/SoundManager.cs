@@ -112,7 +112,7 @@ public class SoundManager : MonoBehaviour
     }
 
     // Play sound with name, will be created if it doesn't exist
-    public void Play(string name)
+    public void Play(string name, bool playMultiple = false)
     {
         Sound sound = FindSound(name);
 
@@ -130,12 +130,22 @@ public class SoundManager : MonoBehaviour
         }
         if (sound.componentAudioSource.isActiveAndEnabled)
         {
-            sound.componentAudioSource.Play();
-            sound.componentAudioSource.pitch = sound.pitch;
-            sound.componentAudioSource.playOnAwake = false;
-            sound.componentAudioSource.volume = 0;
-        
-            StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+            if (playMultiple)
+            {
+                sound.componentAudioSource.PlayOneShot(sound.componentAudioSource.clip);
+                sound.componentAudioSource.pitch = sound.pitch;
+                sound.componentAudioSource.playOnAwake = false;
+            }
+            else
+            {
+                sound.componentAudioSource.Play();
+                sound.componentAudioSource.pitch = sound.pitch;
+                sound.componentAudioSource.playOnAwake = false;
+                sound.componentAudioSource.volume = 0;
+                StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+            }
+
+            
         }
         
     }
@@ -178,7 +188,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayRandom(string name, int size)
     {
-        Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)));
+        Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)), true);
     }
 
     public void Stop(string name)

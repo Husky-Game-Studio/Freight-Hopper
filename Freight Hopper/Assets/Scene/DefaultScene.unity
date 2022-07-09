@@ -3459,6 +3459,9 @@ MonoBehaviour:
     deltaAngle: 0.015
     acceleration: 26
     sideInputPenaltyMultiplier: 0.4
+  waiting: 0
+  speedSoundMultiplier: 10
+  walkingSoundTimeRange: {x: 0.1, y: 0.5}
 --- !u!114 &1798020246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4422,7 +4425,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2052
   maxDepenetrationVelocity: 100
-  solverIterations: 60
   isGrounded:
     old: 0
     current: 0

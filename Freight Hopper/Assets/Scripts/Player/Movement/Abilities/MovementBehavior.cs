@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MovementBehavior : AbilityBehavior
@@ -7,7 +8,9 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] private Speedometer speedometer;
     [SerializeField] private VelocityController groundController;
     [SerializeField] private VelocityController airController;
-
+    [SerializeField, ReadOnly] bool waiting = false;
+    [SerializeField] float speedSoundMultiplier = 20f;
+    [SerializeField] Vector2 walkingSoundTimeRange = new Vector2(0.1f, 0.4f);
     public float HorizontalSpeed => speedometer.AbsoluteHorzSpeed;
     public float Speed => rb.velocity.magnitude;
 
@@ -73,14 +76,26 @@ public class MovementBehavior : AbilityBehavior
     public void Action()
     {
         MoveAction();
-        if (collisionManager.IsGrounded.current && !UserInput.Instance.Move().IsZero())
+        if (!waiting && collisionManager.IsGrounded.current && !UserInput.Instance.Move().IsZero())
         {
-            soundManager.PlayRandom("Move", 7);
-            soundManager.PlayRandom("Stone", 5);
+            StartCoroutine((PlayMovement(speedometer.HorzSpeed)));
         }
     }
-    IEnumerator PlayRandomButFaster()
+    
+    IEnumerator PlayMovement(float speed)
     {
-        
+        soundManager.PlayRandom("Move", 7);
+        soundManager.PlayRandom("Stone", 5);
+        waiting = true;
+        speed = speedSoundMultiplier/speed;
+        speed = Mathf.Clamp(speed, walkingSoundTimeRange.x, walkingSoundTimeRange.y);
+        float elapsed = 0;
+        while (elapsed < speed)
+        {
+            yield return null;
+            elapsed += Time.deltaTime;
+        }
+        waiting = false;
     }
+    
 }
