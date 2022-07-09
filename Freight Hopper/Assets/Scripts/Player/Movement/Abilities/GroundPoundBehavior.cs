@@ -71,10 +71,16 @@ public class GroundPoundBehavior : AbilityBehavior
         //Debug.Log("ground pounding");
         if (collisionManager.IsGrounded.current)
         {
-            //Debug.Log("grounded");
+            
             Vector3 acrossSlope = Vector3.Cross(upAxis, collisionManager.ContactNormal.current);
             Vector3 downSlope = Vector3.Cross(acrossSlope, collisionManager.ContactNormal.current);
             direction = downSlope;
+
+            if (!FlatSurface)
+            {
+                soundManager.Play("WallSkid");
+            }
+            
             if (!collisionManager.IsGrounded.old)
             {
                 particles.Play();
@@ -93,6 +99,7 @@ public class GroundPoundBehavior : AbilityBehavior
         else
         {
             direction *= downwardsForce;
+            soundManager.Stop("WallSkid");
         }
 
         
@@ -105,6 +112,7 @@ public class GroundPoundBehavior : AbilityBehavior
     {
         PreventConsumptionCheck();
         soundManager.Play("GroundPoundExit");
+        soundManager.Stop("WallSkid");
         increasingForce.Reset();
         active = false;
     }

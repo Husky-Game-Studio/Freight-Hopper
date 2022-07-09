@@ -76,10 +76,24 @@ public class MovementBehavior : AbilityBehavior
     public void Action()
     {
         MoveAction();
-        if (!waiting && collisionManager.IsGrounded.current && !UserInput.Instance.Move().IsZero())
+        if (waiting)
         {
-            StartCoroutine((PlayMovement(speedometer.HorzSpeed)));
+            return;
         }
+        if (!collisionManager.IsGrounded.current)
+        {
+            return;
+        }
+        if (UserInput.Instance.Move().IsZero())
+        {
+            return;
+        }
+        if (UserInput.Instance.GroundPoundHeld)
+        {
+            return;
+        }
+
+        StartCoroutine(PlayMovement(speedometer.HorzSpeed));
     }
     
     IEnumerator PlayMovement(float speed)
