@@ -1,7 +1,7 @@
 ﻿[System.Serializable]
 public class Toggle
 {
-    public bool value = false;
+    public bool value;
 
     public void Reset() => value = false;
 

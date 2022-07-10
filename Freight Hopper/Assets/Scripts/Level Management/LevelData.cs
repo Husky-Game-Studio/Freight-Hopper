@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-[System.Serializable]
-public class LevelData
+[CreateAssetMenu(menuName = "Scriptable Objects/Level/Data"), System.Serializable]
+public class LevelData : ScriptableObject
 {
     public enum NextLevelStatus
     {
@@ -13,24 +14,24 @@ public class LevelData
         Custom
     }
 
-    public NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
-    public string customNextLevelName;
-    public Vector3 spawnPosition = Vector3.zero;
-    public float rotationAngle = 0;
-    public Quaternion velocityDirection;
-    public float speed;
+    [SerializeField] private NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
+    [SerializeField] private string customNextLevelName;
+    [SerializeField] private float speed;
+    [SerializeField] private bool snapDownAtStart = true;
+    [SerializeField] private LayerMask layerMask;
 
-    [SerializeField]
-    public PlayerAbilities.Name[] activeAbilities = {
-            PlayerAbilities.Name.MovementBehavior,
-            PlayerAbilities.Name.JumpBehavior,
-            PlayerAbilities.Name.WallRunBehavior,
-            PlayerAbilities.Name.GroundPoundBehavior
-        };
+    [Header("Meta Data")]
+    [SerializeField] private string title;
+    [SerializeField] private Texture2D image;
+    [SerializeField] private Optional<string> tutorialSceneName;
+    [SerializeField] private float[] medalTimes = new float[4];
 
-    public void SetSpawnTransform(Transform transform)
-    {
-        spawnPosition = transform.position;
-        rotationAngle = Vector3.SignedAngle(Vector3.forward, transform.forward, Vector3.up);
-    }
+    public NextLevelStatus NLevelStatus => nextLevelStatus;
+    public string CustomNextLevelName => customNextLevelName;
+    public float Speed => speed;
+    public string Title => title;
+    public Texture2D Image => image;
+    public bool SnapDownAtStart => snapDownAtStart;
+    public LayerMask PlayerLayerMask => layerMask;
+    public IList<float> MedalTimes => Array.AsReadOnly(medalTimes);
 }

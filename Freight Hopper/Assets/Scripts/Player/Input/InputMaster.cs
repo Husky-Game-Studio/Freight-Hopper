@@ -36,7 +36,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Look"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""a16746e7-e947-468e-ad81-b5a88ea06e5c"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -59,38 +59,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
-                    ""name"": ""Burst"",
-                    ""type"": ""Button"",
-                    ""id"": ""eb8a9c01-9b08-4665-9dcf-cd0993eabc85"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Upward Dash"",
-                    ""type"": ""Button"",
-                    ""id"": ""b1bc063b-999f-44b6-a2c1-91c3bb09649d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
-                    ""name"": ""Full Stop"",
-                    ""type"": ""Button"",
-                    ""id"": ""ead930ef-e477-4b0f-8081-58521b34d665"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Grapple Pole"",
-                    ""type"": ""Button"",
-                    ""id"": ""ded072bd-f6d3-4ec4-985d-12fe0fe19b03"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)""
-                },
-                {
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""80946741-8662-445a-be86-07b62f08ee5b"",
@@ -102,6 +70,30 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""name"": ""Debug"",
                     ""type"": ""Button"",
                     ""id"": ""2cc93062-ce2b-452e-babc-c5d6b8a15000"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Freecam"",
+                    ""type"": ""Button"",
+                    ""id"": ""da627b80-b40b-4003-b9a4-6afa1ebb1083"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""45d59b99-518a-4382-9f07-7bb322d1d313"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""892097b3-b1ef-4b98-96e4-0d7642f50d8b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
@@ -165,8 +157,30 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""46b992ce-161f-44ea-9447-c24eeb6772a3"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""f77d6814-1fdb-4cef-be4f-7e6c0ca84165"",
                     ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a113f01b-0e50-4c1d-a87c-ce4859082de9"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -187,8 +201,30 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""da5fd640-b3eb-48cf-bcad-3ec7ccbb10df"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""aaf0dbcd-e3f3-47a4-a570-2453da31fe45"",
                     ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebd07c22-1c94-42f8-8689-542cb469ec83"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -209,45 +245,23 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1e93637b-176f-472d-ae71-78c7ec8a5a4c"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""id"": ""0d414d3d-428a-443a-a549-e2a7934e37e6"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Burst"",
+                    ""action"": ""Ground Pound"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fc96117b-391c-44b2-808b-da68dc8961d7"",
-                    ""path"": ""<Keyboard>/ctrl"",
+                    ""id"": ""6e3e7e62-adb0-48e5-9664-33b4cb0a7dd3"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Upward Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a8e4321c-b2e1-4269-a640-dd0c566a7f7d"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Full Stop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""adb02bd0-09d5-409d-b2ed-1ab5dc789b4d"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Grapple Pole"",
+                    ""action"": ""Ground Pound"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -255,6 +269,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""1dd3bb63-6b8b-4020-9b4b-a7c103d99c4f"",
                     ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af11c2aa-f502-4359-a641-fb86c69dddc3"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -272,6 +297,83 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Debug"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07ee30ab-c3af-4aba-9532-ed979a486585"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0609e75d-eb6e-43c6-bb81-8ddc79129162"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Freecam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14a6e505-fdff-4a5e-aa08-e49c9ab3fdb4"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Freecam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4bf985c5-47dd-4ca2-ace2-eb73dede12ca"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a91bc90b-fb79-44ac-aac6-ba7fadaff0ce"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4e81ca7-1003-4389-8927-5d82990be09c"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7f4f186-9541-4785-9f4e-a8d647764134"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -285,12 +387,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Restart = m_Player.FindAction("Restart", throwIfNotFound: true);
         m_Player_GroundPound = m_Player.FindAction("Ground Pound", throwIfNotFound: true);
-        m_Player_Burst = m_Player.FindAction("Burst", throwIfNotFound: true);
-        m_Player_UpwardDash = m_Player.FindAction("Upward Dash", throwIfNotFound: true);
-        m_Player_FullStop = m_Player.FindAction("Full Stop", throwIfNotFound: true);
-        m_Player_GrapplePole = m_Player.FindAction("Grapple Pole", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_Debug = m_Player.FindAction("Debug", throwIfNotFound: true);
+        m_Player_Freecam = m_Player.FindAction("Freecam", throwIfNotFound: true);
+        m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
+        m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -345,12 +446,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Restart;
     private readonly InputAction m_Player_GroundPound;
-    private readonly InputAction m_Player_Burst;
-    private readonly InputAction m_Player_UpwardDash;
-    private readonly InputAction m_Player_FullStop;
-    private readonly InputAction m_Player_GrapplePole;
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_Debug;
+    private readonly InputAction m_Player_Freecam;
+    private readonly InputAction m_Player_Menu;
+    private readonly InputAction m_Player_Next;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -360,12 +460,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Restart => m_Wrapper.m_Player_Restart;
         public InputAction @GroundPound => m_Wrapper.m_Player_GroundPound;
-        public InputAction @Burst => m_Wrapper.m_Player_Burst;
-        public InputAction @UpwardDash => m_Wrapper.m_Player_UpwardDash;
-        public InputAction @FullStop => m_Wrapper.m_Player_FullStop;
-        public InputAction @GrapplePole => m_Wrapper.m_Player_GrapplePole;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @Debug => m_Wrapper.m_Player_Debug;
+        public InputAction @Freecam => m_Wrapper.m_Player_Freecam;
+        public InputAction @Menu => m_Wrapper.m_Player_Menu;
+        public InputAction @Next => m_Wrapper.m_Player_Next;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -390,24 +489,21 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @GroundPound.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
                 @GroundPound.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
                 @GroundPound.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGroundPound;
-                @Burst.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
-                @Burst.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
-                @Burst.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBurst;
-                @UpwardDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
-                @UpwardDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
-                @UpwardDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUpwardDash;
-                @FullStop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
-                @FullStop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
-                @FullStop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFullStop;
-                @GrapplePole.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
-                @GrapplePole.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
-                @GrapplePole.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrapplePole;
                 @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                 @Debug.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
                 @Debug.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
                 @Debug.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebug;
+                @Freecam.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
+                @Freecam.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
+                @Freecam.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFreecam;
+                @Menu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                @Menu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                @Menu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                @Next.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNext;
+                @Next.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNext;
+                @Next.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnNext;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -427,24 +523,21 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @GroundPound.started += instance.OnGroundPound;
                 @GroundPound.performed += instance.OnGroundPound;
                 @GroundPound.canceled += instance.OnGroundPound;
-                @Burst.started += instance.OnBurst;
-                @Burst.performed += instance.OnBurst;
-                @Burst.canceled += instance.OnBurst;
-                @UpwardDash.started += instance.OnUpwardDash;
-                @UpwardDash.performed += instance.OnUpwardDash;
-                @UpwardDash.canceled += instance.OnUpwardDash;
-                @FullStop.started += instance.OnFullStop;
-                @FullStop.performed += instance.OnFullStop;
-                @FullStop.canceled += instance.OnFullStop;
-                @GrapplePole.started += instance.OnGrapplePole;
-                @GrapplePole.performed += instance.OnGrapplePole;
-                @GrapplePole.canceled += instance.OnGrapplePole;
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
                 @Debug.started += instance.OnDebug;
                 @Debug.performed += instance.OnDebug;
                 @Debug.canceled += instance.OnDebug;
+                @Freecam.started += instance.OnFreecam;
+                @Freecam.performed += instance.OnFreecam;
+                @Freecam.canceled += instance.OnFreecam;
+                @Menu.started += instance.OnMenu;
+                @Menu.performed += instance.OnMenu;
+                @Menu.canceled += instance.OnMenu;
+                @Next.started += instance.OnNext;
+                @Next.performed += instance.OnNext;
+                @Next.canceled += instance.OnNext;
             }
         }
     }
@@ -456,11 +549,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
         void OnGroundPound(InputAction.CallbackContext context);
-        void OnBurst(InputAction.CallbackContext context);
-        void OnUpwardDash(InputAction.CallbackContext context);
-        void OnFullStop(InputAction.CallbackContext context);
-        void OnGrapplePole(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnDebug(InputAction.CallbackContext context);
+        void OnFreecam(InputAction.CallbackContext context);
+        void OnMenu(InputAction.CallbackContext context);
+        void OnNext(InputAction.CallbackContext context);
     }
 }

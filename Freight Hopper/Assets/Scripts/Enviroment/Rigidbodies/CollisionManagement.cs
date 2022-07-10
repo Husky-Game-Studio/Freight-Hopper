@@ -1,24 +1,28 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class CollisionManagement
+public class CollisionManagement : MonoBehaviour
 {
-    [System.NonSerialized] private MonoBehaviour component;
-    [System.NonSerialized] private Rigidbody rb;
-    [System.NonSerialized] private Friction frictionManager;
-    [System.NonSerialized] private bool aerial;
+    private Rigidbody rb;
+    private Friction frictionManager;
+    private RigidbodyLinker rigidbodyLinker;
+    private Gravity gravity;
 
     [SerializeField] private float maxSlope = 60;
-    [ReadOnly, SerializeField] private AutomaticTimer unlandableSurfaceDuration;
+    [SerializeField] private float groundRaycastCheckDistance = 0.5f;
+    [SerializeField] private LayerMask groundMask;
+
+    [SerializeField] private float maxDepenetrationVelocity = 500;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
     [ReadOnly, SerializeField] private Memory<Vector3> position;
     [ReadOnly, SerializeField] private int contactCount;
     [ReadOnly, SerializeField] private int steepCount;
-    [ReadOnly, SerializeField] public RigidbodyLinker rigidbodyLinker;
-    [ReadOnly, SerializeField] private Vector3 validUpAxis;
+
+    [ReadOnly, SerializeField] private Vector3 validUpAxis = Vector3.up;
 
     public Vector3 ValidUpAxis => validUpAxis;
     public Memory<Vector3> ContactNormal => contactNormal;
@@ -28,6 +32,8 @@ public class CollisionManagement
     public Memory<Vector3> Position => position;
     public float MaxSlope => maxSlope;
 
+    public float MaxDepenetrationVelocity => maxDepenetrationVelocity;
+
     public delegate void CollisionEventHandler();
 
     public event CollisionEventHandler Landed;
@@ -36,57 +42,27 @@ public class CollisionManagement
 
     private Vector3 upAxis;
 
-    public void Initialize(Rigidbody rb, MonoBehaviour component, RigidbodyLinker linker, Friction frictionManager, bool aerial)
+    private void Awake()
     {
-        this.rb = rb;
-        this.component = component;
-        this.frictionManager = frictionManager;
-        this.aerial = aerial;
-        this.rigidbodyLinker = linker;
+        rb = Player.Instance.modules.rigidbody;
+        frictionManager = Player.Instance.modules.friction;
+        rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
+        gravity = Player.Instance.modules.gravity;
 
-        upAxis = CustomGravity.GetUpAxis(rb.position);
+        upAxis = CustomGravity.GetUpAxis();
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
-
-        component.StartCoroutine(LateFixedUpdate());
-        unlandableSurfaceDuration.Subscribe(KillPlayer);
+        Physics.defaultMaxDepenetrationVelocity = this.MaxDepenetrationVelocity;
+        this.StartCoroutine(LateFixedUpdate());
     }
-
-    ~CollisionManagement()
-    {
-        unlandableSurfaceDuration.Unsubscribe(KillPlayer);
-    }
-
-    private bool touchedUnlandable = false;
-
-    private void KillPlayer()
-    {
-        LevelController.Instance.Respawn();
-    }
-
+    List<ContactPoint> contacts = new List<ContactPoint>();
     private void EvaulateCollisions(Collision collision)
     {
-        if (aerial)
-        {
-            return;
-        }
-
         contactNormal.current = Vector3.zero;
-
-        for (int i = 0; i < collision.contactCount; i++)
+        collision.GetContacts(contacts);
+        foreach (ContactPoint contactPoint in contacts)
         {
-            Vector3 normal = collision.GetContact(i).normal;
-
-            if (!collision.gameObject.CompareTag("landable") && rb.gameObject.CompareTag("Player"))
-            {
-                SurfaceProperties surfaceProperties = collision.gameObject.GetComponent<SurfaceProperties>();
-                if (surfaceProperties != null && surfaceProperties.KillInstantly)
-                {
-                    KillPlayer();
-                }
-                touchedUnlandable = true;
-                continue;
-            }
+            Vector3 normal = contactPoint.normal;
 
             float collisionAngle = Vector3.Angle(normal, upAxis);
             if (collisionAngle <= maxSlope)
@@ -117,43 +93,65 @@ public class CollisionManagement
     }
 
     // Call using OnCollisionEnter from a monobehavior
-    public void CollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         EvaulateCollisions(collision);
         if (isGrounded.current)
         {
             Landed?.Invoke();
         }
+        Player.Instance.modules.edgeCorrectionCollision.AddContacts(collision);
     }
 
     // Call using OnCollisionStay from a monobehavior
-    public void CollisionStay(Collision collision)
+    public void OnCollisionStay(Collision collision)
     {
         EvaulateCollisions(collision);
         if (isGrounded.current && !isGrounded.old)
         {
             Landed?.Invoke();
         }
+        Player.Instance.modules.edgeCorrectionCollision.AddContacts(collision);
+    }
+
+    private void CheckGround()
+    {
+        if (isGrounded.current)
+        {
+            return;
+        }
+
+        var transform1 = rb.transform;
+        var up = transform1.up;
+        Ray ray = new Ray(rb.position - (up * transform1.localScale.y), -up);
+        Debug.DrawRay(ray.origin, ray.direction * groundRaycastCheckDistance, Color.red);
+        if (Physics.Raycast(ray, out RaycastHit hit, groundRaycastCheckDistance, groundMask))
+        {
+            if (Vector3.Angle(hit.normal, this.ValidUpAxis) <= maxSlope)
+            {
+                isGrounded.current = true;
+                contactNormal.current = hit.normal;
+                rb.AddForce(-ValidUpAxis, ForceMode.Acceleration);
+            }
+        }
     }
 
     private IEnumerator LateFixedUpdate()
     {
+        var waitFixedUpdate = new WaitForFixedUpdate();
         while (true)
         {
-            upAxis = CustomGravity.GetUpAxis(rb.position);
-            yield return new WaitForFixedUpdate();
+            upAxis = CustomGravity.GetUpAxis();
+
+            yield return waitFixedUpdate;
+            if (!isGrounded.current)
+            {
+                gravity.GravityLoop();
+            }
+            CheckGround();
             rigidbodyLinker.UpdateConnectionState(rb);
             CollisionDataCollected?.Invoke();
 
-            if (touchedUnlandable && rb.CompareTag("Player"))
-            {
-                unlandableSurfaceDuration.Update(Time.fixedDeltaTime);
-            }
-            else
-            {
-                unlandableSurfaceDuration.ResetTimer();
-            }
-            touchedUnlandable = false;
             UpdateOldValues();
             ClearValues();
         }
@@ -176,7 +174,7 @@ public class CollisionManagement
         velocity.current = rb.velocity;
         position.current = rb.position;
 
-        if (upAxis != Vector3.zero)
+        if (upAxis.magnitude > float.Epsilon)
         {
             validUpAxis = upAxis;
         }

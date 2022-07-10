@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
@@ -25,20 +24,6 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    protected void CreateAudioSource(Sound sound, Vector3 location)
-    {
-        string spawnedObjectName = (location + " sound " + sound.name);
-        GameObject spawnedObject = new GameObject(spawnedObjectName);
-        Instantiate(spawnedObject, location, Quaternion.identity, this.transform);
-        sound.audioSources[location] = spawnedObject.AddComponent<AudioSource>();
-        Destroy(spawnedObject, sound.clip.length);
-
-#if !UNITY_EDITOR
-        UpdateAudioSource(sound, sound.audioSources[location]);
-#endif
-        ResetTimer(sound);
-    }
-
     private void ResetTimer(Sound sound)
     {
         if (sound.hasCooldown)
@@ -51,7 +36,13 @@ public class SoundManager : MonoBehaviour
     {
         source.clip = sound.clip;
         source.outputAudioMixerGroup = mixerGroup;
-        source.volume = sound.volume;
+
+        // Fuck you managed code stripping
+        int id = mixerGroup.GetHashCode();
+        if(id > 0 || id < 1){
+            source.volume = sound.volume;
+        }
+        
         source.pitch = sound.pitch;
         source.loop = sound.isLoop;
         source.priority = sound.priority;
@@ -82,32 +73,8 @@ public class SoundManager : MonoBehaviour
         return null;
     }
 
-    protected Sound FindSound(string name, Vector3 location)
-    {
-        foreach (SoundCollection soundCollection in sounds)
-        {
-            foreach (Sound sound in soundCollection.sounds)
-            {
-                if (sound.filename.Equals(name))
-                {
-                    if (!sound.audioSources.ContainsKey(location) || sound.audioSources[location] == null)
-                    {
-                        CreateAudioSource(sound, location);
-                    }
-#if UNITY_EDITOR
-                    UpdateAudioSource(sound, sound.audioSources[location]);
-#endif
-                    return sound;
-                }
-            }
-        }
-
-        Debug.LogError("Sound " + name + " Not Found!");
-        return null;
-    }
-
     // Play sound with name, will be created if it doesn't exist
-    public void Play(string name)
+    public void Play(string name, bool playMultiple = false)
     {
         Sound sound = FindSound(name);
 
@@ -123,10 +90,26 @@ public class SoundManager : MonoBehaviour
         {
             sound.componentAudioSource.volume += UnityEngine.Random.Range(-sound.volumeVarience, sound.volumeVarience);
         }
-        sound.componentAudioSource.Play();
-        sound.componentAudioSource.pitch = sound.pitch;
-        sound.componentAudioSource.volume = 0;
-        StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+        if (sound.componentAudioSource.isActiveAndEnabled)
+        {
+            if (playMultiple)
+            {
+                sound.componentAudioSource.PlayOneShot(sound.componentAudioSource.clip);
+                sound.componentAudioSource.pitch = sound.pitch;
+                sound.componentAudioSource.playOnAwake = false;
+            }
+            else
+            {
+                sound.componentAudioSource.Play();
+                sound.componentAudioSource.pitch = sound.pitch;
+                sound.componentAudioSource.playOnAwake = false;
+                sound.componentAudioSource.volume = 0;
+                StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+            }
+
+            
+        }
+        
     }
 
     private IEnumerator Fade(AudioSource source, float duration, float finalVolume)
@@ -142,31 +125,10 @@ public class SoundManager : MonoBehaviour
     }
 
     // Plays sound with name at location, creates a new one if it doesn't exist at absolute location. Sound temp object is deleted after being played
-    public void Play(string name, Vector3 location)
-    {
-        Sound sound = FindSound(name, location);
-
-        if (!CanPlaySound(sound))
-        {
-            return;
-        }
-        if (sound.pitchVarience > 0)
-        {
-            sound.audioSources[location].pitch += UnityEngine.Random.Range(-sound.pitchVarience, sound.pitchVarience);
-        }
-        if (sound.volumeVarience > 0)
-        {
-            sound.audioSources[location].volume += UnityEngine.Random.Range(-sound.volumeVarience, sound.volumeVarience);
-        }
-        sound.audioSources[location].Play();
-        sound.audioSources[location].pitch = sound.pitch;
-        sound.audioSources[location].volume = 0;
-        StartCoroutine(Fade(sound.audioSources[location], sound.fadeInTime, sound.volume));
-    }
 
     public void PlayRandom(string name, int size)
     {
-        Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)));
+        Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)), true);
     }
 
     public void Stop(string name)
@@ -174,7 +136,7 @@ public class SoundManager : MonoBehaviour
         Sound sound = FindSound(name);
         if (sound.componentAudioSource.isActiveAndEnabled)
         {
-            StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime);
+            StartCoroutine(StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime));
             StartCoroutine(Fade(sound.componentAudioSource, sound.fadeOutTime, 0));
             ResetTimer(sound);
         }

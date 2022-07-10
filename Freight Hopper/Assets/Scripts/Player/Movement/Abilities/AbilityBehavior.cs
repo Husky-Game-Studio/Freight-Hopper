@@ -3,33 +3,22 @@ using UnityEngine;
 [System.Serializable]
 public class AbilityBehavior : MonoBehaviour
 {
-    [SerializeField, ReadOnly] protected bool unlocked = false;
-    [SerializeField, ReadOnly] protected bool consumed = false;
-    [SerializeField, ReadOnly] protected bool preventConsumption = false;
-    public bool Unlocked => unlocked;
+    [SerializeField, ReadOnly] protected bool consumed;
+    [SerializeField, ReadOnly] protected bool preventConsumption;
     public bool Consumed => consumed;
 
-    // Ready meaning not consumed
-    public bool UnlockedAndReady => this.Unlocked && !this.Consumed;
-
-    protected PhysicsManager physicsManager;
+    [SerializeField, ReadOnly] protected Rigidbody rb;
     protected SoundManager soundManager;
-    protected PlayerAbilities abilitiesManager;
 
-    public virtual void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
+    public virtual void Initialize()
     {
-        this.physicsManager = pm;
-        this.soundManager = sm;
-        this.abilitiesManager = pa;
+        this.rb = Player.Instance.modules.rigidbody;
+        this.soundManager = Player.Instance.modules.soundManager;
     }
 
     public SoundManager PlayerSoundManager() => soundManager;
-
-    public virtual void EntryAction()
-    {
-    }
-
-    public virtual void ExitAction()
+    
+    public void PreventConsumptionCheck()
     {
         if (preventConsumption)
         {
@@ -41,9 +30,6 @@ public class AbilityBehavior : MonoBehaviour
         }
     }
 
-    // Action played while in Ability state
-    public virtual void Action() { }
-
     public virtual void Recharge()
     {
         consumed = false;
@@ -52,15 +38,5 @@ public class AbilityBehavior : MonoBehaviour
     public void PreventConsumption()
     {
         preventConsumption = true;
-    }
-
-    public void Lock()
-    {
-        unlocked = false;
-    }
-
-    public void Unlock()
-    {
-        unlocked = true;
     }
 }

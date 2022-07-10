@@ -4,12 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
-    private bool respawning = false;
+    private bool respawning;
     public LevelName CurrentLevelName => levelName;
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
     [SerializeField] private Transform playerSpawnTransform;
-    [SerializeField] private LevelData levelData;
+    [SerializeField] private float spawnSnapSmoothing = 0.001f;
+    public LevelData levelData;
 
     private const int highHeight = 999999;
 
@@ -25,18 +26,10 @@ public class LevelController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(levelData.spawnPosition, 2);
+        Gizmos.DrawWireSphere(playerSpawnTransform.position, 2);
     }
 
 #endif
-
-    private void OnValidate()
-    {
-        if (playerSpawnTransform != null)
-        {
-            levelData.SetSpawnTransform(playerSpawnTransform);
-        }
-    }
 
     public void LoadNextLevel()
     {
@@ -54,35 +47,23 @@ public class LevelController : MonoBehaviour
             SceneManager.LoadScene(nextLevelName);
         }
     }
-
-    [ContextMenu("UpdateSpawnTransform")]
-    public void UpdateSpawn()
-    {
-        if (playerSpawnTransform == null)
-        {
-            Debug.LogWarning("Please set a transform in the inspector first for playerSpawnTransform");
-            return;
-        }
-        levelData.SetSpawnTransform(playerSpawnTransform);
-    }
-
     public string GetNextLevel()
     {
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextLevel)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.NextLevel)
         {
             return levelName.NextLevel();
         }
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.NextWorld)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.NextWorld)
         {
             return levelName.NextWorld();
         }
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.Menu)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.Menu)
         {
             return "MainMenu";
         }
-        if (levelData.nextLevelStatus == LevelData.NextLevelStatus.Custom)
+        if (levelData.NLevelStatus == LevelData.NextLevelStatus.Custom)
         {
-            return levelData.customNextLevelName;
+            return levelData.CustomNextLevelName;
         }
         return levelName.CurrentLevel();
     }
@@ -104,7 +85,6 @@ public class LevelController : MonoBehaviour
             instance = this;
         }
         Player.PlayerLoadedIn += ResetPlayerPosition;
-        Player.PlayerLoadedIn += UnlockAbilities;
         bool defaultSceneAlreadyLoaded = false;
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
@@ -121,14 +101,11 @@ public class LevelController : MonoBehaviour
         LevelLoadedIn?.Invoke();
     }
 
+
+
     private void OnDestroy()
     {
-        Player.PlayerLoadedIn -= UnlockAbilities;
-    }
-
-    public void UnlockAbilities()
-    {
-        Player.Instance.GetComponent<PlayerAbilities>().SetActiveAbilities(levelData.activeAbilities);
+        Player.PlayerLoadedIn -= ResetPlayerPosition;
     }
 
     private void ResetPlayerPosition()
@@ -140,16 +117,24 @@ public class LevelController : MonoBehaviour
         }
         if (spawnPlayerHigh)
         {
-            player.transform.position = levelData.spawnPosition + (this.transform.up * highHeight);
+            player.transform.position = playerSpawnTransform.position + (this.transform.up * highHeight);
         }
         else
         {
-            player.transform.position = levelData.spawnPosition;
+            player.transform.position = playerSpawnTransform.position;
         }
-        player.transform.rotation = Quaternion.LookRotation(Vector3.forward, CustomGravity.GetUpAxis(player.transform.position)) *
-            Quaternion.AngleAxis(levelData.rotationAngle, Vector3.up);
+        player.transform.forward = playerSpawnTransform.forward;
 
-        player.GetComponent<Rigidbody>().velocity = levelData.velocityDirection * Vector3.forward * levelData.speed;
+        if (levelData.SnapDownAtStart)
+        {
+            Ray ray = new Ray(player.transform.position - Vector3.up, -Vector3.up);
+            if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
+            {
+                player.transform.position = hit.point + (Vector3.up*2) + (Vector3.up * spawnSnapSmoothing);
+            }
+        }
+
+        player.GetComponent<Rigidbody>().velocity = player.transform.forward * levelData.Speed;
     }
 
     // Respawns player. Reloads scene for now. Respawning var is used to prevent spamming of respawn button
@@ -163,12 +148,14 @@ public class LevelController : MonoBehaviour
         respawning = true;
         SceneLoader.LoadLevel(levelName.CurrentLevel());
         PlayerRespawned?.Invoke();
-
-        //player.transform.Rotate(Vector3.up, levelData.rotationAngle); Doesn't work due to camera
     }
 
     public void Respawn(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (PauseMenu.Instance.Paused)
+        {
+            return;
+        }
         Respawn();
     }
 }

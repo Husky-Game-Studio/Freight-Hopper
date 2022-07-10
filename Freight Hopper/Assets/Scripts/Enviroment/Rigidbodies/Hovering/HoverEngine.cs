@@ -1,92 +1,101 @@
 using UnityEngine;
-using UnityEngine.VFX;
 
 [System.Serializable]
 public class HoverEngine : MonoBehaviour
 {
-    private VisualEffect effect;
-    private bool is_effect_playing = false;
-
-    [SerializeField, ReadOnly] private Rigidbody rb;
-    [SerializeField, ReadOnly] private Vector3 direction = Vector3.down;
-    [SerializeField, ReadOnly] private LayerMask layerMask;
+    [System.NonSerialized] private Rigidbody rb;
     [SerializeField, ReadOnly] private PID controller = new PID();
     [SerializeField, ReadOnly] private float targetDistance;
-    [SerializeField, ReadOnly] private bool automatic;
+    [SerializeField, ReadOnly] private bool automatic = true;
     [SerializeField, ReadOnly] private bool firing;
-    private Vector3 position;
+    [System.NonSerialized] private TrainRailLinker currentLinker;
     public bool Firing => firing;
+    private int followIndex;
+    private float followDistance;
 
-    private void Awake()
+    public void DisableEngine()
     {
-        effect = GetComponent<VisualEffect>();
-        effect.SetFloat("Downward", -5.0f);
-        effect.SetFloat("power", 4.0f);
+        automatic = false;
     }
 
-    public void Initialize(Rigidbody rb, LayerMask layerMask, PID.Data data, float targetDistance, bool automatic)
+    public void Initialize(Rigidbody rb, PID.Data data, float targetDistance)
     {
         this.rb = rb;
         controller.Initialize(data * rb.mass);
-        this.layerMask = layerMask;
         this.targetDistance = targetDistance;
-        this.automatic = automatic;
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + (direction * targetDistance));
+        var position = this.transform.position;
+        Gizmos.DrawLine(position, position + (Vector3.up * targetDistance));
     }
 
-    public void Hover(float height)
+    public void UpdateCurrentLinker(TrainRailLinker newLinker)
     {
-        if (Physics.Raycast(position, direction, out RaycastHit hit, height + 0.1f, layerMask))
+        currentLinker = newLinker;
+        currentLinker.RemovedRigidbody += CheckIfCanHover;
+        if (newLinker.pathCreator.path.isClosedLoop)
         {
-            firing = true;
-            float error = height - hit.distance;
-            //Debug.DrawLine(this.transform.position, this.transform.position + (-direction * error), Color.white);
-            // We don't want the hover engine to correct itself downwards. Hovering only applys upwards!
-            if (error > -0.1f)
-            {
-                Vector3 force = -direction * this.controller.GetOutput(error, Time.fixedDeltaTime);
-
-                rb.AddForceAtPosition(force, position, ForceMode.Force);
-            }
+            followIndex = (int)((newLinker.pathCreator.path.CalculateClosestVertexIndex(rb.position) + 1) % newLinker.pathCreator.path.length);
         }
         else
         {
-            firing = false;
+            followIndex = Mathf.Min(newLinker.pathCreator.path.CalculateClosestVertexIndex(this.transform.position) + 1, newLinker.pathCreator.path.LastVertexIndex);
+        }
+
+        followDistance = newLinker.FollowDistance;
+    }
+
+    private void CheckIfCanHover(Rigidbody unlinkedRigidbody)
+    {
+        if (unlinkedRigidbody.Equals(rb))
+        {
+            // Memory leaks?????
+            //currentLinker.removedRigidbody -= CheckIfCanHover;
+            //Debug.Log("Removed ");
+            //Debug.Log("removed " + rb.name);
+            currentLinker = null;
         }
     }
 
-    public void SetDirection(Vector3 direction)
+    public void Hover(float height, TrainRailLinker railLinker, ref Vector3 position)
     {
-        direction.Normalize();
-        this.direction = direction;
+        if ((object)railLinker == null)
+        {
+            firing = false;
+            //Debug.Log("no rail linker");
+            return;
+        }
+        firing = true;
+        PathCreation.VertexPath path = railLinker.pathCreator.path;
+
+        Vector3 positionOnPath = path.GetPoint(followIndex);
+        float distance = Vector3.Distance(positionOnPath, position);
+        while (distance <= followDistance && followIndex < path.times.Length - 1)
+        {
+            followIndex = path.GetNextIndex(followIndex, path.isClosedLoop);
+            positionOnPath = path.GetPoint(followIndex);
+            distance = Vector3.Distance(positionOnPath, position);
+        }
+
+        Vector3 up = path.GetNormal(followIndex);
+        float currentHeight = Vector3.Project(positionOnPath - position, up).magnitude;
+        float heightDif = height - currentHeight;
+
+        Vector3 force = Vector3.up * this.controller.GetOutput(heightDif, Time.fixedDeltaTime);
+        rb.AddForceAtPosition(force, position, ForceMode.Force);
     }
+
+ 
 
     private void FixedUpdate()
     {
-        position = this.transform.position;
         if (automatic)
         {
-            SetDirection(-CustomGravity.GetUpAxis(position));
-            Hover(targetDistance);
-        }
-        if (firing)
-        {
-            effect.SetVector3("spawn", position);
-            if (!is_effect_playing)
-            {
-                effect.Play();
-                is_effect_playing = true;
-            }
-        }
-        else if (!firing && is_effect_playing)
-        {
-            effect.Stop();
-            is_effect_playing = false;
+            Vector3 position = this.transform.position;
+            Hover(targetDistance, currentLinker, ref position);
         }
     }
 }

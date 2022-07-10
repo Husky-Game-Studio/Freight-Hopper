@@ -3,98 +3,122 @@ using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class MusicManager : SoundManager
 {
     private static MusicManager instance;
     public static MusicManager Instance => instance;
-    private static Songs lastSongName;
+
+    [SerializeField] private AudioMixerSnapshot normal;
+    [SerializeField] private AudioMixerSnapshot paused;
+    [SerializeField] private AudioMixerSnapshot alternate;
+    [SerializeField] private Timer minSongLengthTimer = new Timer(60);
+    [SerializeField] private float musicChangeChance = 0.1f;
+
+    public enum SnapshotMode
+    { Normal, Paused, Alternate }
 
     public enum Songs
     {
         Menu,
         Desert,
-        Factory,
         CityDay,
         CityNight,
         Ice,
+        Factory,
         Sky,
         Space,
         Escape,
         Unknown
     }
 
-    [SerializeField] private Songs currentSongName;
-    [SerializeField] private bool playMusicOnAwake = true;
-    private bool subscribedToLevelLoading = false;
-    private static bool changeMixer = false;
-
-    private void Awake()
+    private Songs currentSong = Songs.Menu;
+    [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
+    private string lastScene = "";
+    private void Start()
     {
-        if (instance != null && instance.mixerGroup != this.mixerGroup)
+        if (instance == null)
         {
-            instance.mixerGroup = this.mixerGroup;
-            changeMixer = true;
-        }
-        if (instance == null || currentSongName != lastSongName)
-        {
-            if (currentSongName != Songs.Menu)
-            {
-                DontDestroyOnLoad(this);
-                instance = this;
-                lastSongName = currentSongName;
-                SceneManager.sceneLoaded += LevelLoaded;
-                subscribedToLevelLoading = true;
-            }
+            DontDestroyOnLoad(this.gameObject);
+            instance = this;
+            Play(currentSong.ToString());
         }
         else
         {
-            Destroy(this);
+            if(instance.gameObject == this.gameObject)
+            {
+                return;
+            }
+            
+            
+            Destroy(this.gameObject);
+            return;
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
     private void OnDisable()
     {
-        if (subscribedToLevelLoading)
-        {
-            SceneManager.sceneLoaded -= LevelLoaded;
-        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void Start()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (playMusicOnAwake)
+        
+        if(mode != LoadSceneMode.Single)
         {
-            Play(currentSongName.ToString());
+            return;
         }
+        
+        if (!scene.name.Equals(SceneManager.GetActiveScene().name)) 
+        {
+            return;
+        }
+
+        if(!SceneManager.GetActiveScene().name.Equals("MainMenu") && !minSongLengthTimer.TimerActive() && !lastScene.Equals(scene.name))
+        {
+            if (UnityEngine.Random.Range(0f, 1f) < musicChangeChance || instance.currentSong == Songs.Menu)
+            {
+                instance.SwitchSong(PickRandomSong());
+                instance.TransitionToSnapshot(musicMode);
+                minSongLengthTimer.ResetTimer();
+            }
+        }
+        lastScene = scene.name;
     }
 
-    private void Update()
-    {
-        if (lastSongName != currentSongName)
-        {
-            Destroy(this.gameObject);
-        }
+    private Songs PickRandomSong(){
+        List<Songs> enums = Enum.GetValues(typeof(Songs)).Cast<Songs>().ToList();
+        System.Random random = new System.Random();
+        return enums[random.Next(1, enums.Count)];
     }
 
-    private void LevelLoaded(Scene scene, LoadSceneMode mode)
+    private void FixedUpdate()
     {
-        if (changeMixer && this == instance && mode == LoadSceneMode.Single && SceneManager.GetActiveScene() == scene)
-        {
-            changeMixer = false;
-            instance.ChangeMixer(mixerGroup);
-        }
+        minSongLengthTimer.CountDown(Time.fixedUnscaledDeltaTime);
     }
-
-    public void ChangeMixer(AudioMixerGroup newMixer)
+    public void TransitionToSnapshot(SnapshotMode mode)
     {
-        Sound sound = FindSound(currentSongName.ToString());
-        sound.componentAudioSource.outputAudioMixerGroup = newMixer;
+        switch (mode)
+        {
+            case SnapshotMode.Normal:
+                normal.TransitionTo(0.5f);
+                break;
+
+            case SnapshotMode.Paused:
+                paused.TransitionTo(0.5f);
+                break;
+
+            case SnapshotMode.Alternate:
+                alternate.TransitionTo(0.5f);
+                break;
+        }
     }
 
     public void SwitchSong(Songs songName)
     {
-        Stop(currentSongName.ToString());
+        Stop(currentSong.ToString());
         Play(songName.ToString());
+        currentSong = songName;
     }
 }

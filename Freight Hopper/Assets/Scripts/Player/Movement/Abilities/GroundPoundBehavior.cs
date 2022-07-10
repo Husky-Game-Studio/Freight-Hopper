@@ -1,63 +1,119 @@
 using UnityEngine;
 
+
 public class GroundPoundBehavior : AbilityBehavior
 {
     [ReadOnly, SerializeField] private Current<float> increasingForce = new Current<float>(1);
 
     [SerializeField] private float deltaIncreaseForce = 0.01f;
     [SerializeField] private float angleToBeConsideredFlat;
-    [SerializeField] private float initialBurstForce = 20;
+    [SerializeField] private float initialBurstVelocity = 20;
     [SerializeField] private float downwardsForce = 10;
     [SerializeField] private float slopeDownForce = 500;
     [SerializeField] private float groundFrictionReductionPercent = 0.95f;
+    [SerializeField] private ParticleSystem particles;
+    [Space]
+    [SerializeField]
+    private MovementBehavior movementBehavior;
+    [SerializeField] private float lowSpeedMultiplier = 2;
+    [SerializeField, Tooltip("the horizontal speed you have to be below to apply low speed multiplier")]
+    private float horizontalSpeedLimit = 90f;
+    
+
+    private bool active;
+
     public float FrictionReduction => groundFrictionReductionPercent;
+    public bool Active => active;
 
     public bool FlatSurface =>
-         physicsManager.collisionManager.IsGrounded.current
-            && Vector3.Angle(physicsManager.collisionManager.ValidUpAxis, physicsManager.collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
+         collisionManager.IsGrounded.current && Vector3.Angle(collisionManager.ValidUpAxis, collisionManager.ContactNormal.current) < angleToBeConsideredFlat;
+    private CollisionManagement collisionManager;
+    private Friction friction;
 
-    public override void EntryAction()
+    public override void Initialize()
     {
-        soundManager.Play("GroundPoundBurst");
-        Vector3 upAxis = physicsManager.collisionManager.ValidUpAxis;
-        if (Vector3.Dot(Vector3.Project(physicsManager.rb.velocity, upAxis), physicsManager.rb.transform.up) > 0)
-        {
-            physicsManager.rb.velocity = Vector3.ProjectOnPlane(physicsManager.rb.velocity, upAxis);
-        }
-        physicsManager.rb.AddForce(-upAxis * initialBurstForce, ForceMode.VelocityChange);
+        base.Initialize();
+        collisionManager = Player.Instance.modules.collisionManagement;
+        friction = Player.Instance.modules.friction;
     }
 
-    public override void Action()
+    public void EntryAction()
     {
-        soundManager.Play("GroundPoundTick");
-        Vector3 upAxis = physicsManager.collisionManager.ValidUpAxis;
-        Vector3 direction = -upAxis;
-        if (physicsManager.collisionManager.IsGrounded.current)
+        GroundPoundInitialBurst();
+        soundManager.Play("GroundPoundBurst");
+        Vector3 upAxis = collisionManager.ValidUpAxis;
+        if (Vector3.Dot(Vector3.Project(rb.velocity, upAxis), rb.transform.up) > 0)
         {
-            Vector3 acrossSlope = Vector3.Cross(upAxis, physicsManager.collisionManager.ContactNormal.current);
-            Vector3 downSlope = Vector3.Cross(acrossSlope, physicsManager.collisionManager.ContactNormal.current);
+            rb.velocity = Vector3.ProjectOnPlane(rb.velocity, upAxis);
+        }
+        active = true;
+    }
+
+    public void GroundPoundInitialBurst()
+    {   
+        bool underSpeedLimit = initialBurstVelocity > -collisionManager.Velocity.old.y;
+        if (!underSpeedLimit)
+        {
+            return;
+        }
+            
+        Vector3 upAxis = collisionManager.ValidUpAxis;
+        rb.AddForce(-upAxis * initialBurstVelocity, ForceMode.VelocityChange);
+    }
+
+    public void Action()
+    {
+        friction.ReduceFriction(FrictionReduction);
+        soundManager.Play("GroundPoundTick");
+        Vector3 upAxis = collisionManager.ValidUpAxis;
+        
+        Vector3 direction = -upAxis;
+        //Debug.Log("ground pounding");
+        if (collisionManager.IsGrounded.current)
+        {
+            
+            Vector3 acrossSlope = Vector3.Cross(upAxis, collisionManager.ContactNormal.current);
+            Vector3 downSlope = Vector3.Cross(acrossSlope, collisionManager.ContactNormal.current);
             direction = downSlope;
-            if (!physicsManager.collisionManager.IsGrounded.old &&
-                !this.FlatSurface)
+
+            if (!FlatSurface)
             {
-                Vector3 oldDownForce = Vector3.Project(physicsManager.collisionManager.Velocity.old, upAxis);
-                physicsManager.rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
+                soundManager.Play("WallSkid");
+            }
+            
+            if (!collisionManager.IsGrounded.old)
+            {
+                particles.Play();
+                if (!this.FlatSurface){
+                    Vector3 oldDownForce = Vector3.Project(collisionManager.Velocity.old, upAxis);
+                    rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
+                }
+                
             }
             direction *= slopeDownForce;
+            if (movementBehavior.HorizontalSpeed < horizontalSpeedLimit)
+            {
+                direction *= lowSpeedMultiplier;
+            }
         }
         else
         {
             direction *= downwardsForce;
+            soundManager.Stop("WallSkid");
         }
 
-        physicsManager.rb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
+        
+
+        rb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
         increasingForce.value += deltaIncreaseForce * Time.fixedDeltaTime;
     }
 
-    public override void ExitAction()
+    public void ExitAction()
     {
-        base.ExitAction();
+        PreventConsumptionCheck();
         soundManager.Play("GroundPoundExit");
+        soundManager.Stop("WallSkid");
         increasingForce.Reset();
+        active = false;
     }
 }

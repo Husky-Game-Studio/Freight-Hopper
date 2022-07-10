@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class FiniteStateMachineCenter : MonoBehaviour
 {
     // Machine Fields
-    [SerializeField] private bool debugging = false;
+    [SerializeField] private bool debugging;
     [SerializeField] private string currentStateName;
     [SerializeField] private string currentSubStateName;
     [SerializeField] private string previousStateName;
@@ -14,7 +14,7 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
 
     public DefaultState defaultState;
 
-    protected bool amSubStateMachine = false;
+    protected bool amSubStateMachine;
 
     private void Awake()
     {
@@ -72,8 +72,10 @@ public abstract class FiniteStateMachineCenter : MonoBehaviour
             }
             else
             {
+#if UNITY_EDITOR
                 currentSubState = currentState.GetCurrentSubState();
                 currentSubStateName = currentSubState.ToString();
+#endif
             }
         }
     }

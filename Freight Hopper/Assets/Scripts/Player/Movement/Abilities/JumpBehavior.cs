@@ -4,10 +4,21 @@ public class JumpBehavior : AbilityBehavior
 {
     [SerializeField] private float minJumpHeight = 2f;
     [SerializeField] private float holdingJumpForceMultiplier = 5f;
+    private RigidbodyLinker rigidbodyLinker;
+    private CollisionManagement collisionManager;
+
     public Timer jumpHoldingTimer = new Timer(0.5f);
     public Timer coyoteeTimer = new Timer(0.5f);
     public Timer jumpBufferTimer = new Timer(0.3f);
     public float JumpHeight => minJumpHeight;
+    private bool active;
+    public bool Active => active;
+    public override void Initialize()
+    {
+        base.Initialize();
+        rigidbodyLinker = Player.Instance.modules.rigidbodyLinker;
+        collisionManager = Player.Instance.modules.collisionManagement;
+    }
 
     /// <summary>
     /// Same as jump but inputs the users current jump height
@@ -16,50 +27,73 @@ public class JumpBehavior : AbilityBehavior
     {
         Jump(this.JumpHeight);
     }
+    private void FixedUpdate()
+    {
+        if (jumpBufferTimer.TimerActive())
+        {
+            jumpBufferTimer.CountDown(Time.fixedDeltaTime);
+        }
 
+        if (collisionManager.IsGrounded.old)
+        {
+            coyoteeTimer.ResetTimer();
+        }
+        else
+        {
+            coyoteeTimer.CountDown(Time.fixedDeltaTime);
+        }
+    }
     /// <summary>
     /// Physics behavior for the initial press of jump button
     /// </summary>
     public void Jump(float height)
     {
-        Vector3 gravity = CustomGravity.GetGravity(physicsManager.rb.position, out Vector3 upAxis);
+        Vector3 gravity = CustomGravity.GetGravity(out Vector3 upAxis);
 
-        if (Vector3.Dot(physicsManager.rb.velocity, upAxis) < 0)
+        if (Vector3.Dot(rb.velocity, upAxis) < 0)
         {
-            physicsManager.rb.velocity = physicsManager.rb.velocity.ProjectOnContactPlane(upAxis);
+            rb.velocity = rb.velocity.ProjectOnContactPlane(upAxis);
         }
 
-        // Basic physics, except the force required to reach this height may not work if we consider holding space
-        // That and considering that physics works in timesteps.
+        // Basic physics, except the force required to reach this height may not work if we consider
+        // holding space That and considering that physics works in timesteps.
         float jumpForce = Mathf.Sqrt(2f * gravity.magnitude * height);
 
         // Upward bias for sloped jumping
-        Vector3 jumpDirection = (physicsManager.collisionManager.ContactNormal.old + upAxis).normalized;
+        Vector3 jumpDirection = (collisionManager.ContactNormal.old + upAxis).normalized;
 
         // Considers velocity when jumping on slopes and the slope angle
-        float alignedSpeed = Vector3.Dot(physicsManager.rb.velocity, jumpDirection);
+        float alignedSpeed = Vector3.Dot(rb.velocity, jumpDirection);
         if (alignedSpeed > 0)
         {
             jumpForce = Mathf.Max(jumpForce - alignedSpeed, 0);
         }
 
         // Actual jump itself
-        physicsManager.rb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
-        if (physicsManager.collisionManager.rigidbodyLinker.ConnectedRb.current != null)
+        rb.AddForce(jumpForce * upAxis, ForceMode.VelocityChange);
+        if (rigidbodyLinker.ConnectedRb.current != null)
         {
-            physicsManager.rb.AddForce(Vector3.Project(physicsManager.collisionManager.rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
+            rb.AddForce(Vector3.Project(rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
         }
 
         soundManager.Play("Jump");
     }
 
-    public override void EntryAction()
+    public void EntryAction()
     {
+        jumpHoldingTimer.ResetTimer();
+        coyoteeTimer.DeactivateTimer();
         Jump();
+        active = true;
+    }
+    public void ExitAction()
+    {
+        jumpHoldingTimer.DeactivateTimer();
+        active = false;
     }
 
-    public override void Action()
+    public void Action()
     {
-        physicsManager.rb.AddForce(CustomGravity.GetUpAxis(physicsManager.rb.position) * holdingJumpForceMultiplier, ForceMode.Acceleration);
+        rb.AddForce(CustomGravity.GetUpAxis() * holdingJumpForceMultiplier, ForceMode.Acceleration);
     }
 }

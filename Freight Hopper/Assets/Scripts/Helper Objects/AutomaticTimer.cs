@@ -19,10 +19,6 @@ public class AutomaticTimer : Timer
     // Unlisten to ReachedZeroEvent, do this if you don't like memory leaks
     public void Unsubscribe(Action function) => ReachedZeroEvent -= function;
 
-    ~AutomaticTimer()
-    {
-    }
-
     public override void ResetTimer()
     {
         base.ResetTimer();

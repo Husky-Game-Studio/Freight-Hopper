@@ -9,25 +9,33 @@ public class OnTriggerEvent : MonoBehaviour
 
     [SerializeField] private bool triggerOnPlayerEnter;
     // GameObject MUST have a collider component
-    [SerializeField] private Optional<List<GameObject>> triggerOnGameObjectEnter = new Optional<List<GameObject>>();
+    [SerializeField] private Optional<List<GameObject>> triggerOnGameObjectEnter;
 
     private void OnTriggerEnter(Collider other)
     {
-        for (int i = 0; i < triggerOnGameObjectEnter.value.Count; i++)
+        if (triggerOnGameObjectEnter.Enabled)
         {
-            if (triggerOnGameObjectEnter.Enabled && triggerOnGameObjectEnter.value
-                != null && other.gameObject == triggerOnGameObjectEnter.value[i])
+            for (int i = 0; i < triggerOnGameObjectEnter.value.Count; i++)
             {
-                triggered?.Invoke();
-                staticTriggered = true;
+                if (triggerOnGameObjectEnter.value
+                    != null && other.gameObject == triggerOnGameObjectEnter.value[i])
+                {
+                    triggered?.Invoke();
+                    staticTriggered = true;
+                }
             }
+            return;
         }
-        
+
         if (triggerOnPlayerEnter && other.CompareTag("Player"))
         {
             triggered?.Invoke();
             staticTriggered = true;
+            return;
         }
+
+        triggered?.Invoke();
+        staticTriggered = true;
     }
 
     private void OnTriggerExit(Collider other)

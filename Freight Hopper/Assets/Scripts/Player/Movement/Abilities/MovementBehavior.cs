@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MovementBehavior : AbilityBehavior
@@ -7,25 +8,31 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] private Speedometer speedometer;
     [SerializeField] private VelocityController groundController;
     [SerializeField] private VelocityController airController;
-
+    [SerializeField, ReadOnly] bool waiting = false;
+    [SerializeField] float speedSoundMultiplier = 20f;
+    [SerializeField] Vector2 walkingSoundTimeRange = new Vector2(0.1f, 0.4f);
     public float HorizontalSpeed => speedometer.AbsoluteHorzSpeed;
-    public float Speed => physicsManager.rb.velocity.magnitude;
+    public float Speed => rb.velocity.magnitude;
 
     private Transform cameraTransform;
+    private CollisionManagement collisionManager;
+    private Friction friction;
 
-    public override void Initialize(PhysicsManager pm, SoundManager sm, PlayerAbilities pa)
+    public override void Initialize()
     {
-        base.Initialize(pm, sm, pa);
+        base.Initialize();
+        this.collisionManager = Player.Instance.modules.collisionManagement;
+        this.friction = Player.Instance.modules.friction;
         cameraTransform = Camera.main.transform;
-        speedometer.Initialize(pm);
-        groundController.Initialize(pm, speedometer, oppositeInputAngle);
-        airController.Initialize(pm, speedometer, oppositeInputAngle);
+        speedometer.Initialize();
+        groundController.Initialize(speedometer, oppositeInputAngle);
+        airController.Initialize(speedometer, oppositeInputAngle);
     }
 
     private Vector3 ConvertInputToCameraSpace(Vector3 forward, Vector3 right)
     {
-        forward = forward.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
-        right = right.ProjectOnContactPlane(physicsManager.collisionManager.ValidUpAxis);
+        forward = forward.ProjectOnContactPlane(collisionManager.ValidUpAxis);
+        right = right.ProjectOnContactPlane(collisionManager.ValidUpAxis);
 
         // Moves relative to the camera
         Vector3 input = UserInput.Instance.Move();
@@ -35,19 +42,21 @@ public class MovementBehavior : AbilityBehavior
 
     public void Move(Vector3 direction)
     {
-        // If the player is in the air, the default direction is upwards. So this calculation does nothing in the air.
-        Vector3 surfaceMoveDirection = direction.ProjectOnContactPlane(physicsManager.collisionManager.ContactNormal.current).normalized;
+        // If the player is in the air, the default direction is upwards. So this calculation does
+        // nothing in the air.
         if (direction.IsZero())
         {
             return;
         }
-        if (!physicsManager.collisionManager.IsGrounded.current)
+        Vector3 surfaceMoveDirection = direction.ProjectOnContactPlane(collisionManager.ContactNormal.current).normalized;
+        
+        if (!collisionManager.IsGrounded.current)
         {
             airController.Move(surfaceMoveDirection);
         }
         else
         {
-            physicsManager.friction.ReduceFriction(1);
+            friction.ReduceFriction(1);
             groundController.Move(surfaceMoveDirection);
         }
     }
@@ -59,26 +68,48 @@ public class MovementBehavior : AbilityBehavior
         Move(relativeInput);
     }
 
-    public override void EntryAction()
-    {
-    }
-
-    public void UpdateMovement()
+    public void UpdateStatus()
     {
         speedometer.UpdateSpeedometer();
     }
 
-    public override void Action()
+    public void Action()
     {
         MoveAction();
-        if (physicsManager.collisionManager.IsGrounded.current)
+        if (waiting)
         {
-            soundManager.PlayRandom("Move", 7);
-            soundManager.PlayRandom("Stone", 5);
+            return;
         }
-    }
+        if (!collisionManager.IsGrounded.current)
+        {
+            return;
+        }
+        if (UserInput.Instance.Move().IsZero())
+        {
+            return;
+        }
+        if (UserInput.Instance.GroundPoundHeld)
+        {
+            return;
+        }
 
-    public override void ExitAction()
-    {
+        StartCoroutine(PlayMovement(speedometer.HorzSpeed));
     }
+    
+    IEnumerator PlayMovement(float speed)
+    {
+        soundManager.PlayRandom("Move", 7);
+        soundManager.PlayRandom("Stone", 5);
+        waiting = true;
+        speed = speedSoundMultiplier/speed;
+        speed = Mathf.Clamp(speed, walkingSoundTimeRange.x, walkingSoundTimeRange.y);
+        float elapsed = 0;
+        while (elapsed < speed)
+        {
+            yield return null;
+            elapsed += Time.deltaTime;
+        }
+        waiting = false;
+    }
+    
 }

@@ -1,35 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class ChangeMixerOnTrigger : MonoBehaviour
 {
-    [SerializeField] private AudioMixerGroup mixerToFadeInto;
-    private bool switched = false;
-    private AudioMixerGroup originalMixer;
-
-    private void Awake()
-    {
-        originalMixer = MusicManager.Instance.MixerGroup;
-        switched = false;
-    }
+    [SerializeField] private MusicManager.SnapshotMode mixerToFadeInto = MusicManager.SnapshotMode.Alternate;
+    [SerializeField] private bool switched;
 
     private void OnTriggerExit(Collider other)
     {
+        
         if (!other.CompareTag("Player"))
+        {
+            return;
+        }
+        if (MusicManager.Instance == null)
         {
             return;
         }
         if (!switched)
         {
             switched = true;
-            MusicManager.Instance.ChangeMixer(mixerToFadeInto);
+            MusicManager.Instance.TransitionToSnapshot(mixerToFadeInto);
         }
         else
         {
             switched = false;
-            MusicManager.Instance.ChangeMixer(originalMixer);
+            MusicManager.Instance.TransitionToSnapshot(MusicManager.SnapshotMode.Normal);
         }
     }
 }

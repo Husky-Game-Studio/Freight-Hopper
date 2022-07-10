@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class RigidbodyLinker
+public class RigidbodyLinker : MonoBehaviour
 {
     [ReadOnly, SerializeField] private Memory<Rigidbody> connectedRb = new Memory<Rigidbody>(null, null);
     [ReadOnly, SerializeField] private Memory<Vector3> connectionVelocity;
@@ -23,8 +23,8 @@ public class RigidbodyLinker
         connectedRb.current = rigidbody;
     }
 
-    // Applies acceleration to ourRigidbody if applicable. Not applicable if mass of linked rigidbody
-    // is too small and is not kinematic
+    // Applies acceleration to ourRigidbody if applicable. Not applicable if mass of linked
+    // rigidbody is too small and is not kinematic
     public void UpdateConnectionState(Rigidbody ourRigidbody)
     {
         if (connectedRb.current == null)

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.Rendering;
@@ -7,7 +6,7 @@ using UnityEngine.Rendering;
 public class CameraEffects : MonoBehaviour
 {
     private Rigidbody playerRB;
-    private Camera cam;
+    [SerializeField] private CinemachineVirtualCamera cam;
 
     private VisualEffect speedLines;
 
@@ -17,6 +16,7 @@ public class CameraEffects : MonoBehaviour
 
     [SerializeField] private SoundManager playerSounds;
     [SerializeField] private CameraEffect<float> fov;
+    [SerializeField] private Camera distanceCamera;
 
     [System.Serializable]
     public struct CameraEffect<T>
@@ -30,11 +30,11 @@ public class CameraEffects : MonoBehaviour
 
     private void Awake()
     {
-        playerRB = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Rigidbody>();
+        playerRB = Player.Instance.modules.rigidbody;
 
-        cam = Camera.main;
-
-        fov.baseValue = cam.fieldOfView;
+        cam.m_Lens.FieldOfView = Settings.GetFOV();
+        distanceCamera.fieldOfView = Settings.GetFOV();
+        fov.baseValue = cam.m_Lens.FieldOfView;
         fov.value = fov.baseValue;
         fov.maxValue += fov.baseValue;
 
@@ -43,11 +43,11 @@ public class CameraEffects : MonoBehaviour
         speedLines.Stop();
     }
 
-    private bool goingSlowAgain = false;
+    private bool goingSlowAgain;
 
     private void Update()
     {
-        Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
+        //Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
         speedLines.SetVector3("Direction", playerRB.velocity.normalized);
         float speed = playerRB.velocity.magnitude;
 
@@ -56,7 +56,8 @@ public class CameraEffects : MonoBehaviour
 
         speedLines.SetFloat("Scalar", fov.lerpValue + 1);
 
-        cam.fieldOfView = fov.value;
+        cam.m_Lens.FieldOfView = fov.value;
+        distanceCamera.fieldOfView = fov.value;
 
         if (speed > speedEffectsStart)
         {
@@ -73,14 +74,5 @@ public class CameraEffects : MonoBehaviour
             playerSounds.Stop("GoingFast");
             goingSlowAgain = false;
         }
-    }
-
-    private Color BlendGradients(Gradient a, Gradient b, float bias, float t)
-    {
-        Color fromA = a.Evaluate(t);
-        Color fromB = b.Evaluate(t);
-
-        Color final = Color.Lerp(fromA, fromB, bias);
-        return final;
     }
 }

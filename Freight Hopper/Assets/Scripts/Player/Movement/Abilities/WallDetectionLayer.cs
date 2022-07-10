@@ -2,7 +2,7 @@
 
 public class WallDetectionLayer
 {
-    private float priority = 0;
+    private readonly float priority;
     private readonly (bool, Vector3) FAIL = (false, Vector3.zero);
     public float Priority => priority;
 
@@ -17,11 +17,11 @@ public class WallDetectionLayer
         public T rightBack;
     }
 
-    private WallDetections<Ray> rays = new WallDetections<Ray>();
+    private WallDetections<Ray> rays;
 
-    private WallDetections<bool> status = new WallDetections<bool>();
+    private WallDetections<bool> status;
 
-    private WallDetections<Vector3> normals = new WallDetections<Vector3>();
+    private WallDetections<Vector3> normals;
 
     public WallDetectionLayer(float frontAngles, float backAngles, float height, float priority)
     {
@@ -48,42 +48,42 @@ public class WallDetectionLayer
         return this.Priority < otherLayer.Priority;
     }
 
-    public void CheckWalls(PhysicsManager physicsManager, float distance, LayerMask layers)
+    public void CheckWalls(Transform player, RigidbodyLinker rl, CollisionManagement cm, float distance, LayerMask layers)
     {
         (bool, Vector3) temp;
-        temp = CheckDirection(rays.leftBack, physicsManager, distance, layers);
+        temp = CheckDirection(rays.leftBack, player, rl, cm, distance, layers);
         status.leftBack = temp.Item1;
         normals.leftBack = temp.Item2;
 
-        temp = CheckDirection(rays.left, physicsManager, distance, layers);
+        temp = CheckDirection(rays.left, player, rl, cm, distance, layers);
         status.left = temp.Item1;
         normals.left = temp.Item2;
 
-        temp = CheckDirection(rays.leftFront, physicsManager, distance, layers);
+        temp = CheckDirection(rays.leftFront, player, rl, cm, distance, layers);
         status.leftFront = temp.Item1;
         normals.leftFront = temp.Item2;
 
-        temp = CheckDirection(rays.front, physicsManager, distance, layers);
+        temp = CheckDirection(rays.front, player, rl, cm, distance, layers);
         status.front = temp.Item1;
         normals.front = temp.Item2;
 
-        temp = CheckDirection(rays.rightFront, physicsManager, distance, layers);
+        temp = CheckDirection(rays.rightFront, player, rl, cm, distance, layers);
         status.rightFront = temp.Item1;
         normals.rightFront = temp.Item2;
 
-        temp = CheckDirection(rays.right, physicsManager, distance, layers);
+        temp = CheckDirection(rays.right, player, rl, cm, distance, layers);
         status.right = temp.Item1;
         normals.right = temp.Item2;
 
-        temp = CheckDirection(rays.rightBack, physicsManager, distance, layers);
+        temp = CheckDirection(rays.rightBack, player, rl, cm, distance, layers);
         status.rightBack = temp.Item1;
         normals.rightBack = temp.Item2;
     }
 
-    private (bool, Vector3) CheckDirection(Ray ray, PhysicsManager physicsManager, float distance, LayerMask layers)
+    private (bool, Vector3) CheckDirection(Ray ray, Transform player, RigidbodyLinker rigidbodyLinker, CollisionManagement collisionManager, float distance, LayerMask layers)
     {
-        Ray relativeRay = new Ray(physicsManager.transform.TransformPoint(ray.origin), physicsManager.transform.TransformDirection(ray.direction));
-        //Debug.DrawRay(relativeRay.origin, relativeRay.direction * distance, Color.yellow);
+        Ray relativeRay = new Ray(player.TransformPoint(ray.origin), player.TransformDirection(ray.direction));
+        Debug.DrawRay(relativeRay.origin, relativeRay.direction * distance, Color.yellow);
         if (Physics.Raycast(relativeRay, out RaycastHit hit, distance, layers))
         {
             if (!hit.transform.CompareTag("landable"))
@@ -92,11 +92,11 @@ public class WallDetectionLayer
             }
             if (hit.rigidbody != null)
             {
-                physicsManager.rigidbodyLinker.UpdateLink(hit.rigidbody);
+                rigidbodyLinker.UpdateLink(hit.rigidbody);
             }
 
-            float collisionAngle = Vector3.Angle(hit.normal, physicsManager.collisionManager.ValidUpAxis);
-            if (collisionAngle > physicsManager.collisionManager.MaxSlope)
+            float collisionAngle = Vector3.Angle(hit.normal, collisionManager.ValidUpAxis);
+            if (collisionAngle > collisionManager.MaxSlope)
             {
                 return (true, hit.normal);
             }

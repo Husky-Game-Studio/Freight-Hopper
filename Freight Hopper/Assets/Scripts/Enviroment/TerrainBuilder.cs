@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Linq;
 
 [ExecuteInEditMode]
 public class TerrainBuilder : MonoBehaviour
@@ -27,7 +25,8 @@ public class TerrainBuilder : MonoBehaviour
                 GameObject go = PrefabUtility.InstantiatePrefab(terrain, this.transform) as GameObject;
                 Undo.RegisterCreatedObjectUndo(go, "Generate Terrain");
                 go.name = terrainName + " " + x + ", " + y;
-                go.transform.position = this.transform.position + (this.transform.right * x * terrainWidth.Value) + (this.transform.forward * y * terrainWidth.Value);
+                var transform1 = transform;
+                go.transform.position = transform1.position + (terrainWidth.Value * x * transform1.right) + (terrainWidth.Value * y * transform1.forward);
                 builtTerrain.Add(go);
             }
         }

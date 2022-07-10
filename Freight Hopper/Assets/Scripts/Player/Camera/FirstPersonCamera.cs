@@ -1,109 +1,104 @@
+using Cinemachine;
 using UnityEngine;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-    private Transform camTransform;
-    [SerializeField, ReadOnly] private Quaternion localRotation;
-    private Transform player;
-    [SerializeField, ReadOnly] private Vector3 upAxisAngleRotation;
+    [SerializeField, ReadOnly] private Vector3 upAxisAngleRotation = Vector3.zero;
     [SerializeField, ReadOnly] private Memory<Vector3> upAxis;
     [SerializeField, ReadOnly] private Vector3 smoothedUpAxis;
     [SerializeField, ReadOnly] private Vector3 oldUpAxis;
     [SerializeField, ReadOnly] private float timeStep;
-    [SerializeField] private Transform playerHead;
-
-    // y min, y max
-    [SerializeField] private float yRotationLock = 90;
-
-    [SerializeField] private Vector2 mouseSensitivity;
+    [SerializeField] private Transform upAxisTransform;
+    private Transform player;
+    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
+    [SerializeField] private GameObject ui;
+    private GameObject otherUIs;
+    [SerializeField, ReadOnly] private bool freecam;
 
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
-
-    // This is to stop the input while the level is loading. At least if it was implemented
-    private bool cameraEnabled = false;
-
-    private CollisionManagement playerCM;
-
-    private void Awake()
+    [SerializeField] private float mouseSensitivityConversionValue = 10;
+    private int curFrameCount;
+    private const int stopCameraFrameCount = 4;
+    private void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        camTransform = Camera.main.transform;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        localRotation = player.rotation;
-        playerCM = player.GetComponent<PhysicsManager>().collisionManager;
+        
+        Vector2 mouseSensitivity = Settings.GetMouseSensitivity();
+        player = Player.Instance.transform.Find("Mesh");
+        cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity.x / mouseSensitivityConversionValue;
+        cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed = mouseSensitivity.y / mouseSensitivityConversionValue;
 
-        // Need to make this false until level loaded in the future :(
-        cameraEnabled = true;
     }
 
     private void Update()
     {
-        FollowPlayer();
+        CalculateSmoothedUpAxis(Vector3.up);
+        if((Time.timeScale == 0 || stopCameraFrameCount > curFrameCount) && !freecam)
+        {
+            cinemachineVirtualCamera.gameObject.SetActive(false);
+        } else {
+            cinemachineVirtualCamera.gameObject.SetActive(true);
+        }
+        curFrameCount++;
+        
     }
 
     private void FixedUpdate()
     {
-        if (cameraEnabled)
-        {
-            RotatePlayer();
-        }
+        Vector3 forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+        player.rotation = Quaternion.LookRotation(forward, Vector3.up);
     }
 
-    private void FollowPlayer()
+    private void OnEnable()
     {
-        camTransform.position = playerHead.position;
+        UserInput.Instance.UserInputMaster.Player.Freecam.performed += ToggleFreecam;
+    }
+    private void OnDisable()
+    {
+        UserInput.Instance.UserInputMaster.Player.Freecam.performed -= ToggleFreecam;
     }
 
-    private void RotatePlayer()
+    private void ToggleFreecam(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Vector3 validUpAxis = playerCM.ValidUpAxis;
-
-        CalculateSmoothedUpAxis(validUpAxis);
-
-        // convert input to rotation
-        Vector2 mouse = UserInput.Instance.Look() * mouseSensitivity * Time.deltaTime;
-        Quaternion mouseRotationHorizontal = Quaternion.Euler(0, mouse.x, 0);
-        Quaternion mouseRotationVertical = Quaternion.Euler(-mouse.y, 0, 0);
-
-        float sign = 1;
-        if (Vector3.Angle(validUpAxis, camTransform.up) > 90)
-        {
-            sign = -1;
+        if(Time.timeScale == 0 && !freecam){
+            return;
         }
-
-        // Just prevents issues with camera glitching at the poles
-        float verticalAngle = Vector3.Angle(player.up * sign,
-            Quaternion.LookRotation(player.forward, smoothedUpAxis) * localRotation * mouseRotationVertical *
-            player.up * sign);
-
-        if (verticalAngle < yRotationLock)
-        {
-            localRotation *= mouseRotationVertical;
+        freecam = !freecam;
+        if(freecam) {
+            Time.timeScale = 0;
+            ui.SetActive(false);
+            otherUIs = GameObject.Find("UniqueUICanvas");
+            if(otherUIs != null){
+                otherUIs.SetActive(false);
+            }
+            
         }
-        // Apply camera and player rotation
-
-        camTransform.rotation = Quaternion.LookRotation(player.forward * sign, smoothedUpAxis) * localRotation;
-        Vector3 forward = camTransform.forward.ProjectOnContactPlane(smoothedUpAxis).normalized;
-        player.LookAt(player.position + forward, validUpAxis);
-
-        player.rotation *= mouseRotationHorizontal;
+        else {
+            Time.timeScale = 1;
+            ui.SetActive(true);
+            if (otherUIs != null)
+            {
+                otherUIs.SetActive(true);
+            }
+            
+        }
     }
 
     private void CalculateSmoothedUpAxis(Vector3 upAxisCamera)
     {
         upAxis.current = Quaternion.Euler(upAxisAngleRotation) * upAxisCamera;
-
+        
         if (upAxis.current != upAxis.old)
         {
             timeStep = 0;
             oldUpAxis = upAxis.old;
-            smoothedUpAxis = upAxis.old;
         }
         upAxis.UpdateOld();
         timeStep = Mathf.Min(timeStep + smoothingDelta, 1);
         smoothedUpAxis = Vector3.Lerp(oldUpAxis, upAxis.current, timeStep);
+        upAxisTransform.transform.up = smoothedUpAxis;
         if (timeStep >= 1)
         {
             oldUpAxis = upAxis.current;

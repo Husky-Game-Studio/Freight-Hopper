@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
+  - {fileID: 2100000, guid: 7b0b4d7713477294f92561b868563bf8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &5439519174914632069
 GameObject:
@@ -122,6 +121,7 @@ GameObject:
   - component: {fileID: 6428001057975034513}
   - component: {fileID: 24308252523590883}
   - component: {fileID: 3136405820143418863}
+  - component: {fileID: 8793437778503588092}
   m_Layer: 0
   m_Name: ProgramableSignRight
   m_TagString: Untagged
@@ -137,8 +137,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5439519174914632069}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -1.4679, y: 2.9065, z: 0}
+  m_LocalScale: {x: 0.9528413, y: 0.8747738, z: 1}
   m_Children: []
   m_Father: {fileID: 8572133768495074328}
   m_RootOrder: 1
@@ -170,7 +170,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
+  - {fileID: 2100000, guid: a75503adbff9ccd49a325c614454cfe4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -192,6 +192,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8793437778503588092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5439519174914632069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce28ea7f786ac8479524d6fdf41d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billboards: {fileID: 0}
 --- !u!1 &7238913996852058671
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +266,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
+  - {fileID: 2100000, guid: 7b0b4d7713477294f92561b868563bf8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -301,7 +314,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &7433938515738415603
 GameObject:
@@ -314,6 +326,7 @@ GameObject:
   - component: {fileID: 5303634431944494403}
   - component: {fileID: 7944364372449529843}
   - component: {fileID: 1090334054559989408}
+  - component: {fileID: 3940650333640879099}
   m_Layer: 0
   m_Name: ProgramableSignLeft
   m_TagString: Untagged
@@ -329,8 +342,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7433938515738415603}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.5042, y: 2.762, z: 0}
+  m_LocalScale: {x: 0.95486796, y: 0.8809699, z: 1}
   m_Children: []
   m_Father: {fileID: 8572133768495074328}
   m_RootOrder: 0
@@ -362,7 +375,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
+  - {fileID: 2100000, guid: a75503adbff9ccd49a325c614454cfe4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -384,6 +397,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3940650333640879099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7433938515738415603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce28ea7f786ac8479524d6fdf41d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billboards: {fileID: 0}
 --- !u!1 &8688190685769290960
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,7 +471,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c4b893df2803b24bb1a8335a861fb2f, type: 2}
+  - {fileID: 2100000, guid: 7b0b4d7713477294f92561b868563bf8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -493,7 +519,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065ea480c6a3e854f9be75045e626117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killInstantly: 1
   friction: {fileID: 11400000, guid: 19eeeccbf48075644b2a25d3823d0333, type: 2}
 --- !u!1 &9060545988388181666
 GameObject:

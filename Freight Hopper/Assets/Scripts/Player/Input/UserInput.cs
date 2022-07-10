@@ -21,40 +21,19 @@ public class UserInput : MonoBehaviour
 
     public event PressEventHandler GroundPoundCanceled;
 
-    public event PressEventHandler FullStopInput;
-
-    public event PressEventHandler BurstInput;
-
-    public event PressEventHandler GrappleInput;
-
-    public event PressEventHandler GrappleInputCanceled;
-
-    public event PressEventHandler UpwardDashInput;
-
-    public event PressEventHandler UpwardDashInputCanceled;
-
     public bool GroundPoundHeld => groundPoundHeld;
     public bool JumpHeld => jumpHeld;
-    public bool GrappleHeld => grappleHeld;
 
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
-    [ReadOnly, SerializeField] private bool upwardDashHeld;
-    [ReadOnly, SerializeField] private bool grappleHeld;
 
     private void OnEnable()
     {
         master.Enable();
         master.Player.GroundPound.performed += GroundPoundPressed;
         master.Player.GroundPound.canceled += GroundPoundReleased;
-        master.Player.UpwardDash.performed += UpwardDashHeld;
-        master.Player.UpwardDash.canceled += UpwardDashReleased;
         master.Player.Jump.performed += JumpPressed;
         master.Player.Jump.canceled += JumpReleased;
-        master.Player.FullStop.performed += FullStopPressed;
-        master.Player.Burst.performed += BurstPressed;
-        master.Player.GrapplePole.performed += GrapplePressed;
-        master.Player.GrapplePole.performed += GrappleReleased;
 
         if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
         {
@@ -64,6 +43,21 @@ public class UserInput : MonoBehaviour
         {
             Player.PlayerLoadedIn += RespawnLinked;
         }
+        master.Disable();
+    }
+    private int frameCount;
+    private bool masterEnabled;
+    private void Update()
+    {
+        if (frameCount >= 4)
+        {
+            master.Enable();
+            masterEnabled = true;
+            frameCount = 0;
+        } else if (!masterEnabled){
+            frameCount++;
+        }
+        
     }
 
     private void RespawnLinked()
@@ -92,7 +86,6 @@ public class UserInput : MonoBehaviour
             Destroy(this);
         }
     }
-
     private void GroundPoundPressed(InputAction.CallbackContext context)
     {
         groundPoundHeld = !groundPoundHeld;
@@ -102,7 +95,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void JumpPressed(InputAction.CallbackContext context)
+    private void JumpPressed(InputAction.CallbackContext _)
     {
         jumpHeld = !jumpHeld;
         if (jumpHeld)
@@ -111,52 +104,14 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    private void GrapplePressed(InputAction.CallbackContext context)
-    {
-        grappleHeld = !grappleHeld;
-        if (grappleHeld)
-        {
-            GrappleInput?.Invoke();
-        }
-    }
-
-    private void JumpReleased(InputAction.CallbackContext context)
+    private void JumpReleased(InputAction.CallbackContext _)
     {
         JumpInputCanceled?.Invoke();
     }
 
-    private void UpwardDashHeld(InputAction.CallbackContext context)
-    {
-        upwardDashHeld = !upwardDashHeld;
-        if (upwardDashHeld)
-        {
-            UpwardDashInput?.Invoke();
-        }
-    }
-
-    private void UpwardDashReleased(InputAction.CallbackContext context)
-    {
-        UpwardDashInputCanceled?.Invoke();
-    }
-
-    private void GroundPoundReleased(InputAction.CallbackContext context)
+    private void GroundPoundReleased(InputAction.CallbackContext _)
     {
         GroundPoundCanceled?.Invoke();
-    }
-
-    private void GrappleReleased(InputAction.CallbackContext context)
-    {
-        GrappleInputCanceled?.Invoke();
-    }
-
-    private void FullStopPressed(InputAction.CallbackContext context)
-    {
-        FullStopInput?.Invoke();
-    }
-
-    private void BurstPressed(InputAction.CallbackContext context)
-    {
-        BurstInput?.Invoke();
     }
 
     // Returns the direction the player wants to move

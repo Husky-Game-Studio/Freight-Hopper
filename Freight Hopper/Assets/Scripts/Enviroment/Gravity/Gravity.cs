@@ -1,43 +1,37 @@
 using UnityEngine;
 
 [System.Serializable]
-public class Gravity
+public class Gravity : MonoBehaviour
 {
     [SerializeField] private bool useGravity = true;
-    [System.NonSerialized] private bool aerial;
-    [System.NonSerialized] private Rigidbody rb;
-    [System.NonSerialized] private CollisionManagement collisionManagement;
+    [SerializeField] private bool automatic = true;
+    [SerializeField, ReadOnly] private Rigidbody rb;
 
-    public void Initialize(Rigidbody rb, CollisionManagement collisionManagement, bool aerial)
+    private void Awake()
     {
-        this.rb = rb;
-        this.collisionManagement = collisionManagement;
-        this.aerial = aerial;
+        this.rb = GetComponentInParent<Rigidbody>();
         rb.useGravity = false;
-        collisionManagement.CollisionDataCollected += GravityLoop;
     }
 
-    ~Gravity()
+    private void FixedUpdate()
     {
-        collisionManagement.CollisionDataCollected -= GravityLoop;
+        if (automatic)
+        {
+            GravityLoop();
+        }
     }
 
-    public void DisableGravity()
+    public void EnableGravity(bool enable = true)
     {
-        useGravity = false;
+        useGravity = enable;
     }
 
-    public void EnableGravity()
+    public void GravityLoop()
     {
-        useGravity = true;
-    }
-
-    private void GravityLoop()
-    {
-        if (!useGravity || (collisionManagement.IsGrounded.current && !aerial))
+        if (!useGravity || Time.timeScale == 0)
         {
             return;
         }
-        rb.AddForce(CustomGravity.GetGravity(rb.position), ForceMode.Acceleration);
+        rb.AddForce(CustomGravity.GetGravity(), ForceMode.Acceleration);
     }
 }
