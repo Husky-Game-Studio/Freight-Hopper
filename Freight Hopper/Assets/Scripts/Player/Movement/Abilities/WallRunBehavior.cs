@@ -245,12 +245,12 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public void WallClimbExit()
     {
-        StartCoroutine(soundManager.Stop("WallClimb"));
+        soundManager.Stop("WallClimb");
         wallClimbActive = false;
     }
     public void RunExit()
     {
-        StartCoroutine(soundManager.Stop("WallSkid"));
+        soundManager.Stop("WallSkid");
         exitEffectsCooldown.ResetTimer();
         entryEffectsCooldown.ResetTimer();
         wallRunActive = false;

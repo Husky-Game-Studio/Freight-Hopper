@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "Sound", menuName = "Scriptable Objects/Sound")]
 public class Sound : ScriptableObject
@@ -10,7 +10,7 @@ public class Sound : ScriptableObject
     public string filename;
 
     public AudioClip clip;
-    public AssetReference clip2;
+
     [Range(0f, 1f)]
     public float volume = 1f;
 
@@ -39,4 +39,5 @@ public class Sound : ScriptableObject
     public int priority = 128;
 
     [HideInInspector] public AudioSource componentAudioSource;
+    [HideInInspector] public Dictionary<Vector3, AudioSource> audioSources = new Dictionary<Vector3, AudioSource>();
 }
