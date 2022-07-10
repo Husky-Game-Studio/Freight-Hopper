@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 // From comments from https://www.youtube.com/watch?v=QL29aTa7J5Q
 // Probably heavily modified by the time anyone reads this
@@ -12,6 +14,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField] protected SoundCollection[] sounds;
     protected Dictionary<string, float> soundTimerDictionary = new Dictionary<string, float>();
 
+    AsyncOperationHandle switchMusicOperationHandle;
+    
     protected void CreateAudioSource(Sound sound)
     {
         sound.componentAudioSource = this.gameObject.AddComponent<AudioSource>();
@@ -74,7 +78,7 @@ public class SoundManager : MonoBehaviour
     }
 
     // Play sound with name, will be created if it doesn't exist
-    public void Play(string name, bool playMultiple = false)
+    public void Play(string name, bool playMultiple = false, bool addressables = false)
     {
         Sound sound = FindSound(name);
 
@@ -100,19 +104,44 @@ public class SoundManager : MonoBehaviour
             }
             else
             {
-                sound.componentAudioSource.Play();
-                sound.componentAudioSource.pitch = sound.pitch;
-                sound.componentAudioSource.playOnAwake = false;
-                sound.componentAudioSource.volume = 0;
-                StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+                if (addressables)
+                {
+                    StartCoroutine(PlaySongAsync(sound));
+                    sound.componentAudioSource.pitch = sound.pitch;
+                    sound.componentAudioSource.playOnAwake = false;
+                    sound.componentAudioSource.volume = 0;
+                }
+                else
+                {
+                    sound.componentAudioSource.Play();
+                    sound.componentAudioSource.pitch = sound.pitch;
+                    sound.componentAudioSource.playOnAwake = false;
+                    sound.componentAudioSource.volume = 0;
+                    StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+                }
+                
             }
-
-            
         }
-        
     }
 
-    private IEnumerator Fade(AudioSource source, float duration, float finalVolume)
+    private IEnumerator PlaySongAsync(Sound sound)
+    {
+        if (switchMusicOperationHandle.IsValid())
+        {
+            yield return Stop(sound.filename);
+            sound.componentAudioSource.clip = null;
+            sound.clip = null;
+            Addressables.Release(switchMusicOperationHandle);
+        }
+        switchMusicOperationHandle = sound.clip2.LoadAssetAsync<AudioClip>();
+        yield return switchMusicOperationHandle;
+        
+        sound.componentAudioSource.clip = (AudioClip)switchMusicOperationHandle.Result;
+        sound.componentAudioSource.Play();
+        StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
+    }
+    
+    private IEnumerator Fade(AudioSource source, float duration, float finalVolume, bool stop = false)
     {
         float startVolume = source.volume;
         float t = 0;
@@ -121,6 +150,10 @@ public class SoundManager : MonoBehaviour
             t += Time.deltaTime / duration;
             source.volume = Mathf.Lerp(startVolume, finalVolume, t);
             yield return null;
+        }
+        if (stop)
+        {
+            source.Stop();
         }
     }
 
@@ -131,21 +164,14 @@ public class SoundManager : MonoBehaviour
         Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)), true);
     }
 
-    public void Stop(string name)
+    public IEnumerator Stop(string name)
     {
         Sound sound = FindSound(name);
         if (sound.componentAudioSource.isActiveAndEnabled)
         {
-            StartCoroutine(StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime));
-            StartCoroutine(Fade(sound.componentAudioSource, sound.fadeOutTime, 0));
+            yield return Fade(sound.componentAudioSource, sound.fadeOutTime, 0, true);
             ResetTimer(sound);
         }
-    }
-
-    private IEnumerator StopAfterSeconds(AudioSource source, float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        source.Stop();
     }
 
     protected string GetSoundName(Sound sound)

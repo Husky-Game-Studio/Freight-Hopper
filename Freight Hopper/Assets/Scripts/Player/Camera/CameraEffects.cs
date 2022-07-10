@@ -71,7 +71,7 @@ public class CameraEffects : MonoBehaviour
         }
         if (goingSlowAgain && speed < speedEffectsStart)
         {
-            playerSounds.Stop("GoingFast");
+            StartCoroutine(playerSounds.Stop("GoingFast"));
             goingSlowAgain = false;
         }
     }

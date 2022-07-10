@@ -42,7 +42,7 @@ public class MusicManager : SoundManager
         {
             DontDestroyOnLoad(this.gameObject);
             instance = this;
-            Play(currentSong.ToString());
+            Play(currentSong.ToString(), false, true);
         }
         else
         {
@@ -117,8 +117,8 @@ public class MusicManager : SoundManager
 
     public void SwitchSong(Songs songName)
     {
-        Stop(currentSong.ToString());
-        Play(songName.ToString());
+        StartCoroutine(Stop(currentSong.ToString()));
+        Play(songName.ToString(), false, true);
         currentSong = songName;
     }
 }

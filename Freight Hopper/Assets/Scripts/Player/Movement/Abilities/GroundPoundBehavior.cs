@@ -99,7 +99,7 @@ public class GroundPoundBehavior : AbilityBehavior
         else
         {
             direction *= downwardsForce;
-            soundManager.Stop("WallSkid");
+            StartCoroutine(soundManager.Stop("WallSkid"));
         }
 
         
@@ -110,9 +110,14 @@ public class GroundPoundBehavior : AbilityBehavior
 
     public void ExitAction()
     {
+        if (!active)
+        {
+            return;
+        }
         PreventConsumptionCheck();
+
         soundManager.Play("GroundPoundExit");
-        soundManager.Stop("WallSkid");
+        StartCoroutine(soundManager.Stop("WallSkid"));
         increasingForce.Reset();
         active = false;
     }

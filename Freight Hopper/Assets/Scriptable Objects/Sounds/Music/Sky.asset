@@ -14,13 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groupingName: 
   filename: Sky
-  clip: {fileID: 8300000, guid: 1285ac76a7d5445409487ec070cd0d58, type: 3}
+  clip: {fileID: 0}
+  clip2:
+    m_AssetGUID: 1285ac76a7d5445409487ec070cd0d58
+    m_SubObjectName: 
+    m_SubObjectType: 
   volume: 1
+  fadeInTime: 0
+  fadeOutTime: 0
   volumeVarience: 0
   pitch: 1
   pitchVarience: 0
   isLoop: 1
   hasCooldown: 0
+  spatialBlend: 0
   delay: 0
   priority: 0
-  source: {fileID: 0}
+  componentAudioSource: {fileID: 0}
