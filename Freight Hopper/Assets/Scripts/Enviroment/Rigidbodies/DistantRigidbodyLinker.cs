@@ -9,7 +9,7 @@ public class DistantRigidbodyLinker : MonoBehaviour
     private Rigidbody rb;
     private RigidbodyLinker rigibodyLinker;
     private CollisionManagement collisionManagent;
-    Collider[] results = new Collider[]{};
+    Collider[] results = new Collider[10];
 
     private void OnDrawGizmosSelected()
     {
@@ -31,12 +31,12 @@ public class DistantRigidbodyLinker : MonoBehaviour
 
     private void EmitSkin()
     {
-        Physics.OverlapCapsuleNonAlloc(this.transform.TransformPoint(pointOne), this.transform.TransformPoint(pointTwo), radius, results, layerMask);
-        foreach (var t in results)
+        var size = Physics.OverlapCapsuleNonAlloc(this.transform.TransformPoint(pointOne), this.transform.TransformPoint(pointTwo), radius, results, layerMask);
+        for (int i = 0; i < size; i++)
         {
-            if (t.attachedRigidbody != null)
+            if (results[i].attachedRigidbody != null)
             {
-                rigibodyLinker.UpdateLink(t.attachedRigidbody);
+                rigibodyLinker.UpdateLink(results[i].attachedRigidbody);
             }
         }
     }
