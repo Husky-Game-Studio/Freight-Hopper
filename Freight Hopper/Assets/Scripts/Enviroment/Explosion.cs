@@ -9,7 +9,7 @@ public class Explosion : MonoBehaviour
     [SerializeField] private float explosionOffsetTime = 0.6f;
     [SerializeField] private float explosionDuration;
     private VisualEffect explosion;
-    Collider[] results = new Collider[]{};
+    Collider[] results = new Collider[10];
 
     private void Awake()
     {
@@ -23,10 +23,11 @@ public class Explosion : MonoBehaviour
     private void Explode()
     {
         Vector3 center = this.transform.position;
-        Physics.OverlapSphereNonAlloc(center, radius, results, targetLayer);
-        foreach (Collider hitObject in results)
+        var count = Physics.OverlapSphereNonAlloc(center, radius, results, targetLayer);
+        for (int i = 0; i < count; i++)
         {
-            Rigidbody rb = hitObject.GetComponent<Rigidbody>();
+            
+            Rigidbody rb = results[i].GetComponent<Rigidbody>();
             if (rb != null)
             {
                 rb.AddExplosionForce(centerForce, center, radius, 3);
