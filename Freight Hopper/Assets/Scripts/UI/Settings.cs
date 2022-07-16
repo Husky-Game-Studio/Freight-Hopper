@@ -58,7 +58,7 @@ public class Settings : MonoBehaviour
     public void SetSettings()
     {
         QualitySettings.vSyncCount = Vsync ? 1 : 0;
-        pipelineAsset.msaaSampleCount = antialiasing ? 4 : 0;
+        pipelineAsset.msaaSampleCount = antialiasing ? 4 : 1;
         pipelineAsset.shadowDistance = shadowDistance;
         UpdateMixerVolume(musicVolumeMixer, musicVolume);
         UpdateMixerVolume(soundEffectsVolumeMixer, soundEffectsVolume);
