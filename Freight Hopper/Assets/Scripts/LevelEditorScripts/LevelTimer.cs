@@ -32,6 +32,10 @@ public class LevelTimer : MonoBehaviour
     {
         string minutes = ((int)time / 60).ToString();
         string seconds = (time % 60).ToString("f3");
+        if (time % 60 < 10)
+        {
+            seconds = "0" + seconds;
+        }
         return minutes + ":" + seconds;
     }
 }
