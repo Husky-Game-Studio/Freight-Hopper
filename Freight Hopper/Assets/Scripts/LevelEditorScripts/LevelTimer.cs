@@ -1,3 +1,4 @@
+using System.Text;
 using UnityEngine;
 using TMPro;
 
@@ -25,12 +26,24 @@ public class LevelTimer : MonoBehaviour
 
     public static string GetTimeString(float time)
     {
-        string minutes = ((int)time / 60).ToString();
-        string seconds = (time % 60).ToString("f3");
-        if (time % 60 < 10)
+        int minutes = (int)time / 60;
+        float seconds = time % 60;
+
+        StringBuilder sb = new StringBuilder();
+        if (minutes > 0)
         {
-            seconds = "0" + seconds;
+            if (minutes < 10)
+            {
+                sb.Append("0");
+            }
+            sb.Append(minutes);
+            sb.Append(":");
         }
-        return minutes + ":" + seconds;
+        if (seconds < 10)
+        {
+            sb.Append("0");
+        }
+        sb.Append(seconds.ToString("f3"));
+        return sb.ToString();
     }
 }
