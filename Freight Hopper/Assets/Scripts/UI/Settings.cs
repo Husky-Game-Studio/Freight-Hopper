@@ -8,7 +8,7 @@ public class Settings : MonoBehaviour
     private bool antialiasing;
     private int shadowDistance;
     private int fov;
-    private Vector2 mouseSensitivity;
+    private float mouseSensitivity;
     private float soundEffectsVolume;
     private float musicVolume;
 
@@ -17,7 +17,7 @@ public class Settings : MonoBehaviour
     public bool Antialiasing => antialiasing;
     public int ShadowDistance => shadowDistance;
     public int FOV => fov;
-    public Vector2 MouseSensitivity => mouseSensitivity;
+    public float MouseSensitivity => mouseSensitivity;
     public float SoundEffectsVolume => soundEffectsVolume;
     public float MusicVolume => musicVolume;
 
@@ -49,8 +49,7 @@ public class Settings : MonoBehaviour
         antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Antialiasing.ToString(), 1));
         shadowDistance = PlayerPrefs.GetInt(SettingName.ShadowDistance.ToString(), 1000);
         fov = PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
-        mouseSensitivity.x = PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 14);
-        mouseSensitivity.y = PlayerPrefs.GetFloat(SettingName.MouseYSensitivity.ToString(), 10);
+        mouseSensitivity = PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 6);
         soundEffectsVolume = PlayerPrefs.GetFloat(SettingName.SoundEffectsVolume.ToString(), 0.5f);
         musicVolume = PlayerPrefs.GetFloat(SettingName.MusicVolume.ToString(), 0.5f);
     }
@@ -68,12 +67,9 @@ public class Settings : MonoBehaviour
     {
         return PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
     }
-    public static Vector2 GetMouseSensitivity()
+    public static float GetMouseSensitivity()
     {
-        Vector2 mouseSens;
-        mouseSens.x = PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 14);
-        mouseSens.y = PlayerPrefs.GetFloat(SettingName.MouseYSensitivity.ToString(), 10);
-        return mouseSens;
+        return PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 5);;
     }
     public void SaveSettings()
     {
@@ -81,8 +77,7 @@ public class Settings : MonoBehaviour
         PlayerPrefs.SetInt(SettingName.Antialiasing.ToString(), Convert.ToInt32(antialiasing));
         PlayerPrefs.SetInt(SettingName.ShadowDistance.ToString(), shadowDistance);
         PlayerPrefs.SetInt(SettingName.Fov.ToString(), fov);
-        PlayerPrefs.SetFloat(SettingName.MouseXSensitivity.ToString(), mouseSensitivity.x);
-        PlayerPrefs.SetFloat(SettingName.MouseYSensitivity.ToString(), mouseSensitivity.y);
+        PlayerPrefs.SetFloat(SettingName.MouseXSensitivity.ToString(), mouseSensitivity);
         PlayerPrefs.SetFloat(SettingName.SoundEffectsVolume.ToString(), soundEffectsVolume);
         PlayerPrefs.SetFloat(SettingName.MusicVolume.ToString(), musicVolume);
     }
@@ -122,12 +117,7 @@ public class Settings : MonoBehaviour
 
     public void SetMouseX(float val)
     {
-        mouseSensitivity.x = val;
-    }
-
-    public void SetMouseY(float val)
-    {
-        mouseSensitivity.y = val;
+        mouseSensitivity = val;
     }
 
     public void SetSoundEffectsVolume(float val)

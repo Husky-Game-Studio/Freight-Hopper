@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SettingsController : MonoBehaviour
 {
@@ -6,8 +7,7 @@ public class SettingsController : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Toggle antialiasing;
     [SerializeField] private EchoSlider shadowDistance;
     [SerializeField] private EchoSlider fov;
-    [SerializeField] private EchoSlider horizontalSensitivity;
-    [SerializeField] private EchoSlider verticalSensitivity;
+    [FormerlySerializedAs("horizontalSensitivity")][SerializeField] private EchoSlider sensitivity;
     [SerializeField] private EchoSlider soundsVolume;
     [SerializeField] private EchoSlider musicVolume;
 
@@ -19,8 +19,7 @@ public class SettingsController : MonoBehaviour
         antialiasing.isOn = settings.Antialiasing;
         shadowDistance.SetSliderValue(settings.ShadowDistance);
         fov.SetSliderValue(settings.FOV);
-        horizontalSensitivity.SetSliderValue(settings.MouseSensitivity.x);
-        verticalSensitivity.SetSliderValue(settings.MouseSensitivity.y);
+        sensitivity.SetSliderValue(settings.MouseSensitivity);
         soundsVolume.SetSliderValue(settings.SoundEffectsVolume);
         musicVolume.SetSliderValue(settings.MusicVolume);
 
@@ -28,8 +27,7 @@ public class SettingsController : MonoBehaviour
         antialiasing.onValueChanged.AddListener(settings.SetAntialiasing);
         shadowDistance.SetListener(settings.SetShadowDistance);
         fov.SetListener(settings.SetFOV);
-        horizontalSensitivity.SetListener(settings.SetMouseX);
-        verticalSensitivity.SetListener(settings.SetMouseY);
+        sensitivity.SetListener(settings.SetMouseX);
         soundsVolume.SetListener(settings.SetSoundEffectsVolume);
         musicVolume.SetListener(settings.SetMusicVolume);
     }
