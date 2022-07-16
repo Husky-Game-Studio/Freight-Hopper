@@ -60,7 +60,7 @@ public class LevelComplete : MonoBehaviour
     private void BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
-        levelNameText.text = levelName;
+        levelNameText.text = "Level: " + levelName.Split(' ')[1]; // this just happens to always get the last number
         float bestTime;
         LevelTimeSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         if (levelTimeData == null)
