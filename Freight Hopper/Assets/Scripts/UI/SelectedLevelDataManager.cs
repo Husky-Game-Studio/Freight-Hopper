@@ -28,7 +28,7 @@ public class SelectedLevelDataManager : MonoBehaviour
         LevelTimeSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
         if (levelSaveData != null)
         {
-            if (float.IsNaN(levelSaveData.BestTime))
+            if (float.IsInfinity(levelSaveData.BestTime))
             {
                 bestTime.text = "Best: None";
             }

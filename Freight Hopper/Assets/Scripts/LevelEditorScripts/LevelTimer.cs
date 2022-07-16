@@ -15,17 +15,12 @@ public class LevelTimer : MonoBehaviour
 
     private void Update()
     {
-        textTimer.text = GetTimeString();
+        textTimer.text = GetTimeString(GetTime());
     }
 
     public float GetTime()
     {
         return Time.realtimeSinceStartup - startTime;
-    }
-
-    public string GetTimeString()
-    {
-        return GetTimeString(GetTime());
     }
 
     public static string GetTimeString(float time)

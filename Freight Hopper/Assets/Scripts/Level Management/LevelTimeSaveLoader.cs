@@ -1,18 +1,25 @@
+using System;
 using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Text;
 
 public static class LevelTimeSaveLoader
 {
+    const int saveVersion = 1;
+
     public static void Save(string levelName, LevelTimeSaveData data)
     {
-        BinaryFormatter bf = new BinaryFormatter();
         string filename = GetFileName(levelName);
-        Directory.CreateDirectory(Path.GetDirectoryName(filename));
-        FileStream file = File.Create(filename);
-        bf.Serialize(file, data);
-        file.Close();
+        Directory.CreateDirectory(Path.GetDirectoryName(filename) ?? throw new InvalidOperationException());
+        using (var stream = File.Open(filename, FileMode.Create))
+        {
+            using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
+            {
+                writer.Write(saveVersion);
+                writer.Write(data.BestTime);
+                writer.Write(data.MedalIndex);
+            }
+        }
     }
 
     public static LevelTimeSaveData Load(string levelName)
@@ -21,10 +28,20 @@ public static class LevelTimeSaveLoader
         string filename = GetFileName(levelName);
         if (File.Exists(filename))
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(filename, FileMode.Open);
-            temp = (LevelTimeSaveData)bf.Deserialize(file);
-            file.Close();
+            using (var stream = File.Open(filename, FileMode.Open))
+            {
+                using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+                {
+                    // File Version Number is an int
+                    switch (reader.ReadInt32())
+                    {
+                        case 1:
+                            temp = new LevelTimeSaveData(reader.ReadSingle(), levelName, false);
+                            temp.SetNewMedalIndex(reader.ReadInt32(), false);
+                            break;
+                    }
+                }
+            }
         }
         return temp;
     }

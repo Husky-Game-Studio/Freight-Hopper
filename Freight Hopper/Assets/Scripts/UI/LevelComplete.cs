@@ -49,7 +49,7 @@ public class LevelComplete : MonoBehaviour
             return;
         }
 
-        timerText.text = "Time: " + timer.GetTimeString();
+        
         timer.gameObject.SetActive(false);
         BestTime();
         PauseMenu.Instance.PauseGame(true);
@@ -61,44 +61,40 @@ public class LevelComplete : MonoBehaviour
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
         levelNameText.text = "Level: " + levelName.Split(' ')[1]; // this just happens to always get the last number
-        float bestTime;
+        
+        
         LevelTimeSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
+        float myTime = timer.GetTime();
+        timerText.text = "Time: " + LevelTimer.GetTimeString(myTime);
         if (levelTimeData == null)
         {
-            float myTime = timer.GetTime();
-            myTime = Mathf.Round(myTime * 1000f) / 1000f;
-            bestTimeText.text = "Best Time: " + myTime;
-            //float time = timer.GetTime();
-            levelTimeData = new LevelTimeSaveData(myTime);
-            LevelTimeSaveLoader.Save(levelName, levelTimeData);
-            Debug.Log("no save data found, saving new best of " + myTime);
-            bestTime = myTime;
+            Debug.Log("no save data found, saving new time");
+            
+            levelTimeData = new LevelTimeSaveData(myTime, levelName);
+            bestTimeText.text = "Best Time: " + LevelTimer.GetTimeString(myTime);
         }
         else
         {
-            float newBestTime = levelTimeData.SetNewBestTime(timer.GetTime());
-            newBestTime = Mathf.Round(newBestTime * 1000f) / 1000f;
+            float newBestTime = levelTimeData.SetNewBestTime(myTime);
             bestTimeText.text = "Best Time: " + LevelTimer.GetTimeString(newBestTime);
-            if (newBestTime == timer.GetTime())
-            {
-                LevelTimeSaveLoader.Save(levelName, levelTimeData);
-                Debug.Log("saving new best time of " + newBestTime);
-            }
-            bestTime = newBestTime;
         }
 
-
-
+        SetMedals(levelTimeData);
+    }
+    void SetMedals(LevelTimeSaveData levelTimeData)
+    {
+        float bestTime = levelTimeData.BestTime;
         int index = 0;
         while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
         {
             index++;
         }
+        
         if (levelTimeData.MedalIndex != index - 1)
         {
             levelTimeData.SetNewMedalIndex(index - 1);
-            LevelTimeSaveLoader.Save(levelName, levelTimeData);
         }
+        
         if (levelTimeData.MedalIndex < 0)
         {
             medalImage.gameObject.SetActive(false);
@@ -108,10 +104,11 @@ public class LevelComplete : MonoBehaviour
             medalImage.gameObject.SetActive(true);
             medalImage.sprite = medalImages.Sprites[levelTimeData.MedalIndex];
         }
+        
         if (levelTimeData.MedalIndex < 2)
         {
             nextMedalTimeText.gameObject.SetActive(true);
-            nextMedalTimeText.text = "Time to Next Medal: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
+            nextMedalTimeText.text = "Next Medal Time: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
         }
         else
         {
@@ -119,7 +116,6 @@ public class LevelComplete : MonoBehaviour
         }
     }
 
-    
     public void RestartLevel(){
         if (!levelComplete)
         {
