@@ -43,7 +43,7 @@ public class EchoSlider : MonoBehaviour
         }
         else
         {
-            echoText.text = value.ToString("0.00");
+            echoText.text = value.ToString("0.0");
         }
 
         if (callBack != null)
