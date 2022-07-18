@@ -7,12 +7,17 @@ public class LevelComplete : MonoBehaviour
 {
     [SerializeField] private GameObject levelCompleteScreen;
     [SerializeField] private LevelTimer timer;
-    [SerializeField] private TextMeshProUGUI timerText;
-    [SerializeField] private TextMeshProUGUI bestTimeText;
-    [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private Image medalImage;
     [SerializeField] private SpriteList medalImages;
+    
+    [SerializeField] private TextMeshProUGUI levelNameText;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI bestTimeText;
     [SerializeField] private TextMeshProUGUI nextMedalTimeText;
+    
+    [SerializeField] private TextMeshProUGUI timerValue;
+    [SerializeField] private TextMeshProUGUI bestTimeValue;
+    [SerializeField] private TextMeshProUGUI nextMedalTimeValue;
 
     private bool levelComplete;
 
@@ -60,23 +65,26 @@ public class LevelComplete : MonoBehaviour
     private void BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
-        levelNameText.text = "Level: " + levelName.Split(' ')[1]; // this just happens to always get the last number
+        levelNameText.text = "Level " + levelName.Split(' ')[1]; // this just happens to always get the last number
         
         
         LevelTimeSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         float myTime = timer.GetTime();
-        timerText.text = "Time: " + LevelTimer.GetTimeString(myTime);
+        timerText.text = "Time:";
+        timerValue.text = LevelTimer.GetTimeString(myTime);
         if (levelTimeData == null)
         {
             Debug.Log("no save data found, saving new time");
             
             levelTimeData = new LevelTimeSaveData(myTime, levelName);
-            bestTimeText.text = "Best Time: " + LevelTimer.GetTimeString(myTime);
+            bestTimeText.text = "Best Time:";
+            bestTimeValue.text = LevelTimer.GetTimeString(myTime);
         }
         else
         {
             float newBestTime = levelTimeData.SetNewBestTime(myTime);
-            bestTimeText.text = "Best Time: " + LevelTimer.GetTimeString(newBestTime);
+            bestTimeText.text = "Best Time:";
+            bestTimeValue.text = LevelTimer.GetTimeString(newBestTime);
         }
 
         SetMedals(levelTimeData);
@@ -108,11 +116,14 @@ public class LevelComplete : MonoBehaviour
         if (levelTimeData.MedalIndex < 2)
         {
             nextMedalTimeText.gameObject.SetActive(true);
-            nextMedalTimeText.text = "Next Medal Time: " + LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
+            nextMedalTimeValue.gameObject.SetActive(true);
+            nextMedalTimeText.text = "Next Medal Time:";
+            nextMedalTimeValue.text = LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
         }
         else
         {
             nextMedalTimeText.gameObject.SetActive(false);
+            nextMedalTimeValue.gameObject.SetActive(false);
         }
     }
 
