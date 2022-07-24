@@ -22,14 +22,14 @@ public class MusicManager : SoundManager
     public enum Songs
     {
         Menu,
-        Desert,
         CityDay,
         CityNight,
-        Ice,
+        Desert,
+        Escape,
         Factory,
+        Ice,
         Sky,
         Space,
-        Escape,
         Unknown
     }
 
@@ -89,8 +89,14 @@ public class MusicManager : SoundManager
 
     private Songs PickRandomSong(){
         List<Songs> enums = Enum.GetValues(typeof(Songs)).Cast<Songs>().ToList();
-        System.Random random = new System.Random();
-        return enums[random.Next(1, enums.Count)];
+        Songs random;
+        do
+        {
+            random = enums[UnityEngine.Random.Range(1, enums.Count)];
+        }
+        while (instance.currentSong == random);
+        
+        return random;
     }
 
     private void FixedUpdate()
