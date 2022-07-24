@@ -9,7 +9,6 @@ public class JumpBehavior : AbilityBehavior
 
     public Timer jumpHoldingTimer = new Timer(0.5f);
     public Timer coyoteeTimer = new Timer(0.5f);
-    public Timer jumpBufferTimer = new Timer(0.3f);
     public float JumpHeight => minJumpHeight;
     private bool active;
     public bool Active => active;
@@ -29,11 +28,6 @@ public class JumpBehavior : AbilityBehavior
     }
     private void FixedUpdate()
     {
-        if (jumpBufferTimer.TimerActive())
-        {
-            jumpBufferTimer.CountDown(Time.fixedDeltaTime);
-        }
-
         if (collisionManager.IsGrounded.old)
         {
             coyoteeTimer.ResetTimer();

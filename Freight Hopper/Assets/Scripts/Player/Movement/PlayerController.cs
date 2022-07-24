@@ -74,7 +74,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        jumpBehavior.jumpBufferTimer.ResetTimer();
         if (jumpBehavior.Consumed)
         {
             jumpBehavior.PlayerSoundManager().Play("JumpFail");
@@ -95,6 +94,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        jumpedPreviously = true;
         wallBehavior.JumpInitial();
     }
 
