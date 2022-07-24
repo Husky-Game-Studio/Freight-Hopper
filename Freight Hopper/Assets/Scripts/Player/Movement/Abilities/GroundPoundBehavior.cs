@@ -64,7 +64,7 @@ public class GroundPoundBehavior : AbilityBehavior
     public void Action()
     {
         friction.ReduceFriction(FrictionReduction);
-        soundManager.Play("GroundPoundTick");
+        //soundManager.Play("GroundPoundTick");
         Vector3 upAxis = collisionManager.ValidUpAxis;
         
         Vector3 direction = -upAxis;
@@ -84,6 +84,7 @@ public class GroundPoundBehavior : AbilityBehavior
             if (!collisionManager.IsGrounded.old)
             {
                 particles.Play();
+                soundManager.Play("GroundPoundLand");
                 if (!this.FlatSurface){
                     Vector3 oldDownForce = Vector3.Project(collisionManager.Velocity.old, upAxis);
                     rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
