@@ -35,10 +35,16 @@ public class FirstPersonCamera : MonoBehaviour
     private void Update()
     {
         CalculateSmoothedUpAxis(Vector3.up);
-        if((Time.timeScale == 0 || stopCameraFrameCount > curFrameCount) && !freecam)
+        if (stopCameraFrameCount > curFrameCount)
+        {
+            cinemachineVirtualCamera.ForceCameraPosition(LevelController.Instance.playerSpawnTransform.position, LevelController.Instance.playerSpawnTransform.rotation);
+        }
+        if(Time.timeScale == 0 && !freecam)
         {
             cinemachineVirtualCamera.gameObject.SetActive(false);
-        } else {
+        } 
+        else 
+        {
             cinemachineVirtualCamera.gameObject.SetActive(true);
         }
         curFrameCount++;

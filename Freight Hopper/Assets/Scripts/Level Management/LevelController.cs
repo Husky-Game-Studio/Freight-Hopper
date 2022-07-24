@@ -8,7 +8,7 @@ public class LevelController : MonoBehaviour
     public LevelName CurrentLevelName => levelName;
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
-    [SerializeField] private Transform playerSpawnTransform;
+    [SerializeField] public Transform playerSpawnTransform;
     [SerializeField] private float spawnSnapSmoothing = 0.001f;
     public LevelData levelData;
 
