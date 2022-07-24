@@ -31,6 +31,7 @@ public class JumpBehavior : AbilityBehavior
         if (collisionManager.IsGrounded.old)
         {
             coyoteeTimer.ResetTimer();
+            jumpHoldingTimer.DeactivateTimer();
         }
         else
         {

@@ -89,8 +89,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
         jumpedPreviously = true;
-        Debug.Log("Jump because coyotee " + jumpBehavior.coyoteeTimer.TimerActive());
-        Debug.Log("Jump because grounded " + collisionManagement.IsGrounded.old);
         jumpBehavior.EntryAction();
     }
 
