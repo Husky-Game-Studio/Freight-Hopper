@@ -25,8 +25,6 @@ public class PlayerController : MonoBehaviour
     }
     private void OnEnable()
     {
-        
-
         collisionManagement.CollisionDataCollected += UpdateLoop;
         collisionManagement.Landed += jumpBehavior.Recharge;
         collisionManagement.Landed += groundPoundBehavior.Recharge;
@@ -84,7 +82,15 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        
+        if (jumpBehavior.Active)
+        {
+            jumpBehavior.coyoteeTimer.DeactivateTimer();
+            return;
+        }
         jumpedPreviously = true;
+        Debug.Log("Jump because coyotee " + jumpBehavior.coyoteeTimer.TimerActive());
+        Debug.Log("Jump because grounded " + collisionManagement.IsGrounded.old);
         jumpBehavior.EntryAction();
     }
 
@@ -95,6 +101,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         jumpedPreviously = true;
+        Debug.Log("Wall Jump");
         wallBehavior.JumpInitial();
     }
 
@@ -128,12 +135,6 @@ public class PlayerController : MonoBehaviour
 
     private void MovingLogic()
     {
-        bool cantMove = false;
-        if(cantMove)
-        {
-            return;
-        }
-
         movementBehavior.Action();
     }
 

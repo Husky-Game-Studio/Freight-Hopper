@@ -47,7 +47,6 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public bool ShouldLeftRun => wallStatus[0] && !wallStatus[1];
     public bool ShouldRightRun => wallStatus[2] && !wallStatus[1];
-    public bool ShouldWallRun => (wallStatus[0] || wallStatus[2]) && !wallStatus[1];
     public bool ShouldWallClimb => wallStatus[1];
 
     private WallDetectionLayer[] detectionlayers;
@@ -258,5 +257,6 @@ public partial class WallRunBehavior : AbilityBehavior
     public void JumpExit()
     {
         wallJumpActive = false;
+        wallClimbActive = false;
     }
 }
