@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
@@ -28,6 +30,7 @@ public class SceneLoader : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         AudioListener.volume = 1;
+        LevelSelectScreenOpener.SwitchSceneFlag(SceneManager.GetActiveScene().name);
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
