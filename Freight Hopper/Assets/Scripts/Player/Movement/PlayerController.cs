@@ -99,7 +99,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
         jumpedPreviously = true;
-        Debug.Log("Wall Jump");
         wallBehavior.JumpInitial();
     }
 
