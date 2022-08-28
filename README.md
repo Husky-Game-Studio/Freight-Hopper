@@ -24,4 +24,4 @@ In the case of a bug report, bugfix or a suggestions, please feel very free to o
 Pull requests are always welcome, and I'll do my best to do reviews as fast as I can.
 
 ## License
-This project is licensed under the [Unlicense](https://github.com/this/project/blob/master/LICENSE)
+This project is licensed under the [Unlicense](https://github.com/Husky-Game-Studio/Freight-Hopper/blob/main/LICENSE.md)
