@@ -7,7 +7,7 @@
 #### A 3D Momentum-based Platformer inspired by Clustertruck and other 3D platformers
 
 ## Getting Started
-Install Unity Hub and install the unity editor 2021.3.8f1
+Install Unity Hub and install the unity editor [2021.3.8f1](https://unity3d.com/unity/whats-new/2021.3.8)
 Then clone the repository and open the project in Unity Hub with 2021.3.8f1
 
 ## Built With
