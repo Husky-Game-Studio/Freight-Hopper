@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerDeath : MonoBehaviour
@@ -43,6 +44,11 @@ public class PlayerDeath : MonoBehaviour
 
     public void KillPlayer()
     {
+        if (Goal.Instance.CompletedLevel)
+        {
+            return;
+        }
+
         LevelController.Instance.Respawn();
     }
 }

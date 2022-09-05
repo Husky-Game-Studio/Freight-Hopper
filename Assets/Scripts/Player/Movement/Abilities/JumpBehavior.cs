@@ -28,6 +28,10 @@ public class JumpBehavior : AbilityBehavior
     }
     private void FixedUpdate()
     {
+        if (Active)
+        {
+            coyoteeTimer.DeactivateTimer();
+        }
         if (collisionManager.IsGrounded.old)
         {
             coyoteeTimer.ResetTimer();

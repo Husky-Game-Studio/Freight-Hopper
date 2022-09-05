@@ -143,7 +143,7 @@ public class LevelController : MonoBehaviour
 
     public void Respawn(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (PauseMenu.Instance.Paused)
+        if (InGameStates.Instance.StateIs(InGameStates.States.Paused))
         {
             return;
         }

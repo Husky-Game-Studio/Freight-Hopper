@@ -19,8 +19,6 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bestTimeValue;
     [SerializeField] private TextMeshProUGUI nextMedalTimeValue;
 
-    private bool levelComplete;
-
     private void Awake()
     {
         if (Goal.Instance == null)
@@ -54,12 +52,11 @@ public class LevelComplete : MonoBehaviour
             return;
         }
 
-        
+        InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
         timer.gameObject.SetActive(false);
         BestTime();
-        PauseMenu.Instance.PauseGame(true);
+        PauseMenu.Instance.PauseGame();
         levelCompleteScreen.SetActive(true);
-        levelComplete = true;
     }
 
     private void BestTime()
@@ -128,31 +125,28 @@ public class LevelComplete : MonoBehaviour
     }
 
     public void RestartLevel(){
-        if (!levelComplete)
+        if (!InGameStates.Instance.StateIs(InGameStates.States.LevelComplete))
         {
             return;
         }
         PauseMenu.Instance.ContinueGame();
         LevelController.Instance.Respawn();
-        levelComplete = false;
     }
     public void NextLevel(){
-        if (!levelComplete)
+        if (!InGameStates.Instance.StateIs(InGameStates.States.LevelComplete))
         {
             return;
         }
         PauseMenu.Instance.ContinueGame();
         LevelController.Instance.LoadNextLevel();
-        levelComplete = false;
     }
     public void Menu(){
-        if (!levelComplete)
+        if (!InGameStates.Instance.StateIs(InGameStates.States.LevelComplete))
         {
             return;
         }
         PauseMenu.Instance.ContinueGame();
         SceneLoader.LoadMenu();
-        levelComplete = false;
     }
     public void RestartLevel(InputAction.CallbackContext context)
     {

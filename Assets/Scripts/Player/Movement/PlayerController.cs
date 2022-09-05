@@ -6,8 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private JumpBehavior jumpBehavior;
     [SerializeField] private GroundPoundBehavior groundPoundBehavior;
     [SerializeField] private WallRunBehavior wallBehavior;
-
-    private FirstPersonCamera cameraController;
+    
     private CollisionManagement collisionManagement;
     private Friction friction;
 
@@ -15,7 +14,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        cameraController = Camera.main.GetComponent<FirstPersonCamera>();
         collisionManagement = Player.Instance.modules.collisionManagement;
         friction = Player.Instance.modules.friction;
         wallBehavior.Initialize();
@@ -50,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     private void GroundPoundStartLogic()
     {
-        if(Time.timeScale == 0) 
+        if(!InGameStates.Instance.StateIs(InGameStates.States.Playing)) 
         {
             return;
         }
@@ -63,12 +61,18 @@ public class PlayerController : MonoBehaviour
 
     private void JumpsStartLogic()
     {
-        if (Time.timeScale == 0)
+        if(!InGameStates.Instance.StateIs(InGameStates.States.Playing)) 
         {
             return;
         }
         if (wallBehavior.RunActive || wallBehavior.ClimbActive) {
-            WallJumpLogic();
+            // Wall Jump Logic
+            if (wallBehavior.JumpActive)
+            {
+                return;
+            }
+            jumpedPreviously = true;
+            wallBehavior.JumpInitial();
             return;
         }
 
@@ -92,16 +96,6 @@ public class PlayerController : MonoBehaviour
         jumpBehavior.EntryAction();
     }
 
-    private void WallJumpLogic()
-    {
-        if (wallBehavior.JumpActive)
-        {
-            return;
-        }
-        jumpedPreviously = true;
-        wallBehavior.JumpInitial();
-    }
-
     private void JumpsCanceledLogic()
     {
         if (wallBehavior.JumpActive)
@@ -115,36 +109,35 @@ public class PlayerController : MonoBehaviour
             jumpBehavior.ExitAction();
         }
     }
-
-    private void JumpsExitLogic()
+    
+    private void UpdateLoop()
     {
-        if (!wallBehavior.jumpHoldingTimer.TimerActive() && wallBehavior.JumpActive)
-        {
-            wallBehavior.JumpExit();
-            return;
+        movementBehavior.UpdateStatus();
+        // WALL RUN ENTRY LOGIC ========================================================
+        if(!wallBehavior.RunActive && !wallBehavior.JumpActive) {
+            if (!wallBehavior.RunActive && !wallBehavior.inAirCooldown.TimerActive())
+            {
+                if (wallBehavior.ShouldLeftRun){
+                    wallBehavior.RunInitial();
+                }
+                if (wallBehavior.ShouldRightRun)
+                {
+                    wallBehavior.RunInitial();
+                }
+            }
         }
-        if (!jumpBehavior.jumpHoldingTimer.TimerActive()){
-            jumpBehavior.ExitAction();
-            
+
+        // Wall Climb Entry Logic ========================================================
+        if (wallBehavior.ShouldWallClimb && UserInput.Instance.Move().z >= 0.6f &&
+            !wallBehavior.ClimbActive)
+        {
+            wallBehavior.InitialWallClimb();
         }
         
-    }
-
-    private void MovingLogic()
-    {
+        // Moving ========================================================
         movementBehavior.Action();
-    }
-
-    private void ResetFrictionOnInactivity()
-    {
-        if (UserInput.Instance.Move().IsZero() && !groundPoundBehavior.Active)
-        {
-            friction.ResetFrictionReduction();
-        }
-    }
-
-    private void ApplyAbilities()
-    {
+        
+        // APPLY ABILITIES ========================================================
         if(UserInput.Instance.JumpHeld && !jumpedPreviously)
         {
             JumpsStartLogic();
@@ -178,98 +171,56 @@ public class PlayerController : MonoBehaviour
             wallBehavior.Climb();
         }
         
-    }
-
-    private void WallRunEntryLogic()
-    {
-        if(wallBehavior.RunActive || wallBehavior.JumpActive) {
-            return;
-        }
-        if (!wallBehavior.RunActive && !wallBehavior.inAirCooldown.TimerActive())
+        // Reset Friction On Inactivity ========================================================
+        if (UserInput.Instance.Move().IsZero() && !groundPoundBehavior.Active)
         {
-            if (wallBehavior.ShouldLeftRun){
-                wallBehavior.RunInitial();
-            }
-            if (wallBehavior.ShouldRightRun)
-            {
-                wallBehavior.RunInitial();
-            }
+            friction.ResetFrictionReduction();
         }
-    }
-    private void WallClimbEntryLogic()
-    {
-        if (wallBehavior.ShouldWallClimb && UserInput.Instance.Move().z >= 0.6f &&
-            !wallBehavior.ClimbActive)
+
+        // Ground Pound Exit Logic ========================================================
+        if (groundPoundBehavior.Active && groundPoundBehavior.FlatSurface)
         {
-            wallBehavior.InitialWallClimb();
+            groundPoundBehavior.ExitAction();
         }
-    }
-    private void WallRunExitLogic(){
-        if(!wallBehavior.RunActive){
-            return;
-        }
-        if (!wallBehavior.ShouldLeftRun && !wallBehavior.ShouldRightRun)
-        {
-            if (!wallBehavior.coyoteTimer.TimerActive())
-            {
-                wallBehavior.coyoteTimer.ResetTimer();
-                wallBehavior.RunExit();
-            }
-        }
-    }
-
-    private void WallClimbExitLogic(){
-        if (!wallBehavior.ClimbActive) {
-            return;
-        }
-
-        if(!wallBehavior.ShouldWallClimb || UserInput.Instance.Move().z < 0.6f) {
-            wallBehavior.WallClimbExit();
-        }
-    }
-
-    private void WallJumpExitLogic(){
-        if (!wallBehavior.JumpActive)
-        {
-            return;
-        }
-
-        if (!wallBehavior.jumpHoldingTimer.TimerActive() || !UserInput.Instance.JumpHeld)
+        
+        // Jump Exit Logic ========================================================
+        if (!wallBehavior.jumpHoldingTimer.TimerActive() && wallBehavior.JumpActive)
         {
             wallBehavior.JumpExit();
         }
-    }
-
-    private void GroundPoundExitLogic()
-    {
-        bool shouldExit = groundPoundBehavior.Active && groundPoundBehavior.FlatSurface;
-        if (!shouldExit)
-        {
-            return;
+        if (!jumpBehavior.jumpHoldingTimer.TimerActive() && jumpBehavior.Active){
+            jumpBehavior.ExitAction();
         }
-        groundPoundBehavior.ExitAction();
-    }
-    private void UpdateLoop()
-    {
-        movementBehavior.UpdateStatus();
-        WallRunEntryLogic();
-        WallClimbEntryLogic();
-        MovingLogic();
-        ApplyAbilities(); 
+
+        // Wall Run Exit Logic ========================================================
+        if(wallBehavior.RunActive){
+            if (!wallBehavior.ShouldLeftRun && !wallBehavior.ShouldRightRun)
+            {
+                if (!wallBehavior.coyoteTimer.TimerActive())
+                {
+                    wallBehavior.coyoteTimer.ResetTimer();
+                    wallBehavior.RunExit();
+                }
+            }
+        }
         
-        ResetFrictionOnInactivity();
+        // Wall Climb Exit Logic ========================================================
+        if (wallBehavior.ClimbActive) {
+            if(!wallBehavior.ShouldWallClimb || UserInput.Instance.Move().z < 0.6f) {
+                wallBehavior.WallClimbExit();
+            }
+        }
 
-        GroundPoundExitLogic();
-        JumpsExitLogic();
-
-        WallRunExitLogic();
-        WallClimbExitLogic();
-        WallJumpExitLogic();
-        ResetValues();
-    }
-    
-    private void ResetValues()
-    {
+        // Wall Jump Exit Logic ========================================================
+        if (wallBehavior.JumpActive)
+        {
+            if (!wallBehavior.jumpHoldingTimer.TimerActive() || !UserInput.Instance.JumpHeld)
+            {
+                wallBehavior.JumpExit();
+            }
+        }
+        
+        // Reset Values ========================================================
         jumpedPreviously = false;
     }
 }

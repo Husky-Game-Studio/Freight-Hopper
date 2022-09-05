@@ -12,6 +12,8 @@ public class Goal : MonoBehaviour
     {
         this.levelComplete = levelComplete;
     }
+    bool completedLevel;
+    public bool CompletedLevel => completedLevel;
 
     private void Awake()
     {
@@ -31,6 +33,7 @@ public class Goal : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             levelComplete.Invoke();
+            completedLevel = true;
         }
     }
 }

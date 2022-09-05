@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 1294291225731703511}
   - component: {fileID: 1294291225731703515}
   - component: {fileID: 1294291225731703509}
+  - component: {fileID: 4079197404381901888}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -194,6 +195,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4079197404381901888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294291225731703514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82f34f2183f45e74797f90f3c5d068b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3434734435948423593
 GameObject:
   m_ObjectHideFlags: 0
@@ -5406,7 +5419,6 @@ MonoBehaviour:
   upAxisTransform: {fileID: 3434734437010601123}
   cinemachineVirtualCamera: {fileID: 3434734436445549621}
   ui: {fileID: 3434734436160647794}
-  freecam: 0
   smoothingDelta: 0.1
   mouseSensitivityConversionValue: 10
 --- !u!114 &8124382008007837249

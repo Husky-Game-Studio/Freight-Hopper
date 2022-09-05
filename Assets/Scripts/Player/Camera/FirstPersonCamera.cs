@@ -13,7 +13,6 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     [SerializeField] private GameObject ui;
     private GameObject otherUIs;
-    [SerializeField, ReadOnly] private bool freecam;
 
     // for when the cameras up axis changes like for gravity or wall running
     [SerializeField] private float smoothingDelta;
@@ -39,7 +38,7 @@ public class FirstPersonCamera : MonoBehaviour
         {
             cinemachineVirtualCamera.ForceCameraPosition(LevelController.Instance.playerSpawnTransform.position, LevelController.Instance.playerSpawnTransform.rotation);
         }
-        if(Time.timeScale == 0 && !freecam)
+        if(InGameStates.Instance.StateIs(InGameStates.States.Paused) || InGameStates.Instance.StateIs(InGameStates.States.LevelComplete))
         {
             cinemachineVirtualCamera.gameObject.SetActive(false);
         } 
@@ -68,27 +67,23 @@ public class FirstPersonCamera : MonoBehaviour
 
     private void ToggleFreecam(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(Time.timeScale == 0 && !freecam){
-            return;
-        }
-        freecam = !freecam;
-        if(freecam) {
+        if(InGameStates.Instance.StateIs(InGameStates.States.Playing)) {
+            InGameStates.Instance.SwitchState(InGameStates.States.Freecam);
             Time.timeScale = 0;
             ui.SetActive(false);
             otherUIs = GameObject.Find("UniqueUICanvas");
             if(otherUIs != null){
                 otherUIs.SetActive(false);
             }
-            
         }
-        else {
+        else if(InGameStates.Instance.StateIs(InGameStates.States.Freecam)){
+            InGameStates.Instance.SwitchState(InGameStates.States.Playing);
             Time.timeScale = 1;
             ui.SetActive(true);
             if (otherUIs != null)
             {
                 otherUIs.SetActive(true);
             }
-            
         }
     }
 
