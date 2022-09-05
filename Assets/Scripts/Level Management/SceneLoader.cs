@@ -19,12 +19,6 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(levelName, LoadSceneMode.Single);
     }
 
-    // Loads default scene as an additive scene
-    public static void LoadPlayerScene()
-    {
-        SceneManager.LoadSceneAsync("DefaultScene", LoadSceneMode.Additive);
-    }
-
     public static void LoadMenu()
     {
         Cursor.visible = true;
