@@ -93,6 +93,7 @@ public class JumpBehavior : AbilityBehavior
 
     public void Action()
     {
+        jumpHoldingTimer.CountDown(Time.fixedDeltaTime);
         rb.AddForce(CustomGravity.GetUpAxis() * holdingJumpForceMultiplier, ForceMode.Acceleration);
     }
 }

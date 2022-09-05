@@ -76,6 +76,8 @@ public class MovementBehavior : AbilityBehavior
     public void Action()
     {
         MoveAction();
+        
+        // For when to play the audio for moving ====
         if (waiting)
         {
             return;

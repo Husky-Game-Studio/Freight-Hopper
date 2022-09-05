@@ -45,9 +45,9 @@ public partial class WallRunBehavior : AbilityBehavior
 
     //public IList<bool> WallStatus => Array.AsReadOnly(wallStatus);
 
-    public bool ShouldLeftRun => wallStatus[0] && !wallStatus[1];
-    public bool ShouldRightRun => wallStatus[2] && !wallStatus[1];
-    public bool ShouldWallClimb => wallStatus[1];
+    public bool LeftObstructed => wallStatus[0] && !wallStatus[1];
+    public bool RightObstructed => wallStatus[2] && !wallStatus[1];
+    public bool FrontObstructed => wallStatus[1];
 
     private WallDetectionLayer[] detectionlayers;
     [SerializeField, ReadOnly] private bool wallRunActive;
@@ -93,7 +93,7 @@ public partial class WallRunBehavior : AbilityBehavior
         }
         entryEffectsCooldown.CountDown(Time.fixedDeltaTime);
 
-        if(RunActive && !ShouldLeftRun && !ShouldRightRun)
+        if(RunActive && !LeftObstructed && !RightObstructed)
         {
             coyoteTimer.CountDown(Time.fixedDeltaTime);
         }
