@@ -6,6 +6,22 @@ using System.Text;
 public static class LevelTimeSaveLoader
 {
     const int saveVersion = 1;
+    const string levelDataPath = "/LevelTimes/";
+    const string fileExtension = ".lvl";
+    // Deletes all .lvl files in /LevelTimes/
+    public static void ClearBestTimeData()
+    {
+        string folderpath = Application.persistentDataPath + levelDataPath;
+        DirectoryInfo dir = new DirectoryInfo(folderpath);
+        FileInfo[] files = dir.GetFiles();
+        foreach (FileInfo file in files)
+        {
+            if (file.Extension.Equals(fileExtension))
+            {
+                File.Delete(file.FullName);
+            }
+        }
+    }
 
     public static void Save(string levelName, LevelTimeSaveData data)
     {
@@ -49,9 +65,9 @@ public static class LevelTimeSaveLoader
     private static string GetFileName(string name)
     {
         StringBuilder sb = new StringBuilder(Application.persistentDataPath);
-        sb.Append("/LevelTimes/");
+        sb.Append(levelDataPath);
         sb.Append(name);
-        sb.Append(".lvl");
+        sb.Append(fileExtension);
         return sb.ToString();
     }
 }

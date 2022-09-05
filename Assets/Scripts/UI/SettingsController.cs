@@ -31,4 +31,9 @@ public class SettingsController : MonoBehaviour
         soundsVolume.SetListener(settings.SetSoundEffectsVolume);
         musicVolume.SetListener(settings.SetMusicVolume);
     }
+
+    public void DeleteBestTimes()
+    {
+        LevelTimeSaveLoader.ClearBestTimeData();
+    }
 }
