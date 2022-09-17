@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
@@ -21,37 +22,32 @@ public class LaserGridBuilder : MonoBehaviour
     private bool laserGroupOpen;
     private int laserGroupCounter;
 
+    // Validate the arguments are valid
     public void OnValidate()
     {
         laserGroupOpen = false;
         laserGroupCounter = 0;
         activeLayersPositions = new List<Vector3>();
-        bool validArguments = CheckArguments();
+        CheckArguments();
     }
 
-    private bool CheckArguments()
+    private void CheckArguments()
     {
         if (poleObject == null || laserObject == null)
         {
             Debug.Log("poleObject or laserObject is null");
-            return false;
         }
         if (layers < 1)
         {
             Debug.Log("layers must be greater than 0");
-            return false;
         }
-        /*if (activeLayers != null && activeLayers.Count > layers)
-        {
-            Debug.Log("activeLayers must be <= to " + layers);
-            return false;
-        }*/
-        return true;
     }
 
-    private void SetBoxCollider(int layer)
+    // Set all the box colliders for this laser grid.
+    // Only creates box colliders for groups of lasers. So if the entire grid have active lasers, there will only
+    // be one box collider. If there are gaps without active lasers, each group will have their own box collider
+    private void SetBoxCollider()
     {
-        //Debug.Log("In SetBoxCollider("+ layer + ") with counter: " + laserGroupCounter);
         BoxCollider laserGroupCollider = this.gameObject.AddComponent<BoxCollider>();
 
         Vector3 boxLocation = Vector3.zero;
@@ -74,25 +70,11 @@ public class LaserGridBuilder : MonoBehaviour
         
         activeLayersPositions.Clear();
         
-        /*float cumulativeYValue = 0;
-        for (int i = 0; i < laserGroupCounter; i++)
-        {
-            cumulativeYValue += layer - i;
-        }
-        Debug.Log(cumulativeYValue);
-        cumulativeYValue /= laserGroupCounter;
-        
-        Vector3 boxPosition = Vector3.zero;
-        boxPosition += transform.up * cumulativeYValue * GRID_SCALAR;
-        boxPosition += transform.up * LASER_SHIFTER;
-        //boxPosition += transform.forward * width / 2;
-        laserGroupCollider.center = boxPosition;*/
-
         Vector3 currentSize = new Vector3(width, (laserGroupCounter * GRID_SCALAR) - GRID_SCALAR, laserThickness * 1.5f);
         laserGroupCollider.size = currentSize;
-
     }
     
+    // Creates one layer for the laser grid
     private void BuildLaserLayer(int layer, bool activeLayer)
     {
         var o = this.gameObject;
@@ -112,7 +94,6 @@ public class LaserGridBuilder : MonoBehaviour
             var up = transform.up;
             laserPosition += up * (layer * GRID_SCALAR);
             laserPosition += up * LASER_SHIFTER;
-            //activeLayersPositions.Add(laserPosition);
             
             GameObject currentLaser = Instantiate(laserObject, laserPosition, currentQuaternion, this.gameObject.transform);
             activeLayersPositions.Add(currentLaser.transform.localPosition);
@@ -125,7 +106,7 @@ public class LaserGridBuilder : MonoBehaviour
         {
             if (laserGroupOpen)
             {
-                SetBoxCollider(layer);
+                SetBoxCollider();
             }
             laserGroupOpen = false;
             laserGroupCounter = 0;
@@ -133,13 +114,13 @@ public class LaserGridBuilder : MonoBehaviour
 
         if (laserGroupOpen && layer == layers -1)
         {
-            //Debug.Log("Last Layer: in builder");
-            SetBoxCollider(layer);
+            SetBoxCollider();
             laserGroupOpen = false;
             laserGroupCounter = 0;
         }
     }
     
+    // Builds the whole laser grid
     public void BuildLaserGrid()
     {
         List<GameObject> children = new List<GameObject>();
@@ -157,7 +138,6 @@ public class LaserGridBuilder : MonoBehaviour
             DestroyImmediate(boxCollider);
         }
         
-        
         if (allLayersActive || activeLayers == null)
         {
             activeLayers = new List<int>();
@@ -166,32 +146,17 @@ public class LaserGridBuilder : MonoBehaviour
                 activeLayers.Add(i);
             }
         }
-        
-        
+
         for (int i = 0; i < layers; i++)
         {
-            //Debug.Log("current layer: " + i);
             BuildLaserLayer(i, activeLayers.Contains(i));
             if (i - 1 == layers && laserGroupOpen)
             {
                 Debug.Log("Last Layer");
-                SetBoxCollider(i);
+                SetBoxCollider();
                 laserGroupOpen = false;
                 laserGroupCounter = 0;
             }
         }
-
-        BuildBoxCollider();
-    }
-
-    private void BuildBoxCollider()
-    {
-
-
-        foreach (int currentLayer in activeLayers)
-        {
-            
-        }
-        
     }
 }
