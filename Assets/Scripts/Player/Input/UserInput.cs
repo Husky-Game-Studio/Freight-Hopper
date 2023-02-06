@@ -26,10 +26,10 @@ public class UserInput : MonoBehaviour
 
     [ReadOnly, SerializeField] private bool groundPoundHeld;
     [ReadOnly, SerializeField] private bool jumpHeld;
-
-    private void OnEnable()
+    void Awake()
     {
-        master.Enable();
+        input = this;
+        master = new InputMaster();
         master.Player.GroundPound.performed += GroundPoundPressed;
         master.Player.GroundPound.canceled += GroundPoundReleased;
         master.Player.Jump.performed += JumpPressed;
@@ -37,14 +37,31 @@ public class UserInput : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
         {
-            LevelController.LevelLoadedIn += RespawnLinked;
+            LevelController.LevelLoadedIn += LinkRespawnKey;
         }
         else
         {
-            Player.PlayerLoadedIn += RespawnLinked;
+            Player.PlayerLoadedIn += LinkRespawnKey;
         }
-        master.Disable();
     }
+    private void OnEnable()
+    {
+        master.Enable();
+    }
+
+    private void OnDisable()
+    {
+        master.Disable();
+        LevelController.LevelLoadedIn -= LinkRespawnKey;
+        master.Player.GroundPound.performed -= GroundPoundPressed;
+        master.Player.GroundPound.canceled -= GroundPoundReleased;
+        master.Player.Jump.performed -= JumpPressed;
+        master.Player.Jump.canceled -= JumpReleased;
+        master.Player.Restart.performed -= LevelController.Instance.Respawn;
+        Player.PlayerLoadedIn -= LinkRespawnKey;
+        master.Dispose();
+    }
+
     private int frameCount;
     private bool masterEnabled;
     private void Update()
@@ -60,32 +77,11 @@ public class UserInput : MonoBehaviour
         
     }
 
-    private void RespawnLinked()
+    private void LinkRespawnKey()
     {
         master.Player.Restart.performed += LevelController.Instance.Respawn;
     }
 
-    private void OnDisable()
-    {
-        master.Disable();
-        LevelController.LevelLoadedIn -= RespawnLinked;
-        master.Player.Restart.performed -= LevelController.Instance.Respawn;
-        Player.PlayerLoadedIn -= RespawnLinked;
-    }
-
-    private void Awake()
-    {
-        // Singleton instance pattern
-        if (input == null)
-        {
-            input = this;
-            master = new InputMaster();
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
     private void GroundPoundPressed(InputAction.CallbackContext context)
     {
         groundPoundHeld = !groundPoundHeld;

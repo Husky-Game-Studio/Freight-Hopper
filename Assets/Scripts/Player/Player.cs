@@ -23,16 +23,9 @@ public class Player : MonoBehaviour
     // If there is a null reference error try subscribing to the PlayerLoadedIn event
     public static Player Instance => instance;
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
+        instance = this;
         PlayerLoadedIn?.Invoke();
     }
 }

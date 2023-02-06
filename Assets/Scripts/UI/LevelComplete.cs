@@ -20,40 +20,32 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nextMedalTimeValue;
 
     private void Awake()
-    {
-        if (Goal.Instance == null)
-        {
-            Debug.Log("No Goal Found");
-        }
-        else
-        {
-            Goal.Instance.SetLevelCompleteScreen(EnableLevelComplete);
-        }
-
+    {  
         levelCompleteScreen.SetActive(false);
     }
+
+
     private void OnEnable()
     {
+        Goal.LevelComplete += EnableLevelComplete;
         UserInput.Instance.UserInputMaster.Player.Menu.performed += Menu;
         UserInput.Instance.UserInputMaster.Player.Next.performed += NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed += RestartLevel;
     }
     private void OnDisable()
     {
+        Goal.LevelComplete -= EnableLevelComplete;
         UserInput.Instance.UserInputMaster.Player.Menu.performed -= Menu;
         UserInput.Instance.UserInputMaster.Player.Next.performed -= NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed -= RestartLevel;
     }
     private void EnableLevelComplete()
     {
-        if (Goal.Instance == null)
-        {
-            Debug.LogWarning("Goal was never found");
-            return;
-        }
 
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
         timer.gameObject.SetActive(false);
+
+        
         BestTime();
         PauseMenu.Instance.PauseGame();
         levelCompleteScreen.SetActive(true);

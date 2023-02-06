@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-461503238661724116
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
+  m_Name: ColorAdjustments
+  m_EditorClassIdentifier: 
+  active: 1
+  postExposure:
+    m_OverrideState: 1
+    m_Value: 0
+  contrast:
+    m_OverrideState: 1
+    m_Value: 0
+  colorFilter:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  hueShift:
+    m_OverrideState: 1
+    m_Value: 0
+  saturation:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &-76998006505292669
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -13,7 +41,6 @@ MonoBehaviour:
   m_Name: Tonemapping
   m_EditorClassIdentifier: 
   active: 1
-  m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
     m_Value: 2
@@ -32,6 +59,7 @@ MonoBehaviour:
   components:
   - {fileID: 5216842109417552070}
   - {fileID: -76998006505292669}
+  - {fileID: -461503238661724116}
 --- !u!114 &5216842109417552070
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -45,42 +73,31 @@ MonoBehaviour:
   m_Name: Bloom
   m_EditorClassIdentifier: 
   active: 1
-  m_AdvancedMode: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 0.9
-    min: 0
+    m_Value: 1.55
   intensity:
     m_OverrideState: 1
-    m_Value: 0.22
-    min: 0
+    m_Value: 0.96
   scatter:
     m_OverrideState: 1
-    m_Value: 0.75
-    min: 0
-    max: 1
+    m_Value: 0.67
   clamp:
     m_OverrideState: 1
     m_Value: 65472
-    min: 0
   tint:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
-    hdr: 0
-    showAlpha: 0
-    showEyeDropper: 1
   highQualityFiltering:
     m_OverrideState: 1
     m_Value: 1
   skipIterations:
     m_OverrideState: 1
     m_Value: 0
-    min: 0
-    max: 16
   dirtTexture:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {fileID: 0}
+    dimension: 1
   dirtIntensity:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
+    m_OverrideState: 1
+    m_Value: 5.56

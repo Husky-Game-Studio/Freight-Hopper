@@ -17,10 +17,7 @@ public class Timer
     // Sets current to duration
     public virtual void ResetTimer()
     {
-        if (current != duration)
-        {
-            current = duration;
-        }
+        current = duration;
     }
 
     // Sets current to 0

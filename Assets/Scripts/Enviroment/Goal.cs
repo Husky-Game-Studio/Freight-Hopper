@@ -3,36 +3,21 @@ using System;
 
 public class Goal : MonoBehaviour
 {
-    private static Goal instance;
-    public static Goal Instance => instance;
+    public static Action LevelComplete;
 
-    private Action levelComplete;
-
-    public void SetLevelCompleteScreen(Action levelComplete)
-    {
-        this.levelComplete = levelComplete;
-    }
-    bool completedLevel;
-    public bool CompletedLevel => completedLevel;
+    static bool completedLevel;
+    public static bool CompletedLevel => completedLevel;
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Debug.LogWarning("Only one goal is allowed, please write a goal manager script for more");
-            Destroy(this.gameObject);
-        }
+        completedLevel = false;
     }
 
     private void OnTriggerEnter(UnityEngine.Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
-            levelComplete.Invoke();
+            LevelComplete?.Invoke();
             completedLevel = true;
         }
     }

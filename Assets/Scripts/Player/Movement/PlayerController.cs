@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     private CollisionManagement collisionManagement;
     private Friction friction;
 
-    private bool jumpedPreviously;
+    private bool jumpedThisFrame;
+    private bool poundedThisFrame;
 
     private void Awake()
     {
@@ -49,7 +50,7 @@ public class PlayerController : MonoBehaviour
 
     private void GroundPoundStartLogic()
     {
-        if (!InGameStates.Instance.StateIs(InGameStates.States.Playing))
+        if (!InGameStates.Instance.StateIs(InGameStates.States.Playing) || poundedThisFrame)
         {
             return;
         }
@@ -57,12 +58,13 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        poundedThisFrame = true;
         groundPoundBehavior.EntryAction();
     }
 
     private void JumpsStartLogic()
     {
-        if (!InGameStates.Instance.StateIs(InGameStates.States.Playing))
+        if (!InGameStates.Instance.StateIs(InGameStates.States.Playing) || jumpedThisFrame)
         {
             return;
         }
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour
             // Wall Jump Logic
             if (!wallBehaviors.JumpActive)
             {
-                jumpedPreviously = true;
+                jumpedThisFrame = true;
                 wallBehaviors.JumpInitial();
             }
             return;
@@ -94,7 +96,7 @@ public class PlayerController : MonoBehaviour
             jumpBehavior.coyoteeTimer.DeactivateTimer();
             return;
         }
-        jumpedPreviously = true;
+        jumpedThisFrame = true;
         jumpBehavior.EntryAction();
     }
 
@@ -104,7 +106,7 @@ public class PlayerController : MonoBehaviour
         {
             wallBehaviors.JumpExit();
         }
-        else if (jumpBehavior.Active)
+        if (jumpBehavior.Active)
         {
             jumpBehavior.ExitAction();
         }
@@ -137,7 +139,7 @@ public class PlayerController : MonoBehaviour
         movementBehavior.Action();
 
         // Jump Holding ========================================================
-        if (UserInput.Instance.JumpHeld && !jumpedPreviously)
+        if (UserInput.Instance.JumpHeld && !jumpedThisFrame)
         {
             JumpsStartLogic();
         }
@@ -223,6 +225,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Reset Values ========================================================
-        jumpedPreviously = false;
+        jumpedThisFrame = false;
+        poundedThisFrame = false;
     }
 }

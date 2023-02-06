@@ -44,7 +44,7 @@ public class PlayerDeath : MonoBehaviour
 
     public void KillPlayer()
     {
-        if (Goal.Instance.CompletedLevel)
+        if (Goal.CompletedLevel)
         {
             return;
         }

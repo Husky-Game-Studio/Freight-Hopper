@@ -14,10 +14,10 @@ public class InGameStates : MonoBehaviour
 
     public enum States
     {
-        Playing,
-        Freecam,
-        Paused,
-        LevelComplete
+        Playing = 0,
+        Freecam = 1,
+        Paused = 2,
+        LevelComplete = 3
     }
     public bool StateIs(States targetState)
     {
