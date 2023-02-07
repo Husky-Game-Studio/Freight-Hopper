@@ -60,10 +60,13 @@ public class UserInput : MonoBehaviour
         master.Player.Restart.performed -= LevelController.Instance.Respawn;
         Player.PlayerLoadedIn -= LinkRespawnKey;
         master.Dispose();
+        input = null;
     }
 
     private int frameCount;
     private bool masterEnabled;
+    private bool jumpInputLock = false;
+    private bool groundPoundInputLock = false;
     private void Update()
     {
         if (frameCount >= 4)
@@ -74,7 +77,11 @@ public class UserInput : MonoBehaviour
         } else if (!masterEnabled){
             frameCount++;
         }
-        
+    }
+    private void FixedUpdate()
+    {
+        jumpInputLock = false;
+        groundPoundInputLock = false;
     }
 
     private void LinkRespawnKey()
@@ -84,29 +91,45 @@ public class UserInput : MonoBehaviour
 
     private void GroundPoundPressed(InputAction.CallbackContext context)
     {
-        groundPoundHeld = !groundPoundHeld;
-        if (groundPoundHeld)
+        if(groundPoundHeld)
         {
-            GroundPoundInput?.Invoke();
+            return;
         }
+        groundPoundHeld = true;
+        groundPoundInputLock = true;
+        GroundPoundInput?.Invoke();
     }
 
     private void JumpPressed(InputAction.CallbackContext _)
     {
-        jumpHeld = !jumpHeld;
-        if (jumpHeld)
+        if(jumpHeld)
         {
-            JumpInput?.Invoke();
+            return;
         }
+        jumpHeld = true;
+        jumpInputLock = true;
+        JumpInput?.Invoke();
     }
 
-    private void JumpReleased(InputAction.CallbackContext _)
+    private void JumpReleased(InputAction.CallbackContext ctx)
     {
+        if (!jumpHeld)
+        {
+            return;
+        }
+        jumpHeld = false;
+        jumpInputLock = true;
         JumpInputCanceled?.Invoke();
     }
 
     private void GroundPoundReleased(InputAction.CallbackContext _)
     {
+        if (!groundPoundHeld)
+        {
+            return;
+        }
+        groundPoundHeld = false;
+        groundPoundInputLock = true;
         GroundPoundCanceled?.Invoke();
     }
 

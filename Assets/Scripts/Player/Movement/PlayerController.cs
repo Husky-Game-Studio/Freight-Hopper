@@ -40,12 +40,6 @@ public class PlayerController : MonoBehaviour
         collisionManagement.CollisionDataCollected -= UpdateLoop;
         collisionManagement.Landed -= jumpBehavior.Recharge;
         collisionManagement.Landed -= groundPoundBehavior.Recharge;
-
-        UserInput.Instance.GroundPoundInput -= GroundPoundStartLogic;
-        UserInput.Instance.GroundPoundCanceled -= groundPoundBehavior.ExitAction;
-
-        UserInput.Instance.JumpInput -= JumpsStartLogic;
-        UserInput.Instance.JumpInputCanceled -= JumpsCanceledLogic;
     }
 
     private void GroundPoundStartLogic()
@@ -86,7 +80,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         bool canJump = jumpBehavior.coyoteeTimer.TimerActive() || collisionManagement.IsGrounded.old;
-        if (!canJump)
+        if (!canJump || jumpCount > 0)
         {
             return;
         }
@@ -97,8 +91,17 @@ public class PlayerController : MonoBehaviour
             return;
         }
         jumpedThisFrame = true;
+        jumpCount++;
         jumpBehavior.EntryAction();
     }
+
+    int jumpCount;
+    int lastJumpCount;
+    int consectutiveFrames;
+    int withinFrameCount = 1;
+
+    bool jumpReleasedThisFrame;
+    bool groundPoundReleasedThisFrame;
 
     private void JumpsCanceledLogic()
     {
@@ -114,6 +117,19 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateLoop()
     {
+        consectutiveFrames++;
+        if (jumpCount != lastJumpCount){
+            lastJumpCount = jumpCount;
+            consectutiveFrames = 0;
+        }
+        if(consectutiveFrames > 0){
+            jumpCount = 0;
+        }
+        if(jumpCount > withinFrameCount)
+        {
+            Debug.LogWarning("Jumped a lot!");
+        }
+
         movementBehavior.UpdateStatus();
         // Wall run entry logic ========================================================
         if (!wallBehaviors.RunActive && 
@@ -143,7 +159,7 @@ public class PlayerController : MonoBehaviour
         {
             JumpsStartLogic();
         }
-        
+
         // Applying Abilities Constantly ========================================================
         // Applying Ground Pound
         if (groundPoundBehavior.Active)
@@ -208,6 +224,13 @@ public class PlayerController : MonoBehaviour
         {
             wallBehaviors.coyoteTimer.ResetTimer();
             wallBehaviors.RunExit();
+        }
+
+        // Wall Jump Exit Logic ========================================================
+        if (wallBehaviors.JumpActive &&
+            (!wallBehaviors.jumpHoldingTimer.TimerActive() || !UserInput.Instance.JumpHeld))
+        {
+            wallBehaviors.JumpExit();
         }
 
         // Wall Climb Exit Logic ========================================================
