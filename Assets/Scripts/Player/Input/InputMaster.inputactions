@@ -11,15 +11,17 @@
                     "id": "3ba67c98-3b29-4c0d-a19d-b1cb629e3907",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "b4929b82-6898-469c-974c-73a2454924b0",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=2)"
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Look",
@@ -27,7 +29,8 @@
                     "id": "a16746e7-e947-468e-ad81-b5a88ea06e5c",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Restart",
@@ -35,7 +38,8 @@
                     "id": "bd3fc753-783a-4f33-9932-c94d121aa02a",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Ground Pound",
@@ -52,7 +56,8 @@
                     "id": "80946741-8662-445a-be86-07b62f08ee5b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Debug",
@@ -60,7 +65,8 @@
                     "id": "2cc93062-ce2b-452e-babc-c5d6b8a15000",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Freecam",
@@ -68,7 +74,8 @@
                     "id": "da627b80-b40b-4003-b9a4-6afa1ebb1083",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Menu",
@@ -76,7 +83,8 @@
                     "id": "45d59b99-518a-4382-9f07-7bb322d1d313",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Next",
@@ -84,7 +92,8 @@
                     "id": "892097b3-b1ef-4b98-96e4-0d7642f50d8b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class UserInput : MonoBehaviour
 {
@@ -35,38 +34,23 @@ public class UserInput : MonoBehaviour
         master.Player.Jump.performed += JumpPressed;
         master.Player.Jump.canceled += JumpReleased;
 
-        if (SceneManager.GetActiveScene().name.Equals("DefaultScene"))
-        {
-            LevelController.LevelLoadedIn += LinkRespawnKey;
-        }
-        else
-        {
-            Player.PlayerLoadedIn += LinkRespawnKey;
-        }
-    }
-    private void OnEnable()
-    {
-        master.Enable();
+        master.Player.Restart.performed += LevelController.Instance.Respawn;
     }
 
     private void OnDisable()
     {
         master.Disable();
-        LevelController.LevelLoadedIn -= LinkRespawnKey;
         master.Player.GroundPound.performed -= GroundPoundPressed;
         master.Player.GroundPound.canceled -= GroundPoundReleased;
         master.Player.Jump.performed -= JumpPressed;
         master.Player.Jump.canceled -= JumpReleased;
         master.Player.Restart.performed -= LevelController.Instance.Respawn;
-        Player.PlayerLoadedIn -= LinkRespawnKey;
         master.Dispose();
         input = null;
     }
 
     private int frameCount;
     private bool masterEnabled;
-    private bool jumpInputLock = false;
-    private bool groundPoundInputLock = false;
     private void Update()
     {
         if (frameCount >= 4)
@@ -78,16 +62,7 @@ public class UserInput : MonoBehaviour
             frameCount++;
         }
     }
-    private void FixedUpdate()
-    {
-        jumpInputLock = false;
-        groundPoundInputLock = false;
-    }
 
-    private void LinkRespawnKey()
-    {
-        master.Player.Restart.performed += LevelController.Instance.Respawn;
-    }
 
     private void GroundPoundPressed(InputAction.CallbackContext context)
     {
@@ -96,7 +71,6 @@ public class UserInput : MonoBehaviour
             return;
         }
         groundPoundHeld = true;
-        groundPoundInputLock = true;
         GroundPoundInput?.Invoke();
     }
 
@@ -107,18 +81,16 @@ public class UserInput : MonoBehaviour
             return;
         }
         jumpHeld = true;
-        jumpInputLock = true;
         JumpInput?.Invoke();
     }
 
-    private void JumpReleased(InputAction.CallbackContext ctx)
+    private void JumpReleased(InputAction.CallbackContext _)
     {
         if (!jumpHeld)
         {
             return;
         }
         jumpHeld = false;
-        jumpInputLock = true;
         JumpInputCanceled?.Invoke();
     }
 
@@ -129,7 +101,6 @@ public class UserInput : MonoBehaviour
             return;
         }
         groundPoundHeld = false;
-        groundPoundInputLock = true;
         GroundPoundCanceled?.Invoke();
     }
 
