@@ -8,7 +8,6 @@ using System.Collections;
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] protected AudioMixerGroup mixerGroup;
-    public AudioMixerGroup MixerGroup => mixerGroup;
     [SerializeField] protected SoundCollection[] sounds;
     protected Dictionary<string, float> soundTimerDictionary = new Dictionary<string, float>();
 
@@ -106,8 +105,6 @@ public class SoundManager : MonoBehaviour
                 sound.componentAudioSource.volume = 0;
                 StartCoroutine(Fade(sound.componentAudioSource, sound.fadeInTime, sound.volume));
             }
-
-            
         }
         
     }

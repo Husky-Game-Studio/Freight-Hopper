@@ -39,5 +39,4 @@ public class Sound : ScriptableObject
     public int priority = 128;
 
     [HideInInspector] public AudioSource componentAudioSource;
-    [HideInInspector] public Dictionary<Vector3, AudioSource> audioSources = new Dictionary<Vector3, AudioSource>();
 }
