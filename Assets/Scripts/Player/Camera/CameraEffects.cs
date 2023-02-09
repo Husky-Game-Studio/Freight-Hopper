@@ -62,7 +62,7 @@ public class CameraEffects : MonoBehaviour
         if (speed > speedEffectsStart)
         {
             speedLines.Play();
-            playerSounds.Play("GoingFast");
+            playerSounds.StartCoroutine(playerSounds.Play("GoingFast"));
             goingSlowAgain = true;
         }
         else

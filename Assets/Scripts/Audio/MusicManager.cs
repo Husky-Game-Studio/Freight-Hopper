@@ -42,7 +42,7 @@ public class MusicManager : SoundManager
         {
             DontDestroyOnLoad(this.gameObject);
             instance = this;
-            Play(currentSong.ToString());
+            StartCoroutine(Play(currentSong.ToString()));
         }
         else
         {
@@ -51,13 +51,13 @@ public class MusicManager : SoundManager
                 return;
             }
             
-            
             Destroy(this.gameObject);
             return;
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-    private void OnDisable()
+
+    private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
@@ -124,7 +124,7 @@ public class MusicManager : SoundManager
     public void SwitchSong(Songs songName)
     {
         Stop(currentSong.ToString());
-        Play(songName.ToString());
+        StartCoroutine(Play(songName.ToString()));
         currentSong = songName;
     }
 }

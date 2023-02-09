@@ -76,7 +76,8 @@ public class PlayerController : MonoBehaviour
 
         if (jumpBehavior.Consumed)
         {
-            jumpBehavior.PlayerSoundManager().Play("JumpFail");
+            SoundManager sm = jumpBehavior.PlayerSoundManager();
+            sm.StartCoroutine(sm.Play("JumpFail"));
             return;
         }
         bool canJump = jumpBehavior.coyoteeTimer.TimerActive() || collisionManagement.IsGrounded.old;

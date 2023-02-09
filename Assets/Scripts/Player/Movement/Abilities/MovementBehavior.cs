@@ -100,8 +100,8 @@ public class MovementBehavior : AbilityBehavior
     
     IEnumerator PlayMovement(float speed)
     {
-        soundManager.PlayRandom("Move", 7);
-        soundManager.PlayRandom("Stone", 5);
+        soundManager.StartCoroutine(soundManager.PlayRandom("Move", 7));
+        soundManager.StartCoroutine(soundManager.PlayRandom("Stone", 5));
         waiting = true;
         speed = speedSoundMultiplier/speed;
         speed = Mathf.Clamp(speed, walkingSoundTimeRange.x, walkingSoundTimeRange.y);

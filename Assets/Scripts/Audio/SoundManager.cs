@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 // From comments from https://www.youtube.com/watch?v=QL29aTa7J5Q
 // Probably heavily modified by the time anyone reads this
@@ -10,19 +14,25 @@ public class SoundManager : MonoBehaviour
     [SerializeField] protected AudioMixerGroup mixerGroup;
     [SerializeField] protected SoundCollection[] sounds;
     protected Dictionary<string, float> soundTimerDictionary = new Dictionary<string, float>();
-
-    protected void CreateAudioSource(Sound sound)
+    private HashSet<Sound> inUseSounds = new HashSet<Sound>();
+    IEnumerator LoadSound(Sound sound)
     {
-        sound.componentAudioSource = this.gameObject.AddComponent<AudioSource>();
-#if !UNITY_EDITOR
-        UpdateAudioSource(sound, sound.componentAudioSource);
-#endif
-        if (sound.hasCooldown)
+        sound.handle = Addressables.LoadAssetAsync<AudioClip>(sound.assetReference);
+        yield return sound.handle;
+        if (sound.handle.Status == AsyncOperationStatus.Succeeded)
         {
-            soundTimerDictionary[GetSoundName(sound)] = -100;
+            sound.componentAudioSource = this.gameObject.AddComponent<AudioSource>();
+            sound.componentAudioSource.clip = sound.handle.Result;
         }
+        else
+        {
+            Debug.LogError("Unable to load sound " + sound.filename + " due to " +
+                                sound.handle.OperationException);
+            yield break;
+        }
+        
     }
-
+    
     private void ResetTimer(Sound sound)
     {
         if (sound.hasCooldown)
@@ -30,12 +40,39 @@ public class SoundManager : MonoBehaviour
             soundTimerDictionary[GetSoundName(sound)] = int.MinValue;
         }
     }
+    
 
-    protected void UpdateAudioSource(Sound sound, AudioSource source)
+    protected Sound FindSound(string soundName)
     {
-        source.clip = sound.clip;
-        source.outputAudioMixerGroup = mixerGroup;
+        foreach (SoundCollection soundCollection in sounds)
+        {
+            foreach (Sound sound in soundCollection.sounds)
+            {
+                if (sound.filename.Equals(soundName))
+                {
+                    return sound;
+                }
+            }
+        }
 
+        Debug.LogError("Sound " + soundName + " Not Found!");
+        return null;
+    }
+
+    // Play sound with name, will be created if it doesn't exist
+    public IEnumerator Play(string name, bool playMultiple = false)
+    {
+        Sound sound = FindSound(name);
+        
+        if (!CanPlaySound(sound))
+        {
+            yield break;
+        }
+
+        yield return LoadSound(sound);
+        AudioSource source = sound.componentAudioSource;
+        source.outputAudioMixerGroup = mixerGroup;
+        inUseSounds.Add(sound);
         // Fuck you managed code stripping
         int id = mixerGroup.GetHashCode();
         if(id > 0 || id < 1){
@@ -46,41 +83,7 @@ public class SoundManager : MonoBehaviour
         source.loop = sound.isLoop;
         source.priority = sound.priority;
         source.spatialBlend = sound.spatialBlend;
-    }
 
-    protected Sound FindSound(string name)
-    {
-        foreach (SoundCollection soundCollection in sounds)
-        {
-            foreach (Sound sound in soundCollection.sounds)
-            {
-                if (sound.filename.Equals(name))
-                {
-                    if (sound.componentAudioSource == null)
-                    {
-                        CreateAudioSource(sound);
-                    }
-#if UNITY_EDITOR
-                    UpdateAudioSource(sound, sound.componentAudioSource);
-#endif
-                    return sound;
-                }
-            }
-        }
-
-        Debug.LogError("Sound " + name + " Not Found!");
-        return null;
-    }
-
-    // Play sound with name, will be created if it doesn't exist
-    public void Play(string name, bool playMultiple = false)
-    {
-        Sound sound = FindSound(name);
-
-        if (!CanPlaySound(sound))
-        {
-            return;
-        }
         if (sound.pitchVarience > 0)
         {
             sound.componentAudioSource.pitch += UnityEngine.Random.Range(-sound.pitchVarience, sound.pitchVarience);
@@ -123,26 +126,41 @@ public class SoundManager : MonoBehaviour
 
     // Plays sound with name at location, creates a new one if it doesn't exist at absolute location. Sound temp object is deleted after being played
 
-    public void PlayRandom(string name, int size)
+    public IEnumerator PlayRandom(string name, int size)
     {
-        Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)), true);
+        yield return Play(name.SetNumber(UnityEngine.Random.Range(1, size + 1)), true);
     }
 
     public void Stop(string name)
     {
         Sound sound = FindSound(name);
-        if (sound.componentAudioSource.isActiveAndEnabled)
+        if (sound.componentAudioSource != null && sound.componentAudioSource.isActiveAndEnabled)
         {
-            StartCoroutine(StopAfterSeconds(sound.componentAudioSource, sound.fadeOutTime));
+            StartCoroutine(StopAfterSeconds(sound, sound.fadeOutTime));
             StartCoroutine(Fade(sound.componentAudioSource, sound.fadeOutTime, 0));
             ResetTimer(sound);
         }
+
+        inUseSounds.Remove(sound);
     }
 
-    private IEnumerator StopAfterSeconds(AudioSource source, float seconds)
+    private IEnumerator StopAfterSeconds(Sound sound, float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        source.Stop();
+        sound.componentAudioSource.Stop();
+        if (sound.releaseStrategy == Sound.ReleaseStrategy.AlsoOnStop)
+        {
+            Debug.Log("Stopping audio and then disposing it");
+            sound.Dispose();
+        }
+    }
+
+    public void OnDisable()
+    {
+        foreach (Sound sound in inUseSounds)
+        {
+            sound.Dispose();
+        }
     }
 
     protected string GetSoundName(Sound sound)
@@ -157,12 +175,18 @@ public class SoundManager : MonoBehaviour
 
     protected bool CanPlaySound(Sound sound)
     {
+        if (!sound.assetReference.RuntimeKeyIsValid())
+        {
+            Debug.LogWarning("Asset reference for " + sound.filename + " doesn't exist");
+            return false;
+        }
+        
         string soundName = GetSoundName(sound);
         if (soundTimerDictionary.ContainsKey(soundName))
         {
             float lastTimePlayed = soundTimerDictionary[soundName];
 
-            if (lastTimePlayed + sound.clip.length + sound.delay < Time.time)
+            if (lastTimePlayed + sound.clipLength + sound.delay < Time.time)
             {
                 soundTimerDictionary[soundName] = Time.time;
                 return true;

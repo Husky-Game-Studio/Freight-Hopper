@@ -40,7 +40,7 @@ public class GroundPoundBehavior : AbilityBehavior
     public void EntryAction()
     {
         GroundPoundInitialBurst();
-        soundManager.Play("GroundPoundBurst");
+        soundManager.StartCoroutine(soundManager.Play("GroundPoundBurst"));
         Vector3 upAxis = collisionManager.ValidUpAxis;
         if (Vector3.Dot(Vector3.Project(rb.velocity, upAxis), rb.transform.up) > 0)
         {
@@ -78,13 +78,13 @@ public class GroundPoundBehavior : AbilityBehavior
 
             if (!FlatSurface)
             {
-                soundManager.Play("WallSkid");
+                soundManager.StartCoroutine(soundManager.Play("WallSkid"));
             }
             
             if (!collisionManager.IsGrounded.old)
             {
                 particles.Play();
-                soundManager.Play("GroundPoundLand");
+                soundManager.StartCoroutine(soundManager.Play("GroundPoundLand"));
                 if (!this.FlatSurface){
                     Vector3 oldDownForce = Vector3.Project(collisionManager.Velocity.old, upAxis);
                     rb.AddForce(direction * oldDownForce.magnitude, ForceMode.VelocityChange);
@@ -112,7 +112,7 @@ public class GroundPoundBehavior : AbilityBehavior
     public void ExitAction()
     {
         PreventConsumptionCheck();
-        soundManager.Play("GroundPoundExit");
+        soundManager.StartCoroutine(soundManager.Play("GroundPoundExit"));
         soundManager.Stop("WallSkid");
         increasingForce.Reset();
         active = false;
