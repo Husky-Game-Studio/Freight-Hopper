@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Rail Color
-  m_Shader: {fileID: -6465566751694194690, guid: 906815c4c1fbcb0409b2b6b2ea00dec4, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 78a6dec32f6b89b4387346d77ecefb84, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -68,6 +68,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -107,7 +111,11 @@ Material:
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RampOffset: 0
+    - _RampSmoothness: 99
     - _ReceiveShadows: 1
+    - _RimBrightness: 0
+    - _RimPower: 0
     - _Smoothness: 0.492
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -120,6 +128,8 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1.7411011, g: 1.5193571, b: 1.5193571, a: 1}
+    - _RampColor: {r: 0.18222678, g: 0.21921726, b: 0.3301887, a: 1}
+    - _RampTinting: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &6632452725084065388
