@@ -14,8 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groupingName: 
   filename: WallClimb
-  clip: {fileID: 8300000, guid: bf949cd1b7b9a0b4d842aa43d81cb923, type: 3}
+  assetReference:
+    m_AssetGUID: bf949cd1b7b9a0b4d842aa43d81cb923
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  releaseStrategy: 1
+  clipLength: 0.06027211
   volume: 0.15
+  fadeInTime: 0
+  fadeOutTime: 0
   volumeVarience: 0
   pitch: 1
   pitchVarience: 0
@@ -24,4 +32,3 @@ MonoBehaviour:
   spatialBlend: 0
   delay: 0
   priority: 128
-  componentAudioSource: {fileID: 0}

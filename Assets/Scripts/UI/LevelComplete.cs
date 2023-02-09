@@ -44,6 +44,7 @@ public class LevelComplete : MonoBehaviour
 
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
         timer.gameObject.SetActive(false);
+        Player.Instance.modules.soundManager.StopAll();
 
         
         BestTime();

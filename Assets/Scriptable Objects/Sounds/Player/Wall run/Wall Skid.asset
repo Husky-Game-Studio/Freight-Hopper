@@ -14,14 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groupingName: 
   filename: WallSkid
-  clip: {fileID: 8300000, guid: c7ec0a0ba1a9ef44995d5446355d7006, type: 3}
+  assetReference:
+    m_AssetGUID: c7ec0a0ba1a9ef44995d5446355d7006
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  clipLength: 6.857143
   volume: 0.35
+  fadeInTime: 0
+  fadeOutTime: 0
   volumeVarience: 0
   pitch: 1
   pitchVarience: 0
-  isLoop: 0
+  isLoop: 1
   hasCooldown: 1
   spatialBlend: 0
-  delay: 0
   priority: 128
-  componentAudioSource: {fileID: 0}

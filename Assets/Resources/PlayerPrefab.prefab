@@ -127,7 +127,7 @@ MonoBehaviour:
   movementBehavior: {fileID: 3434734437734733544}
   jumpBehavior: {fileID: 3434734437734733551}
   groundPoundBehavior: {fileID: 3434734437734733550}
-  wallBehavior: {fileID: 3434734437734733546}
+  wallBehaviors: {fileID: 3434734437734733546}
 --- !u!114 &1294291225731703511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1395,7 +1395,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9795539, y: 1}
+    m_SensorSize: {x: 1.5383211, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4972,7 +4972,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 3434734436815871931}
-  pausedAudioMixer: {fileID: 24300002, guid: b2d2e8b2ecfedfb47a1a12058ce7f03f, type: 2}
 --- !u!1 &3434734438050166296
 GameObject:
   m_ObjectHideFlags: 0
@@ -5155,9 +5154,7 @@ MonoBehaviour:
   mixerGroup: {fileID: 24300002, guid: e9b316a2a2ab7834288ca63c496b39b6, type: 2}
   sounds:
   - {fileID: 11400000, guid: 4d7a00d1f41614347a3117a8fcf088e5, type: 2}
-  - {fileID: 11400000, guid: 4fa50d1d329170640bc98b700a0581ec, type: 2}
   - {fileID: 11400000, guid: 24e69780d549ef1499bcf321df58ff2d, type: 2}
-  - {fileID: 11400000, guid: 002d57c418e571f44a7104e69e1ac539, type: 2}
   - {fileID: 11400000, guid: edb66b5a24959a944bf3aa5d423c0bd8, type: 2}
 --- !u!1 &8124382008007837255
 GameObject:

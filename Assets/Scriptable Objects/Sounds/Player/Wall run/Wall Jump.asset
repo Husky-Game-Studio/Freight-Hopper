@@ -14,8 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groupingName: 
   filename: WallJump
-  clip: {fileID: 8300000, guid: c0d46f75d06222b4b818a37d86f9143c, type: 3}
+  assetReference:
+    m_AssetGUID: c0d46f75d06222b4b818a37d86f9143c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  releaseStrategy: 1
+  clipLength: 0.4063492
   volume: 1
+  fadeInTime: 0
+  fadeOutTime: 0
   volumeVarience: 0
   pitch: 0.84
   pitchVarience: 0
@@ -24,4 +32,3 @@ MonoBehaviour:
   spatialBlend: 0
   delay: 0
   priority: 0
-  componentAudioSource: {fileID: 0}

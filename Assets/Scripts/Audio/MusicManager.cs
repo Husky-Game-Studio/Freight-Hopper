@@ -51,13 +51,13 @@ public class MusicManager : SoundManager
                 return;
             }
             
-            
             Destroy(this.gameObject);
             return;
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-    private void OnDisable()
+
+    private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
