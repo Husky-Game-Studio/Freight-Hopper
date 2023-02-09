@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -7,17 +9,11 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 [CreateAssetMenu(fileName = "Sound", menuName = "Scriptable Objects/Sound")]
 public class Sound : ScriptableObject, IDisposable
 {
-    public enum ReleaseStrategy
-    {
-        Normal = 0,
-        AlsoOnStop = 1
-    }
     [Tooltip("This is for stuff like Metal 1 and Metal 2, leave the name as Metal in that case. Otherwise blank")]
     public string groupingName = "";
 
     public string filename;
     public AssetReference assetReference;
-    public ReleaseStrategy releaseStrategy = ReleaseStrategy.Normal;
     public float clipLength = 0;
 
     [Range(0f, 1f)]
@@ -41,9 +37,6 @@ public class Sound : ScriptableObject, IDisposable
     [Range(0f, 1f)]
     public float spatialBlend;
 
-    [Min(0)]
-    public float delay;
-
     [Range(0, 256), Tooltip("Lower is higher priority")]
     public int priority = 128;
     
@@ -61,18 +54,38 @@ public class Sound : ScriptableObject, IDisposable
 
     [NonSerialized] public AudioSource componentAudioSource;
     [NonSerialized] public AsyncOperationHandle<AudioClip> handle;
+    private bool isLoading = false;
+    public bool IsLoading => !handle.IsDone || isLoading;
+
+    public IEnumerator LoadSound(GameObject componentHolder)
+    {
+        handle = Addressables.LoadAssetAsync<AudioClip>(assetReference);
+        isLoading = true;
+        yield return handle;
+        isLoading = false;
+        if (handle.IsValid() && handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            if (componentAudioSource == null)
+            {
+                componentAudioSource = componentHolder.AddComponent<AudioSource>();
+            }
+            componentAudioSource.clip = handle.Result;
+        }
+        else
+        {
+            Debug.LogError("Unable to load sound " + filename);
+        }
+    }
+
     public void Dispose()
     {
         if (componentAudioSource != null)
         {
             componentAudioSource.clip = null;
-            Destroy(componentAudioSource);
-            componentAudioSource = null;
         }
         if (handle.IsValid())
         {
             Addressables.Release(handle);
-            handle = default;
         }
     }
 }

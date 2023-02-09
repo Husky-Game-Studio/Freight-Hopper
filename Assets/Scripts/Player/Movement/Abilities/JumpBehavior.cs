@@ -75,7 +75,7 @@ public class JumpBehavior : AbilityBehavior
             rb.AddForce(Vector3.Project(rigidbodyLinker.ConnectionVelocity.current, upAxis), ForceMode.VelocityChange);
         }
 
-        soundManager.StartCoroutine(soundManager.Play("Jump"));
+        soundManager.Play("Jump");
     }
 
     public void EntryAction()

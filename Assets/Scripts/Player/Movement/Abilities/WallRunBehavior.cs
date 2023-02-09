@@ -174,7 +174,7 @@ public partial class WallRunBehavior : AbilityBehavior
 
     public void Climb()
     {
-        soundManager.StartCoroutine(soundManager.Play("WallClimb"));
+        soundManager.Play("WallClimb");
         Vector3 upAlongWall = GetUpAlongWall(wallNormals[1]);
         
         cameraController.TiltUpAxis(Vector3.Cross(-wallNormals[1], upAlongWall) * wallrunCameraTilt);
@@ -187,7 +187,7 @@ public partial class WallRunBehavior : AbilityBehavior
     {
         RunExit();
         wallJumpActive = true;
-        soundManager.StartCoroutine(soundManager.Play("WallJump"));
+        soundManager.Play("WallJump");
         jumpHoldingTimer.ResetTimer();
 
         Vector3 sumNormals = Vector3.zero;
