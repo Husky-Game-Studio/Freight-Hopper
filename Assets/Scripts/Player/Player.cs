@@ -27,8 +27,5 @@ public class Player : MonoBehaviour
     {
         instance = this;
         PlayerLoadedIn?.Invoke();
-#if UNITY_EDITOR
-        UnityEditor.Selection.activeObject = this.gameObject; 
-#endif
     }
 }
