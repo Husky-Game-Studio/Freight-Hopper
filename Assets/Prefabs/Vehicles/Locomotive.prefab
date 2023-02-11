@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5400923174265790355}
   - component: {fileID: 1109776650627392963}
   - component: {fileID: -3548527690878655890}
-  - component: {fileID: 2564180750181826235}
   m_Layer: 11
   m_Name: Locomotive
   m_TagString: landable
@@ -30,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 24.92, y: 2.6268997, z: -14.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1974601308939043298}
   - {fileID: 8525373906403386287}
@@ -49,7 +49,7 @@ Rigidbody:
   m_Drag: 1.5
   m_AngularDrag: 1.5
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -81,21 +81,6 @@ MonoBehaviour:
   explosion: 1
   explosionTime: 2
   scale: 4
---- !u!114 &2564180750181826235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5400923174265790356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useGravity: 1
-  automatic: 1
-  rb: {fileID: 0}
 --- !u!1 &5853955075626571381
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +110,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1.05}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4735605026481358126}
   m_RootOrder: 0
@@ -162,6 +148,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -218,6 +205,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 11.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4735605026481358126}
   m_RootOrder: 2
@@ -249,6 +237,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 85755468220564776}
   - {fileID: 1914116658506137253}
@@ -273,7 +262,6 @@ MonoBehaviour:
   - {fileID: 1914116658506137252}
   hoverSetting: {fileID: 11400000, guid: 8642c08fd866f764e900a1f5a1a96b7c, type: 2}
   targetDistance: 4.5
-  automatic: 1
   hoverEnginePrefab: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
   enginesFiring: 0
 --- !u!1001 &128047362993437784
@@ -478,11 +466,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
---- !u!4 &1914116658506137253 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
-  m_PrefabInstance: {fileID: 1902224061243181013}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1914116658506137252 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
@@ -494,3 +477,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cac855621139334ebb9ba211c80799c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1914116658506137253 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+  m_PrefabInstance: {fileID: 1902224061243181013}
+  m_PrefabAsset: {fileID: 0}

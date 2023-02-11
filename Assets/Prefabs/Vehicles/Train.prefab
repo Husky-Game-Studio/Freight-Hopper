@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4268207889634961697}
   m_Father: {fileID: 0}
@@ -45,10 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58c06c7b731866445bce9089e7a20353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugging: 0
-  currentStateName: 
-  currentSubStateName: 
-  previousStateName: 
   startWaitTime:
     enabled: 0
     value: 0
@@ -71,7 +68,6 @@ MonoBehaviour:
   inactivityDeletionTimer:
     duration: 3
     current: 0
-  hoverController: {fileID: 924277779522981793}
 --- !u!114 &8828049057225272882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,14 +212,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4735605026481358126, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
   m_PrefabInstance: {fileID: 8828049057815456783}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &924277779522981793 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8525373906403386286, guid: 6841341a893fb8c4d9bf1747ee0f3d00, type: 3}
-  m_PrefabInstance: {fileID: 8828049057815456783}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05852190c9073be4395f46a6aa214239, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

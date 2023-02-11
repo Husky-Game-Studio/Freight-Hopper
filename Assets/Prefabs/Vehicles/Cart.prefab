@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6888594939690183911}
   - component: {fileID: 5946936164422260423}
   - component: {fileID: 3491304789254103795}
-  - component: {fileID: 358080932042886713}
   m_Layer: 11
   m_Name: Cart
   m_TagString: landable
@@ -31,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7513636582688472648}
   m_Father: {fileID: 0}
@@ -61,7 +61,7 @@ Rigidbody:
   m_Drag: 1.5
   m_AngularDrag: 1.5
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -176,21 +176,6 @@ MonoBehaviour:
   explosion: 1
   explosionTime: 2
   scale: 4
---- !u!114 &358080932042886713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5098807932008158715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 556237e75828ce4429bd969668beae40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useGravity: 1
-  automatic: 1
-  rb: {fileID: 0}
 --- !u!1 &8661514545871677199
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +203,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2440289689643165762}
   - {fileID: 4562610941157119881}
@@ -242,7 +228,6 @@ MonoBehaviour:
   - {fileID: 4562610941157119880}
   hoverSetting: {fileID: 11400000, guid: 8642c08fd866f764e900a1f5a1a96b7c, type: 2}
   targetDistance: 4.5
-  automatic: 1
   hoverEnginePrefab: {fileID: 69313492950432119, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
   enginesFiring: 0
 --- !u!1001 &2390257782663745842
@@ -326,7 +311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 202.5
+      value: 67.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
@@ -451,7 +436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Kd
-      value: 202.5
+      value: 67.5
       objectReference: {fileID: 0}
     - target: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
       propertyPath: controller.data.Ki
@@ -479,11 +464,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
---- !u!4 &4562610941157119881 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
-  m_PrefabInstance: {fileID: 4586887886687219449}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4562610941157119880 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 69313492950432113, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
@@ -495,3 +475,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cac855621139334ebb9ba211c80799c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &4562610941157119881 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 69313492950432112, guid: 5fcab4e2db7c4c145b5a2d18f337381c, type: 3}
+  m_PrefabInstance: {fileID: 4586887886687219449}
+  m_PrefabAsset: {fileID: 0}

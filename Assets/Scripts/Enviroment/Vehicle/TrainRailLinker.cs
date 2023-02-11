@@ -80,16 +80,17 @@ public class TrainRailLinker : MonoBehaviour
             //Debug.Log("Path is open");
         }
         // Could be bad for performance !!
-        trainObject.hoverController = trainObject.rb.GetComponentInChildren<HoverController>();
+        //trainObject.hoverController = trainObject.rb.GetComponentInChildren<HoverController>();
         //Debug.Log("linked to path: " + rb.name);
-        trainObject.hoverController.LinkEngines(this);
-        PID.Data controllerData = new PID.Data(horizontalControllerSettings);
+        //trainObject.hoverController.LinkEngines(this);
+        //PID.Data controllerData = new PID.Data(horizontalControllerSettings);
+        //trainObject.controller = new PID();
+        //trainObject.controller.Initialize(controllerData * rb.mass);
+
         isRigidbodyLinked.Add(rb);
-        trainObject.controller = new PID();
-        trainObject.controller.Initialize(controllerData * rb.mass);
         linkedTrainObjects.Add(trainObject);
         linkedRigidbodyObjects[rb] = trainObject;
-        return;
+        //return;
     }
 
     public void RemoveLink(Rigidbody rb)
@@ -121,15 +122,15 @@ public class TrainRailLinker : MonoBehaviour
     }
 
     // Gets error for PID, the error is the horizontal distance from the rail
-    private float GetError(Vector3 positionOnRail, Vector3 normal, Vector3 trainPosition, Vector3 right)
-    {
-        Vector3 displacement = TargetPos(positionOnRail, normal) - trainPosition;
-        Vector3 rightDisplacement = Vector3.Project(displacement, right);
+    //private float GetError(Vector3 positionOnRail, Vector3 normal, Vector3 trainPosition, Vector3 right)
+    //{
+    //    Vector3 displacement = TargetPos(positionOnRail, normal) - trainPosition;
+    //    Vector3 rightDisplacement = Vector3.Project(displacement, right);
 
-        float direction = Mathf.Sign(Vector3.Dot(right, rightDisplacement));
+    //    float direction = Mathf.Sign(Vector3.Dot(right, rightDisplacement));
 
-        return direction * rightDisplacement.magnitude;
-    }
+    //    return direction * rightDisplacement.magnitude;
+    //}
 
     private void FixedUpdate()
     {
@@ -154,18 +155,18 @@ public class TrainRailLinker : MonoBehaviour
                 distance = Vector3.Distance(positionOnPath, position);
             }
 
-            Vector3 normal = path.GetNormal(dataFollowIndex);
-            Vector3 right = Vector3.Cross(normal, path.GetTangent(dataFollowIndex));
+            //Vector3 normal = path.GetNormal(dataFollowIndex);
+            //Vector3 right = Vector3.Cross(normal, path.GetTangent(dataFollowIndex));
 
-            float error = GetError(positionOnPath, normal, position, right);
-            Vector3 force = data.controller.GetOutput(error, Time.fixedDeltaTime) * right;
-            data.rb.AddForce(force, ForceMode.Force);
+            //float error = GetError(positionOnPath, normal, position, right);
+            //Vector3 force = data.controller.GetOutput(error, Time.fixedDeltaTime) * right;
+            //data.rb.AddForce(force, ForceMode.Force);
 
-            if (error > derailThreshold)
-            {
-                dataToRemove.Add(data);
+            //if (error > derailThreshold)
+            //{
+            //    dataToRemove.Add(data);
                 //Debug.Log("removing due to derail");
-            }
+            //}
         }
 
         foreach (TrainData data in dataToRemove)

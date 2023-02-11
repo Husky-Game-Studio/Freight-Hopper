@@ -36,7 +36,7 @@ public class RigidbodyLinker : MonoBehaviour
         {
             return;
         }
-
+        
         connectionVelocity.current = connectedRb.current.GetPointVelocity(ourRigidbody.position);
         if (connectedRb.current == connectedRb.old)
         {
