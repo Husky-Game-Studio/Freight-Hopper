@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6864759d46811444bdbc0a5ebe4c757, type: 3}
+  m_Name: Orator
+  m_EditorClassIdentifier: 
+  m_HideFlags: 0
+  m_IsRequiredOnLaunch: 0
+  m_IsReplaceable: 0
+  m_OnAfterInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+    m_IsEnabled: 0
+    m_Context: {fileID: 0}
+    m_RunInGlobalContext: 0
+    m_ScaledTime: 1
+    m_DelaySeconds: -1
+  m_OratorPrefix: <color="orange">[Orator]</color>
+  m_IncludeContextInMessages: 1
+  m_LogStackTracePolicy: 1
+  m_AssertionsRaiseExceptions: 1
+  m_ForceAssertionsInRelease: 0
+  m_ReachedFormat:
+    LogType: 2
+    LogOption: 0
+    BaseMessage: <b>Reached!</b>
+    RichTextColor:
+      serializedVersion: 2
+      rgba: 0
+  m_AssertionFailedFormat:
+    LogType: 1
+    LogOption: 0
+    BaseMessage: <b>Assertion failed!</b>
+    RichTextColor:
+      serializedVersion: 2
+      rgba: 0
+  m_LogOnceMemorySize: 256
