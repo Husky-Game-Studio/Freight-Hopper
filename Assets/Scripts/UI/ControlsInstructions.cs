@@ -1,59 +1,61 @@
 using System.Collections;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class ControlsInstructions : MonoBehaviour
 {
-    [SerializeField] private Image tutorialImage;
-    [SerializeField] private TextMeshProUGUI tutorialText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private CanvasGroup canvasGroup;
     private const float fadeInTime = 0.8f;
+
+    Dictionary<string, string> levelInstructions = new Dictionary<string, string>() 
+    { 
+        { "1 1", "W - Move Forward\nMouse - Steer\nSpace - Jump\nShift - Ground Pound" }, 
+        { "1 2", "Ground Pound on Slanted Surfaces to Speed Boost.\nShift - Ground Pound" }, 
+        { "1 3", "Ground Pound on Slanted Surfaces to Speed Boost.\nShift - Ground Pound" }, 
+        { "1 4", "Jumping & Ground Pound on Slopes = Speed.\nShift - Ground Pound" }
+    };
 
     private void Start()
     {
+        canvasGroup.alpha = 0;
+        
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
+
+        if (!levelInstructions.ContainsKey(levelName)){
+            return;
+        }
+
         LevelTimeSaveData levelTimeSaveData = LevelTimeSaveLoader.Load(levelName);
+        bool disableCanvas = true;
         if (levelTimeSaveData == null)
         {
-            tutorialImage.enabled = true;
-            tutorialText.enabled = true;
+            disableCanvas = false;
         }
         else
         {
-            if (levelTimeSaveData.MedalIndex > 0)
+            if (levelTimeSaveData.MedalIndex <= 0)
             {
-                tutorialImage.enabled = false;
-                tutorialText.enabled = false;
-            }
-            else
-            {
-                tutorialImage.enabled = true;
-                tutorialText.enabled = true;
+                disableCanvas = false;
             }
         }
-
-        if(tutorialImage.enabled) 
+        
+        if (!disableCanvas) 
         {
-            tutorialImage.color = new Color(tutorialImage.color.r, tutorialImage.color.g, tutorialImage.color.b, 0f);
-            tutorialImage.color = new Color(tutorialText.color.r, tutorialText.color.g, tutorialText.color.b, 0f);
+            descriptionText.text = levelInstructions[levelName];
             StartCoroutine(FadeIn());
         }
     }
 
     private IEnumerator FadeIn()
     {
-        Color initialColor = tutorialImage.color;
-        Color initialColorText = tutorialText.color;
-        Color targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 1f);
-        Color targetColorText = new Color(initialColorText.r, initialColorText.g, initialColorText.b, 1f);
-
         float elapsedTime = 0f;
 
         while (elapsedTime < fadeInTime)
         {
             elapsedTime += Time.deltaTime;
-            tutorialImage.color = Color.Lerp(initialColor, targetColor, elapsedTime / fadeInTime);
-            tutorialText.color = Color.Lerp(initialColorText, targetColorText, elapsedTime / fadeInTime);
+            canvasGroup.alpha = elapsedTime / fadeInTime;
             yield return null;
         }
     }
