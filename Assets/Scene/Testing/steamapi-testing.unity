@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 2128651583}
   - component: {fileID: 2128651585}
   - component: {fileID: 2128651586}
+  - component: {fileID: 2128651587}
   m_Layer: 0
   m_Name: SteamManager
   m_TagString: Untagged
@@ -415,7 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSO: {fileID: 11400000, guid: 83fd9c7ce047c964c8cb0ef4aaf0bdd9, type: 2}
-  testCase: 2
+  testCase: 0
 --- !u!114 &2128651586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,3 +435,15 @@ MonoBehaviour:
   desertSilverStat: DesertSilverStat
   desertGoldStat: DesertGoldStat
   desertRobertoStat: DesertRobertoStat
+--- !u!114 &2128651587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128651582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ab2cffe1c1f1746b2adef2bade11cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
