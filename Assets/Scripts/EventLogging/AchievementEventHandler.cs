@@ -53,7 +53,7 @@ public class AchievementEventHandler : MonoBehaviour
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
         {
-            LevelTimeSaveData save = LevelTimeSaveLoader.Load(level);
+            LevelSaveData save = LevelTimeSaveLoader.Load(level);
             if (save != null)
                 if (save.MedalIndex >= 0)
                     ++count;
@@ -71,7 +71,7 @@ public class AchievementEventHandler : MonoBehaviour
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
         {
-            LevelTimeSaveData save = LevelTimeSaveLoader.Load(level);
+            LevelSaveData save = LevelTimeSaveLoader.Load(level);
             if (save != null)
                 if (save.MedalIndex >= 1)
                     ++count;
@@ -89,7 +89,7 @@ public class AchievementEventHandler : MonoBehaviour
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
         {
-            LevelTimeSaveData save = LevelTimeSaveLoader.Load(level);
+            LevelSaveData save = LevelTimeSaveLoader.Load(level);
             if (save != null)
                 if (save.MedalIndex >= 2)
                     ++count;

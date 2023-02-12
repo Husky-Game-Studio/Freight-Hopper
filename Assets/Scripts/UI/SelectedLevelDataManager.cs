@@ -25,7 +25,7 @@ public class SelectedLevelDataManager : MonoBehaviour
 
         worldtitle.text = levelListManager.CurrentWorld.name;
         title.text = currentData.Title;
-        LevelTimeSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
+        LevelSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
         if (levelSaveData != null)
         {
             if (float.IsInfinity(levelSaveData.BestTime))
@@ -36,7 +36,6 @@ public class SelectedLevelDataManager : MonoBehaviour
             {
                 bestTime.text = "Best: " + LevelTimer.GetTimeString(levelSaveData.BestTime);
             }
-
             if (levelSaveData.MedalIndex >= 0)
             {
                 medal.gameObject.SetActive(true);

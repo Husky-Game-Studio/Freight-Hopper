@@ -41,7 +41,6 @@ public class LevelComplete : MonoBehaviour
     }
     private void EnableLevelComplete()
     {
-
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
         timer.gameObject.SetActive(false);
         Player.Instance.modules.soundManager.StopAll();
@@ -55,10 +54,11 @@ public class LevelComplete : MonoBehaviour
     private void BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
+        
         levelNameText.text = "Level " + levelName.Split(' ')[1]; // this just happens to always get the last number
         
         
-        LevelTimeSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
+        LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         float myTime = timer.GetTime();
         timerText.text = "Time:";
         timerValue.text = LevelTimer.GetTimeString(myTime);
@@ -66,33 +66,52 @@ public class LevelComplete : MonoBehaviour
         {
             Debug.Log("no save data found, saving new time");
             
-            levelTimeData = new LevelTimeSaveData(myTime, levelName);
+            levelTimeData = new LevelSaveData();
             bestTimeText.text = "Best Time:";
             bestTimeValue.text = LevelTimer.GetTimeString(myTime);
+            levelTimeData.LevelName = levelName;
+            levelTimeData.SetNewBestTime(myTime, true);
+            
+            EventBoat.NewBestTime(levelName, myTime);
         }
         else
         {
-            float newBestTime = levelTimeData.SetNewBestTime(myTime);
+            levelTimeData.LevelName = levelName;
+            var newBestTime = levelTimeData.SetNewBestTime(myTime);
             bestTimeText.text = "Best Time:";
-            bestTimeValue.text = LevelTimer.GetTimeString(newBestTime);
+            bestTimeValue.text = LevelTimer.GetTimeString(newBestTime.Time);
+            if(newBestTime.IsNew){
+                EventBoat.NewBestTime(levelName, myTime);
+            }
         }
+        EventBoat.AddLevelComplete(levelName);
 
-        SetMedals(levelTimeData);
-    }
-    void SetMedals(LevelTimeSaveData levelTimeData)
-    {
+        //////////////////// Medal Shit ////////////////////
         float bestTime = levelTimeData.BestTime;
         int index = 0;
         while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
         {
+            if (index == 0)
+            {
+                EventBoat.BronzeMedalUnlock(levelName);
+            }
+            else if (index == 1)
+            {
+                EventBoat.SilverMedalUnlock(levelName);
+            }
+            else if (index == 2)
+            {
+                EventBoat.GoldMedalUnlock(levelName);
+            }
             index++;
+
         }
-        
+
         if (levelTimeData.MedalIndex != index - 1)
         {
             levelTimeData.SetNewMedalIndex(index - 1);
         }
-        
+
         if (levelTimeData.MedalIndex < 0)
         {
             medalImage.gameObject.SetActive(false);
@@ -102,7 +121,7 @@ public class LevelComplete : MonoBehaviour
             medalImage.gameObject.SetActive(true);
             medalImage.sprite = medalImages.Sprites[levelTimeData.MedalIndex];
         }
-        
+
         if (levelTimeData.MedalIndex < 2)
         {
             nextMedalTimeText.gameObject.SetActive(true);

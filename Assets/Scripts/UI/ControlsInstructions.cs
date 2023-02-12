@@ -27,7 +27,7 @@ public class ControlsInstructions : MonoBehaviour
             return;
         }
 
-        LevelTimeSaveData levelTimeSaveData = LevelTimeSaveLoader.Load(levelName);
+        LevelSaveData levelTimeSaveData = LevelTimeSaveLoader.Load(levelName);
         bool disableCanvas = true;
         if (levelTimeSaveData == null)
         {
