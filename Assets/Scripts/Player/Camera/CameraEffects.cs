@@ -32,8 +32,8 @@ public class CameraEffects : MonoBehaviour
     {
         playerRB = Player.Instance.modules.rigidbody;
 
-        cam.m_Lens.FieldOfView = Settings.GetFOV();
-        distanceCamera.fieldOfView = Settings.GetFOV();
+        cam.m_Lens.FieldOfView = Settings.GetFOV;
+        distanceCamera.fieldOfView = Settings.GetFOV;
         fov.baseValue = cam.m_Lens.FieldOfView;
         fov.value = fov.baseValue;
         fov.maxValue += fov.baseValue;

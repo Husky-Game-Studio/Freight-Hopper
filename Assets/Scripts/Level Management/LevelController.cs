@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class LevelController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class LevelController : MonoBehaviour
     [SerializeField] public Transform playerSpawnTransform;
     [SerializeField] private float spawnSnapSmoothing = 0.001f;
     public LevelData levelData;
+    public WorldListMetaData worldListMetaData;
 
     private const int highHeight = 999999;
 
@@ -46,6 +48,25 @@ public class LevelController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene(nextLevelName);
         }
+    }
+    public void LoadRandomLevel()
+    {
+        List<LevelData> validLevelData = new List<LevelData>();
+        foreach (WorldMetaData world in worldListMetaData.Worlds) 
+        {
+            if (world == null) continue;
+            foreach (LevelData level in world.Levels)
+            {
+                if (level != null && level.Enabled)
+                {
+                    validLevelData.Add(level);
+                }
+            }
+        }
+        int randomLevel = UnityEngine.Random.Range(0, validLevelData.Count);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        SceneLoader.LoadLevel(validLevelData[randomLevel].name);
     }
     public string GetNextLevel()
     {

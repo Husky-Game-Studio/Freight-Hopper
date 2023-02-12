@@ -42,13 +42,17 @@ public class LevelComplete : MonoBehaviour
     private void EnableLevelComplete()
     {
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
+        BestTime();
+        if (Settings.GetIsContinuousMode){
+            NextLevel();
+            return;
+        }
+
         timer.gameObject.SetActive(false);
         Player.Instance.modules.soundManager.StopAll();
-
-        
-        BestTime();
         PauseMenu.Instance.PauseGame();
         levelCompleteScreen.SetActive(true);
+        
     }
 
     private void BestTime()
@@ -56,7 +60,6 @@ public class LevelComplete : MonoBehaviour
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
         
         levelNameText.text = "Level " + levelName.Split(' ')[1]; // this just happens to always get the last number
-        
         
         LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         float myTime = timer.GetTime();
@@ -149,8 +152,16 @@ public class LevelComplete : MonoBehaviour
         {
             return;
         }
-        PauseMenu.Instance.ContinueGame();
-        LevelController.Instance.LoadNextLevel();
+        if(!Settings.GetIsContinuousMode){
+            PauseMenu.Instance.ContinueGame();
+        }
+        
+        if(Settings.GetIsRandomMode){
+            LevelController.Instance.LoadRandomLevel();
+        }else{
+            LevelController.Instance.LoadNextLevel();
+        }
+        
     }
     public void Menu(){
         if (!InGameStates.Instance.StateIs(InGameStates.States.LevelComplete))

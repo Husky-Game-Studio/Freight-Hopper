@@ -5,7 +5,6 @@ using UnityEngine.Audio;
 
 public class Settings : MonoBehaviour
 {
-    private bool antialiasing;
     private int shadowDistance;
     private int fov;
     private float mouseSensitivity;
@@ -13,8 +12,9 @@ public class Settings : MonoBehaviour
     private float musicVolume;
 
     public bool Vsync { get; private set; }
-
-    public bool Antialiasing => antialiasing;
+    public bool Antialiasing { get; private set; }
+    public bool Continuous { get; private set; }
+    public bool Random { get; private set; }
     public int ShadowDistance => shadowDistance;
     public int FOV => fov;
     public float MouseSensitivity => mouseSensitivity;
@@ -27,14 +27,16 @@ public class Settings : MonoBehaviour
 
     private enum SettingName
     {
-        VSync,
-        Antialiasing,
-        ShadowDistance,
-        Fov,
-        MouseXSensitivity,
-        MouseYSensitivity,
-        SoundEffectsVolume,
-        MusicVolume
+        VSync=0,
+        Antialiasing=1,
+        ShadowDistance=2,
+        Fov=3,
+        MouseXSensitivity=3,
+        MouseYSensitivity=4,
+        SoundEffectsVolume=5,
+        MusicVolume=6,
+        Continuous=7,
+        Random=8
     }
 
     public void Start()
@@ -46,10 +48,12 @@ public class Settings : MonoBehaviour
     public void LoadSettings()
     {
         Vsync = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.VSync.ToString(), 1));
-        antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Antialiasing.ToString(), 1));
+        Continuous = GetIsContinuousMode;
+        Random = GetIsRandomMode;
+        Antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Antialiasing.ToString(), 1));
         shadowDistance = PlayerPrefs.GetInt(SettingName.ShadowDistance.ToString(), 1000);
-        fov = PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
-        mouseSensitivity = PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 6);
+        fov = GetFOV;
+        mouseSensitivity = GetMouseSensitivity;
         soundEffectsVolume = PlayerPrefs.GetFloat(SettingName.SoundEffectsVolume.ToString(), 0.5f);
         musicVolume = PlayerPrefs.GetFloat(SettingName.MusicVolume.ToString(), 0.5f);
     }
@@ -57,24 +61,24 @@ public class Settings : MonoBehaviour
     public void SetSettings()
     {
         QualitySettings.vSyncCount = Vsync ? 1 : 0;
-        pipelineAsset.msaaSampleCount = antialiasing ? 4 : 1;
+        pipelineAsset.msaaSampleCount = Antialiasing ? 4 : 1;
         pipelineAsset.shadowDistance = shadowDistance;
         UpdateMixerVolume(musicVolumeMixer, musicVolume);
         UpdateMixerVolume(soundEffectsVolumeMixer, soundEffectsVolume);
     }
 
-    public static int GetFOV()
-    {
-        return PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
-    }
-    public static float GetMouseSensitivity()
-    {
-        return PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 5);;
-    }
+    public static int GetFOV => PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
+    public static float GetMouseSensitivity => PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 5);
+    public static bool GetIsRandomMode => Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Random.ToString(), 0));
+    public static bool GetIsContinuousMode => Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Continuous.ToString(), 0));
+
+
     public void SaveSettings()
     {
         PlayerPrefs.SetInt(SettingName.VSync.ToString(), Convert.ToInt32(Vsync));
-        PlayerPrefs.SetInt(SettingName.Antialiasing.ToString(), Convert.ToInt32(antialiasing));
+        PlayerPrefs.SetInt(SettingName.Antialiasing.ToString(), Convert.ToInt32(Antialiasing));
+        PlayerPrefs.SetInt(SettingName.Continuous.ToString(), Convert.ToInt32(Continuous));
+        PlayerPrefs.SetInt(SettingName.Random.ToString(), Convert.ToInt32(Random));
         PlayerPrefs.SetInt(SettingName.ShadowDistance.ToString(), shadowDistance);
         PlayerPrefs.SetInt(SettingName.Fov.ToString(), fov);
         PlayerPrefs.SetFloat(SettingName.MouseXSensitivity.ToString(), mouseSensitivity);
@@ -95,30 +99,17 @@ public class Settings : MonoBehaviour
         }
     }
 
-    public void SetVsync(bool val)
-    {
-        Vsync = val;
-    }
+    public void SetVsync(bool val) => Vsync = val;
+    public void SetAntialiasing(bool val) =>Antialiasing = val;
+    public void SetContinuous(bool val) => Continuous = val;
+    public void SetRandom(bool val) => Random = val;
 
-    public void SetAntialiasing(bool val)
-    {
-        antialiasing = val;
-    }
+    public void SetShadowDistance(float val) => shadowDistance = (int)val;
+  
 
-    public void SetShadowDistance(float val)
-    {
-        shadowDistance = (int)val;
-    }
+    public void SetFOV(float val) => fov = (int)val;
 
-    public void SetFOV(float val)
-    {
-        fov = (int)val;
-    }
-
-    public void SetMouseX(float val)
-    {
-        mouseSensitivity = val;
-    }
+    public void SetMouseSens(float val) => mouseSensitivity = val;
 
     public void SetSoundEffectsVolume(float val)
     {

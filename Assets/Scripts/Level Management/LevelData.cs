@@ -18,6 +18,7 @@ public class LevelData : ScriptableObject
     [SerializeField] private string customNextLevelName;
     [SerializeField] private float speed;
     [SerializeField] private bool snapDownAtStart = true;
+    [SerializeField] private bool enabled = false;
     [SerializeField] private LayerMask layerMask;
 
     [Header("Meta Data")]
@@ -32,6 +33,7 @@ public class LevelData : ScriptableObject
     public string Title => title;
     public Texture2D Image => image;
     public bool SnapDownAtStart => snapDownAtStart;
+    public bool Enabled => enabled;
     public LayerMask PlayerLayerMask => layerMask;
     public IList<float> MedalTimes => Array.AsReadOnly(medalTimes);
 }

@@ -68,7 +68,7 @@ public static class LevelTimeSaveLoader
                 {
                     case 1:
                         temp = new LevelSaveData();
-                        temp.SetNewBestTime(reader.ReadSingle(), false);
+                        temp.BestTime = reader.ReadSingle();
                         temp.SetNewMedalIndex(reader.ReadInt32(), false);
                         break;
                 }
@@ -88,8 +88,7 @@ public static class LevelTimeSaveLoader
         try 
         {
             temp = JsonConvert.DeserializeObject<LevelSaveData>(text);
-        } catch (Exception e){
-            Debug.LogError(e);
+        } catch {
             return temp;
         }
 
@@ -120,8 +119,17 @@ public static class LevelTimeSaveLoader
     }
     private static string Decrypt(string s, int version)
     {
-        if(version == 2){
-            return Encoding.UTF8.GetString(System.Convert.FromBase64String(s));
+        string tmp;
+        if (version == 2){
+            try
+            {
+                tmp = Encoding.UTF8.GetString(System.Convert.FromBase64String(s));
+            }
+            catch
+            {
+                return s;
+            }
+            return tmp;
         }
         return s;
     }

@@ -24,7 +24,7 @@ public class FirstPersonCamera : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         
-        float mouseSensitivity = Settings.GetMouseSensitivity();
+        float mouseSensitivity = Settings.GetMouseSensitivity;
         player = Player.Instance.transform.Find("Mesh");
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity / mouseSensitivityConversionValue;
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed = mouseSensitivity / mouseSensitivityConversionValue;
