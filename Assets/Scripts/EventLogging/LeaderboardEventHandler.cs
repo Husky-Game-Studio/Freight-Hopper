@@ -43,7 +43,7 @@ public class LeaderboardEventHandler : MonoBehaviour
         leaderboardHandlers[level].FindLeaderboardAndUploadScore(level);
     }
 
-    public IEnumerator GetTimes(string level, int amount,
+    public static IEnumerator GetTimes(string level, int amount,
                                 List<SteamTrain.LeaderboardEntry> result,
                                 List<SteamTrain.LeaderboardEntry> resultFriends)
     {
@@ -90,7 +90,7 @@ public class LeaderboardEventHandler : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator GetRelativeTimes(string level, int amount,
+    public static IEnumerator GetRelativeTimes(string level, int amount,
                                         List<SteamTrain.LeaderboardEntry> result,
                                         List<SteamTrain.LeaderboardEntry> resultFriends)
     {
