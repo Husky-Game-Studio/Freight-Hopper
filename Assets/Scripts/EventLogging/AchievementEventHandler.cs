@@ -29,9 +29,7 @@ public class AchievementEventHandler : MonoBehaviour
             EventBoat.SeenRoberto += CheckAndCountRobertos;
         }
         else
-        {
             Debug.Log("Did not subscribe events because Steam Stats were not retrieved.");
-        }
     }
 
     // subscribble for level completes, which should increment the achievement count

@@ -11,7 +11,7 @@ namespace SteamTrain
         private StatAchieveMap mapSO; 
         public static Dictionary<string, string[]> stat_achievementMap = new Dictionary<string, string[]>();
         public static bool statsRetrieved { get; private set; } = false;
-        public int testCase = 1;
+        public int testCase = 0;
 
         void Start()
         {
