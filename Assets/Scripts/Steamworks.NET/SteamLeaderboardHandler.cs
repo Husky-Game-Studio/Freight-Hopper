@@ -217,7 +217,7 @@ namespace SteamTrain
                     LeaderboardEntry toAdd = new LeaderboardEntry
                     {
                         rank = tempEntry.m_nGlobalRank,
-                        playername = SteamFriends.GetFriendPersonaName(tempEntry.m_steamIDUser),
+                        playerName = SteamFriends.GetFriendPersonaName(tempEntry.m_steamIDUser),
                         timeSeconds = tempEntry.m_nScore / 1000f
                     };
                     readableLeaderboard.Add(toAdd);

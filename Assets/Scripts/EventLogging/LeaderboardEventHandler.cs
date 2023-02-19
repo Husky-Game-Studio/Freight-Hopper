@@ -64,7 +64,7 @@ public class LeaderboardEventHandler : MonoBehaviour
                 result.AddRange(leaderboardHandlers[level].readableLeaderboard);
                 for (int j = 0; j < result.Count; ++j)
                 {
-                    Debug.Log(result[j].playername);
+                    Debug.Log(result[j].playerName);
                 }
                 Debug.Log("Leaderboard End");
             }
@@ -82,7 +82,7 @@ public class LeaderboardEventHandler : MonoBehaviour
                 resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
                 for (int j = 0; j < resultFriends.Count; ++j)
                 {
-                    Debug.Log(resultFriends[j].playername);
+                    Debug.Log(resultFriends[j].playerName);
                 }
                 Debug.Log("Friend Leaderboard End");
             }
@@ -111,7 +111,7 @@ public class LeaderboardEventHandler : MonoBehaviour
                 result.AddRange(leaderboardHandlers[level].readableLeaderboard);
                 for (int j = 0; j < result.Count; ++j)
                 {
-                    Debug.Log(result[j].playername);
+                    Debug.Log(result[j].playerName);
                 }
                 Debug.Log("Leaderboard End");
             }
@@ -134,7 +134,7 @@ public class LeaderboardEventHandler : MonoBehaviour
                 resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
                 for (int j = 0; j < resultFriends.Count; ++j)
                 {
-                    Debug.Log(resultFriends[j].playername);
+                    Debug.Log(resultFriends[j].playerName);
                 }
                 Debug.Log("Friend Leaderboard End");
             }

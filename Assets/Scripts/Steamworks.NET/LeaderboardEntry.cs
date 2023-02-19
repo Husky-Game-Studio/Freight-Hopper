@@ -7,7 +7,7 @@ namespace SteamTrain
     public class LeaderboardEntry
     {
         public int rank;
-        public string playername;
+        public string playerName;
         public float timeSeconds;
     }
 }
