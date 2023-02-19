@@ -28,6 +28,10 @@ public class AchievementEventHandler : MonoBehaviour
             EventBoat.GoldMedalUnlock += CheckAndCountGoldMedals;
             EventBoat.SeenRoberto += CheckAndCountRobertos;
         }
+        else
+        {
+            Debug.Log("Did not subscribe events because Steam Stats were not retrieved.");
+        }
     }
 
     // subscribble for level completes, which should increment the achievement count
@@ -36,10 +40,8 @@ public class AchievementEventHandler : MonoBehaviour
         int count = 0;
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
-        {
-            if (LevelTimeSaveLoader.Load(level) != null)
+            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
                 ++count;
-        }
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertCompletionStat, out currentProgress))
@@ -52,12 +54,12 @@ public class AchievementEventHandler : MonoBehaviour
         int count = 0;
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
-        {
-            LevelSaveData save = LevelTimeSaveLoader.Load(level);
-            if (save != null)
+            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
+            {
+                LevelSaveData save = LevelTimeSaveLoader.Load(s);
                 if (save.MedalIndex >= 0)
                     ++count;
-        }
+            }
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertBronzeStat, out currentProgress))
@@ -70,12 +72,12 @@ public class AchievementEventHandler : MonoBehaviour
         int count = 0;
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
-        {
-            LevelSaveData save = LevelTimeSaveLoader.Load(level);
-            if (save != null)
+            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
+            {
+                LevelSaveData save = LevelTimeSaveLoader.Load(s);
                 if (save.MedalIndex >= 1)
                     ++count;
-        }
+            }
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertSilverStat, out currentProgress))
@@ -88,15 +90,15 @@ public class AchievementEventHandler : MonoBehaviour
         int count = 0;
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
-        {
-            LevelSaveData save = LevelTimeSaveLoader.Load(level);
-            if (save != null)
+            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
+            {
+                LevelSaveData save = LevelTimeSaveLoader.Load(s);
                 if (save.MedalIndex >= 2)
                     ++count;
-        }
+            }
 
         int currentProgress;
-        if (SteamTrain.SteamAchievementHandler.GetStat(desertSilverStat, out currentProgress))
+        if (SteamTrain.SteamAchievementHandler.GetStat(desertGoldStat, out currentProgress))
             if (currentProgress < count)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertGoldStat, count);
     }
@@ -106,13 +108,15 @@ public class AchievementEventHandler : MonoBehaviour
         int count = 0;
         // this cleared levels count will be changed
         foreach (string s in desertLevelNamesForAchievements)
-        {
-            if (LevelTimeSaveLoader.Load(level) != null)
-                ++count;
-        }
+            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
+            {
+                LevelSaveData save = LevelTimeSaveLoader.Load(s);
+                if (save.RobertoFound)
+                    ++count;
+            }
 
         int currentProgress;
-        if (SteamTrain.SteamAchievementHandler.GetStat(desertCompletionStat, out currentProgress))
+        if (SteamTrain.SteamAchievementHandler.GetStat(desertRobertoStat, out currentProgress))
             if (currentProgress < count)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertRobertoStat, count);
     }
