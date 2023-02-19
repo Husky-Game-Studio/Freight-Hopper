@@ -7,7 +7,7 @@ namespace SteamTrain
 {
     // https://stackoverflow.com/questions/37842524/how-to-do-leaderboards-in-steamworks-net
     // https://partner.steamgames.com/doc/features/leaderboards/guide
-    public class SteamLeaderboardHandler
+    public class SteamLeaderboardHandler : MonoBehaviour
     {
         public SteamLeaderboard_t currentLeaderboard { get; private set; }
         private CallResult<LeaderboardFindResult_t> callResultFindLeaderboard = new CallResult<LeaderboardFindResult_t>();
