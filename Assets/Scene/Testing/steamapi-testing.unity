@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 2128651585}
   - component: {fileID: 2128651586}
   - component: {fileID: 2128651587}
+  - component: {fileID: 2128651588}
   m_Layer: 0
   m_Name: SteamManager
   m_TagString: Untagged
@@ -447,8 +448,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e39519355e0cb649a6b85c258bb0f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaderboards:
-  - 1 1
-  - 1 1 Friend
-  testCase: 2
+  testCase: 0
   testSeconds: 25
+--- !u!114 &2128651588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128651582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad04e1bf6ee56344b8b3c1a7cd8ac80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
