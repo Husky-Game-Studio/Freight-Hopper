@@ -46,7 +46,7 @@ public class AchievementEventHandler : MonoBehaviour
                     ++bronzeCount;
                 if (save.MedalIndex >= 1)
                     ++silverCount;
-                if (save.MedalIndex >= 1)
+                if (save.MedalIndex >= 2)
                     ++goldCount;
                 if (save.RobertoFound)
                     ++robCount;
