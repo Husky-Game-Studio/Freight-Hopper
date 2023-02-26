@@ -177,7 +177,7 @@ namespace SteamTrain
             }
             SendPacketWithHeader(dest, PacketID.Pos, 
                                  positionPacket, 
-                                 EP2PSend.k_EP2PSendUnreliableNoDelay);
+                                 EP2PSend.k_EP2PSendReliable);
         }
 
         // we'll use this for 2 things: one, to initialize the P2P session, and two, to decide whether or not to send packets
