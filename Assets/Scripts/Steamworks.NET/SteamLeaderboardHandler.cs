@@ -137,7 +137,6 @@ namespace SteamTrain
             if (r.m_bLeaderboardFound == 1 && !failure)
             {
                 foundLeaderboard = true;
-                Debug.Log("Found leaderboard.");
                 currentLeaderboard = r.m_hSteamLeaderboard;
                 DownloadScores(firstLimit, secondLimit);
             }
@@ -152,7 +151,6 @@ namespace SteamTrain
             if (r.m_bLeaderboardFound == 1 && !failure)
             {
                 foundLeaderboard = true;
-                Debug.Log("Found leaderboard.");
                 currentLeaderboard = r.m_hSteamLeaderboard;
                 DownloadFriendScores(firstLimit, secondLimit);
             }
@@ -167,7 +165,6 @@ namespace SteamTrain
             if (r.m_bLeaderboardFound == 1 && !failure)
             {
                 foundLeaderboard = true;
-                Debug.Log("Found relative leaderboard.");
                 currentLeaderboard = r.m_hSteamLeaderboard;
                 DownloadRelativeScores(firstLimit, secondLimit);
             }
@@ -182,7 +179,6 @@ namespace SteamTrain
             if (r.m_bLeaderboardFound == 1 && !failure)
             {
                 foundLeaderboard = true;
-                Debug.Log("Found leaderboard.");
                 currentLeaderboard = r.m_hSteamLeaderboard;
                 UploadTimeBestTime(newScore);
             }
@@ -194,10 +190,8 @@ namespace SteamTrain
         {
             if (r.m_bSuccess == 1 && !failure)
             {
-                Debug.Log("Score uploaded.");
                 if (r.m_bScoreChanged == 1)
                 {
-                    Debug.Log("Updated score.");
                     SteamBus.OnNewBestTime.Invoke();
                 }
             }
@@ -210,7 +204,6 @@ namespace SteamTrain
             downloadingLeaderboards = false;
             if (r.m_cEntryCount > 0 && !failure)
             {
-                Debug.Log("Scores downloaded.");
                 readableLeaderboard.Clear();
                 for (int i = 0; i < r.m_cEntryCount; ++i)
                 {

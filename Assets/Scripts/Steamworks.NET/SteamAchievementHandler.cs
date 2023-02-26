@@ -63,13 +63,13 @@ namespace SteamTrain
         public static bool UnlockAchievement(string id)
         {
             bool flag;
-            Debug.Log(SteamUserStats.GetAchievement(id, out flag));
+            SteamUserStats.GetAchievement(id, out flag);
             if (!flag)
                if(SteamUserStats.SetAchievement(id))
                     // this has a callback, which should probably be tracked somewhere for errors
                    return SteamUserStats.StoreStats();
 
-            Debug.Log("This achivement does not exist, or is not published, or the ID is wrong.");
+            Debug.Log($"Achivement {id} does not exist, or is not published, or the ID is wrong.");
             return false;
         }
 
@@ -101,31 +101,30 @@ namespace SteamTrain
 
         public static bool SetStatsAndCheckAchievements(string id, int progress, bool request = true)
         {
-            if (stat_achievementMap.ContainsKey(id))
-            {
-                foreach (string s in stat_achievementMap[id])
-                {
-                    // technically would be more optimal to just set instead of get
-                    // however, the get is necessary if I want to prioritize the steam interface
-                    Debug.Log(s);
-                    // i have no idea why, but this is no longer working https://github.com/rlabrecque/Steamworks.NET/issues/448
-                    /*
-                    int minProg;
-                    int maxProg;
-                    if (SteamUserStats.GetAchievementProgressLimits(s, out minProg, out maxProg))
-                    {
-                        Debug.Log(maxProg);
-                        if (progress >= maxProg)
-                            Debug.Log(UnlockAchievement(s));
-                    }*/
-                    if (progress >= 10)
-                        Debug.Log(UnlockAchievement(s));
-                }
-                
-            }
+            //if (stat_achievementMap.ContainsKey(id))
+            //{
+            //    foreach (string s in stat_achievementMap[id])
+            //    {
+            //        // technically would be more optimal to just set instead of get
+            //        // however, the get is necessary if I want to prioritize the steam interface
+            //        //Debug.Log(s);
+            //        // i have no idea why, but this is no longer working https://github.com/rlabrecque/Steamworks.NET/issues/448
+            //        /*
+            //        int minProg;
+            //        int maxProg;
+            //        if (SteamUserStats.GetAchievementProgressLimits(s, out minProg, out maxProg))
+            //        {
+            //            Debug.Log(maxProg);
+            //            if (progress >= maxProg)
+            //                Debug.Log(UnlockAchievement(s));
+            //        }*/
+            //        if (progress >= 10)
+            //            //Debug.Log(UnlockAchievement(s));
+            //    }
+            //}
             if (SteamUserStats.SetStat(id, progress) && request)
                 return SteamUserStats.StoreStats();
-            Debug.Log("Stat failed to set.");
+            Debug.Log($"{id} failed to set.");
             return false;
         }
 

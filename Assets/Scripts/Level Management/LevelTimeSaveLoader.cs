@@ -10,23 +10,6 @@ public static class LevelTimeSaveLoader
     public const string levelDataPath = "/LevelTimes/";
     public const string fileExtension = ".lvl";
 
-    // Deletes all .lvl files in /LevelTimes/
-    public static void ClearBestTimeData()
-    {
-        string folderpath = Application.persistentDataPath + levelDataPath;
-        FileInfo[] files = new DirectoryInfo(folderpath).GetFiles();
-        foreach (FileInfo file in files)
-        {
-            if (file.Extension.Equals(fileExtension))
-            {
-                LevelSaveData data = Load(file.Name);
-                if (data == null) continue;
-                data.ResetBestTime();
-                Save(file.Name, data);
-            }
-        }
-    }
-
     public static void Save(string levelName, LevelSaveData data)
     {
         string filename = GetFileName(levelName);

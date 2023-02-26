@@ -13,11 +13,10 @@ public class LevelComplete : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private TextMeshProUGUI timerText;
-    [SerializeField] private TextMeshProUGUI bestTimeText;
     [SerializeField] private TextMeshProUGUI nextMedalTimeText;
+    [SerializeField] private GameObject breakpointImage;
     
     [SerializeField] private TextMeshProUGUI timerValue;
-    [SerializeField] private TextMeshProUGUI bestTimeValue;
     [SerializeField] private TextMeshProUGUI nextMedalTimeValue;
 
     private void Awake()
@@ -32,7 +31,6 @@ public class LevelComplete : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Menu.performed += Menu;
         UserInput.Instance.UserInputMaster.Player.Next.performed += NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed += RestartLevel;
-        SteamBus.GetBestTime += SetBestTimeText;
         SteamBus.OnNewBestTime += CallBestTimeSfx;
     }
     private void OnDisable()
@@ -41,11 +39,7 @@ public class LevelComplete : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Menu.performed -= Menu;
         UserInput.Instance.UserInputMaster.Player.Next.performed -= NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed -= RestartLevel;
-        SteamBus.GetBestTime -= SetBestTimeText;
-    }
-    private void SetBestTimeText(float val){
-        bestTimeText.text = "Best Time:";
-        bestTimeValue.text = LevelTimer.GetTimeString(val);
+        SteamBus.OnNewBestTime -= CallBestTimeSfx;
     }
     private void CallBestTimeSfx(){
         Debug.Log("GREAT JOB");
@@ -69,7 +63,8 @@ public class LevelComplete : MonoBehaviour
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
         
-        levelNameText.text = "Level " + levelName.Split(' ')[1]; // this just happens to always get the last number
+
+        levelNameText.text = LevelController.Instance.worldListMetaData.GetWorld("Desert").GetLevel(levelName).Title; // this just happens to always get the last number
         
         LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         float myTime = timer.GetTime();
@@ -78,17 +73,16 @@ public class LevelComplete : MonoBehaviour
         if (levelTimeData == null)
         {
             Debug.Log("no save data found, saving new time");
-            
-            levelTimeData = new LevelSaveData();
-            SetBestTimeText(myTime);
-            levelTimeData.LevelName = levelName;
+            levelTimeData = new LevelSaveData
+            {
+                LevelName = levelName
+            };
             levelTimeData.SetNewBestTime(myTime, true);
         }
         else
         {
             levelTimeData.LevelName = levelName;
-            var newBestTime = levelTimeData.SetNewBestTime(myTime);
-            SetBestTimeText(newBestTime.Time);
+            levelTimeData.SetNewBestTime(myTime);
         }
 
         //////////////////// Medal Shit ////////////////////
@@ -118,13 +112,15 @@ public class LevelComplete : MonoBehaviour
         {
             nextMedalTimeText.gameObject.SetActive(true);
             nextMedalTimeValue.gameObject.SetActive(true);
-            nextMedalTimeText.text = "Next Medal Time:";
+            breakpointImage.SetActive(true);
+            nextMedalTimeText.text = "Medal Time:";
             nextMedalTimeValue.text = LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
         }
         else
         {
             nextMedalTimeText.gameObject.SetActive(false);
             nextMedalTimeValue.gameObject.SetActive(false);
+            breakpointImage.SetActive(false);
         }
 
         LevelCompleteData data = new LevelCompleteData

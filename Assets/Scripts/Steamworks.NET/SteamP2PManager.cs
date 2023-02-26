@@ -236,8 +236,8 @@ namespace SteamTrain
                             break;
                         case PacketID.SceneIndex:
                             lobbyMemberSceneDict[remoteId] = TranslateToSceneIntPacket(buffer);
-                            Debug.Log("Packet from " + remoteId.m_SteamID.ToString() + 
-                                        ": Scene " + lobbyMemberSceneDict[remoteId]);
+                            //Debug.Log("Packet from " + remoteId.m_SteamID.ToString() + 
+                            //            ": Scene " + lobbyMemberSceneDict[remoteId]);
                             break;
                     }
                 }
