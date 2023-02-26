@@ -28,4 +28,8 @@ public class Player : MonoBehaviour
         instance = this;
         PlayerLoadedIn?.Invoke();
     }
+    private void OnDisable()
+    {
+        instance = null;
+    }
 }
