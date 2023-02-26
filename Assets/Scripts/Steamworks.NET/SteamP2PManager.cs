@@ -28,6 +28,10 @@ namespace SteamTrain
         public static Dictionary<CSteamID, int> lobbyMemberSceneDict = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, Vector3> lobbyMemberLastPosDict = new Dictionary<CSteamID, Vector3>();
 
+        // For multiplayer
+        public static Action<string> OnPlayerJoinedGame = delegate { }; // playerName
+        public static Action<string> OnPlayerLeftGame = delegate { }; // playerName
+
         public enum PacketID
         {
             Pos = 0,
@@ -139,8 +143,17 @@ namespace SteamTrain
             Debug.Log("Something be happening to the lobby.");
             if(request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeEntered)
             {
-                Debug.Log("OMG" + request.m_ulSteamIDUserChanged.ToString() + " JOINED!!!!!!");
-                SendSceneNamePacket(SceneManager.GetActiveScene().name, new CSteamID(request.m_ulSteamIDUserChanged));
+                Debug.Log("OMG " + request.m_ulSteamIDUserChanged.ToString() + " JOINED!!!!!!");
+                CSteamID newguy = new CSteamID(request.m_ulSteamIDUserChanged);
+                SendSceneNamePacket(SceneManager.GetActiveScene().name, newguy);
+                OnPlayerJoinedGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
+            }
+            else if(request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeLeft)
+            {
+                Debug.Log("BRUH, " + request.m_ulSteamIDUserChanged.ToString() + " LEFT!!!!!!");
+                CSteamID newguy = new CSteamID(request.m_ulSteamIDUserChanged);
+                SendSceneNamePacket(SceneManager.GetActiveScene().name, newguy);
+                OnPlayerLeftGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
             }
         }
 
@@ -178,7 +191,7 @@ namespace SteamTrain
             }
             SendPacketWithHeader(dest, PacketID.Pos, 
                                  positionPacket, 
-                                 EP2PSend.k_EP2PSendReliable);
+                                 EP2PSend.k_EP2PSendUnreliableNoDelay);
         }
 
         // we'll use this for 2 things: one, to initialize the P2P session, and two, to decide whether or not to send packets

@@ -5,7 +5,7 @@ using UnityEngine;
 public class AchievementEventHandler : MonoBehaviour
 {
     [SerializeField]
-    private List<string> desertLevelNamesForAchievements;
+    private List<string> desertLevelNames = new List<string>();
     [SerializeField]
     private string desertCompletionStat = "DesertCompletionStat";
     [SerializeField]
@@ -22,100 +22,52 @@ public class AchievementEventHandler : MonoBehaviour
     {
         if (SteamTrain.SteamAchievementHandler.statsRetrieved)
         {
-            EventBoat.AddLevelComplete += CheckAndCountLevels;
-            EventBoat.BronzeMedalUnlock += CheckAndCountBronzeMedals;
-            EventBoat.SilverMedalUnlock += CheckAndCountSilverMedals;
-            EventBoat.GoldMedalUnlock += CheckAndCountGoldMedals;
-            EventBoat.SeenRoberto += CheckAndCountRobertos;
+            EventBoat.OnLevelComplete += CheckAndCountLevels;
         }
         else
             Debug.Log("Did not subscribe events because Steam Stats were not retrieved.");
     }
 
     // subscribble for level completes, which should increment the achievement count
-    private void CheckAndCountLevels(string level)
+    private void CheckAndCountLevels(LevelCompleteData level)
     {
-        int count = 0;
+        int levelCount = 0;
+        int bronzeCount = 0;
+        int silverCount = 0;
+        int goldCount = 0;
+        int robCount = 0;
         // this cleared levels count will be changed
-        foreach (string s in desertLevelNamesForAchievements)
+        foreach (var s in desertLevelNames)
             if (LevelTimeSaveLoader.LevelSaveDataExists(s))
-                ++count;
+            {
+                LevelSaveData save = LevelTimeSaveLoader.Load(s);
+                ++levelCount;
+                if (save.MedalIndex >= 0)
+                    ++bronzeCount;
+                if (save.MedalIndex >= 1)
+                    ++silverCount;
+                if (save.MedalIndex >= 1)
+                    ++goldCount;
+                if (save.RobertoFound)
+                    ++robCount;
+            }       
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertCompletionStat, out currentProgress))
-            if (currentProgress <= count)
-                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertCompletionStat, count);
-    }
-
-    private void CheckAndCountBronzeMedals(string level)
-    {
-        int count = 0;
-        // this cleared levels count will be changed
-        foreach (string s in desertLevelNamesForAchievements)
-            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
-            {
-                LevelSaveData save = LevelTimeSaveLoader.Load(s);
-                if (save.MedalIndex >= 0)
-                    ++count;
-            }
-
-        int currentProgress;
+            if (currentProgress <= levelCount)
+                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertCompletionStat, levelCount);
         if (SteamTrain.SteamAchievementHandler.GetStat(desertBronzeStat, out currentProgress))
-            if (currentProgress <= count)
-                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertBronzeStat, count);
-    }
-
-    private void CheckAndCountSilverMedals(string level)
-    {
-        int count = 0;
-        // this cleared levels count will be changed
-        foreach (string s in desertLevelNamesForAchievements)
-            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
-            {
-                LevelSaveData save = LevelTimeSaveLoader.Load(s);
-                if (save.MedalIndex >= 1)
-                    ++count;
-            }
-
-        int currentProgress;
+            if (currentProgress <= bronzeCount)
+                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertBronzeStat, bronzeCount);
         if (SteamTrain.SteamAchievementHandler.GetStat(desertSilverStat, out currentProgress))
-            if (currentProgress <= count)
-                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertSilverStat, count);
-    }
-
-    private void CheckAndCountGoldMedals(string level)
-    {
-        int count = 0;
-        // this cleared levels count will be changed
-        foreach (string s in desertLevelNamesForAchievements)
-            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
-            {
-                LevelSaveData save = LevelTimeSaveLoader.Load(s);
-                if (save.MedalIndex >= 2)
-                    ++count;
-            }
-
-        int currentProgress;
+            if (currentProgress <= silverCount)
+                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertSilverStat, silverCount);
         if (SteamTrain.SteamAchievementHandler.GetStat(desertGoldStat, out currentProgress))
-            if (currentProgress <= count)
-                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertGoldStat, count);
-    }
-
-    private void CheckAndCountRobertos(string level)
-    {
-        int count = 0;
-        // this cleared levels count will be changed
-        foreach (string s in desertLevelNamesForAchievements)
-            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
-            {
-                LevelSaveData save = LevelTimeSaveLoader.Load(s);
-                if (save.RobertoFound)
-                    ++count;
-            }
-
-        int currentProgress;
+            if (currentProgress <= goldCount)
+                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertGoldStat, goldCount);
         if (SteamTrain.SteamAchievementHandler.GetStat(desertRobertoStat, out currentProgress))
-            if (currentProgress <= count)
-                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertRobertoStat, count);
+            if (currentProgress <= robCount)
+                SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertRobertoStat, robCount);
+
     }
 }

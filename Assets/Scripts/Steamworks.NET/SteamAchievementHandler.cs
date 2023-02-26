@@ -50,8 +50,13 @@ namespace SteamTrain
                                 Debug.Log("Delete index one of all achievements.");
                                 Debug.Log(ClearAchievement(a.achievements[0]));
                                 break;
+                            case 5:
+                                Debug.Log("No more achievements.");
+                                Debug.Log(ObliterateEverything());
+                                break;
                         }
                     }
+                else Debug.Log("Crippling depression");
             }
         }
 
