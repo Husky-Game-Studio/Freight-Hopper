@@ -43,7 +43,7 @@ public class AchievementEventHandler : MonoBehaviour
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertCompletionStat, out currentProgress))
-            if (currentProgress < count)
+            if (currentProgress <= count)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertCompletionStat, count);
     }
 
@@ -61,7 +61,7 @@ public class AchievementEventHandler : MonoBehaviour
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertBronzeStat, out currentProgress))
-            if (currentProgress < count)
+            if (currentProgress <= count)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertBronzeStat, count);
     }
 
@@ -79,7 +79,7 @@ public class AchievementEventHandler : MonoBehaviour
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertSilverStat, out currentProgress))
-            if (currentProgress < count)
+            if (currentProgress <= count)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertSilverStat, count);
     }
 
@@ -97,7 +97,7 @@ public class AchievementEventHandler : MonoBehaviour
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertGoldStat, out currentProgress))
-            if (currentProgress < count)
+            if (currentProgress <= count)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertGoldStat, count);
     }
 
@@ -115,7 +115,7 @@ public class AchievementEventHandler : MonoBehaviour
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertRobertoStat, out currentProgress))
-            if (currentProgress < count)
+            if (currentProgress <= count)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertRobertoStat, count);
     }
 }
