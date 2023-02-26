@@ -15,6 +15,6 @@ public class PlayerDummyName : MonoBehaviour
 
     public void Update()
     {
-        this.transform.LookAt(cam.transform);
+        textMeshProUGUI.transform.LookAt(cam.transform);
     }
 }
