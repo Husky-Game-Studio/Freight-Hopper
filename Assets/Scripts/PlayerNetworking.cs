@@ -41,6 +41,8 @@ public class PlayerNetworking : MonoBehaviour
                 {
                     Debug.Log("A new player has been made.");
                     dummyDict[lobbyMembers.Key] = Instantiate(playerDummyPrefab.gameObject).transform;
+                    dummyDict[lobbyMembers.Key].GetComponent<PlayerDummyName>().SetText(
+                                                Steamworks.SteamFriends.GetFriendPersonaName(lobbyMembers.Key));
                 }
                 if(SteamTrain.SteamP2PManager.lobbyMemberLastPosDict.ContainsKey(lobbyMembers.Key))
                     dummyDict[lobbyMembers.Key].position = SteamTrain.SteamP2PManager.lobbyMemberLastPosDict[lobbyMembers.Key];

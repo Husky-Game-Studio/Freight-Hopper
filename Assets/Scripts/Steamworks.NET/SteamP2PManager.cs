@@ -48,7 +48,7 @@ namespace SteamTrain
         public static void BroadcastPositionToLobby(Vector3 pos)
         {
             Debug.Log("Broadcast position.");
-            foreach(var dest in lobbyMemberSceneDict)
+            foreach (var dest in lobbyMemberSceneDict)
                 if(dest.Key != SteamUser.GetSteamID() &&
                     dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
                     SendPositionPacket(pos, dest.Key);
