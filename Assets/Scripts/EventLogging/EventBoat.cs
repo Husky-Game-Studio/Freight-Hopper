@@ -9,17 +9,17 @@ public static class EventBoat
     [Obsolete] public static Action<string> SilverMedalUnlock  = delegate { }; // levelID
     [Obsolete] public static Action<string> GoldMedalUnlock    = delegate { }; // levelID
 
-    // For achievements
     public static Action<LevelCompleteData> OnLevelComplete = delegate { };
     public static Action<string>            SeenRoberto     = delegate { }; // levelID
 
     // For leaderboards
-    public static Action<float>     OnNewBestTime       = delegate { }; // The time
+    //public static Action<float>     GetBestTime         = delegate { };     // The time
+    //public static Action            OnNewBestTime       = delegate { };
 
 
     // For multiplayer
-    public static Action<string>    OnPlayerJoinedGame  = delegate { }; // playerName
-    public static Action<string>    OnPlayerLeavedGame  = delegate { }; // playerName
+    //public static Action<string>    OnPlayerJoinedGame  = delegate { }; // playerName
+    //public static Action<string>    OnPlayerLeavedGame  = delegate { }; // playerName
 }
 
 public struct LevelCompleteData
