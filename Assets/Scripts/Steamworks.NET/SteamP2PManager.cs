@@ -49,7 +49,8 @@ namespace SteamTrain
         {
             Debug.Log("Broadcast position.");
             foreach(var dest in lobbyMemberSceneDict)
-                if(dest.Value != lobbyMemberSceneDict[SteamUser.GetSteamID()])
+                if(dest.Key != SteamUser.GetSteamID() &&
+                    dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
                     SendPositionPacket(pos, dest.Key);
         }
 
