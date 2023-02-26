@@ -200,7 +200,7 @@ namespace SteamTrain
                     Debug.Log("Updated score.");
                     SteamBus.OnNewBestTime.Invoke();
                 }
-                SteamBus.GetBestTime.Invoke(r.m_nScore);
+                SteamBus.GetBestTime.Invoke(r.m_nScore/1000f);
             }
             else
                 Debug.Log("Failed to upload score.");
