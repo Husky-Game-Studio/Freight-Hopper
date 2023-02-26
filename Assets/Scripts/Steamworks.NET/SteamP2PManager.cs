@@ -37,7 +37,6 @@ namespace SteamTrain
         public static void Init()
         {
             // setup the callback method
-            Debug.Log("Networking Initializing");
             _p2PSessionRequestCallback = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
             _gameLobbyJoinRequestedCallback = Callback<GameLobbyJoinRequested_t>.Create(OnLobbyJoinRequest);
             _gameLobbyUpdatedCallback = Callback<LobbyChatUpdate_t>.Create(OnLobbyUpdate);
