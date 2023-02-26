@@ -34,7 +34,6 @@ public class PlayerNetworking : MonoBehaviour
             // synchronize positions and spawn players if needed
             foreach(var lobbyMembers in SteamTrain.SteamP2PManager.lobbyMemberSceneDict)
             {
-                Debug.Log("Replicating user: " + lobbyMembers.Key.m_SteamID.ToString());
                 if (lobbyMembers.Value != currScene || lobbyMembers.Key == Steamworks.SteamUser.GetSteamID())
                     continue;
                 if(!dummyDict.ContainsKey(lobbyMembers.Key))

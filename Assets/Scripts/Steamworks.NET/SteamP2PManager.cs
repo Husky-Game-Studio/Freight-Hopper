@@ -47,7 +47,6 @@ namespace SteamTrain
         // only broadcast to users in the same scene
         public static void BroadcastPositionToLobby(Vector3 pos)
         {
-            Debug.Log("Broadcast position.");
             foreach (var dest in lobbyMemberSceneDict)
                 if(dest.Key != SteamUser.GetSteamID() &&
                     dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
@@ -57,7 +56,6 @@ namespace SteamTrain
         // call this on scene change once
         public static void BroadcastCurrentSceneToLobby()
         {
-            Debug.Log("Broadcast scene name.");
             foreach (var dest in lobbyMemberSceneDict)
               SendSceneNamePacket(SceneManager.GetActiveScene().name, dest.Key);
         }
@@ -96,9 +94,7 @@ namespace SteamTrain
             {
                 Debug.Log("Successfully made lobby of id " + r.m_ulSteamIDLobby.ToString());
                 lobbyID = new CSteamID(r.m_ulSteamIDLobby);
-                Debug.Log(GetCurrentLobbyMembers().Count.ToString() + " in this Lobby.");
                 lobbyMemberSceneDict[SteamUser.GetSteamID()] = SceneManager.GetActiveScene().buildIndex;
-                Debug.Log(lobbyMemberSceneDict[SteamUser.GetSteamID()]);
                 SendSceneNamePacket(SceneManager.GetActiveScene().name, SteamUser.GetSteamID());
                 joinedLobby = true;
             }
@@ -136,7 +132,6 @@ namespace SteamTrain
 
         private static void OnLobbyUpdate(LobbyChatUpdate_t request)
         {
-            Debug.Log("Something be happening to the lobby.");
             if(request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeEntered)
             {
                 Debug.Log("OMG " + request.m_ulSteamIDUserChanged.ToString() + " JOINED!!!!!!");
@@ -238,8 +233,6 @@ namespace SteamTrain
                     {
                         case PacketID.Pos:
                             lobbyMemberLastPosDict[remoteId] = TranslateToPositionPacket(buffer);
-                            Debug.Log("Packet from " + remoteId.m_SteamID.ToString() + 
-                                        ": Position " + lobbyMemberLastPosDict[remoteId]);
                             break;
                         case PacketID.SceneIndex:
                             lobbyMemberSceneDict[remoteId] = TranslateToSceneIntPacket(buffer);
