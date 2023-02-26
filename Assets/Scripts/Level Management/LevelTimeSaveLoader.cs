@@ -20,6 +20,7 @@ public static class LevelTimeSaveLoader
             if (file.Extension.Equals(fileExtension))
             {
                 LevelSaveData data = Load(file.Name);
+                if (data == null) continue;
                 data.ResetBestTime();
                 Save(file.Name, data);
             }
