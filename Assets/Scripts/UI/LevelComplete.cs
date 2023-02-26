@@ -52,9 +52,6 @@ public class LevelComplete : MonoBehaviour
         Player.Instance.modules.soundManager.StopAll();
         PauseMenu.Instance.PauseGame();
         levelCompleteScreen.SetActive(true);
-        LevelCompleteData data = new LevelCompleteData();
-        data.World = 1;
-        EventBoat.OnLevelComplete.Invoke(data);
     }
 
     private void BestTime()
@@ -76,8 +73,6 @@ public class LevelComplete : MonoBehaviour
             bestTimeValue.text = LevelTimer.GetTimeString(myTime);
             levelTimeData.LevelName = levelName;
             levelTimeData.SetNewBestTime(myTime, true);
-            
-            EventBoat.NewBestTime(levelName, myTime);
         }
         else
         {
@@ -85,31 +80,14 @@ public class LevelComplete : MonoBehaviour
             var newBestTime = levelTimeData.SetNewBestTime(myTime);
             bestTimeText.text = "Best Time:";
             bestTimeValue.text = LevelTimer.GetTimeString(newBestTime.Time);
-            if(newBestTime.IsNew){
-                EventBoat.NewBestTime(levelName, myTime);
-            }
         }
-        EventBoat.AddLevelComplete(levelName);
 
         //////////////////// Medal Shit ////////////////////
         float bestTime = levelTimeData.BestTime;
         int index = 0;
         while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
         {
-            if (index == 0)
-            {
-                EventBoat.BronzeMedalUnlock(levelName);
-            }
-            else if (index == 1)
-            {
-                EventBoat.SilverMedalUnlock(levelName);
-            }
-            else if (index == 2)
-            {
-                EventBoat.GoldMedalUnlock(levelName);
-            }
             index++;
-
         }
 
         if (levelTimeData.MedalIndex != index - 1)
@@ -139,6 +117,14 @@ public class LevelComplete : MonoBehaviour
             nextMedalTimeText.gameObject.SetActive(false);
             nextMedalTimeValue.gameObject.SetActive(false);
         }
+
+        LevelCompleteData data = new LevelCompleteData
+        {
+            World = 1,
+            Level = LevelController.Instance.CurrentLevelName.CurrentLevel(),
+            Time = myTime
+        };
+        EventBoat.OnLevelComplete.Invoke(data);
     }
 
     public void RestartLevel(){
