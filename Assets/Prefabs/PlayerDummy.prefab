@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2456890396686829371}
   - component: {fileID: 6275875718683159842}
   - component: {fileID: 8458377463985938293}
-  - component: {fileID: 8285293792476768496}
   m_Layer: 0
   m_Name: Name
   m_TagString: Untagged
@@ -173,19 +172,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6275875718683159842}
   m_maskType: 0
---- !u!114 &8285293792476768496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3342085851622924852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0691bea4bbfed8343a572a3bcf3f0b5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textMeshProUGUI: {fileID: 8458377463985938293}
 --- !u!1 &8142904562385917128
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,6 +183,7 @@ GameObject:
   - component: {fileID: 3994419256061152403}
   - component: {fileID: 1386576752311506766}
   - component: {fileID: 8705142198205210347}
+  - component: {fileID: 1613355960720854311}
   m_Layer: 0
   m_Name: PlayerDummy
   m_TagString: Untagged
@@ -270,3 +257,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1613355960720854311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8142904562385917128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0691bea4bbfed8343a572a3bcf3f0b5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMeshProUGUI: {fileID: 8458377463985938293}
