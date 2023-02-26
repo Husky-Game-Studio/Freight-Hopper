@@ -24,7 +24,8 @@ public class PlayerNetworking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(SteamTrain.SteamP2PManager.joinedLobby && Player.Instance != null)
+        SteamTrain.SteamP2PManager.HandlePackets();
+        if (SteamTrain.SteamP2PManager.joinedLobby && Player.Instance != null)
         {
             string currScene = SceneManager.GetActiveScene().name;
             SteamTrain.SteamP2PManager.BroadcastPositionToLobby(Player.Instance.transform.position);
