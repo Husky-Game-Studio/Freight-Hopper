@@ -8,7 +8,7 @@ public class PlayerNetworking : MonoBehaviour
     [SerializeField]
     private Transform playerDummyPrefab;
 
-    private static Dictionary<Steamworks.CSteamID, Transform> dummyDict = new Dictionary<Steamworks.CSteamID, Transform>();
+    private static Dictionary<Steamworks.CSteamID, Rigidbody> dummyDict = new Dictionary<Steamworks.CSteamID, Rigidbody>();
     
     private void OnEnable()
     {
@@ -40,12 +40,12 @@ public class PlayerNetworking : MonoBehaviour
                 if(!dummyDict.ContainsKey(lobbyMembers.Key))
                 {
                     Debug.Log("A new player has been made.");
-                    dummyDict[lobbyMembers.Key] = Instantiate(playerDummyPrefab.gameObject).transform;
+                    dummyDict[lobbyMembers.Key] = Instantiate(playerDummyPrefab.gameObject).GetComponent<Rigidbody>();
                     dummyDict[lobbyMembers.Key].GetComponent<PlayerDummyName>().SetText(
                                                 Steamworks.SteamFriends.GetFriendPersonaName(lobbyMembers.Key));
                 }
                 if(SteamTrain.SteamP2PManager.lobbyMemberLastPosDict.ContainsKey(lobbyMembers.Key))
-                    dummyDict[lobbyMembers.Key].position = SteamTrain.SteamP2PManager.lobbyMemberLastPosDict[lobbyMembers.Key];
+                    dummyDict[lobbyMembers.Key].MovePosition(SteamTrain.SteamP2PManager.lobbyMemberLastPosDict[lobbyMembers.Key]);
             }
         }
     }
