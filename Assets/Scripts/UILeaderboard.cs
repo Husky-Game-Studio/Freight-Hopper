@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SteamTrain;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
 {
@@ -12,6 +13,7 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
     [SerializeField] LoopScrollRect loopScrollRect;
     [SerializeField] UnityEngine.UI.Toggle toggleFriend;
     [SerializeField] int timesToGrab = 50;
+    [SerializeField] bool loadCurrentSceneLeaderboards = true;
 
     List<LeaderboardEntry> fullLeaderboard = new List<LeaderboardEntry>();
     List<LeaderboardEntry> friendLeaderboard = new List<LeaderboardEntry>();
@@ -23,6 +25,9 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
 
         loopScrollRect.prefabSource = this;
         loopScrollRect.dataSource = this;
+        if(loadCurrentSceneLeaderboards){
+            StartCoroutine(LoadRelativeLeaderboard(SceneManager.GetActiveScene().name));
+        }
     }
 
     public IEnumerator LoadRelativeLeaderboard(string level){

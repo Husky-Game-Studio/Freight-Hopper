@@ -60,13 +60,7 @@ public class LeaderboardEventHandler : MonoBehaviour
             yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
             if (leaderboardHandlers[level].readLeaderboards)
             {
-                Debug.Log("Leaderboard?");
                 result.AddRange(leaderboardHandlers[level].readableLeaderboard);
-                for (int j = 0; j < result.Count; ++j)
-                {
-                    Debug.Log(result[j].playerName);
-                }
-                Debug.Log("Leaderboard End");
             }
         }
 
@@ -78,13 +72,7 @@ public class LeaderboardEventHandler : MonoBehaviour
             yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
             if (leaderboardHandlers[level].readLeaderboards)
             {
-                Debug.Log("Friend Leaderboard?");
                 resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
-                for (int j = 0; j < resultFriends.Count; ++j)
-                {
-                    Debug.Log(resultFriends[j].playerName);
-                }
-                Debug.Log("Friend Leaderboard End");
             }
         }
         yield return null;
@@ -107,13 +95,7 @@ public class LeaderboardEventHandler : MonoBehaviour
             yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
             if (leaderboardHandlers[level].readLeaderboards)
             {
-                Debug.Log("Leaderboard?");
                 result.AddRange(leaderboardHandlers[level].readableLeaderboard);
-                for (int j = 0; j < result.Count; ++j)
-                {
-                    Debug.Log(result[j].playerName);
-                }
-                Debug.Log("Leaderboard End");
             }
         }
 
@@ -130,13 +112,7 @@ public class LeaderboardEventHandler : MonoBehaviour
             yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
             if (leaderboardHandlers[level].readLeaderboards)
             {
-                Debug.Log("Friend Leaderboard?");
                 resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
-                for (int j = 0; j < resultFriends.Count; ++j)
-                {
-                    Debug.Log(resultFriends[j].playerName);
-                }
-                Debug.Log("Friend Leaderboard End");
             }
         }
         yield return null;
