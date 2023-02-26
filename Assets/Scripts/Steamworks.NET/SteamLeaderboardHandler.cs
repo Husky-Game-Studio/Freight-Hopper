@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Steamworks;
-using System;
 
 namespace SteamTrain
 {
@@ -23,10 +22,6 @@ namespace SteamTrain
         public int newScore;
         public int firstLimit;
         public int secondLimit;
-
-        // For leaderboards
-        public static Action<float>     GetBestTime         = delegate { };     // The time
-        public static Action            OnNewBestTime       = delegate { };
 
         public List<LeaderboardEntry> readableLeaderboard = new List<LeaderboardEntry>();
 
@@ -203,9 +198,9 @@ namespace SteamTrain
                 if (r.m_bScoreChanged == 1)
                 {
                     Debug.Log("Updated score.");
-                    OnNewBestTime.Invoke();
+                    SteamBus.OnNewBestTime.Invoke();
                 }
-                GetBestTime.Invoke(r.m_nScore);
+                SteamBus.GetBestTime.Invoke(r.m_nScore);
             }
             else
                 Debug.Log("Failed to upload score.");

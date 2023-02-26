@@ -28,10 +28,6 @@ namespace SteamTrain
         public static Dictionary<CSteamID, int> lobbyMemberSceneDict = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, Vector3> lobbyMemberLastPosDict = new Dictionary<CSteamID, Vector3>();
 
-        // For multiplayer
-        public static Action<string> OnPlayerJoinedGame = delegate { }; // playerName
-        public static Action<string> OnPlayerLeftGame = delegate { }; // playerName
-
         public enum PacketID
         {
             Pos = 0,
@@ -146,14 +142,14 @@ namespace SteamTrain
                 Debug.Log("OMG " + request.m_ulSteamIDUserChanged.ToString() + " JOINED!!!!!!");
                 CSteamID newguy = new CSteamID(request.m_ulSteamIDUserChanged);
                 SendSceneNamePacket(SceneManager.GetActiveScene().name, newguy);
-                OnPlayerJoinedGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
+                SteamBus.OnPlayerJoinedGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
             }
             else if(request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeLeft)
             {
                 Debug.Log("BRUH, " + request.m_ulSteamIDUserChanged.ToString() + " LEFT!!!!!!");
                 CSteamID newguy = new CSteamID(request.m_ulSteamIDUserChanged);
                 SendSceneNamePacket(SceneManager.GetActiveScene().name, newguy);
-                OnPlayerLeftGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
+                SteamBus.OnPlayerLeftGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
             }
         }
 

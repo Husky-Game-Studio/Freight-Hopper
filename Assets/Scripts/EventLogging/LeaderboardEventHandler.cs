@@ -13,12 +13,12 @@ public class LeaderboardEventHandler : MonoBehaviour
     {
         if (SteamTrain.SteamAchievementHandler.statsRetrieved)
         {
-            EventBoat.NewBestTime += UploadTimes;
+            EventBoat.OnLevelComplete += UploadTimes;
             switch (testCase)
             {
                 case 1:
-                    Debug.Log("Uploading preset seconds.");
-                    UploadTimes("who cares", testSeconds);
+                    //Debug.Log("Uploading preset seconds.");
+                    //UploadTimes("who cares", testSeconds);
                     break;
                 case 2:
                     Debug.Log("Printing leaderboards.");
@@ -34,13 +34,13 @@ public class LeaderboardEventHandler : MonoBehaviour
             Debug.Log("Did not subscribe events because Steam Stats were not retrieved.");
     }
 
-    public static void UploadTimes(string level, float time)
+    public static void UploadTimes(LevelCompleteData leveldata)
     {
-        leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler
+        leaderboardHandlers[leveldata.Level] = new SteamTrain.SteamLeaderboardHandler
         {
-            newScore = (int)(time * 1000)
+            newScore = (int)(leveldata.Time * 1000)
         };
-        leaderboardHandlers[level].FindLeaderboardAndUploadScore(level);
+        leaderboardHandlers[leveldata.Level].FindLeaderboardAndUploadScore(leveldata.Level);
     }
 
     public static IEnumerator GetTimes(string level, int amount,
