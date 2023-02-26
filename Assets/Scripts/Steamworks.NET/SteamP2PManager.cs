@@ -25,7 +25,7 @@ namespace SteamTrain
         public static bool joiningLobby { get; private set; } = false;
         public static bool joinedLobby { get; private set; } = false;
 
-        public static Dictionary<CSteamID, string> lobbyMemberSceneDict = new Dictionary<CSteamID, string>();
+        public static Dictionary<CSteamID, int> lobbyMemberSceneDict = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, Vector3> lobbyMemberLastPosDict = new Dictionary<CSteamID, Vector3>();
 
         public enum PacketID
@@ -49,7 +49,7 @@ namespace SteamTrain
         {
             Debug.Log("Broadcast position.");
             foreach(var dest in lobbyMemberSceneDict)
-                if(dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
+                if(dest.Value != lobbyMemberSceneDict[SteamUser.GetSteamID()])
                     SendPositionPacket(pos, dest.Key);
         }
 
@@ -96,9 +96,9 @@ namespace SteamTrain
                 Debug.Log("Successfully made lobby of id " + r.m_ulSteamIDLobby.ToString());
                 lobbyID = new CSteamID(r.m_ulSteamIDLobby);
                 Debug.Log(GetCurrentLobbyMembers().Count.ToString() + " in this Lobby.");
-                lobbyMemberSceneDict[SteamUser.GetSteamID()] = SceneManager.GetActiveScene().name;
+                lobbyMemberSceneDict[SteamUser.GetSteamID()] = SceneManager.GetActiveScene().buildIndex;
                 Debug.Log(lobbyMemberSceneDict[SteamUser.GetSteamID()]);
-                SendSceneNamePacket(lobbyMemberSceneDict[SteamUser.GetSteamID()], SteamUser.GetSteamID());
+                SendSceneNamePacket(SceneManager.GetActiveScene().name, SteamUser.GetSteamID());
                 joinedLobby = true;
             }
             else
@@ -139,7 +139,7 @@ namespace SteamTrain
             if(request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeEntered)
             {
                 Debug.Log("OMG" + request.m_ulSteamIDUserChanged.ToString() + " JOINED!!!!!!");
-                SendSceneNamePacket(lobbyMemberSceneDict[SteamUser.GetSteamID()], new CSteamID(request.m_ulSteamIDUserChanged));
+                SendSceneNamePacket(SceneManager.GetActiveScene().name, new CSteamID(request.m_ulSteamIDUserChanged));
             }
         }
 
@@ -202,6 +202,12 @@ namespace SteamTrain
             return SceneManager.GetSceneByBuildIndex(BitConverter.ToInt32(bytes.Slice(sizeof(uint), sizeof(int)))).name;
         }
 
+        private static int TranslateToSceneIntPacket(byte[] packet)
+        {
+            ReadOnlySpan<byte> bytes = new ReadOnlySpan<byte>(packet);
+            return BitConverter.ToInt32(bytes.Slice(sizeof(uint), sizeof(int)));
+        }
+
         public static void HandlePackets()
         {
             uint size;
@@ -226,7 +232,7 @@ namespace SteamTrain
                                         ": Position " + lobbyMemberLastPosDict[remoteId]);
                             break;
                         case PacketID.SceneIndex:
-                            lobbyMemberSceneDict[remoteId] = TranslateToSceneNamePacket(buffer);
+                            lobbyMemberSceneDict[remoteId] = TranslateToSceneIntPacket(buffer);
                             Debug.Log("Packet from " + remoteId.m_SteamID.ToString() + 
                                         ": Scene " + lobbyMemberSceneDict[remoteId]);
                             break;

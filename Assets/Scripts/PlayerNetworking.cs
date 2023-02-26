@@ -27,7 +27,7 @@ public class PlayerNetworking : MonoBehaviour
         SteamTrain.SteamP2PManager.HandlePackets();
         if (SteamTrain.SteamP2PManager.joinedLobby && Player.Instance != null)
         {
-            string currScene = SceneManager.GetActiveScene().name;
+            int currScene = SceneManager.GetActiveScene().buildIndex;
             SteamTrain.SteamP2PManager.BroadcastPositionToLobby(Player.Instance.transform.position);
             // angrily ping my position
             
