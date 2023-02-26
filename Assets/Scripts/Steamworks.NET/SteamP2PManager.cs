@@ -7,15 +7,15 @@ using UnityEngine.SceneManagement;
 
 namespace SteamTrain
 {
-    public class SteamP2PManager : MonoBehaviour
+    public class SteamP2PManager
     {
         // steam handles these callbacks
         // this callback is called when the user receives any steam packet
-        private Callback<P2PSessionRequest_t> _p2PSessionRequestCallback;
+        private static Callback<P2PSessionRequest_t> _p2PSessionRequestCallback;
         // this callback is called when the user attempts to join a lobby (which I believe includes from Steam Join)
-        private Callback<GameLobbyJoinRequested_t> _gameLobbyJoinRequestedCallback;
+        private static Callback<GameLobbyJoinRequested_t> _gameLobbyJoinRequestedCallback;
         // this call back is called when someone joins the lobby the user is in
-        private Callback<LobbyChatUpdate_t> _gameLobbyUpdatedCallback;
+        private static Callback<LobbyChatUpdate_t> _gameLobbyUpdatedCallback;
 
         private static CallResult<LobbyCreated_t> callResultMakeLobby = new CallResult<LobbyCreated_t>();
         private static CallResult<LobbyEnter_t> callResultJoinLobby = new CallResult<LobbyEnter_t>();
@@ -34,10 +34,10 @@ namespace SteamTrain
             SceneIndex
         }
 
-        private void Start()
+        public static void Init()
         {
             // setup the callback method
-            Debug.Log(SteamUser.GetSteamID().m_SteamID);
+            Debug.Log("Networking Initializing");
             _p2PSessionRequestCallback = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
             _gameLobbyJoinRequestedCallback = Callback<GameLobbyJoinRequested_t>.Create(OnLobbyJoinRequest);
             _gameLobbyUpdatedCallback = Callback<LobbyChatUpdate_t>.Create(OnLobbyUpdate);
@@ -49,7 +49,7 @@ namespace SteamTrain
         {
             Debug.Log("Broadcast position.");
             foreach(var dest in lobbyMemberSceneDict)
-                if(dest.Value == SceneManager.GetActiveScene().name)
+                if(dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
                     SendPositionPacket(pos, dest.Key);
         }
 
@@ -235,17 +235,6 @@ namespace SteamTrain
                 else
                     Debug.Log("Received some packet that was NOT readable");
             }
-        }
-
-        private void Update()
-        {
-            if(joinedLobby)
-            {
-                BroadcastCurrentSceneToLobby();
-            }
-            // repeat while there's a P2P message available
-            // will write its size to size variable
-            HandlePackets();
         }
     }
 
