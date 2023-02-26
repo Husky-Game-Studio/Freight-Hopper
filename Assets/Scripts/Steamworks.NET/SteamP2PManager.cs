@@ -156,28 +156,28 @@ namespace SteamTrain
             return headeredPacket;
         }
 
-        private static void SendPacketWithHeader(CSteamID dest, PacketID pid, byte[] packet, EP2PSend r)
+        private static byte[] SendPacketWithHeader(CSteamID dest, PacketID pid, byte[] packet, EP2PSend r)
         {
             byte[] toSend = AddPacketHeader(pid, packet);
             SteamNetworking.SendP2PPacket(dest, toSend, (uint)toSend.Length, r);
+            return toSend;
         }
 
         public static void SendPositionPacket(Vector3 pos, CSteamID dest)
         {
-            byte[] positionPacket = new byte[sizeof(uint)+(sizeof(float)*3)];
+            byte[] positionPacket = new byte[(sizeof(float)*3)];
             byte[] xBytes = BitConverter.GetBytes(pos.x);
             byte[] yBytes = BitConverter.GetBytes(pos.y);
             byte[] zBytes = BitConverter.GetBytes(pos.z);
-
-            for (uint i = sizeof(uint); i < sizeof(float); ++i)
+            for (uint i = 0; i < sizeof(float); ++i)
             {
                 positionPacket[i] = xBytes[i];
                 positionPacket[i + sizeof(float)] = yBytes[i];
                 positionPacket[i + (2 * sizeof(float))] = zBytes[i];
             }
             SendPacketWithHeader(dest, PacketID.Pos, 
-                                positionPacket, 
-                                EP2PSend.k_EP2PSendUnreliableNoDelay);
+                                 positionPacket, 
+                                 EP2PSend.k_EP2PSendUnreliableNoDelay);
         }
 
         // we'll use this for 2 things: one, to initialize the P2P session, and two, to decide whether or not to send packets
