@@ -11,4 +11,9 @@ public static class EventBoat
     public static Action<string> BronzeMedalUnlock  = delegate { }; // levelID
     public static Action<string> SilverMedalUnlock  = delegate { }; // levelID
     public static Action<string> GoldMedalUnlock    = delegate { }; // levelID
+    public static Action<LevelCompleteData> OnLevelComplete = delegate { };
+
+    public struct LevelCompleteData {
+        public int World;
+    }
 }

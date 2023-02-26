@@ -52,7 +52,9 @@ public class LevelComplete : MonoBehaviour
         Player.Instance.modules.soundManager.StopAll();
         PauseMenu.Instance.PauseGame();
         levelCompleteScreen.SetActive(true);
-        
+        LevelCompleteData data = new LevelCompleteData();
+        data.World = 1;
+        EventBoat.OnLevelComplete.Invoke(data);
     }
 
     private void BestTime()
