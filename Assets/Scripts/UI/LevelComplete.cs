@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
+using SteamTrain;
 
 public class LevelComplete : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class LevelComplete : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Menu.performed += Menu;
         UserInput.Instance.UserInputMaster.Player.Next.performed += NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed += RestartLevel;
+        SteamBus.GetBestTime += SetBestTimeText;
+        SteamBus.OnNewBestTime += CallBestTimeSfx;
     }
     private void OnDisable()
     {
@@ -38,6 +41,14 @@ public class LevelComplete : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Menu.performed -= Menu;
         UserInput.Instance.UserInputMaster.Player.Next.performed -= NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed -= RestartLevel;
+        SteamBus.GetBestTime -= SetBestTimeText;
+    }
+    private void SetBestTimeText(float val){
+        bestTimeText.text = "Best Time:";
+        bestTimeValue.text = LevelTimer.GetTimeString(val);
+    }
+    private void CallBestTimeSfx(){
+        Debug.Log("GREAT JOB");
     }
     private void EnableLevelComplete()
     {
@@ -69,8 +80,7 @@ public class LevelComplete : MonoBehaviour
             Debug.Log("no save data found, saving new time");
             
             levelTimeData = new LevelSaveData();
-            bestTimeText.text = "Best Time:";
-            bestTimeValue.text = LevelTimer.GetTimeString(myTime);
+            SetBestTimeText(myTime);
             levelTimeData.LevelName = levelName;
             levelTimeData.SetNewBestTime(myTime, true);
         }
@@ -78,8 +88,7 @@ public class LevelComplete : MonoBehaviour
         {
             levelTimeData.LevelName = levelName;
             var newBestTime = levelTimeData.SetNewBestTime(myTime);
-            bestTimeText.text = "Best Time:";
-            bestTimeValue.text = LevelTimer.GetTimeString(newBestTime.Time);
+            SetBestTimeText(newBestTime.Time);
         }
 
         //////////////////// Medal Shit ////////////////////
@@ -121,7 +130,7 @@ public class LevelComplete : MonoBehaviour
         LevelCompleteData data = new LevelCompleteData
         {
             World = 1,
-            Level = LevelController.Instance.CurrentLevelName.CurrentLevel(),
+            Level = levelName,
             Time = myTime
         };
         EventBoat.OnLevelComplete.Invoke(data);
