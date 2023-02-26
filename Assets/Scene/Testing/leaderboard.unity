@@ -273,12 +273,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7823105279832238095}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.075623, y: 21.555}
-  m_SizeDelta: {x: 640.05, y: 424.58}
+  m_AnchoredPosition: {x: -11.7002, y: -2.6513}
+  m_SizeDelta: {x: 605.5533, y: 386.44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &639596641
 MonoBehaviour:
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8714c362c0c8a6449a9559a31cdab9a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 20
+  radius: 25
 --- !u!114 &639596642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.97647065, g: 0.97647065, b: 0.97647065, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7607843}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -324,7 +324,7 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
-  falloffDistance: 1
+  falloffDistance: 60
 --- !u!222 &639596643
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1668,8 +1668,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8745112228789804864}
   - {fileID: 639596640}
+  - {fileID: 8745112228789804864}
   - {fileID: 5039704312494737322}
   - {fileID: 3353099644647627161}
   - {fileID: 8283498846209801717}
@@ -1934,7 +1934,7 @@ RectTransform:
   m_Children:
   - {fileID: 5621528503016604835}
   m_Father: {fileID: 7823105279832238095}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
