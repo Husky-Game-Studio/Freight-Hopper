@@ -149,12 +149,7 @@ public class LevelComplete : MonoBehaviour
             PauseMenu.Instance.ContinueGame();
         }
         
-        if(Settings.GetIsRandomMode){
-            LevelController.Instance.LoadRandomLevel();
-        }else{
-            LevelController.Instance.LoadNextLevel();
-        }
-        
+        LevelController.Instance.LoadNextLevel();
     }
     public void Menu(){
         if (!InGameStates.Instance.StateIs(InGameStates.States.LevelComplete))

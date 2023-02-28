@@ -14,7 +14,7 @@ public class Settings : MonoBehaviour
     public bool Vsync { get; private set; }
     public bool Antialiasing { get; private set; }
     public bool Continuous { get; private set; }
-    public bool Random { get; private set; }
+    public bool PlayerCollision { get; private set; }
     public int ShadowDistance => shadowDistance;
     public int FOV => fov;
     public float MouseSensitivity => mouseSensitivity;
@@ -36,7 +36,7 @@ public class Settings : MonoBehaviour
         SoundEffectsVolume=5,
         MusicVolume=6,
         Continuous=7,
-        Random=8
+        PlayerCollision=8
     }
 
     public void Start()
@@ -49,7 +49,7 @@ public class Settings : MonoBehaviour
     {
         Vsync = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.VSync.ToString(), 1));
         Continuous = GetIsContinuousMode;
-        Random = GetIsRandomMode;
+        PlayerCollision = GetIsPlayerCollisionEnabled;
         Antialiasing = Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Antialiasing.ToString(), 1));
         shadowDistance = PlayerPrefs.GetInt(SettingName.ShadowDistance.ToString(), 1000);
         fov = GetFOV;
@@ -69,7 +69,7 @@ public class Settings : MonoBehaviour
 
     public static int GetFOV => PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
     public static float GetMouseSensitivity => PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 5);
-    public static bool GetIsRandomMode => Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Random.ToString(), 0));
+    public static bool GetIsPlayerCollisionEnabled => Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.PlayerCollision.ToString(), 0));
     public static bool GetIsContinuousMode => Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Continuous.ToString(), 0));
 
 
@@ -78,7 +78,7 @@ public class Settings : MonoBehaviour
         PlayerPrefs.SetInt(SettingName.VSync.ToString(), Convert.ToInt32(Vsync));
         PlayerPrefs.SetInt(SettingName.Antialiasing.ToString(), Convert.ToInt32(Antialiasing));
         PlayerPrefs.SetInt(SettingName.Continuous.ToString(), Convert.ToInt32(Continuous));
-        PlayerPrefs.SetInt(SettingName.Random.ToString(), Convert.ToInt32(Random));
+        PlayerPrefs.SetInt(SettingName.PlayerCollision.ToString(), Convert.ToInt32(PlayerCollision));
         PlayerPrefs.SetInt(SettingName.ShadowDistance.ToString(), shadowDistance);
         PlayerPrefs.SetInt(SettingName.Fov.ToString(), fov);
         PlayerPrefs.SetFloat(SettingName.MouseXSensitivity.ToString(), mouseSensitivity);
@@ -102,7 +102,7 @@ public class Settings : MonoBehaviour
     public void SetVsync(bool val) => Vsync = val;
     public void SetAntialiasing(bool val) =>Antialiasing = val;
     public void SetContinuous(bool val) => Continuous = val;
-    public void SetRandom(bool val) => Random = val;
+    public void SetRandom(bool val) => PlayerCollision = val;
 
     public void SetShadowDistance(float val) => shadowDistance = (int)val;
   

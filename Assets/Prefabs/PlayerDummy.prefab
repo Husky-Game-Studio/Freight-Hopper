@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2456890396686829371}
   - component: {fileID: 6275875718683159842}
   - component: {fileID: 8458377463985938293}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,9 @@ GameObject:
   - component: {fileID: 8705142198205210347}
   - component: {fileID: 1613355960720854311}
   - component: {fileID: 2056881747557337887}
-  m_Layer: 0
+  - component: {fileID: 6689311560830598285}
+  - component: {fileID: 9147533184758294169}
+  m_Layer: 6
   m_Name: PlayerDummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,3 +289,30 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &6689311560830598285
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8142904562385917128}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9147533184758294169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8142904562385917128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f27274c3c0286374990efac3d33106f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  capsuleCollider: {fileID: 6689311560830598285}

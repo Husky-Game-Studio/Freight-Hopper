@@ -2533,7 +2533,7 @@ GameObject:
   - component: {fileID: 434977411}
   - component: {fileID: 434977412}
   m_Layer: 5
-  m_Name: RandomMode
+  m_Name: Player Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8292,7 +8292,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Random Mode
+  m_text: Player Collision
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13205,7 +13205,7 @@ MonoBehaviour:
   vsync: {fileID: 1650140099}
   antialiasing: {fileID: 1867006966}
   continuous: {fileID: 1442540834}
-  random: {fileID: 434977412}
+  playerCollision: {fileID: 434977412}
   shadowDistance: {fileID: 969716658}
   fov: {fileID: 782431962}
   sensitivity: {fileID: 1265271974}
