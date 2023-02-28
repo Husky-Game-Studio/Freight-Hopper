@@ -31,7 +31,7 @@ public class Settings : MonoBehaviour
         Antialiasing=1,
         ShadowDistance=2,
         Fov=3,
-        MouseXSensitivity=3,
+        MouseXSensitivity=2,
         MouseYSensitivity=4,
         SoundEffectsVolume=5,
         MusicVolume=6,
@@ -68,7 +68,7 @@ public class Settings : MonoBehaviour
     }
 
     public static int GetFOV => PlayerPrefs.GetInt(SettingName.Fov.ToString(), 100);
-    public static float GetMouseSensitivity => PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 5);
+    public static float GetMouseSensitivity => PlayerPrefs.GetFloat(SettingName.MouseXSensitivity.ToString(), 2);
     public static bool GetIsPlayerCollisionEnabled => Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.PlayerCollision.ToString(), 0));
     public static bool GetIsContinuousMode => Convert.ToBoolean(PlayerPrefs.GetInt(SettingName.Continuous.ToString(), 0));
 
