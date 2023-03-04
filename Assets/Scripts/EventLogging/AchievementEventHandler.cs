@@ -41,6 +41,8 @@ public class AchievementEventHandler : MonoBehaviour
             if (LevelTimeSaveLoader.LevelSaveDataExists(s))
             {
                 LevelSaveData save = LevelTimeSaveLoader.Load(s);
+                if (save == null) continue; // likely parsing issue
+
                 ++levelCount;
                 if (save.MedalIndex >= 0)
                     ++bronzeCount;
