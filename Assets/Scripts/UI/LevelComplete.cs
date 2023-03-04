@@ -24,7 +24,6 @@ public class LevelComplete : MonoBehaviour
         levelCompleteScreen.SetActive(false);
     }
 
-
     private void OnEnable()
     {
         Goal.LevelComplete += EnableLevelComplete;
@@ -32,6 +31,7 @@ public class LevelComplete : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Next.performed += NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed += RestartLevel;
         SteamBus.OnNewBestTime += CallBestTimeSfx;
+        SteamBus.OnTimeUploaded += DownloadLeaderboard;
     }
     private void OnDisable()
     {
@@ -40,7 +40,13 @@ public class LevelComplete : MonoBehaviour
         UserInput.Instance.UserInputMaster.Player.Next.performed -= NextLevel;
         UserInput.Instance.UserInputMaster.Player.Restart.performed -= RestartLevel;
         SteamBus.OnNewBestTime -= CallBestTimeSfx;
+        SteamBus.OnTimeUploaded -= DownloadLeaderboard;
     }
+
+    void DownloadLeaderboard(){
+        levelCompleteScreen.SetActive(true);
+    }
+
     private void CallBestTimeSfx(){
         Debug.Log("GREAT JOB");
     }
@@ -56,14 +62,12 @@ public class LevelComplete : MonoBehaviour
         timer.gameObject.SetActive(false);
         Player.Instance.modules.soundManager.StopAll();
         PauseMenu.Instance.PauseGame();
-        levelCompleteScreen.SetActive(true);
     }
 
     private void BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
         
-
         levelNameText.text = LevelController.Instance.worldListMetaData.GetWorld("Desert").GetLevel(levelName).Title; // this just happens to always get the last number
         
         LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
