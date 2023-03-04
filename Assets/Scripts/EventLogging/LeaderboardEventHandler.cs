@@ -38,7 +38,7 @@ public class LeaderboardEventHandler : MonoBehaviour
     {
         leaderboardHandlers[leveldata.Level] = new SteamTrain.SteamLeaderboardHandler
         {
-            newScore = (int)(leveldata.Time * 1000)
+            newScore = Mathf.RoundToInt(leveldata.Time * 1000f)
         };
         leaderboardHandlers[leveldata.Level].FindLeaderboardAndUploadScore(leveldata.Level);
     }

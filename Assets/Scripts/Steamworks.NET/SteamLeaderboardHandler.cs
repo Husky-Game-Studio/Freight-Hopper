@@ -190,6 +190,7 @@ namespace SteamTrain
         {
             if (r.m_bSuccess == 1 && !failure)
             {
+                SteamBus.OnTimeUploaded.Invoke();
                 if (r.m_bScoreChanged == 1)
                 {
                     SteamBus.OnNewBestTime.Invoke();
