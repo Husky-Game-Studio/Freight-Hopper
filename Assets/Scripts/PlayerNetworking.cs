@@ -71,7 +71,10 @@ public class PlayerNetworking : OSingleton<PlayerNetworking>
 
     private void OnPlayerLeaveSceneDestroy(SteamTrain.SteamP2PManager.P2PPlayerInfo pname)
     {
-        Destroy(dummyDict[pname.pid].gameObject);
-        dummyDict.Remove(pname.pid);
+        if (dummyDict.ContainsKey(pname.pid))
+        {
+            Destroy(dummyDict[pname.pid].gameObject);
+            dummyDict.Remove(pname.pid);
+        }
     }
 }
