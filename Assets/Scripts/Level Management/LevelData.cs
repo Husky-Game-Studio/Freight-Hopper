@@ -16,7 +16,6 @@ public class LevelData : ScriptableObject
 
     [SerializeField] private NextLevelStatus nextLevelStatus = NextLevelStatus.NextLevel;
     [SerializeField] private string customNextLevelName;
-    [SerializeField] private float speed;
     [SerializeField] private bool snapDownAtStart = true;
     [SerializeField] private bool enabled = false;
     [SerializeField] private LayerMask layerMask;
@@ -29,7 +28,6 @@ public class LevelData : ScriptableObject
 
     public NextLevelStatus NLevelStatus => nextLevelStatus;
     public string CustomNextLevelName => customNextLevelName;
-    public float Speed => speed;
     public string Title => title;
     public Texture2D Image => image;
     public bool SnapDownAtStart => snapDownAtStart;

@@ -118,7 +118,6 @@ public class LevelController : MonoBehaviour
         }
 
         InstantiationParameters parameters = new InstantiationParameters(position, rotation, null);
-        Player.PlayerCanMove += ApplyEarlySpeed;
         yield return Addressables.InstantiateAsync("PlayerPrefab.prefab", parameters);
         Player player = Player.Instance;
         if (player == null)
@@ -141,20 +140,6 @@ public class LevelController : MonoBehaviour
         LevelLoadedIn?.Invoke();
         yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");
         
-    }
-    private void OnDestroy()
-    {
-        Player.PlayerCanMove -= ApplyEarlySpeed;
-    }
-    void ApplyEarlySpeed()
-    {
-        StartCoroutine(ApplyLateForce());
-    }
-
-    IEnumerator ApplyLateForce(){
-        Player player = Player.Instance;
-        yield return new WaitForFixedUpdate();
-        player.modules.rigidbody.AddForce(player.transform.forward * levelData.Speed, ForceMode.VelocityChange);
     }
 
     // Respawns player. Reloads scene for now. Respawning var is used to prevent spamming of respawn button
