@@ -16,7 +16,8 @@ public class Player : MonoBehaviour
     }
     public Modules modules;
 
-    public static event Action PlayerLoadedIn;
+    public static Action PlayerLoadedIn;
+    public static Action PlayerCanMove;
 
     private static Player instance;
 

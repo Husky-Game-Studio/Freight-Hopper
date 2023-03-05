@@ -53,8 +53,18 @@ public class CollisionManagement : MonoBehaviour
         contactNormal.current = upAxis;
         contactNormal.UpdateOld();
         Physics.defaultMaxDepenetrationVelocity = this.MaxDepenetrationVelocity;
+        Player.PlayerCanMove += EnableCollision;
+    }
+
+    void EnableCollision(){
+        this.GetComponent<Collider>().enabled = true;
         this.StartCoroutine(LateFixedUpdate());
     }
+    private void OnDestroy()
+    {
+        Player.PlayerCanMove -= EnableCollision;
+    }
+
     List<ContactPoint> contacts = new List<ContactPoint>();
     private void EvaulateCollisions(Collision collision)
     {

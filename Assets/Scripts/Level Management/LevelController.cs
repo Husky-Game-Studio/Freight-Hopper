@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class LevelController : MonoBehaviour
 {
@@ -109,48 +110,42 @@ public class LevelController : MonoBehaviour
             instance = this;
         }
 
-        yield return Addressables.InstantiateAsync("PlayerPrefab.prefab");
-        ResetPlayerPosition();
-        //Player.PlayerLoadedIn += ResetPlayerPosition;
-        LevelLoadedIn?.Invoke();
+        Vector3 position = playerSpawnTransform.position;
+        Quaternion rotation = Quaternion.LookRotation(playerSpawnTransform.forward);
+        if (spawnPlayerHigh)
+        {
+            position = playerSpawnTransform.position + (this.transform.up * highHeight);
+        }
 
-        yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");
-    }
+        InstantiationParameters parameters = new InstantiationParameters(position, rotation, null);
 
-
-
-    private void OnDestroy()
-    {
-        //Player.PlayerLoadedIn -= ResetPlayerPosition;
-    }
-
-    private void ResetPlayerPosition()
-    {
+        yield return Addressables.InstantiateAsync("PlayerPrefab.prefab", parameters);
         GameObject player = Player.Instance.gameObject;
         if (player == null)
         {
             Debug.LogWarning("Can't find player");
         }
-        if (spawnPlayerHigh)
-        {
-            player.transform.position = playerSpawnTransform.position + (this.transform.up * highHeight);
-        }
-        else
-        {
-            player.transform.position = playerSpawnTransform.position;
-        }
-        player.transform.forward = playerSpawnTransform.forward;
 
         if (levelData.SnapDownAtStart)
         {
             Ray ray = new Ray(player.transform.position - Vector3.up, -Vector3.up);
             if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
             {
-                player.transform.position = hit.point + (Vector3.up*2) + (Vector3.up * spawnSnapSmoothing);
+                player.transform.position = hit.point + (Vector3.up * 2) + (Vector3.up * spawnSnapSmoothing);
             }
         }
-
-        player.GetComponent<Rigidbody>().velocity = player.transform.forward * levelData.Speed;
+        Player.PlayerCanMove += ApplyEarlySpeed;
+        yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");
+        LevelLoadedIn?.Invoke();
+    }
+    private void OnDestroy()
+    {
+        Player.PlayerCanMove -= ApplyEarlySpeed;
+    }
+    void ApplyEarlySpeed(){
+        Player player = Player.Instance;
+        if (player == null) return;
+        player.modules.rigidbody.velocity = player.transform.forward * levelData.Speed;
     }
 
     // Respawns player. Reloads scene for now. Respawning var is used to prevent spamming of respawn button

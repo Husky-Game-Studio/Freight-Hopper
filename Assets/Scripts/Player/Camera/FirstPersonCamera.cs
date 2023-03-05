@@ -18,12 +18,13 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private float smoothingDelta;
     [SerializeField] private float mouseSensitivityConversionValue = 10;
     private int curFrameCount;
+    private bool calledEvent = false;
     private const int stopCameraFrameCount = 4;
     private void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        
+        calledEvent = false;
         float mouseSensitivity = Settings.GetMouseSensitivity;
         player = Player.Instance.transform.Find("Mesh");
         cinemachineVirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = mouseSensitivity / mouseSensitivityConversionValue;
@@ -36,6 +37,10 @@ public class FirstPersonCamera : MonoBehaviour
         CalculateSmoothedUpAxis(Vector3.up);
         if (stopCameraFrameCount > curFrameCount)
         {
+            if(!calledEvent){
+                calledEvent = true;
+                Player.PlayerCanMove.Invoke();
+            }
             cinemachineVirtualCamera.ForceCameraPosition(LevelController.Instance.playerSpawnTransform.position, LevelController.Instance.playerSpawnTransform.rotation);
         }
         if(InGameStates.Instance.StateIs(InGameStates.States.Paused) || InGameStates.Instance.StateIs(InGameStates.States.LevelComplete))

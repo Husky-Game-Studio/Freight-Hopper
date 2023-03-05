@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class PlayerDeath : MonoBehaviour
@@ -8,6 +7,7 @@ public class PlayerDeath : MonoBehaviour
     [SerializeField] private MeshRenderer playerMeshRenderer;
     [SerializeField] private float radius;
     [SerializeField] private LayerMask deathMask;
+    private bool isEnabled = false;
 
     private void OnDrawGizmosSelected()
     {
@@ -16,10 +16,18 @@ public class PlayerDeath : MonoBehaviour
 
     private void Awake()
     {
+        isEnabled = false;
+        Player.PlayerCanMove += EnableCollision;
+    }
+    private void OnDestroy()
+    {
+        Player.PlayerCanMove -= EnableCollision;
+    }
+    void EnableCollision(){
         position.SetCurrent(head.transform.position);
         position.UpdateOld();
+        isEnabled = true;
     }
-
     private void CheckInBetweenCollision()
     {
         position.SetCurrent(head.transform.position);
@@ -39,6 +47,10 @@ public class PlayerDeath : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!isEnabled)
+        {
+            return;
+        }
         CheckInBetweenCollision();
     }
 
@@ -48,7 +60,6 @@ public class PlayerDeath : MonoBehaviour
         {
             return;
         }
-
         LevelController.Instance.Respawn();
     }
 }
