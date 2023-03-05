@@ -13,6 +13,9 @@ namespace SteamTrain
         private CallResult<LeaderboardFindResult_t> callResultFindLeaderboard = new CallResult<LeaderboardFindResult_t>();
         private CallResult<LeaderboardScoreUploaded_t> callResultUploadScore = new CallResult<LeaderboardScoreUploaded_t>();
         private CallResult<LeaderboardScoresDownloaded_t> callResultDownloadScore = new CallResult<LeaderboardScoresDownloaded_t>();
+        private CallResult<RemoteStorageFileWriteAsyncComplete_t> callResultUploadFileData = new CallResult<RemoteStorageFileWriteAsyncComplete_t>();
+        private CallResult<RemoteStorageFileShareResult_t> callResultShareFileData = new CallResult<RemoteStorageFileShareResult_t>();
+        private CallResult<LeaderboardUGCSet_t> callResultLeaderboardFileSave = new CallResult<LeaderboardUGCSet_t>();
 
         public bool findingLeaderboard { get; private set; } = false;
         public bool foundLeaderboard { get; private set; } = false;
@@ -22,6 +25,10 @@ namespace SteamTrain
         public int newScore;
         public int firstLimit;
         public int secondLimit;
+
+        public string leaderboardFName;
+        public byte[] leaderboardData;
+        public CSteamID whomst;
 
         public List<LeaderboardEntry> readableLeaderboard = new List<LeaderboardEntry>();
 
@@ -33,6 +40,14 @@ namespace SteamTrain
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardUploadScore);
         }
 
+        public void FindLeaderboardAndUploadData(string name)
+        {
+            foundLeaderboard = false;
+            findingLeaderboard = true;
+            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            callResultFindLeaderboard.Set(cb, OnFindLeaderboardUploadData);
+        }
+
         public void FindLeaderboardAndDownloadScores(string name)
         {
             foundLeaderboard = false;
@@ -40,6 +55,14 @@ namespace SteamTrain
             SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadScores);
         }
+
+        public void FindLeaderboardAndDownloadSomeGuysScore(string name)
+        {
+            foundLeaderboard = false;
+            findingLeaderboard = true;
+            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadSomeGuysScore);
+        }    
 
         public void FindLeaderboardAndFriendScores(string name)
         {
@@ -71,6 +94,20 @@ namespace SteamTrain
             return false;
         }
 
+        public bool UploadDataBestData(int time)
+        {
+            if (foundLeaderboard)
+            {
+                // makes sure that it only keeps best
+                SteamAPICall_t cb = SteamUserStats.UploadLeaderboardScore(currentLeaderboard,
+                                                                          ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest,
+                                                                          time, null, 0);
+                callResultUploadScore.Set(cb, OnUploadScoreData);
+                return true;
+            }
+            return false;
+        }
+
         public bool UploadTimeForced(int time)
         {
             if (foundLeaderboard)
@@ -94,6 +131,21 @@ namespace SteamTrain
                 SteamAPICall_t cb = SteamUserStats.DownloadLeaderboardEntries(currentLeaderboard,
                                                                           ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal,
                                                                           min, max);
+                callResultDownloadScore.Set(cb, OnDownloadScore);
+                return true;
+            }
+            return false;
+        }
+
+        public bool DownloadSomeGuysScore(CSteamID whomst)
+        {
+            if (foundLeaderboard)
+            {
+                readLeaderboards = false;
+                downloadingLeaderboards = true;
+                SteamAPICall_t cb = SteamUserStats.DownloadLeaderboardEntriesForUsers(currentLeaderboard, 
+                                                                                      new CSteamID[1]{ whomst },
+                                                                                      1);
                 callResultDownloadScore.Set(cb, OnDownloadScore);
                 return true;
             }
@@ -144,6 +196,20 @@ namespace SteamTrain
                 Debug.Log("Failed to find leaderboard.");
         }
 
+        private void OnFindLeaderboardDownloadSomeGuysScore(LeaderboardFindResult_t r, bool failure)
+        {
+            // no operations can be done if the target leaderboard has not been found, so this requires a flag
+            findingLeaderboard = false;
+            if (r.m_bLeaderboardFound == 1 && !failure)
+            {
+                foundLeaderboard = true;
+                currentLeaderboard = r.m_hSteamLeaderboard;
+                DownloadSomeGuysScore(whomst);
+            }
+            else
+                Debug.Log("Failed to find leaderboard.");
+        }
+
         private void OnFindLeaderboardDownloadFriendScores(LeaderboardFindResult_t r, bool failure)
         {
             // no operations can be done if the target leaderboard has not been found, so this requires a flag
@@ -185,7 +251,21 @@ namespace SteamTrain
             else
                 Debug.Log("Failed to find leaderboard.");
         }
-        
+
+        private void OnFindLeaderboardUploadData(LeaderboardFindResult_t r, bool failure)
+        {
+            // no operations can be done if the target leaderboard has not been found, so this requires a flag
+            findingLeaderboard = false;
+            if (r.m_bLeaderboardFound == 1 && !failure)
+            {
+                foundLeaderboard = true;
+                currentLeaderboard = r.m_hSteamLeaderboard;
+                UploadDataBestData(newScore);
+            }
+            else
+                Debug.Log("Failed to find leaderboard.");
+        }
+
         private void OnUploadScore(LeaderboardScoreUploaded_t r, bool failure)
         {
             if (r.m_bSuccess == 1 && !failure)
@@ -194,6 +274,29 @@ namespace SteamTrain
                 if (r.m_bScoreChanged == 1)
                 {
                     SteamBus.OnNewBestTime.Invoke();
+                }
+            }
+            else
+                Debug.Log("Failed to upload score.");
+        }
+
+        private void OnUploadScoreData(LeaderboardScoreUploaded_t r, bool failure)
+        {
+            if (r.m_bSuccess == 1 && !failure)
+            {
+                SteamBus.OnTimeUploaded.Invoke();
+                if (r.m_bScoreChanged == 1)
+                {
+                    SteamBus.OnNewBestTime.Invoke();
+                    SteamAPICall_t cb =  SteamRemoteStorage.FileWriteAsync(leaderboardFName, leaderboardData, (uint)leaderboardData.Length);
+                    if(cb == (SteamAPICall_t)0)
+                    {
+                        Debug.Log(leaderboardFName);
+                        Debug.Log("Crippling sad");
+                    }
+                    callResultUploadFileData.Set(cb, OnUploadFileData);
+                    Debug.Log("goomba");
+
                 }
             }
             else
@@ -225,6 +328,38 @@ namespace SteamTrain
                 Debug.Log("No users in leaderboard");
             else
                 Debug.Log("Failed to download scores.");
+        }
+        
+        private void OnUploadFileData(RemoteStorageFileWriteAsyncComplete_t r, bool failure)
+        {
+            if (r.m_eResult == EResult.k_EResultOK && !failure)
+            {
+                SteamAPICall_t cb = SteamRemoteStorage.FileShare(leaderboardFName);
+                callResultShareFileData.Set(cb, OnShareFileData);
+            }
+            else
+                Debug.Log("Failed to upload leaderboard file.");
+        }
+
+        private void OnShareFileData(RemoteStorageFileShareResult_t r, bool failure)
+        {
+            if (r.m_eResult == EResult.k_EResultOK && !failure)
+            {
+                SteamAPICall_t cb = SteamUserStats.AttachLeaderboardUGC(currentLeaderboard, r.m_hFile);
+                callResultLeaderboardFileSave.Set(cb, OnLeaderboardSaveFile);
+            }
+            else
+                Debug.Log("Failed to share leaderboard file.");
+        }
+
+        private void OnLeaderboardSaveFile(LeaderboardUGCSet_t r, bool failure)
+        {
+            if (r.m_eResult == EResult.k_EResultOK && !failure)
+            {
+                Debug.Log("Leaderboard Save Data Full Process Succ.");
+            }
+            else
+                Debug.Log("Failed to attach leaderboard file to leaderboard.");
         }
     }
 }

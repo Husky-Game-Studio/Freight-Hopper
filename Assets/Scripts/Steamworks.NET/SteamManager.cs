@@ -24,6 +24,11 @@ public class SteamManager : MonoBehaviour {
 #if !DISABLESTEAMWORKS
 	protected static bool s_EverInitialized = false;
 
+    public static ulong GetMySteamID()
+    {
+        return SteamUser.GetSteamID().m_SteamID;
+    }
+
 	protected static SteamManager s_instance;
 	protected static SteamManager Instance {
 		get {

@@ -18,21 +18,61 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
             switch (testCase)
             {
                 case 1:
-                    //Debug.Log("Uploading preset seconds.");
-                    //UploadTimes("who cares", testSeconds);
+                    Debug.Log("Uploading bytearray 0000 to the leaderboard.");
+                    UploadTimeAndFile(new LevelCompleteData() { Level = "1 10", Time = testSeconds}, new byte[4]);
                     break;
                 case 2:
                     Debug.Log("Printing leaderboards.");
                     StartCoroutine(GetTimes("1 1", 2, new List<SteamTrain.LeaderboardEntry>(), new List<SteamTrain.LeaderboardEntry>()));
                     break;
                 case 3:
-                    Debug.Log("Printing relative leaderboards");
+                    Debug.Log("Printing relative leaderboards.");
                     StartCoroutine(GetRelativeTimes("1 1", 5, new List<SteamTrain.LeaderboardEntry>(), new List<SteamTrain.LeaderboardEntry>()));
+                    break;
+                case 4:
+                    Debug.Log("Printing my score.");
+                    StartCoroutine(GetMyUserTime("1 1", new SteamTrain.LeaderboardEntry()));
                     break;
             }
         }
         else
             Debug.Log("Did not subscribe events because Steam Stats were not retrieved.");
+    }
+
+    public static void UploadTimeAndFile(LevelCompleteData leveldata, byte[] data)
+    {
+        leaderboardHandlers[leveldata.Level] = new SteamTrain.SteamLeaderboardHandler
+        {
+            newScore = Mathf.RoundToInt(leveldata.Time * 1000f),
+            leaderboardData = data,
+            leaderboardFName = "Level" + leveldata.Level.Replace(" ","_") + "_BestReplay.txt"
+        };
+        leaderboardHandlers[leveldata.Level].FindLeaderboardAndUploadData(leveldata.Level);
+    }
+
+    public static IEnumerator GetMyUserTime(string level, SteamTrain.LeaderboardEntry result)
+    {
+        yield return GetTargetUserTimes(level, result, SteamManager.GetMySteamID());
+    }
+
+    public static IEnumerator GetTargetUserTimes(string level, SteamTrain.LeaderboardEntry result, ulong whomst)
+    {
+        leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler()
+        {
+            whomst = new CSteamID(whomst)
+        };
+        leaderboardHandlers[level].FindLeaderboardAndDownloadSomeGuysScore(level);
+
+        yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
+        if (leaderboardHandlers[level].foundLeaderboard)
+        {
+            yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
+            if (leaderboardHandlers[level].readLeaderboards)
+            {
+                result = leaderboardHandlers[level].readableLeaderboard[0];
+                Debug.Log(result.timeSeconds);
+            }
+        }
     }
 
     public static void UploadTimes(LevelCompleteData leveldata)

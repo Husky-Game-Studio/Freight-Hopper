@@ -9,5 +9,6 @@ namespace SteamTrain
         public int rank;
         public string playerName;
         public float timeSeconds;
+        public ulong steamID;
     }
 }
