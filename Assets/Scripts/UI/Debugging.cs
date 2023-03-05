@@ -48,8 +48,9 @@ public class Debugging : MonoBehaviour
 
     private void UpdateText()
     {
-        speedText.text = "Speed: " + movementBehavior.Speed.ToString("0.00") + " m/s";
-        horizontalSpeedText.text = "HSpeed: " + movementBehavior.HorizontalSpeed.ToString("0.00") + " m/s";
+        speedText.text = $"Speed: \t{movementBehavior.Speed.ToString("0.00")} m/s\n"+
+                         $"HSpeed:\t{movementBehavior.HorizontalSpeed.ToString("0.00")} m/s\n"+
+                         $"Pos:\t   {Player.Instance.transform.position}\n";
     }
 
     private void ToggleDebugging(InputAction.CallbackContext context)
