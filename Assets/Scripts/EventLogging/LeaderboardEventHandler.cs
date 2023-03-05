@@ -118,7 +118,7 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
                 result.AddRange(leaderboardHandlers[level].readableLeaderboard);
             }
         }
-
+        leaderboardHandlers[level].readableLeaderboard.Clear();
         leaderboardHandlers[level].FindLeaderboardAndFriendScores(level);
 
         yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
@@ -159,6 +159,7 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
             firstLimit = 1,
             secondLimit = amount
         };
+        leaderboardHandlers[level].readableLeaderboard.Clear();
         leaderboardHandlers[level].FindLeaderboardAndFriendScores(level);
 
         yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
