@@ -42,6 +42,7 @@ namespace SteamTrain
 
         public static void Init()
         {
+            Debug.Log("Hello " + SteamFriends.GetPersonaName() + " ID:" + SteamManager.GetMySteamID().ToString());
             // setup the callback method
             _p2PSessionRequestCallback = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
             _gameLobbyJoinRequestedCallback = Callback<GameLobbyJoinRequested_t>.Create(OnLobbyJoinRequest);
