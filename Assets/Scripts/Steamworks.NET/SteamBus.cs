@@ -9,7 +9,7 @@ namespace SteamTrain
         public static Action OnTimeUploaded = delegate { };
 
         // For multiplayer
-        public static Action<string> OnPlayerJoinedGame = delegate { }; // playerName
-        public static Action<string> OnPlayerLeftGame = delegate { }; // playerName
+        public static Action<SteamP2PManager.P2PPlayerInfo> OnPlayerJoinedGame = delegate { }; // playerName
+        public static Action<SteamP2PManager.P2PPlayerInfo> OnPlayerLeftGame = delegate { }; // playerName
     }
 }

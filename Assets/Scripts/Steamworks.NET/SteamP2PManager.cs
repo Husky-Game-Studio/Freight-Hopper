@@ -28,6 +28,12 @@ namespace SteamTrain
         public static Dictionary<CSteamID, int> lobbyMemberSceneDict = new Dictionary<CSteamID, int>();
         public static Dictionary<CSteamID, Vector3> lobbyMemberLastPosDict = new Dictionary<CSteamID, Vector3>();
 
+        public struct P2PPlayerInfo
+        {
+            public string pname;
+            public CSteamID pid;
+        }
+
         public enum PacketID
         {
             Pos = 0,
@@ -131,19 +137,27 @@ namespace SteamTrain
 
         private static void OnLobbyUpdate(LobbyChatUpdate_t request)
         {
-            if(request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeEntered)
+            if (request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeEntered)
             {
                 Debug.Log("OMG " + request.m_ulSteamIDUserChanged.ToString() + " JOINED!!!!!!");
                 CSteamID newguy = new CSteamID(request.m_ulSteamIDUserChanged);
                 SendSceneNamePacket(SceneManager.GetActiveScene().name, newguy);
-                SteamBus.OnPlayerJoinedGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
+                SteamBus.OnPlayerJoinedGame.Invoke(new P2PPlayerInfo()
+                {
+                    pname = SteamFriends.GetFriendPersonaName(newguy),
+                    pid = newguy
+                });
             }
-            else if(request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeLeft)
+            else if (request.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeLeft)
             {
                 Debug.Log("BRUH, " + request.m_ulSteamIDUserChanged.ToString() + " LEFT!!!!!!");
-                CSteamID newguy = new CSteamID(request.m_ulSteamIDUserChanged);
-                SendSceneNamePacket(SceneManager.GetActiveScene().name, newguy);
-                SteamBus.OnPlayerLeftGame.Invoke(SteamFriends.GetFriendPersonaName(newguy));
+                CSteamID leaver = new CSteamID(request.m_ulSteamIDUserChanged);
+                SendSceneNamePacket(SceneManager.GetActiveScene().name, leaver);
+                SteamBus.OnPlayerLeftGame.Invoke(new P2PPlayerInfo()
+                {
+                    pname = SteamFriends.GetFriendPersonaName(leaver),
+                    pid = leaver
+                });
             }
         }
 

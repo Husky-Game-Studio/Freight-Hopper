@@ -9,11 +9,13 @@ public class PlayerNetworking : MonoBehaviour
     private Transform playerDummyPrefab;
 
     private static Dictionary<Steamworks.CSteamID, Rigidbody> dummyDict = new Dictionary<Steamworks.CSteamID, Rigidbody>();
-    
+   
+
     private void OnEnable()
     {
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SteamTrain.SteamBus.OnPlayerLeftGame += OnPlayerLeaveSceneDestroy;
     }
 
     private void Start()
@@ -34,8 +36,17 @@ public class PlayerNetworking : MonoBehaviour
             // synchronize positions and spawn players if needed
             foreach(var lobbyMembers in SteamTrain.SteamP2PManager.lobbyMemberSceneDict)
             {
-                if (lobbyMembers.Value != currScene || lobbyMembers.Key == Steamworks.SteamUser.GetSteamID())
+                if (lobbyMembers.Key == Steamworks.SteamUser.GetSteamID())
                     continue;
+                if(lobbyMembers.Value != currScene)
+                {
+                    if (dummyDict.ContainsKey(lobbyMembers.Key))
+                        OnPlayerLeaveSceneDestroy(new SteamTrain.SteamP2PManager.P2PPlayerInfo
+                        {
+                            pid = lobbyMembers.Key
+                        });
+                    continue;
+                }
                 if(!dummyDict.ContainsKey(lobbyMembers.Key))
                 {
                     Debug.Log("A new player has been made.");
@@ -56,5 +67,11 @@ public class PlayerNetworking : MonoBehaviour
 
         dummyDict.Clear();
         SteamTrain.SteamP2PManager.BroadcastCurrentSceneToLobby();
+    }
+
+    private void OnPlayerLeaveSceneDestroy(SteamTrain.SteamP2PManager.P2PPlayerInfo pname)
+    {
+        Destroy(dummyDict[pname.pid].gameObject);
+        dummyDict.Remove(pname.pid);
     }
 }
