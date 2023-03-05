@@ -2,6 +2,9 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class LevelController : MonoBehaviour
 {
@@ -89,7 +92,7 @@ public class LevelController : MonoBehaviour
         return levelName.CurrentLevel();
     }
 
-    private void Awake()
+    private IEnumerator Start()
     {
         respawning = false;
         if (levelData != null)
@@ -105,11 +108,10 @@ public class LevelController : MonoBehaviour
         {
             instance = this;
         }
+
+        yield return Addressables.InstantiateAsync("PlayerPrefab.prefab");
+        ResetPlayerPosition();
         Player.PlayerLoadedIn += ResetPlayerPosition;
-
-        
-        Instantiate(Resources.Load("PlayerPrefab"));
-
         LevelLoadedIn?.Invoke();
     }
 
