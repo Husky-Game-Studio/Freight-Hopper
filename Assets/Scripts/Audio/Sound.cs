@@ -13,7 +13,7 @@ public class Sound : ScriptableObject, IDisposable
     public string groupingName = "";
 
     public string filename;
-    public AssetReference assetReference;
+    public AssetReferenceT<AudioClip> assetReference;
     public float clipLength = 0;
 
     [Range(0f, 1f)]

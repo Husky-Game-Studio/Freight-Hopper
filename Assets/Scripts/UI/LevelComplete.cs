@@ -19,6 +19,8 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerValue;
     [SerializeField] private TextMeshProUGUI nextMedalTimeValue;
 
+    [SerializeField] private Color bestTimeColor;
+
     private void Awake()
     {  
         levelCompleteScreen.SetActive(false);
@@ -48,7 +50,9 @@ public class LevelComplete : MonoBehaviour
     }
 
     private void CallBestTimeSfx(){
-        Debug.Log("GREAT JOB");
+        Player.Instance.modules.soundManager.Play("BestTime");
+        timerText.color = bestTimeColor;
+        timerValue.color = bestTimeColor;
     }
     private void EnableLevelComplete()
     {
