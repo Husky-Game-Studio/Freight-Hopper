@@ -32,6 +32,14 @@ namespace SteamTrain
 
         public List<LeaderboardEntry> readableLeaderboard = new List<LeaderboardEntry>();
 
+        public void FindLeaderboardAndForceUploadScore(string name)
+        {
+            foundLeaderboard = false;
+            findingLeaderboard = true;
+            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            callResultFindLeaderboard.Set(cb, OnFindLeaderboardForceUploadScore);
+        }
+
         public void FindLeaderboardAndUploadScore(string name)
         {
             foundLeaderboard = false;
@@ -247,6 +255,20 @@ namespace SteamTrain
                 foundLeaderboard = true;
                 currentLeaderboard = r.m_hSteamLeaderboard;
                 UploadTimeBestTime(newScore);
+            }
+            else
+                Debug.Log("Failed to find leaderboard.");
+        }
+
+        private void OnFindLeaderboardForceUploadScore(LeaderboardFindResult_t r, bool failure)
+        {
+            // no operations can be done if the target leaderboard has not been found, so this requires a flag
+            findingLeaderboard = false;
+            if (r.m_bLeaderboardFound == 1 && !failure)
+            {
+                foundLeaderboard = true;
+                currentLeaderboard = r.m_hSteamLeaderboard;
+                UploadTimeForced(newScore);
             }
             else
                 Debug.Log("Failed to find leaderboard.");

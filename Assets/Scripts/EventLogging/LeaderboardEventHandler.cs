@@ -33,10 +33,24 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
                     Debug.Log("Printing my score.");
                     StartCoroutine(GetMyUserTime("1 1", new SteamTrain.LeaderboardEntry()));
                     break;
+                case 5:
+                    Debug.Log("Forcibly updating score");
+                    UploadTimeForced(new LevelCompleteData() { Level = "1 10", Time = testSeconds });
+                    break;
+
             }
         }
         else
             Debug.Log("Did not subscribe events because Steam Stats were not retrieved.");
+    }
+
+    public static void UploadTimeForced(LevelCompleteData leveldata)
+    {
+        leaderboardHandlers[leveldata.Level] = new SteamTrain.SteamLeaderboardHandler
+        {
+            newScore = Mathf.RoundToInt(leveldata.Time * 1000f)
+        };
+        leaderboardHandlers[leveldata.Level].FindLeaderboardAndForceUploadScore(leveldata.Level);
     }
 
     public static void UploadTimeAndFile(LevelCompleteData leveldata, byte[] data)
