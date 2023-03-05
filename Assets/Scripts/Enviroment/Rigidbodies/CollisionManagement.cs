@@ -75,7 +75,7 @@ public class CollisionManagement : MonoBehaviour
             Vector3 normal = contactPoint.normal;
 
             float collisionAngle = Vector3.Angle(normal, upAxis);
-            if (collisionAngle <= maxSlope)
+            if (normal != default && collisionAngle <= maxSlope)
             {
                 isGrounded.current = true;
                 contactNormal.current += normal;
