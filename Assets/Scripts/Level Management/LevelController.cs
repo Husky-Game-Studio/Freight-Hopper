@@ -120,7 +120,7 @@ public class LevelController : MonoBehaviour
         InstantiationParameters parameters = new InstantiationParameters(position, rotation, null);
         Player.PlayerCanMove += ApplyEarlySpeed;
         yield return Addressables.InstantiateAsync("PlayerPrefab.prefab", parameters);
-        GameObject player = Player.Instance.gameObject;
+        Player player = Player.Instance;
         if (player == null)
         {
             Debug.LogWarning("Can't find player");
@@ -132,20 +132,29 @@ public class LevelController : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
             {
                 player.transform.position = hit.point + (Vector3.up * 2) + (Vector3.up * spawnSnapSmoothing);
+                if(hit.rigidbody != null){
+                    player.modules.rigidbodyLinker.UpdateLink(hit.rigidbody);
+                }
             }
         }
         
-        yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");
         LevelLoadedIn?.Invoke();
+        yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");
+        
     }
     private void OnDestroy()
     {
         Player.PlayerCanMove -= ApplyEarlySpeed;
     }
-    void ApplyEarlySpeed(){
+    void ApplyEarlySpeed()
+    {
+        StartCoroutine(ApplyLateForce());
+    }
+
+    IEnumerator ApplyLateForce(){
         Player player = Player.Instance;
-        if (player == null) return;
-        player.modules.rigidbody.velocity = player.transform.forward * levelData.Speed;
+        yield return new WaitForFixedUpdate();
+        player.modules.rigidbody.AddForce(player.transform.forward * levelData.Speed, ForceMode.VelocityChange);
     }
 
     // Respawns player. Reloads scene for now. Respawning var is used to prevent spamming of respawn button
