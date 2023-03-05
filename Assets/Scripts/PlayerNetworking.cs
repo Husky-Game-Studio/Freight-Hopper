@@ -12,9 +12,8 @@ public class PlayerNetworking : OSingleton<PlayerNetworking>
     private static Dictionary<Steamworks.CSteamID, Rigidbody> dummyDict = new Dictionary<Steamworks.CSteamID, Rigidbody>();
    
 
-    private void OnEnable()
+    private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
         SteamTrain.SteamBus.OnPlayerLeftGame += OnPlayerLeaveSceneDestroy;
     }

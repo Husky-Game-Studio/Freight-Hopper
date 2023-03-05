@@ -318,7 +318,8 @@ namespace SteamTrain
                     {
                         rank = tempEntry.m_nGlobalRank,
                         playerName = SteamFriends.GetFriendPersonaName(tempEntry.m_steamIDUser),
-                        timeSeconds = tempEntry.m_nScore / 1000f
+                        timeSeconds = tempEntry.m_nScore / 1000f,
+                        steamID = tempEntry.m_steamIDUser.m_SteamID
                     };
                     readableLeaderboard.Add(toAdd);
                 }
