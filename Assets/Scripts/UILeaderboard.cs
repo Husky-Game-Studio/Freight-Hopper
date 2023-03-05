@@ -33,6 +33,9 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
     public IEnumerator LoadRelativeLeaderboard(string level){
         loadingIcon.gameObject.SetActive(true);
         yield return LeaderboardEventHandler.GetRelativeTimes(level, timesToGrab, fullLeaderboard, friendLeaderboard);
+        if(fullLeaderboard.Count == 0){
+            yield return LeaderboardEventHandler.GetTimes(level, timesToGrab, fullLeaderboard, friendLeaderboard);
+        }
         loadingIcon.gameObject.SetActive(false);
 
         RefreshLeaderboard();

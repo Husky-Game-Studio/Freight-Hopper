@@ -21,6 +21,9 @@ public class LevelComplete : MonoBehaviour
 
     [SerializeField] private Color bestTimeColor;
 
+    const float maxTime = 24 * 60;
+    const float minTime = Mathf.PI/1.234f;
+
     private void Awake()
     {  
         levelCompleteScreen.SetActive(false);
@@ -131,6 +134,11 @@ public class LevelComplete : MonoBehaviour
             breakpointImage.SetActive(false);
         }
 
+        // Look, don't ruin the fun for others please
+        if(myTime < minTime || Settings.GetIsPlayerCollisionEnabled){
+            myTime = maxTime;
+            Debug.Log($"Submitting max time as runner doesn't meet qualifications");
+        }
         LevelCompleteData data = new LevelCompleteData
         {
             World = 1,
