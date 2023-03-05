@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Ore;
 
-public class PlayerNetworking : MonoBehaviour
+public class PlayerNetworking : OSingleton<PlayerNetworking>
 {
     [SerializeField]
     private Transform playerDummyPrefab;

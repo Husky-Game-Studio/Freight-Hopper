@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Steamworks;
+using Ore;
 
 namespace SteamTrain
 {    
-    public class SteamAchievementHandler : MonoBehaviour
+    public class SteamAchievementHandler : OSingleton<SteamAchievementHandler>
     {
         [SerializeField]
         private StatAchieveMap mapSO; 

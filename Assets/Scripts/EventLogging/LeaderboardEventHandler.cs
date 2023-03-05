@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Steamworks;
+using Ore;
 
-public class LeaderboardEventHandler : MonoBehaviour
+public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
 {
     public int testCase = 0;
     public int testSeconds = 30;

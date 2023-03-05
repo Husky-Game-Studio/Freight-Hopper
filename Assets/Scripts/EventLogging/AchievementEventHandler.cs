@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ore;
 
-public class AchievementEventHandler : MonoBehaviour
+public class AchievementEventHandler : OSingleton<AchievementEventHandler>
 {
     [SerializeField]
     private List<string> desertLevelNames = new List<string>();

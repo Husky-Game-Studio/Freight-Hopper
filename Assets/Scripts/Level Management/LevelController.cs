@@ -9,7 +9,7 @@ public class LevelController : MonoBehaviour
     public LevelName CurrentLevelName => levelName;
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
-    [SerializeField] public Transform playerSpawnTransform;
+    public Transform playerSpawnTransform; // was originally private serialize field
     [SerializeField] private float spawnSnapSmoothing = 0.001f;
     public LevelData levelData;
     public WorldListMetaData worldListMetaData;
@@ -109,8 +109,10 @@ public class LevelController : MonoBehaviour
 
         
         Instantiate(Resources.Load("PlayerPrefab"));
-
+        
         LevelLoadedIn?.Invoke();
+
+        
     }
 
 
