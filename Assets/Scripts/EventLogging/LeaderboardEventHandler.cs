@@ -7,6 +7,7 @@ using Ore;
 public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
 {
     public int testCase = 0;
+    public string testLevel = "1 9";
     public int testSeconds = 30;
     private static Dictionary<string, SteamTrain.SteamLeaderboardHandler> leaderboardHandlers = new Dictionary<string, SteamTrain.SteamLeaderboardHandler>();
 
@@ -19,23 +20,23 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
             {
                 case 1:
                     Debug.Log("Uploading bytearray 0000 to the leaderboard.");
-                    UploadTimeAndFile(new LevelCompleteData() { Level = "1 10", Time = testSeconds}, new byte[4]);
+                    UploadTimeAndFile(new LevelCompleteData() { Level = testLevel, Time = testSeconds}, new byte[4]);
                     break;
                 case 2:
                     Debug.Log("Printing leaderboards.");
-                    StartCoroutine(GetTimes("1 1", 2, new List<SteamTrain.LeaderboardEntry>(), new List<SteamTrain.LeaderboardEntry>()));
+                    StartCoroutine(GetTimes(testLevel, 2, new List<SteamTrain.LeaderboardEntry>(), new List<SteamTrain.LeaderboardEntry>()));
                     break;
                 case 3:
                     Debug.Log("Printing relative leaderboards.");
-                    StartCoroutine(GetRelativeTimes("1 1", 5, new List<SteamTrain.LeaderboardEntry>(), new List<SteamTrain.LeaderboardEntry>()));
+                    StartCoroutine(GetRelativeTimes(testLevel, 5, new List<SteamTrain.LeaderboardEntry>(), new List<SteamTrain.LeaderboardEntry>()));
                     break;
                 case 4:
                     Debug.Log("Printing my score.");
-                    StartCoroutine(GetMyUserTime("1 1", new SteamTrain.LeaderboardEntry()));
+                    StartCoroutine(GetMyUserTime(testLevel, new SteamTrain.LeaderboardEntry()));
                     break;
                 case 5:
                     Debug.Log("Forcibly updating score");
-                    UploadTimeForced(new LevelCompleteData() { Level = "1 10", Time = testSeconds });
+                    UploadTimeForced(new LevelCompleteData() { Level = testLevel, Time = testSeconds });
                     break;
 
             }

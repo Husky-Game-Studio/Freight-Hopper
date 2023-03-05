@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5232500131110940638}
   - component: {fileID: 5232500131110940639}
+  - component: {fileID: 6251673067873175706}
   m_Layer: 0
   m_Name: Main Music
   m_TagString: Untagged
@@ -27,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -49,6 +51,17 @@ MonoBehaviour:
   normal: {fileID: 24500006, guid: b2d2e8b2ecfedfb47a1a12058ce7f03f, type: 2}
   paused: {fileID: -7521013773554080458, guid: b2d2e8b2ecfedfb47a1a12058ce7f03f, type: 2}
   alternate: {fileID: 6927605061772508586, guid: b2d2e8b2ecfedfb47a1a12058ce7f03f, type: 2}
-  currentSongName: 0
+  minSongLengthTimer:
+    duration: 60
+    current: 0
+  musicChangeChance: 0.1
+  tempListener: {fileID: 6251673067873175706}
   musicMode: 2
-  playMusicOnAwake: 1
+--- !u!81 &6251673067873175706
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5232500131110940636}
+  m_Enabled: 0

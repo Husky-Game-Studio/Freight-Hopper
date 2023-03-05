@@ -5305,6 +5305,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 659886075}
   m_CullTransparentMesh: 1
+--- !u!81 &664313916 stripped
+AudioListener:
+  m_CorrespondingSourceObject: {fileID: 6251673067873175706, guid: 57978364343a0d94fb262851beaf4bf7, type: 3}
+  m_PrefabInstance: {fileID: 5232500130745530217}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &667529439
 GameObject:
   m_ObjectHideFlags: 0
@@ -14357,6 +14362,10 @@ PrefabInstance:
       propertyPath: musicMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5232500131110940639, guid: 57978364343a0d94fb262851beaf4bf7, type: 3}
+      propertyPath: tempListener
+      value: 
+      objectReference: {fileID: 664313916}
     - target: {fileID: 5232500131110940639, guid: 57978364343a0d94fb262851beaf4bf7, type: 3}
       propertyPath: musicChangeChance
       value: 0.25
