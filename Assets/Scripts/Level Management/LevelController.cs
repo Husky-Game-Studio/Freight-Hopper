@@ -111,17 +111,17 @@ public class LevelController : MonoBehaviour
 
         yield return Addressables.InstantiateAsync("PlayerPrefab.prefab");
         ResetPlayerPosition();
-        Player.PlayerLoadedIn += ResetPlayerPosition;
+        //Player.PlayerLoadedIn += ResetPlayerPosition;
         LevelLoadedIn?.Invoke();
 
-        
+        yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");
     }
 
 
 
     private void OnDestroy()
     {
-        Player.PlayerLoadedIn -= ResetPlayerPosition;
+        //Player.PlayerLoadedIn -= ResetPlayerPosition;
     }
 
     private void ResetPlayerPosition()
