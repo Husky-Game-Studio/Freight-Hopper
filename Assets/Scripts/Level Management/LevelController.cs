@@ -118,7 +118,7 @@ public class LevelController : MonoBehaviour
         }
 
         InstantiationParameters parameters = new InstantiationParameters(position, rotation, null);
-
+        Player.PlayerCanMove += ApplyEarlySpeed;
         yield return Addressables.InstantiateAsync("PlayerPrefab.prefab", parameters);
         GameObject player = Player.Instance.gameObject;
         if (player == null)
@@ -134,7 +134,7 @@ public class LevelController : MonoBehaviour
                 player.transform.position = hit.point + (Vector3.up * 2) + (Vector3.up * spawnSnapSmoothing);
             }
         }
-        Player.PlayerCanMove += ApplyEarlySpeed;
+        
         yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");
         LevelLoadedIn?.Invoke();
     }
