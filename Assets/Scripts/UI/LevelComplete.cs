@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 using SteamTrain;
+using System.Collections;
 
 public class LevelComplete : MonoBehaviour
 {
@@ -60,7 +61,7 @@ public class LevelComplete : MonoBehaviour
     private void EnableLevelComplete()
     {
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
-        BestTime();
+        StartCoroutine(BestTime());
         if (Settings.GetIsContinuousMode){
             NextLevel();
             return;
@@ -71,12 +72,14 @@ public class LevelComplete : MonoBehaviour
         PauseMenu.Instance.PauseGame();
     }
 
-    private void BestTime()
+    private IEnumerator BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
         
         levelNameText.text = LevelController.Instance.worldListMetaData.GetWorld("Desert").GetLevel(levelName).Title; // this just happens to always get the last number
-        
+
+        LeaderboardEntry result = new LeaderboardEntry();
+        yield return LeaderboardEventHandler.GetMyUserTime(levelName, result);
         LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
         float myTime = timer.GetTime();
         timerText.text = "Time:";
@@ -88,16 +91,17 @@ public class LevelComplete : MonoBehaviour
             {
                 LevelName = levelName
             };
-            levelTimeData.SetNewBestTime(myTime, true);
         }
         else
         {
             levelTimeData.LevelName = levelName;
-            levelTimeData.SetNewBestTime(myTime);
         }
 
         //////////////////// Medal Shit ////////////////////
-        float bestTime = levelTimeData.BestTime;
+        float bestTime = result.timeSeconds;
+        if (result == default){
+            bestTime = MAX_TIME;
+        }
         int index = 0;
         while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
         {

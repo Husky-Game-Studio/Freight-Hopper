@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using SteamTrain;
 
 public class SelectedLevelDataManager : MonoBehaviour
 {
@@ -15,26 +17,29 @@ public class SelectedLevelDataManager : MonoBehaviour
 
     public LevelData CurrentLevelData => levelListManager.CurrentWorld.Levels[LevelSelectLevelButton.currentID - 1];
 
-    public void UpdateUI()
+    public IEnumerator UpdateUI()
     {
         LevelData currentData = this.CurrentLevelData;
         if(currentData == null)
         {
-            return;
+            yield break;
         }
-
+        
         worldtitle.text = levelListManager.CurrentWorld.name;
         title.text = currentData.Title;
+
+        LeaderboardEntry result = new LeaderboardEntry();
+        yield return LeaderboardEventHandler.GetMyUserTime(currentData.name, result);
         LevelSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
         if (levelSaveData != null)
         {
-            if (float.IsInfinity(levelSaveData.BestTime))
+            if (result == null)
             {
                 bestTime.text = "Best: None";
             }
             else
             {
-                bestTime.text = "Best: " + LevelTimer.GetTimeString(levelSaveData.BestTime);
+                bestTime.text = "Best: " + LevelTimer.GetTimeString(result.timeSeconds);
             }
             if (levelSaveData.MedalIndex >= 0)
             {
@@ -65,7 +70,7 @@ public class SelectedLevelDataManager : MonoBehaviour
     {
         if (LevelSelectLevelButton.currentID != lastIndex)
         {
-            UpdateUI();
+            StartCoroutine(UpdateUI());
         }
         lastIndex = LevelSelectLevelButton.currentID;
     }

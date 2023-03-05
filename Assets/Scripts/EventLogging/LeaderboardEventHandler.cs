@@ -84,8 +84,7 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
             yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
             if (leaderboardHandlers[level].readLeaderboards)
             {
-                result = leaderboardHandlers[level].readableLeaderboard[0];
-                Debug.Log(result.timeSeconds);
+                result.Copy(leaderboardHandlers[level].readableLeaderboard[0]);
             }
         }
     }

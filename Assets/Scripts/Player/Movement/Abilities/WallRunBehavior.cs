@@ -246,6 +246,7 @@ public partial class WallRunBehavior : AbilityBehavior
     {
         soundManager.Stop("WallClimb");
         wallClimbActive = false;
+        wallJumpActive = false;
     }
     public void RunExit()
     {

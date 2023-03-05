@@ -52,7 +52,6 @@ public static class LevelTimeSaveLoader
                 {
                     case 1:
                         temp = new LevelSaveData();
-                        temp.BestTime = reader.ReadSingle();
                         temp.SetNewMedalIndex(reader.ReadInt32(), false);
                         break;
                 }
