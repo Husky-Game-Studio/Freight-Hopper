@@ -67,69 +67,89 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
 
     public static IEnumerator GetMyUserTime(string level, SteamTrain.LeaderboardEntry result)
     {
-        yield return GetTargetUserTimes(level, result, SteamManager.GetMySteamID());
+        if (SteamManager.Initialized)
+            yield return GetTargetUserTimes(level, result, SteamManager.GetMySteamID());
+        else
+            Debug.Log("Cannot get user time, as there is no Steam.");
+        yield return null;
     }
 
     public static IEnumerator GetTargetUserTimes(string level, SteamTrain.LeaderboardEntry result, ulong whomst)
     {
-        leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler()
+        if (SteamManager.Initialized)
         {
-            whomst = new CSteamID(whomst)
-        };
-        leaderboardHandlers[level].FindLeaderboardAndDownloadSomeGuysScore(level);
-
-        yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
-        if (leaderboardHandlers[level].foundLeaderboard)
-        {
-            yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
-            if (leaderboardHandlers[level].readLeaderboards)
+            leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler()
             {
-                result.Copy(leaderboardHandlers[level].readableLeaderboard[0]);
+                whomst = new CSteamID(whomst)
+            };
+            leaderboardHandlers[level].FindLeaderboardAndDownloadSomeGuysScore(level);
+
+            yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
+            if (leaderboardHandlers[level].foundLeaderboard)
+            {
+                yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
+                if (leaderboardHandlers[level].readLeaderboards)
+                {
+                    result.Copy(leaderboardHandlers[level].readableLeaderboard[0]);
+                }
             }
         }
+        else
+            Debug.Log("Cannot get user time, as there is no Steam.");
+        yield return null;
     }
 
     public static void UploadTimes(LevelCompleteData leveldata)
     {
-        leaderboardHandlers[leveldata.Level] = new SteamTrain.SteamLeaderboardHandler
+        if (SteamManager.Initialized)
         {
-            newScore = Mathf.RoundToInt(leveldata.Time * 1000f)
-        };
-        leaderboardHandlers[leveldata.Level].FindLeaderboardAndUploadScore(leveldata.Level);
+            leaderboardHandlers[leveldata.Level] = new SteamTrain.SteamLeaderboardHandler
+            {
+                newScore = Mathf.RoundToInt(leveldata.Time * 1000f)
+            };
+            leaderboardHandlers[leveldata.Level].FindLeaderboardAndUploadScore(leveldata.Level);
+        }
+        else
+            Debug.Log("Cannot upload time, as there is no Steam.");
     }
 
     public static IEnumerator GetTimes(string level, int amount,
                                 List<SteamTrain.LeaderboardEntry> result,
                                 List<SteamTrain.LeaderboardEntry> resultFriends)
     {
-        leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler
+        if (SteamManager.Initialized)
         {
+            leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler
+            {
                 firstLimit = 1,
                 secondLimit = amount
-        };
-        leaderboardHandlers[level].FindLeaderboardAndDownloadScores(level);
+            };
+            leaderboardHandlers[level].FindLeaderboardAndDownloadScores(level);
 
-        yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
-        if (leaderboardHandlers[level].foundLeaderboard)
-        {
-            yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
-            if (leaderboardHandlers[level].readLeaderboards)
+            yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
+            if (leaderboardHandlers[level].foundLeaderboard)
             {
-                result.AddRange(leaderboardHandlers[level].readableLeaderboard);
+                yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
+                if (leaderboardHandlers[level].readLeaderboards)
+                {
+                    result.AddRange(leaderboardHandlers[level].readableLeaderboard);
+                }
+            }
+            leaderboardHandlers[level].readableLeaderboard.Clear();
+            leaderboardHandlers[level].FindLeaderboardAndFriendScores(level);
+
+            yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
+            if (leaderboardHandlers[level].foundLeaderboard)
+            {
+                yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
+                if (leaderboardHandlers[level].readLeaderboards)
+                {
+                    resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
+                }
             }
         }
-        leaderboardHandlers[level].readableLeaderboard.Clear();
-        leaderboardHandlers[level].FindLeaderboardAndFriendScores(level);
-
-        yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
-        if (leaderboardHandlers[level].foundLeaderboard)
-        {
-            yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
-            if (leaderboardHandlers[level].readLeaderboards)
-            {
-                resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
-            }
-        }
+        else
+            Debug.Log("Cannot get leaderboard times, as there is no Steam");
         yield return null;
     }
 
@@ -137,40 +157,45 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
                                         List<SteamTrain.LeaderboardEntry> result,
                                         List<SteamTrain.LeaderboardEntry> resultFriends)
     {
-        leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler
+        if (SteamManager.Initialized)
         {
-            firstLimit = amount/2,
-            secondLimit = amount/2
-        };
-        leaderboardHandlers[level].FindLeaderboardAndDownloadRelativeScores(level);
-
-        yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
-        if (leaderboardHandlers[level].foundLeaderboard)
-        {
-            yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
-            if (leaderboardHandlers[level].readLeaderboards)
+            leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler
             {
-                result.AddRange(leaderboardHandlers[level].readableLeaderboard);
+                firstLimit = amount / 2,
+                secondLimit = amount / 2
+            };
+            leaderboardHandlers[level].FindLeaderboardAndDownloadRelativeScores(level);
+
+            yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
+            if (leaderboardHandlers[level].foundLeaderboard)
+            {
+                yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
+                if (leaderboardHandlers[level].readLeaderboards)
+                {
+                    result.AddRange(leaderboardHandlers[level].readableLeaderboard);
+                }
+            }
+
+            leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler
+            {
+                firstLimit = 1,
+                secondLimit = amount
+            };
+            leaderboardHandlers[level].readableLeaderboard.Clear();
+            leaderboardHandlers[level].FindLeaderboardAndFriendScores(level);
+
+            yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
+            if (leaderboardHandlers[level].foundLeaderboard)
+            {
+                yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
+                if (leaderboardHandlers[level].readLeaderboards)
+                {
+                    resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
+                }
             }
         }
-
-        leaderboardHandlers[level] = new SteamTrain.SteamLeaderboardHandler
-        {
-            firstLimit = 1,
-            secondLimit = amount
-        };
-        leaderboardHandlers[level].readableLeaderboard.Clear();
-        leaderboardHandlers[level].FindLeaderboardAndFriendScores(level);
-
-        yield return new WaitWhile(delegate { return leaderboardHandlers[level].findingLeaderboard; });
-        if (leaderboardHandlers[level].foundLeaderboard)
-        {
-            yield return new WaitWhile(delegate { return leaderboardHandlers[level].downloadingLeaderboards; });
-            if (leaderboardHandlers[level].readLeaderboards)
-            {
-                resultFriends.AddRange(leaderboardHandlers[level].readableLeaderboard);
-            }
-        }
+        else
+            Debug.Log("Cannot get leaderboard times, as there is no Steam");
         yield return null;
     }
 }

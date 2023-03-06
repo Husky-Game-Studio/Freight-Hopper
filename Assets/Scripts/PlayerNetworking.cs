@@ -26,36 +26,39 @@ public class PlayerNetworking : OSingleton<PlayerNetworking>
     // Update is called once per frame
     void FixedUpdate()
     {
-        SteamTrain.SteamP2PManager.HandlePackets();
-        if (SteamTrain.SteamP2PManager.joinedLobby && Player.Instance != null)
+        if (SteamManager.Initialized)
         {
-            int currScene = SceneManager.GetActiveScene().buildIndex;
-            SteamTrain.SteamP2PManager.BroadcastPositionToLobby(Player.Instance.transform.position);
-            // angrily ping my position
-            
-            // synchronize positions and spawn players if needed
-            foreach(var lobbyMembers in SteamTrain.SteamP2PManager.lobbyMemberSceneDict)
+            SteamTrain.SteamP2PManager.HandlePackets();
+            if (SteamTrain.SteamP2PManager.joinedLobby && Player.Instance != null)
             {
-                if (lobbyMembers.Key == Steamworks.SteamUser.GetSteamID())
-                    continue;
-                if(lobbyMembers.Value != currScene)
+                int currScene = SceneManager.GetActiveScene().buildIndex;
+                SteamTrain.SteamP2PManager.BroadcastPositionToLobby(Player.Instance.transform.position);
+                // angrily ping my position
+
+                // synchronize positions and spawn players if needed
+                foreach (var lobbyMembers in SteamTrain.SteamP2PManager.lobbyMemberSceneDict)
                 {
-                    if (dummyDict.ContainsKey(lobbyMembers.Key))
-                        OnPlayerLeaveSceneDestroy(new SteamTrain.SteamP2PManager.P2PPlayerInfo
-                        {
-                            pid = lobbyMembers.Key
-                        });
-                    continue;
+                    if (lobbyMembers.Key == Steamworks.SteamUser.GetSteamID())
+                        continue;
+                    if (lobbyMembers.Value != currScene)
+                    {
+                        if (dummyDict.ContainsKey(lobbyMembers.Key))
+                            OnPlayerLeaveSceneDestroy(new SteamTrain.SteamP2PManager.P2PPlayerInfo
+                            {
+                                pid = lobbyMembers.Key
+                            });
+                        continue;
+                    }
+                    if (!dummyDict.ContainsKey(lobbyMembers.Key))
+                    {
+                        Debug.Log("A new player has been made.");
+                        dummyDict[lobbyMembers.Key] = Instantiate(playerDummyPrefab.gameObject).GetComponent<Rigidbody>();
+                        dummyDict[lobbyMembers.Key].GetComponent<PlayerDummyName>().SetText(
+                                                    Steamworks.SteamFriends.GetFriendPersonaName(lobbyMembers.Key));
+                    }
+                    if (SteamTrain.SteamP2PManager.lobbyMemberLastPosDict.ContainsKey(lobbyMembers.Key))
+                        dummyDict[lobbyMembers.Key].MovePosition(SteamTrain.SteamP2PManager.lobbyMemberLastPosDict[lobbyMembers.Key]);
                 }
-                if(!dummyDict.ContainsKey(lobbyMembers.Key))
-                {
-                    Debug.Log("A new player has been made.");
-                    dummyDict[lobbyMembers.Key] = Instantiate(playerDummyPrefab.gameObject).GetComponent<Rigidbody>();
-                    dummyDict[lobbyMembers.Key].GetComponent<PlayerDummyName>().SetText(
-                                                Steamworks.SteamFriends.GetFriendPersonaName(lobbyMembers.Key));
-                }
-                if(SteamTrain.SteamP2PManager.lobbyMemberLastPosDict.ContainsKey(lobbyMembers.Key))
-                    dummyDict[lobbyMembers.Key].MovePosition(SteamTrain.SteamP2PManager.lobbyMemberLastPosDict[lobbyMembers.Key]);
             }
         }
     }

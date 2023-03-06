@@ -42,28 +42,38 @@ namespace SteamTrain
 
         public static void Init()
         {
-            Debug.Log("Hello " + SteamFriends.GetPersonaName() + " ID:" + SteamManager.GetMySteamID().ToString());
-            // setup the callback method
-            _p2PSessionRequestCallback = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
-            _gameLobbyJoinRequestedCallback = Callback<GameLobbyJoinRequested_t>.Create(OnLobbyJoinRequest);
-            _gameLobbyUpdatedCallback = Callback<LobbyChatUpdate_t>.Create(OnLobbyUpdate);
-            CreateP2PLobby();
+            if (SteamManager.Initialized)
+            {
+                Debug.Log("Hello " + SteamFriends.GetPersonaName() + " ID:" + SteamManager.GetMySteamID().ToString());
+                // setup the callback method
+                _p2PSessionRequestCallback = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
+                _gameLobbyJoinRequestedCallback = Callback<GameLobbyJoinRequested_t>.Create(OnLobbyJoinRequest);
+                _gameLobbyUpdatedCallback = Callback<LobbyChatUpdate_t>.Create(OnLobbyUpdate);
+                CreateP2PLobby();
+            }
+            else
+                Debug.Log("No Steam detected, cannoit create lobby.");
         }
 
         // only broadcast to users in the same scene
         public static void BroadcastPositionToLobby(Vector3 pos)
         {
-            foreach (var dest in lobbyMemberSceneDict)
-                if(dest.Key != SteamUser.GetSteamID() &&
-                    dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
-                    SendPositionPacket(pos, dest.Key);
+            if(SteamManager.Initialized)
+              foreach (var dest in lobbyMemberSceneDict)
+                if(dest.Key != SteamUser.GetSteamID() && dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
+                  SendPositionPacket(pos, dest.Key);
+           else
+              Debug.Log("No Steam detected, cannot send packets.");
         }
 
         // call this on scene change once
         public static void BroadcastCurrentSceneToLobby()
         {
-            foreach (var dest in lobbyMemberSceneDict)
-              SendSceneNamePacket(SceneManager.GetActiveScene().name, dest.Key);
+            if (SteamManager.Initialized)
+              foreach (var dest in lobbyMemberSceneDict)
+                SendSceneNamePacket(SceneManager.GetActiveScene().name, dest.Key);
+            else
+                Debug.Log("No Steam detected, cannot send packets.");
         }
 
         public static void CreateP2PLobby(int lobbySize = 4)
