@@ -13,20 +13,27 @@ MonoBehaviour:
   m_Name: JumpBehaviourInput
   m_EditorClassIdentifier: Assembly-CSharp::JumpBehaviourInputs
   intialVelocity: 2
-  holdingJumpForceMultiplier: 30
-  jumpCurveOffset: 1
   jumpCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 30
-      inSlope: 2
-      outSlope: 2
+      value: 3750
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.05
+      value: 30
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 0
