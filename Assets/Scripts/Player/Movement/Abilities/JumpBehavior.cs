@@ -97,7 +97,7 @@ public class JumpBehavior : AbilityBehavior
     {
         jumpHoldingTimer.CountDown(Time.fixedDeltaTime);
         t = Mathf.Clamp01(((jumpHoldingTimer.Current - jumpHoldingTimer.Duration) * -1) / jumpHoldingTimer.Duration);
-        multiplier = behaviorInputs.jumpCurve.Evaluate(t) * behaviorInputs.holdingJumpForceMultiplier + behaviorInputs.jumpCurveOffset;
+        multiplier = behaviorInputs.jumpCurve.Evaluate(t);
         rb.AddForce(CustomGravity.GetUpAxis() * multiplier, ForceMode.Acceleration);
     }
 }
