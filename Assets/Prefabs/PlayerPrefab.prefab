@@ -1073,7 +1073,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7786561, y: 1}
+    m_SensorSize: {x: 2.0561168, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3498,10 +3498,10 @@ MonoBehaviour:
   consumed: 0
   preventConsumption: 0
   rb: {fileID: 0}
-  minJumpHeight: 5
+  minJumpHeight: 6
   holdingJumpForceMultiplier: 3
   jumpHoldingTimer:
-    duration: 1.2
+    duration: 0.5
     current: 0
   coyoteeTimer:
     duration: 0.66
@@ -3525,8 +3525,8 @@ MonoBehaviour:
     value: 1
   deltaIncreaseForce: 0.02
   angleToBeConsideredFlat: 3
-  initialBurstVelocity: 20
-  downwardsForce: 25
+  initialBurstVelocity: 30
+  downwardsForce: 30
   slopeDownForce: 20
   groundFrictionReductionPercent: 1
   particles: {fileID: 8483552611477300632}
