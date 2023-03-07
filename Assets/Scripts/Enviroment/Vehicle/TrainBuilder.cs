@@ -418,7 +418,7 @@ public class TrainBuilder : MonoBehaviour
     private Vector3 GetPosition(int index)
     {
         var forward = locomotive.transform.forward;
-        Vector3 startPosition = locomotive.transform.position - (forward * cartLength.Value/2);
+        Vector3 startPosition = locomotive.transform.position - (forward * locomotiveLength.Value/2);
 
         Vector3 endPosition = startPosition - (forward * ((cartLength.Value / 2) + (index * cartLength.Value) + ((index + 1) * (gapLength.Value + jointSnappingLength.Value))));
 
