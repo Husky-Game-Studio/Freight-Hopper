@@ -16,6 +16,7 @@ public class CollisionManagement : MonoBehaviour
 
     [SerializeField] private float maxDepenetrationVelocity = 500;
     [ReadOnly, SerializeField] private Memory<bool> isGrounded;
+    [ReadOnly, SerializeField] private Memory<bool> trueIsGrounded;
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
     [ReadOnly, SerializeField] private Memory<Vector3> position;
@@ -27,6 +28,7 @@ public class CollisionManagement : MonoBehaviour
     public Vector3 ValidUpAxis => validUpAxis;
     public Memory<Vector3> ContactNormal => contactNormal;
     public Memory<bool> IsGrounded => isGrounded;
+    public Memory<bool> TrueIsGrounded => trueIsGrounded;
     public bool LevelSurface => this.ValidUpAxis == this.ContactNormal.current && isGrounded.current;
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
@@ -78,6 +80,7 @@ public class CollisionManagement : MonoBehaviour
             if (normal != default && collisionAngle <= maxSlope)
             {
                 isGrounded.current = true;
+                trueIsGrounded.current = true;
                 contactNormal.current += normal;
                 contactCount++;
                 frictionManager.EvalauteSurface(collision);
@@ -137,6 +140,9 @@ public class CollisionManagement : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * groundRaycastCheckDistance, Color.red);
         if (Physics.Raycast(ray, out RaycastHit hit, groundRaycastCheckDistance, groundMask))
         {
+            if (hit.collider == null || hit.collider.isTrigger || hit.normal == default)
+                return;
+
             if (Vector3.Angle(hit.normal, this.ValidUpAxis) <= maxSlope)
             {
                 isGrounded.current = true;
@@ -170,6 +176,7 @@ public class CollisionManagement : MonoBehaviour
     private void UpdateOldValues()
     {
         isGrounded.UpdateOld();
+        trueIsGrounded.UpdateOld();
         contactNormal.UpdateOld();
         rigidbodyLinker.UpdateOldValues();
         velocity.UpdateOld();
@@ -179,6 +186,7 @@ public class CollisionManagement : MonoBehaviour
     private void ClearValues()
     {
         isGrounded.current = false;
+        trueIsGrounded.current = false;
         contactCount = 0;
         steepCount = 0;
         velocity.current = rb.velocity;

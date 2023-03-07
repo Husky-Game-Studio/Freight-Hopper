@@ -205,6 +205,9 @@ MonoBehaviour:
   isGrounded:
     old: 0
     current: 0
+  trueIsGrounded:
+    old: 0
+    current: 0
   contactNormal:
     old: {x: 0, y: 0, z: 0}
     current: {x: 0, y: 0, z: 0}
@@ -1073,7 +1076,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.0561168, y: 1}
+    m_SensorSize: {x: 1.7775862, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3498,8 +3501,7 @@ MonoBehaviour:
   consumed: 0
   preventConsumption: 0
   rb: {fileID: 0}
-  minJumpHeight: 6
-  holdingJumpForceMultiplier: 3
+  behaviorInputs: {fileID: 11400000, guid: 3e62d2f5121079a44a1f164a3617ac40, type: 2}
   jumpHoldingTimer:
     duration: 0.5
     current: 0

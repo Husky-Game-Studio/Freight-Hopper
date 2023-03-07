@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class JumpBehavior : AbilityBehavior
 {
-    [SerializeField] private float minJumpHeight = 2f;
-    [SerializeField] private float holdingJumpForceMultiplier = 5f;
+    [SerializeField] JumpBehaviorInputs behaviorInputs;
+
+    float t;
+    float multiplier;
+    float total;
+
     private RigidbodyLinker rigidbodyLinker;
     private CollisionManagement collisionManager;
 
     public Timer jumpHoldingTimer = new Timer(0.5f);
     public Timer coyoteeTimer = new Timer(0.5f);
-    public float JumpHeight => minJumpHeight;
     private bool active;
     public bool Active => active;
     public override void Initialize()
@@ -24,7 +27,7 @@ public class JumpBehavior : AbilityBehavior
     /// </summary>
     public void Jump()
     {
-        Jump(this.JumpHeight);
+        Jump(behaviorInputs.intialVelocity);
     }
     private void FixedUpdate()
     {
@@ -32,7 +35,7 @@ public class JumpBehavior : AbilityBehavior
         {
             coyoteeTimer.DeactivateTimer();
         }
-        if (collisionManager.IsGrounded.old)
+        if (collisionManager.TrueIsGrounded.old)
         {
             coyoteeTimer.ResetTimer();
             jumpHoldingTimer.DeactivateTimer();
@@ -90,10 +93,11 @@ public class JumpBehavior : AbilityBehavior
         jumpHoldingTimer.DeactivateTimer();
         active = false;
     }
-
     public void Action()
     {
         jumpHoldingTimer.CountDown(Time.fixedDeltaTime);
-        rb.AddForce(CustomGravity.GetUpAxis() * holdingJumpForceMultiplier, ForceMode.Acceleration);
+        t = Mathf.Clamp01(((jumpHoldingTimer.Current - jumpHoldingTimer.Duration) * -1) / jumpHoldingTimer.Duration);
+        multiplier = behaviorInputs.jumpCurve.Evaluate(t) * behaviorInputs.holdingJumpForceMultiplier + behaviorInputs.jumpCurveOffset;
+        rb.AddForce(CustomGravity.GetUpAxis() * multiplier, ForceMode.Acceleration);
     }
 }
