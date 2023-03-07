@@ -41,7 +41,7 @@ public class SelectedLevelDataManager : MonoBehaviour
             {
                 bestTime.text = "Best: " + LevelTimer.GetTimeString(result.timeSeconds);
             }
-            if (levelSaveData.MedalIndex >= 0)
+            if (levelSaveData.MedalIndex >= 0 && levelSaveData.MedalIndex < medalSprites.Sprites.Count)
             {
                 medal.gameObject.SetActive(true);
                 medal.sprite = medalSprites.Sprites[levelSaveData.MedalIndex];
