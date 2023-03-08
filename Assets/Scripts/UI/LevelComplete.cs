@@ -89,7 +89,9 @@ public class LevelComplete : MonoBehaviour
             Debug.Log("no save data found, saving new time");
             levelTimeData = new LevelSaveData
             {
-                LevelName = levelName
+                LevelName = levelName,
+                MedalIndex = -1,
+                RobertoFound = false
             };
         }
         else
@@ -98,9 +100,9 @@ public class LevelComplete : MonoBehaviour
         }
 
         //////////////////// Medal Shit ////////////////////
-        float bestTime = result.timeSeconds;
-        if (result == default){
-            bestTime = MAX_TIME;
+        float bestTime = MAX_TIME;
+        if (result != null && result.timeSeconds != default){
+            bestTime = result.timeSeconds;
         }
         int index = 0;
         while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])

@@ -32,34 +32,10 @@ public static class LevelTimeSaveLoader
         }
 
         LevelSaveData temp = Load2(levelName);
-        if(temp == null){
-            temp = Load1(levelName);
-        }
 
         return temp;
     }
 
-    private static LevelSaveData Load1(string levelName){
-        LevelSaveData temp = null;
-        string filename = GetFileName(levelName);
-
-        using (var stream = File.Open(filename, FileMode.Open))
-        {
-            using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
-            {
-                // File Version Number is an int
-                switch (reader.ReadInt32())
-                {
-                    case 1:
-                        temp = new LevelSaveData();
-                        temp.SetNewMedalIndex(reader.ReadInt32(), false);
-                        break;
-                }
-            }
-        }
-        
-        return temp;
-    }
     private static LevelSaveData Load2(string levelName){
         LevelSaveData temp = null;
         string filename = GetFileName(levelName);
