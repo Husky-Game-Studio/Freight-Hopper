@@ -94,10 +94,6 @@ public class LevelComplete : MonoBehaviour
                 RobertoFound = false
             };
         }
-        else
-        {
-            levelTimeData.LevelName = levelName;
-        }
 
         //////////////////// Medal Shit ////////////////////
         float bestTime = MAX_TIME;

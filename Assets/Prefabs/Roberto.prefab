@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4471779370613439530}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Roberto
-  m_TagString: Untagged
+  m_TagString: landable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4761402832644332877}
   - component: {fileID: 5200647888553002107}
   - component: {fileID: 7399095771111825201}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cowboy_hat_v1.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 3548914919086291466}
   - component: {fileID: 970677064095021228}
   - component: {fileID: 5279128008476152220}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: banjo_v0.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,12 +211,14 @@ GameObject:
   - component: {fileID: 7091528328534452301}
   - component: {fileID: 7036540831123638267}
   - component: {fileID: 6260830675544817379}
-  m_Layer: 0
+  - component: {fileID: 5225311082213195465}
+  - component: {fileID: 2237811594229408439}
+  m_Layer: 2
   m_Name: Roberto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 126
   m_IsActive: 1
 --- !u!4 &7091528328534452301
 Transform:
@@ -283,3 +285,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5225311082213195465
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442465809380587065}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6155788545460931807, guid: a7f36240e8707da4ea825f519896764a, type: 3}
+--- !u!114 &2237811594229408439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442465809380587065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8f98a7e231ca142a22d8ba20789171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

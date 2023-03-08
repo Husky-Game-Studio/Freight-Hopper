@@ -18,4 +18,9 @@ public class LevelSaveData
             LevelTimeSaveLoader.Save(LevelName, this);
         }
     }
+
+    public void FoundRoberto(){
+        RobertoFound = true;
+        LevelTimeSaveLoader.Save(LevelName, this);
+    }
 }
