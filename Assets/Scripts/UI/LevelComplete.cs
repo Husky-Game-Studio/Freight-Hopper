@@ -19,8 +19,8 @@ public class LevelComplete : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI timerValue;
     [SerializeField] private TextMeshProUGUI nextMedalTimeValue;
-
     [SerializeField] private Color bestTimeColor;
+    [SerializeField] UILeaderboard leaderboard;
 
     public const float MAX_TIME = 24 * 60;
     public const float MIN_TIME = Mathf.PI/1.234f;
@@ -50,7 +50,7 @@ public class LevelComplete : MonoBehaviour
     }
 
     void DownloadLeaderboard(){
-        levelCompleteScreen.SetActive(true);
+        leaderboard.LoadCurrentSceneLeaderboard();
     }
 
     private void CallBestTimeSfx(){
@@ -61,6 +61,7 @@ public class LevelComplete : MonoBehaviour
     private void EnableLevelComplete()
     {
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
+        levelCompleteScreen.SetActive(true);
         StartCoroutine(BestTime());
         if (Settings.GetIsContinuousMode){
             NextLevel();
@@ -75,15 +76,14 @@ public class LevelComplete : MonoBehaviour
     private IEnumerator BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
-        
-        levelNameText.text = LevelController.Instance.worldListMetaData.GetWorld("Desert").GetLevel(levelName).Title; // this just happens to always get the last number
 
-        LeaderboardEntry result = new LeaderboardEntry();
-        yield return LeaderboardEventHandler.GetMyUserTime(levelName, result);
-        LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
-        float myTime = timer.GetTime();
+        levelNameText.text = LevelController.Instance.worldListMetaData.GetWorld("Desert").GetLevel(levelName).Title; // this just happens to always get the last number
         timerText.text = "Time:";
+        float myTime = timer.GetTime();
         timerValue.text = LevelTimer.GetTimeString(myTime);
+
+        LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
+
         if (levelTimeData == null)
         {
             Debug.Log("no save data found, saving new time");
@@ -94,6 +94,12 @@ public class LevelComplete : MonoBehaviour
                 RobertoFound = false
             };
         }
+        else {
+            DisplayMedal(levelTimeData);
+        }
+        LeaderboardEntry result = new LeaderboardEntry();
+        yield return LeaderboardEventHandler.GetMyUserTime(levelName, result);
+        
 
         //////////////////// Medal Shit ////////////////////
         float bestTime = MAX_TIME;
@@ -106,38 +112,24 @@ public class LevelComplete : MonoBehaviour
             index++;
         }
 
-        if (levelTimeData.MedalIndex != index - 1)
+        if (levelTimeData.MedalIndex < index - 1)
         {
             levelTimeData.SetNewMedalIndex(index - 1);
         }
 
-        if (levelTimeData.MedalIndex < 0)
-        {
-            medalImage.gameObject.SetActive(false);
-        }
-        else
-        {
-            medalImage.gameObject.SetActive(true);
-            medalImage.sprite = medalImages.Sprites[levelTimeData.MedalIndex];
-        }
-
-        if (levelTimeData.MedalIndex < 2)
-        {
-            nextMedalTimeText.gameObject.SetActive(true);
-            nextMedalTimeValue.gameObject.SetActive(true);
-            breakpointImage.SetActive(true);
-            nextMedalTimeText.text = "Medal Time:";
-            nextMedalTimeValue.text = LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[levelTimeData.MedalIndex + 1]);
-        }
-        else
-        {
-            nextMedalTimeText.gameObject.SetActive(false);
-            nextMedalTimeValue.gameObject.SetActive(false);
-            breakpointImage.SetActive(false);
-        }
+        DisplayMedal(levelTimeData);
 
         // Look, don't ruin the fun for others please
-        if(myTime < MIN_TIME || Settings.GetIsPlayerCollisionEnabled){
+        LevelCompleteData.InvalidationReason reason = LevelCompleteData.InvalidationReason.None;
+
+        if(myTime < MIN_TIME){
+            reason = LevelCompleteData.InvalidationReason.ShortTime;
+        } else if(Settings.GetIsPlayerCollisionEnabled) {
+            reason = LevelCompleteData.InvalidationReason.CollisionEnabled;
+        }
+
+        if (reason != LevelCompleteData.InvalidationReason.None)
+        {
             myTime = MAX_TIME;
             Debug.Log($"Submitting max time as runner doesn't meet qualifications");
         }
@@ -145,9 +137,37 @@ public class LevelComplete : MonoBehaviour
         {
             World = 1,
             Level = levelName,
-            Time = myTime
+            Time = myTime,
+            LevelInvalidationReason = reason
         };
         EventBoat.OnLevelComplete.Invoke(data);
+    }
+
+    void DisplayMedal(LevelSaveData saveData){
+        if (saveData.MedalIndex < 0)
+        {
+            medalImage.gameObject.SetActive(false);
+        }
+        else
+        {
+            medalImage.gameObject.SetActive(true);
+            medalImage.sprite = medalImages.Sprites[saveData.MedalIndex];
+        }
+
+        if (saveData.MedalIndex < 2)
+        {
+            nextMedalTimeText.gameObject.SetActive(true);
+            nextMedalTimeValue.gameObject.SetActive(true);
+            breakpointImage.SetActive(true);
+            nextMedalTimeText.text = "Medal Time:";
+            nextMedalTimeValue.text = LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[saveData.MedalIndex + 1]);
+        }
+        else
+        {
+            nextMedalTimeText.gameObject.SetActive(false);
+            nextMedalTimeValue.gameObject.SetActive(false);
+            breakpointImage.SetActive(false);
+        }
     }
 
     public void RestartLevel(){
@@ -191,4 +211,6 @@ public class LevelComplete : MonoBehaviour
     {
         Menu();
     }
+
+    
 }

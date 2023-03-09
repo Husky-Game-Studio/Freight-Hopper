@@ -9,7 +9,15 @@ public static class EventBoat
 
 public struct LevelCompleteData
 {
+    public enum InvalidationReason
+    {
+        None,
+        ShortTime,
+        CollisionEnabled
+    }
+
     public string Level;
     public int World;
     public float Time;
+    public InvalidationReason LevelInvalidationReason;
 }

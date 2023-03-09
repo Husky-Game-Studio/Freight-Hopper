@@ -13,7 +13,6 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
     [SerializeField] LoopScrollRect loopScrollRect;
     [SerializeField] UnityEngine.UI.Toggle toggleFriend;
     [SerializeField] int timesToGrab = 50;
-    [SerializeField] bool loadCurrentSceneLeaderboards = true;
 
     List<LeaderboardEntry> fullLeaderboard = new List<LeaderboardEntry>();
     List<LeaderboardEntry> friendLeaderboard = new List<LeaderboardEntry>();
@@ -22,16 +21,23 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
 
     void OnEnable(){
         Instance = this;
-
         loopScrollRect.prefabSource = this;
         loopScrollRect.dataSource = this;
-        if(loadCurrentSceneLeaderboards){
-            StartCoroutine(LoadRelativeLeaderboard(SceneManager.GetActiveScene().name));
-        }
+        loadingIcon.gameObject.SetActive(true);
+        StartCoroutine(Timeout());
+    }
+
+    IEnumerator Timeout(){
+        yield return new WaitForSecondsRealtime(3);
+        loadingIcon.gameObject.SetActive(false);
+    }
+
+    public void LoadCurrentSceneLeaderboard(){
+        StartCoroutine(LoadRelativeLeaderboard(SceneManager.GetActiveScene().name));
     }
 
     public IEnumerator LoadRelativeLeaderboard(string level){
-        loadingIcon.gameObject.SetActive(true);
+        
         yield return LeaderboardEventHandler.GetRelativeTimes(level, timesToGrab, fullLeaderboard, friendLeaderboard);
         if(fullLeaderboard.Count == 0){
             yield return LeaderboardEventHandler.GetTimes(level, timesToGrab, fullLeaderboard, friendLeaderboard);

@@ -1076,7 +1076,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7775862, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2063,7 +2063,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 396.04004, y: 0.000061035156}
+  m_AnchoredPosition: {x: 396.04004, y: 0}
   m_SizeDelta: {x: 792.08, y: 247.64}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3434734437073229992
@@ -3983,6 +3983,7 @@ MonoBehaviour:
   timerValue: {fileID: 3434734437371285167}
   nextMedalTimeValue: {fileID: 3434734438050166298}
   bestTimeColor: {r: 1, g: 0.85882354, b: 0.31764707, a: 1}
+  leaderboard: {fileID: 7886061772630217332}
 --- !u!1 &3434734437850515655
 GameObject:
   m_ObjectHideFlags: 0
@@ -4094,7 +4095,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 35.763, y: -148}
+  m_AnchoredPosition: {x: 35.76294, y: -148}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &3434734438037591692
@@ -5590,6 +5591,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8028605092611280440, guid: a0d2daa342866424892bb627a8c21cd0, type: 3}
   m_PrefabInstance: {fileID: 350152162639080037}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7886061772630217332 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7614204810971494417, guid: a0d2daa342866424892bb627a8c21cd0, type: 3}
+  m_PrefabInstance: {fileID: 350152162639080037}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4de806c062bfe22408c71e44142aa18f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3434734437466805759
 PrefabInstance:
   m_ObjectHideFlags: 0

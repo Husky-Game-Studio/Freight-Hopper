@@ -18,6 +18,6 @@ public class UISpinner : MonoBehaviour
     }
     private void Update()
     {
-        rotatingImage.Rotate(Vector3.forward * speed * Time.deltaTime);
+        rotatingImage.Rotate(Vector3.forward * speed * Time.unscaledDeltaTime);
     }
 }

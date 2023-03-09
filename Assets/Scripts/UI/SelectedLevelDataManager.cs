@@ -28,19 +28,9 @@ public class SelectedLevelDataManager : MonoBehaviour
         worldtitle.text = levelListManager.CurrentWorld.name;
         title.text = currentData.Title;
 
-        LeaderboardEntry result = new LeaderboardEntry();
-        yield return LeaderboardEventHandler.GetMyUserTime(currentData.name, result);
         LevelSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
         if (levelSaveData != null)
         {
-            if (result == null)
-            {
-                bestTime.text = "Best: None";
-            }
-            else
-            {
-                bestTime.text = "Best: " + LevelTimer.GetTimeString(result.timeSeconds);
-            }
             if (levelSaveData.MedalIndex >= 0 && levelSaveData.MedalIndex < medalSprites.Sprites.Count)
             {
                 medal.gameObject.SetActive(true);
@@ -64,6 +54,17 @@ public class SelectedLevelDataManager : MonoBehaviour
             button.onClick.RemoveAllListeners();
         }
         button.onClick.AddListener(delegate { SceneLoader.LoadLevel(currentData.name); });
+
+        LeaderboardEntry result = new LeaderboardEntry();
+        yield return LeaderboardEventHandler.GetMyUserTime(currentData.name, result);
+        if (result == null)
+        {
+            bestTime.text = "Best: None";
+        }
+        else
+        {
+            bestTime.text = "Best: " + LevelTimer.GetTimeString(result.timeSeconds);
+        }
     }
 
     private void Update()
