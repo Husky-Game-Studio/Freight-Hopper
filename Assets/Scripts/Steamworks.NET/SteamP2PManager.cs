@@ -58,12 +58,14 @@ namespace SteamTrain
         // only broadcast to users in the same scene
         public static void BroadcastPositionToLobby(Vector3 pos)
         {
-            if(SteamManager.Initialized)
-              foreach (var dest in lobbyMemberSceneDict)
-                if(dest.Key != SteamUser.GetSteamID() && dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
-                  SendPositionPacket(pos, dest.Key);
-           else
-              Debug.Log("No Steam detected, cannot send packets.");
+            if (SteamManager.Initialized)
+            {
+                foreach (var dest in lobbyMemberSceneDict)
+                    if (dest.Key != SteamUser.GetSteamID() && dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
+                        SendPositionPacket(pos, dest.Key);
+            }
+            else
+                Debug.Log("No Steam detected, cannot send packets.");
         }
 
         // call this on scene change once
