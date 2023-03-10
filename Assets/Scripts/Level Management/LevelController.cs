@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class LevelController : MonoBehaviour
@@ -13,15 +12,15 @@ public class LevelController : MonoBehaviour
     public LevelName CurrentLevelName => levelName;
     [SerializeField] private bool spawnPlayerHigh;
     [SerializeField, ReadOnly] private LevelName levelName;
-    public Transform playerSpawnTransform; // was originally private serialize field
+    public Transform playerSpawnTransform;
     [SerializeField] private float spawnSnapSmoothing = 0.001f;
-    public LevelData levelData;
-    public WorldListMetaData worldListMetaData;
+    [SerializeField] private LevelData levelData;
+
+    public LevelData LevelData => levelData;
 
     private const int highHeight = 999999;
 
     public static event Action PlayerRespawned;
-
     public static event Action LevelLoadedIn;
 
     public static LevelController Instance => instance;
@@ -36,6 +35,8 @@ public class LevelController : MonoBehaviour
     }
 
 #endif
+
+    public string GetVersionedLevel => levelName.VersionedCurrentLevel(levelData);
 
     public void LoadNextLevel()
     {
@@ -56,7 +57,7 @@ public class LevelController : MonoBehaviour
     public void LoadRandomLevel()
     {
         List<LevelData> validLevelData = new List<LevelData>();
-        foreach (WorldMetaData world in worldListMetaData.Worlds) 
+        foreach (WorldMetaData world in levelData.World.WorldsList.Worlds) 
         {
             if (world == null) continue;
             foreach (LevelData level in world.Levels)

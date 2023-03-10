@@ -6,14 +6,14 @@ using UnityEngine;
 public class SceneLoader : MonoBehaviour
 {
     /// Format for name: "World #"
-    /// For example: 1 1
+    /// For example: 1-1
     public void LoadLevelButton(string levelName)
     {
         LoadLevel(levelName);
     }
 
     /// Format for name: "World #"
-    /// For example: 1 1
+    /// For example: 1-1
     public static void LoadLevel(string levelName)
     {
         SceneManager.LoadScene(levelName, LoadSceneMode.Single);

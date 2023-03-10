@@ -20,13 +20,15 @@ public class LevelData : ScriptableObject
 
     [Header("Meta Data")]
     [SerializeField] private string title;
+    [SerializeField] private int version = 1;
     [SerializeField] private Texture2D image;
     [SerializeField] private float[] medalTimes = new float[4];
     [SerializeField] private WorldMetaData world;
 
-    public WorldMetaData World          => world;
+    public WorldMetaData World          =>  world;
     public NextLevelStatus NLevelStatus =>  nextLevelStatus;
     public string CustomNextLevelName   =>  customNextLevelName;
+    public int Version                  =>  version;
     public string Title                 =>  title;
     public Texture2D Image              =>  image;
     public bool Enabled                 =>  enabled;

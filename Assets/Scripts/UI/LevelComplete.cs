@@ -62,6 +62,7 @@ public class LevelComplete : MonoBehaviour
     {
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
         levelCompleteScreen.SetActive(true);
+        medalImage.gameObject.SetActive(false);
         StartCoroutine(BestTime());
         if (Settings.GetIsContinuousMode){
             NextLevel();
@@ -76,8 +77,9 @@ public class LevelComplete : MonoBehaviour
     private IEnumerator BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
+        string versionedLevelName = LevelController.Instance.GetVersionedLevel;
 
-        levelNameText.text = LevelController.Instance.worldListMetaData.GetWorld("Desert").GetLevel(levelName).Title; // this just happens to always get the last number
+        levelNameText.text = LevelController.Instance.LevelData.Title; // this just happens to always get the last number
         timerText.text = "Time:";
         float myTime = timer.GetTime();
         timerValue.text = LevelTimer.GetTimeString(myTime);
@@ -98,7 +100,7 @@ public class LevelComplete : MonoBehaviour
             DisplayMedal(levelTimeData);
         }
         LeaderboardEntry result = new LeaderboardEntry();
-        yield return LeaderboardEventHandler.GetMyUserTime(levelName, result);
+        yield return LeaderboardEventHandler.GetMyUserTime(versionedLevelName, result);
         
 
         //////////////////// Medal Shit ////////////////////
@@ -107,7 +109,7 @@ public class LevelComplete : MonoBehaviour
             bestTime = result.timeSeconds;
         }
         int index = 0;
-        while (index < 4 && bestTime < LevelController.Instance.levelData.MedalTimes[index])
+        while (index < 4 && bestTime < LevelController.Instance.LevelData.MedalTimes[index])
         {
             index++;
         }
@@ -136,7 +138,7 @@ public class LevelComplete : MonoBehaviour
         LevelCompleteData data = new LevelCompleteData
         {
             World = 1,
-            Level = levelName,
+            Level = versionedLevelName,
             Time = myTime,
             LevelInvalidationReason = reason
         };
@@ -160,7 +162,7 @@ public class LevelComplete : MonoBehaviour
             nextMedalTimeValue.gameObject.SetActive(true);
             breakpointImage.SetActive(true);
             nextMedalTimeText.text = "Medal Time:";
-            nextMedalTimeValue.text = LevelTimer.GetTimeString(LevelController.Instance.levelData.MedalTimes[saveData.MedalIndex + 1]);
+            nextMedalTimeValue.text = LevelTimer.GetTimeString(LevelController.Instance.LevelData.MedalTimes[saveData.MedalIndex + 1]);
         }
         else
         {

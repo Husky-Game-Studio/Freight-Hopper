@@ -55,8 +55,9 @@ public class SelectedLevelDataManager : MonoBehaviour
         }
         button.onClick.AddListener(delegate { SceneLoader.LoadLevel(currentData.name); });
 
+        LevelName levelName = new LevelName(currentData.name);
         LeaderboardEntry result = new LeaderboardEntry();
-        yield return LeaderboardEventHandler.GetMyUserTime(currentData.name, result);
+        yield return LeaderboardEventHandler.GetMyUserTime(levelName.VersionedCurrentLevel(currentData), result);
         if (result == null)
         {
             bestTime.text = "Best: None";

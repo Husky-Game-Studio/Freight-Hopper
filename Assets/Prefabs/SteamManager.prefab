@@ -97,17 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca8a0cb534b487428d51e4518dbee1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DontDestroyOnLoad: 0
-  m_IsReplaceable: 0
-  m_IsValidWhileDisabled: 0
-  m_OnFirstInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-    m_IsEnabled: 0
-    m_Context: {fileID: 594994838133878388}
-    m_RunInGlobalContext: 0
-    m_ScaledTime: 0
-    m_DelaySeconds: 0.016666668
   messageText: {fileID: 3652157163775066233}
   canvasGroup: {fileID: 1096913013034671192}
   fadeLength: 0.2
@@ -222,16 +211,16 @@ MonoBehaviour:
     m_ScaledTime: 0
     m_DelaySeconds: 0.016666668
   desertLevelNames:
-  - 1 1
-  - 1 2
-  - 1 3
-  - 1 4
-  - 1 5
-  - 1 6
-  - 1 7
-  - 1 8
-  - 1 9
-  - 1 10
+  - 1-1
+  - 1-2
+  - 1-3
+  - 1-4
+  - 1-5
+  - 1-6
+  - 1-7
+  - 1-8
+  - 1-9
+  - 1-10
   desertCompletionStat: DesertCompletionStat
   desertBronzeStat: DesertBronzeStat
   desertSilverStat: DesertSilverStat
@@ -261,7 +250,7 @@ MonoBehaviour:
     m_ScaledTime: 0
     m_DelaySeconds: 0.016666668
   testCase: 0
-  testLevel: 1 9
+  testLevel: 1-9
   testSeconds: 25
 --- !u!114 &3871873792588153143
 MonoBehaviour:

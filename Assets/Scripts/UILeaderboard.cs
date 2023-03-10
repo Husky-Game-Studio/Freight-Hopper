@@ -32,8 +32,9 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
         loadingIcon.gameObject.SetActive(false);
     }
 
+    // Only works in level scenes
     public void LoadCurrentSceneLeaderboard(){
-        StartCoroutine(LoadRelativeLeaderboard(SceneManager.GetActiveScene().name));
+        StartCoroutine(LoadRelativeLeaderboard(LevelController.Instance.GetVersionedLevel));
     }
 
     public IEnumerator LoadRelativeLeaderboard(string level){
