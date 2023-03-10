@@ -6,6 +6,9 @@ using System.Linq;
 public class WorldMetaData : ScriptableObject
 {
     [SerializeField] private LevelData[] levels = new LevelData[10];
+    [SerializeField] private WorldListMetaData worldsList;
+
+    public WorldListMetaData WorldsList => worldsList;
 
     public IReadOnlyList<LevelData> Levels => levels;
 

@@ -125,17 +125,15 @@ public class LevelController : MonoBehaviour
             Debug.LogWarning("Can't find player");
         }
 
-        if (levelData.SnapDownAtStart)
+        Ray ray = new Ray(player.transform.position - Vector3.up, -Vector3.up);
+        if (Physics.Raycast(ray, out RaycastHit hit, 10, LayerMask.GetMask("Ignore Raycast", "NoHover")))
         {
-            Ray ray = new Ray(player.transform.position - Vector3.up, -Vector3.up);
-            if (Physics.Raycast(ray, out RaycastHit hit, levelData.PlayerLayerMask))
-            {
-                player.transform.position = hit.point + (Vector3.up * 2) + (Vector3.up * spawnSnapSmoothing);
-                if(hit.rigidbody != null){
-                    player.modules.rigidbodyLinker.UpdateLink(hit.rigidbody);
-                }
+            player.transform.position = hit.point + (Vector3.up * 2) + (Vector3.up * spawnSnapSmoothing);
+            if(hit.rigidbody != null){
+                player.modules.rigidbodyLinker.UpdateLink(hit.rigidbody);
             }
         }
+        
         
         LevelLoadedIn?.Invoke();
         yield return Addressables.InstantiateAsync("Assets/Prefabs/SteamManager.prefab");

@@ -8,6 +8,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GroundPoundBehavior groundPoundBehavior;
     [FormerlySerializedAs("wallBehavior")][SerializeField] private WallRunBehavior wallBehaviors;
 
+    // You change major version, Gabe, when you want to FUCK everyone over in the leaderboards
+    // CHOOSE WISELY
+    // Minor when you just want to keep track of history I guess in git? Kinda don't need it
+    public const int MajorVersion = 1;
+    public const int MinorVersion = 0;
+
     private CollisionManagement collisionManagement;
     private Friction friction;
 
