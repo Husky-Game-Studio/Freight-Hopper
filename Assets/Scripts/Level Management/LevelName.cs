@@ -60,6 +60,10 @@ public struct LevelName
     {
         return $"{PlayerController.MajorVersion}-{level.Version}-{ConvertToString(worldID, levelID)}";
     }
+    public string VersionedCurrentLevel(int playerControllerVersion, int levelVersion)
+    {
+        return $"{playerControllerVersion}-{levelVersion}-{ConvertToString(worldID, levelID)}";
+    }
     public string NextLevel()
     {
         return ConvertToString(worldID, (int.Parse(levelID) + 1).ToString());

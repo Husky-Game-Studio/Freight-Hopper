@@ -4,6 +4,7 @@ using UnityEngine;
 using SteamTrain;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
 {
@@ -13,9 +14,11 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
     [SerializeField] LoopScrollRect loopScrollRect;
     [SerializeField] UnityEngine.UI.Toggle toggleFriend;
     [SerializeField] int timesToGrab = 50;
-
+    [SerializeField] TMP_Dropdown supportedVersionsDropdown;
     List<LeaderboardEntry> fullLeaderboard = new List<LeaderboardEntry>();
     List<LeaderboardEntry> friendLeaderboard = new List<LeaderboardEntry>();
+
+    private LevelData currentLevelData;
     public bool IsFriendLeaderboard => toggleFriend.isOn;
     public static UILeaderboard Instance;
 
@@ -25,6 +28,10 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
         loopScrollRect.dataSource = this;
         loadingIcon.gameObject.SetActive(true);
         StartCoroutine(Timeout());
+        if(LevelController.Instance != null){
+            currentLevelData = LevelController.Instance.LevelData;
+            SetupDropdownVersions(currentLevelData);
+        }
     }
 
     IEnumerator Timeout(){
@@ -36,13 +43,27 @@ public class UILeaderboard : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDa
     public void LoadCurrentSceneLeaderboard(){
         StartCoroutine(LoadRelativeLeaderboard(LevelController.Instance.GetVersionedLevel));
     }
+    void SetupDropdownVersions(LevelData levelData)
+    {
+        supportedVersionsDropdown.ClearOptions();
+        supportedVersionsDropdown.AddOptions(levelData.SupportedVersionsDisplayStrings());
+    }
+    public void UpdateDisplayedLeaderboardViaIndex(int index){
+        Vector2Int ver = currentLevelData.SupportedVersions[index];
+        StartCoroutine(LoadRelativeLeaderboard(LevelController.Instance.CurrentLevelName.VersionedCurrentLevel(ver.x, ver.y)));
+    }
 
     public IEnumerator LoadRelativeLeaderboard(string level){
-        
+        loadingIcon.gameObject.SetActive(true);
+        fullLeaderboard.Clear();
+        friendLeaderboard.Clear();
+        loopScrollRect.totalCount = 0;
+        loopScrollRect.RefillCells();
         yield return LeaderboardEventHandler.GetRelativeTimes(level, timesToGrab, fullLeaderboard, friendLeaderboard);
         if(fullLeaderboard.Count == 0){
             yield return LeaderboardEventHandler.GetTimes(level, timesToGrab, fullLeaderboard, friendLeaderboard);
         }
+        StopCoroutine(Timeout());
         loadingIcon.gameObject.SetActive(false);
 
         RefreshLeaderboard();

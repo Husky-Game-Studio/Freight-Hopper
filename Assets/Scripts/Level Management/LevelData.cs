@@ -24,13 +24,24 @@ public class LevelData : ScriptableObject
     [SerializeField] private Texture2D image;
     [SerializeField] private float[] medalTimes = new float[4];
     [SerializeField] private WorldMetaData world;
+    [SerializeField, Tooltip("Player version, level version. Sorted newest->old")] private Vector2Int[] supportedLevelVersions;
 
-    public WorldMetaData World          =>  world;
-    public NextLevelStatus NLevelStatus =>  nextLevelStatus;
-    public string CustomNextLevelName   =>  customNextLevelName;
-    public int Version                  =>  version;
-    public string Title                 =>  title;
-    public Texture2D Image              =>  image;
-    public bool Enabled                 =>  enabled;
-    public IList<float> MedalTimes      =>  Array.AsReadOnly(medalTimes);
+    public WorldMetaData World                  =>  world;
+    public NextLevelStatus NLevelStatus         =>  nextLevelStatus;
+    public string CustomNextLevelName           =>  customNextLevelName;
+    public int Version                          =>  version;
+    public string Title                         =>  title;
+    public Texture2D Image                      =>  image;
+    public bool Enabled                         =>  enabled;
+    public IList<float> MedalTimes              =>  Array.AsReadOnly(medalTimes);
+    public IList<Vector2Int> SupportedVersions  =>  Array.AsReadOnly(supportedLevelVersions);
+
+    public List<string> SupportedVersionsDisplayStrings(){
+        List<string> versions = new List<string>();
+        foreach (Vector2 vec2 in supportedLevelVersions)
+        {
+            versions.Add($"v{vec2.x}.{vec2.y}");
+        }
+        return versions;
+    }
 }
