@@ -36,7 +36,9 @@ namespace SteamTrain
         {
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name, 
+                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
+                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardForceUploadScore);
         }
 
@@ -44,7 +46,9 @@ namespace SteamTrain
         {
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
+                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
+                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardUploadScore);
         }
 
@@ -52,7 +56,9 @@ namespace SteamTrain
         {
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
+                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
+                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardUploadData);
         }
 
@@ -60,7 +66,9 @@ namespace SteamTrain
         {
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
+                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
+                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadScores);
         }
 
@@ -68,7 +76,9 @@ namespace SteamTrain
         {
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
+                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
+                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadSomeGuysScore);
         }    
 
@@ -76,7 +86,9 @@ namespace SteamTrain
         {
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
+                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
+                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadFriendScores);
         }
 
@@ -84,7 +96,9 @@ namespace SteamTrain
         {
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindLeaderboard(name);
+            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name, 
+                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
+                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
             callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadRelativeScores);
         }
 
