@@ -6,6 +6,8 @@ public class Gravity : MonoBehaviour
     [SerializeField] private bool useGravity = true;
     [SerializeField] private bool automatic = true;
     [SerializeField, ReadOnly] private Rigidbody rb;
+    private float gravityScale = 1;
+
 
     private void Awake()
     {
@@ -21,6 +23,9 @@ public class Gravity : MonoBehaviour
         }
     }
 
+    public void SetGravityScale(float val) => gravityScale = val;
+    public void ResetGravityScale() => gravityScale = 1;
+
     public void EnableGravity(bool enable = true)
     {
         useGravity = enable;
@@ -32,6 +37,6 @@ public class Gravity : MonoBehaviour
         {
             return;
         }
-        rb.AddForce(CustomGravity.GetGravity(), ForceMode.Acceleration);
+        rb.AddForce(CustomGravity.GetGravity() * gravityScale, ForceMode.Acceleration);
     }
 }

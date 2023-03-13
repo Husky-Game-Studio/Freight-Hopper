@@ -62,7 +62,7 @@ public class JumpBehavior : AbilityBehavior
         float jumpForce = Mathf.Sqrt(2f * gravity.magnitude * height);
 
         // Upward bias for sloped jumping
-        Vector3 jumpDirection = (collisionManager.ContactNormal.old + upAxis).normalized;
+        Vector3 jumpDirection = (collisionManager.ContactNormal.old + upAxis * behaviorInputs.upwardBiasWeight).normalized;
 
         // Considers velocity when jumping on slopes and the slope angle
         float alignedSpeed = Vector3.Dot(rb.velocity, jumpDirection);
@@ -91,6 +91,7 @@ public class JumpBehavior : AbilityBehavior
     public void ExitAction()
     {
         jumpHoldingTimer.DeactivateTimer();
+        Player.Instance.modules.gravity.ResetGravityScale();
         active = false;
     }
     public void Action()
@@ -98,6 +99,8 @@ public class JumpBehavior : AbilityBehavior
         jumpHoldingTimer.CountDown(Time.fixedDeltaTime);
         t = Mathf.Clamp01(((jumpHoldingTimer.Current - jumpHoldingTimer.Duration) * -1) / jumpHoldingTimer.Duration);
         multiplier = behaviorInputs.jumpCurve.Evaluate(t);
+        float gravityMultiplier = behaviorInputs.gravityRise.Evaluate(t);
+        Player.Instance.modules.gravity.SetGravityScale(gravityMultiplier);
         rb.AddForce(CustomGravity.GetUpAxis() * multiplier, ForceMode.Acceleration);
     }
 }
