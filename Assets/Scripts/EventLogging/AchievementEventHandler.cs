@@ -24,6 +24,7 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
         if (SteamTrain.SteamAchievementHandler.statsRetrieved)
         {
             EventBoat.OnLevelComplete += CheckAndCountLevels;
+            EventBoat.SeenRoberto += CheckAndCountRobertos;
         }
         else
             Debug.Log("Did not subscribe events because Steam Stats were not retrieved.");
@@ -36,7 +37,6 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
         int bronzeCount = 0;
         int silverCount = 0;
         int goldCount = 0;
-        int robCount = 0;
         // this cleared levels count will be changed
         foreach (var s in desertLevelNames)
             if (LevelTimeSaveLoader.LevelSaveDataExists(s))
@@ -51,8 +51,6 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
                     ++silverCount;
                 if (save.MedalIndex >= 2)
                     ++goldCount;
-                if (save.RobertoFound)
-                    ++robCount;
             }       
 
         int currentProgress;
@@ -68,9 +66,24 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
         if (SteamTrain.SteamAchievementHandler.GetStat(desertGoldStat, out currentProgress))
             if (currentProgress <= goldCount)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertGoldStat, goldCount);
+    }
+
+    private void CheckAndCountRobertos(string levelname)
+    {
+        int robCount = 0;
+        // this cleared levels count will be changed
+        foreach (var s in desertLevelNames)
+            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
+            {
+                LevelSaveData save = LevelTimeSaveLoader.Load(s);
+                if (save == null) continue; // likely parsing issue
+                if (save.RobertoFound)
+                    ++robCount;
+            }
+
+        int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertRobertoStat, out currentProgress))
             if (currentProgress <= robCount)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertRobertoStat, robCount);
-
     }
 }
