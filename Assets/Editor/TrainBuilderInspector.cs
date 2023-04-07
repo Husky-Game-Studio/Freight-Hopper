@@ -50,6 +50,12 @@ public class TrainBuilderInspector : Editor
             trainBuilder.ReplaceCart(cartIndex, cargoIndex);
             trainBuilder.OnValidate();
         }
+        if (GUILayout.Button("Duplicate"))
+        {
+            trainBuilder.Duplicate();
+            trainBuilder.OnValidate();
+        }
+
         if (GUILayout.Button("Clear"))
         {
             trainBuilder.Clear();
@@ -90,17 +96,6 @@ public class TrainBuilderInspector : Editor
             trainBuilder.UpdateAllTrains();
         }
         EditorGUILayout.Space(10);
-        if (GUILayout.Button("Swap Forward"))
-        {
-            trainBuilder.SwapForward();
-            trainBuilder.OnValidate();
-        }
-        if (GUILayout.Button("Swap Backwards"))
-        {
-            trainBuilder.SwapBackward();
-            trainBuilder.OnValidate();
-        }
-        EditorGUILayout.Space(10);
         if (GUILayout.Button("Move Forward"))
         {
             trainBuilder.DecrementActionIndex();
@@ -109,6 +104,17 @@ public class TrainBuilderInspector : Editor
         if (GUILayout.Button("Move Backwards"))
         {
             trainBuilder.IncrementActionIndex();
+            trainBuilder.OnValidate();
+        }
+        EditorGUILayout.Space(10);
+        if (GUILayout.Button("Swap Forward"))
+        {
+            trainBuilder.SwapForward();
+            trainBuilder.OnValidate();
+        }
+        if (GUILayout.Button("Swap Backwards"))
+        {
+            trainBuilder.SwapBackward();
             trainBuilder.OnValidate();
         }
 

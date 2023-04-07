@@ -202,23 +202,40 @@ public class TrainBuilder : MonoBehaviour
         Undo.RegisterCompleteObjectUndo(this, "Add Cart");
         for (int i = 0; i < repeatActionCount; i++)
         {
-            Cart cart = CreateNewCart(cartID, cargoID);
-            int index = this.ActionIndex;
-
-            cartsList.Add(cart);
-
-            UpdateCart(cartsList.Count - 1, cart);
-            Undo.RegisterCreatedObjectUndo(cart.gameObject, "Created cargo gameobject");
-            if (actionIndex != -1)
-            {
-                for (int j = cartsList.Count - 1; j > index; j--)
-                {
-                    SwapCarts(cartsList[j], cartsList[j - 1]);
-                }
-                UpdateJoint(index + 1);
-            }
+            AddCartInternal(cartID, new List<int>() { cargoID });
         }
         UpdateTrain();
+    }
+
+    private void AddCartInternal(int cartId, List<int> cargoIDs)
+    {
+        Cart cart = CreateNewCart(cartId, cargoIDs);
+        int index = this.ActionIndex;
+
+        cartsList.Add(cart);
+
+        UpdateCart(cartsList.Count - 1, cart);
+        Undo.RegisterCreatedObjectUndo(cart.gameObject, "Created cargo gameobject");
+        if (actionIndex != -1)
+        {
+            for (int j = cartsList.Count - 1; j > index; j--)
+            {
+                SwapCarts(cartsList[j], cartsList[j - 1]);
+            }
+            UpdateJoint(index + 1);
+        }
+    }
+    public void Duplicate()
+    {
+        if (this.ActionIndex <= -1) return;
+        Undo.RegisterCompleteObjectUndo(this, "Duplicate Cart");
+
+        Cart current = cartsList[this.ActionIndex];
+
+        for (int i = 0; i < this.repeatActionCount; i++)
+        {
+            AddCartInternal(current.cartID, current.cargoIDs);
+        }
     }
 
     public void AddCargo(int cargoID)
@@ -264,6 +281,7 @@ public class TrainBuilder : MonoBehaviour
 
     public void SwapForward(){
         if (this.ActionIndex <= 0) return;
+        Undo.RegisterCompleteObjectUndo(this, "Swap Forwards");
 
         int current = this.ActionIndex;
         int next = this.ActionIndex - 1;
@@ -273,7 +291,9 @@ public class TrainBuilder : MonoBehaviour
     }
     public void SwapBackward()
     {
-        if (this.ActionIndex == cartsList.Count-1 || this.ActionIndex <= -1) return;
+        if (this.ActionIndex == cartsList.Count - 1 || this.ActionIndex <= -1) return;
+        Undo.RegisterCompleteObjectUndo(this, "Swap Backwards");
+
         int current = this.ActionIndex;
         int next = this.ActionIndex + 1;
 
@@ -517,6 +537,14 @@ public class TrainBuilder : MonoBehaviour
         };
         cart.cargoIDs.Add(cargoID);
 
+        return cart;
+    }
+    private Cart CreateNewCart(int cartID, List<int> cargoIDs){
+        Cart cart = new Cart
+        {
+            cartID = cartID,
+        };
+        cart.cargoIDs.AddRange(cargoIDs);
         return cart;
     }
 
