@@ -71,7 +71,6 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
             yield return GetTargetUserTimes(level, result, SteamManager.GetMySteamID());
         else
             Debug.Log("Cannot get user time, as there is no Steam.");
-        yield return null;
     }
 
     public static IEnumerator GetTargetUserTimes(string level, SteamTrain.LeaderboardEntry result, ulong whomst)
@@ -96,7 +95,6 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
         }
         else
             Debug.Log("Cannot get user time, as there is no Steam.");
-        yield return null;
     }
 
     public static void UploadTimes(LevelCompleteData leveldata)
@@ -150,7 +148,6 @@ public class LeaderboardEventHandler : OSingleton<LeaderboardEventHandler>
         }
         else
             Debug.Log("Cannot get leaderboard times, as there is no Steam");
-        yield return null;
     }
 
     public static IEnumerator GetRelativeTimes(string level, int amount,

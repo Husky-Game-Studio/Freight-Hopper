@@ -29,14 +29,14 @@ public class PlayerNetworking : OSingleton<PlayerNetworking>
         if (SteamManager.Initialized)
         {
             SteamTrain.SteamP2PManager.HandlePackets();
-            if (SteamTrain.SteamP2PManager.joinedLobby && Player.Instance != null)
+            if (SteamTrain.SteamP2PManager.JoinedLobby && Player.Instance != null)
             {
                 int currScene = SceneManager.GetActiveScene().buildIndex;
                 SteamTrain.SteamP2PManager.BroadcastPositionToLobby(Player.Instance.transform.position);
                 // angrily ping my position
 
                 // synchronize positions and spawn players if needed
-                foreach (var lobbyMembers in SteamTrain.SteamP2PManager.lobbyMemberSceneDict)
+                foreach (var lobbyMembers in SteamTrain.SteamP2PManager.LobbyMemberSceneDict)
                 {
                     if (lobbyMembers.Key == Steamworks.SteamUser.GetSteamID())
                         continue;
@@ -56,8 +56,8 @@ public class PlayerNetworking : OSingleton<PlayerNetworking>
                         dummyDict[lobbyMembers.Key].GetComponent<PlayerDummyName>().SetText(
                                                     Steamworks.SteamFriends.GetFriendPersonaName(lobbyMembers.Key));
                     }
-                    if (SteamTrain.SteamP2PManager.lobbyMemberLastPosDict.ContainsKey(lobbyMembers.Key))
-                        dummyDict[lobbyMembers.Key].MovePosition(SteamTrain.SteamP2PManager.lobbyMemberLastPosDict[lobbyMembers.Key]);
+                    if (SteamTrain.SteamP2PManager.LobbyMemberLastPosDict.ContainsKey(lobbyMembers.Key))
+                        dummyDict[lobbyMembers.Key].MovePosition(SteamTrain.SteamP2PManager.LobbyMemberLastPosDict[lobbyMembers.Key]);
                 }
             }
         }

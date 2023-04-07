@@ -20,13 +20,13 @@ namespace SteamTrain
         private static CallResult<LobbyCreated_t> callResultMakeLobby = new CallResult<LobbyCreated_t>();
         private static CallResult<LobbyEnter_t> callResultJoinLobby = new CallResult<LobbyEnter_t>();
 
-        public static CSteamID lobbyID { get; private set; }
+        public static CSteamID LobbyID { get; private set; }
         
-        public static bool joiningLobby { get; private set; } = false;
-        public static bool joinedLobby { get; private set; } = false;
+        public static bool JoiningLobby { get; private set; } = false;
+        public static bool JoinedLobby { get; private set; } = false;
 
-        public static Dictionary<CSteamID, int> lobbyMemberSceneDict = new Dictionary<CSteamID, int>();
-        public static Dictionary<CSteamID, Vector3> lobbyMemberLastPosDict = new Dictionary<CSteamID, Vector3>();
+        public static Dictionary<CSteamID, int> LobbyMemberSceneDict = new Dictionary<CSteamID, int>();
+        public static Dictionary<CSteamID, Vector3> LobbyMemberLastPosDict = new Dictionary<CSteamID, Vector3>();
 
         public struct P2PPlayerInfo
         {
@@ -60,8 +60,8 @@ namespace SteamTrain
         {
             if (SteamManager.Initialized)
             {
-                foreach (var dest in lobbyMemberSceneDict)
-                    if (dest.Key != SteamUser.GetSteamID() && dest.Value == lobbyMemberSceneDict[SteamUser.GetSteamID()])
+                foreach (var dest in LobbyMemberSceneDict)
+                    if (dest.Key != SteamUser.GetSteamID() && dest.Value == LobbyMemberSceneDict[SteamUser.GetSteamID()])
                         SendPositionPacket(pos, dest.Key);
             }
             else
@@ -72,7 +72,7 @@ namespace SteamTrain
         public static void BroadcastCurrentSceneToLobby()
         {
             if (SteamManager.Initialized)
-              foreach (var dest in lobbyMemberSceneDict)
+              foreach (var dest in LobbyMemberSceneDict)
                 SendSceneNamePacket(SceneManager.GetActiveScene().name, dest.Key);
             else
                 Debug.Log("No Steam detected, cannot send packets.");
@@ -82,39 +82,39 @@ namespace SteamTrain
         {
             SteamAPICall_t cb = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, lobbySize);
             callResultMakeLobby.Set(cb, OnCreateP2PLobby);
-            joiningLobby = true;
-            joinedLobby = false;
+            JoiningLobby = true;
+            JoinedLobby = false;
         }
 
         private static void JoinP2PLobby(CSteamID lobbyID)
         {
             SteamAPICall_t cb = SteamMatchmaking.JoinLobby(lobbyID);
             callResultJoinLobby.Set(cb, OnJoinP2PLobby);
-            joiningLobby = true;
-            joinedLobby = false;
+            JoiningLobby = true;
+            JoinedLobby = false;
         }
 
         public static List<CSteamID> GetCurrentLobbyMembers()
         {
             List<CSteamID> lobbymembers = new List<CSteamID>();
-            int lobbyMemberCount = SteamMatchmaking.GetNumLobbyMembers(lobbyID);
+            int lobbyMemberCount = SteamMatchmaking.GetNumLobbyMembers(LobbyID);
             for(int i = 0; i < lobbyMemberCount; ++i)
             {
-                lobbymembers.Add(SteamMatchmaking.GetLobbyMemberByIndex(lobbyID, i));
+                lobbymembers.Add(SteamMatchmaking.GetLobbyMemberByIndex(LobbyID, i));
             }
             return lobbymembers;
         }
 
         private static void OnCreateP2PLobby(LobbyCreated_t r, bool failure)
         {
-            joiningLobby = false;
+            JoiningLobby = false;
             if (r.m_eResult == EResult.k_EResultOK && !failure)
             {
                 Debug.Log("Successfully made lobby of id " + r.m_ulSteamIDLobby.ToString());
-                lobbyID = new CSteamID(r.m_ulSteamIDLobby);
-                lobbyMemberSceneDict[SteamUser.GetSteamID()] = SceneManager.GetActiveScene().buildIndex;
+                LobbyID = new CSteamID(r.m_ulSteamIDLobby);
+                LobbyMemberSceneDict[SteamUser.GetSteamID()] = SceneManager.GetActiveScene().buildIndex;
                 SendSceneNamePacket(SceneManager.GetActiveScene().name, SteamUser.GetSteamID());
-                joinedLobby = true;
+                JoinedLobby = true;
             }
             else
                 Debug.Log("Failed to make lobby.");
@@ -122,13 +122,13 @@ namespace SteamTrain
 
         private static void OnJoinP2PLobby(LobbyEnter_t r, bool failure)
         {
-            joiningLobby = false;
+            JoiningLobby = false;
             if (r.m_EChatRoomEnterResponse == (uint)EChatRoomEnterResponse.k_EChatRoomEnterResponseSuccess && !failure)
             {
                 Debug.Log("Successfully joined lobby of id " + r.m_ulSteamIDLobby.ToString());
-                lobbyID = new CSteamID(r.m_ulSteamIDLobby);
+                LobbyID = new CSteamID(r.m_ulSteamIDLobby);
                 Debug.Log(GetCurrentLobbyMembers().Count.ToString() + " in this Lobby.");
-                joinedLobby = true;
+                JoinedLobby = true;
             }
             else
                 Debug.Log("Failed to join lobby.");
@@ -187,10 +187,10 @@ namespace SteamTrain
             return headeredPacket;
         }
 
-        private static byte[] SendPacketWithHeader(CSteamID dest, PacketID pid, byte[] packet, EP2PSend r)
+        private static byte[] SendPacketWithHeader(CSteamID dest, PacketID pid, byte[] packet, EP2PSend type)
         {
             byte[] toSend = AddPacketHeader(pid, packet);
-            SteamNetworking.SendP2PPacket(dest, toSend, (uint)toSend.Length, r);
+            SteamNetworking.SendP2PPacket(dest, toSend, (uint)toSend.Length, type);
             return toSend;
         }
 
@@ -258,10 +258,10 @@ namespace SteamTrain
                     switch(pid)
                     {
                         case PacketID.Pos:
-                            lobbyMemberLastPosDict[remoteId] = TranslateToPositionPacket(buffer);
+                            LobbyMemberLastPosDict[remoteId] = TranslateToPositionPacket(buffer);
                             break;
                         case PacketID.SceneIndex:
-                            lobbyMemberSceneDict[remoteId] = TranslateToSceneIntPacket(buffer);
+                            LobbyMemberSceneDict[remoteId] = TranslateToSceneIntPacket(buffer);
                             //Debug.Log("Packet from " + remoteId.m_SteamID.ToString() + 
                             //            ": Scene " + lobbyMemberSceneDict[remoteId]);
                             break;
@@ -271,7 +271,89 @@ namespace SteamTrain
                     Debug.Log("Received some packet that was NOT readable");
             }
         }
+
+    }
+    public struct PacketHeader
+    {
+        public uint Id;
+
+        public const int Size = sizeof(uint);
     }
 
+    public abstract class IPacket<T>
+    {
+        public enum PacketID
+        {
+            Pos = 0,
+            SceneIndex = 1,
+        }
+        private int offset = 0;
+        private byte[] rawBuffer;
+        private PacketHeader header = new PacketHeader();
+        public PacketHeader Header => header;
+        protected abstract int Size { get; }
+
+        // READ
+        public IPacket(byte[] rawBuffer)
+        {
+            this.rawBuffer = rawBuffer;
+            ReadHeader();
+        }
+        // WRITE
+        public IPacket(PacketHeader header)
+        {
+            this.header = header;
+            rawBuffer = new byte[Size + PacketHeader.Size];
+        }
+        
+        protected virtual void ReadHeader()
+        {
+            header.Id = ReadUint();
+        }
+        protected uint ReadUint()
+        {
+            int temp = offset;
+            offset += sizeof(uint);
+            return BitConverter.ToUInt32(new ReadOnlySpan<byte>(rawBuffer, temp, sizeof(uint)));
+        }
+        protected int ReadInt()
+        {
+            int temp = offset;
+            offset += sizeof(int);
+            return BitConverter.ToInt32(new ReadOnlySpan<byte>(rawBuffer, temp, sizeof(int)));
+        }
+        protected float ReadFloat()
+        {
+            int temp = offset;
+            offset += sizeof(float);
+            return BitConverter.ToSingle(new ReadOnlySpan<byte>(rawBuffer, temp, sizeof(float)));
+        }
+        protected Vector3 ReadVector3()
+        {
+            return new Vector3(ReadFloat(), ReadFloat(), ReadFloat());
+        }
+        protected Quaternion ReadQuaternion()
+        {
+            return new Quaternion(ReadFloat(), ReadFloat(), ReadFloat(), ReadFloat());
+        }
+    }
+    public class PlayerTransform : IPacket<PlayerTransform>
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+
+        public PlayerTransform(byte[] rawBuffer) : base(rawBuffer)
+        {
+            ReadVector3();
+            ReadQuaternion();
+        }
+        public PlayerTransform(PacketHeader header) : base(header)
+        {
+            WriteVector3();
+            WriteQuaternion();
+        }
+
+        protected override int Size => (sizeof(float)*3)+(sizeof(float)*4);
+    }
 
 }

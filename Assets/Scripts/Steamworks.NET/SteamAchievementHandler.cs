@@ -48,11 +48,11 @@ namespace SteamTrain
                             // remove me the achievements
                             case 4:
                                 Debug.Log("Delete index one of all achievements.");
-                                Debug.Log(ClearAchievement(a.achievements[0]));
+                                Debug.Log(SteamUserStats.ClearAchievement(a.achievements[0]));
                                 break;
                             case 5:
                                 Debug.Log("No more achievements.");
-                                Debug.Log(ObliterateEverything());
+                                Debug.Log(SteamUserStats.ResetAllStats(true));
                                 break;
                         }
                     }
@@ -121,21 +121,6 @@ namespace SteamTrain
                 return SteamUserStats.StoreStats();
             Debug.Log($"{id} failed to set.");
             return false;
-        }
-
-        public static bool PushStatsToServer()
-        {
-            return SteamUserStats.StoreStats();
-        }
-
-        public static bool ClearAchievement(string id)
-        {
-            return SteamUserStats.ClearAchievement(id);
-        }
-
-        public static bool ObliterateEverything()
-        {
-            return SteamUserStats.ResetAllStats(true);
         }
     }
 }

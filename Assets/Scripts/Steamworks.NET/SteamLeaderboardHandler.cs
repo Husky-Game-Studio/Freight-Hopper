@@ -32,74 +32,47 @@ namespace SteamTrain
 
         public List<LeaderboardEntry> readableLeaderboard = new List<LeaderboardEntry>();
 
-        public void FindLeaderboardAndForceUploadScore(string name)
-        {
+        private SteamAPICall_t FindingLeaderboard(string name){
             foundLeaderboard = false;
             findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name, 
+            return SteamUserStats.FindOrCreateLeaderboard(name,
                                                     ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
                                                     ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
-            callResultFindLeaderboard.Set(cb, OnFindLeaderboardForceUploadScore);
+        }
+
+        public void FindLeaderboardAndForceUploadScore(string name)
+        {
+            callResultFindLeaderboard.Set(FindingLeaderboard(name), OnFindLeaderboardForceUploadScore);
         }
 
         public void FindLeaderboardAndUploadScore(string name)
         {
-            foundLeaderboard = false;
-            findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
-                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
-                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
-            callResultFindLeaderboard.Set(cb, OnFindLeaderboardUploadScore);
+            callResultFindLeaderboard.Set(FindingLeaderboard(name), OnFindLeaderboardUploadScore);
         }
 
         public void FindLeaderboardAndUploadData(string name)
         {
-            foundLeaderboard = false;
-            findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
-                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
-                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
-            callResultFindLeaderboard.Set(cb, OnFindLeaderboardUploadData);
+            callResultFindLeaderboard.Set(FindingLeaderboard(name), OnFindLeaderboardUploadData);
         }
 
         public void FindLeaderboardAndDownloadScores(string name)
         {
-            foundLeaderboard = false;
-            findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
-                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
-                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
-            callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadScores);
+            callResultFindLeaderboard.Set(FindingLeaderboard(name), OnFindLeaderboardDownloadScores);
         }
 
         public void FindLeaderboardAndDownloadSomeGuysScore(string name)
         {
-            foundLeaderboard = false;
-            findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
-                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
-                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
-            callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadSomeGuysScore);
+            callResultFindLeaderboard.Set(FindingLeaderboard(name), OnFindLeaderboardDownloadSomeGuysScore);
         }    
 
         public void FindLeaderboardAndFriendScores(string name)
         {
-            foundLeaderboard = false;
-            findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name,
-                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
-                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
-            callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadFriendScores);
+            callResultFindLeaderboard.Set(FindingLeaderboard(name), OnFindLeaderboardDownloadFriendScores);
         }
 
         public void FindLeaderboardAndDownloadRelativeScores(string name)
         {
-            foundLeaderboard = false;
-            findingLeaderboard = true;
-            SteamAPICall_t cb = SteamUserStats.FindOrCreateLeaderboard(name, 
-                                                    ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending,
-                                                    ELeaderboardDisplayType.k_ELeaderboardDisplayTypeTimeMilliSeconds);
-            callResultFindLeaderboard.Set(cb, OnFindLeaderboardDownloadRelativeScores);
+            callResultFindLeaderboard.Set(FindingLeaderboard(name), OnFindLeaderboardDownloadRelativeScores);
         }
 
         public bool UploadTimeBestTime(int time)
