@@ -12,9 +12,9 @@ public class ControlsInstructions : MonoBehaviour
     Dictionary<string, string> levelInstructions = new Dictionary<string, string>() 
     { 
         { "1-1", "W - Move Forward\nMouse - Steer\nSpace - Jump\nShift - Ground Pound" }, 
-        { "1-2", "Ground Pound on Slanted Surfaces to Speed Boost.\nShift - Ground Pound" }, 
-        { "1-3", "Ground Pound on Slanted Surfaces to Speed Boost.\nShift - Ground Pound" }, 
-        { "1-4", "Jumping & Ground Pound on Slopes = Speed.\nShift - Ground Pound" }
+        { "1-2", "Ground Pound on Slopes to Speed Up.\nShift - Ground Pound" }, 
+        { "1-3", "Ground Pound on Slopes to Speed Up.\nShift - Ground Pound" }, 
+        { "1-4", "Jumping + Ground Pound = Speed.\nShift - Ground Pound" }
     };
 
     private void Start()
