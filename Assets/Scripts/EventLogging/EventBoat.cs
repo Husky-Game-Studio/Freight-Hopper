@@ -5,6 +5,7 @@ public static class EventBoat
 {
     public static Action<LevelCompleteData> OnLevelComplete = delegate { };
     public static Action<string>            SeenRoberto     = delegate { }; // levelID
+    public static Action<int>               RobertoCount    = delegate { }; // Roberto #
 }
 
 public struct LevelCompleteData
