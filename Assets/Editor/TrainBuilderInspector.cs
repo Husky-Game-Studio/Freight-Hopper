@@ -90,6 +90,17 @@ public class TrainBuilderInspector : Editor
             trainBuilder.UpdateAllTrains();
         }
         EditorGUILayout.Space(10);
+        if (GUILayout.Button("Swap Forward"))
+        {
+            trainBuilder.SwapForward();
+            trainBuilder.OnValidate();
+        }
+        if (GUILayout.Button("Swap Backwards"))
+        {
+            trainBuilder.SwapBackward();
+            trainBuilder.OnValidate();
+        }
+        EditorGUILayout.Space(10);
         if (GUILayout.Button("Move Forward"))
         {
             trainBuilder.DecrementActionIndex();

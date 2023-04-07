@@ -51,27 +51,27 @@ public class TrainBuilder : MonoBehaviour
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCargos
     {
-        None,
-        BoxCargo,
-        PillCargo,
-        BillBoardUp,
-        BillBoardDown,
-        BillBoardRF,
-        BillBoardLF,
-        VoidCargo
+        None = 0,
+        BoxCargo = 1,
+        PillCargo = 2,
+        BillBoardUp = 3,
+        BillBoardDown = 4,
+        BillBoardRF = 5,
+        BillBoardLF = 6,
+        VoidCargo = 7
     }
 
     // This order matters, if this is different from the model order for the list this WON'T work
     public enum TrainCarts
     {
-        EmptyCart,
-        EmptyCartWalls,
-        EmptyCartLasers,
-        VoidCart,
-        NULL2,
-        NULL3,
-        NULL4,
-        TurretCart
+        EmptyCart = 0,
+        EmptyCartWalls = 1,
+        EmptyCartLasers = 2,
+        VoidCart = 3,
+        NULL2 = 4,
+        NULL3 = 5,
+        NULL4 = 6,
+        TurretCart = 7
     }
 
     [System.Serializable]
@@ -89,20 +89,31 @@ public class TrainBuilder : MonoBehaviour
 
     public void IncrementActionIndex()
     {
-        actionIndex++;
+        if (actionIndex == -1)
+        {
+            return;
+        }
+        else
+        {
+            actionIndex++;
+        }
+        
         if (actionIndex >= cartsList.Count)
         {
-            actionIndex = cartsList.Count - 1;
+            actionIndex = -1;
         }
         SceneView.RepaintAll();
     }
 
     public void DecrementActionIndex()
     {
-        actionIndex--;
-        if (actionIndex < -1)
+        if (actionIndex == 0) return;
+        
+        if (actionIndex == -1)
         {
-            actionIndex = -1;
+            actionIndex = cartsList.Count - 1;
+        } else {
+            actionIndex--;
         }
         SceneView.RepaintAll();
     }
@@ -127,7 +138,7 @@ public class TrainBuilder : MonoBehaviour
             Gizmos.color = Color.red;
         }
 
-        Gizmos.DrawWireSphere(position, 4);
+        Gizmos.DrawWireSphere(position, 8);
     }
 
     public void OnValidate()
@@ -249,6 +260,25 @@ public class TrainBuilder : MonoBehaviour
             }
         }
         UpdateTrain();
+    }
+
+    public void SwapForward(){
+        if (this.ActionIndex <= 0) return;
+
+        int current = this.ActionIndex;
+        int next = this.ActionIndex - 1;
+
+        SwapCarts(cartsList[current], cartsList[next]);
+        this.DecrementActionIndex();
+    }
+    public void SwapBackward()
+    {
+        if (this.ActionIndex == cartsList.Count-1 || this.ActionIndex <= -1) return;
+        int current = this.ActionIndex;
+        int next = this.ActionIndex + 1;
+
+        SwapCarts(cartsList[current], cartsList[next]);
+        this.IncrementActionIndex();
     }
 
     public void ReplaceCart(int cartID, int cargoID)
