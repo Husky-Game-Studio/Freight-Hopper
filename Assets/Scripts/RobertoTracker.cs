@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class RobertoTracker : MonoBehaviour
 {
+    [SerializeField] SoundManager soundManager;
     private void OnCollisionEnter(Collision collision)
     {
         if (!collision.gameObject.CompareTag("Player")) return;
@@ -10,7 +11,6 @@ public class RobertoTracker : MonoBehaviour
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
 
         LevelSaveData level = LevelTimeSaveLoader.Load(levelName);
-
         if (level == null)
         {
             Debug.Log("no save data found, creating new one for Roberto");
@@ -28,6 +28,19 @@ public class RobertoTracker : MonoBehaviour
 
         level.FoundRoberto();
         EventBoat.SeenRoberto.Invoke(levelName);
-        Debug.Log("Woah you hit Roberto crazy");
+    }
+
+    void EmitRobertoSeenSFX(int robertoCount){
+        int robertoSoundNumber = ((robertoCount-1) / 2)+1;
+        soundManager.Play($"Roberto{robertoSoundNumber}");
+    }
+
+    private void OnEnable()
+    {
+        EventBoat.RobertoCount += EmitRobertoSeenSFX;
+    }
+    private void OnDisable()
+    {
+        EventBoat.RobertoCount -= EmitRobertoSeenSFX;
     }
 }

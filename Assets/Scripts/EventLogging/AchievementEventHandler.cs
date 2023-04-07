@@ -85,5 +85,7 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
         if (SteamTrain.SteamAchievementHandler.GetStat(desertRobertoStat, out currentProgress))
             if (currentProgress <= robCount)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertRobertoStat, robCount);
+
+        EventBoat.RobertoCount.Invoke(robCount);
     }
 }

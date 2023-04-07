@@ -37,6 +37,9 @@ public class Sound : ScriptableObject, IDisposable
     [Range(0f, 1f)]
     public float spatialBlend;
 
+    [Range(0f, 1f)]
+    public float dopplerLevel=0f;
+
     [Range(0, 256), Tooltip("Lower is higher priority")]
     public int priority = 128;
     
@@ -56,6 +59,10 @@ public class Sound : ScriptableObject, IDisposable
     [NonSerialized] public AsyncOperationHandle<AudioClip> handle;
     private bool isLoading = false;
     public bool IsLoading => !handle.IsDone || isLoading;
+
+    void OnEnable(){
+        isLoading = false;
+    }
 
     public IEnumerator LoadSound(GameObject componentHolder)
     {

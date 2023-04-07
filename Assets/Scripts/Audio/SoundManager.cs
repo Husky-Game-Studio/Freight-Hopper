@@ -62,6 +62,7 @@ public class SoundManager : MonoBehaviour
         source.loop = sound.isLoop;
         source.priority = sound.priority;
         source.spatialBlend = sound.spatialBlend;
+        source.dopplerLevel = sound.dopplerLevel;
 
         if (sound.pitchVarience > 0)
         {
