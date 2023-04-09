@@ -62,6 +62,22 @@ public partial class WallRunBehavior : AbilityBehavior
         base.Initialize();
     }
 
+    public void ResetAllState()
+    {
+        wallRunActive = false;
+        wallJumpActive = false;
+        wallClimbActive = false;
+        wallStatus = new bool[3];
+        wallNormals = new Vector3[3];
+        jumpDirection = Vector3.zero;
+        wallJumpWallDirection = Vector3.zero;
+        jumpHoldingTimer.DeactivateTimer();
+        inAirCooldown.DeactivateTimer();
+        coyoteTimer.DeactivateTimer();
+        entryEffectsCooldown.DeactivateTimer();
+        exitEffectsCooldown.DeactivateTimer();
+    }
+    
     private void Awake()
     {
         cameraController = Camera.main.GetComponent<FirstPersonCamera>();

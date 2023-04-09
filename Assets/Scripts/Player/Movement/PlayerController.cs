@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private bool jumpedThisFrame;
     private bool poundedThisFrame;
-
+    
     private void Awake()
     {
         collisionManagement = Player.Instance.modules.collisionManagement;
@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
         movementBehavior.Initialize();
         jumpBehavior.Initialize();
         groundPoundBehavior.Initialize();
+        ResetLogic();
     }
     private void OnEnable()
     {
@@ -40,12 +41,31 @@ public class PlayerController : MonoBehaviour
 
         UserInput.Instance.JumpInput += JumpsStartLogic;
         UserInput.Instance.JumpInputCanceled += JumpsCanceledLogic;
+        Goal.LevelComplete += ResetLogic;
     }
     private void OnDisable()
     {
         collisionManagement.CollisionDataCollected -= UpdateLoop;
         collisionManagement.Landed -= jumpBehavior.Recharge;
         collisionManagement.Landed -= groundPoundBehavior.Recharge;
+        
+        // UserInput.Instance.GroundPoundInput -= GroundPoundStartLogic;
+        // UserInput.Instance.GroundPoundCanceled -= groundPoundBehavior.ExitAction;
+        //
+        // UserInput.Instance.JumpInput -= JumpsStartLogic;
+        // UserInput.Instance.JumpInputCanceled -= JumpsCanceledLogic;
+        
+        Goal.LevelComplete -= ResetLogic;
+    }
+
+    public void ResetLogic()
+    {
+        jumpedThisFrame = false;
+        poundedThisFrame = false;
+        wallBehaviors.ResetAllState();
+        movementBehavior.ResetAllState();
+        jumpBehavior.ResetAllState();
+        groundPoundBehavior.ResetAllState();
     }
 
     private void GroundPoundStartLogic()

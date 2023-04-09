@@ -1,7 +1,6 @@
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.VFX;
-using UnityEngine.Rendering;
 
 public class CameraEffects : MonoBehaviour
 {
@@ -10,11 +9,10 @@ public class CameraEffects : MonoBehaviour
 
     private VisualEffect speedLines;
 
-    [SerializeField] private Volume speedVolume;
     [SerializeField] private float speedEffectsStart = 50;
     [SerializeField] private float speedEffectsEnd = 120;
 
-    [SerializeField] private SoundManager playerSounds;
+    SoundManager playerSounds;
     [SerializeField] private CameraEffect<float> fov;
     [SerializeField] private Camera distanceCamera;
 
@@ -31,7 +29,7 @@ public class CameraEffects : MonoBehaviour
     private void Awake()
     {
         playerRB = Player.Instance.modules.rigidbody;
-
+        playerSounds = Player.Instance.modules.soundManager;
         cam.m_Lens.FieldOfView = Settings.GetFOV;
         distanceCamera.fieldOfView = Settings.GetFOV;
         fov.baseValue = cam.m_Lens.FieldOfView;
@@ -39,7 +37,7 @@ public class CameraEffects : MonoBehaviour
         fov.maxValue += fov.baseValue;
 
         speedLines = Camera.main.GetComponent<VisualEffect>();
-
+        
         speedLines.Stop();
     }
 

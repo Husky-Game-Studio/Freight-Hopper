@@ -18,6 +18,10 @@ public class MovementBehavior : AbilityBehavior
     private CollisionManagement collisionManager;
     private Friction friction;
 
+    public void ResetAllState()
+    {
+        waiting = false;
+    }
     public override void Initialize()
     {
         base.Initialize();

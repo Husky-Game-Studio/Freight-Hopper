@@ -56,6 +56,7 @@ public class PauseMenu : MonoBehaviour
         {
             MusicManager.Instance.TransitionToSnapshot(MusicManager.SnapshotMode.Paused);
         }
+        Player.Instance.modules.soundManager.Mute();
     }
 
     public void ContinueGame()
@@ -67,6 +68,7 @@ public class PauseMenu : MonoBehaviour
         {
             MusicManager.Instance.TransitionToSnapshot(MusicManager.SnapshotMode.Normal);
         }
+        Player.Instance.modules.soundManager.UnMute();
     }
 
     public void ExitToMenu()

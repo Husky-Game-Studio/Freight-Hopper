@@ -30,6 +30,12 @@ public class GroundPoundBehavior : AbilityBehavior
     private CollisionManagement collisionManager;
     private Friction friction;
 
+    
+    public void ResetAllState()
+    {
+        active = false;
+        increasingForce.Reset();
+    }
     public override void Initialize()
     {
         base.Initialize();

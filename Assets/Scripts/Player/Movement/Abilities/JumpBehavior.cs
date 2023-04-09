@@ -15,6 +15,13 @@ public class JumpBehavior : AbilityBehavior
     public Timer coyoteeTimer = new Timer(0.5f);
     private bool active;
     public bool Active => active;
+    
+    public void ResetAllState()
+    {
+        active = false;
+        coyoteeTimer.DeactivateTimer();
+        jumpHoldingTimer.DeactivateTimer();
+    }
     public override void Initialize()
     {
         base.Initialize();

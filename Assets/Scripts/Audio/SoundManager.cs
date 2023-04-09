@@ -6,6 +6,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Scripting;
 
 // From comments from https://www.youtube.com/watch?v=QL29aTa7J5Q
 // Probably heavily modified by the time anyone reads this
@@ -13,9 +14,8 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField] protected AudioMixerGroup mixerGroup;
     [SerializeField] protected SoundCollection[] sounds;
-
     protected Dictionary<string, float> soundTimerDictionary = new Dictionary<string, float>();
-    private HashSet<Sound> inUseSounds = new HashSet<Sound>();   
+    private HashSet<Sound> inUseSounds = new HashSet<Sound>();
 
     protected Sound FindSound(string soundName)
     {
@@ -29,9 +29,25 @@ public class SoundManager : MonoBehaviour
                 }
             }
         }
-
         Debug.LogError("Sound " + soundName + " Not Found!");
         return null;
+    }
+
+    public void Mute()
+    {
+        AudioSource[] sources = GetComponents<AudioSource>();
+        foreach (var source in sources)
+        {
+            source.enabled = false;
+        }
+    }
+    public void UnMute()
+    {
+        AudioSource[] sources = GetComponents<AudioSource>();
+        foreach (var source in sources)
+        {
+            source.enabled = true;
+        }
     }
     public void Play(string name, bool playMultiple = false)
     {
@@ -39,6 +55,7 @@ public class SoundManager : MonoBehaviour
         StartCoroutine(PlayAsync(name, playMultiple));
     }
     // Play sound with name, will be created if it doesn't exist
+    [Preserve]
     public IEnumerator PlayAsync(string name, bool playMultiple = false)
     {
         Sound sound = FindSound(name);
@@ -52,12 +69,7 @@ public class SoundManager : MonoBehaviour
         AudioSource source = sound.componentAudioSource;
         source.outputAudioMixerGroup = mixerGroup;
         
-        // Fuck you managed code stripping
-        int id = mixerGroup.GetHashCode();
-        if(id > 0 || id < 1){
-            source.volume = sound.volume;
-        }
-        
+        source.volume = sound.volume;
         source.pitch = sound.pitch;
         source.loop = sound.isLoop;
         source.priority = sound.priority;
@@ -144,7 +156,7 @@ public class SoundManager : MonoBehaviour
     private IEnumerator StopAfterSeconds(Sound sound, float seconds)
     {
         if(seconds > float.Epsilon){
-            yield return new WaitForSeconds(seconds);
+            yield return new WaitForSecondsRealtime(seconds);
         }
         
         while (sound.IsLoading)
@@ -164,6 +176,10 @@ public class SoundManager : MonoBehaviour
     {
         foreach (Sound sound in inUseSounds)
         {
+            if (sound.componentAudioSource != null)
+            {
+                sound.componentAudioSource.Stop();
+            }
             sound.Dispose();
         }
         inUseSounds.Clear();
