@@ -96,17 +96,6 @@ public class TrainBuilderInspector : Editor
             trainBuilder.UpdateAllTrains();
         }
         EditorGUILayout.Space(10);
-        if (GUILayout.Button("Move Forward"))
-        {
-            trainBuilder.DecrementActionIndex();
-            trainBuilder.OnValidate();
-        }
-        if (GUILayout.Button("Move Backwards"))
-        {
-            trainBuilder.IncrementActionIndex();
-            trainBuilder.OnValidate();
-        }
-        EditorGUILayout.Space(10);
         if (GUILayout.Button("Swap Forward"))
         {
             trainBuilder.SwapForward();
@@ -115,6 +104,17 @@ public class TrainBuilderInspector : Editor
         if (GUILayout.Button("Swap Backwards"))
         {
             trainBuilder.SwapBackward();
+            trainBuilder.OnValidate();
+        }
+        EditorGUILayout.Space(10);
+        if (GUILayout.Button("Move Forward"))
+        {
+            trainBuilder.DecrementActionIndex();
+            trainBuilder.OnValidate();
+        }
+        if (GUILayout.Button("Move Backwards"))
+        {
+            trainBuilder.IncrementActionIndex();
             trainBuilder.OnValidate();
         }
 
