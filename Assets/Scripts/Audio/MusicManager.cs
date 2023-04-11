@@ -38,6 +38,7 @@ public class MusicManager : SoundManager
     private Songs currentSong = Songs.Menu;
     [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
     private string lastScene = "";
+    
     private void Awake()
     {
         tempListener.enabled = LevelController.Instance != null;

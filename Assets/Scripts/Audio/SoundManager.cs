@@ -49,6 +49,56 @@ public class SoundManager : MonoBehaviour
             source.enabled = true;
         }
     }
+    
+    bool isVolumeModified = true;
+    bool isMuted = false;
+    public void ResetVolumePercent()
+    {
+        if (!isVolumeModified) return;
+        isVolumeModified = false;
+        isMuted = false;
+        foreach (SoundCollection soundCollection in sounds)
+        {
+            foreach (Sound sound in soundCollection.sounds)
+            {
+                if (sound.componentAudioSource == null || sound.componentAudioSource.clip == null) continue;
+
+                sound.componentAudioSource.volume = sound.volume;
+            }
+        }
+    }
+    // NOTE: Percent of percent of persons volume. So if there volume is 20% and you pass 10%, its 10% of 20%
+    public void ModifyVolumePercent(float percent)
+    {
+        isVolumeModified = true;
+        isMuted = false;
+        foreach (SoundCollection soundCollection in sounds)
+        {
+            foreach (Sound sound in soundCollection.sounds)
+            {
+                if (sound.componentAudioSource == null || sound.componentAudioSource.clip == null) continue;
+
+                sound.componentAudioSource.volume = sound.volume * percent;
+            }
+        }
+    }
+
+    public void MuteVolume()
+    {
+        if (isMuted) return;
+        isMuted = true;
+        isVolumeModified = true;
+        foreach (SoundCollection soundCollection in sounds)
+        {
+            foreach (Sound sound in soundCollection.sounds)
+            {
+                if (sound.componentAudioSource == null || sound.componentAudioSource.clip == null) continue;
+
+                sound.componentAudioSource.volume = 0;
+            }
+        }
+    }
+    
     public void Play(string name, bool playMultiple = false)
     {
         if (this.gameObject.activeSelf == false) return;
@@ -75,6 +125,10 @@ public class SoundManager : MonoBehaviour
         source.priority = sound.priority;
         source.spatialBlend = sound.spatialBlend;
         source.dopplerLevel = sound.dopplerLevel;
+        source.spread = 360;
+        source.rolloffMode = AudioRolloffMode.Logarithmic;
+        source.minDistance = sound.minVolumeDistance;
+        source.maxDistance = sound.maxVolumeDistance;
 
         if (sound.pitchVarience > 0)
         {
@@ -111,6 +165,14 @@ public class SoundManager : MonoBehaviour
         
     }
 
+    public void SetMaxDistance(string songName, float maxDistance)
+    {
+        Sound sound = FindSound(songName);
+        if (sound.componentAudioSource == null) return;
+
+        sound.componentAudioSource.maxDistance = maxDistance;
+    }
+    
     private IEnumerator Fade(Sound sound, float duration, float finalVolume)
     {
         while (sound.IsLoading)

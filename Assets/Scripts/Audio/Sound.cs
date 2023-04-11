@@ -40,6 +40,9 @@ public class Sound : ScriptableObject, IDisposable
     [Range(0f, 1f)]
     public float dopplerLevel=0f;
 
+    public float minVolumeDistance=1;
+    public float maxVolumeDistance=500;
+
     [Range(0, 256), Tooltip("Lower is higher priority")]
     public int priority = 128;
     
