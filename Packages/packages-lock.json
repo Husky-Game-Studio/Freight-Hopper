@@ -139,7 +139,7 @@
     },
     "com.unity.nuget.newtonsoft-json": {
       "version": "3.0.2",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -292,6 +292,13 @@
         "com.unity.render-pipelines.core": "12.1.7"
       }
     },
+    "dev.leviperez.ore": {
+      "version": "https://gitlab.com/UnityOre/ore.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "6528c07494cc821a6e6128d477852812b7ee6996"
+    },
     "me.qiankanglai.loopscrollrect": {
       "version": "https://github.com/qiankanglai/LoopScrollRect.git",
       "depth": 0,
@@ -300,15 +307,6 @@
         "com.unity.ugui": "1.0.0"
       },
       "hash": "e5e343e7fd6330359730c84b3cd6b11dd15c82d9"
-    },
-    "upm.leviperez.ore": {
-      "version": "https://gitlab.com/UnityOre/ore.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2"
-      },
-      "hash": "3dd632da18e069bae9cb991511ef91dad4d6fc2d"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
