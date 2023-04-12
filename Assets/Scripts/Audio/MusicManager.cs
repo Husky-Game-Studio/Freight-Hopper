@@ -50,7 +50,14 @@ public class MusicManager : SoundManager
         {
             DontDestroyOnLoad(this.gameObject);
             instance = this;
-            Play(currentSong.ToString());
+            if (SceneManager.GetActiveScene().name.Equals("MainMenu"))
+            {
+                Play(currentSong.ToString());
+            }
+            else
+            {
+                OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+            }
         }
         else
         {

@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
 using System.Collections;
-using UnityEditor;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Scripting;
 
 // From comments from https://www.youtube.com/watch?v=QL29aTa7J5Q
