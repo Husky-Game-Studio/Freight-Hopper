@@ -5,10 +5,12 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Ore;
 using UnityEngine;
 
-public class CacheSaveFile : OSingleton<CacheSaveFile>
+public class SaveFile : OSingleton<SaveFile>
 {
     public const int CacheVersion = 1;
     const string FILEPATH = "/data.cache";
@@ -41,10 +43,11 @@ public class CacheSaveFile : OSingleton<CacheSaveFile>
     {
         if (Filesystem.TryReadText(filepath, out string text))
         {
+            string jsonText = Decrypt(text);
 #if UNITY_EDITOR
-            Debug.Log("Cache Read\n" + Decrypt(text));
+            Debug.Log("Cache Read\n" + jsonText);
 #endif
-            objects = JsonAuthority.GenericParse(Decrypt(text)) as Dictionary<string, object>;
+            objects = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonText);
         }
         else
         {
@@ -64,7 +67,9 @@ public class CacheSaveFile : OSingleton<CacheSaveFile>
     }
     void WriteCacheFile()
     {
-        string json = JsonAuthority.Serialize(objects);
+        var settings = new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include };
+        var jsonSerializer = JsonSerializer.CreateDefault(settings); // CRINGE
+        string json = JsonAuthority.Serialize(objects, jsonSerializer);
         string finalText = Encrypt(json);
         if (!Filesystem.TryWriteText(filepath, finalText))
         {
@@ -82,10 +87,20 @@ public class CacheSaveFile : OSingleton<CacheSaveFile>
 
     public void FixedUpdate()
     {
+        CheckWriteCacheFile();
+    }
+
+    void CheckWriteCacheFile()
+    {
         if (!CheckFileDirtied()) return;
         
         WriteCacheFile();
         isDirty = false;
+    }
+    
+    void OnApplicationQuit()
+    {
+        CheckWriteCacheFile();
     }
 
     #region Freight Hopper Specific
@@ -126,33 +141,15 @@ public class CacheSaveFile : OSingleton<CacheSaveFile>
         List<(string, LevelAchievementData)> data = GetAllPairs<LevelAchievementData>();
         switch (type)
         {
-            case LevelAchievementData.Type.GottenRobert:
-                foreach (var val in data) val.Item2.GottenRoberto = false;
+            case LevelAchievementData.Type.RobertoFound:
+                foreach (var val in data) val.Item2.RobertoFound = false;
                 break;
             case LevelAchievementData.Type.BestMedalIndex:
-                foreach (var val in data) val.Item2.BestMedalIndex = -1;
+                foreach (var val in data) val.Item2.MedalIndex = -1;
                 break;
         }
         WriteAll(data);
     }
-    
-    public class LevelVersionData
-    {
-        public float Time;
-        public int MedalIndex;
-    }
-
-    public class LevelAchievementData
-    {
-        public enum Type
-        {
-            GottenRobert = 0,
-            BestMedalIndex = 1
-        }
-        public bool GottenRoberto = false;
-        public int BestMedalIndex = -1;
-    }
-    
     #endregion
 
     [CanBeNull]
@@ -160,8 +157,32 @@ public class CacheSaveFile : OSingleton<CacheSaveFile>
     {
         if (objects.TryGetValue(key, out object value))
         {
-            T data = (T)value;
-            return data;
+            if (value is T data)
+            {
+                return data;
+            }
+            try {
+                return (T)Convert.ChangeType(value, typeof(T));
+            } 
+            catch (InvalidCastException) {
+                try
+                {
+                    JObject j = (JObject)value;
+                    T ret = j.ToObject<T>();
+                    if (ret != null)
+                    {
+                        objects[key] = ret;
+                    }
+                    return ret;
+                }
+                catch (InvalidCastException)
+                {
+                    Debug.LogError($"{typeof(T)} can't be casted to object from key {key} as it is type {value.GetType()}");
+                    return default;
+                }
+            }
+            
+            
         }
         return default;
     }
@@ -275,5 +296,26 @@ public class CacheSaveFile : OSingleton<CacheSaveFile>
             }
         }
         return plaintext;
+    }
+}
+public class LevelAchievementData
+{
+    public bool RobertoFound;
+    public int MedalIndex;
+    
+    public enum Type
+    {
+        RobertoFound = 0,
+        BestMedalIndex = 1
+    }
+}
+
+public class LevelVersionData
+{
+    public float Time { get; set; }
+
+    public LevelVersionData(float time)
+    {
+        Time = time;
     }
 }

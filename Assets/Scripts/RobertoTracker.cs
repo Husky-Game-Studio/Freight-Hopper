@@ -10,15 +10,14 @@ public class RobertoTracker : MonoBehaviour
 
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
 
-        LevelSaveData level = LevelTimeSaveLoader.Load(levelName);
+        LevelAchievementData level = SaveFile.Current.ReadLevelAchievementData(levelName);
         if (level == null)
         {
             Debug.Log("no save data found, creating new one for Roberto");
-            level = new LevelSaveData
+            level = new LevelAchievementData
             {
-                LevelName = levelName,
-                MedalIndex = -1,
-                RobertoFound = true
+                RobertoFound = false,
+                MedalIndex = -1
             };
         } else {
            if(level.RobertoFound){
@@ -26,7 +25,8 @@ public class RobertoTracker : MonoBehaviour
            }
         }
 
-        level.FoundRoberto();
+        level.RobertoFound = true;
+        SaveFile.Current.WriteLevelAchievementData(levelName, level);
         EventBoat.SeenRoberto.Invoke(levelName);
     }
 

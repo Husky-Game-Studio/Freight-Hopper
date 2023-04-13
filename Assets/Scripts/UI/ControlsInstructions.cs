@@ -27,20 +27,9 @@ public class ControlsInstructions : MonoBehaviour
             return;
         }
 
-        LevelSaveData levelTimeSaveData = LevelTimeSaveLoader.Load(levelName);
-        bool disableCanvas = true;
-        if (levelTimeSaveData == null)
-        {
-            disableCanvas = false;
-        }
-        else
-        {
-            if (levelTimeSaveData.MedalIndex <= 0)
-            {
-                disableCanvas = false;
-            }
-        }
-        
+        LevelAchievementData levelTimeSaveData = SaveFile.Current.ReadLevelAchievementData(levelName);
+        bool disableCanvas = levelTimeSaveData is { MedalIndex: > 0 };
+
         if (!disableCanvas) 
         {
             descriptionText.text = levelInstructions[levelName];

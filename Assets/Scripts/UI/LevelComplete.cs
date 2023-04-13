@@ -84,25 +84,32 @@ public class LevelComplete : MonoBehaviour
         float myTime = timer.GetTime();
         timerValue.text = LevelTimer.GetTimeString(myTime);
 
-        LevelSaveData levelTimeData = LevelTimeSaveLoader.Load(levelName);
+        LevelVersionData levelTimeData = SaveFile.Current.ReadLevelVersionData(versionedLevelName);
+        LevelAchievementData levelAchievementData = SaveFile.Current.ReadLevelAchievementData(levelName);
 
         if (levelTimeData == null)
         {
             Debug.Log("no save data found, saving new time");
-            levelTimeData = new LevelSaveData
+            levelTimeData = new LevelVersionData(myTime);
+            SaveFile.Current.WriteLevelVersionData(versionedLevelName, levelTimeData);
+        }
+        if (levelAchievementData == null)
+        {
+            levelAchievementData = new LevelAchievementData
             {
-                LevelName = levelName,
-                MedalIndex = -1,
-                RobertoFound = false
+                RobertoFound = false,
+                MedalIndex = -1
             };
+            SaveFile.Current.WriteLevelAchievementData(levelName, levelAchievementData);
         }
-        else {
-            DisplayMedal(levelTimeData);
+        else
+        {
+            DisplayMedal(levelAchievementData);
         }
+
         LeaderboardEntry result = new LeaderboardEntry();
         yield return LeaderboardEventHandler.GetMyUserTime(versionedLevelName, result);
         
-
         //////////////////// Medal Shit ////////////////////
         float bestTime = MAX_TIME;
         if (result != null && result.timeSeconds != default){
@@ -113,13 +120,14 @@ public class LevelComplete : MonoBehaviour
         {
             index++;
         }
-
-        if (levelTimeData.MedalIndex < index - 1)
+        int mIndex = index - 1;
+        if (levelAchievementData.MedalIndex < mIndex)
         {
-            levelTimeData.SetNewMedalIndex(index - 1);
+            levelAchievementData.MedalIndex = mIndex;
+            SaveFile.Current.WriteLevelAchievementData(levelName, levelAchievementData);
         }
 
-        DisplayMedal(levelTimeData);
+        DisplayMedal(levelAchievementData);
 
         // Look, don't ruin the fun for others please
         LevelCompleteData.InvalidationReason reason = LevelCompleteData.InvalidationReason.None;
@@ -142,10 +150,12 @@ public class LevelComplete : MonoBehaviour
             Time = myTime,
             LevelInvalidationReason = reason
         };
+        levelTimeData.Time = result.timeSeconds;
+        SaveFile.Current.WriteLevelVersionData(versionedLevelName, levelTimeData);
         EventBoat.OnLevelComplete.Invoke(data);
     }
 
-    void DisplayMedal(LevelSaveData saveData){
+    void DisplayMedal(LevelAchievementData saveData){
         if (saveData.MedalIndex < 0)
         {
             medalImage.gameObject.SetActive(false);

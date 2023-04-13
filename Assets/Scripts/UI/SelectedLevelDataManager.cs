@@ -27,8 +27,8 @@ public class SelectedLevelDataManager : MonoBehaviour
         
         worldtitle.text = levelListManager.CurrentWorld.name;
         title.text = currentData.Title;
-
-        LevelSaveData levelSaveData = LevelTimeSaveLoader.Load(currentData.name);
+        
+        LevelAchievementData levelSaveData = SaveFile.Current.ReadLevelAchievementData(currentData.name);
         if (levelSaveData != null)
         {
             if (levelSaveData.MedalIndex >= 0 && levelSaveData.MedalIndex < medalSprites.Sprites.Count)

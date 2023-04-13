@@ -39,11 +39,10 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
         int goldCount = 0;
         // this cleared levels count will be changed
         foreach (var s in desertLevelNames)
-            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
+        {
+            LevelAchievementData save = SaveFile.Current.ReadLevelAchievementData(s);
+            if (save != null)
             {
-                LevelSaveData save = LevelTimeSaveLoader.Load(s);
-                if (save == null) continue; // likely parsing issue
-
                 ++levelCount;
                 if (save.MedalIndex >= 0)
                     ++bronzeCount;
@@ -51,8 +50,8 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
                     ++silverCount;
                 if (save.MedalIndex >= 2)
                     ++goldCount;
-            }       
-
+            }
+        }
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertCompletionStat, out currentProgress))
             if (currentProgress <= levelCount)
@@ -66,6 +65,7 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
         if (SteamTrain.SteamAchievementHandler.GetStat(desertGoldStat, out currentProgress))
             if (currentProgress <= goldCount)
                 SteamTrain.SteamAchievementHandler.SetStatsAndCheckAchievements(desertGoldStat, goldCount);
+        
     }
 
     private void CheckAndCountRobertos(string levelname)
@@ -73,13 +73,14 @@ public class AchievementEventHandler : OSingleton<AchievementEventHandler>
         int robCount = 0;
         // this cleared levels count will be changed
         foreach (var s in desertLevelNames)
-            if (LevelTimeSaveLoader.LevelSaveDataExists(s))
+        {
+            LevelAchievementData save = SaveFile.Current.ReadLevelAchievementData(s);
+            if (save != null)
             {
-                LevelSaveData save = LevelTimeSaveLoader.Load(s);
-                if (save == null) continue; // likely parsing issue
                 if (save.RobertoFound)
                     ++robCount;
             }
+        }
 
         int currentProgress;
         if (SteamTrain.SteamAchievementHandler.GetStat(desertRobertoStat, out currentProgress))
