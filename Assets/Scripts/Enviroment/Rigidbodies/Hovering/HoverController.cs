@@ -31,7 +31,7 @@ public class HoverController : MonoBehaviour
 
 #endif
 
-    private void Awake()
+    private void OnEnable()
     {
         InitializeEngines();
     }
@@ -45,7 +45,7 @@ public class HoverController : MonoBehaviour
     private void OnValidate()
     {
         InitializeRigidBody();
-        if (this.gameObject != null)
+        if (this.rb != null)
         {
             InitializeEngines();
         }
@@ -65,10 +65,6 @@ public class HoverController : MonoBehaviour
         if (this.transform.parent.GetComponent<Rigidbody>() != null)
         {
             rb = this.transform.parent.GetComponent<Rigidbody>();
-        }
-        else
-        {
-            Debug.LogWarning("HoverController: Rigidbody not found in parent", this.gameObject);
         }
     }
 
