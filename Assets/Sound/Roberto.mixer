@@ -1,26 +1,44 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!244 &-4512908979364273101
+--- !u!244 &-5140531835501898943
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_EffectID: 32c9579b4ca062d43b6f92882b5985e6
-  m_EffectName: Echo
-  m_MixLevel: 972f046db78b27d43bbb55c2c465db6e
+  m_EffectID: 4fbcfc46b17686b47b5e55d3e8fee8e8
+  m_EffectName: SFX Reverb
+  m_MixLevel: c0127f4939e611e4da27c5156b306d8e
   m_Parameters:
-  - m_ParameterName: Delay
-    m_GUID: 687422267812baa4a9ab8925626a9889
-  - m_ParameterName: Decay
-    m_GUID: 9b1044864ecc71f43959ffb2723af7fb
-  - m_ParameterName: Max channels
-    m_GUID: 0e9cf56402419ce48909d6645b7a73d4
-  - m_ParameterName: Drymix
-    m_GUID: 6670b553a0d3ac1409ac55f047884c91
-  - m_ParameterName: Wetmix
-    m_GUID: eb20cd11078edbf49a45a25ae4742f7f
+  - m_ParameterName: Dry Level
+    m_GUID: 0c1e8b0b47b009b4c8633eef8ef64228
+  - m_ParameterName: Room
+    m_GUID: be446cea2240f9c4e976ebe467f966a3
+  - m_ParameterName: Room HF
+    m_GUID: 96b5eb7692c84544b8d8c5a4029d4a0e
+  - m_ParameterName: Decay Time
+    m_GUID: 8d7d68262e721d64aa7fa0cdbd4ef43f
+  - m_ParameterName: Decay HF Ratio
+    m_GUID: a2a750281209f2c49b7bb81040cb67a2
+  - m_ParameterName: Reflections
+    m_GUID: 6f4eef8a3d5867e4ca8cf8523f020a45
+  - m_ParameterName: Reflect Delay
+    m_GUID: 21f74e6fdbf21684eb1614dc2992351c
+  - m_ParameterName: Reverb
+    m_GUID: 4a9c334404af04543b9774a4d018cc69
+  - m_ParameterName: Reverb Delay
+    m_GUID: 0ec58ef225034fa4fbc83691069681cd
+  - m_ParameterName: Diffusion
+    m_GUID: c239a26e5bc49d946854f570b361002c
+  - m_ParameterName: Density
+    m_GUID: 13090e84f7c03274889b6ee3f4c5533e
+  - m_ParameterName: HF Reference
+    m_GUID: 8a4a576b7ea9f2d429099b2bc5e91f2d
+  - m_ParameterName: Room LF
+    m_GUID: 38c1f710f0d84334d8ce908ac7727a2a
+  - m_ParameterName: LF Reference
+    m_GUID: 035a6de6376e8db49afe8d795e988e66
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
@@ -61,7 +79,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: 24400004}
-  - {fileID: -4512908979364273101}
+  - {fileID: -5140531835501898943}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
@@ -90,5 +108,27 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: b2adceff3391c5f4c8d442be4c03af64
   m_FloatValues:
-    18a286ce94f6aa941bf2bcd463d878fc: -1.2
+    38c1f710f0d84334d8ce908ac7727a2a: 0
+    feba5b1185b93f5478f24a6945871b7a: 22000
+    eb20cd11078edbf49a45a25ae4742f7f: 1
+    8bd150b1bc5cc1c47829a85a0a8e4e4e: 0.06000001
+    6670b553a0d3ac1409ac55f047884c91: 1
+    4a9c334404af04543b9774a4d018cc69: 1250
+    cd1588448e4adef4c96726dac28aa080: 1502
+    4b331ae4f06fae140851f6c7ae8b13f4: 0.253
+    d25d02f47ac5c744bb8b10ae697827c6: 1
+    687422267812baa4a9ab8925626a9889: 69
+    8d7d68262e721d64aa7fa0cdbd4ef43f: 3
+    9b1044864ecc71f43959ffb2723af7fb: 0.708
+    a2a750281209f2c49b7bb81040cb67a2: 0.5
+    077d12787dfd53f46938891c7c2c5f7d: 4.86
+    75a58b886e28a3a47857587cead59dc3: 1
+    b3f608c9d2578a546a2a4e1eaa600c64: 0
+    6f4eef8a3d5867e4ca8cf8523f020a45: -10000
+    be446cea2240f9c4e976ebe467f966a3: -1500
+    e5ad311c6b119a94daa6da521a1b328f: 0.53099996
+    00f3a4dd15b835d40838827960572f42: 1.276
+    7f77f66ed3cfa5d4bbd8a23a041bc401: 10
+    18a286ce94f6aa941bf2bcd463d878fc: 5
+    21f74e6fdbf21684eb1614dc2992351c: 0.05
   m_TransitionOverrides: {}
