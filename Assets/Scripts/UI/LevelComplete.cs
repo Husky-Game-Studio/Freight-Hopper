@@ -73,7 +73,8 @@ public class LevelComplete : MonoBehaviour
         Player.Instance.modules.soundManager.StopAll();
         PauseMenu.Instance.PauseGame();
     }
-
+    
+    
     private IEnumerator BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
@@ -108,7 +109,7 @@ public class LevelComplete : MonoBehaviour
         }
 
         LeaderboardEntry result = new LeaderboardEntry();
-        yield return LeaderboardEventHandler.GetMyUserTime(versionedLevelName, result);
+        yield return SaveFile.GetMyUserTimeCached(versionedLevelName, result, myTime);
         
         //////////////////// Medal Shit ////////////////////
         float bestTime = MAX_TIME;
@@ -150,8 +151,6 @@ public class LevelComplete : MonoBehaviour
             Time = myTime,
             LevelInvalidationReason = reason
         };
-        levelTimeData.Time = result.timeSeconds;
-        SaveFile.Current.WriteLevelVersionData(versionedLevelName, levelTimeData);
         EventBoat.OnLevelComplete.Invoke(data);
     }
 

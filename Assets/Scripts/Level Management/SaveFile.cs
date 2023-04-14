@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ore;
+using SteamTrain;
 using UnityEngine;
 
 public class SaveFile : OSingleton<SaveFile>
@@ -81,7 +83,11 @@ public class SaveFile : OSingleton<SaveFile>
     bool CheckFileDirtied()
     {
         if (isDirty) return true;
-        if (!File.Exists(filepath)) return true;
+        if (!File.Exists(filepath))
+        {
+            checkedLeaderboard = false;
+            return true;
+        }
         return false;
     }
 
@@ -150,6 +156,33 @@ public class SaveFile : OSingleton<SaveFile>
         }
         WriteAll(data);
     }
+
+    static bool checkedLeaderboard = false;
+    // Optional parameter for setting time locally
+    public static IEnumerator GetMyUserTimeCached(string versionedLevelName, LeaderboardEntry result, float newTime = 24*60)
+    {
+        if (!checkedLeaderboard || Current.ReadLevelVersionData(versionedLevelName) == null)
+        {
+            yield return LeaderboardEventHandler.GetMyUserTime(versionedLevelName, result);
+            if (result == null)
+            {
+                yield break;
+            }
+            Current.WriteLevelVersionData(versionedLevelName, new LevelVersionData(result.timeSeconds));
+            checkedLeaderboard = true;
+        }
+        else
+        {
+            LevelVersionData data = Current.ReadLevelVersionData(versionedLevelName);
+            if (data.Time > newTime)
+            {
+                data.Time = newTime;
+                Current.WriteLevelVersionData(versionedLevelName, new LevelVersionData(newTime));
+            }
+            result.timeSeconds = data.Time;
+        }
+        
+    }
     #endregion
 
     [CanBeNull]
@@ -161,28 +194,22 @@ public class SaveFile : OSingleton<SaveFile>
             {
                 return data;
             }
-            try {
-                return (T)Convert.ChangeType(value, typeof(T));
-            } 
-            catch (InvalidCastException) {
-                try
+
+            try
+            {
+                JObject j = (JObject)value;
+                T ret = j.ToObject<T>();
+                if (ret != null)
                 {
-                    JObject j = (JObject)value;
-                    T ret = j.ToObject<T>();
-                    if (ret != null)
-                    {
-                        objects[key] = ret;
-                    }
-                    return ret;
+                    objects[key] = ret;
                 }
-                catch (InvalidCastException)
-                {
-                    Debug.LogError($"{typeof(T)} can't be casted to object from key {key} as it is type {value.GetType()}");
-                    return default;
-                }
+                return ret;
             }
-            
-            
+            catch (InvalidCastException)
+            {
+                Debug.LogError($"{typeof(T)} can't be casted to object from key {key} as it is type {value.GetType()}");
+                return default;
+            }
         }
         return default;
     }

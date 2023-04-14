@@ -57,7 +57,7 @@ public class SelectedLevelDataManager : MonoBehaviour
 
         LevelName levelName = new LevelName(currentData.name);
         LeaderboardEntry result = new LeaderboardEntry();
-        yield return LeaderboardEventHandler.GetMyUserTime(levelName.VersionedCurrentLevel(currentData), result);
+        yield return SaveFile.GetMyUserTimeCached(levelName.VersionedCurrentLevel(currentData), result);
         if (result == null)
         {
             bestTime.text = "Best: None";
