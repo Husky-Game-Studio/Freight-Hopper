@@ -34,15 +34,46 @@ public class SaveFile : OSingleton<SaveFile>
     };
     
     public string Filepath => filepath;
+    bool usingIncorrectFilepath = false;
+    string steamIDKey = "steamID";
+    public ulong CachedSteamID()
+    {
+        if (SteamManager.Initialized)
+        {
+            ulong val = SteamManager.GetMySteamID();
+            PlayerPrefs.SetString(steamIDKey, val.ToString());
+            return val;
+        }
+        else
+        {
+            string result = PlayerPrefs.GetString(steamIDKey, string.Empty);
+            if (result == string.Empty)
+            {
+                return 0;
+            }
+            return ulong.Parse(result);
+        }
+    }
     
     void Awake()
     {
-        filepath = string.Concat(Application.persistentDataPath, "/", SteamManager.GetMySteamID(), FILEPATH);
+        
         LoadCacheFile();
     }
     
     void LoadCacheFile()
     {
+        ulong id = CachedSteamID();
+        usingIncorrectFilepath = id == 0;
+        if (usingIncorrectFilepath)
+        {
+            filepath = string.Concat(Application.persistentDataPath, FILEPATH);
+        }
+        else
+        {
+            filepath = string.Concat(Application.persistentDataPath, "/", SteamManager.GetMySteamID(), FILEPATH);
+        }
+        
         if (Filesystem.TryReadText(filepath, out string text))
         {
             string jsonText = Decrypt(text);
@@ -98,6 +129,12 @@ public class SaveFile : OSingleton<SaveFile>
 
     void CheckWriteCacheFile()
     {
+        if (usingIncorrectFilepath)
+        {
+            ulong id = CachedSteamID();
+            usingIncorrectFilepath = id == 0;
+            if (!usingIncorrectFilepath) LoadCacheFile();
+        }
         if (!CheckFileDirtied()) return;
         
         WriteCacheFile();
