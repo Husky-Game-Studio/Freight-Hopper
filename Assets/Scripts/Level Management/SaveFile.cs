@@ -37,7 +37,7 @@ public class SaveFile : OSingleton<SaveFile>
     
     void Awake()
     {
-        filepath = string.Concat(Application.persistentDataPath, FILEPATH);
+        filepath = string.Concat(Application.persistentDataPath, "/", SteamManager.GetMySteamID(), FILEPATH);
         LoadCacheFile();
     }
     
