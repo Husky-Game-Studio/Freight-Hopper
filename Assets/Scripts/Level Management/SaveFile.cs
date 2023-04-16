@@ -55,9 +55,8 @@ public class SaveFile : OSingleton<SaveFile>
         }
     }
     
-    void Awake()
+    void Start()
     {
-        
         LoadCacheFile();
     }
     
@@ -71,7 +70,7 @@ public class SaveFile : OSingleton<SaveFile>
         }
         else
         {
-            filepath = string.Concat(Application.persistentDataPath, "/", SteamManager.GetMySteamID(), FILEPATH);
+            filepath = string.Concat(Application.persistentDataPath, "/", id, FILEPATH);
         }
         
         if (Filesystem.TryReadText(filepath, out string text))
