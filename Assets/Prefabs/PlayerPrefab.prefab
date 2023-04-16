@@ -217,8 +217,6 @@ MonoBehaviour:
   position:
     old: {x: 0, y: 0, z: 0}
     current: {x: 0, y: 0, z: 0}
-  contactCount: 0
-  steepCount: 0
   validUpAxis: {x: 0, y: 1, z: 0}
 --- !u!136 &1294291225731703509
 CapsuleCollider:
@@ -822,7 +820,7 @@ MonoBehaviour:
   radius: 0.5
   deathMask:
     serializedVersion: 2
-    m_Bits: 147457
+    m_Bits: 671745
 --- !u!1 &3434734436270945015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,7 +1074,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.3888888, y: 1}
+    m_SensorSize: {x: 1.77758, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
