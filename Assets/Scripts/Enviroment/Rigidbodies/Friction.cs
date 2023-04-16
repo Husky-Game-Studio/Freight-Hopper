@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [System.Serializable]
@@ -19,6 +20,10 @@ public class Friction : MonoBehaviour
 
         playerCollision.CollisionDataCollected += ApplyFriction;
         currentFriction = defaultFriction;
+    }
+    void OnDisable()
+    {
+        playerCollision.CollisionDataCollected -= ApplyFriction;
     }
 
     // Expects numbers like "5% friction reduction" or 0.05f. Will only apply when grounded

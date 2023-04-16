@@ -20,8 +20,6 @@ public class CollisionManagement : MonoBehaviour
     [ReadOnly, SerializeField] private Memory<Vector3> contactNormal;
     [ReadOnly, SerializeField] private Memory<Vector3> velocity;
     [ReadOnly, SerializeField] private Memory<Vector3> position;
-    [ReadOnly, SerializeField] private int contactCount;
-    [ReadOnly, SerializeField] private int steepCount;
 
     [ReadOnly, SerializeField] private Vector3 validUpAxis = Vector3.up;
 
@@ -29,7 +27,6 @@ public class CollisionManagement : MonoBehaviour
     public Memory<Vector3> ContactNormal => contactNormal;
     public Memory<bool> IsGrounded => isGrounded;
     public Memory<bool> TrueIsGrounded => trueIsGrounded;
-    public bool LevelSurface => this.ValidUpAxis == this.ContactNormal.current && isGrounded.current;
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
     public float MaxSlope => maxSlope;
@@ -70,38 +67,21 @@ public class CollisionManagement : MonoBehaviour
     List<ContactPoint> contacts = new List<ContactPoint>();
     private void EvaulateCollisions(Collision collision)
     {
-        contactNormal.current = Vector3.zero;
         collision.GetContacts(contacts);
-        foreach (ContactPoint contactPoint in contacts)
+        Vector3 normal = contacts[0].normal;
+        float collisionAngle = Vector3.Angle(normal, upAxis);
+        if (normal != default && collisionAngle <= maxSlope)
         {
-            Vector3 normal = contactPoint.normal;
-
-            float collisionAngle = Vector3.Angle(normal, upAxis);
-            if (normal != default && collisionAngle <= maxSlope)
-            {
-                isGrounded.current = true;
-                trueIsGrounded.current = true;
-                contactNormal.current += normal;
-                contactCount++;
-                frictionManager.EvalauteSurface(collision);
-                rigidbodyLinker.UpdateLink(collision.rigidbody);
-            }
-            else
-            {
-                steepCount++;
-                if (contactCount == 0)
-                {
-                    rigidbodyLinker.UpdateLink(collision.rigidbody);
-                }
-            }
+            isGrounded.current = true;
+            trueIsGrounded.current = true;
+            contactNormal.current = normal;
+            frictionManager.EvalauteSurface(collision);
+            rigidbodyLinker.UpdateLink(collision.rigidbody);
         }
-        if (contactCount == 0)
+        else
         {
+            rigidbodyLinker.UpdateLink(collision.rigidbody);
             contactNormal.current = upAxis;
-        }
-        if (contactCount > 1)
-        {
-            contactNormal.current.Normalize();
         }
     }
 
@@ -187,8 +167,6 @@ public class CollisionManagement : MonoBehaviour
     {
         isGrounded.current = false;
         trueIsGrounded.current = false;
-        contactCount = 0;
-        steepCount = 0;
         velocity.current = rb.velocity;
         position.current = rb.position;
 
