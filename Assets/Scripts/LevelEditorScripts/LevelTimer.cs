@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using UnityEngine;
 using TMPro;
@@ -5,23 +6,22 @@ using TMPro;
 // Source: https://www.youtube.com/watch?v=x-C95TuQtf0
 public class LevelTimer : MonoBehaviour
 {
-    private TextMeshProUGUI textTimer;
-    private float startTime;
-
-    private void Start()
+    TextMeshProUGUI textTimer;
+    DateTime startDateTime;
+    void Start()
     {
-        startTime = Time.realtimeSinceStartup;
+        startDateTime = DateTime.UtcNow;
         textTimer = GetComponent<TextMeshProUGUI>();
     }
 
-    private void Update()
+    void Update()
     {
         textTimer.text = GetTimeString(GetTime());
     }
 
-    public float GetTime()
+    public float GetTime() //ur not kool
     {
-        return Time.realtimeSinceStartup - startTime;
+        return (float)(DateTime.UtcNow-startDateTime).TotalSeconds;
     }
 
     public static string GetTimeString(float time)
