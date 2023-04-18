@@ -14,7 +14,7 @@ public class LevelController : MonoBehaviour
     [SerializeField, ReadOnly] private LevelName levelName;
     public Transform playerSpawnTransform;
     #if UNITY_EDITOR
-    public int editorCheckpointIndex = 0;
+    public int editorCheckpointIndex = -1;
     public List<Transform> editorCheckpoints;
     #endif
     [SerializeField] private float spawnSnapSmoothing = 0.001f;
@@ -122,7 +122,7 @@ public class LevelController : MonoBehaviour
             position = playerSpawnTransform.position + (this.transform.up * highHeight);
         }
 #if UNITY_EDITOR
-        if (editorCheckpointIndex < editorCheckpoints.Count && editorCheckpointIndex < 0)
+        if (editorCheckpoints != null && editorCheckpointIndex < editorCheckpoints.Count && editorCheckpointIndex >= 0)
         {
             position = editorCheckpoints[editorCheckpointIndex].position;
         }
