@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Text;
 using UnityEngine;
 using TMPro;
@@ -8,9 +9,11 @@ public class LevelTimer : MonoBehaviour
 {
     TextMeshProUGUI textTimer;
     DateTime startDateTime;
+    Stopwatch stopwatch;
     void Start()
     {
         startDateTime = DateTime.UtcNow;
+        stopwatch = Stopwatch.StartNew();
         textTimer = GetComponent<TextMeshProUGUI>();
     }
 
@@ -21,7 +24,9 @@ public class LevelTimer : MonoBehaviour
 
     public float GetTime() //ur not kool
     {
-        return (float)(DateTime.UtcNow-startDateTime).TotalSeconds;
+        float utcTime = (float)(DateTime.UtcNow-startDateTime).TotalSeconds;
+        float reportedTime = Mathf.Max(utcTime, stopwatch.ElapsedMilliseconds / 1000f);
+        return reportedTime;
     }
 
     public static string GetTimeString(float time)
