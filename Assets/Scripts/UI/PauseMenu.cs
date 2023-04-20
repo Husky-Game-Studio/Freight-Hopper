@@ -28,11 +28,6 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
-        UserInput.Instance.UserInputMaster.Player.Pause.performed -= Pause;
-    }
-
     public void PauseMenuEnable()
     {
         InGameStates.Instance.SwitchState(InGameStates.States.Paused);

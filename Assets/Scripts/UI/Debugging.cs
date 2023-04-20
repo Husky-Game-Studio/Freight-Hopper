@@ -26,7 +26,6 @@ public class Debugging : MonoBehaviour
 
     private void OnDisable()
     {
-        UserInput.Instance.UserInputMaster.Player.Debug.performed -= ToggleDebugging;
         refreshSpeed.Unsubscribe(UpdateText);
     }
 

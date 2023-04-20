@@ -35,6 +35,7 @@ public class SaveFile : OSingleton<SaveFile>
     
     public string Filepath => filepath;
     bool usingIncorrectFilepath = false;
+    FileInfo filePathInfoCache;
     string steamIDKey = "steamID";
     public ulong CachedSteamID()
     {
@@ -72,7 +73,7 @@ public class SaveFile : OSingleton<SaveFile>
         {
             filepath = string.Concat(Application.persistentDataPath, "/", id, FILEPATH);
         }
-        
+        filePathInfoCache = new FileInfo(filepath);
         if (Filesystem.TryReadText(filepath, out string text))
         {
             string jsonText = Decrypt(text);
@@ -113,7 +114,7 @@ public class SaveFile : OSingleton<SaveFile>
     bool CheckFileDirtied()
     {
         if (isDirty) return true;
-        if (!File.Exists(filepath))
+        if (!filePathInfoCache.Exists)
         {
             checkedLeaderboard = false;
             return true;

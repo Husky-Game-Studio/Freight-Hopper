@@ -42,9 +42,6 @@ public class LevelComplete : MonoBehaviour
     private void OnDisable()
     {
         Goal.LevelComplete -= EnableLevelComplete;
-        UserInput.Instance.UserInputMaster.Player.Menu.performed -= Menu;
-        UserInput.Instance.UserInputMaster.Player.Next.performed -= NextLevel;
-        UserInput.Instance.UserInputMaster.Player.Restart.performed -= RestartLevel;
         SteamBus.OnNewBestTime -= CallBestTimeSfx;
         SteamBus.OnTimeUploaded -= DownloadLeaderboard;
     }

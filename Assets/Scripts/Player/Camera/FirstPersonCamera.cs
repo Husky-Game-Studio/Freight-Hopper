@@ -65,10 +65,6 @@ public class FirstPersonCamera : MonoBehaviour
     {
         UserInput.Instance.UserInputMaster.Player.Freecam.performed += ToggleFreecam;
     }
-    private void OnDisable()
-    {
-        UserInput.Instance.UserInputMaster.Player.Freecam.performed -= ToggleFreecam;
-    }
 
     private void ToggleFreecam(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
