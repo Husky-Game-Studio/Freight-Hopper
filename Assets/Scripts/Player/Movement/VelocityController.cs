@@ -8,7 +8,9 @@ public class VelocityController
     [SerializeField] private float deltaAngle;
     [SerializeField] private float acceleration;
     [SerializeField] private float sideInputPenaltyMultiplier;
-
+    [SerializeField] float slowdownPercent = 0.025f; // this will probably lead to a speed exploit
+    [SerializeField,ReadOnly] float nextSpeed;
+    
     private float oppositeAngle;
     private Rigidbody rb;
     private Friction friction;
@@ -34,13 +36,15 @@ public class VelocityController
         Vector3 rotatedVector = Vector3.RotateTowards(speedometer.HorzVelocity.normalized, input, deltaAngle * deltaAngleMultipier, 0);
         rb.AddForce(rotatedVector * speedometer.HorzSpeed, ForceMode.VelocityChange);
     }
-
+    
     public void Move(Vector3 input)
     {
-        float nextSpeed = ((acceleration * Time.fixedDeltaTime * input) +
+        nextSpeed = ((acceleration * Time.fixedDeltaTime * input) +
             speedometer.HorzVelocity).magnitude;
 
-        if (nextSpeed < speedLimit.value || nextSpeed < speedometer.HorzSpeed)
+        bool isOpposite = OppositeInput(input);
+        
+        if (nextSpeed < speedLimit.value)
         {
             rb.AddForce(input * acceleration, ForceMode.Acceleration);
             if (nextSpeed < speedLimit.Stored)
@@ -50,10 +54,17 @@ public class VelocityController
         }
         else
         {
-            RotateVelocity(input);
-            speedLimit.value += Time.fixedDeltaTime * speedLimitIncreaseValue;
+            if (isOpposite)
+            {
+                rb.AddForce(input * (slowdownPercent * speedometer.HorzSpeed), ForceMode.VelocityChange);
+            }
+            else
+            {
+                RotateVelocity(input);
+                speedLimit.value += Time.fixedDeltaTime * speedLimitIncreaseValue;
+            }
         }
-        if (OppositeInput(input))
+        if (isOpposite)
         {
             friction.ResetFrictionReduction();
         }

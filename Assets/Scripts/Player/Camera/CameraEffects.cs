@@ -42,7 +42,7 @@ public class CameraEffects : MonoBehaviour
     }
 
     private bool goingSlowAgain;
-
+    bool playingWind = false;
     private void Update()
     {
         //Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);
@@ -57,7 +57,7 @@ public class CameraEffects : MonoBehaviour
         cam.m_Lens.FieldOfView = fov.value;
         distanceCamera.fieldOfView = fov.value;
 
-        if (speed > speedEffectsStart)
+        if (speed > speedEffectsStart && !goingSlowAgain)
         {
             speedLines.Play();
             playerSounds.Play("GoingFast");

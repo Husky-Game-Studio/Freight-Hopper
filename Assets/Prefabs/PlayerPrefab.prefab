@@ -1074,7 +1074,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.77758, y: 1}
+    m_SensorSize: {x: 1.7785888, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3474,6 +3474,8 @@ MonoBehaviour:
     deltaAngle: 0.02
     acceleration: 80
     sideInputPenaltyMultiplier: 0.4
+    slowdownPercent: 0.025
+    nextSpeed: 0
   airController:
     speedLimit:
       value: 25
@@ -3481,6 +3483,8 @@ MonoBehaviour:
     deltaAngle: 0.015
     acceleration: 26
     sideInputPenaltyMultiplier: 0.4
+    slowdownPercent: 0.025
+    nextSpeed: 0
   waiting: 0
   speedSoundMultiplier: 10
   walkingSoundTimeRange: {x: 0.1, y: 0.5}

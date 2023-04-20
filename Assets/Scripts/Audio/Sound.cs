@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -59,32 +60,27 @@ public class Sound : ScriptableObject, IDisposable
 #endif
 
     [NonSerialized] public AudioSource componentAudioSource;
-    [NonSerialized] public AsyncOperationHandle<AudioClip> handle;
-    private bool isLoading = false;
-    public bool IsLoading => !handle.IsDone || isLoading;
 
-    void OnEnable(){
-        isLoading = false;
-    }
-
-    public IEnumerator LoadSound(GameObject componentHolder)
+    void AssignSound(AudioClip sound, AssetReference reference)
     {
-        handle = Addressables.LoadAssetAsync<AudioClip>(assetReference);
-        isLoading = true;
-        yield return handle;
-        isLoading = false;
-        if (handle.IsValid() && handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            if (componentAudioSource == null)
-            {
-                componentAudioSource = componentHolder.AddComponent<AudioSource>();
-            }
-            componentAudioSource.clip = handle.Result;
-        }
-        else
+        if (sound == null)
         {
             Debug.LogError("Unable to load sound " + filename);
+            return;
         }
+        
+        if (componentAudioSource == null)
+        {
+            componentAudioSource = temp.AddComponent<AudioSource>();
+        }
+        componentAudioSource.clip = sound;
+    }
+    GameObject temp;
+    public IEnumerator LoadSound(GameObject componentHolder)
+    {
+        yield return AddressableAssets.WaitUntilAssetIsLoaded(assetReference);
+        temp = componentHolder; // BAD
+        yield return AddressableAssets.RequestAssetInternal<AudioClip>(AssignSound, assetReference);
     }
 
     public void Dispose()
@@ -93,9 +89,11 @@ public class Sound : ScriptableObject, IDisposable
         {
             componentAudioSource.clip = null;
         }
-        if (handle.IsValid())
-        {
-            Addressables.Release(handle);
-        }
+        Ore.ActiveScene.Coroutines.Run(WaitRelease());
+    }
+
+    IEnumerator WaitRelease()
+    {
+        yield return AddressableAssets.ReleaseAssetInternal(assetReference, 5);
     }
 }

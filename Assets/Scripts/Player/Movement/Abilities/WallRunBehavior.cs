@@ -120,6 +120,8 @@ public partial class WallRunBehavior : AbilityBehavior
             
             if (!exitEffectsCooldown.TimerActive())
             {
+                soundManager.Stop("WallSkid");
+                isPlayingThisFrameWallSkid = false;
                 cameraController.ResetUpAxis();
             }
         }
@@ -245,9 +247,15 @@ public partial class WallRunBehavior : AbilityBehavior
         WallRun(-wallNormals[0], GetUpAlongWall(wallNormals[0]));
     }
 
+    bool isPlayingThisFrameWallSkid = false;
     private void WallRun(Vector3 right, Vector3 up)
     {
-        soundManager.Play("WallSkid");
+        if (!isPlayingThisFrameWallSkid)
+        {
+            soundManager.Play("WallSkid");
+            isPlayingThisFrameWallSkid = false;
+        }
+        
         Vector3 forward = Vector3.Cross(right, up);
         if (!entryEffectsCooldown.TimerActive())
         {
@@ -266,7 +274,6 @@ public partial class WallRunBehavior : AbilityBehavior
     }
     public void RunExit()
     {
-        soundManager.Stop("WallSkid");
         exitEffectsCooldown.ResetTimer();
         entryEffectsCooldown.ResetTimer();
         wallRunActive = false;

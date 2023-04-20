@@ -171,10 +171,6 @@ public class SoundManager : MonoBehaviour
     
     private IEnumerator Fade(Sound sound, float duration, float finalVolume)
     {
-        while (sound.IsLoading)
-        {
-            yield return null;
-        }
         float startVolume = sound.componentAudioSource.volume;
         float t = 0;
         while (t < 1)
@@ -216,12 +212,7 @@ public class SoundManager : MonoBehaviour
         if(seconds > float.Epsilon){
             yield return new WaitForSecondsRealtime(seconds);
         }
-        
-        while (sound.IsLoading)
-        {
-            yield return null;
-        }
-        
+
         sound.componentAudioSource.Stop();
         sound.Dispose();
         if (sound.hasCooldown)
@@ -238,7 +229,7 @@ public class SoundManager : MonoBehaviour
             {
                 sound.componentAudioSource.Stop();
             }
-            sound.Dispose();
+            AddressableAssets.ReleaseAllOfAsset(sound.assetReference);
         }
         inUseSounds.Clear();
     }
@@ -255,16 +246,6 @@ public class SoundManager : MonoBehaviour
 
     protected bool CanPlaySound(Sound sound)
     {
-        if (sound.IsLoading)
-        {
-            return false;
-        }
-        if (!sound.assetReference.RuntimeKeyIsValid())
-        {
-            Debug.LogWarning("Asset reference for " + sound.filename + " doesn't exist");
-            return false;
-        }
-        
         string soundName = GetSoundName(sound);
         if (soundTimerDictionary.ContainsKey(soundName))
         {
