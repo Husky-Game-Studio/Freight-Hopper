@@ -61,7 +61,7 @@ public class Sound : ScriptableObject, IDisposable
 
     [NonSerialized] public AudioSource componentAudioSource;
 
-    void AssignSound(AudioClip sound, AssetReference reference)
+    void AssignSound(UnityEngine.Object sound, AssetReference reference)
     {
         if (sound == null)
         {
@@ -73,27 +73,19 @@ public class Sound : ScriptableObject, IDisposable
         {
             componentAudioSource = temp.AddComponent<AudioSource>();
         }
-        componentAudioSource.clip = sound;
+        componentAudioSource.clip = sound as AudioClip;
     }
     GameObject temp;
     public IEnumerator LoadSound(GameObject componentHolder)
     {
-        yield return AddressableAssets.WaitUntilAssetIsLoaded(assetReference);
         temp = componentHolder; // BAD
         yield return AddressableAssets.RequestAssetInternal<AudioClip>(AssignSound, assetReference);
     }
 
     public void Dispose()
     {
-        if (componentAudioSource != null)
-        {
-            componentAudioSource.clip = null;
-        }
-        Ore.ActiveScene.Coroutines.Run(WaitRelease());
+        componentAudioSource.clip = null;
+        AddressableAssets.ReleaseAsset(assetReference, 5);
     }
-
-    IEnumerator WaitRelease()
-    {
-        yield return AddressableAssets.ReleaseAssetInternal(assetReference, 5);
-    }
+    
 }

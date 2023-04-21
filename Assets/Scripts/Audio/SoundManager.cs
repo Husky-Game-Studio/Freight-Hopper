@@ -97,7 +97,7 @@ public class SoundManager : MonoBehaviour
     
     public void Play(string name, bool playMultiple = false)
     {
-        if (this.gameObject.activeSelf == false) return;
+        if (this.gameObject.activeInHierarchy == false) return;
         StartCoroutine(PlayAsync(name, playMultiple));
     }
     // Play sound with name, will be created if it doesn't exist
@@ -138,7 +138,11 @@ public class SoundManager : MonoBehaviour
         {
             if (playMultiple)
             {
-                sound.componentAudioSource.PlayOneShot(sound.componentAudioSource.clip);
+                if (sound.componentAudioSource.clip != null)
+                {
+                    sound.componentAudioSource.PlayOneShot(sound.componentAudioSource.clip);
+                }
+                
                 sound.componentAudioSource.pitch = sound.pitch;
                 sound.componentAudioSource.playOnAwake = false;
             }
@@ -201,9 +205,12 @@ public class SoundManager : MonoBehaviour
         }
     }
     public void StopAll(){
-        foreach (Sound sound in inUseSounds)
+        foreach (Sound sound in GetAllSounds())
         {
-            Stop(sound.filename, false);
+            if (AddressableAssets.InMemory(sound.assetReference))
+            {
+                Stop(sound.filename, false);
+            }
         }
         inUseSounds.Clear();
     }
@@ -221,15 +228,28 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    IEnumerable GetAllSounds()
+    {
+        foreach (SoundCollection soundCollection in sounds)
+        {
+            foreach (Sound sound in soundCollection.sounds)
+            {
+                yield return sound;
+            }
+        }   
+    }
     public void OnDisable()
     {
-        foreach (Sound sound in inUseSounds)
+        foreach (Sound sound in GetAllSounds())
         {
+            if (AddressableAssets.InMemory(sound.assetReference))
+            {
+                AddressableAssets.ReleaseAllOfAsset(sound.assetReference);
+            }
             if (sound.componentAudioSource != null)
             {
                 sound.componentAudioSource.Stop();
             }
-            AddressableAssets.ReleaseAllOfAsset(sound.assetReference);
         }
         inUseSounds.Clear();
     }

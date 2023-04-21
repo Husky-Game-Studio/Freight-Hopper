@@ -16,8 +16,6 @@ public class MusicManager : SoundManager
     [SerializeField] private Timer minSongLengthTimer = new Timer(60);
     [SerializeField] private float musicChangeChance = 0.1f;
 
-    [SerializeField] AudioListener tempListener;
-
     public enum SnapshotMode
     { Normal, Paused, Alternate }
 
@@ -38,12 +36,6 @@ public class MusicManager : SoundManager
     private Songs currentSong = Songs.Menu;
     [SerializeField] private SnapshotMode musicMode = SnapshotMode.Normal;
     private string lastScene = "";
-    
-    private void Awake()
-    {
-        tempListener.enabled = LevelController.Instance != null;
-    }
-
     private void Start()
     {
         if (instance == null)
@@ -70,15 +62,19 @@ public class MusicManager : SoundManager
             return;
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
-        Player.PlayerLoadedIn += DisableTempListener;
     }
 
-    void DisableTempListener() => tempListener.enabled = false;
+    void Update()
+    {
+        if (Player.Instance != null)
+        {
+            this.transform.position = Player.Instance.transform.position;
+        }
+    }
 
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        Player.PlayerLoadedIn -= DisableTempListener;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

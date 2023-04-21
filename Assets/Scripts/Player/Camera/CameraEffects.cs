@@ -42,7 +42,6 @@ public class CameraEffects : MonoBehaviour
     }
 
     private bool goingSlowAgain;
-    bool playingWind = false;
     private void Update()
     {
         //Vector3 speedLineDirection = playerRB.transform.InverseTransformDirection(playerRB.velocity.normalized);

@@ -52,20 +52,14 @@ public class VelocityController
                 speedLimit.Reset();
             }
         }
-        else
+        else if(!isOpposite)
         {
-            if (isOpposite)
-            {
-                rb.AddForce(input * (slowdownPercent * speedometer.HorzSpeed), ForceMode.VelocityChange);
-            }
-            else
-            {
-                RotateVelocity(input);
-                speedLimit.value += Time.fixedDeltaTime * speedLimitIncreaseValue;
-            }
+            RotateVelocity(input);
+            speedLimit.value += Time.fixedDeltaTime * speedLimitIncreaseValue;
         }
         if (isOpposite)
         {
+            rb.AddForce(Vector3.Project(-speedometer.HorzVelocity, input) * (slowdownPercent), ForceMode.VelocityChange);
             friction.ResetFrictionReduction();
         }
     }

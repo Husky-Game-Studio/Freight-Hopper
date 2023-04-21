@@ -4,49 +4,61 @@ using Ore;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Object = UnityEngine.Object;
 
 public static class AddressableAssets
 {
     static HashMap<AssetReference, AsyncOperationHandleCounter> _assetHandles 
       = new HashMap<AssetReference, AsyncOperationHandleCounter>();
-    public static void RequestAsset<T>(Action<T, AssetReference> onComplete, AssetReference assetReference) where T : UnityEngine.Object
+    public static void RequestAsset<T>(Action<Object, AssetReference> onComplete, AssetReference assetReference)
     {
       ActiveScene.Coroutines.Run(RequestAssetInternal<T>(onComplete, assetReference));
     }
-    public static IEnumerator RequestAssetInternal<T>(Action<T, AssetReference> onComplete, AssetReference assetReference) where T : UnityEngine.Object
+    public static IEnumerator RequestAssetInternal<T>(Action<Object, AssetReference> onComplete, AssetReference assetReference)
     {
         if (!assetReference.RuntimeKeyIsValid())
         {
             Debug.LogError($"key invalid {assetReference}");
+            onComplete.Invoke(default,assetReference);
             yield break;
         }
-        while (!assetReference.IsDone) yield return null;
-        
-        if (!_assetHandles.TryGetValue(assetReference, out var assetReferenceList))
+        bool valueExists = _assetHandles.TryGetValue(assetReference, out var handleCounter);
+        if (!valueExists)
         {
-            //Debug.Log("adding ref " + assetReference.editorAsset.name);
-            if (assetReference.IsValid()) // oh no :(
+            handleCounter = new AsyncOperationHandleCounter
             {
-                yield break;
-            }
-
-            var handle = assetReference.LoadAssetAsync<T>();
-            yield return handle;
-            if (handle.Status != AsyncOperationStatus.Succeeded)
+                Handle = default,
+                Count = 1,
+                OnComplete = onComplete
+            };
+            _assetHandles[assetReference] = handleCounter;
+            handleCounter.Handle = Addressables.LoadAssetAsync<T>(assetReference);
+            yield return handleCounter.Handle;
+            if (handleCounter.Handle.Status != AsyncOperationStatus.Succeeded)
             {
-                Addressables.Release(handle);
+                Addressables.Release(handleCounter.Handle);
                 Debug.LogError($"Failed to load {assetReference.Asset.name}");
                 yield break;
             }
-
-            assetReferenceList = new AsyncOperationHandleCounter { Handle = handle, Count = 0 };
+            handleCounter.OnComplete.Invoke(handleCounter.Handle.Result as Object, assetReference);
+            handleCounter.OnComplete = null;
         }
-
-        T asset = assetReferenceList.Handle.Result as T;
-        assetReferenceList.Count++;
-        //Debug.Log($"adding count {assetReference.editorAsset.name} is " + assetReferenceList.Count);
-        _assetHandles[assetReference] = assetReferenceList;
-        onComplete.Invoke(asset, assetReference);
+        else
+        {
+            handleCounter.Count++;
+            if (handleCounter.IsLoading)
+            {
+                handleCounter.OnComplete += onComplete;
+                _assetHandles[assetReference] = handleCounter;
+                while (handleCounter.IsLoading) yield return null;
+            }
+            else
+            {
+                _assetHandles[assetReference] = handleCounter;
+                Object asset = handleCounter.Handle.Result as Object;
+                onComplete.Invoke(asset, assetReference);
+            }
+        }
     }
 
     /// <summary>
@@ -67,9 +79,9 @@ public static class AddressableAssets
     {
         if (_assetHandles.TryGetValue(reference, out var assetReference))
         {
-            int val = _assetHandles[reference].Count--;
-            while (!reference.IsDone) yield return null;
-            if (val != 0) yield break;
+            while (assetReference.IsLoading) yield return null;
+            int val = --_assetHandles[reference].Count;
+            if (val > 0) yield break;
 
             while (condition())
             {
@@ -78,39 +90,36 @@ public static class AddressableAssets
             }
 
             Addressables.Release(assetReference.Handle);
-            //Debug.Log("Clearing ref " + reference.editorAsset.name);
             _assetHandles.Remove(reference);
         }
     }
     public static IEnumerator ReleaseAssetInternal(AssetReference reference, float secondsDelay)
     {
-        //Debug.Log($"Release attempt for {reference.editorAsset.name} when at {GetCount(reference)}");
         if (_assetHandles.TryGetValue(reference, out var assetReference))
         {
+            while (assetReference.IsLoading) yield return null;
             if (assetReference.Count == 0)
             {
                 if (secondsDelay == 0)
                 {
                     Addressables.Release(assetReference.Handle);
-                    //Debug.Log("Clearing ref " + reference.editorAsset.name);
                     _assetHandles.Remove(reference);
                 }
                 yield break;
             }
-            int val = _assetHandles[reference].Count--;
-            while (!reference.IsDone) yield return null;
-            if (val != 0) yield break;
+            
+            int val = --_assetHandles[reference].Count;
+            if (val > 0) yield break;
 
             float duration = 0;
             while (duration < secondsDelay)
             {
               duration += Time.unscaledDeltaTime;
               yield return null;
-              if (assetReference.Count > 0) yield break;
+              if (assetReference.Count > 0 || !assetReference.Handle.IsValid()) yield break;
             }
-
+      
             Addressables.Release(assetReference.Handle);
-            Debug.Log("Clearing ref " + reference.editorAsset.name);
             _assetHandles.Remove(reference);
         }
     }
@@ -118,7 +127,10 @@ public static class AddressableAssets
     {
         if (_assetHandles.TryGetValue(reference, out var assetReference))
         {
-            Addressables.Release(assetReference.Handle);
+            if (assetReference.Handle.IsValid())
+            {
+                Addressables.Release(assetReference.Handle);
+            }
             _assetHandles.Remove(reference);
         }
     }
@@ -131,12 +143,24 @@ public static class AddressableAssets
         _assetHandles.Clear();
     }
 
-    public static bool AssetIsLoading (AssetReference reference) => reference.IsDone;
+    public static bool AssetIsLoading (AssetReference reference)
+    {
+        if (_assetHandles.TryGetValue(reference, out var assetReference))
+        {
+            return assetReference.IsLoading;
+        }
+        return false;
+    }
     public static IEnumerator WaitUntilAssetIsLoaded(AssetReference reference)
     {
-        if (reference.IsDone) yield break;
-        while (!reference.IsDone) yield return null;
-        yield return null; // if we don't wait an extra frame, the loading/releasing functions will make a duplicate due to using similar logic and needing to be "faster"
+        if (_assetHandles.TryGetValue(reference, out var assetReference))
+        {
+            while (assetReference.IsLoading) yield return null;
+        }
+    }
+    public static bool InMemory(AssetReference reference)
+    {
+        return _assetHandles.ContainsKey(reference);
     }
     public static int GetCount(AssetReference reference) // should be internal and only visible to tests
     {
@@ -151,6 +175,8 @@ public static class AddressableAssets
     {
         public int Count;
         public AsyncOperationHandle Handle;
+        public Action<Object, AssetReference> OnComplete;
+        public bool IsLoading => OnComplete != null;
     }
 }
 
