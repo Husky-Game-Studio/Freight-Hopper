@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 using SteamTrain;
 using System.Collections;
+using UnityEngine.Serialization;
 
 public class LevelComplete : MonoBehaviour
 {
@@ -19,12 +21,13 @@ public class LevelComplete : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI timerValue;
     [SerializeField] private TextMeshProUGUI nextMedalTimeValue;
-    [SerializeField] private Color bestTimeColor;
     [SerializeField] UILeaderboard leaderboard;
-
+    [FormerlySerializedAs("speed")][SerializeField]  float colorChangeSpeed = 1f;
     public const float MAX_TIME = 24 * 60;
     public const float MIN_TIME = Mathf.PI/1.234f;
 
+    bool isBestTime = false;
+    
     private void Awake()
     {  
         levelCompleteScreen.SetActive(false);
@@ -49,12 +52,26 @@ public class LevelComplete : MonoBehaviour
     void DownloadLeaderboard(){
         leaderboard.LoadCurrentSceneLeaderboard();
     }
-
+   
     private void CallBestTimeSfx(){
         Player.Instance.modules.soundManager.Play("BestTime");
-        timerText.color = bestTimeColor;
-        timerValue.color = bestTimeColor;
+        isBestTime = true;
     }
+
+    void Update()
+    {
+        ConstantlyChangeBestTimeColorRainbow();
+    }
+    
+    private void ConstantlyChangeBestTimeColorRainbow(){
+        if(!isBestTime) return;
+
+        float hue = (Time.unscaledTime * colorChangeSpeed) % 1f;
+        Color bestColor = Color.HSVToRGB(hue, 1f, 1f);
+        timerText.color = bestColor;
+        timerValue.color = bestColor;
+    }
+    
     private void EnableLevelComplete()
     {
         InGameStates.Instance.SwitchState(InGameStates.States.LevelComplete);
