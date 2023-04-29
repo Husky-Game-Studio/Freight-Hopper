@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,8 +28,18 @@ public class UserInput : MonoBehaviour
     [ReadOnly, SerializeField] private bool jumpHeld;
     void Awake()
     {
-        input = this;
-        master = new InputMaster();
+        if (input == null)
+        {
+            input = this;
+            master = new InputMaster();
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    void OnEnable()
+    {
         master.Player.GroundPound.performed += GroundPoundPressed;
         master.Player.GroundPound.canceled += GroundPoundReleased;
         master.Player.Jump.performed += JumpPressed;
@@ -46,7 +57,6 @@ public class UserInput : MonoBehaviour
         master.Player.Jump.canceled -= JumpReleased;
         master.Player.Restart.performed -= LevelController.Instance.Respawn;
         master.Dispose();
-        input = null;
     }
 
     private int frameCount;
@@ -109,11 +119,6 @@ public class UserInput : MonoBehaviour
     {
         Vector2 rawInput = master.Player.Movement.ReadValue<Vector2>();
         return new Vector3(rawInput.x, 0, rawInput.y);
-    }
-
-    public Vector2 Look()
-    {
-        return master.Player.Look.ReadValue<Vector2>();
     }
 
     // Returns true if the player press the restart key/button
