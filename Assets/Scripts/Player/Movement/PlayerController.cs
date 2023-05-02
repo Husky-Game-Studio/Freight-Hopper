@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
         }
         poundedThisFrame = true;
         groundPoundBehavior.EntryAction();
+        jumpBehavior.ExitAction();
     }
 
     private void JumpsStartLogic()
@@ -119,6 +120,7 @@ public class PlayerController : MonoBehaviour
         }
         jumpedThisFrame = true;
         jumpBehavior.EntryAction();
+        groundPoundBehavior.ExitAction();
     }
 
     private void JumpsCanceledLogic()
