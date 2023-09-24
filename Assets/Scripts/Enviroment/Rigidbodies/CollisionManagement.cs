@@ -29,6 +29,7 @@ public class CollisionManagement : MonoBehaviour
     public Memory<bool> TrueIsGrounded => trueIsGrounded;
     public Memory<Vector3> Velocity => velocity;
     public Memory<Vector3> Position => position;
+    public LayerMask GroundMask => groundMask;
     public float MaxSlope => maxSlope;
 
     public float MaxDepenetrationVelocity => maxDepenetrationVelocity;
@@ -113,12 +114,8 @@ public class CollisionManagement : MonoBehaviour
         {
             return;
         }
-
-        var transform1 = rb.transform;
-        var up = transform1.up;
-        Ray ray = new Ray(rb.position - (up * transform1.localScale.y), -up);
-        Debug.DrawRay(ray.origin, ray.direction * groundRaycastCheckDistance, Color.red);
-        if (Physics.Raycast(ray, out RaycastHit hit, groundRaycastCheckDistance, groundMask))
+        
+        if (RaycastDown( groundRaycastCheckDistance, out RaycastHit hit))
         {
             if (hit.collider == null || hit.collider.isTrigger || hit.normal == default)
                 return;
@@ -130,6 +127,15 @@ public class CollisionManagement : MonoBehaviour
                 rb.AddForce(-ValidUpAxis, ForceMode.Acceleration);
             }
         }
+    }
+
+    public bool RaycastDown(float distance, out RaycastHit hit)
+    {
+        var transform1 = rb.transform;
+        var up = transform1.up;
+        Ray ray = new Ray(rb.position - (up * transform1.localScale.y), -up);
+        Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+        return Physics.Raycast(ray, out hit, distance, groundMask);
     }
 
     private IEnumerator LateFixedUpdate()

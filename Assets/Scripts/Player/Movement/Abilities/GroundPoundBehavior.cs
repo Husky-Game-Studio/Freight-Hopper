@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 
 public class GroundPoundBehavior : AbilityBehavior
@@ -6,6 +9,8 @@ public class GroundPoundBehavior : AbilityBehavior
     [ReadOnly, SerializeField] private Current<float> increasingForce = new Current<float>(1);
 
     [SerializeField] private float deltaIncreaseForce = 0.01f;
+    [SerializeField] private float forceMultiplier = 2f;
+    [SerializeField] private float normalDetectDistance = 1.5f;
     [SerializeField] private float angleToBeConsideredFlat;
     [SerializeField] private float initialBurstVelocity = 20;
     [SerializeField] private float downwardsForce = 10;
@@ -43,10 +48,9 @@ public class GroundPoundBehavior : AbilityBehavior
         friction = Player.Instance.modules.friction;
     }
 
-    public void EntryAction()
+    public void EntryAction() // need cooldown too bruh
     {
         GroundPoundInitialBurst();
-        soundManager.Play("GroundPoundBurst");
         Vector3 upAxis = collisionManager.ValidUpAxis;
         if (Vector3.Dot(Vector3.Project(rb.velocity, upAxis), rb.transform.up) > 0)
         {
@@ -56,15 +60,35 @@ public class GroundPoundBehavior : AbilityBehavior
     }
 
     public void GroundPoundInitialBurst()
-    {   
-        bool underSpeedLimit = initialBurstVelocity > -collisionManager.Velocity.old.y;
+    {
+        Vector3 normal = Vector3.down;
+        Rigidbody rbConnected = null;
+        if (collisionManager.RaycastDown(normalDetectDistance, out RaycastHit hit))
+        {
+            normal = hit.normal;
+            rbConnected = hit.rigidbody;
+        }
+        Vector3 direction = Vector3.down;
+        float speedOnSurface = -collisionManager.Velocity.old.y;
+        bool isDownward = normal == Vector3.down;
+        if (!isDownward)
+        {
+            Vector3 connectedRbVelocity = rb == null ? Vector3.zero : rbConnected.velocity;
+            speedOnSurface = (collisionManager.Velocity.old - connectedRbVelocity).ProjectOnContactPlane(normal).magnitude;
+            Vector3 acrossSlope = Vector3.Cross(Vector3.up, normal);
+            Vector3 downSlope = Vector3.Cross(acrossSlope, normal);
+            direction = downSlope;
+            Debug.Log("Not downwards");
+        }
+
+        bool underSpeedLimit = speedOnSurface < initialBurstVelocity;
         if (!underSpeedLimit)
         {
             return;
         }
-            
-        Vector3 upAxis = collisionManager.ValidUpAxis;
-        rb.AddForce(-upAxis * initialBurstVelocity, ForceMode.VelocityChange);
+        soundManager.Play("GroundPoundBurst");
+        Debug.Log("FIRED");
+        rb.AddForce(direction * initialBurstVelocity, ForceMode.VelocityChange);
     }
 
     public void Action()
@@ -98,10 +122,6 @@ public class GroundPoundBehavior : AbilityBehavior
                 
             }
             direction *= slopeDownForce;
-            if (movementBehavior.HorizontalSpeed < horizontalSpeedLimit)
-            {
-                direction *= lowSpeedMultiplier;
-            }
         }
         else
         {
@@ -111,7 +131,7 @@ public class GroundPoundBehavior : AbilityBehavior
 
         
 
-        rb.AddForce(direction * increasingForce.value, ForceMode.Acceleration);
+        rb.AddForce(direction * increasingForce.value * forceMultiplier, ForceMode.Acceleration);
         increasingForce.value += deltaIncreaseForce * Time.fixedDeltaTime;
     }
 

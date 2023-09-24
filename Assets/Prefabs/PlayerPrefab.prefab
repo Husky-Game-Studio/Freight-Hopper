@@ -1074,7 +1074,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.777592, y: 1}
+    m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3527,7 +3527,8 @@ MonoBehaviour:
   rb: {fileID: 0}
   increasingForce:
     value: 1
-  deltaIncreaseForce: 0.02
+  deltaIncreaseForce: 2.5
+  forceMultiplier: 2
   angleToBeConsideredFlat: 3
   initialBurstVelocity: 30
   downwardsForce: 30
@@ -3985,7 +3986,7 @@ MonoBehaviour:
   timerValue: {fileID: 3434734437371285167}
   nextMedalTimeValue: {fileID: 3434734438050166298}
   leaderboard: {fileID: 7886061772630217332}
-  speed: 0.75
+  colorChangeSpeed: 0.75
 --- !u!1 &3434734437850515655
 GameObject:
   m_ObjectHideFlags: 0

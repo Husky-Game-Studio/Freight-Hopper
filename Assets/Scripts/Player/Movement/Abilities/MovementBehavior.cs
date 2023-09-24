@@ -12,6 +12,8 @@ public class MovementBehavior : AbilityBehavior
     [SerializeField] float speedSoundMultiplier = 20f;
     [SerializeField] Vector2 walkingSoundTimeRange = new Vector2(0.1f, 0.4f);
     public float HorizontalSpeed => speedometer.AbsoluteHorzSpeed;
+    public float RelativeHorizontalSpeed => speedometer.HorzSpeed;
+    public Vector3 RelativeHorizontalVelocity => speedometer.HorzVelocity;
     public float Speed => rb.velocity.magnitude;
 
     private Transform cameraTransform;
