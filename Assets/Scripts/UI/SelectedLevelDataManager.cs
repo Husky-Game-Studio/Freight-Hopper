@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,6 +12,7 @@ public class SelectedLevelDataManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private TextMeshProUGUI worldtitle;
     [SerializeField] private TextMeshProUGUI bestTime;
+    [SerializeField] private TextMeshProUGUI place;
     [SerializeField] private LevelListManager levelListManager;
     [SerializeField] private SpriteList medalSprites;
     private int lastIndex;
@@ -22,6 +24,7 @@ public class SelectedLevelDataManager : MonoBehaviour
         LevelData currentData = this.CurrentLevelData;
         if(currentData == null)
         {
+            place.enabled = false;
             yield break;
         }
         
@@ -43,7 +46,8 @@ public class SelectedLevelDataManager : MonoBehaviour
         }
         else
         {
-            bestTime.text = "Best: None";
+            bestTime.enabled = false;
+            place.enabled = false;
             medal.gameObject.SetActive(false);
         }
         levelImage.texture = currentData.Image;
@@ -57,17 +61,43 @@ public class SelectedLevelDataManager : MonoBehaviour
 
         LevelName levelName = new LevelName(currentData.name);
         LeaderboardEntry result = new LeaderboardEntry();
-        yield return SaveFile.GetMyUserTimeCached(levelName.VersionedCurrentLevel(currentData), result);
-        if (result == null)
+        yield return SaveFile.GetMyUserTimeUncached(levelName.VersionedCurrentLevel(currentData), result);
+        if (result.timeSeconds == 0)
         {
-            bestTime.text = "Best: None";
+            bestTime.enabled = false;
+            place.enabled = false;
         }
         else
         {
             bestTime.text = "Best: " + LevelTimer.GetTimeString(result.timeSeconds);
+            bestTime.enabled = true;
+            place.enabled = true;
+            place.text = $"Place: {Ordinalifier(result.rank)}";
         }
     }
-
+    string Ordinalifier(int rank)
+    {
+        int lastDigit = rank % 10;
+        int last2Digits = rank % 100;
+        if (last2Digits is 11 or 12 or 13) return $"{rank}th";
+        switch (lastDigit)
+        {
+            case 1:
+                return $"{rank}st";
+            case 2:
+                return $"{rank}nd";
+            case 3:
+                return $"{rank}rd";
+            default:
+                return $"{rank}th";
+        }
+    }
+    public void OnEnable()
+    {
+        bestTime.enabled = false;
+        place.enabled = false;
+        StartCoroutine(UpdateUI());
+    }
     private void Update()
     {
         if (LevelSelectLevelButton.currentID != lastIndex)

@@ -128,7 +128,6 @@ public class SaveFile : OSingleton<SaveFile>
         if (isDirty) return true;
         if (!filePathInfoCache.Exists)
         {
-            checkedLeaderboard = false;
             return true;
         }
         return false;
@@ -205,32 +204,14 @@ public class SaveFile : OSingleton<SaveFile>
         }
         WriteAll(data);
     }
-
-    static bool checkedLeaderboard = false;
-    // Optional parameter for setting time locally
-    public static IEnumerator GetMyUserTimeCached(string versionedLevelName, LeaderboardEntry result, float newTime = 24*60)
+    public static IEnumerator GetMyUserTimeUncached(string versionedLevelName, LeaderboardEntry result, float newTime = 24*60)
     {
-        if (!checkedLeaderboard || Current.ReadLevelVersionData(versionedLevelName) == null)
+        yield return LeaderboardEventHandler.GetMyUserTime(versionedLevelName, result);
+        if (result == null || result.timeSeconds == 0)
         {
-            yield return LeaderboardEventHandler.GetMyUserTime(versionedLevelName, result);
-            if (result == null || result.timeSeconds == 0)
-            {
-                yield break;
-            }
-            Current.WriteLevelVersionData(versionedLevelName, new LevelVersionData(result.timeSeconds));
-            checkedLeaderboard = true;
+            yield break;
         }
-        else
-        {
-            LevelVersionData data = Current.ReadLevelVersionData(versionedLevelName);
-            if (data.Time > newTime)
-            {
-                data.Time = newTime;
-                Current.WriteLevelVersionData(versionedLevelName, new LevelVersionData(newTime));
-            }
-            result.timeSeconds = data.Time;
-        }
-        
+        Current.WriteLevelVersionData(versionedLevelName, new LevelVersionData(result.timeSeconds));
     }
     #endregion
 

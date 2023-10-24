@@ -132,11 +132,11 @@ public class LevelComplete : MonoBehaviour
         }
 
         LeaderboardEntry result = new LeaderboardEntry();
-        yield return SaveFile.GetMyUserTimeCached(versionedLevelName, result, myTime);
+        yield return SaveFile.GetMyUserTimeUncached(versionedLevelName, result, myTime);
         
         //////////////////// Medal Shit ////////////////////
         float bestTime = MAX_TIME;
-        if (result.timeSeconds != default)
+        if (result.timeSeconds != default && result.timeSeconds < myTime)
         {
             bestTime = result.timeSeconds;
         }
@@ -154,6 +154,7 @@ public class LevelComplete : MonoBehaviour
         {
             levelAchievementData.MedalIndex = mIndex;
             SaveFile.Current.WriteLevelAchievementData(levelName, levelAchievementData);
+            Debug.Log("Saved new medal " + mIndex);
         }
 
         DisplayMedal(levelAchievementData);
