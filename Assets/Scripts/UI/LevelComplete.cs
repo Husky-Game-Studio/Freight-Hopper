@@ -24,6 +24,7 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] UILeaderboard leaderboard;
     [FormerlySerializedAs("speed")][SerializeField]  float colorChangeSpeed = 1f;
     public const float MAX_TIME = 24 * 60;
+    public const float MAX_TIME_GAMER = MAX_TIME * Mathf.PI; // shhh
     public const float MIN_TIME = Mathf.PI/1.234f;
 
     bool isBestTime = false;
@@ -87,8 +88,8 @@ public class LevelComplete : MonoBehaviour
         Player.Instance.modules.soundManager.StopAll();
         PauseMenu.Instance.PauseGame();
     }
-    
-    
+
+
     private IEnumerator BestTime()
     {
         string levelName = LevelController.Instance.CurrentLevelName.CurrentLevel();
@@ -107,6 +108,14 @@ public class LevelComplete : MonoBehaviour
             Debug.Log("no save data found, saving new time");
             levelTimeData = new LevelVersionData(myTime);
             SaveFile.Current.WriteLevelVersionData(versionedLevelName, levelTimeData);
+        }
+        else
+        {
+            if (levelTimeData.Time == 0) // fix for medal being gone backwards patch thingy. Fixed v2.0.0
+            {
+                levelTimeData.Time = MAX_TIME;
+                SaveFile.Current.WriteLevelVersionData(versionedLevelName, levelTimeData);
+            }
         }
         if (levelAchievementData == null)
         {
@@ -127,8 +136,13 @@ public class LevelComplete : MonoBehaviour
         
         //////////////////// Medal Shit ////////////////////
         float bestTime = MAX_TIME;
-        if (result != null && result.timeSeconds != default){
+        if (result.timeSeconds != default)
+        {
             bestTime = result.timeSeconds;
+        }
+        else // meaning no time on leaderboard
+        {
+            bestTime = myTime;
         }
         int index = 0;
         while (index < 4 && bestTime < LevelController.Instance.LevelData.MedalTimes[index])
@@ -166,6 +180,13 @@ public class LevelComplete : MonoBehaviour
             LevelInvalidationReason = reason
         };
         EventBoat.OnLevelComplete.Invoke(data);
+    }
+
+    public static void ForceUploadMaxTimeGamer(LevelCompleteData level) // basically clears time
+    {
+        level.Time = MAX_TIME_GAMER;
+        level.LevelInvalidationReason = LevelCompleteData.InvalidationReason.None;
+        LeaderboardEventHandler.UploadTimeForced(level);
     }
 
     void DisplayMedal(LevelAchievementData saveData){

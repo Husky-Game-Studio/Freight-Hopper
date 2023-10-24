@@ -110,6 +110,18 @@ public class SaveFile : OSingleton<SaveFile>
             return;
         }
     }
+    public bool DeleteCacheFile()
+    {
+        if (!Filesystem.TryDeletePath(filepath))
+        {
+            Filesystem.LogLastException();
+            return false;
+        }
+      
+        objects = new Dictionary<string, object>();
+        objects["CacheVersion"] = CacheVersion;
+        return true;
+    }
     
     bool CheckFileDirtied()
     {
@@ -201,7 +213,7 @@ public class SaveFile : OSingleton<SaveFile>
         if (!checkedLeaderboard || Current.ReadLevelVersionData(versionedLevelName) == null)
         {
             yield return LeaderboardEventHandler.GetMyUserTime(versionedLevelName, result);
-            if (result == null)
+            if (result == null || result.timeSeconds == 0)
             {
                 yield break;
             }
